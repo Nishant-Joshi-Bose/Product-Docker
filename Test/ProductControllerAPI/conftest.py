@@ -13,11 +13,9 @@
 PyTest Configuration & Fixtures for the Product Controller frontdoor APIs.
 """
 import time
-
 import pytest
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
-from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.RivieraUtils import adb_utils
@@ -93,8 +91,8 @@ def device_playing_from_amazon(request, front_door_queue):
     get_config = RESOURCES[current_resource]
 
     message_creator = MessageCreator(service_name)
-    response_handler = ResponseHandler(service_name, get_config['name'])
-    common_behavior_handler = CommonBehaviorHandler(front_door_queue, response_handler, message_creator)
+    common_behavior_handler = CommonBehaviorHandler(front_door_queue, message_creator, service_name, get_config['name'])
+
 
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')
@@ -147,27 +145,3 @@ def device_playing_from_amazon(request, front_door_queue):
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
     yield front_door_queue, common_behavior_handler, service_name, get_config
-
-@pytest.fixture(scope="function")
-def remove_oob_setup_state_and_reboot_device(device_id, adb):
-    """
-    This fixture is used to remove "/mnt/nv/product-persistence/SystemSetupDone" file and reboot the device.
-    """
-    oob_setup_file = '/mnt/nv/product-persistence/SystemSetupDone'
-    # 1. Remove "/mnt/nv/product-persistence/SystemSetupDone" file.
-    adb.executeCommand("/opt/Bose/bin/rw")
-    adb.executeCommand("rm {}".format(oob_setup_file))
-    adb.executeCommand('sync')
-    rebooted_and_out_of_booting_state_device(device_id, adb)
-
-    # Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
-    for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
-        if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
-            break
-        time.sleep(1)
-
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
-    assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
-        'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
-                                                                        eddie_helper.SETUPNETWORK, device_state)

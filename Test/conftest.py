@@ -37,6 +37,7 @@ from CastleTestUtils.LpmUtils.Lpm import Lpm
 
 from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
+from ProductControllerAPI import eddie_helper
 
 LOGGER = get_logger(__name__)
 
@@ -414,16 +415,17 @@ def ip_address_wlan(request, device_id, wifi_config):
                                  async_response=True, device_id=device_id)
 
         device_ip_address = network_base.check_inf_presence(interface, timeout=20)
-        if device_ip_address:
-            LOGGER.debug("Found IP Address (%s) for Device (%s).", device_ip_address, device_id)
-            return device_ip_address
 
-        LOGGER.debug("Rebooting device to ensure added profile retains.")
-        riviera_device.communication.executeCommand('/opt/Bose/bin/PlatformReset')
+        if not device_ip_address:
+            LOGGER.debug("Rebooting device to ensure added profile retains.")
+            riviera_device.communication.executeCommand('/opt/Bose/bin/PlatformReset')
+            device_ip_address = network_base.check_inf_presence(interface, timeout=60)
 
-    device_ip_address = network_base.check_inf_presence(interface, timeout=60)
-    if not device_ip_address:
-        pytest.fail("Failed to acquire network connection through: {}".format(interface))
+            if not device_ip_address:
+                pytest.fail("Failed to acquire network connection through: {}".format(interface))
+
+    # Wait for galapagos activation even if network is already configured.
+    assert riviera_device.wait_for_galapagos_activation(), 'galapagos activation is not done yet.'
 
     LOGGER.debug("Found IP Address (%s) for Device (%s).", device_ip_address, device_id)
     return device_ip_address
@@ -570,7 +572,51 @@ def frontdoor_wlan(request, ip_address_wlan):
 
 
 @pytest.fixture(scope="function")
-def set_lps_timeout(deviceid):
+def set_no_audio_timeout(device_id):
+    """
+    This fixture changes "NoAudioTimeout" param to test NetworkStandby state transition.
+    Test steps:
+    1. Change "NoAudioTimeout" to 1 minute.
+    2. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
+    4. At the end of test case revert "NoAudioTimeout" to 20 minutes.
+    5. Reboot and wait for CLI-Server to start and device state get out of Booting.
+
+    :param device_id: ADB Device ID of the device under test
+    """
+    adb = rivieraCommunication.getCommunicationType('ADB')
+    adb.setCommunicationDetail(device_id)
+    timer_file = '/opt/Bose/etc/InActivityTimer.json'
+    # 1. Change "NoAudioTimeout" to 1 minute.
+    adb.executeCommand("/opt/Bose/bin/rw")
+    adb.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
+    adb.executeCommand('sync')
+    # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    rebooted_and_out_of_booting_state_device(device_id, adb)
+
+    # 3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
+    for _ in range(30):
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+        if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
+            break
+        time.sleep(1)
+
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+    assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
+        'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
+                                                                        eddie_helper.SETUPNETWORK, device_state)
+    yield
+
+    # 4. At the end of test case revert "NoAudioTimeout" to 20 minutes.
+    adb.executeCommand("/opt/Bose/bin/rw")
+    adb.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
+    adb.executeCommand('sync')
+    # 5. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    rebooted_and_out_of_booting_state_device(device_id, adb)
+
+
+@pytest.fixture(scope="function")
+def set_lps_timeout(device_id):
     """
     This fixture changes "NoAudioTimeout" and "NoNetworkConfiguredTimeout" params to test Low power state transition.
     Test steps:
@@ -578,9 +624,11 @@ def set_lps_timeout(deviceid):
     2. Reboot and wait for CLI-Server to start and device state get out of Booting.
     3. At the end of test case revert "NoAudioTimeout" to 20 minutes and "NoNetworkConfiguredTimeout" to 120 minutes.
     4. Reboot and wait for CLI-Server to start and device state get out of Booting.
+
+    :param device_id: ADB Device ID of the device under test
     """
     adb = rivieraCommunication.getCommunicationType('ADB')
-    adb.setCommunicationDetail(deviceid)
+    adb.setCommunicationDetail(device_id)
     timer_file = '/opt/Bose/etc/InActivityTimer.json'
     # 1. Change "NoAudioTimeout" to 1 minute and "NoNetworkConfiguredTimeout" to 2 minutes.
     adb.executeCommand("/opt/Bose/bin/rw")
@@ -588,10 +636,8 @@ def set_lps_timeout(deviceid):
                        "s/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
     adb.executeCommand('sync')
     LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
-    adb.executeCommand("/opt/Bose/bin/PlatformReset")
-    LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
     # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(deviceid, adb)
+    rebooted_and_out_of_booting_state_device(device_id, adb)
     LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
 
     yield
@@ -604,11 +650,12 @@ def set_lps_timeout(deviceid):
     LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
 
     # 4. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(deviceid, adb)
+    rebooted_and_out_of_booting_state_device(device_id, adb)
+
 
 
 @pytest.fixture(scope="function")
-def rebooted_and_out_of_booting_state_device(deviceid, adb):
+def rebooted_and_out_of_booting_state_device(device_id, adb):
     """
     This fixture is used to reboot the device and wait until device come out of 'Booting' state.
     """
@@ -635,11 +682,36 @@ def rebooted_and_out_of_booting_state_device(deviceid, adb):
 
     # Wait until product state come out from 'Booting' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
-        if device_state != 'Booting':
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+        if device_state != eddie_helper.BOOTING:
             break
         LOGGER.debug("Current device state : %s", device_state)
         time.sleep(1)
+
+
+@pytest.fixture(scope="function")
+def remove_oob_setup_state_and_reboot_device(device_id, adb):
+    """
+    This fixture is used to remove "/mnt/nv/product-persistence/SystemSetupDone" file and reboot the device.
+    """
+    oob_setup_file = '/mnt/nv/product-persistence/SystemSetupDone'
+    # 1. Remove "/mnt/nv/product-persistence/SystemSetupDone" file.
+    adb.executeCommand("/opt/Bose/bin/rw")
+    adb.executeCommand("rm {}".format(oob_setup_file))
+    adb.executeCommand('sync')
+    rebooted_and_out_of_booting_state_device(device_id, adb)
+
+    # Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
+    for _ in range(30):
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+        if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
+            break
+        time.sleep(1)
+
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+    assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
+        'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
+                                                                        eddie_helper.SETUPNETWORK, device_state)
 
 
 @pytest.fixture(scope='session')
