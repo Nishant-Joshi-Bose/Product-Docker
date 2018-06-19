@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@73492fe7735cdb1443eb9635c0a6a280c0627ce4"
+    "selected_version": "master@3ae387f7525cfd46b4013aef69e9cddddace1659"
   },
   {
     "name": "A4VVideoManagerService",
@@ -225,7 +225,7 @@
   },
   {
     "name": "unittest-cpp-qc8017_32",
-    "selected_version": "Release/bose-master/2.0.0-10+d5e90cf"
+    "selected_version": "Release/bose-master/2.0.0-20+8575b87"
   },
   {
     "name": "Webkit",
