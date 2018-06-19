@@ -139,6 +139,14 @@
     "name": "LightBarController-qc8017_32",
     "selected_version": "Release/master/1.5.2-147+73661e0"
   },
+  { 
+    "name": "CastleTestUtils",
+    "selected_version": "master@cab04e3b9a7c63428f52b38958bd21b6a2125bd9"
+  },
+  {
+    "name": "FrontDoor-qc8017_32",
+    "selected_version": "Release/master/0.3.8-166+bdf45c8"
+  },
   {
     "name": "NetworkService-qc8017_32",
     "selected_version": "Release/master/1.5.3-345+7d23d2a"
