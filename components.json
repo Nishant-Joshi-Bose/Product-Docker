@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-15_1641"
+    "selected_version": "Continuous/Castle-Fork/2018-06-18_1706"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@d5e18020b3c7fbdb654756a9976ae10acb6f54c1"
+    "selected_version": "master@6b8a79c34eb1839c98ba3d8b4608a41eb32fed78"
   },
   {
     "name": "bose-web-update-page",
@@ -49,7 +49,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.2-359+129cf39"
+    "selected_version": "Release/master/1.5.3-372+86f13cb"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-15_1641"
+    "selected_version": "Continuous/Castle-Fork/2018-06-18_1706"
   },
   {
     "name": "SystemEventService-qc8017_32",
