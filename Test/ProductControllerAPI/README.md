@@ -48,6 +48,7 @@ Many test suites can be found in the `ProductControllerAPI` test module:
 - `test_system_power_control.py`
 - `test_system_setup.py`
 - `test_system_power_timeouts.py`
+- `test_system_update_start.py`
 
 `test_system_info.py` contains tests related to system info API and ensuring API works from different device states. 
 The following self descriptive test names can be found in the suite:
@@ -86,3 +87,10 @@ The following self descriptive test names can be found in the suite:
 - `test_system_power_timeouts_from_selected_state`
 - `test_system_power_timeouts_from_idle_state`
 - `test_system_power_timeouts_behaviour`
+
+`test_system_update_start.py` contains tests related to system update start API and ensuring API works fine.
+The following self descriptive test names can be found in the suite:
+- `test_system_update_start_from_setup_state`
+- `test_system_update_start_playing_from_aux`
+- `test_system_update_start_from_idle_state`
+- `test_system_update_start_errors`
