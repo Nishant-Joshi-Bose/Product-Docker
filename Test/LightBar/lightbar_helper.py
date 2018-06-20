@@ -12,7 +12,6 @@
 """
 Automated Tests for LightBar Animations for Eddie
 """
-import json
 import os
 import re
 
@@ -44,24 +43,14 @@ def get_notification_in_list(front_door_queue, notif_id):
         notif_id = [notif_id]
 
     notif_list = list()
+
     while not front_door_queue.queueEmpty():
         notification = front_door_queue.getNotification()
+
         if notification["header"]["resource"] in notif_id:
             notif_list.append(notification)
 
     return notif_list
-
-
-def play_invalid_lightbar_animation(front_door, data):
-    """"
-    Request Lightbar to play animation
-    :param frontDoor: fixture returning frontDoor instance
-    :param data: animation data value
-    :return:  lightbar_status [dict]  FrontDoor response json
-    """
-    lightbar_status = front_door.send(METHOD_PUT, LIGHTBAR_API, data)
-    lightbar_status = json.loads(lightbar_status)
-    return lightbar_status
 
 
 def negative_animation_data():
@@ -71,9 +60,11 @@ def negative_animation_data():
     :return lightbar_data : List of negative animation data
     """
     LOGGER.info("Get the negative lightbar data")
+
     current_directory = os.path.dirname(os.path.realpath(__file__))
     negative_scenarios_file_name = os.path.join(current_directory, 'lightbar_negative_testdata.csv')
     lightbar_data = read_rows_as_dictionary_list_from_csv_file(negative_scenarios_file_name)[1]
+
     return lightbar_data
 
 
@@ -97,8 +88,7 @@ def get_animation_from_lpm(serial_handler, animation_value):
         serial_animations = [serial_output for serial_output in serial_outputs
                              if ANIMATION_NAME in serial_output]
 
-        serial_last_animation = re.search(serial_last_animation_string,
-                                          serial_animations[-1]).group(1)
+        serial_last_animation = re.search(serial_last_animation_string, serial_animations[-1]).group(1)
 
         if serial_last_animation == animation_value:
             LOGGER.debug("Expected Animation (%s), Played Animation (%s)", animation_value, serial_last_animation)
@@ -124,6 +114,7 @@ def animation_in_notification(front_door_queue, expected_animation_value):
             if current_animation_value == expected_animation_value:
                 LOGGER.debug("Animation value received: %s", current_animation_value)
                 return current_animation_value
+
             LOGGER.debug("Current (%s) does not match Expected (%s).",
                          current_animation_value, expected_animation_value)
         except KeyError:
