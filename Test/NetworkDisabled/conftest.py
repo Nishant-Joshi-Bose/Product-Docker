@@ -21,7 +21,6 @@ from CastleTestUtils.LpmUtils.Lpm import Lpm
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
-from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.scripts.config_madrid import RESOURCES
 
@@ -63,8 +62,7 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     get_config = RESOURCES[current_resource]
 
     message_creator = MessageCreator(service_name)
-    response_handler = ResponseHandler(service_name, get_config['name'])
-    common_behavior_handler = CommonBehaviorHandler(frontdoor_wlan, response_handler, message_creator)
+    common_behavior_handler = CommonBehaviorHandler(frontdoor_wlan, message_creator, service_name, get_config['name'])
 
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')

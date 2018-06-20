@@ -93,7 +93,6 @@ def device_playing_from_amazon(request, front_door_queue):
     message_creator = MessageCreator(service_name)
     common_behavior_handler = CommonBehaviorHandler(front_door_queue, message_creator, service_name, get_config['name'])
 
-
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')
     apikey = request.config.getoption('--api-key')
