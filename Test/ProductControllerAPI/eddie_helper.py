@@ -147,10 +147,10 @@ def check_error_and_response_header(response, api, method=METHOD_GET, status_cod
     assert header["status"] == status_code
 
     if is_error:
-        assert response["error"]
-        assert response["error"]["code"]
-        assert response["error"]["subcode"]
-        assert response["error"]["message"]
+        assert "error" in response.keys(), 'Response should contain error'
+        assert "code" in response["error"].keys(), 'Error Response should contain code'
+        assert "subcode" in response["error"].keys(), 'Error Response should contain subcode'
+        assert "message" in response["error"].keys(), 'Error Response should contain message'
     else:
         with pytest.raises(KeyError) as key_error:
             error = response["error"]
