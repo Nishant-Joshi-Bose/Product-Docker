@@ -10,6 +10,16 @@
 #include "LpmClientIF.h"
 #include "ProductSTSController.h"
 
+typedef union __auxAggregateStatus
+{
+    uint32_t  key;
+    struct __aggrStatus
+    {
+        bool auxInserted : 1;
+        bool userPlayStatus : 1;
+    } aggrStatus;
+} auxAggregateStatus_t;
+
 class CustomProductSTSStateTopAux : public ProductSTSStateTop
 {
 public:
@@ -24,6 +34,13 @@ public:
     /// @return true if successful
     ////////////////////////////////////////////////////////
     bool HandleStop( const STS::Void & ) override;
+
+    ////////////////////////////////////////////////////////
+    /// @brief Act on Puase request
+    /// @param Void
+    /// @return true if successful
+    ////////////////////////////////////////////////////////
+    bool HandlePause( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
     /// @brief Act on play request
@@ -59,8 +76,26 @@ private:
     void HandleAUXCableDetect( LpmServiceMessages::IpcAuxState_t IpcAuxState );
     void RegisterAuxPlugStatusCallbacks();
     void AuxPlay();
-    void AuxStop();
-
-    bool m_userPlayStatus = false;//to save user's choice to PLAY or PAUSE
-    bool m_auxInserted    = false;
+    void AuxStopPlaying( bool isStop );
+    inline void SetUserPlayStatus( bool isPlay )
+    {
+        m_AuxAggregateStatus.aggrStatus.userPlayStatus = isPlay;
+    }
+    inline bool GetUserPlayStatus() const
+    {
+        return m_AuxAggregateStatus.aggrStatus.userPlayStatus;
+    }
+    inline void SetAuxInertedStatus( bool isInserted )
+    {
+        m_AuxAggregateStatus.aggrStatus.auxInserted = isInserted;
+    }
+    inline bool GetAuxInsertedStatus() const
+    {
+        return m_AuxAggregateStatus.aggrStatus.auxInserted;
+    }
+    void Init();
+    bool ProcessAuxAggregateStatus();
+    auxAggregateStatus_t m_AuxAggregateStatus;//current aggregate status
+    std::map<uint32_t, Callback<>> m_AuxPlayStatusMap;
+    uint32_t m_prevAggregateKey;//used as cache
 };
