@@ -72,8 +72,8 @@ product-ipk: cmake_build
 privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-IPKS = recovery.ipk wpe.ipk product-script.ipk software-update.ipk  monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES = SoundTouchRecovery wpe product-script software-update monaco SoundTouch lpm_updater
+IPKS = recovery.ipk product-script.ipk software-update.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES = SoundTouchRecovery product-script software-update wpe monaco SoundTouch lpm_updater
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
@@ -81,8 +81,8 @@ package-no-hsp: packages-gz
 
 #Create one more Zip file for Bonjour / Local update with HSP 
 #- This is temporary, till DP2 boards are not available.
-IPKS_HSP = recovery.ipk hsp.ipk wpe.ipk product-script.ipk software-update.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = SoundTouchRecovery hsp wpe product-script software-update monaco SoundTouch lpm_updater
+IPKS_HSP = recovery.ipk hsp.ipk product-script.ipk software-update.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = SoundTouchRecovery hsp product-script software-update wpe monaco SoundTouch lpm_updater
 
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
