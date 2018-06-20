@@ -352,7 +352,6 @@ def ip_address_wlan(request, device_id, wifi_config):
     """
     riviera_device = rivieraUtils.RivieraUtils('ADB', device=device_id, logger=LOGGER)
     network_base = NetworkBase(None, device=device_id, logger=LOGGER)
-
     interface = request.config.getoption("--network-iface")
     device_ip_address = None
     try:
