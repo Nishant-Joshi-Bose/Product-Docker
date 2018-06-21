@@ -137,7 +137,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.2-147+73661e0"
+    "selected_version": "Release/master/1.5.3-151+1b6d1ea"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@ce2fd78850d72389437d1aabb1d46c7aa142ab67"
+    "selected_version": "master@dcea9f3e0d8d2427716eab1539871c2af08bfb2e"
   },
   {
     "name": "ProductUIAssets",
