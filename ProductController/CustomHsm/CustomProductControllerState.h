@@ -243,7 +243,7 @@ public:
         return false;
     }
 
-    virtual bool HandleSoftwareUpdateStatus( )
+    virtual bool HandleSoftwareUpdateInstall( )
     {
         return false;
     }
