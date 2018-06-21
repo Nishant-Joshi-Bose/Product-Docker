@@ -248,6 +248,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
         channel++;
     }
 
+    m_DspStreamConfig = streamConfig;
     m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
 }
 

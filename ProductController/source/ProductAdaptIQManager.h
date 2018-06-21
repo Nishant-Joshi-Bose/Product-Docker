@@ -126,7 +126,8 @@ private:
     ///        the device.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<CustomProductLpmHardwareInterface> m_ProductLpmHardwareInterface;
+    std::shared_ptr<CustomProductLpmHardwareInterface>  m_ProductLpmHardwareInterface;
+    std::shared_ptr<CustomProductAudioService>          m_ProductAudioService;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
