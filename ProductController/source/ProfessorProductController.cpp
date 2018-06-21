@@ -558,6 +558,9 @@ void ProfessorProductController::Run( )
     ///
     ApplyOpticalAutoWakeSettingFromPersistence( );
 
+    /// Register a callback so the autowake from persistence is sent to LPM when connected
+    RegisterOpticalAutowakeForLpmConnection( );
+
     ///
     /// Set up LightBarController
     ///
@@ -1211,6 +1214,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
+        m_ProductLpmHardwareInterface->SendAutowakeStatus( m_IsAutoWakeEnabled );
+
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
     }
@@ -1626,6 +1631,26 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::RegisterOpticalAutowakeForLpmConnection
+///
+/// @brief This method registers callback with LPM connection. When LPM is connected it sends the
+///        autowake status read from NV to LPM
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::RegisterOpticalAutowakeForLpmConnection( )
+{
+    auto lpmFunc = [ this ]( bool connected )
+    {
+        if( connected )
+        {
+            m_ProductLpmHardwareInterface->SendAutowakeStatus( m_IsAutoWakeEnabled );
+        }
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmFunc );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
