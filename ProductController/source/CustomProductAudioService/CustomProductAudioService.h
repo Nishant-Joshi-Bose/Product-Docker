@@ -25,6 +25,10 @@ public:
                                LpmClientIF::LpmClientPtr lpmClient );
     void SetThermalMonitorEnabled( bool enabled );
     void SetAiqInstalled( bool installed );
+    const LpmServiceMessages::IpcDspStreamConfigReqPayload_t& GetDspStreamConfig( ) const
+    {
+        return m_DspStreamConfig;
+    };
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// m_MainStreamAudioSettings is the structure holding information that APProduct would like to know
@@ -81,5 +85,7 @@ private:
     /// FrontDoor handling functions
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterFrontDoorEvents() override;
+
+    LpmServiceMessages::IpcDspStreamConfigReqPayload_t m_DspStreamConfig;
 };
 }// namespace ProductApp

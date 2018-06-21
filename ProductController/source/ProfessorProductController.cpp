@@ -529,11 +529,15 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
-    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
                                     m_ProductLpmHardwareInterface->GetLpmClient( ) );
+    ///
+    /// ProductAdaptIQManager depends on CustomProductAudioService, so make sure that CustomProductAudioService is
+    /// instantiated first
+    ///
+    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductAudioService         == nullptr ||
@@ -1108,7 +1112,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     if( message.has_lpmstatus( ) )
     {
         ///
-        /// Register for product-specific LPM events if connected. Common handling of the product 
+        /// Register for product-specific LPM events if connected. Common handling of the product
         /// message is then done.
         ///
         if( message.lpmstatus( ).has_connected( ) && message.lpmstatus( ).connected( ) )
