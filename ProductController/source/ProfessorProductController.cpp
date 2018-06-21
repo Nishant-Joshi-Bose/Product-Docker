@@ -1650,6 +1650,30 @@ void ProfessorProductController::RegisterOpticalAutowakeForLpmConnection( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::IsProductControlSurface
+///
+/// @brief  This method is called to determine whether the given key origin is a product control
+///         surface.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsProductControlSurface( LpmServiceMessages::KeyOrigin_t keyOrigin ) const
+{
+    switch( keyOrigin )
+    {
+    case LpmServiceMessages::KEY_ORIGIN_CONSOLE_BUTTON:
+    case LpmServiceMessages::KEY_ORIGIN_CAPSENSE:
+    case LpmServiceMessages::KEY_ORIGIN_IR:
+    case LpmServiceMessages::KEY_ORIGIN_RF:
+    case LpmServiceMessages::KEY_ORIGIN_TAP:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

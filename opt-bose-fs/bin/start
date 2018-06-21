@@ -1,2 +1,3 @@
 #!/bin/sh
-exec /opt/Bose/bin/SoundTouch start "$@"
+/opt/Bose/bin/SoundTouch start "$@" &
+exec /opt/Bose/bin/install start "$@"
