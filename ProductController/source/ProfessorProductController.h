@@ -363,6 +363,7 @@ private:
                                    const Callback<FrontDoor::Error> & errorCb );
     void ApplyOpticalAutoWakeSettingFromPersistence( );
     void NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
+    void RegisterOpticalAutowakeForLpmConnection( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
