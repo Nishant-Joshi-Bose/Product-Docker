@@ -29,11 +29,10 @@ from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
+from CastleTestUtils.LpmUtils.Lpm import Lpm
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
-from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication
-from CastleTestUtils.LpmUtils.Lpm import Lpm
 
 from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
