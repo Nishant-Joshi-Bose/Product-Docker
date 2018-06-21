@@ -533,6 +533,10 @@ void ProfessorProductController::Run( )
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
                                     m_ProductLpmHardwareInterface->GetLpmClient( ) );
+    ///
+    /// ProductAdaptIQManager depends on CustomProductAudioService, so make sure that CustomProductAudioService is
+    /// instantiated first
+    ///
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
 
     if( m_ProductLpmHardwareInterface == nullptr ||

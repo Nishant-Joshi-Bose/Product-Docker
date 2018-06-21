@@ -323,8 +323,10 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
 
     auto bootedFunc = [ this ]( LpmServiceMessages::IpcDeviceBoot_t image )
     {
-        LpmServiceMessages::IpcDspStreamConfigReqPayload_t config;
-        m_ProductAudioService->GetDspStreamConfig( config );
+        const auto& config = m_ProductAudioService->GetDspStreamConfig( );
+        // Verify that stream configuration is actually valid (it's possible that we get a "booted" indication
+        // before first audio path select, since DSP booting and audio path selection are independent). This
+        // is okay, since in that case audio path selection will still send stream configuration to the DSP)
         if( config.has_audiosettings() )
         {
             BOSE_INFO( s_logger, "DSP booted, send stream config (%s)", ProtoToMarkup::ToJson( config ).c_str() );
