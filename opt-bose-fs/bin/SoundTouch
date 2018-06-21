@@ -240,7 +240,6 @@ usage: $0 start [args...]
    or: $0 factory_default
    or: $0 enterlowpower
    or: $0 exitlowpower
-   or: $0 enterswup
    or: $0 snapshot         - save a snapshot of the logread buffer
 "
 exit 1
