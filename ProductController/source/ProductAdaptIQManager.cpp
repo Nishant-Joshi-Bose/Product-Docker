@@ -39,15 +39,6 @@ const std::string s_ActionEnter         = "ACTION_ENTER";
 const std::string s_ActionCancel        = "ACTION_CANCEL";
 const std::string s_ActionAdvance       = "ACTION_ADVANCE";
 const std::string s_ActionPrevious      = "ACTION_PREVIOUS";
-
-#if 0
-// these have moved to a new endpoint, not sure if they will be implemented here
-// or elsewhere
-const std::string s_ModeNormal          = "Enabled Normal";
-const std::string s_ModeRetail          = "Enabled Retail";
-const std::string s_ModeDisabled        = "Enabled Disabled";
-#endif
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +65,8 @@ namespace ProductApp
 ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
-    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
+    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
+    m_ProductAudioService( ProductController.GetProductAudioServiceInstance( ) )
 {
     m_status.set_smstate( "AIQ_STATE_NOT_RUNNING" );
     m_status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
@@ -323,8 +315,30 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
     bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqSetupStatus_t >
                     ( LpmServiceMessages::IPC_DSP_AIQ_SETUP_STATUS, Callback<LpmServiceMessages::IpcAiqSetupStatus_t >( aiqFunc ) );
 
-    BOSE_INFO( s_logger, "%s registered for AdaptIQ status from the LPM hardware.",
-               ( success ? "Successfully" : "Unsuccessfully" ) );
+    if( not success )
+    {
+        BOSE_ERROR( s_logger, "%s error registering for AiQ setup status", __func__ );
+        return;
+    }
+
+    auto bootedFunc = [ this ]( LpmServiceMessages::IpcDeviceBoot_t image )
+    {
+        const auto& config = m_ProductAudioService->GetDspStreamConfig( );
+        // Verify that stream configuration is actually valid (it's possible that we get a "booted" indication
+        // before first audio path select, since DSP booting and audio path selection are independent). This
+        // is okay, since in that case audio path selection will still send stream configuration to the DSP)
+        if( config.has_audiosettings() )
+        {
+            BOSE_INFO( s_logger, "DSP booted, send stream config (%s)", ProtoToMarkup::ToJson( config ).c_str() );
+            m_ProductLpmHardwareInterface->SetStreamConfig( config, {} );
+        }
+    };
+    success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
+               ( LpmServiceMessages::IPC_DSP_BOOTED_EVENT, Callback<LpmServiceMessages::IpcDeviceBoot_t>( bootedFunc ) );
+    if( not success )
+    {
+        BOSE_ERROR( s_logger, "%s error registering for DSP boot status", __func__ );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
