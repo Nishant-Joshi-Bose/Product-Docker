@@ -16,6 +16,7 @@
 #include "ProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "ProductSTS.pb.h"
+#include "SHELBY_SOURCE.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -66,16 +67,16 @@ bool CustomProductControllerStatePlayingSelected::PossiblyGoToCustomState( )
 
     if( GetProductController( ).GetNowSelection( ).has_contentitem( ) )
     {
-        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0 )
+        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( SHELBY_SOURCE::SETUP ) == 0 )
         {
-            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( ADAPTIQ ) ) == 0 )
+            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
                 return true;
             }
 
-            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( PAIRING ) ) == 0 )
+            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
 

@@ -511,11 +511,7 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
             nowPlayingStatus.container( ).contentitem( ).has_source( ) and
             nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
         {
-            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0   and
-                ( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( TV ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 ) )
+            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( SHELBY_SOURCE::PRODUCT ) == 0 )
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
 

@@ -138,7 +138,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
         // TV_INPUT key should always be sent to tv source
         if( keyEvent.keyid( ) == BOSE_TV_INPUT )
         {
-            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( "PRODUCT",  "TV" );
+            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
             if( tvSource and tvSource->has_details( ) )
             {
                 cicode = tvSource->details( ).cicode( );
@@ -164,13 +164,8 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
             return true;
         }
 
-        // ignore CEC keys if we're not in TV or SLOT_* sources
-        if( sourceItem and ( sourceItem->sourcename().compare( "PRODUCT" ) == 0 ) and (
-                ( sourceItem->sourceaccountname().compare( "SLOT_0" ) == 0 ) or
-                ( sourceItem->sourceaccountname().compare( "SLOT_1" ) == 0 ) or
-                ( sourceItem->sourceaccountname().compare( "SLOT_2" ) == 0 ) or
-                ( sourceItem->sourceaccountname().compare( "TV" ) == 0 )
-            ) )
+        // ignore CEC keys if we're not in PRODUCT sources
+        if( sourceItem and ( sourceItem->sourcename().compare( SHELBY_SOURCE::PRODUCT ) == 0 ) )
         {
             ignoreCECKey = false;
         }
