@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.10.42747.2864797"
+    "selected_version": "Release/Castle-Fork/1.5.11.42817.2874894"
   },
   {
     "name": "BLERemoteXCVR",
@@ -41,7 +41,7 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@d5e18020b3c7fbdb654756a9976ae10acb6f54c1"
+    "selected_version": "master@6b8a79c34eb1839c98ba3d8b4608a41eb32fed78"
   },
   {
     "name": "bose-web-update-page",
@@ -65,7 +65,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.2-359+129cf39"
+    "selected_version": "Release/master/1.5.3-372+86f13cb"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -73,7 +73,7 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/1.5.0-71+dfcce78"
+    "selected_version": "Release/master/1.5.1-78+8151ab6"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -137,11 +137,11 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.1-138+ba62d58"
+    "selected_version": "Release/master/1.5.2-147+73661e0"
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.3-345+7d23d2a"
+    "selected_version": "Release/master/1.5.4-356+f6b1fa4"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -153,15 +153,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
+    "selected_version": "Release/master/1.5.0-828+e814d8d"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
+    "selected_version": "Release/master/1.5.0-828+e814d8d"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@3c95bd4bb4f9a16111b85fa8e7d9e07e504382ae"
+    "selected_version": "master@ce2fd78850d72389437d1aabb1d46c7aa142ab67"
   },
   {
     "name": "ProductUIAssets",
@@ -189,7 +189,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.0.0-183+6de2ea1"
+    "selected_version": "Release/master/1.5.0-192+8c2c870"
   },
   {
     "name": "RivieraLpmTools",
@@ -201,7 +201,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.5.1-360+b35cc3c"
+    "selected_version": "Release/master/1.5.2-385+4887537"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -209,11 +209,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.3-654+20f0ec9"
+    "selected_version": "Release/master/1.5.4-678+5707e77"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.10.42747.2864797"
+    "selected_version": "Release/Castle-Fork/1.5.11.42817.2874894"
   },
   {
     "name": "SystemEventService-qc8017_32",
