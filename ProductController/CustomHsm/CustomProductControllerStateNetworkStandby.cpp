@@ -27,14 +27,14 @@ CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkS
 void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
     // For regulation, cap LCD display in standby state.
-    GetCustomProductController().SetDisplayStandbyBrightnessCapEnabled( true );
+    GetCustomProductController().GetDisplayController()->SetStandbyLcdBrightnessCapEnabled( true );
 
     ProductControllerStateNetworkStandby::HandleStateEnter();
 }
 
 void CustomProductControllerStateNetworkStandby::HandleStateExit()
 {
-    GetCustomProductController().SetDisplayStandbyBrightnessCapEnabled( false );
+    GetCustomProductController().GetDisplayController()->SetStandbyLcdBrightnessCapEnabled( false );
 
     ProductControllerStateNetworkStandby::HandleStateExit();
 }

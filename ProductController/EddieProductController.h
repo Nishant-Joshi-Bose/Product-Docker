@@ -292,21 +292,14 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief Turn ON/OFF LCD display
+/// @brief Returns an instance to the DisplayController.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-    void TurnDisplayOnOff( bool turnOn ) const
+    std::shared_ptr< DisplayController >& GetDisplayController( )
     {
-        m_displayController->TurnDisplayOnOff( turnOn );
+        return m_displayController;
     }
 
-    /*! \brief Enables/disables brightness cap for LCD during a standby state (not low power).
-     * \param enabled True to impose the cap and false to disable it.
-     */
-    void SetDisplayStandbyBrightnessCapEnabled( bool enabled )
-    {
-        m_displayController->SetStandbyLcdBrightnessCapEnabled( enabled );
-    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -370,7 +363,7 @@ private:
     ProductCliClient m_productCliClient;
 
     std::unique_ptr<LightBar::LightBarController>  m_lightbarController;
-    std::unique_ptr<DisplayController>             m_displayController;
+    std::shared_ptr<DisplayController>             m_displayController;
     IntentHandler                                  m_IntentHandler;
     bool                                           m_isBLEModuleReady  = false;
     bool                                           m_isUiConnected = false;

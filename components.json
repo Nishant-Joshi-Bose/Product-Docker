@@ -125,7 +125,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.1-138+ba62d58"
+    "selected_version": "Continuous/master/1.5.1-145+cd8092d"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@8982a1b369379b9a28f7db3ff41cb3aa7e48cefc"
+    "selected_version": "master@dcea9f3e0d8d2427716eab1539871c2af08bfb2e"
   },
   {
     "name": "ProductUIAssets",
@@ -173,7 +173,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.0.0-183+6de2ea1"
+    "selected_version": "Release/master/1.0.1-190+16fee43"
   },
   {
     "name": "RivieraLpmTools",
