@@ -28,7 +28,7 @@ public:
     void BootDSPImage( LpmServiceMessages::IpcImage_t image )
     {
         m_DspIsRebooting = true;
-        m_ProductLpmHardwareInterface->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
+        m_ProductLpmHardwareInterface->BootDSPImage( image );
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
