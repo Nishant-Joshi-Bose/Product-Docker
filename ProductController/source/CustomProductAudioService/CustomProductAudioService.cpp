@@ -55,6 +55,34 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
 
+    // stream config callback is normally empty (gets set when we get a SetStreamConfig request that
+    // we can't immediately forward to DSP because it's booting)
+    m_StreamConfigResponseCb = {};
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Register to handle DSP booted indications
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    auto bootedFunc = [ this ]( LpmServiceMessages::IpcDeviceBoot_t image )
+    {
+        // Verify that stream configuration is actually valid (it's possible that we get a "booted" indication
+        // before first audio path select, since DSP booting and audio path selection are independent). This
+        // is okay, since in that case audio path selection will still send stream configuration to the DSP)
+        if( m_DspStreamConfig.has_audiosettings() )
+        {
+            BOSE_INFO( s_logger, "DSP booted, send stream config (%s)", ProtoToMarkup::ToJson( m_DspStreamConfig ).c_str() );
+            m_ProductLpmHardwareInterface->SetStreamConfig( m_DspStreamConfig, m_StreamConfigResponseCb );
+            m_StreamConfigResponseCb = {};
+        }
+        m_DspIsRebooting = false;
+    };
+    bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
+                    ( LpmServiceMessages::IPC_DSP_BOOTED_EVENT, Callback<LpmServiceMessages::IpcDeviceBoot_t>( bootedFunc ) );
+    if( not success )
+    {
+        BOSE_ERROR( s_logger, "%s error registering for DSP boot status", __func__ );
+        return;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize member variables related to AudioPath
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -249,7 +277,16 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
     }
 
     m_DspStreamConfig = streamConfig;
-    m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
+    if( not m_DspIsRebooting )
+    {
+        // send it to the DSP
+        m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
+    }
+    else
+    {
+        // wait until the DSP reboots to send it, and save the response callback
+        m_StreamConfigResponseCb = cb;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
