@@ -55,10 +55,6 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
 
-    // stream config callback is normally empty (gets set when we get a SetStreamConfig request that
-    // we can't immediately forward to DSP because it's booting)
-    m_StreamConfigResponseCb = {};
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Register to handle DSP booted indications
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +67,8 @@ void CustomProductAudioService::RegisterAudioPathEvents()
         {
             BOSE_INFO( s_logger, "DSP booted, send stream config (%s)", ProtoToMarkup::ToJson( m_DspStreamConfig ).c_str() );
             m_ProductLpmHardwareInterface->SetStreamConfig( m_DspStreamConfig, m_StreamConfigResponseCb );
+            // stream config callback is normally empty (gets set when we get a SetStreamConfig request that
+            // we can't immediately forward to DSP because it's booting)
             m_StreamConfigResponseCb = {};
         }
         m_DspIsRebooting = false;
