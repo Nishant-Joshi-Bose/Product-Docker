@@ -86,6 +86,7 @@ btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
 blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
 btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
+telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -183,6 +184,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$blesetup_dir/stage" "$opt_dir" || exit
 "$btstssink_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
+"$telemetry_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 

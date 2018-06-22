@@ -208,6 +208,10 @@
     "selected_version": "Release/master/0.5.2-57+4e76ab1"
   },
   {
+    "name": "Telemetry-qc8017_32",
+    "selected_version": "Release/master/1.5.1-12+f573e1a"
+  },
+  {
     "name": "TestUtils",
     "selected_version": "master@cab04e3b9a7c63428f52b38958bd21b6a2125bd9"
   },
