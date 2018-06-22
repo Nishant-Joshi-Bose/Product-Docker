@@ -140,6 +140,10 @@
     "selected_version": "Release/master/1.5.3-151+1b6d1ea"
   },
   {
+    "name": "LpmMfgTool",
+    "selected_version": "Release/master/0.0.1-4+34833d6"
+  },
+  {
     "name": "NetworkService-qc8017_32",
     "selected_version": "Release/master/1.5.4-356+f6b1fa4"
   },
@@ -177,7 +181,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.10"
+    "selected_version": "Release/sop/3.10.3"
   },
   {
     "name": "Riviera-Toolchain",
