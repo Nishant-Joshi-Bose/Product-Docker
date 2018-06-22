@@ -20,7 +20,6 @@ from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
-from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
 from CastleTestUtils.RivieraUtils.hardware.keys import KeyUtils
 from CastleTestUtils.RivieraUtils.hardware.keys import keypress
 from global_resources_data import RESOURCES
@@ -107,7 +106,7 @@ class SmokeUtils(object):
         :param source_name: Music Source Name For ex. TUNEIN, AMAZON etc.
         :param frontDoor: FrontDoor object
 
-        - Common function to get common_behavior_handler, response_handler and playback message based on each source.
+        - Common function to get common_behavior_handler and playback message based on each source.
         """
         message_creator = MessageCreator(source_name)
 
@@ -120,10 +119,9 @@ class SmokeUtils(object):
             user = resource['name']
             playback_msg = message_creator.playback_msg(user, content['container_location'], content['container_name'], content['track_location'])
 
-        response_handler = ResponseHandler(source_name, user)
-        common_behavior_handler = CommonBehaviorHandler(frontDoor, response_handler, message_creator)
+        common_behavior_handler = CommonBehaviorHandler(frontDoor, message_creator, source_name, user)
 
-        return (common_behavior_handler, response_handler, playback_msg)
+        return (common_behavior_handler, playback_msg)
 
     def play_music(self, source_name, source_account_name, frontDoor, timeout=10):
         """
@@ -134,7 +132,7 @@ class SmokeUtils(object):
         """
         common_obj = self.get_common_handler(source_name, source_account_name, frontDoor)
         common_behavior_handler = common_obj[0]
-        playback_msg = common_obj[2]
+        playback_msg = common_obj[1]
         common_behavior_handler.playContentItemAndVerifyPlayStatus(playback_msg)
         # Below loop to play music for few seconds
         start_time = time.time()
@@ -150,10 +148,9 @@ class SmokeUtils(object):
         """
         common_obj = self.get_common_handler(source_name, source_account_name, frontDoor)
         common_behavior_handler = common_obj[0]
-        response_handler = common_obj[1]
-        playback_msg = common_obj[2]
+        playback_msg = common_obj[1]
         playresponse = common_behavior_handler.checkPlayStatus('PLAY')
-        response_handler.verify_device_now_playing_response(nowplaying_response=playresponse, playback_msg=playback_msg)
+        common_behavior_handler.verify_device_now_playing_response(nowplaying_response=playresponse, playback_msg=playback_msg)
 
     def stop_music(self, deviceip, frontDoor):
         """

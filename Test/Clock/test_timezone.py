@@ -63,7 +63,7 @@ def test_set_timezone(request, timezone):
 
     # verify timezone is set
     timezone_response = SET_TIMEZONE_RESPONSE.replace('$timezone', timezone)
-    print timezone_response
+    LOGGER.debug("Timezone Response: %s", timezone_response)
     assert timezone_response in command_output, "timezone {0} not set for Eddie, result is "\
         "{1}".format(timezone, command_output)
 
