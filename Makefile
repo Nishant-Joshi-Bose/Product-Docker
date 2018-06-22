@@ -44,7 +44,6 @@ PRODUCTCONTROLLERCOMMONPROTO = $(shell components get ProductControllerCommonPro
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
-	$(MAKE) -C ${PRODUCTCONTROLLERCOMMONPROTO}/Protobufs/public
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
 	ln -nsf $(RIVIERA_LPM_SERVICE_DIR) builds/RivieraLpmService

@@ -90,6 +90,7 @@ TARGET_LINK_LIBRARIES(Eddie
   rt
   cap
   dl
+  ProductControllerCommonProto
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
