@@ -85,6 +85,7 @@ btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location)
 btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
 blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
 btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
+lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -128,6 +129,7 @@ cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
+cp "$lpmmfgtool_dir/LpmMfgTool" "$opt_dir/bin" || exit
 
 t=$(date +%s)
 put_script "$opt_dir/bin/set-default-time" <<EOF

@@ -128,6 +128,10 @@
     "selected_version": "Continuous/master/1.5.1-145+cd8092d"
   },
   {
+    "name": "LpmMfgTool",
+    "selected_version": "Release/master/0.0.1-4+34833d6"
+  },
+  {
     "name": "NetworkService-qc8017_32",
     "selected_version": "Release/master/1.5.4-356+f6b1fa4"
   },
