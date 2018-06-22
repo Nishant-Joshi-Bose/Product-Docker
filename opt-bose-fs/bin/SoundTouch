@@ -160,9 +160,6 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     <arg>-S</arg> <!-- log to syslog -->
     <arg>-F</arg> <!-- run in foreground -->
   </daemon>
-  <daemon name="Telemetry"
-          exe="/opt/Bose/Telemetry/telemetry">
-  </daemon>
 </ShepherdConfig>
 EOF
         fi
