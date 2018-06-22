@@ -75,13 +75,23 @@ void CustomProductAudioService::RegisterAudioPathEvents()
         }
         m_DspIsRebooting = false;
     };
-    bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
-                    ( LpmServiceMessages::IPC_DSP_BOOTED_EVENT, Callback<LpmServiceMessages::IpcDeviceBoot_t>( bootedFunc ) );
-    if( not success )
+
+    auto lpmConnectCb = [ this, bootedFunc ]( bool connected )
     {
-        BOSE_ERROR( s_logger, "%s error registering for DSP boot status", __func__ );
-        return;
-    }
+        if( not connected )
+        {
+            return;
+        }
+
+        bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
+                        ( LpmServiceMessages::IPC_DSP_BOOTED_EVENT, Callback<LpmServiceMessages::IpcDeviceBoot_t>( bootedFunc ) );
+        if( not success )
+        {
+            BOSE_ERROR( s_logger, "%s error registering for DSP boot status", __func__ );
+            return;
+        }
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmConnectCb );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize member variables related to AudioPath
