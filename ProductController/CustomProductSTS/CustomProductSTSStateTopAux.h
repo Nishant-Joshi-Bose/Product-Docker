@@ -10,15 +10,31 @@
 #include "LpmClientIF.h"
 #include "ProductSTSController.h"
 
-typedef union __auxAggregateStatus
+union AuxAggregateState
 {
+    AuxAggregateState()
+    {
+        Reset();
+    };
     uint32_t  key;
     struct __aggrStatus
     {
         bool auxInserted : 1;
         bool userPlayStatus : 1;
     } aggrStatus;
-} auxAggregateStatus_t;
+    void Reset()
+    {
+        key ^= key;//max value
+    }
+    bool operator != ( const AuxAggregateState& t )
+    {
+        return ( t.key != key );
+    }
+    void operator = ( const AuxAggregateState& t )
+    {
+        key = t.key;
+    }
+} ;
 
 class CustomProductSTSStateTopAux : public ProductSTSStateTop
 {
@@ -79,23 +95,23 @@ private:
     void AuxStopPlaying( bool isStop );
     inline void SetUserPlayStatus( bool isPlay )
     {
-        m_AuxAggregateStatus.aggrStatus.userPlayStatus = isPlay;
+        m_CurrAggregateStatus.aggrStatus.userPlayStatus = isPlay;
     }
     inline bool GetUserPlayStatus() const
     {
-        return m_AuxAggregateStatus.aggrStatus.userPlayStatus;
+        return m_CurrAggregateStatus.aggrStatus.userPlayStatus;
     }
     inline void SetAuxInertedStatus( bool isInserted )
     {
-        m_AuxAggregateStatus.aggrStatus.auxInserted = isInserted;
+        m_CurrAggregateStatus.aggrStatus.auxInserted = isInserted;
     }
     inline bool GetAuxInsertedStatus() const
     {
-        return m_AuxAggregateStatus.aggrStatus.auxInserted;
+        return m_CurrAggregateStatus.aggrStatus.auxInserted;
     }
     void Init();
     bool ProcessAuxAggregateStatus();
-    auxAggregateStatus_t m_AuxAggregateStatus;//current aggregate status
+    AuxAggregateState m_CurrAggregateStatus;//current aggregate status
     std::unordered_map<uint32_t, Callback<>> m_AuxPlayStatusMap;
-    uint32_t m_prevAggregateKey;//used as cache
+    AuxAggregateState m_prevAggregateState;//used as cache
 };

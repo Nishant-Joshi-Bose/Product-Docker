@@ -14,8 +14,8 @@ CustomProductSTSStateTopAux::CustomProductSTSStateTopAux( ProductSTSHsm& hsm,
                                                           ProductSTSAccount& account ) :
     ProductSTSStateTop( hsm, pSuperState, account )
 {
-    RegisterAuxPlugStatusCallbacks();
     Init();
+    RegisterAuxPlugStatusCallbacks();
 }
 
 void CustomProductSTSStateTopAux::Init()
@@ -38,7 +38,7 @@ void CustomProductSTSStateTopAux::Init()
 
     auto GenerateKey = []( bool isAuxInserted, bool doesUserWantsPlay )
     {
-        auxAggregateStatus_t AggrStatus;
+        AuxAggregateState AggrStatus;
         AggrStatus.key = 0;
         AggrStatus.aggrStatus.auxInserted = isAuxInserted;
         AggrStatus.aggrStatus.userPlayStatus = doesUserWantsPlay;
@@ -66,9 +66,8 @@ void CustomProductSTSStateTopAux::Init()
     // 4) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - STOP
     m_AuxPlayStatusMap[GenerateKey( false, true )] = AuxStopCb;
 
-    m_prevAggregateKey ^= m_prevAggregateKey;//max value
-    BOSE_INFO( m_logger, "%s: m_prevAggregateKey=0x%x, Aux is %sinserted,User Play status:%s", __func__,
-               m_prevAggregateKey, GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
+    BOSE_INFO( m_logger, "%s: m_prevAggregateState=0x%x, Aux is %sinserted,User Play status:%s", __func__,
+               m_prevAggregateState.key, GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
 
 }
 
@@ -77,13 +76,13 @@ bool CustomProductSTSStateTopAux::ProcessAuxAggregateStatus()
     bool actionTaken = false;
     BOSE_DEBUG( m_logger, "%s: AUX is %sactive,prevKey=0x%x,CurrentKey=0x%x, Aux is %sinserted,"
                 "User Play status:%s", __func__,
-                m_active ? "" : "NOT ", m_prevAggregateKey, m_AuxAggregateStatus.key,
+                m_active ? "" : "NOT ", m_prevAggregateState.key, m_CurrAggregateStatus.key,
                 GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
-    if( m_active && ( m_prevAggregateKey != m_AuxAggregateStatus.key ) )
+    if( m_active && ( m_prevAggregateState != m_CurrAggregateStatus ) )
     {
-        BOSE_INFO( m_logger, "%s: Changing Play status", __func__ );
-        m_AuxPlayStatusMap[m_AuxAggregateStatus.key]();
-        m_prevAggregateKey = m_AuxAggregateStatus.key;
+        BOSE_INFO( m_logger, "%s: Changing Play status ", __func__ );
+        m_AuxPlayStatusMap[m_CurrAggregateStatus.key]();
+        m_prevAggregateState = m_CurrAggregateStatus;
         actionTaken = true;
     }
     return actionTaken;
@@ -137,6 +136,7 @@ bool CustomProductSTSStateTopAux::HandleDeactivateRequest( const STS::Deactivate
 {
     BOSE_INFO( m_logger, "Custom-HandleDeactivateRequest( %s )", m_account.GetSourceName().c_str() );
     SetUserPlayStatus( false );
+    m_prevAggregateState.Reset();
     ProductSTSStateTop::HandleDeactivateRequest( req, seq );
     return true;
 }
@@ -186,7 +186,7 @@ void CustomProductSTSStateTopAux::RegisterAuxPlugStatusCallbacks()
 void CustomProductSTSStateTopAux::AuxPlay()
 {
     const std::string& URL = GetURL( );
-    BOSE_DEBUG( s_logger, "%s:Playing AUX stream", __func__ );
+    BOSE_INFO( s_logger, "%s:Playing AUX stream", __func__ );
     if( !URL.empty( ) )
     {
         STS::AudioSetURL asu;
@@ -205,8 +205,8 @@ void CustomProductSTSStateTopAux::AuxPlay()
 
 void CustomProductSTSStateTopAux::AuxStopPlaying( bool isStop )
 {
-    BOSE_DEBUG( m_logger, "%s: Current status:%s, req=%s", __func__,
-                STS::PlayStatus::Enum_Name( m_np.playstatus( ) ).c_str(), isStop ? "STOP" : "PAUSE" );
+    BOSE_INFO( m_logger, "%s: Current status:%s, req=%s", __func__,
+               STS::PlayStatus::Enum_Name( m_np.playstatus( ) ).c_str(), isStop ? "STOP" : "PAUSE" );
     m_account.IPC().SendAudioStopEvent();
     if( isStop )
     {
