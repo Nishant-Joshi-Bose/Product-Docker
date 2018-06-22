@@ -496,7 +496,7 @@ def create_tar(output_filename, input_dir, current_working_dir=None):
         return -51, "Cannot create tar file"
     return 0, ""
     
-def create_output(is_without_lpm, development):
+def create_output(is_without_lpm, development, ipksList):
     global output_dir
     output_dir = os.path.join(workspace, 'builds/Release/package')
     if os.path.exists(output_dir):
@@ -528,9 +528,9 @@ def create_output(is_without_lpm, development):
 
     if os_arch() == '64': 
         ''' create bose partition
+            ['product.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk', 'recovery.ipk', 'product-script.ipk', 'software-update.ipk', 'wpe.ipk'])        
         '''
-        retVal, retStr = create_bose_partition(is_without_lpm, development, 
-                        ['product.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk', 'recovery.ipk', 'product-script.ipk', 'software-update.ipk'])
+        retVal, retStr = create_bose_partition(is_without_lpm, development, ipksList)
         if retVal != 0:
             return retVal, retStr
 
@@ -573,7 +573,7 @@ def cleanup():
     
     return 0, ""
     
-def create_package(name, workspace, is_without_lpm, development):
+def create_package(name, workspace, ipksList, is_without_lpm, development):
     retVal, retStr = create_stage(name, workspace)
     if retVal != 0:
         return retVal, retStr
@@ -591,7 +591,7 @@ def create_package(name, workspace, is_without_lpm, development):
     retVal, retStr = copy_signing_tools_to_stage()
     if retVal != 0:
         return retVal, retStr
-    retVal, retStr = create_output(name, workspace)
+    retVal, retStr = create_output(name, workspace, ipksList)
     if retVal != 0:
         return retVal, retStr
     logging.info("Output Directory [%s]" %(output_dir))
@@ -623,6 +623,12 @@ if __name__ == '__main__':
                          action='store_true', 
                          required=False, 
                          help="Use to build development build - UNUSED for now")
+    parser.add_argument('-i', '--ipks', 
+                        action='store',
+                        nargs='+',
+                        help='List of IPKs',
+                        required=True)
+                         
     args = parser.parse_args()
     del parser
     name = args.name
@@ -630,6 +636,7 @@ if __name__ == '__main__':
     workspace = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     is_without_lpm = args.without_lpm
     is_development = args.development
+    ipksList = args.ipks
     if len(name):
         logging.error("Name needs to have 1 or more characters")
         sys.exit(-1)
@@ -638,11 +645,10 @@ if __name__ == '__main__':
         logging.error("workspace [%s] does not exist" %(workspace))
         sys.exit(-1)
 
-    retVal, retStr = create_package(name, workspace, is_without_lpm, is_development)
+    retVal, retStr = create_package(name, workspace, ipksList, is_without_lpm, is_development)
     if retVal == 0:
         logging.info("Success")
         sys.exit(0) 
     else:
         logging.error("Failure: [%d-%s]" %(retVal, retStr))
         sys.exit(-1) 
-
