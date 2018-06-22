@@ -2,14 +2,13 @@
 #
 # :Organization:  BOSE CORPORATION
 #
-# :Copyright:  COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+# :Copyright:  COPYRIGHT 2018 BOSE CORPORATION ALL RIGHTS RESERVED.
 #              This program may not be reproduced, in whole or in part in any
 #              form or any means whatsoever without the written permission of:
 #                  BOSE CORPORATION
 #                  The Mountain,
 #                  Framingham, MA 01701-9168
 #
-
 """
 Parent conftest.py for the Eddie repository
 """
@@ -33,10 +32,14 @@ from CastleTestUtils.LpmUtils.Lpm import Lpm
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
-
+from CastleTestUtils.LpmUtils.Lpm import Lpm
 from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
+from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
+from CastleTestUtils.OAuthUtils.OAuthUtils import UserAccount
+from services import SERVICES
 from ProductControllerAPI import eddie_helper
+
 
 LOGGER = get_logger(__name__)
 
@@ -111,7 +114,6 @@ def pytest_addoption(parser):
                      default="latest",
                      help="Pass the Galapagos environment for frontdoor api object")
 
-
 def ping(ip):
     """ Pings a given IP Address """
     return os.system("ping -q -c 5 -i 0.2 -w 2 " + ip) == 0
@@ -160,7 +162,6 @@ def device_ip(request, device_id):
         device_ip = network_base.check_inf_presence(interface)
         return device_ip
 
-
 @pytest.fixture(scope="class")
 def frontDoor(device_ip, request):
     """
@@ -177,6 +178,102 @@ def frontDoor(device_ip, request):
     request.addfinalizer(tear)
 
     return front_door
+
+@pytest.fixture(scope='session')
+def passport_user_details(request):
+    """
+    Get User details.
+    """
+    LOGGER.info("passport_user_details")
+    fname = "eddie"
+    lname = "automation"
+    env = request.config.getoption('--galapagos-env')
+    _dname = str(time.time()*1000)
+    LOGGER.debug("_dname is: %s", _dname)
+    email = "Eddie_Automation" + _dname + "@bose.com"
+    LOGGER.debug("email is: %s", email)
+    user_dict = {"email" : email, "password" : "bose901", "fname" : fname, "lname" : lname, "env" : env}
+    return user_dict
+
+@pytest.fixture(scope='session')
+def create_passport_user(request, passport_user_details):
+    """
+    Get passport user object
+    """
+    LOGGER.info("passport_user_withoutFD")
+    gigya_url = "https://ingress-platform.live-aws-useast1.bose.io/dev/svc-id-gen-pub/" + passport_user_details["env"] + "/id-user-accounts-core/userAccounts/"
+    user_account = UserAccount(url=gigya_url, logger=LOGGER)
+    user_account.create_user_account(passport_user_details["email"], passport_user_details["password"], passport_user_details["lname"], passport_user_details["fname"])
+    response = user_account.authenticate_user_account(passport_user_details["email"], passport_user_details["password"])
+    LOGGER.info("The bosePersonID is: %s", response["bosePersonID"])
+    LOGGER.info("The access token is: %s", response["access_token"])
+    LOGGER.info("The refresh token is: %s", response["refresh_token"])
+    LOGGER.info("The time to live is: %s", response["expires_in"])
+
+    def tear():
+        user_account = UserAccount(url=gigya_url, logger=LOGGER)
+        LOGGER.info("Deleting User-Account")
+        user_account.delete_user_account(passport_user_details["email"], passport_user_details["password"])
+    request.addfinalizer(tear)
+
+    return response
+
+@pytest.fixture(scope='session')
+def passport_user(request, create_passport_user):
+    LOGGER.info("passport_user")
+    passport_base_url = request.config.getoption('--passport-base-url')
+    apikey = request.config.getoption('--api-key')
+    _bosepersonID = create_passport_user["bosePersonID"]
+    _access_token = create_passport_user["access_token"]
+    LOGGER.info("Bose Person ID : %s ", _bosepersonID)
+    passportUser = PassportAPIUsers(_bosepersonID, apikey, _access_token, passport_base_url, LOGGER)
+    return passportUser
+
+
+@pytest.fixture(scope="function")
+def frontDoor_without_user(request, ip_address_wlan, passport_user_details):
+    LOGGER.info("frontDoor_without_user")
+    if ip_address_wlan is None:
+        pytest.fail("No valid device IP")
+    front_door = FrontDoorAPI(ip_address_wlan, email=passport_user_details["email"], password=passport_user_details["password"])
+
+    def tear():
+        if front_door:
+            front_door.close()
+    request.addfinalizer(tear)
+
+    return front_door
+
+
+@pytest.fixture(scope='session')
+def music_service_account(request, passport_user):
+    """
+    Add music service account
+    :param request: pytest request fixture
+    :param passport_user: fixture returns reference to current PassportAPIUsers
+    :param get_config: fixture returns dictionary of current config loaded from either global resources or config file
+    :param common_behavior_handler: fixture returns reference to CommonBehaviorHandler
+    """
+    LOGGER.info("music_service_account")
+    service_accountid = []
+    for service in SERVICES:
+        print("Adding {} to {}".format(service, passport_user))
+        account = SERVICES[service]['account']
+        if account['provider'] != 'TUNEIN':
+            accountId = passport_user.add_service_account(accountType=account['account_type'],
+                                                        service=account['provider'],
+                                                        accountID=account['name'],
+                                                        account_name=account['name'],
+                                                        refresh_token=account['secret'])
+            service_accountid.append(accountId)
+            assert accountId and accountId != "", "Fail to add music service account."
+
+    def remove_music_service():
+        LOGGER.info("remove_music_service")
+        # get account id for music service
+        for accountId in service_accountid:
+            assert passport_user.remove_service_account(accountId), "Fail to remove music account from passport account."
+    request.addfinalizer(remove_music_service)
 
 
 @pytest.fixture(scope='class')
@@ -204,12 +301,12 @@ def test_log_banner(request):
     """
     Log start and completed test banner in console output.
     """
-    testName = request.function.__name__
-    LOGGER.info("\n%s\n----- Start test:    %s\n%s\n", "-" * 60, testName, "-" * 60)
+    test_name = request.function.__name__
+    LOGGER.info("\n%s\n----- Start test:    %s\n%s\n", "-" * 60, test_name, "-" * 60)
 
     def teardown():
         """ log banner ends """
-        LOGGER.info("\n%s\n----- Completed test:    %s\n%s\n", "-" * 60, testName, "-" * 60)
+        LOGGER.info("\n%s\n----- Completed test:    %s\n%s\n", "-" * 60, test_name, "-" * 60)
 
     request.addfinalizer(teardown)
 
@@ -221,7 +318,7 @@ def create_log_dir(foldername):
     """
     if not os.path.exists(foldername):
         os.mkdir(foldername)
-    subfolder = foldername +"/Logs-"+str(datetime.date.today())
+    subfolder = foldername + "/Logs-" + str(datetime.date.today())
     if not os.path.exists(subfolder):
         os.makedirs(subfolder)
     return subfolder
@@ -307,7 +404,6 @@ def eddie_master_latest_directory(tmpdir):
 
 @pytest.fixture(scope="session")
 def keyConfig():
-    keyConfigData = None
     keyConfigData = keyConfig["keyTable"]
     return keyConfigData
 
@@ -328,21 +424,29 @@ def deviceid(request):
 @pytest.fixture(scope='module')
 def wifi_config():
     """
-    Get config parser instance of wifi profiles.
+    Generates a ConfigParser object of locally stored wireless base
+    station profiles.
+
+    See ./Configs/conf_wifiProiles.ini for details and configuration
+    setups.
+
+    :return: ConfigParser object of Wireless configs
     """
     LOGGER.info("wifi_config")
-    cfg = ConfigParser.SafeConfigParser()
+    config = ConfigParser.SafeConfigParser()
     current_path = os.path.dirname(os.path.realpath(__file__))
     wifi_ini_file = '{}/Configs/conf_wifiProfiles.ini'.format(current_path)
-    cfg.read(wifi_ini_file)
-    yield cfg
 
+    config.read(wifi_ini_file)
+
+    yield config
 
 @pytest.mark.usefixture('request', 'device_id', 'wifi_config')
 @pytest.fixture(scope="function")
 def ip_address_wlan(request, device_id, wifi_config):
     """
     IP address of the device connected to WLAN.
+
     Removes any configuration on the Device if not connected.
     :param request: PyTest command line request option
     :param device_id: The ADB Device ID of the device under test
