@@ -195,3 +195,7 @@ def test_default_language_set(request, wifi_config):
 
     assert output_language == DEFAULT_LANGUAGE, \
         "Default Language {0} not set on eddie, language set is {1}".format(DEFAULT_LANGUAGE, output_language)
+
+    # Close Frontdoor Connection
+    if frontdoor:
+        frontdoor.close()

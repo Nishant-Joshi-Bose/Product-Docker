@@ -140,6 +140,7 @@ if button == "apply" and (is_valid or force):
 mount -oremount,rw /persist
 mv {} {} /persist || exit
 mount -oremount,ro /persist
+LpmMfgTool || exit
 """.format(fn_json, fn_sig)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     apply_output = ph.stdout.readlines()
     if ph.wait() == 0:

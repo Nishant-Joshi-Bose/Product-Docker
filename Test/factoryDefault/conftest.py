@@ -15,11 +15,9 @@ PyTest Configuration & Fixtures for the Eddie Factory Default tests.
 import pytest
 import pexpect
 
-from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
-from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.scripts.config_madrid import RESOURCES
 
@@ -59,7 +57,7 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     This fixture will send playback request to device and verifies the right station or track is playing.
     Steps:
     1. Get Passport account config from CastleTestUtils.scripts.config_madrid.RESOURCES.
-    2. Create objects of MessageCreator, ResponseHandler, CommonBehaviorHandler.
+    2. Create objects of MessageCreator, CommonBehaviorHandler.
     3. Add music service account
     4. Register device to passport and verify device source
     5. Send playback request to device Verify the right station or track is playing by verifying 'nowPlaying' response
@@ -77,8 +75,7 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     get_config = RESOURCES[current_resource]
 
     message_creator = MessageCreator(service_name)
-    response_handler = ResponseHandler(service_name, get_config['name'])
-    common_behavior_handler = CommonBehaviorHandler(frontdoor_wlan, response_handler, message_creator)
+    common_behavior_handler = CommonBehaviorHandler(frontdoor_wlan, message_creator, service_name, get_config['name'])
 
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')
