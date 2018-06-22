@@ -36,27 +36,36 @@ void CustomProductSTSStateTopAux::Init()
         AuxStopPlaying( true );
     };
 
-    // initialize the aggregateStatus - action map
-    // 1) aux cable - IN, UserPlayStatus - PLAY Expected action - PLAY
-    SetAuxInertedStatus( true );
-    SetUserPlayStatus( true );
-    m_AuxPlayStatusMap[m_AuxAggregateStatus.key] = AuxPlayCb;
-    // 2) aux cable - IN, UserPlayStatus - PAUSE Expected action - PAUSE
-    SetAuxInertedStatus( true );
-    SetUserPlayStatus( false );
-    m_AuxPlayStatusMap[m_AuxAggregateStatus.key] = AuxPauseCb;
-    // 3) aux cable - OUT, UserPlayStatus - PAUSE Expected action - STOP
-    SetAuxInertedStatus( false );
-    SetUserPlayStatus( false );
-    m_AuxPlayStatusMap[m_AuxAggregateStatus.key] = AuxStopCb;
-    // 4) aux cable - OUT, UserPlayStatus - PLAY Expected action - STOP
-    SetAuxInertedStatus( false );
-    SetUserPlayStatus( true );
-    m_AuxPlayStatusMap[m_AuxAggregateStatus.key] = AuxStopCb;
+    auto GenerateKey = []( bool isAuxInserted, bool doesUserWantsPlay )
+    {
+        auxAggregateStatus_t AggrStatus;
+        AggrStatus.key = 0;
+        AggrStatus.aggrStatus.auxInserted = isAuxInserted;
+        AggrStatus.aggrStatus.userPlayStatus = doesUserWantsPlay;
+        //key is now udpated.
+        return AggrStatus.key;
+    };
 
-    //reset back
-    SetAuxInertedStatus( false );
-    SetUserPlayStatus( false );
+    // High level design:
+    // Each individual status - Aux Insert state, User Play select state,
+    // is aggregated and maps to a key. In other words, when you set
+    // an individual state, it changes the key (using Union) automatically
+    // Each binary state is represented by a bit (bit field).
+    //
+    // Future changes - With the usage of uint32 as key, we shall be able to
+    // accommodate 32 binary states or its equivalent. You need to add
+    // that parameter to the GenerateKey().
+
+    // initialize the aggregateStatus - action map
+    // 1) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - PLAY
+    m_AuxPlayStatusMap[GenerateKey( true, true )] = AuxPlayCb;
+    // 2) isAuxInserted - Yes(true), doesUserWantsPlay - PAUSE(false) Expected action - PAUSE
+    m_AuxPlayStatusMap[GenerateKey( true, false )] = AuxPauseCb;
+    // 3) isAuxInserted - Yes(true), doesUserWantsPlay - PAUSE(false) Expected action - STOP
+    m_AuxPlayStatusMap[GenerateKey( false, false )] = AuxStopCb;
+    // 4) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - STOP
+    m_AuxPlayStatusMap[GenerateKey( false, false )] = AuxStopCb;
+
     m_prevAggregateKey ^= m_prevAggregateKey;//max value
     BOSE_INFO( m_logger, "%s: m_prevAggregateKey=0x%x, Aux is %sinserted,User Play status:%s", __func__,
                m_prevAggregateKey, GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
@@ -176,30 +185,22 @@ void CustomProductSTSStateTopAux::RegisterAuxPlugStatusCallbacks()
 }
 void CustomProductSTSStateTopAux::AuxPlay()
 {
-    if( m_np.playstatus( ) != STS::PlayStatus::PLAY )
+    const std::string& URL = GetURL( );
+    BOSE_DEBUG( s_logger, "%s:Playing AUX stream", __func__ );
+    if( !URL.empty( ) )
     {
-        const std::string& URL = GetURL( );
-        BOSE_DEBUG( s_logger, "%s:Playing AUX stream", __func__ );
-        if( !URL.empty( ) )
-        {
-            STS::AudioSetURL asu;
-            asu.set_url( URL );
-            asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
-            m_account.IPC().SendAudioSetURLEvent( asu );
-        }
-
-        m_account.IPC().SendAudioPlayEvent();
-        m_np.set_playstatus( STS::PlayStatus::PLAY );
-
-        STS::NowPlayingChange npc;
-        *( npc.mutable_nowplaying() ) = m_np;
-        m_account.IPC().SendNowPlayingChangeEvent( npc );
+        STS::AudioSetURL asu;
+        asu.set_url( URL );
+        asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
+        m_account.IPC().SendAudioSetURLEvent( asu );
     }
-    else
-    {
-        BOSE_INFO( m_logger, "%s: No Action Current State:%s",
-                   __FUNCTION__, STS::PlayStatus::Enum_Name( m_np.playstatus( ) ).c_str() );
-    }
+
+    m_account.IPC().SendAudioPlayEvent();
+    m_np.set_playstatus( STS::PlayStatus::PLAY );
+
+    STS::NowPlayingChange npc;
+    *( npc.mutable_nowplaying() ) = m_np;
+    m_account.IPC().SendNowPlayingChangeEvent( npc );
 }
 
 void CustomProductSTSStateTopAux::AuxStopPlaying( bool isStop )

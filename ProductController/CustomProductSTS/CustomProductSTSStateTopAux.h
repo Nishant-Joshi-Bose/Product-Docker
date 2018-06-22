@@ -96,6 +96,6 @@ private:
     void Init();
     bool ProcessAuxAggregateStatus();
     auxAggregateStatus_t m_AuxAggregateStatus;//current aggregate status
-    std::map<uint32_t, Callback<>> m_AuxPlayStatusMap;
+    std::unordered_map<uint32_t, Callback<>> m_AuxPlayStatusMap;
     uint32_t m_prevAggregateKey;//used as cache
 };
