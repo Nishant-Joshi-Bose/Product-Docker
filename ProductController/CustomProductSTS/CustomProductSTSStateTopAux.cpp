@@ -64,7 +64,7 @@ void CustomProductSTSStateTopAux::Init()
     // 3) isAuxInserted - Yes(true), doesUserWantsPlay - PAUSE(false) Expected action - STOP
     m_AuxPlayStatusMap[GenerateKey( false, false )] = AuxStopCb;
     // 4) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - STOP
-    m_AuxPlayStatusMap[GenerateKey( false, false )] = AuxStopCb;
+    m_AuxPlayStatusMap[GenerateKey( false, true )] = AuxStopCb;
 
     m_prevAggregateKey ^= m_prevAggregateKey;//max value
     BOSE_INFO( m_logger, "%s: m_prevAggregateKey=0x%x, Aux is %sinserted,User Play status:%s", __func__,
