@@ -4,7 +4,6 @@ Conftest.py for DemoController
 import pytest
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
-from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from ..commonData import keyConfig
 logger = get_logger(__name__)
 
