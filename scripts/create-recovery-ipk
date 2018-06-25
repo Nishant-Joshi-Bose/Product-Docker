@@ -148,6 +148,11 @@ cp /opt/Bose/etc/RecoveryMgr /cache/
 
 # move network check script to /cache
 cp /opt/Bose/bin/isNetworkConfigured /cache/ 
+
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
+
+exit 0
 EOF
 
 put_script "$stage/postrm" <<EOF
@@ -158,6 +163,9 @@ EOF
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
 echo "SoundTouch recovery preinst"
+# Set Progress Start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
+
 EOF
 
 put_script "$stage/prerm" <<EOF
