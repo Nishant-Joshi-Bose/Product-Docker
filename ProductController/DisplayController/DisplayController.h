@@ -47,6 +47,8 @@ public:
     enum ScreenBlackState
     {
         ScreenBlackState_Invalid = -1,
+
+        ScreenBlackState_Disabled,
         ScreenBlackState_Black,
         ScreenBlackState_NotBlack,
 
@@ -253,7 +255,7 @@ private:
     /*! \brief Sets the current screen blank state and clear transient flags.
      * \param s New "now" screen blank state.
      */
-    void SetScreenBlankNowState( ScreenBlackState s );
+    void SetBlackScreenNowState( ScreenBlackState s );
 
     /*! \brief Kills the process that drives the UI.
      * We do this when we lose hearbeat for so long. Shepherd will then restart the
@@ -265,7 +267,7 @@ private:
     /*! \brief Convenience function for checking if black screen detection is enabled.
      * \return Black screen detect state.
      */
-    bool IsBlackScreenDetectEnabled() const
+    bool IsBlackScreenDetectSupported() const
     {
         return ( m_config.m_hasLcd && m_config.m_blackScreenDetectEnabled );
     }

@@ -135,7 +135,7 @@ DisplayController::DisplayController( const Configuration& config,
     m_defaultsSentTime( 0 ),
     m_lcdStandbyBrightnessCap( 50 ), // Sensible default. Real default loaded from JSON.
     m_lcdBrightnessCap( BRIGHTNESS_MAX ),
-    m_screenBlackState( ScreenBlackState_Invalid ),
+    m_screenBlackState( ScreenBlackState_Disabled ),
     m_screenBlackChangeTo( ScreenBlackState_Invalid ),
     m_screenBlackInactivityTicks( 0 ),
     m_screenBlackChangeCounter( 0 ),
@@ -183,7 +183,7 @@ void DisplayController::Initialize()
     RegisterFrontdoorEndPoints();
 
     // Initial screen state.
-    if( IsBlackScreenDetectEnabled() )
+    if( IsBlackScreenDetectSupported() )
     {
         if( DirUtils::DoesFileExist( BLACK_SCREEN_FILE_NAME ) == false )
         {
@@ -192,7 +192,9 @@ void DisplayController::Initialize()
             m_config.m_blackScreenDetectEnabled = false;
         }
 
-        m_screenBlackState = ReadFrameBufferBlackState();
+        // Initial poll of screen black state is set in UpdateUiConnected().
+        // "Disabled" will keep the back light in boot state (off).
+        m_screenBlackState = ScreenBlackState_Disabled;
     }
 
     // Background task initialization.
@@ -306,7 +308,7 @@ bool DisplayController::ParseJSONData()
         m_lcdStandbyBrightnessCap = json_root["lcdStandbyBrightnessCap"].asUInt();
     }
 
-    if( IsBlackScreenDetectEnabled() && json_root.isMember( "lcdInactivityBacklightOffDebounceTime" ) )
+    if( IsBlackScreenDetectSupported() && json_root.isMember( "lcdInactivityBacklightOffDebounceTime" ) )
     {
         m_screenBlackInactivityTicks = ( 1000 * json_root["lcdInactivityBacklightOffDebounceTime"].asUInt() ) / UPDATE_SLEEP_MS;
     }
@@ -449,11 +451,12 @@ void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
         m_uiConnected = currentUiConnectedStatus;
         m_ProductControllerUiConnectedCb( currentUiConnectedStatus );
 
-        // LPM boots with the cap at 0 to turn off the LCD until the display controller
-        // on the APQ (us) is fully initialized. Remove that cap at this time.
-        if( ReadFrameBufferBlackState() == ScreenBlackState_NotBlack )
+        // Set initial black screen state. Black screen detection will be disabled until
+        // the member variable is set to something other than ScreenBlackState_Disabled.
+        // "Invalid" will force a re-detection.
+        if( IsBlackScreenDetectSupported() )
         {
-            SetDisplayBrightnessCap( MIN( m_lcdBrightnessCap, BRIGHTNESS_MAX ), SCREEN_BLACK_RAMP_ON_MS );
+            m_screenBlackState = ScreenBlackState_Invalid;
         }
 
         PullUIBrightnessFromLpm( UI_BRIGTHNESS_DEVICE_LCD );
@@ -483,6 +486,8 @@ void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
 {
     auto f = [this, enabled]()
     {
+        BOSE_DEBUG( s_logger, "SetStandbyLcdBrightnessCapEnabled enabled %i, hasLcd %i", enabled, m_config.m_hasLcd );
+
         if( m_config.m_hasLcd )
         {
             m_lcdBrightnessCap = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
@@ -514,7 +519,7 @@ void DisplayController::UpdateLoop()
     // Blank screen detection.
     //
 
-    if( IsBlackScreenDetectEnabled() )
+    if( IsBlackScreenDetectSupported() )
     {
         ProcessBlackScreenDetection();
     }
@@ -584,7 +589,8 @@ void DisplayController::ProcessBlackScreenDetection()
     screenState = ReadFrameBufferBlackState();
 
     // Not supported.
-    if( screenState == ScreenBlackState_Invalid )
+    if( screenState == ScreenBlackState_Invalid
+        || m_screenBlackState == ScreenBlackState_Disabled )
     {
         return;
     }
@@ -600,7 +606,7 @@ void DisplayController::ProcessBlackScreenDetection()
         if( m_screenBlackChangeCounter == 0 )
         {
             BOSE_DEBUG( s_logger, "Screen is black, turning off backlight." );
-            SetScreenBlankNowState( m_screenBlackChangeTo );
+            SetBlackScreenNowState( m_screenBlackChangeTo );
             SetDisplayBrightnessCap( BRIGHTNESS_MIN, SCREEN_BLACK_RAMP_OFF_MS );
         }
     }
@@ -632,7 +638,7 @@ void DisplayController::ProcessBlackScreenDetection()
         case ScreenBlackState_NotBlack:
         {
             BOSE_DEBUG( s_logger, "Screen is no longer black, turning on backlight." );
-            SetScreenBlankNowState( ScreenBlackState_NotBlack );
+            SetBlackScreenNowState( ScreenBlackState_NotBlack );
             SetDisplayBrightnessCap( MIN( m_lcdBrightnessCap, BRIGHTNESS_MAX ), SCREEN_BLACK_RAMP_ON_MS );
             // Do not use LCD on/off since it boots into an "all white" state which
             // may be momentarily visible.
@@ -655,7 +661,7 @@ void DisplayController::ProcessBlackScreenDetection()
 
 /*!
  */
-void DisplayController::SetScreenBlankNowState( ScreenBlackState s )
+void DisplayController::SetBlackScreenNowState( ScreenBlackState s )
 {
     m_screenBlackState = s;
     m_screenBlackChangeTo = ScreenBlackState_Invalid;
@@ -1029,20 +1035,18 @@ void DisplayController::RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void
         {
             if( turnOn )
             {
-                // Wait for content. LCD boots into an "all pixels white" state. Which will
-                // be visible if the backlight comes on before content is set.
-                if( ReadFrameBufferBlackState() == ScreenBlackState_NotBlack )
+                // Re-enable black screen detection which will drive the back light back on
+                // once there is content. "Invalid" will force a re-detection.
+                if( IsBlackScreenDetectSupported() )
                 {
-                    // dr1037486 When turning on the display, use a ramp. In addition to being more
-                    // pleasing, this will hide any pop that might result from multiple "brightness cap"
-                    // commands in quick succession. For example, right now Eddie resumes from low power
-                    // supmend into network standby. The latter has a brightness cap which will be
-                    // applied only after we resume into the previous brightness.
-                    SetDisplayBrightnessCap( BRIGHTNESS_MAX, UI_BRIGHTNESS_TIME_DEFAULT );
+                    m_screenBlackState = ScreenBlackState_Invalid;
                 }
             }
             else
             {
+                // Disable black screen detection while the screen is off.
+                m_screenBlackState = ScreenBlackState_Disabled;
+
                 // Turn the display off instantly because the LPM may be driving into a low
                 // power state.
                 SetDisplayBrightnessCap( BRIGHTNESS_MIN, UI_BRIGHTNESS_TIME_IMMEDIATE );
