@@ -41,6 +41,26 @@
             ]
         }, 
         {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "power off", 
+            "action": 9, 
+            "keyList": [
+                204
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "power off", 
+            "action": 9, 
+            "keyList": [
+                204
+            ]
+        }, 
+        {
             "origin": 2, 
             "keyEvent": 1, 
             "timeOutList": [
