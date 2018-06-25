@@ -27,6 +27,8 @@
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductMessage.pb.h"
+#include "CustomProductAudioService.h"
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +90,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
         HandleTimeOut();
     } );
 
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
+    GetProductController( ).GetProductAudioServiceInstance( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +151,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
     m_timer->Stop( );
 
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
+    GetProductController( ).GetProductAudioServiceInstance( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
 
 }
 
