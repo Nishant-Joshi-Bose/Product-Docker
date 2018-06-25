@@ -10,27 +10,29 @@
 #include "LpmClientIF.h"
 #include "ProductSTSController.h"
 
-union AuxAggregateState
+// AuxSourceState includes(aggregates) the individual parameter states, like - Aux Cable (insert) state,
+// User Play selection
+union AuxSourceState_U
 {
-    AuxAggregateState()
+    AuxSourceState_U()
     {
         Reset();
     };
     uint32_t  key;
-    struct __aggrStatus
+    struct __State
     {
         bool auxInserted : 1;
         bool userPlayStatus : 1;
-    } aggrStatus;
+    } state;
     void Reset()
     {
         key ^= key;//max value
     }
-    bool operator != ( const AuxAggregateState& t )
+    bool operator != ( const AuxSourceState_U& t )
     {
         return ( t.key != key );
     }
-    void operator = ( const AuxAggregateState& t )
+    void operator = ( const AuxSourceState_U& t )
     {
         key = t.key;
     }
@@ -95,23 +97,23 @@ private:
     void AuxStopPlaying( bool isStop );
     inline void SetUserPlayStatus( bool isPlay )
     {
-        m_CurrAggregateStatus.aggrStatus.userPlayStatus = isPlay;
+        m_CurrentState.state.userPlayStatus = isPlay;
     }
     inline bool GetUserPlayStatus() const
     {
-        return m_CurrAggregateStatus.aggrStatus.userPlayStatus;
+        return m_CurrentState.state.userPlayStatus;
     }
     inline void SetAuxInertedStatus( bool isInserted )
     {
-        m_CurrAggregateStatus.aggrStatus.auxInserted = isInserted;
+        m_CurrentState.state.auxInserted = isInserted;
     }
     inline bool GetAuxInsertedStatus() const
     {
-        return m_CurrAggregateStatus.aggrStatus.auxInserted;
+        return m_CurrentState.state.auxInserted;
     }
     void Init();
     bool ProcessAuxAggregateStatus();
-    AuxAggregateState m_CurrAggregateStatus;//current aggregate status
-    std::unordered_map<uint32_t, Callback<>> m_AuxPlayStatusMap;
-    AuxAggregateState m_prevAggregateState;//used as cache
+    AuxSourceState_U m_CurrentState;//current aggregate status
+    std::unordered_map<uint32_t, Callback<>> m_AuxStateActionMap;
+    AuxSourceState_U m_prevState;//used as cache
 };

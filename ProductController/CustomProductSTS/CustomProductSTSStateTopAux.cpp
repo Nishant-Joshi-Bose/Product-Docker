@@ -23,27 +23,27 @@ void CustomProductSTSStateTopAux::Init()
     BOSE_INFO( m_logger, __func__ );
 
     // callbacks
-    auto AuxPlayCb = [this]()
+    auto AuxPlayCallback = [this]()
     {
         AuxPlay();
     };
-    auto AuxPauseCb = [this]()
+    auto AuxPauseCallback = [this]()
     {
         AuxStopPlaying( false );
     };
-    auto AuxStopCb = [this]()
+    auto AuxStopCallback = [this]()
     {
         AuxStopPlaying( true );
     };
 
     auto GenerateKey = []( bool isAuxInserted, bool doesUserWantsPlay )
     {
-        AuxAggregateState AggrStatus;
-        AggrStatus.key = 0;
-        AggrStatus.aggrStatus.auxInserted = isAuxInserted;
-        AggrStatus.aggrStatus.userPlayStatus = doesUserWantsPlay;
+        AuxSourceState_U AuxSourceState;
+        AuxSourceState.key = 0;
+        AuxSourceState.state.auxInserted = isAuxInserted;
+        AuxSourceState.state.userPlayStatus = doesUserWantsPlay;
         //key is now udpated.
-        return AggrStatus.key;
+        return AuxSourceState.key;
     };
 
     // High level design:
@@ -58,16 +58,16 @@ void CustomProductSTSStateTopAux::Init()
 
     // initialize the aggregateStatus - action map
     // 1) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - PLAY
-    m_AuxPlayStatusMap[GenerateKey( true, true )] = AuxPlayCb;
+    m_AuxStateActionMap[GenerateKey( true, true )] = AuxPlayCallback;
     // 2) isAuxInserted - Yes(true), doesUserWantsPlay - PAUSE(false) Expected action - PAUSE
-    m_AuxPlayStatusMap[GenerateKey( true, false )] = AuxPauseCb;
+    m_AuxStateActionMap[GenerateKey( true, false )] = AuxPauseCallback;
     // 3) isAuxInserted - Yes(true), doesUserWantsPlay - PAUSE(false) Expected action - STOP
-    m_AuxPlayStatusMap[GenerateKey( false, false )] = AuxStopCb;
+    m_AuxStateActionMap[GenerateKey( false, false )] = AuxStopCallback;
     // 4) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - STOP
-    m_AuxPlayStatusMap[GenerateKey( false, true )] = AuxStopCb;
+    m_AuxStateActionMap[GenerateKey( false, true )] = AuxStopCallback;
 
-    BOSE_INFO( m_logger, "%s: m_prevAggregateState=0x%x, Aux is %sinserted,User Play status:%s", __func__,
-               m_prevAggregateState.key, GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
+    BOSE_INFO( m_logger, "%s: m_prevState=0x%x, Aux is %sinserted,User Play status:%s", __func__,
+               m_prevState.key, GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
 
 }
 
@@ -76,13 +76,13 @@ bool CustomProductSTSStateTopAux::ProcessAuxAggregateStatus()
     bool actionTaken = false;
     BOSE_DEBUG( m_logger, "%s: AUX is %sactive,prevKey=0x%x,CurrentKey=0x%x, Aux is %sinserted,"
                 "User Play status:%s", __func__,
-                m_active ? "" : "NOT ", m_prevAggregateState.key, m_CurrAggregateStatus.key,
+                m_active ? "" : "NOT ", m_prevState.key, m_CurrentState.key,
                 GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
-    if( m_active && ( m_prevAggregateState != m_CurrAggregateStatus ) )
+    if( m_active && ( m_prevState != m_CurrentState ) )
     {
         BOSE_INFO( m_logger, "%s: Changing Play status ", __func__ );
-        m_AuxPlayStatusMap[m_CurrAggregateStatus.key]();
-        m_prevAggregateState = m_CurrAggregateStatus;
+        m_AuxStateActionMap[m_CurrentState.key]();
+        m_prevState = m_CurrentState;
         actionTaken = true;
     }
     return actionTaken;
@@ -136,7 +136,7 @@ bool CustomProductSTSStateTopAux::HandleDeactivateRequest( const STS::Deactivate
 {
     BOSE_INFO( m_logger, "Custom-HandleDeactivateRequest( %s )", m_account.GetSourceName().c_str() );
     SetUserPlayStatus( false );
-    m_prevAggregateState.Reset();
+    m_prevState.Reset();
     ProductSTSStateTop::HandleDeactivateRequest( req, seq );
     return true;
 }
