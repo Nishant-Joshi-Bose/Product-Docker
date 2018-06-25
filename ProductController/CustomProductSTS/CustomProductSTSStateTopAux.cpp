@@ -71,9 +71,8 @@ void CustomProductSTSStateTopAux::Init()
 
 }
 
-bool CustomProductSTSStateTopAux::ProcessAuxAggregateStatus()
+void CustomProductSTSStateTopAux::ProcessAuxAggregateStatus()
 {
-    bool actionTaken = false;
     BOSE_DEBUG( m_logger, "%s: AUX is %sactive,prevKey=0x%x,CurrentKey=0x%x, Aux is %sinserted,"
                 "User Play status:%s", __func__,
                 m_active ? "" : "NOT ", m_prevState.key, m_CurrentState.key,
@@ -83,9 +82,8 @@ bool CustomProductSTSStateTopAux::ProcessAuxAggregateStatus()
         BOSE_INFO( m_logger, "%s: Changing Play status ", __func__ );
         m_AuxStateActionMap[m_CurrentState.key]();
         m_prevState = m_CurrentState;
-        actionTaken = true;
     }
-    return actionTaken;
+    return ;
 }
 
 bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )

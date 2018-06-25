@@ -112,7 +112,7 @@ private:
         return m_CurrentState.state.auxInserted;
     }
     void Init();
-    bool ProcessAuxAggregateStatus();
+    void ProcessAuxAggregateStatus();
     AuxSourceState_U m_CurrentState;//current aggregate status
     std::unordered_map<uint32_t, Callback<>> m_AuxStateActionMap;
     AuxSourceState_U m_prevState;//used as cache
