@@ -138,6 +138,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOff( )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentFactoryDefault( )
     {
         return false;
