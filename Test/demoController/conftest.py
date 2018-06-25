@@ -55,3 +55,20 @@ def frontDoor_reboot(request, device_ip):
             frontDoorAPI.close()
     request.addfinalizer(tear)
     return frontDoorAPI
+
+@pytest.fixture(scope='function', autouse=True)
+def resetDemo(request, frontDoor_reboot, demoUtils, device_id):
+    """
+    reset demoMode False if True
+    :param request:
+    :param frontDoor_reboot:
+    :param demoUtils:
+    :param device_id:
+    :return:
+    """
+    def teardown():
+        logger.info("set demoMode False towards the end of every test")
+        setDemo(request, frontDoor_reboot, demoUtils, device_id)
+        demoUtils.deleteKeyConfig(frontDoor_reboot)
+        demoUtils.verifyDemoKeyConfig(frontDoor_reboot, "Error Reading configuration file")
+    request.addfinalizer(teardown)

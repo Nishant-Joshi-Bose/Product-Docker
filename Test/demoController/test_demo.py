@@ -14,8 +14,8 @@ import time
 @pytest.mark.usefixtures("save_speaker_log")
 class TestDemo():
     """ Test Class for Demo State """
-    @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "frontDoor_reboot")
-    def test_demoOnAfterTimeout(self, demoUtils, device_ip, request, deviceid, frontDoor_reboot):
+    @pytest.mark.usefixtures("demoUtils", "deviceid", "request", "frontDoor_without_user")
+    def test_demoOnAfterTimeout(self, demoUtils, request, deviceid, frontDoor_without_user):
         """
         This test verifies the demoMode stays on after timeout
         Test steps:
@@ -26,11 +26,11 @@ class TestDemo():
         5. Set demoMode True before timeout and verify demoMode stays True after timeout
         """
         logger.info("Start test_demo_on_after_timeout")
-        demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, True, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoMode(True, frontDoor_reboot)
+        demoUtils.setDemoMode(True, deviceid, frontDoor_without_user, True, 3, request.config.getoption("--network-iface"))
+        demoUtils.verifyDemoMode(True, frontDoor_without_user)
         time.sleep(5)
-        demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, False, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoModeOn(60, frontDoor_reboot)
+        demoUtils.setDemoMode(True, deviceid, frontDoor_without_user, False, 3, request.config.getoption("--network-iface"))
+        demoUtils.verifyDemoModeOn(60, frontDoor_without_user)
 
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "frontDoor_reboot")
     def test_demoOnFor30Min(self, demoUtils, device_ip, request, deviceid, frontDoor_reboot):
@@ -52,8 +52,8 @@ class TestDemo():
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(responseTimeout*30, frontDoor_reboot)
 
-    @pytest.mark.usefixtures("request", "deviceid", "demoUtils", "device_ip", "frontDoor_reboot")
-    def test_demoPlayPauseBehaviour(self, request, demoUtils, device_ip, deviceid, frontDoor_reboot):
+    @pytest.mark.usefixtures("request", "deviceid", "demoUtils", "frontDoor_reboot")
+    def test_demoPlayPauseBehaviour(self, request, demoUtils, deviceid, frontDoor_reboot):
         """
         This test verifies PlayPauseBehaviour while demoMode is True
         Test steps:
@@ -73,8 +73,8 @@ class TestDemo():
         demoUtils.verifyPlayPauseBehaviour(frontDoor_reboot)
         demoUtils.verifyDemoModeOn(20, frontDoor_reboot)
 
-    @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "get_config", "frontDoor_reboot")
-    def test_demoKeyConfig(self, demoUtils, device_ip, request, get_config, deviceid, frontDoor_reboot):
+    @pytest.mark.usefixtures("demoUtils", "deviceid", "request", "get_config", "frontDoor_reboot")
+    def test_demoKeyConfig(self, demoUtils, request, get_config, deviceid, frontDoor_reboot):
         """
         This test add keyConfig. Set demoMode true and finally delete the keyConfig
         Test steps:
