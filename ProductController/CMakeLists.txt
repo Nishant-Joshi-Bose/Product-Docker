@@ -52,7 +52,7 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairingCancelling.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
-  source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
+  source/CustomStateMachine/CustomProductControllerStateAdaptIQCancelling.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp

@@ -75,6 +75,8 @@ void CustomProductControllerStateAdaptIQCancelling::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
+    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,8 +91,7 @@ void CustomProductControllerStateAdaptIQCancelling::HandleStateExit( )
     ///
     GetProductController( ).SendAllowSourceSelectMessage( true );
 
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
-    m_timer->Stop( );
+    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQCancelling is being exited." );
 
     HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
 
@@ -125,7 +126,7 @@ bool CustomProductControllerStateAdaptIQCancelling::HandleAdaptIQStatus( const P
 /// @brief CustomProductControllerStateAdaptIQCancelling::HardwareIface
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr<CustomProductLpmHardwareInterface>& CustomProductControllerStateAdaptIQ::HardwareIface( )
+std::shared_ptr<CustomProductLpmHardwareInterface>& CustomProductControllerStateAdaptIQCancelling::HardwareIface( )
 {
     return GetCustomProductController( ).GetLpmHardwareInterface( );
 }
