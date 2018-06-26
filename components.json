@@ -33,7 +33,7 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.5.0-46+d64c839"
+    "selected_version": "Release/master/1.5.0-82+e4b9243"
   },
   {
     "name": "bose-opkg-utils",
@@ -77,7 +77,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/1.5.0-37+1f3aca4"
+    "selected_version": "Release/master/1.5.0-43+3b6c006"
   },
   {
     "name": "CastleLibs-native",
@@ -105,7 +105,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/1.5.1-113+a7f0ce3"
+    "selected_version": "Release/master/1.5.1-116+68c8ba2"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/1.5.2-183+76faca6"
+    "selected_version": "Release/master/1.5.2-197+2352364"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -129,7 +129,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/1.5.1-104+11170b1"
+    "selected_version": "Release/master/1.5.1-116+bd66c32"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.6-686+2cbfedb"
+    "selected_version": "Release/master/1.5.6-696+4297f3f"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/1.5.1-12+f573e1a"
+    "selected_version": "Release/master/1.5.1-16+8db70f0"
   },
   {
     "name": "TestUtils",
