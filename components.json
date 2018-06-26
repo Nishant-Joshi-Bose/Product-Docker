@@ -13,11 +13,11 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-25_1827"
+    "selected_version": "Continuous/Castle-Fork/2018-06-26_0941"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.5.0-46+d64c839"
+    "selected_version": "Continuous/master/1.5.0-80+d470614"
   },
   {
     "name": "bose-opkg-utils",
@@ -53,7 +53,7 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-28+2a7386f"
+    "selected_version": "Continuous/master/1.5.0-29+f707b2a"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-114+673e153"
+    "selected_version": "Continuous/master/1.5.1-115+eec3cba"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -105,7 +105,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-33+5522612"
+    "selected_version": "Release/master/1.5.1-41+6a4337f"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-88+f887275"
+    "selected_version": "Release/master/1.5.0-90+f887275"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -125,7 +125,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Continuous/master/1.5.3-153+bc1b7c5"
+    "selected_version": "Continuous/master/1.5.3-155+63e7bf8"
   },
   {
     "name": "LpmMfgTool",
@@ -149,7 +149,7 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-846+fc4c0dd"
+    "selected_version": "Continuous/master/1.5.0-865+5b6bd71"
   },
   {
     "name": "ProductControllerCommon",
@@ -177,7 +177,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-194+48a3230"
+    "selected_version": "Continuous/master/1.5.0-195+cab6049"
   },
   {
     "name": "RivieraLpmTools",
@@ -193,15 +193,15 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-93+aa53fc1"
+    "selected_version": "Release/master/1.5.1-95+aa53fc1"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.6-686+2cbfedb"
+    "selected_version": "Continuous/master/1.5.6-695+e610ce9"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-25_1827"
+    "selected_version": "Continuous/Castle-Fork/2018-06-26_0941"
   },
   {
     "name": "SystemEventService-qc8017_32",
