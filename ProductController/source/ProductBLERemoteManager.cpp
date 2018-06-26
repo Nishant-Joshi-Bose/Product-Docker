@@ -638,7 +638,7 @@ void ProductBLERemoteManager::CheckPairing( void )
     // Indeterminate states
     case RemoteStatus::PSTATE_INIT:
     case RemoteStatus::PSTATE_UNPAIRING:
-    case RemoteStatus::PSTATE_UNKOWN:
+    case RemoteStatus::PSTATE_UNKNOWN:
         break;
 
     // In these states, any pairing pending request isn't necessary (we're already paired)
