@@ -238,11 +238,6 @@ public:
         return false;
     }
 
-    virtual bool HandleSoftwareUpdateStart( uint32_t delay )
-    {
-        return false;
-    }
-
     virtual bool HandleSoftwareUpdateInstall( )
     {
         return false;
