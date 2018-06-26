@@ -32,6 +32,7 @@
 #include "EndPointsDefines.h"
 #include "ProductSourceInfo.h"
 #include "ProductSTS.pb.h"
+#include "SHELBY_SOURCE.h"
 
 using namespace ProductPb;
 
@@ -108,12 +109,14 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     if( action == ( uint16_t )Action::ACTION_TV )
     {
         playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( TV ) );
+        playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
     }
     else if( action == ( uint16_t )Action::ACTION_GAME )
     {
         if( m_gameSourcePlaybackRq.has_sourceaccount() )
         {
             playbackRequestData.set_sourceaccount( m_gameSourcePlaybackRq.sourceaccount( ) );
+            playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
         }
         else
         {
@@ -126,6 +129,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         if( m_dvdSourcePlaybackRq.has_sourceaccount() )
         {
             playbackRequestData.set_sourceaccount( m_dvdSourcePlaybackRq.sourceaccount( ) );
+            playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
         }
         else
         {
@@ -138,6 +142,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         if( m_cablesatSourcePlaybackRq.has_sourceaccount() )
         {
             playbackRequestData.set_sourceaccount( m_cablesatSourcePlaybackRq.sourceaccount( ) );
+            playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
         }
         else
         {
@@ -147,11 +152,13 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_APAPTIQ_START )
     {
-        playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( ADAPTIQ ) );
+        playbackRequestData.set_sourceaccount( SetupSourceSlot_Name( ADAPTIQ ) );
+        playbackRequestData.set_source( SHELBY_SOURCE::SETUP );
     }
     else if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
     {
-        playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( PAIRING ) );
+        playbackRequestData.set_sourceaccount( SetupSourceSlot_Name( PAIRING ) );
+        playbackRequestData.set_source( SHELBY_SOURCE::SETUP );
     }
     else
     {
@@ -169,8 +176,6 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         activeSource  = nowSelectingContentItem.source( );
         activeAccount = nowSelectingContentItem.sourceaccount( );
     }
-
-    playbackRequestData.set_source( ProductSourceSlot_Name( PRODUCT ) );
 
     if( activeSource != playbackRequestData.source()  ||
         activeAccount != playbackRequestData.sourceaccount( ) )
