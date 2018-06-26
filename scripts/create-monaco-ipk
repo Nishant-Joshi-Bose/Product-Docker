@@ -94,7 +94,7 @@ put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "monaco postinst"
 # Set Progress End
-/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
 exit 0
 EOF
 
@@ -107,7 +107,7 @@ put_script "$stage/preinst" <<EOF
 #!/bin/sh
 echo "monaco preinst"
 # Set Progress Start
-/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
 echo "Stopping dyz-shm"
 pkill dyz-shm
 exit 0

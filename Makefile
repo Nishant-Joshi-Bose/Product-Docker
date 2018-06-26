@@ -181,7 +181,7 @@ product-script-ipk:
 
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph
-	./scripts/create-product-tar
+	./scripts/create-product-tar -i $(IPKS_HSP)
 
 .PHONY: clean
 clean:
@@ -191,4 +191,3 @@ clean:
 .PHONY: distclean
 distclean:
 	git clean -fdX
-
