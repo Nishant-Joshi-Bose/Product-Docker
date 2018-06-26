@@ -137,7 +137,11 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.2-147+73661e0"
+    "selected_version": "Release/master/1.5.3-151+1b6d1ea"
+  },
+  {
+    "name": "LpmMfgTool",
+    "selected_version": "Release/master/0.0.1-4+34833d6"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -177,7 +181,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.10"
+    "selected_version": "Release/sop/3.10.3"
   },
   {
     "name": "Riviera-Toolchain",
@@ -218,6 +222,10 @@
   {
     "name": "SystemEventService-qc8017_32",
     "selected_version": "Release/master/0.5.2-57+4e76ab1"
+  },
+  {
+    "name": "Telemetry-qc8017_32",
+    "selected_version": "Release/master/1.5.1-12+f573e1a"
   },
   {
     "name": "TestUtils",

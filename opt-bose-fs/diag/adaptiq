@@ -46,6 +46,14 @@ else:
     print """
 <!DOCTYPE HTML>
 <html>
+    <script>
+    function aiqstart() {
+        var url = "/diag/adaptiq/put";
+        var request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.send(null);
+    }
+    </script
     <head>
         <meta charset="utf-8">
         <title>AdaptIQ Diagnostics</title>
@@ -81,7 +89,7 @@ else:
         <hr>
         <li>FrontDoor Endpoint
         <iframe src="/diag/adaptiq/get"></iframe>   <!-- inline frame pulls from "get" portion of CGI script, while button fetches "pull" request -->
-        <input id='submit-payload-button' type='submit' value='AdaptIQ Start' class='submit btn waves-effect waves-light' onclick='fetch("/diag/adaptiq/put")'/>
+        <input id='submit-payload-button' type='submit' value='AdaptIQ Start' class='submit btn waves-effect waves-light' onclick='aiqstart()'/>
         <hr>
     </body>
 </html>
