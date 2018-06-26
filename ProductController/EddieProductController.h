@@ -97,7 +97,7 @@ public:
     }
     std::string GetProductVersionNumber() const override
     {
-        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
+        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_NUMBER + std::string( "+" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
