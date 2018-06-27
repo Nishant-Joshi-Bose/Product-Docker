@@ -58,13 +58,9 @@ if guid is None or not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
 
 fixes = []
 
-# 'development' is optional, but if present must be "true" or "false"
-optional_dev = True
 dev = get("development")
 if dev is not None and dev != "true" and dev != "false":
-    warn("development field is invalid:", dev)
-    fixes.append("set development true")
-    optional_dev = False
+    warn("Suspicious development:", dev)
 
 cc = get("country_code")
 if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
@@ -137,9 +133,6 @@ if not fixes:
 
 if brief:
     sys.exit(1)
-
-if optional_dev:
-    fixes.append("set development true # (optional)")
 
 print """
 To set manufacturing data:

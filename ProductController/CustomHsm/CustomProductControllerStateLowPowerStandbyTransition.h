@@ -26,5 +26,20 @@ public:
     {
     }
     void HandleStateStart() override;
+
+protected:
+
+    /*! \copydoc ProductControllerStateLowPowerStandbyTransition::IsReadyForLowPowerState()
+     * Include custom handling for the LCD via DisplayController.
+     */
+    bool IsReadyForLowPowerState() const override;
+
+private:
+
+    /*! \brief Flag that the display controller is ready.
+     */
+    void SetDisplayControllerIsReady();
+
+    bool m_displayControllerIsReady;        //!< Received response from DisplayController.
 };
 } /// namespace ProductApp
