@@ -26,6 +26,8 @@ SYSTEM_INFO_FILE = "The System Time Zone Info file is " + '"/usr/share/zoneinfo/
 NV_RAM_INFO_FILE = "The NV-RAM Time Zone Info file is " + '"/usr/share/zoneinfo/$timezone"'
 SET_TIMEZONE_RESPONSE = "Setting the Clock Display Time Zone Info to " + '"$timezone"'
 
+UNSUPPORTED_ZONES =  ['America/Punta_Arenas', 'Asia/Atyrau', 'Europe/Saratov']
+
 
 def pytest_generate_tests(metafunc):
     """
@@ -39,8 +41,8 @@ def pytest_generate_tests(metafunc):
     metafunc.parametrize("timezone", timezones)
 
 
-@pytest.mark.usefixtures("request")
-def test_set_timezone(request, timezone):
+@pytest.mark.usefixtures("device_id")
+def test_set_timezone(device_id, timezone):
     """
     Set and verify different timezones on Eddie
 
@@ -49,12 +51,13 @@ def test_set_timezone(request, timezone):
     2 Verify the timezone is set through get timezone command
     3 Verify system info and nvram files for timezone in get timezone command
 
-    :param request: A request for a fixture from a test or fixture function.
+    :param device_id: ADB Device ID of target system
     :param timezone: parameterize timezone value of all timezones
     """
+    if timezone in UNSUPPORTED_ZONES:
+        pytest.skip("{} is not supported on Riviera Linux OS".format(timezone))
 
     LOGGER.debug("Timezone to set for Eddie is %s", timezone)
-    device_id = request.config.getoption("--device-id")
 
     # execute set timezone command on telnet
     command = SET_TIMEZONE + timezone
