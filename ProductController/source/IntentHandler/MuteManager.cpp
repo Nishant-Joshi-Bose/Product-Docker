@@ -28,19 +28,13 @@
 #include "FrontDoorClient.h"
 #include "ProfessorProductController.h"
 #include "MuteManager.h"
+#include "ProductEndpointDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following constants define FrontDoor endpoints used by the VolumeManager
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -87,7 +81,7 @@ void MuteManager::Initialize( )
     };
 
     m_NotifierCallback = m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
-                         ( FRONTDOOR_AUDIO_VOLUME, fNotify );
+                         ( FRONTDOOR_AUDIO_VOLUME_API, fNotify );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,9 +159,12 @@ void MuteManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume const& vol
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void MuteManager::ToggleMute( )
 {
-    auto errFunc = []( const FrontDoor::Error & e )
+    auto errFunc = []( const FrontDoor::Error & error )
     {
-        BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+        BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor mute request.",
+                    error.code(),
+                    error.subcode(),
+                    error.message().c_str() );
     };
     auto respFunc = [ this ]( SoundTouchInterface::volume v )
     {
@@ -182,7 +179,7 @@ void MuteManager::ToggleMute( )
 
     BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
     m_FrontDoorClient->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-        ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
+        FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respFunc, errCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

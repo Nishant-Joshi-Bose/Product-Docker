@@ -75,6 +75,9 @@ public:
     void HandleStateExit( )                                               override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )   override;
     bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent ) override;
+
+private:
+    void SetVolumeToThresholdLimit( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

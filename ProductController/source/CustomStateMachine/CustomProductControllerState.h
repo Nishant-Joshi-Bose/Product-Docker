@@ -457,6 +457,8 @@ protected:
     ///
     static ProfessorProductController& GetCustomProductController( );
 
+    static void FrontDoorErrorCallback( const FrontDoor::Error & error );
+
     static ProductController* s_productController;
 };
 
