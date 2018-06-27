@@ -72,7 +72,7 @@ ProductCecHelper::ProductCecHelper( ProfessorProductController& ProductControlle
       m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) ),
       m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) )
 {
-    m_cecresp.set_mode( "On" );
+    m_cecresp.set_mode( "ON" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,15 +196,15 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
     }
     else if( req.mode() == s_ModeOn )
     {
-        msg.mutable_cecmode()->set_cecmode( ProductCecMode::On );
+        msg.mutable_cecmode()->set_cecmode( ProductCecMode::ON );
     }
     else if( req.mode() == s_ModeOff )
     {
-        msg.mutable_cecmode()->set_cecmode( ProductCecMode::Off );
+        msg.mutable_cecmode()->set_cecmode( ProductCecMode::OFF );
     }
     else if( req.mode() == s_ModeAltOn )
     {
-        msg.mutable_cecmode()->set_cecmode( ProductCecMode::AltOn );
+        msg.mutable_cecmode()->set_cecmode( ProductCecMode::ALTERNATE_ON );
     }
     else
     {
@@ -227,6 +227,8 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
         error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_CEC );
         errorRsp.Send( error );
     }
+
+    m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, m_cecresp );
 }
 
 
@@ -509,11 +511,7 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
             nowPlayingStatus.container( ).contentitem( ).has_source( ) and
             nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
         {
-            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0   and
-                ( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( TV ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 ) )
+            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( SHELBY_SOURCE::PRODUCT ) == 0 )
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
 

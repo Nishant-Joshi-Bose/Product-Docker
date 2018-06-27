@@ -17,20 +17,22 @@ package ProductSTS;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// This is the identifier used to uniquely designate a product source slot for STS, as well as a
-/// source and source account name for Castle content items, based on the associated enumeration
-/// string.
+/// source account name for Castle content items, based on the associated enumeration string.
 ///
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 enum ProductSourceSlot
 {
-    PRODUCT = 0;
-    SETUP   = 1;
-    TV      = 2;
-    ADAPTIQ = 3;
-    PAIRING = 4;
-    SLOT_0  = 5;
-    SLOT_1  = 6;
-    SLOT_2  = 7;
+    TV      = 1;
+    SLOT_0  = 2;
+    SLOT_1  = 3;
+    SLOT_2  = 4;
+}
+
+enum SetupSourceSlot
+{
+    SETUP   = 5;
+    ADAPTIQ = 6;
+    PAIRING = 7;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -46,6 +46,14 @@ else:
     print """
 <!DOCTYPE HTML>
 <html>
+    <script>
+    function accessorypair() {
+        var url = "/diag/accessories/put";
+        var request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.send(null);
+    }
+    </script
     <head>
         <meta charset="utf-8">
         <title>Accessories Diagnostics</title>
@@ -81,7 +89,7 @@ else:
         <hr>
         <li>FrontDoor Endpoint
         <iframe src="/diag/accessories/get"></iframe>   <!-- inline frame pulls from "get" portion of CGI script, while button fetches "pull" request -->
-        <input id='submit-payload-button' type='submit' value='Pairing Start' class='submit btn waves-effect waves-light' onclick='fetch("/diag/accessories/put")'/>
+        <input id='submit-payload-button' type='submit' value='Pairing Start' class='submit btn waves-effect waves-light' onclick='accessorypair()'/>
         <hr>
     </body>
 </html>

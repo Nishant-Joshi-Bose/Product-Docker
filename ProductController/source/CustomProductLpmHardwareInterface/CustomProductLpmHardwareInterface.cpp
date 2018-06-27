@@ -515,7 +515,7 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 ///
 /// @name  CustomProductHardwareLpmInterface::SetStreamConfig
 ///
-/// @brief This method send setStreamConfig request to DSP,
+/// @brief This method sends setStreamConfig request to DSP,
 ///
 /// @param LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig
 /// @param Callback<IpcDspStreamConfigRespPayload_t> cb
@@ -543,7 +543,7 @@ bool CustomProductLpmHardwareInterface::SetStreamConfig( LpmServiceMessages::Ipc
 ///
 /// @name  CustomProductHardwareLpmInterface::SetInternalMute
 ///
-/// @brief This method send internalMute to DSP
+/// @brief This method sends internalMute to DSP
 ///
 /// @param bool mute
 ///
@@ -579,6 +579,35 @@ bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::IpcIma
 
     p.set_image( image );
     GetLpmClient( )->DspRebootToImage( p );
+
+    return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductLpmHardwareInterface::SendAutowakeStatus
+///
+/// @brief This method sends autowake status to LPM
+///
+/// @param bool enabled This argument indicates whether autowake is enabled
+///
+/// @return bool This method returns false if LPM is not connected. Otherwise, it
+///              attepmts to send the status and returns true
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::SendAutowakeStatus( bool enabled )
+{
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "LPM not connected, cannot send autowake status" );
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "Attemp to send autowake status" );
+
+    IpcAutowakeStatus_t autowakeStatus;
+    autowakeStatus.set_status( enabled );
+    GetLpmClient()->SendAutowakeStatus( autowakeStatus );
 
     return true;
 }

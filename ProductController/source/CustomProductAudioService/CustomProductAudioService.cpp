@@ -21,7 +21,6 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
-#include "ProductSTS.pb.h"
 
 namespace ProductApp
 {
@@ -54,6 +53,42 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
 void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Register to handle DSP booted indications
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    auto bootedFunc = [ this ]( LpmServiceMessages::IpcDeviceBoot_t image )
+    {
+        // Verify that stream configuration is actually valid (it's possible that we get a "booted" indication
+        // before first audio path select, since DSP booting and audio path selection are independent). This
+        // is okay, since in that case audio path selection will still send stream configuration to the DSP)
+        if( m_DspStreamConfig.has_audiosettings() )
+        {
+            BOSE_INFO( s_logger, "DSP booted, send stream config (%s)", ProtoToMarkup::ToJson( m_DspStreamConfig ).c_str() );
+            m_ProductLpmHardwareInterface->SetStreamConfig( m_DspStreamConfig, m_StreamConfigResponseCb );
+            // stream config callback is normally empty (gets set when we get a SetStreamConfig request that
+            // we can't immediately forward to DSP because it's booting)
+            m_StreamConfigResponseCb = {};
+        }
+        m_DspIsRebooting = false;
+    };
+
+    auto lpmConnectCb = [ this, bootedFunc ]( bool connected )
+    {
+        if( not connected )
+        {
+            return;
+        }
+
+        bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
+                        ( LpmServiceMessages::IPC_DSP_BOOTED_EVENT, Callback<LpmServiceMessages::IpcDeviceBoot_t>( bootedFunc ) );
+        if( not success )
+        {
+            BOSE_ERROR( s_logger, "%s error registering for DSP boot status", __func__ );
+            return;
+        }
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmConnectCb );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize member variables related to AudioPath
@@ -118,8 +153,6 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     BOSE_DEBUG( s_logger, __func__ );
     BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
 
-    using namespace ProductSTS;
-
     // Parse contentItem string received from APProduct
     bool error = false;
     SoundTouchInterface::ContentItem contentItemProto;
@@ -141,7 +174,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
         FetchLatestAudioSettings();
         // Update input route
-        if( contentItemProto.source() == ProductSourceSlot_Name( PRODUCT ) )
+        if( contentItemProto.source() == SHELBY_SOURCE::PRODUCT )
         {
             m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
                            ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
@@ -248,7 +281,17 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
         channel++;
     }
 
-    m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
+    m_DspStreamConfig = streamConfig;
+    if( not m_DspIsRebooting )
+    {
+        // send it to the DSP
+        m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
+    }
+    else
+    {
+        // wait until the DSP reboots to send it, and save the response callback
+        m_StreamConfigResponseCb = cb;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

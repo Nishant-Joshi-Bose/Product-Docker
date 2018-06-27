@@ -529,11 +529,15 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
-    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
                                     m_ProductLpmHardwareInterface->GetLpmClient( ) );
+    ///
+    /// ProductAdaptIQManager depends on CustomProductAudioService, so make sure that CustomProductAudioService is
+    /// instantiated first
+    ///
+    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductAudioService         == nullptr ||
@@ -553,6 +557,9 @@ void ProfessorProductController::Run( )
     /// Apply settings from persistence
     ///
     ApplyOpticalAutoWakeSettingFromPersistence( );
+
+    /// Register a callback so the autowake from persistence is sent to LPM when connected
+    RegisterOpticalAutowakeForLpmConnection( );
 
     ///
     /// Set up LightBarController
@@ -781,7 +788,7 @@ PassportPB::contentItem ProfessorProductController::GetOOBDefaultLastContentItem
     using namespace ProductSTS;
 
     PassportPB::contentItem item;
-    item.set_source( ProductSourceSlot_Name( PRODUCT ) );
+    item.set_source( SHELBY_SOURCE::PRODUCT );
     item.set_sourceaccount( ProductSourceSlot_Name( TV ) );
     return item;
 }
@@ -868,10 +875,10 @@ void ProfessorProductController::SetupProductSTSController( )
     /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
     /// will always be available. SLOT sources need to be set-up before they become available.
     ///
-    ProductSTSController::SourceDescriptor descriptor_Setup   { SETUP,   ProductSourceSlot_Name( SETUP ),   false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup   { SETUP,   SetupSourceSlot_Name( SETUP ),   false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, ProductSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
-    ProductSTSController::SourceDescriptor descriptor_Pairing { PAIRING, ProductSourceSlot_Name( PAIRING ), false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
+    ProductSTSController::SourceDescriptor descriptor_Pairing { PAIRING, SetupSourceSlot_Name( PAIRING ), false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, commonStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, commonStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, commonStateFactory, true };
@@ -1105,7 +1112,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     if( message.has_lpmstatus( ) )
     {
         ///
-        /// Register for product-specific LPM events if connected. Common handling of the product 
+        /// Register for product-specific LPM events if connected. Common handling of the product
         /// message is then done.
         ///
         if( message.lpmstatus( ).has_connected( ) && message.lpmstatus( ).connected( ) )
@@ -1123,8 +1130,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     {
         const auto& slot = message.selectsourceslot( ).slot( );
 
-        BOSE_DEBUG( s_logger, "An STS Select message was received for slot %s.",
-                    ProductSTS::ProductSourceSlot_Name( static_cast<ProductSTS::ProductSourceSlot>( slot ) ).c_str( ) );
+        BOSE_DEBUG( s_logger, "An STS Select message was received for slot %d.", slot );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Wireless network status messages are handled at this point.
@@ -1206,6 +1212,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
 
         NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
+
+        m_ProductLpmHardwareInterface->SendAutowakeStatus( m_IsAutoWakeEnabled );
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
@@ -1631,6 +1639,50 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::RegisterOpticalAutowakeForLpmConnection
+///
+/// @brief This method registers callback with LPM connection. When LPM is connected it sends the
+///        autowake status read from NV to LPM
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::RegisterOpticalAutowakeForLpmConnection( )
+{
+    auto lpmFunc = [ this ]( bool connected )
+    {
+        if( connected )
+        {
+            m_ProductLpmHardwareInterface->SendAutowakeStatus( m_IsAutoWakeEnabled );
+        }
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmFunc );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::IsProductControlSurface
+///
+/// @brief  This method is called to determine whether the given key origin is a product control
+///         surface.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsProductControlSurface( LpmServiceMessages::KeyOrigin_t keyOrigin ) const
+{
+    switch( keyOrigin )
+    {
+    case LpmServiceMessages::KEY_ORIGIN_CONSOLE_BUTTON:
+    case LpmServiceMessages::KEY_ORIGIN_CAPSENSE:
+    case LpmServiceMessages::KEY_ORIGIN_IR:
+    case LpmServiceMessages::KEY_ORIGIN_RF:
+    case LpmServiceMessages::KEY_ORIGIN_TAP:
+        return true;
+
+    default:
+        return false;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

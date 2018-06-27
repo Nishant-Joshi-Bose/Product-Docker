@@ -64,9 +64,9 @@ message ProductCecMode
 {
         enum CecModeValue
         {
-            Off       = 0;
-            On        = 1;
-            AltOn     = 2;
+            OFF       = 0;
+            ON        = 1;
+            ALTERNATE_ON = 2;
         }
         optional CecModeValue cecmode = 1;
 }
