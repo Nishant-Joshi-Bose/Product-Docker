@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-26_1919"
+    "selected_version": "Release/Castle-Fork/1.5.12.42906.2884786"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-29+f707b2a"
+    "selected_version": "Continuous/master/1.5.0-30+3f7e152"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@dcea9f3e0d8d2427716eab1539871c2af08bfb2e"
+    "selected_version": "master@57ed9d32874297a5527ead8f05db3cf143e35903"
   },
   {
     "name": "ProductUIAssets",
@@ -201,7 +201,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-26_1919"
+    "selected_version": "Release/Castle-Fork/1.5.12.42906.2884786"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@cab04e3b9a7c63428f52b38958bd21b6a2125bd9"
+    "selected_version": "master@52afe60e6508c30ba84ada1de32530f90abb5603"
   },
   {
     "name": "Webkit",
