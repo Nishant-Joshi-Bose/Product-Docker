@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@3ae387f7525cfd46b4013aef69e9cddddace1659"
+    "selected_version": "master@567a0fb2769e9c2b5aff0f57ff507f40fd633f98"
   },
   {
     "name": "A4VVideoManagerService",
@@ -165,7 +165,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@03d6349c82ee4054e02c497a67d5318389a5e7d6"
+    "selected_version": "master@57ed9d32874297a5527ead8f05db3cf143e35903"
   },
   {
     "name": "ProductUIAssets",
