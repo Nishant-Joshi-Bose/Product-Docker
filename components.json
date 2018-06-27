@@ -49,11 +49,11 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.3-372+86f13cb"
+    "selected_version": "Release/master/1.5.4-402+8fe88b0"
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-30+3f7e152"
+    "selected_version": "Release/master/1.5.0-31+efc5ac4"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
