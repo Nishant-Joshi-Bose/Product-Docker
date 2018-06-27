@@ -1,5 +1,10 @@
 <ShepherdConfig>
 
-  <daemon name="Monaco"/>
+  <daemon name="Monaco"
+          exe="run_dinghy">
+    <arg>MONACO</arg>
+    <arg>--log-console</arg>
+    <arg>--device=/dev/fb1</arg>
+  </daemon>
 
 </ShepherdConfig>
