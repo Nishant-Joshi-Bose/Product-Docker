@@ -31,6 +31,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
 #include "ProductBLERemoteManager.h"
+#include "ProductEndpointDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -76,8 +77,11 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC on.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOn( );
+    GetCustomProductController( ).GetDspHelper( )->SetNormalOperationsMonitor( true );
     GetCustomProductController( ).GetBLERemoteManager( )->PowerOn( );
-    GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( true );
+
+    // Limit the volume to threshold when entering PLAYING, perhaps volume was changed while system was in another state
+    SetVolumeToThresholdLimit( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,6 +131,28 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
     GetCustomProductController( ).GetCecHelper( )->PowerOff( );
     GetCustomProductController( ).GetBLERemoteManager( )->PowerOff( );
     GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( false );
+
+    // Limit the volume to threshold when exiting PLAYING, so UI can show the value expected when we resume playing
+    SetVolumeToThresholdLimit( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductControllerStatePlaying::SetVolumeToThresholdLimit
+///
+/// @brief Consult ProductController and set volume to the limited value if desired
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlaying::SetVolumeToThresholdLimit( )
+{
+    auto desiredPlayingVolumePair = GetCustomProductController( ).GetDesiredPlayingVolume( );
+    if( desiredPlayingVolumePair.first )
+    {
+        SoundTouchInterface::volume v;
+        v.set_value( desiredPlayingVolumePair.second );
+        GetCustomProductController( ).GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_VOLUME_API, v, {}, FrontDoorErrorCallback );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
