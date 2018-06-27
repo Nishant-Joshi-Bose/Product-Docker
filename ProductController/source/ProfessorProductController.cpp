@@ -528,7 +528,8 @@ void ProfessorProductController::Run( )
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
-    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
+    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this,
+                                    m_FrontDoorClientIF );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
