@@ -237,6 +237,10 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/Eddie-SOP/0.3.3-62+1c36018"
+    "selected_version": "Release/master/0.4.1-73+b4c1865"
+  },
+  {
+    "name": "DinghyWebBrowser-qc8017_64",
+    "selected_version": "Release/bose-master/1.0.0-46+8a6938e"
   }
 ]

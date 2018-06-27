@@ -1,0 +1,9 @@
+
+#!/bin/sh
+
+# Change Output to non-existent framebuffer, to prevent output over HDMI. 
+# When the NowPlaying display Brussels is implemented, this can be removed
+# and the Shepherd-Monaco.xml file can be modified to match Eddie.
+export WPE_FBDEV=/dev/fb1
+
+exec run_dinghy MONACO --log-console

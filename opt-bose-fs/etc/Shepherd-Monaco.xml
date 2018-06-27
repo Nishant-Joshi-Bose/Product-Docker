@@ -1,9 +1,5 @@
 <ShepherdConfig>
 
-  <daemon name="Monaco"
-          exe="/opt/Bose/webkit/run_wpe.sh">
-    <arg>MONACO</arg>
-    <arg>1.0</arg>
-  </daemon>
+  <daemon name="Monaco"/>
 
 </ShepherdConfig>
