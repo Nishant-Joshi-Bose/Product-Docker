@@ -14,6 +14,9 @@
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "Bass.pb.h"
+#include "Treble.pb.h"
+#include "Center.pb.h"
+#include "Mode.pb.h"
 
 using namespace std::placeholders;
 
@@ -91,9 +94,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
-            auto dbaPb = std::make_shared<DataCollection::Bass>();
-            dbaPb->set_bass( m_audioSettingsMgr->GetBass( ).value() );
-            m_dataCollectionClient->SendData( dbaPb, "bass-changed" );
+            auto bdcPb = std::make_shared<DataCollectionPb::Bass>();
+            bdcPb->set_bass( m_audioSettingsMgr->GetBass( ).value() );
+            m_dataCollectionClient->SendData( bdcPb, "bass-changed" );
         }
         return error;
     };
@@ -122,6 +125,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             {
                 m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
                 SendMainStreamAudioSettingsEvent();
+                auto cdcPb = std::make_shared<DataCollectionPb::Center>();
+                cdcPb->set_center( m_audioSettingsMgr->GetCenter( ).value() );
+                m_dataCollectionClient->SendData( cdcPb, "center-level-changed" );
             }
             return error;
         };
@@ -151,6 +157,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             {
                 m_mainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
                 SendMainStreamAudioSettingsEvent();
+                auto mdcPb = std::make_shared<DataCollectionPb::Mode>();
+                mdcPb->set_mode( m_audioSettingsMgr->GetMode( ).value() );
+                m_dataCollectionClient->SendData( mdcPb, "mode-changed" );
             }
             return error;
         };
@@ -178,6 +187,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
+            auto tdcPb = std::make_shared<DataCollectionPb::Treble>();
+            tdcPb->set_treble( m_audioSettingsMgr->GetTreble( ).value() );
+            m_dataCollectionClient->SendData( tdcPb, "treble-changed" );
         }
         return error;
     };
