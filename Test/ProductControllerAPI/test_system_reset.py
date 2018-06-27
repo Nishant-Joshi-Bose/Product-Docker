@@ -92,6 +92,9 @@ def test_system_reset_device_state(request, adb, device_state, wifi_config):
 
     assert device_state != eddie_helper.BOOTING, "Device is still in Booting ({}) state.".format(device_state)
 
+    if front_door.isOpen():
+        front_door.close()
+
 
 @pytest.mark.usefixtures("request", "adb", "wifi_config", "ip_address_wlan")
 @pytest.mark.parametrize("device_source", ["AUX", "BLUETOOTH"])
@@ -157,3 +160,6 @@ def test_system_reset_device_source(request, adb, device_source, wifi_config):
     device_state = eddie_helper.wait_for_setup_state(device_id)
 
     assert device_state != eddie_helper.BOOTING, "Device is still in '{}' state.".format(eddie_helper.BOOTING)
+
+    if front_door.isOpen():
+        front_door.close()

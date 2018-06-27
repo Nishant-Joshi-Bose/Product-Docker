@@ -36,10 +36,8 @@ def test_system_update_start_from_setup_state(front_door_queue):
 
     # 2. Request system update start API with PUT method.
     LOGGER.info("Testing of system update start API")
-    data_request = dict()
-    data_request["delay"] = 0
-    data = json.dumps(data_request)
-    response = eddie_helper.system_update_start(front_door_queue, data)
+    delay = 0
+    response = front_door_queue.sendSystemUpdateStartRequest(delay)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
@@ -56,10 +54,9 @@ def test_system_update_start_playing_from_aux(front_door_queue):
 
     # 2. Request system update start API with PUT method.
     LOGGER.info("Testing of system update start API")
-    data_request = dict()
-    data_request["delay"] = 0
-    data = json.dumps(data_request)
-    response = eddie_helper.system_update_start(front_door_queue, data)
+
+    delay = 0
+    response = front_door_queue.sendSystemUpdateStartRequest(delay)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
@@ -78,11 +75,15 @@ def test_system_update_start_from_idle_state(front_door_queue):
     data_request = dict()
     data_request["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_request)
-    eddie_helper.set_system_power_control(front_door_queue, data)
-    time.sleep(10)
+
+    front_door_queue.setSystemPowerControl(data)
+    for _ in range(25):
+        state = front_door_queue.getState()
+        if state == eddie_helper.IDLE:
+            break
+        time.sleep(1)
 
     # 2. Verify device state which should be "IDLE".
-    state = front_door_queue.getState()
     assert state == eddie_helper.IDLE, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
@@ -90,10 +91,9 @@ def test_system_update_start_from_idle_state(front_door_queue):
 
     # 3. Request system update start API with PUT method.
     LOGGER.info("Testing of system update start API")
-    data_request = dict()
-    data_request["delay"] = 0
-    data = json.dumps(data_request)
-    response = eddie_helper.system_update_start(front_door_queue, data)
+
+    delay = 0
+    response = front_door_queue.sendSystemUpdateStartRequest(delay)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
@@ -112,10 +112,8 @@ def test_system_update_start_errors(front_door_queue):
     LOGGER.info("Testing of system update start API with invalid data")
 
     # 1. Validate error message by sending invalid delay value type.
-    data_request = dict()
-    data_request["delay"] = "Invalid"
-    data = json.dumps(data_request)
-    response = eddie_helper.system_update_start(front_door_queue, data)
+    delay = "Invalid"
+    response = front_door_queue.sendSystemUpdateStartRequest(delay)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # 2. Verify error subcode which should be "2005".
@@ -127,7 +125,7 @@ def test_system_update_start_errors(front_door_queue):
     data_request = dict()
     data_request["Invalid"] = 5
     data = json.dumps(data_request)
-    response = eddie_helper.system_update_start(front_door_queue, data)
+    response = front_door_queue.sendSystemUpdateStartRequest(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # 4. Verify error subcode which should be "2005".
