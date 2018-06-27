@@ -25,8 +25,9 @@ CustomProductControllerStateFirstBootGreetingTransition::CustomProductController
 
 void CustomProductControllerStateFirstBootGreetingTransition::HandleStateEnter()
 {
-    BOSE_INFO( s_logger, __func__ );
-    // SYSTEM_STATE_ON
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    // LPM power has been requested to set to SYSTEM_STATE_ON in CustomBooting state
+    // if it's already switched, trigger the callback again; otherwise just wait
     if( GetCustomProductController( ).GetLpmSystemState() == SYSTEM_STATE_ON )
     {
         ProductMessage productMessage;
@@ -39,10 +40,11 @@ void CustomProductControllerStateFirstBootGreetingTransition::HandleStateEnter()
 
 bool CustomProductControllerStateFirstBootGreetingTransition::HandleLPMPowerStatusFullPowerOn()
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
     if( GetCustomProductController( ).AreAccessoriesKnown( ) )
     {
         // It is safe to play the chime
+        BOSE_INFO( s_logger, "Accessories are known, switching to FirstBootGreeting state to play welcome chime" );
         ChangeState( PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
     }
     return true;
@@ -50,7 +52,7 @@ bool CustomProductControllerStateFirstBootGreetingTransition::HandleLPMPowerStat
 
 bool CustomProductControllerStateFirstBootGreetingTransition::HandleAccessoriesAreKnown()
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
     ChangeState( PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
     return true;
 }
