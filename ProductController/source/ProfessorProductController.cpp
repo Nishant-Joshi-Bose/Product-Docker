@@ -1521,7 +1521,21 @@ void ProfessorProductController::SendInitialCapsData()
     DefaultVolumeThresholdsDoneFile += g_ProductPersistenceDir;
     DefaultVolumeThresholdsDoneFile += g_DefaultVolumeThresholdsStateFile;
     const bool defaultVolumeThresholdsDone = SystemUtils::Exists( DefaultVolumeThresholdsDoneFile );
-    if( !defaultVolumeThresholdsDone )
+    if( defaultVolumeThresholdsDone )
+    {
+        // GET the current values, we may have missed an initial notification
+        AsyncCallback< SoundTouchInterface::volume >
+        audioVolumeCb( std::bind( &ProfessorProductController::HandleAudioVolumeNotification,
+                                  this,
+                                  std::placeholders::_1 ),
+                       GetTask( ) );
+
+        m_FrontDoorClientIF->SendGet<SoundTouchInterface::volume, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_VOLUME_API,
+            audioVolumeCb,
+            m_errorCb );
+    }
+    else
     {
         // Set the thresholds only once, after factory default
         if( ! SystemUtils::WriteFile( "", DefaultVolumeThresholdsDoneFile ) )
