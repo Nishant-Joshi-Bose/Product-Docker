@@ -1,4 +1,3 @@
-
 #!/bin/sh
 
 # Change Output to non-existent framebuffer, to prevent output over HDMI. 
