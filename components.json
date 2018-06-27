@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@3ae387f7525cfd46b4013aef69e9cddddace1659"
+    "selected_version": "master@567a0fb2769e9c2b5aff0f57ff507f40fd633f98"
   },
   {
     "name": "A4VVideoManagerService",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-26_1341"
+    "selected_version": "Continuous/Castle-Fork/2018-06-26_2026"
   },
   {
     "name": "BLERemoteXCVR",
@@ -69,7 +69,7 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/1.5.0-26+a759501"
+    "selected_version": "Continuous/master/1.5.0-29+f707b2a"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/1.0.1-96+8bf6c39"
+    "selected_version": "Release/master/1.0.1-99+b471e4f"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -109,15 +109,15 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/1.5.1-373+365aed1"
+    "selected_version": "Release/master/1.5.2-400+b0e36f6"
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.1-132+f400503"
+    "selected_version": "Release/master/1.5.2-154+61695bc"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Release/master/1.5.1-41+6a4337f"
+    "selected_version": "Release/master/1.5.2-56+858603c"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -137,7 +137,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.3-156+69d1119"
+    "selected_version": "Release/master/1.5.3-158+6b9b88e"
   },
   {
     "name": "LpmMfgTool",
@@ -145,7 +145,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-381+d7e6897"
+    "selected_version": "Release/master/1.5.5-384+d6cf54a"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -205,7 +205,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.5.2-441+e5f76cd"
+    "selected_version": "Release/master/1.5.3-445+c63927f"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -217,11 +217,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-26_1341"
+    "selected_version": "Continuous/Castle-Fork/2018-06-26_2026"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.5.2-65+f642525"
+    "selected_version": "Release/master/0.5.2-66+fb291e4"
   },
   {
     "name": "Telemetry-qc8017_32",
