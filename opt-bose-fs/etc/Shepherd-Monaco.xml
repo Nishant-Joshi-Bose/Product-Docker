@@ -4,7 +4,7 @@
           exe="run_dinghy">
     <arg>MONACO</arg>
     <arg>--log-console</arg>
-    <arg>--device=/dev/fb1</arg>
+    <env>WPE_FBDEV=/dev/fb1</env>
   </daemon>
 
 </ShepherdConfig>
