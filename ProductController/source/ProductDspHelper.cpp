@@ -166,7 +166,7 @@ void ProductDspHelper::AutoWakeTriggered()
 
     SoundTouchInterface::PlaybackRequest playbackRequestData;
 
-    playbackRequestData.set_source( ProductSourceSlot_Name( PRODUCT ) );
+    playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
     playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( TV ) );
 
     m_ProductController.GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
