@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@9bcdbdc731c618aea9c69e7310a3a92e331f8d3c"
+    "selected_version": "master@878a2ad7a9882651d1bc23e348802609cd7c6598"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -161,15 +161,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/1.5.0-866+acf4695"
+    "selected_version": "Release/master/1.5.0-884+c50e458"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/1.5.0-866+acf4695"
+    "selected_version": "Release/master/1.5.0-884+c50e458"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@79a9657d5251cfdad279561e59501b51f5ee1cbe"
+    "selected_version": "master@e2e2d95195d7fce233b859f967bbe525ae44cca6"
   },
   {
     "name": "ProductUIAssets",
