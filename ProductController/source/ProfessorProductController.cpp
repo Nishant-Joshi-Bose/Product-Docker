@@ -76,6 +76,8 @@
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
@@ -94,8 +96,10 @@
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlaying.h"
+#include "CustomProductControllerStatePlayingDeselected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
+#include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
 #include "ProductBLERemoteManager.h"
@@ -369,7 +373,7 @@ void ProfessorProductController::Run( )
     auto* statePlayingDeselected = new ProductControllerStatePlayingDeselected
     ( GetHsm( ),
       statePlaying,
-      PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
 
     auto* statePlayingSelected = new CustomProductControllerStatePlayingSelected
     ( GetHsm( ),
@@ -380,6 +384,16 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       statePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
+
+    auto* statePlayingSelectedSilentSourceInvalid = new ProductControllerStatePlayingSelectedSilentSourceInvalid
+    ( GetHsm( ),
+      statePlayingSelectedSilent,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID );
+
+    auto* statePlayingSelectedSilentSourceValid = new ProductControllerStatePlayingSelectedSilentSourceValid
+    ( GetHsm( ),
+      statePlayingSelectedSilent,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_VALID );
 
     auto* statePlayingSelectedNotSilent = new ProductControllerStatePlayingSelectedNotSilent
     ( GetHsm( ),
@@ -498,9 +512,11 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( "", statePlayingTransition );
     GetHsm( ).AddState( "", statePlayingTransitionSelected );
     GetHsm( ).AddState( "", statePlaying );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), statePlayingDeselected );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::PLAYING_SOURCE_OFF ), statePlayingDeselected );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelected );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSilent );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::PLAYING_SOURCE_OFF ),   statePlayingSelectedSilentSourceInvalid );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::PLAYING_SOURCE_OFF ),   statePlayingSelectedSilentSourceValid );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedNotSilent );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSetup );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSetupNetwork );
