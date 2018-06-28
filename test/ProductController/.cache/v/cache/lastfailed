@@ -1,0 +1,8 @@
+{
+  "AudioSettings/test_audio_settings.py::test_audio_avsync": true, 
+  "AudioSettings/test_audio_settings.py::test_audio_center": true, 
+  "AudioSettings/test_audio_settings.py::test_audio_gainOffset": true, 
+  "AudioSettings/test_audio_settings.py::test_audio_subwooferGain": true, 
+  "AudioSettings/test_audio_settings.py::test_audio_surround": true, 
+  "AudioSettings/test_audio_settings.py::test_audio_surroundDelay": true
+}
