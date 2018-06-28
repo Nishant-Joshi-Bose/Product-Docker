@@ -120,7 +120,7 @@ namespace
 constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
-constexpr auto      g_DefaultVolumeThresholdsStateFile  = "DefaultVolumeThresholdsDone";
+constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
 }
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -1484,8 +1484,19 @@ void ProfessorProductController::SendInitialCapsData()
     // Do the Common stuff first
     ProductController::SendInitialCapsData();
 
+    using namespace SoundTouchInterface;
+
+    auto sourcesRespCb = []( Sources sources )
+    {
+        BOSE_INFO( s_logger, "/system/sources response %d sources", sources.sources_size( ) );
+        for( int i = 0; i < sources.sources_size( ); ++i )
+        {
+            BOSE_INFO( s_logger, "/system/sources response source %d: %s\n", i, sources.sources( i ).DebugString( ).c_str( ) );
+        }
+    };
+
     // PUT /system/sources::properties
-    SoundTouchInterface::Sources message;
+    Sources message;
     auto messageProperties = message.mutable_properties();
 
     for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
@@ -1509,28 +1520,28 @@ void ProfessorProductController::SendInitialCapsData()
 
     messageProperties->set_inputrouterequired( false );
 
-    BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
+    BOSE_INFO( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 
-    GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
+    GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
         FRONTDOOR_SYSTEM_SOURCES_API,
         message,
-        { },
+        sourcesRespCb,
         m_errorCb );
 
-    std::string DefaultVolumeThresholdsDoneFile{ g_PersistenceRootDir };
-    DefaultVolumeThresholdsDoneFile += g_ProductPersistenceDir;
-    DefaultVolumeThresholdsDoneFile += g_DefaultVolumeThresholdsStateFile;
-    const bool defaultVolumeThresholdsDone = SystemUtils::Exists( DefaultVolumeThresholdsDoneFile );
-    if( defaultVolumeThresholdsDone )
+    std::string DefaultCAPSValuesStateFile{ g_PersistenceRootDir };
+    DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
+    DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
+    const bool defaultCAPSValuesDone = SystemUtils::Exists( DefaultCAPSValuesStateFile );
+    if( defaultCAPSValuesDone )
     {
         // GET the current values, we may have missed an initial notification
-        AsyncCallback< SoundTouchInterface::volume >
+        AsyncCallback< volume >
         audioVolumeCb( std::bind( &ProfessorProductController::HandleAudioVolumeNotification,
                                   this,
                                   std::placeholders::_1 ),
                        GetTask( ) );
 
-        m_FrontDoorClientIF->SendGet<SoundTouchInterface::volume, FrontDoor::Error>(
+        m_FrontDoorClientIF->SendGet<volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API,
             audioVolumeCb,
             m_errorCb );
@@ -1538,19 +1549,73 @@ void ProfessorProductController::SendInitialCapsData()
     else
     {
         // Set the thresholds only once, after factory default
-        if( ! SystemUtils::WriteFile( "", DefaultVolumeThresholdsDoneFile ) )
+        if( ! SystemUtils::WriteFile( "", DefaultCAPSValuesStateFile ) )
         {
-            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultVolumeThresholdsDoneFile.c_str( ) );
+            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultCAPSValuesStateFile.c_str( ) );
         }
-        SoundTouchInterface::volume desiredVolume;
+        volume desiredVolume;
         desiredVolume.set_min( VOLUME_MIN_THRESHOLD );
         desiredVolume.set_max( VOLUME_MAX_THRESHOLD );
-        GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API,
             desiredVolume,
             { },
             m_errorCb );
-        BOSE_INFO( s_logger, "DefaultVolumeThresholdsDoneFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
+        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
+
+        // Set the status and visibility of PRODUCT sources.
+        using namespace ProductSTS;
+
+        Sources message;
+        Sources_SourceItem* source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
+        source->set_status( SourceStatus::AVAILABLE );
+        source->set_visible( true );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        // Set the (in)visibility of SETUP sources.
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+            FRONTDOOR_SYSTEM_SOURCES_API,
+            message,
+            sourcesRespCb,
+            m_errorCb );
+        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
     }
 }
 
