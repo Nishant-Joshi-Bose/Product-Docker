@@ -46,7 +46,6 @@
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "SoundTouchInterface/AudioService.pb.h"
 #include "MacAddressInfo.h"
-#include "BoseVersion.h"
 #include "LightBarController.h"
 #include "SystemPowerProduct.pb.h"
 #include "DisplayController.pb.h"
@@ -222,11 +221,6 @@ public:
     void HandleMessage( const ProductMessage& message );
 
     std::string GetDefaultProductName() const override;
-
-    std::string GetProductVersionNumber() const override
-    {
-        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
-    }
 
     std::vector<std::string> GetUniqueLanguages() const override
     {

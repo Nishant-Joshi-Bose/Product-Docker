@@ -1,9 +1,10 @@
 <ShepherdConfig>
 
   <daemon name="Monaco"
-          exe="/opt/Bose/webkit/run_wpe.sh">
+          exe="run_dinghy">
     <arg>MONACO</arg>
-    <arg>1.0</arg>
+    <arg>--log-console</arg>
+    <env>WPE_FBDEV=/dev/fb1</env>
   </daemon>
 
 </ShepherdConfig>
