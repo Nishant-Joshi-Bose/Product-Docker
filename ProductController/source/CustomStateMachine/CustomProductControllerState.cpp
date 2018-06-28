@@ -82,6 +82,21 @@ ProfessorProductController& CustomProductControllerState::GetCustomProductContro
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductControllerState::FrontDoorErrorCallback
+///
+/// @param const FrontDoor::Error & error
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerState::FrontDoorErrorCallback( const FrontDoor::Error & error )
+{
+    BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor request.",
+                error.code(),
+                error.subcode(),
+                error.message().c_str() );
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
