@@ -6,6 +6,7 @@ import os
 import sys
 import re
 import json
+import subprocess
 import hashlib
 
 if len(sys.argv) != 1:
@@ -43,9 +44,6 @@ print """
    padding: 1em;
    margin: 1em;
  }
- td.showimg {
-   padding: 8px;
- }
  .hilite {
    background-color: yellow;
  }
@@ -76,6 +74,16 @@ if hash == "720c7c5384a2fe6b9c322d07d7e56906":
 print "</br>Software Update Hash: {} ({})".format(hash, env)
 # ---------------------------------------------------------------------------
 
+print "</div>"
+
+print "<li>LPM Versions"
+print "<div class='box'>"
+ph = subprocess.Popen(["ReadLpmVersion"],
+                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+print "<table>"
+for line in ph.stdout:
+    print "<tr><td>", html_escape(line), "</td></tr>"
+print "</table>"
 print "</div>"
 
 print "<li>Manufacturing Data [<a href='/diag/mfg-data'>all</a>]"
