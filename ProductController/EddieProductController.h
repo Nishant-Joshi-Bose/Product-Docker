@@ -72,7 +72,6 @@
 #include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
-#include "BoseVersion.h"
 
 namespace ProductApp
 {
@@ -95,10 +94,7 @@ public:
     {
         return {};
     }
-    std::string GetProductVersionNumber() const override
-    {
-        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
-    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
     /// @brief The following methods are used by the state machine to determine the status of the
