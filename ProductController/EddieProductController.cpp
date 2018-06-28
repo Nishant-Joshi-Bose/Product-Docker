@@ -146,7 +146,12 @@ void EddieProductController::InitializeAction()
                                                   this, std::placeholders::_1 ), GetTask() ) ;
 
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
-    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient(), uiConnectedCb ) );
+
+    DisplayController::Configuration displayCtrlConfig;
+    displayCtrlConfig.m_hasLightSensor = true;
+    displayCtrlConfig.m_hasLcd = true;
+    displayCtrlConfig.m_blackScreenDetectEnabled = true;
+    m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
 
     // Start Eddie ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
@@ -566,7 +571,7 @@ void EddieProductController::SetupProductSTSController( void )
     sources.push_back( descriptor_AUX );
 
     // 'SETUP' is a "fake" source used for setup state.
-    ProductSTSController::SourceDescriptor descriptor_Setup{ SETUP, ProductSourceSlot_Name( SETUP ), false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup{ SETUP, SetupSourceSlot_Name( SETUP ), false, silentStateFactory };
     sources.push_back( descriptor_Setup );
 
     Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );

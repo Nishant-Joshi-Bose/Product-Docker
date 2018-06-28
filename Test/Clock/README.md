@@ -1,20 +1,23 @@
 # Eddie Timezone Tests
 
 ## Synopsis
-This test module will cover all Timezone related tests to ensure that every timezone works correctly on the Eddie product. 
 
+This test module will cover all Clock related tests to ensure that clock works correctly on the Eddie product.
 
 ## Setting Up Test Environment
 
 Clone the Eddie Repository:
+
 ```bash
 # Clone the respository
 git clone git@github.com:BoseCorp/Eddie.git
 cd Eddie
 ```
+
 All steps assume your are in the directory of your Eddie repository (`$EDDIE_DIR`).
 
 Generate a Virtual Environment and install used packages.
+
 ```bash
 cd $EDDIE_DIR/Test
 
@@ -28,15 +31,17 @@ pip install --requirement requirements.txt
 ```
 
 ## Execution of Tests
-Running the tests requires configuration information that should be known prior to startup. We should know the 
-communication type to the product (`ADB`).
+
+Running the tests requires configuration information that should be known prior to startup. We should know the communication type to the product (`ADB`).
 
 ```bash
-cd $EDDIE_DIR/Test/Timezone
-pytest -vs --junit=timezone.xml \
-       --target=device \
-       --device-id=<adb-device-id>
-       test_timzone.py
+cd $EDDIE_DIR/Test/Clock
+pytest --verbose \
+       --capture=no \
+       --junit=clock.xml \
+       --device-id=<adb-device-id> \
+       test_*.py
 ```
-This will run all `test_*` inside the `Timezone` folder and generate JUnit style output to 
-`timezone.xml`. 
+
+This will run all `test_*` inside the `Clock` folder and generate JUnit style output to
+`clock.xml`.

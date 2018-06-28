@@ -13,14 +13,18 @@
 Utility functions for testing frontdoor APIs provided by Eddie Product.
 """
 import time
-import json
 import os
+
 import pytest
+
+from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+from CastleTestUtils.RivieraUtils import device_utils, adb_utils
+from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 
 # Subcode
 SUBCODE_INVALID_KEY = 2005
-SUBCODE_INVALID_ARGS = 1
+SUBCODE_INVALID_ARGS = 0
 
 # Status code
 STATUS_OK = 200
@@ -89,6 +93,7 @@ DESELECTED = "DESELECTED"
 IDLE = "IDLE"
 NETWORK_STANDBY = "NETWORK_STANDBY"
 FACTORY_DEFAULT = "FACTORY_DEFAULT"
+PLAYINGDESELECTED = "PlayingDeselected"
 
 # System Power options
 POWER_ON = "ON"
@@ -137,6 +142,14 @@ def get_last_notification(fdq, notif_id, retry=5):
 
 
 def check_error_and_response_header(response, api, method=METHOD_GET, status_code=STATUS_OK, is_error=False):
+    """
+    Check the response of FrontDoor API
+    :param response: response of FrontDoor API
+    :param api: API endpoint
+    :param method: method required for API
+    :param status_code: status code of API
+    :param is_error: check for error in API response
+    """
     assert response, 'Not getting any response'
 
     header = response["header"]
@@ -147,14 +160,15 @@ def check_error_and_response_header(response, api, method=METHOD_GET, status_cod
     assert header["status"] == status_code
 
     if is_error:
-        assert response["error"]
-        assert response["error"]["code"]
-        assert response["error"]["subcode"]
-        assert response["error"]["message"]
+        assert "error" in response.keys(), 'Response should contain error'
+        assert "code" in response["error"].keys(), 'Error Response should contain code'
+        assert "subcode" in response["error"].keys(), 'Error Response should contain subcode'
+        assert "message" in response["error"].keys(), 'Error Response should contain message'
     else:
         with pytest.raises(KeyError) as key_error:
             error = response["error"]
-            assert not key_error, 'Got Error for API:{} method:{} Error:{}'.format(api, method, error["message"])
+            assert not key_error, \
+                "Got Error for API:{} method:{} Error:{}".format(api, method, error["message"])
 
 
 def check_if_end_point_exists(frontdoor, endpoint):
@@ -173,130 +187,75 @@ def check_if_end_point_exists(frontdoor, endpoint):
                 if str(name["endpoint"]) == endpoint:
                     return
 
-    assert False, "Front door end point %s does not exists" % endpoint
+    assert False, "Front door end point {} does not exists".format(endpoint)
 
 
-def get_system_info(frontdoor):
-    """ Get System info """
-    LOGGER.info("Getting system info status")
-    result = frontdoor.send(METHOD_GET, SYSTEM_INFO_API)
-    return json.loads(result)
+def wait_for_device_commands(device_id, adb):
+    """
+    This method will wait for device to accept CLI commands
+
+    :param device_id: device_id
+    :param adb: ADB Instance
+    :return: telnet_status (True or False)
+    """
+    telnet_status = False
+    for _ in range(device_utils.TIMEOUT):
+        status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
+        if status:
+            LOGGER.debug("Telnet serive started in the device")
+            telnet_status = True
+            if adb.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
+                device_state = adb_utils.adb_telnet_cmd('getproductstate',
+                                                        expect_after='Current State: ',
+                                                        timeout=30, device_id=device_id)
+                LOGGER.info("Device State: %s", device_state)
+                assert (device_state in [FIRSTBOOTGREETING, BOOTING, SETUPOTHER, PLAYINGDESELECTED]), \
+                    'Device not in expected state. Current state: {}.'.format(device_state)
+                break
+
+        time.sleep(1)
+    return telnet_status
 
 
-def get_system_power_control(frontdoor):
-    """ Get System Power state """
-    LOGGER.info("Getting system power state")
-    result = frontdoor.send(METHOD_GET, SYSTEM_POWER_CONTROL_API)
-    return json.loads(result)
+def wait_for_setup_state(device_id):
+    """
+    This method will wait for device be in set up state after reboot
+
+    :param device_id: device_id
+    :return: device_state: Device state
+    """
+    LOGGER.info("Waiting for Setup device state after booting")
+    time.sleep(device_utils.TIMEOUT)
+    for _ in range(device_utils.TIMEOUT):
+        device_state = adb_utils.adb_telnet_cmd('getproductstate',
+                                                expect_after='Current State: ',
+                                                timeout=30,
+                                                device_id=device_id)
+        if device_state != BOOTING:
+            LOGGER.info("Current device_state is %s ", device_state)
+            break
+        time.sleep(1)
+    return device_state
 
 
-def set_system_power_control(frontdoor, data):
-    """ Get System Power state """
-    LOGGER.info("Getting system power state")
-    result = frontdoor.send(METHOD_POST, SYSTEM_POWER_CONTROL_API, data)
-    return json.loads(result)
+def get_frontdoor_instance(request, wifi_config):
+    """
+    Get frontDoorAPI instance
 
-
-def get_audio_bass(frontdoor):
-    """ Get Audio Bass """
-    LOGGER.info("Getting Audio Bass")
-    result = frontdoor.send(METHOD_GET, AUDIO_BASS_API)
-    return json.loads(result)
-
-
-def set_audio_bass(frontdoor, data):
-    """ Set Audio Bass """
-    LOGGER.info("Setting Audio Bass")
-    result = frontdoor.send(METHOD_PUT, AUDIO_BASS_API, data)
-    return json.loads(result)
-
-
-def get_audio_treble(frontdoor):
-    """ Get Audio Treble """
-    LOGGER.info("Getting Audio Treble")
-    result = frontdoor.send(METHOD_GET, AUDIO_TREBLE_API)
-    return json.loads(result)
-
-
-def set_audio_treble(frontdoor, data):
-    """ Set Audio Treble """
-    LOGGER.info("Setting Audio Treble")
-    result = frontdoor.send(METHOD_PUT, AUDIO_TREBLE_API, data)
-    return json.loads(result)
-
-
-def get_product_settings(frontdoor):
-    """ Get Product Settings """
-    LOGGER.info("Getting Product Settings")
-    result = frontdoor.send(METHOD_GET, SYSTEM_PRODUCTSETTINGS_API)
-    return json.loads(result)
-
-
-def system_reset(frontdoor):
-    """ System Reset API """
-    LOGGER.info("System Reset")
-    result = frontdoor.send(METHOD_GET, SYSTEM_RESET_API)
-    return json.loads(result)
-
-
-def get_setup_state(frontdoor):
-    """ Get Setup State """
-    LOGGER.info("Getting Setup State")
-    result = frontdoor.send(METHOD_GET, SYSTEM_SETUP_API)
-    return json.loads(result)
-
-
-def set_setup_state(frontdoor, data):
-    """ Set Setup State """
-    LOGGER.info("Setting Setup State")
-    result = frontdoor.send(METHOD_PUT, SYSTEM_SETUP_API, data)
-    return json.loads(result)
-
-
-def get_system_state(frontdoor):
-    """ Get System State """
-    LOGGER.info("Getting System State")
-    result = frontdoor.send(METHOD_GET, SYSTEM_STATE_API)
-    return json.loads(result)
-
-
-def set_system_state(frontdoor, data):
-    """ Set System State """
-    LOGGER.info("Setting System State")
-    result = frontdoor.send(METHOD_PUT, SYSTEM_STATE_API, data)
-    return json.loads(result)
-
-
-def system_update_start(frontdoor, data):
-    """ System Update Start """
-    LOGGER.info("System update start")
-    result = frontdoor.send(METHOD_PUT, SYSTEM_UPDATE_START_API, data)
-    return json.loads(result)
-
-
-def get_system_setup(frontdoor):
-    """ Get System Setup """
-    LOGGER.info("Getting System Setup information")
-    result = frontdoor.send(METHOD_GET, SYSTEM_SETUP_API)
-    return json.loads(result)
-
-
-def set_system_setup(frontdoor, data):
-    """ Set System Setup """
-    LOGGER.info("Setting System Setup information")
-    result = frontdoor.send(METHOD_PUT, SYSTEM_SETUP_API, data)
-    return json.loads(result)
-
-
-def get_system_power_timeouts(frontdoor):
-    """ Get System Power Timeouts """
-    LOGGER.info("Getting System Power Timeouts ")
-    result = frontdoor.send(METHOD_GET, SYSTEM_POWER_TIMEOUTS_API)
-    return json.loads(result)
-
-
-def set_system_power_timeouts(frontdoor, data):
-    """ Set System Power Timeouts """
-    LOGGER.info("Setting System Power Timeouts ")
-    result = frontdoor.send(METHOD_PUT, SYSTEM_POWER_TIMEOUTS_API, data)
-    return json.loads(result)
+    :param request: A request for a fixture from a test or fixture function
+    :param wifi_config: config parser instance of wifi profiles
+    :return: frontdoor instance
+    """
+    # get ip address and open frontdoor instance
+    interface = request.config.getoption("--network-iface")
+    router = request.config.getoption("--router")
+    ssid = wifi_config.get(router, 'ssid')
+    security = wifi_config.get(router, 'security')
+    password = wifi_config.get(router, 'password')
+    device_id = request.config.getoption("--device-id")
+    ip_address = device_utils.get_ip_address(
+        device_id, interface, ssid, security, password)
+    riviera_utils = RivieraUtils('ADB', device=device_id)
+    assert riviera_utils.wait_for_galapagos_activation(timeout=120)
+    frontdoor = FrontDoorQueue(ip_address)
+    return frontdoor

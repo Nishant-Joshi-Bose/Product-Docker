@@ -16,6 +16,7 @@ Graphite database and viewable in Grafana.
 """
 
 import logging
+import time
 
 import pytest
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
@@ -57,6 +58,7 @@ def test_base_reboot_time(rebooted_device, adb_versions, graphite):
 
     LOGGER.debug('Posting the following information: %s', rows)
     graphite.send_message('\n'.join(rows) + '\n')
+    time.sleep(5)
 
 
 @pytestrail.case('C658165')
@@ -94,6 +96,7 @@ def test_network_connection_time(rebooted_and_networked_device, adb_versions, gr
 
     LOGGER.debug('Posting the following information: %s', rows)
     graphite.send_message('\n'.join(rows) + '\n')
+    time.sleep(5)
 
 
 @pytestrail.case('C658166')
@@ -133,3 +136,4 @@ def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, 
 
     LOGGER.debug('Posting the following information: %s', rows)
     graphite.send_message('\n'.join(rows) + '\n')
+    time.sleep(5)

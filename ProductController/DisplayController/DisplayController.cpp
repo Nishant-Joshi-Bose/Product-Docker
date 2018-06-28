@@ -15,6 +15,8 @@
 #include <fstream>
 #include <json/json.h>
 
+#include "APTaskFactory.h"
+#include "BreakThread.h"
 #include "DirUtils.h"
 #include "SystemUtils.h"
 #include "FrontDoorClient.h"
@@ -89,28 +91,61 @@ static constexpr char UIBRIGHTNESS_MODE_NAME_MANUAL[]   = "manual";
 static constexpr char FRONTDOOR_ENDPOINT_ALIVE[]        = "/ui/alive";
 static constexpr char FRONTDOOR_ENDPOINT_BRIGHTNESS[]   = "/ui/lcd/brightness";
 
-static constexpr int   UPDATE_SLEEP_MS                  = 1000;
+static constexpr char UI_PID_FILE_NAME[]                = "/var/run/monaco.pid";
+
+static constexpr int   UPDATE_SLEEP_MS                  = 100;
 static constexpr int   SEND_DEFAULTS_TO_LPM_RETRY_MS    = 2000;
-static constexpr float SILVER_LUX_FACTOR                = 11.0f;
 static constexpr uint8_t BRIGHTNESS_MAX                 = 100;
 static constexpr uint8_t BRIGHTNESS_MIN                 = 0;
-static constexpr int     UI_HEART_BEAT_RATE_SEC         = 30; // heart beat frequency in seconds of the Monaco's ui/alive front-end message
+
+static constexpr uint16_t SCREEN_BLACK_RAMP_OFF_MS      = 5000;     //!< Duration (MS) of backlight turn off when screen is black.
+static constexpr uint16_t SCREEN_BLACK_RAMP_ON_MS       = 500;      //!< Duration (MS) of backlight turn on when screen is not black.
+
+//! Warning will be generated if received UI heartbeat counts are out of sync by this count.
+static constexpr uint8_t UI_HEART_BEAT_MISSED_THRESHOLD = 2;
+
+//! Number of ticks that must elapse without receiving a UI tick before we warn about it.
+#define UI_HEART_BEAT_TIME_WARNING_TICKS_DEFAULT  300  // This * UPDATE_SLEEP_MS = time in MS.
+
+//! Number of ticks that must elapse without receiving a UI tick before we consider UI disconnected.
+#define UI_HEART_BEAT_TIME_ERROR_TICKS_DEFAULT 600  // This * UPDATE_SLEEP_MS = time in MS.
+
+//! SysFS file for checking state of screen black.
+const std::string BLACK_SCREEN_FILE_NAME = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + FRAME_BUFFER_BLACK_SCREEN;
+
+//! Number of update ticks after which to respond to a screen blank.
+static constexpr uint64_t SCREEN_BLANK_DEBOUNCE_COUNTS[DisplayController::ScreenBlackState_Count] =
+{
+    200, // ScreenBlackState_Black
+    1,  // ScreenBlackState_NotBlack
+};
 
 /*!
  */
-DisplayController::DisplayController( ProductController& controller, const std::shared_ptr<FrontDoorClientIF>& fd_client,
-                                      LpmClientIF::LpmClientPtr clientPtr, AsyncCallback<bool> uiConnectedCb ):
+DisplayController::DisplayController( const Configuration& config,
+                                      ProductController& controller,
+                                      const std::shared_ptr<FrontDoorClientIF>& fdClient,
+                                      LpmClientIF::LpmClientPtr clientPtr,
+                                      AsyncCallback<bool> uiConnectedCb ):
+    m_config( config ),
     m_productController( controller ),
-    m_frontdoorClientPtr( fd_client ),
+    m_frontdoorClientPtr( fdClient ),
     m_lpmClient( clientPtr ),
     m_defaultsSentToLpm( false ),
     m_defaultsSentTime( 0 ),
     m_lcdStandbyBrightnessCap( 50 ), // Sensible default. Real default loaded from JSON.
-    m_lcdBrightnessCapSystem( BRIGHTNESS_MAX ),
-    m_lcdBrightnessCapFrontdoor( BRIGHTNESS_MAX ),
-    m_timeToStop( false ),
+    m_lcdBrightnessCap( BRIGHTNESS_MAX ),
+    m_screenBlackState( ScreenBlackState_Disabled ),
+    m_screenBlackChangeTo( ScreenBlackState_Invalid ),
+    m_screenBlackInactivityTicks( 0 ),
+    m_screenBlackChangeCounter( 0 ),
+    m_currentTick( 0 ),
+    m_task( IL::CreateTask( "DisplayControllerTask" ) ),
     m_uiHeartBeat( ULLONG_MAX ),
-    m_localHeartBeat( ULLONG_MAX ),
+    m_lastUiHeartBeatTick( 0 ),
+    m_uiHeartBeatLossWarnTicks( UI_HEART_BEAT_TIME_WARNING_TICKS_DEFAULT ),
+    m_uiHeartBeatLossErrorTicks( UI_HEART_BEAT_TIME_ERROR_TICKS_DEFAULT ),
+    m_uiConnected( false ),
     m_ProductControllerUiConnectedCb( uiConnectedCb )
 {
 
@@ -120,11 +155,12 @@ DisplayController::DisplayController( ProductController& controller, const std::
  */
 DisplayController::~DisplayController()
 {
-    m_timeToStop = true;
+    m_updateloopTimer->Stop();
 
-    if( m_threadUpdateLoop )
+    if( m_task != NULL )
     {
-        m_threadUpdateLoop->join();
+        IL::StopTask( m_task );
+        IL::JoinTask( m_task );
     }
 }
 
@@ -132,19 +168,42 @@ DisplayController::~DisplayController()
  */
 void DisplayController::Initialize()
 {
+    // Read JSON configuration.
     bool jsonReadSuccess = ParseJSONData();
-
-    //ui/display end point registration with front door
-    RegisterFrontdoorEndPoints();
-
-    m_threadUpdateLoop = std::unique_ptr<std::thread>( new std::thread( [this] { UpdateLoop(); } ) );
 
     if( ! jsonReadSuccess )
     {
         m_defaultsSentToLpm = true; // Update loop will never send the defaults if this is true.
 
-        BOSE_WARNING( s_logger, "JSON load from '%s' failed. Not sending settings to LPM.", DISPLAY_CONTROLLER_FILE_NAME );
+        BOSE_WARNING( s_logger, "JSON load from '%s' failed. Not sending settings to LPM.",
+                      DISPLAY_CONTROLLER_FILE_NAME );
     }
+
+    // ui/display end point registration with front door
+    RegisterFrontdoorEndPoints();
+
+    // Initial screen state.
+    if( IsBlackScreenDetectSupported() )
+    {
+        if( DirUtils::DoesFileExist( BLACK_SCREEN_FILE_NAME ) == false )
+        {
+            BOSE_LOG( WARNING, "warning: can't find file: " + BLACK_SCREEN_FILE_NAME
+                      + ", update your kernel for black screen detection" );
+            m_config.m_blackScreenDetectEnabled = false;
+        }
+
+        // Initial poll of screen black state is set in UpdateUiConnected().
+        // "Disabled" will keep the back light in boot state (off).
+        m_screenBlackState = ScreenBlackState_Disabled;
+    }
+
+    // Background task initialization.
+    m_updateloopTimer = APTimer::Create( m_task, "DisplayControllerUpdateTimer" );
+    m_updateloopTimer->SetTimeouts( UPDATE_SLEEP_MS, 0 );
+    m_updateloopTimer->Start( [ this ]( )
+    {
+        UpdateLoop();
+    } );
 }
 
 /*!
@@ -154,8 +213,6 @@ bool DisplayController::ParseJSONData()
     BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
 
     auto f = SystemUtils::ReadFile( DISPLAY_CONTROLLER_FILE_NAME );
-
-    m_luxFactor = SILVER_LUX_FACTOR;
 
     if( ! f )
     {
@@ -171,70 +228,92 @@ bool DisplayController::ParseJSONData()
 
     if( ! json_reader->parse( s.c_str(), s.c_str() + s.size(), &json_root, &errors ) )
     {
-        BOSE_LOG( WARNING, "Error: failed to parse JSON File: " << DISPLAY_CONTROLLER_FILE_NAME << " " << errors.c_str() );
+        BOSE_LOG( WARNING, "Error: failed to parse JSON File: " << DISPLAY_CONTROLLER_FILE_NAME
+                  << " " << errors.c_str() );
         return false;
     }
 
-    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_BACK_LIGHT_LEVELS ) )
+    if( m_config.m_hasLightSensor && m_config.m_hasLcd )
     {
-        BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_BACK_LIGHT_LEVELS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
-        return false;
-    }
+        if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_BACK_LIGHT_LEVELS ) )
+        {
+            BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_BACK_LIGHT_LEVELS << " is not a member of: "
+                      << JSON_TOKEN_DISPLAY_CONTROLLER );
+            return false;
+        }
 
-    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_LOWERING_THRESHOLDS ) )
-    {
-        BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_LOWERING_THRESHOLDS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
-        return false;
-    }
+        if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_LOWERING_THRESHOLDS ) )
+        {
+            BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_LOWERING_THRESHOLDS << " is not a member of: "
+                      << JSON_TOKEN_DISPLAY_CONTROLLER );
+            return false;
+        }
 
-    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_RISING_THRESHOLDS ) )
-    {
-        BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_RISING_THRESHOLDS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
-        return false;
-    }
+        if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_RISING_THRESHOLDS ) )
+        {
+            BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_RISING_THRESHOLDS << " is not a member of: "
+                      << JSON_TOKEN_DISPLAY_CONTROLLER );
+            return false;
+        }
 
-    Json::Value  json_back_light_level   = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_BACK_LIGHT_LEVELS  ];
-    Json::Value  json_lowering_threshold = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_LOWERING_THRESHOLDS];
-    Json::Value  json_rising_threadhold  = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_RISING_THRESHOLDS  ];
-    unsigned int nb_threshold_levels     = json_back_light_level.size();
+        Json::Value  json_back_light_level   = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_BACK_LIGHT_LEVELS  ];
+        Json::Value  json_lowering_threshold = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_LOWERING_THRESHOLDS];
+        Json::Value  json_rising_threadhold  = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_RISING_THRESHOLDS  ];
+        unsigned int nb_threshold_levels     = json_back_light_level.size();
 
-    if( json_lowering_threshold.size() != nb_threshold_levels
-        || json_lowering_threshold.size() > IPC_MAX_LIGHT_SENSOR_THRESHOLD )
-    {
-        BOSE_LOG( WARNING, "Error: wrong # of elements in " << JSON_TOKEN_LOWERING_THRESHOLDS
-                  << " expected: " << nb_threshold_levels
-                  << " found: " << json_lowering_threshold.size()
-                  << " max: " << IPC_MAX_LIGHT_SENSOR_THRESHOLD );
-        return false;
-    }
+        if( json_lowering_threshold.size() != nb_threshold_levels
+            || json_lowering_threshold.size() > IPC_MAX_LIGHT_SENSOR_THRESHOLD )
+        {
+            BOSE_LOG( WARNING, "Error: wrong # of elements in " << JSON_TOKEN_LOWERING_THRESHOLDS
+                      << " expected: " << nb_threshold_levels
+                      << " found: " << json_lowering_threshold.size()
+                      << " max: " << IPC_MAX_LIGHT_SENSOR_THRESHOLD );
+            return false;
+        }
 
-    if( json_rising_threadhold.size() != nb_threshold_levels
-        || json_rising_threadhold.size() > IPC_MAX_LIGHT_SENSOR_THRESHOLD )
-    {
-        BOSE_LOG( WARNING, "Error: wrong # of elements in " << JSON_TOKEN_RISING_THRESHOLDS
-                  << " expected: " << nb_threshold_levels
-                  << " found: " << json_rising_threadhold.size()
-                  << " max: " << IPC_MAX_LIGHT_SENSOR_THRESHOLD );
-        return false;
-    }
+        if( json_rising_threadhold.size() != nb_threshold_levels
+            || json_rising_threadhold.size() > IPC_MAX_LIGHT_SENSOR_THRESHOLD )
+        {
+            BOSE_LOG( WARNING, "Error: wrong # of elements in " << JSON_TOKEN_RISING_THRESHOLDS
+                      << " expected: " << nb_threshold_levels
+                      << " found: " << json_rising_threadhold.size()
+                      << " max: " << IPC_MAX_LIGHT_SENSOR_THRESHOLD );
+            return false;
+        }
 
-    for( unsigned int i = 0; i < nb_threshold_levels; i++ )
-    {
-        s_backLightLevels[i]        = json_back_light_level[i].asUInt();
-        s_loweringLuxThreshold[i]   = json_lowering_threshold[i].asFloat();
-        s_risingLuxThreshold[i]     = json_rising_threadhold[i].asFloat();
+        for( unsigned int i = 0; i < nb_threshold_levels; i++ )
+        {
+            s_backLightLevels[i]        = json_back_light_level[i].asUInt();
+            s_loweringLuxThreshold[i]   = json_lowering_threshold[i].asFloat();
+            s_risingLuxThreshold[i]     = json_rising_threadhold[i].asFloat();
+        }
+
+        //
+        // Print the levels for debugging.
+        //
+
+        for( unsigned int i = 0; i < nb_threshold_levels; i++ )
+        {
+            BOSE_DEBUG( s_logger, "%s level %i: backlight %d, lowering %f rising %f",
+                        __FUNCTION__, i, s_backLightLevels[i], s_loweringLuxThreshold[i], s_risingLuxThreshold[i] );
+        }
     }
 
     //
     // LCD and lightbar Brightness defaults.
     //
 
-    if( json_root.isMember( "lcdStandbyBrightnessCap" ) )
+    if( m_config.m_hasLcd && json_root.isMember( "lcdStandbyBrightnessCap" ) )
     {
         m_lcdStandbyBrightnessCap = json_root["lcdStandbyBrightnessCap"].asUInt();
     }
 
-    if( ! ParseBrightnessData( &m_lcdBrightness, json_root, "lcdBrightness" ) )
+    if( IsBlackScreenDetectSupported() && json_root.isMember( "lcdInactivityBacklightOffDebounceTime" ) )
+    {
+        m_screenBlackInactivityTicks = ( 1000 * json_root["lcdInactivityBacklightOffDebounceTime"].asUInt() ) / UPDATE_SLEEP_MS;
+    }
+
+    if( m_config.m_hasLcd && ! ParseBrightnessData( &m_lcdBrightness, json_root, "lcdBrightness" ) )
     {
         return false;
     }
@@ -245,14 +324,26 @@ bool DisplayController::ParseJSONData()
     }
 
     //
-    // Print the levels for debugging.
+    // Others
     //
 
-    for( unsigned int i = 0; i < nb_threshold_levels; i++ )
+    if( json_root.isMember( "killUIOnHeartBeatLossPidFile" ) )
     {
-        BOSE_DEBUG( s_logger, "%s level %i: backlight %d, lowering %f rising %f",
-                    __FUNCTION__, i, s_backLightLevels[i], s_loweringLuxThreshold[i], s_risingLuxThreshold[i] );
+        m_killUIOnHeartBeatLossPidFile = json_root["killUIOnHeartBeatLossPidFile"].asString();
     }
+
+    if( json_root.isMember( "uiHeartBeatLossWarnMS" ) )
+    {
+        m_uiHeartBeatLossWarnTicks = json_root["uiHeartBeatLossWarnMS"].asUInt() / UPDATE_SLEEP_MS;
+    }
+
+    if( json_root.isMember( "uiHeartBeatLossErrorMS" ) )
+    {
+        m_uiHeartBeatLossErrorTicks = json_root["uiHeartBeatLossErrorMS"].asUInt() / UPDATE_SLEEP_MS;
+    }
+
+    BOSE_DEBUG( s_logger, "UI heartbeat ticks warning: %llu, error: %llu",
+                m_uiHeartBeatLossWarnTicks, m_uiHeartBeatLossErrorTicks );
 
     return true;
 }
@@ -356,13 +447,17 @@ void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
 {
     if( m_uiConnected != currentUiConnectedStatus )
     {
-        BOSE_LOG( WARNING, "currentUiConnectedStatus: " << currentUiConnectedStatus );
+        BOSE_WARNING( s_logger, "UI status is now: %s", ( currentUiConnectedStatus ) ? "CONNECTED" : "DISCONNECTED" );
         m_uiConnected = currentUiConnectedStatus;
         m_ProductControllerUiConnectedCb( currentUiConnectedStatus );
 
-        // LPM boots with the cap at 0 to turn off the LCD until the display controller
-        // on the APQ (us) is fully initialized. Remove that cap at this time.
-        SetDisplayBrightnessCap( BRIGHTNESS_MAX );
+        // Set initial black screen state. Black screen detection will be disabled until
+        // the member variable is set to something other than ScreenBlackState_Disabled.
+        // "Invalid" will force a re-detection.
+        if( IsBlackScreenDetectSupported() )
+        {
+            m_screenBlackState = ScreenBlackState_Invalid;
+        }
 
         PullUIBrightnessFromLpm( UI_BRIGTHNESS_DEVICE_LCD );
     }
@@ -370,14 +465,14 @@ void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
 
 /*!
  */
-void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, bool immediate )
+void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, uint16_t time )
 {
     IpcUIBrightness_t lpmBrightness;
 
     lpmBrightness.set_device( UI_BRIGTHNESS_DEVICE_LCD );
     lpmBrightness.set_value( capPercent );
     lpmBrightness.set_mode( UI_BRIGTHNESS_MODE_CAP_MAXIMUM );
-    lpmBrightness.set_immediate( immediate );
+    lpmBrightness.set_time( time );
 
     m_lpmClient->SetUIBrightness( lpmBrightness );
 }
@@ -389,80 +484,189 @@ void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, bool immedi
  */
 void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
 {
-    m_lcdBrightnessCapSystem = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
-    // Actual cap sent to LPM is min of system and frontdoor caps.
-    SetDisplayBrightnessCap( MIN( m_lcdBrightnessCapSystem, m_lcdBrightnessCapFrontdoor ) );
+    auto f = [this, enabled]()
+    {
+        BOSE_DEBUG( s_logger, "SetStandbyLcdBrightnessCapEnabled enabled %i, hasLcd %i", enabled, m_config.m_hasLcd );
+
+        if( m_config.m_hasLcd )
+        {
+            m_lcdBrightnessCap = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
+
+            // Cap (to 0) from screen black takes precedence.
+            if( m_screenBlackState == ScreenBlackState_NotBlack )
+            {
+                SetDisplayBrightnessCap( m_lcdBrightnessCap, UI_BRIGHTNESS_TIME_DEFAULT );
+            }
+        }
+    };
+
+    IL::BreakThread( f, m_task );
 }
 
 /*!
  */
 void DisplayController::UpdateLoop()
 {
-    bool     previous_is_screen_black        = IsFrameBufferBlackScreen();
-    bool     actual_is_screen_black          = previous_is_screen_black  ;
-    const    std::string blackScreenFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + FRAME_BUFFER_BLACK_SCREEN;
-    uint64_t tick_count               = 0;
+    m_currentTick++;
 
-    if( DirUtils::DoesFileExist( blackScreenFileName ) == false )
+    //
+    // Display/Monaco heartbeat.
+    //
+
+    ProcessUiHeartBeat();
+
+    //
+    // Blank screen detection.
+    //
+
+    if( IsBlackScreenDetectSupported() )
     {
-        BOSE_LOG( WARNING, "warning: can't find file: " + blackScreenFileName + ", update your kernel for black screen detection" );
+        ProcessBlackScreenDetection();
     }
 
-    while( ! m_timeToStop )
+    //
+    // Display settings send to LPM.
+    //
+
+    if( ! m_defaultsSentToLpm
+        // Transfer and processing on LPM can take time. Throttle this.
+        && MonotonicClock::NowMs() - m_defaultsSentTime > SEND_DEFAULTS_TO_LPM_RETRY_MS )
     {
-        tick_count++;
+        m_defaultsSentTime = MonotonicClock::NowMs();
 
-        if( m_uiHeartBeat != ULLONG_MAX )
+        PushDefaultsToLPM();
+    }
+
+    // Schedule the next update.
+    m_updateloopTimer->SetTimeouts( UPDATE_SLEEP_MS, 0 );
+    m_updateloopTimer->Start( [ this ]( )
+    {
+        UpdateLoop();
+    } );
+}
+
+/*!
+ */
+void DisplayController::ProcessUiHeartBeat()
+{
+    uint64_t deltaTicks = m_currentTick - m_lastUiHeartBeatTick;
+
+    // If we have not heard from the UI in some time, consider it dead.
+    if( deltaTicks >= m_uiHeartBeatLossErrorTicks )
+    {
+        BOSE_ERROR( s_logger, "UI has stopped. Last heartbeat received %0.2fs ago.",
+                    ( float )( ( m_currentTick - m_lastUiHeartBeatTick ) * UPDATE_SLEEP_MS ) / 1000.0 );
+
+        m_uiHeartBeat = ULLONG_MAX;
+        m_lastUiHeartBeatTick = m_currentTick;  // Reset so we continue to monitor again.
+        UpdateUiConnected( false );
+
+        if( ! m_killUIOnHeartBeatLossPidFile.empty() )
         {
-            if( m_localHeartBeat == ULLONG_MAX )
-            {
-                m_localHeartBeat = m_uiHeartBeat;
-                tick_count       = 1; // reset tick count
-                UpdateUiConnected( true );
-            }// if it's te first heart beat receive from the UI
-            else if( !( tick_count % UI_HEART_BEAT_RATE_SEC ) )
-            {
-                m_localHeartBeat++;
-            }
-
-            if( abs( m_localHeartBeat - m_uiHeartBeat ) > 1 )
-            {
-                BOSE_LOG( ERROR, "Error: the UI stop, local HB: " << m_localHeartBeat << " HB: " << m_uiHeartBeat );
-                // reset the heart beat algorithm and resume on first heart beat from the UI
-                m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
-                UpdateUiConnected( false );
-            }// If the UI stop updating the heart beat
-        }// If the UI had started
-
-        actual_is_screen_black = IsFrameBufferBlackScreen();
-
-        if( actual_is_screen_black != previous_is_screen_black )
-        {
-            BOSE_LOG( VERBOSE, "screen content transitioned from "         <<
-                      ( previous_is_screen_black ? "black" : "non-black" ) <<
-                      " to "                                               <<
-                      ( actual_is_screen_black   ? "black" : "non-black" ) );
-
-            // ???????????????????????????????????????????????????????????????????????
-            // TODO: call HSM with new state
-            // ???????????????????????????????????????????????????????????????????????
-
-            previous_is_screen_black = actual_is_screen_black;
-        }// Else, the screen passed from black-to-none_black or passed form non-black to black
-
-        if( ! m_defaultsSentToLpm
-            // Transfer and processing on LPM can take time. Throttle this.
-            && MonotonicClock::NowMs() - m_defaultsSentTime > SEND_DEFAULTS_TO_LPM_RETRY_MS )
-        {
-            m_defaultsSentTime = MonotonicClock::NowMs();
-
-            PushDefaultsToLPM();
+            KillUiProcess();
         }
 
-        usleep( UPDATE_SLEEP_MS * 1000 );
+        return;
+    }
+    else if( deltaTicks == m_uiHeartBeatLossWarnTicks )
+    {
+        BOSE_WARNING( s_logger, "UI heart beat warning. Last received %0.2fs ago.",
+                      ( float )( ( m_currentTick - m_lastUiHeartBeatTick ) * UPDATE_SLEEP_MS ) / 1000.0 );
     }
 
-}// UpdateLoop
+    // If we have a heartbeat and not already flagged as connected, do so now.
+    if( m_uiHeartBeat != ULLONG_MAX && ! m_uiConnected )
+    {
+        UpdateUiConnected( true );
+    }
+}
+
+/*!
+ */
+void DisplayController::ProcessBlackScreenDetection()
+{
+    ScreenBlackState screenState = ScreenBlackState_Invalid;
+    screenState = ReadFrameBufferBlackState();
+
+    // Not supported.
+    if( screenState == ScreenBlackState_Invalid
+        || m_screenBlackState == ScreenBlackState_Disabled )
+    {
+        return;
+    }
+
+    // Debouncing turning off the backlight.
+    // Turning the backlight back on is handled immediatle in the next branch.
+    if( m_screenBlackChangeCounter > 0
+        && screenState == m_screenBlackChangeTo
+        && m_screenBlackChangeTo ==  ScreenBlackState_Black )
+    {
+        m_screenBlackChangeCounter--;
+
+        if( m_screenBlackChangeCounter == 0 )
+        {
+            BOSE_DEBUG( s_logger, "Screen is black, turning off backlight." );
+            SetBlackScreenNowState( m_screenBlackChangeTo );
+            SetDisplayBrightnessCap( BRIGHTNESS_MIN, SCREEN_BLACK_RAMP_OFF_MS );
+        }
+    }
+    // Screen is now blank. Wait some time to be sure.
+    else if( screenState != m_screenBlackState )
+    {
+        switch( screenState )
+        {
+        // When black is detected, turn off the backlight after some time as a debounce.
+        case ScreenBlackState_Black:
+        {
+            if( m_screenBlackInactivityTicks > 0 )
+            {
+                m_screenBlackChangeTo = screenState;
+                m_screenBlackChangeCounter = m_screenBlackInactivityTicks;
+
+                BOSE_DEBUG( s_logger, "Screen black state changed to %i, waiting %llu MS.",
+                            screenState, m_screenBlackChangeCounter * UPDATE_SLEEP_MS );
+            }
+            else
+            {
+                BOSE_DEBUG( s_logger, "Screen black state changed to %i, but screen blank response is disabled.",
+                            screenState );
+            }
+            break;
+        }
+
+        // When the screen is no longer black, respond immediately.
+        case ScreenBlackState_NotBlack:
+        {
+            BOSE_DEBUG( s_logger, "Screen is no longer black, turning on backlight." );
+            SetBlackScreenNowState( ScreenBlackState_NotBlack );
+            SetDisplayBrightnessCap( MIN( m_lcdBrightnessCap, BRIGHTNESS_MAX ), SCREEN_BLACK_RAMP_ON_MS );
+            // Do not use LCD on/off since it boots into an "all white" state which
+            // may be momentarily visible.
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+    // No change.
+    else if( m_screenBlackChangeTo != ScreenBlackState_Invalid )
+    {
+        BOSE_DEBUG( s_logger, "Aborting screen blank state change." );
+
+        m_screenBlackChangeTo = ScreenBlackState_Invalid;
+        m_screenBlackChangeCounter = 0;
+    }
+}
+
+/*!
+ */
+void DisplayController::SetBlackScreenNowState( ScreenBlackState s )
+{
+    m_screenBlackState = s;
+    m_screenBlackChangeTo = ScreenBlackState_Invalid;
+    m_screenBlackChangeCounter = 0;
+}
 
 /*!
  */
@@ -627,32 +831,37 @@ bool DisplayController::HandleLpmNotificationUIBrightness( IpcUIBrightness_t lpm
 void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
                                                Callback<UiHeartBeat> resp )
 {
-    BOSE_LOG( INFO, "received first heartbeat: " << req.count() );
+    BOSE_INFO( s_logger, "Received first heartbeat: %llu", req.count() );
+
     m_uiHeartBeat = req.count();
+    m_lastUiHeartBeatTick = m_currentTick;
 
     UiHeartBeat response;
     response.set_count( m_uiHeartBeat );
     resp.Send( response );
-}// HandlePostUiHeartBeat
+}
 
 /*!
  */
 void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
                                               Callback<UiHeartBeat> resp )
 {
-    BOSE_LOG( VERBOSE, "received heartbeat: " << req.count() << ", current heart beat: " << m_uiHeartBeat );
+    BOSE_VERBOSE( s_logger, "Received heartbeat: %llu, current %llu", req.count(), m_uiHeartBeat );
 
-    if( ( m_uiHeartBeat != ULLONG_MAX ) && ( abs( m_uiHeartBeat - req.count() ) >= 2 ) )
+    if( ( m_uiHeartBeat != ULLONG_MAX )
+        && ( abs( m_uiHeartBeat - req.count() ) >= UI_HEART_BEAT_MISSED_THRESHOLD ) )
     {
-        BOSE_LOG( WARNING, "UI is skipping heart beat, received heartbeat: " << req.count() + ", current heart beat: " << m_uiHeartBeat );
+        BOSE_WARNING( s_logger, "UI is skipping heart beat, received: %llu, current: %llu",
+                      req.count(), m_uiHeartBeat );
     }
 
     m_uiHeartBeat = req.count();
+    m_lastUiHeartBeatTick = m_currentTick;
 
     UiHeartBeat response;
     response.set_count( m_uiHeartBeat );
     resp.Send( response );
-}// HandlePutUiHeartBeat
+}
 
 /*!
  */
@@ -810,99 +1019,107 @@ void DisplayController::BuildLpmUIBrightnessStruct( IpcUIBrightness_t* out, IpcU
         out->set_value( 0 );
         break;
     }
+
+    out->set_time( UI_BRIGHTNESS_TIME_DEFAULT );
 }
 
 /*!
  */
-bool DisplayController::TurnDisplayOnOff( bool turnOn )
+void DisplayController::RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void>* completedCb )
 {
-    const std::string sendCommandFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + "send_command";
-    const std::string teFileName          = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + "te";
-    const char*       onOffCmdString      = turnOn ? "29" : "28" ;
-    const char*       teString            = turnOn ? "1"  : "0"  ;
+    BOSE_DEBUG( s_logger, "%s, turnOn %i", __FUNCTION__, turnOn );
 
-    BOSE_LOG( VERBOSE, "turning LCD: " << ( turnOn ? "on" : "off" ) );
-
-    if( turnOn )
+    auto f = [this, turnOn, completedCb]()
     {
-        // dr1037486 When turning on the display, use a ramp. In addition to being more
-        // pleasing, this will hide any pop that might result from multiple "brightness cap"
-        // commands in quick succession. For example, right now Eddie resumes from low power
-        // supmend into network standby. The latter has a brightness cap which will be
-        // applied only after we resume into the previous brightness.
-        SetDisplayBrightnessCap( BRIGHTNESS_MAX, false );
+        if( m_config.m_hasLcd )
+        {
+            if( turnOn )
+            {
+                // Re-enable black screen detection which will drive the back light back on
+                // once there is content. "Invalid" will force a re-detection.
+                if( IsBlackScreenDetectSupported() )
+                {
+                    m_screenBlackState = ScreenBlackState_Invalid;
+                }
+            }
+            else
+            {
+                // Disable black screen detection while the screen is off.
+                m_screenBlackState = ScreenBlackState_Disabled;
+
+                // Turn the display off instantly because the LPM may be driving into a low
+                // power state.
+                SetDisplayBrightnessCap( BRIGHTNESS_MIN, UI_BRIGHTNESS_TIME_IMMEDIATE );
+            }
+        }
+
+        if( completedCb != nullptr )
+        {
+            ( *completedCb )();
+        }
+    };
+
+    IL::BreakThread( f, m_task );
+}
+
+/*!
+ */
+DisplayController::ScreenBlackState DisplayController::ReadFrameBufferBlackState()
+{
+    if( ! m_config.m_blackScreenDetectEnabled )
+    {
+        return ScreenBlackState_Invalid;
+    }
+
+    char blackState = '9';
+    // dr1037486 I am intentionally using open() instead of SystemUtils::ReadFile() because
+    // it is about 25% faster and we don't need the extra overhead (only reading 1 character).
+    // This gets called frequently.
+    int blackScreenFp = open( BLACK_SCREEN_FILE_NAME.c_str(), O_RDONLY );
+
+    if( blackScreenFp == -1
+        || read( blackScreenFp, &blackState, 1 ) != 1 )
+    {
+        BOSE_DEBUG( s_logger, "Failed to read black screen file '%s'", BLACK_SCREEN_FILE_NAME.c_str() );
+
+        m_config.m_blackScreenDetectEnabled = false;
+        close( blackScreenFp );
+        return ScreenBlackState_Invalid;
+    }
+
+    close( blackScreenFp );
+
+    return ( blackState == '1' ) ? ScreenBlackState_Black : ScreenBlackState_NotBlack;
+}
+
+/*!
+ * The "monaco.pid" file is created by run_wpe.sh from the CastleWebKit component.
+ */
+void DisplayController::KillUiProcess()
+{
+    if( m_killUIOnHeartBeatLossPidFile.empty() )
+    {
+        return;
+    }
+
+    pid_t pid = 0;
+
+    if( auto fileData = SystemUtils::ReadFile( m_killUIOnHeartBeatLossPidFile ) )
+    {
+        char* endPointer = nullptr;
+        pid = strtol( fileData->c_str(), &endPointer, 10 );
+    }
+
+    if( pid != 0 )
+    {
+        BOSE_ERROR( s_logger, "Killing UI process at pid %i", pid );
+        kill( pid, SIGKILL );
     }
     else
     {
-        // Turn the display off instantly because the LPM may be driving into a low
-        // power state.
-        SetDisplayBrightnessCap( BRIGHTNESS_MIN, true );
+        BOSE_ERROR( s_logger, "UI pid file '%s' read failed or PID invalid. Restart aborted.",
+                    m_killUIOnHeartBeatLossPidFile.c_str() );
     }
-
-    if( DirUtils::DoesFileExist( sendCommandFileName ) == false )
-    {
-        BOSE_LOG( ERROR, "error: can't find file: " + sendCommandFileName + " - " + strerror( errno ) );
-        return false;
-    }
-
-    if( DirUtils::DoesFileExist( teFileName ) == false )
-    {
-        BOSE_LOG( ERROR, "error: can't find file: " + teFileName + " - " + strerror( errno ) );
-        return false;
-    }
-
-    std::ofstream displayControllerSendCmd( sendCommandFileName );
-    std::ofstream displayControllerTe( teFileName );
-
-    if( displayControllerSendCmd.is_open() == false )
-    {
-        BOSE_LOG( ERROR,  "error: failed to open file: " + sendCommandFileName + " - " + strerror( errno ) );
-        return false;
-    }
-
-    if( displayControllerTe.is_open() == false )
-    {
-        BOSE_LOG( ERROR,  "error: failed to open file: " + teFileName + " - " + strerror( errno ) );
-        return false;
-    }
-
-    if( turnOn == false )
-    {
-        displayControllerTe << teString;
-        usleep( 25 * 1000 ); // wait a full te cycle, the slowest is 40Hz
-    }
-
-    displayControllerSendCmd << onOffCmdString; // see ST7789VI_SPEC_V1.4.pdf
-
-    if( turnOn == true )
-    {
-        displayControllerTe << teString;
-    }
-
-    BOSE_LOG( VERBOSE, "LCD is now: " << ( turnOn ? "on" : "off" ) );
-    return true;
 }
-
-bool DisplayController::IsFrameBufferBlackScreen()
-{
-    const std::string blackScreenFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + FRAME_BUFFER_BLACK_SCREEN;
-    FILE *fp                              = fopen( blackScreenFileName.c_str(), "r" );
-    char  buf                             = '9';
-
-    if( fp == NULL )
-    {
-        return false;
-    }
-
-    if( fscanf( fp, "%c", &buf ) != 1 )
-    {
-        fclose( fp );
-        BOSE_LOG( WARNING, "warning: failed to read file: " + blackScreenFileName );
-        return false;
-    }
-
-    fclose( fp );
-    return buf == '1' ? true : false;
-}// IsFrameBufferBlackScreen
 
 } //namespace ProductApp

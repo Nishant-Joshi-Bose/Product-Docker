@@ -18,7 +18,7 @@ import pytest
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 import eddie_helper
 
-logger = get_logger(os.path.basename(__file__))
+LOGGER = get_logger(os.path.basename(__file__))
 
 
 @pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'front_door_queue')
@@ -33,11 +33,11 @@ def test_system_info_setup_state(front_door_queue):
     eddie_helper.check_if_end_point_exists(front_door_queue, eddie_helper.SYSTEM_INFO_API)
 
     # 2. Get system info and verify response.
-    logger.info("Testing get system info")
-    response = eddie_helper.get_system_info(front_door_queue)
+    LOGGER.info("Testing get system info")
+    response = front_door_queue.getInfo()
 
-    eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API, eddie_helper.METHOD_GET,
-                                                 eddie_helper.STATUS_OK)
+    eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API,
+                                                 eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
 
     assert (response["body"]["guid"] and
             response["body"]["countryCode"] and
@@ -62,11 +62,11 @@ def test_system_info_playing_from_amazon(front_door_queue):
     # 1. Configure Amazon MSP account and play music from fixture.
 
     # 2. Get system info and verify response.
-    logger.info("Testing get system info")
-    response = eddie_helper.get_system_info(front_door_queue)
+    LOGGER.info("Testing get system info")
+    response = front_door_queue.getInfo()
 
-    eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API, eddie_helper.METHOD_GET,
-                                                 eddie_helper.STATUS_OK)
+    eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API,
+                                                 eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
 
     assert (response["body"]["guid"] and
             response["body"]["countryCode"] and
@@ -91,11 +91,11 @@ def test_system_info_playing_from_aux(front_door_queue):
     # 1. Change playing source to AUX and verifies the device state from fixture.
 
     # 2. Get system info and verify response.
-    logger.info("Testing get system info")
-    response = eddie_helper.get_system_info(front_door_queue)
+    LOGGER.info("Testing get system info")
+    response = front_door_queue.getInfo()
 
-    eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API, eddie_helper.METHOD_GET,
-                                                 eddie_helper.STATUS_OK)
+    eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API,
+                                                 eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
 
     assert (response["body"]["guid"] and
             response["body"]["countryCode"] and

@@ -13,7 +13,6 @@ Common conftest file for Eddie Test
 import pytest
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
-from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.PassportUtils.passport_utils import *
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
@@ -94,21 +93,13 @@ def message_creator(request, service_name):
     return MessageCreator(service_name, logger)
 
 @pytest.fixture(scope='class')
-def response_handler(request, service_name, get_config):
-    """
-    Get ResponseHandler instance.
-    """
-    logger.info("response_handler")
-    return ResponseHandler(service_name, get_config['name'], logger)
-
-@pytest.fixture(scope='class')
-def common_behavior_handler(response_handler, frontDoor, message_creator):
+def common_behavior_handler(frontDoor, message_creator, service_name, get_config):
     """
     Get CommonBehaviorHandler instance.
     """
     logger.info("common_behavior_handler")
 
-    return CommonBehaviorHandler(frontDoor, response_handler, message_creator, logger)
+    return CommonBehaviorHandler(frontDoor, message_creator, service_name, get_config['name'], logger)
 
 @pytest.fixture(scope='class')
 def passport_user(request, frontDoor):

@@ -35,7 +35,7 @@ def get_and_set_system_setup(front_door_queue):
     """
     # 1. Get system setup information and verify response.
     LOGGER.info("Testing get system setup information ")
-    response = eddie_helper.get_system_setup(front_door_queue)
+    response = front_door_queue.getSystemSetup()
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_SETUP_API, eddie_helper.METHOD_GET,
                                                  eddie_helper.STATUS_OK)
@@ -52,10 +52,10 @@ def get_and_set_system_setup(front_door_queue):
     data_request = dict()
     data_request["isSetupCompleted"] = True
     data = json.dumps(data_request)
-    response = eddie_helper.set_system_setup(front_door_queue, data)
+    response = front_door_queue.setSystemSetup(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_SETUP_API, eddie_helper.METHOD_PUT,
                                                  eddie_helper.STATUS_OK)
-    time.sleep(2)
+    time.sleep(10)
 
     # 4. Verify notification of system setup information.
     notification = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_SETUP_API)
@@ -76,7 +76,7 @@ def set_and_verify_invalid_system_setup(front_door_queue, request_data, error_co
     4. Verify device setup which should be False and networkConfigured should be True.
     """
     # 1. Configure OOB setup using PUT method.
-    response = eddie_helper.set_system_setup(front_door_queue, request_data)
+    response = front_door_queue.setSystemSetup(request_data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_SETUP_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # 2. Verify error subcode which should be "1".
@@ -85,7 +85,7 @@ def set_and_verify_invalid_system_setup(front_door_queue, request_data, error_co
     time.sleep(2)
 
     # 3. Get system setup information and verify response.
-    response = eddie_helper.get_system_setup(front_door_queue)
+    response = front_door_queue.getSystemSetup()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_SETUP_API, eddie_helper.METHOD_GET,
                                                  eddie_helper.STATUS_OK)
 
@@ -111,9 +111,13 @@ def test_system_setup_from_setup_state(front_door_queue):
 
     # 2. Get and set system setup information and verify response.
     get_and_set_system_setup(front_door_queue)
+    for _ in range(25):
+        state = front_door_queue.getState()
+        if state == eddie_helper.DESELECTED:
+            break
+        time.sleep(1)
 
     # 3. Verify device state which should be "DESELECTED".
-    state = front_door_queue.getState()
     assert state == eddie_helper.DESELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.DESELECTED, state)
 
@@ -131,9 +135,13 @@ def test_system_setup_from_selected_state(front_door_queue):
 
     # 2. Get and set system setup information and verify response.
     get_and_set_system_setup(front_door_queue)
+    for _ in range(25):
+        state = front_door_queue.getState()
+        if state == eddie_helper.SELECTED:
+            break
+        time.sleep(1)
 
     # 3. Verify device state which should be "SELECTED".
-    state = front_door_queue.getState()
     assert state == eddie_helper.SELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
@@ -146,28 +154,26 @@ def test_system_setup_from_idle_state(front_door_queue):
     1. Change device state to Idle.
     2. Verify device state which should be "IDLE".
     3. Get and set system state and verify response.
-    4. Verify device state which should be "IDLE".
     """
     # 1. Change device state to Idle.
     LOGGER.info("Setting device state to Idle")
     data_request = dict()
     data_request["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_request)
-    eddie_helper.set_system_power_control(front_door_queue, data)
-    time.sleep(2)
+
+    front_door_queue.setSystemPowerControl(data)
+    for _ in range(25):
+        state = front_door_queue.getState()
+        if state == eddie_helper.IDLE:
+            break
+        time.sleep(1)
 
     # 2. Verify device state which should be "IDLE".
-    state = front_door_queue.getState()
     assert state == eddie_helper.IDLE, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
     # 3. Get and set system state and verify response.
     get_and_set_system_setup(front_door_queue)
-
-    # 4. Verify device state which should be "IDLE".
-    state = front_door_queue.getState()
-    assert state == eddie_helper.IDLE, \
-        'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
 
 @pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'device_id', 'front_door_queue')
@@ -181,7 +187,11 @@ def test_system_setup_cli_command(device_id, front_door_queue):
     """
     # 1. Set OOB Setup completed using CLI command.
     adb_utils.adb_telnet_cmd('setoobsetupcompleted', device_id=device_id)
-    time.sleep(2)
+    for _ in range(25):
+        state = front_door_queue.getState()
+        if state == eddie_helper.DESELECTED:
+            break
+        time.sleep(1)
 
     # 2. Verify notification of system setup information.
     notification = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_SETUP_API)
@@ -192,7 +202,6 @@ def test_system_setup_cli_command(device_id, front_door_queue):
             notification["networkConfigured"])
 
     # 3. Verify device state which should be "DESELECTED".
-    state = front_door_queue.getState()
     assert state == eddie_helper.DESELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.DESELECTED, state)
 
