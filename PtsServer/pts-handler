@@ -134,7 +134,7 @@ if path.startswith("/diag/"):
 # View the log message buffer.
 
 if path == "/logread.txt":
-    only_for_usb()
+    #only_for_usb() -- iface restriction disabled for now for this URL
 
     http_ok()
     sys.stdout.flush()
@@ -144,7 +144,7 @@ if path == "/logread.txt":
 # View the log message buffer (compressed).
 
 if path == "/logread.txt.gz":
-    only_for_usb()
+    #only_for_usb() -- iface restriction disabled for now for this URL
 
     http_ok("application/x-gzip")
     sys.stdout.flush()
@@ -154,7 +154,7 @@ if path == "/logread.txt.gz":
 # View miscellaneous system status information.
 
 if path == "/pts.txt":
-    only_for_usb()
+    #only_for_usb() -- iface restriction disabled for now for this URL
 
     def call(*args):
         print ">", " ".join(args)

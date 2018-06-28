@@ -24,7 +24,7 @@ from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 
 # Subcode
 SUBCODE_INVALID_KEY = 2005
-SUBCODE_INVALID_ARGS = 1
+SUBCODE_INVALID_ARGS = 0
 
 # Status code
 STATUS_OK = 200
@@ -93,6 +93,7 @@ DESELECTED = "DESELECTED"
 IDLE = "IDLE"
 NETWORK_STANDBY = "NETWORK_STANDBY"
 FACTORY_DEFAULT = "FACTORY_DEFAULT"
+PLAYINGDESELECTED = "PlayingDeselected"
 
 # System Power options
 POWER_ON = "ON"
@@ -208,8 +209,8 @@ def wait_for_device_commands(device_id, adb):
                                                         expect_after='Current State: ',
                                                         timeout=30, device_id=device_id)
                 LOGGER.info("Device State: %s", device_state)
-                assert (device_state in [FIRSTBOOTGREETING, BOOTING, SETUPOTHER]), \
-                    'Device not in "Booting" state. Current state: {}.'.format(device_state)
+                assert (device_state in [FIRSTBOOTGREETING, BOOTING, SETUPOTHER, PLAYINGDESELECTED]), \
+                    'Device not in expected state. Current state: {}.'.format(device_state)
                 break
 
         time.sleep(1)

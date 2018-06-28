@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-27_1321"
+    "selected_version": "Continuous/Castle-Fork/2018-06-27_1601"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -145,15 +145,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/1.5.0-866+acf4695"
+    "selected_version": "Release/master/1.5.0-884+c50e458"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/1.5.0-866+acf4695"
+    "selected_version": "Release/master/1.5.0-884+c50e458"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@dcea9f3e0d8d2427716eab1539871c2af08bfb2e"
+    "selected_version": "master@f705379043a428bab1c2101409d793e2132ce68f"
   },
   {
     "name": "ProductUIAssets",
@@ -201,7 +201,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-27_1321"
+    "selected_version": "Continuous/Castle-Fork/2018-06-27_1601"
   },
   {
     "name": "SystemEventService-qc8017_32",

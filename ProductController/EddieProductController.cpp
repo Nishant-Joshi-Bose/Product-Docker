@@ -571,7 +571,7 @@ void EddieProductController::SetupProductSTSController( void )
     sources.push_back( descriptor_AUX );
 
     // 'SETUP' is a "fake" source used for setup state.
-    ProductSTSController::SourceDescriptor descriptor_Setup{ SETUP, ProductSourceSlot_Name( SETUP ), false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup{ SETUP, SetupSourceSlot_Name( SETUP ), false, silentStateFactory };
     sources.push_back( descriptor_Setup );
 
     Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );

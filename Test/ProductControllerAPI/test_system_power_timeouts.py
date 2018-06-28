@@ -43,7 +43,7 @@ def test_system_power_timeouts_errors(front_door_queue):
     data_request["notValid"] = False
     data = json.dumps(data_request)
 
-    response = eddie_helper.set_system_power_timeouts(front_door_queue, data)
+    response = front_door_queue.setSystemPowerTimeouts(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # Verify error subcode which should be "2005".
@@ -57,7 +57,7 @@ def test_system_power_timeouts_errors(front_door_queue):
     data_request["noAudio"] = "invalidValue"
     data = json.dumps(data_request)
 
-    response = eddie_helper.set_system_power_timeouts(front_door_queue, data)
+    response = front_door_queue.setSystemPowerTimeouts(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # Verify error subcode which should be "2005".
@@ -71,7 +71,7 @@ def test_system_power_timeouts_errors(front_door_queue):
     data_request["noVideo"] = "invalidValue"
     data = json.dumps(data_request)
 
-    response = eddie_helper.set_system_power_timeouts(front_door_queue, data)
+    response = front_door_queue.setSystemPowerTimeouts(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # Verify error subcode which should be "2005".
@@ -93,7 +93,8 @@ def test_system_power_timeouts_from_setup_state(front_door_queue):
     """
     # 1. Get system power timeouts information and verify response.
     LOGGER.info("Testing get system power timeouts")
-    response = eddie_helper.get_system_power_timeouts(front_door_queue)
+
+    response = front_door_queue.getSystemPowerTimeouts()
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                  eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
@@ -112,7 +113,7 @@ def test_system_power_timeouts_from_setup_state(front_door_queue):
         data_request = dict()
         data_request["noAudio"] = no_audio
 
-        response = eddie_helper.set_system_power_timeouts(front_door_queue, json.dumps(data_request))
+        response = front_door_queue.setSystemPowerTimeouts(json.dumps(data_request))
         eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                      eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
@@ -122,7 +123,7 @@ def test_system_power_timeouts_from_setup_state(front_door_queue):
         assert response["body"]["noAudio"] == no_audio, \
             'Audio timeout should be {}. Current value : {}'.format(no_audio, response["body"]["noAudio"])
 
-        time.sleep(2)
+        time.sleep(10)
 
         # 5. Verify notification of system power timeouts.
         notification = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_TIMEOUTS_API)
@@ -148,7 +149,12 @@ def test_system_power_timeouts_from_selected_state(front_door_queue):
     # 1. Change playing source to AUX and verifies the device state from fixture.
 
     # 2. Verify device state which should be "SELECTED".
-    state = front_door_queue.getState()
+    for _ in range(25):
+        state = front_door_queue.getState()
+        if state == eddie_helper.SELECTED:
+            break
+        time.sleep(1)
+
     assert state == eddie_helper.SELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
@@ -174,11 +180,14 @@ def test_system_power_timeouts_from_idle_state(front_door_queue):
     data_request = dict()
     data_request["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_request)
-    eddie_helper.set_system_power_control(front_door_queue, data)
-    time.sleep(2)
+    front_door_queue.setSystemPowerControl(data)
+    for _ in range(25):
+        state = front_door_queue.getState()
+        if state == eddie_helper.IDLE:
+            break
+        time.sleep(1)
 
     # 2. Verify device state which should be "IDLE".
-    state = front_door_queue.getState()
     assert state == eddie_helper.IDLE, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
@@ -207,15 +216,19 @@ def test_system_power_timeouts_behaviour(front_door_queue):
     data_request = dict()
     data_request["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_request)
-    eddie_helper.set_system_power_control(front_door_queue, data)
+    front_door_queue.setSystemPowerControl(data)
     time.sleep(2)
-
+    state = front_door_queue.getState()
     # Set noAudio timeout to False.
     no_audio = False
 
     for _ in range(2):
         # Verify device state which should be "IDLE".
-        state = front_door_queue.getState()
+        for _ in range(25):
+            state = front_door_queue.getState()
+            if state == eddie_helper.IDLE:
+                break
+            time.sleep(1)
         assert state == eddie_helper.IDLE, \
             'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
@@ -224,7 +237,7 @@ def test_system_power_timeouts_behaviour(front_door_queue):
         data_request = dict()
         data_request["noAudio"] = no_audio
 
-        response = eddie_helper.set_system_power_timeouts(front_door_queue, json.dumps(data_request))
+        response = front_door_queue.setSystemPowerTimeouts(json.dumps(data_request))
         eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                      eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
