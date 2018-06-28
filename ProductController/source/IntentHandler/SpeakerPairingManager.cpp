@@ -559,6 +559,10 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     GetProductController().GetDataCollectionClient()->SendData(
         std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
         DATA_COLLECTION_ACCESSORIES );
+
+    ProductMessage productMessage;
+    productMessage.set_accessoriesareknown( true );
+    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
