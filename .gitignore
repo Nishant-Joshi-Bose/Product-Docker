@@ -7,3 +7,6 @@
 /components/
 *.sublime-project
 *.sublime-workspace
+venv/
+test/ProductController/venv/
+test/ProductController/.cache/
