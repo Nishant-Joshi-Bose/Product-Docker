@@ -429,11 +429,20 @@ void ProductCecHelper::HandleRawEDIDResponse( const A4VVideoManagerServiceMessag
 {
     BOSE_DEBUG( s_logger, "ProductCecHelper::SendEdidDataCollection" );
 
-    auto edidData = std::make_shared< DataCollection::HdmiEdid >( );
+    auto eedid = std::make_shared< DataCollection::HdmiEdid >( );
 
-    edidData->set_eedid( rawEdid.edid().c_str() );
+    //convert protobuf byte buffer to string
+    std::stringstream stringEdid;
+    const char *bytesBuf = rawEdid.edid().c_str();
+    stringEdid << std::hex;
+    for( uint i = 0; i < rawEdid.edid().size(); ++i )
+    {
+        stringEdid << ( int )bytesBuf[i];
+    }
 
-    m_DataCollectionClient->SendData( edidData, DATA_COLLECTION_EEDID );
+    eedid->set_ediddata( stringEdid.str() );
+
+    m_DataCollectionClient->SendData( eedid, DATA_COLLECTION_EEDID );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
