@@ -24,9 +24,9 @@ INCLUDE_DIRECTORIES(
 )
 
 # -----------------------------------------------------------------------------
-# Eddie daemon.
+# ProductController daemon.
 
-ADD_EXECUTABLE(Eddie
+ADD_EXECUTABLE(ProductController
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateSoftwareInstall.cpp
@@ -56,7 +56,7 @@ ADD_EXECUTABLE(Eddie
   CustomProductSTS/CustomProductSTSStateTopAux.cpp
 )
 
-TARGET_LINK_LIBRARIES(Eddie
+TARGET_LINK_LIBRARIES(ProductController
   CastleProductControllerCommon
   DataCollectionClient
   LpmClient
@@ -92,4 +92,4 @@ TARGET_LINK_LIBRARIES(Eddie
   dl
 )
 
-INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
+INSTALL(TARGETS ProductController DESTINATION ${OUTPUT_BIN_DIR})
