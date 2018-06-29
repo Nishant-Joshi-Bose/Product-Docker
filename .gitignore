@@ -1,0 +1,10 @@
+*~
+.#*
+\#*
+.*.swp
+*.pyc
+/builds/
+/components/
+*.sublime-project
+*.sublime-workspace
+

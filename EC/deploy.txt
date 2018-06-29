@@ -1,0 +1,2 @@
+# Source	Destination	Rule
+builds/deploy/.	<DEPLOY_DIR>	recursive

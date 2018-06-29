@@ -1,0 +1,74 @@
+{
+    "product-ipk": {
+        "src_path": {
+            "bins" : "builds/Release/product-ipk-stage/Bose/bin/",
+            "libs" : "builds/Release/product-ipk-stage/Bose/lib/",
+            "conf" : "builds/Release/product-ipk-stage/Bose/etc/"
+        },
+
+        "dest_path": {
+            "bins" : "/opt/Bose/bin/",
+            "libs" : "/opt/Bose/lib/",
+            "conf" : "/opt/Bose/etc/"
+        },
+
+        "modules": {
+            "Product": {
+                "libs": "libAlexaToMusicServicesIPCClient.so, libAlexaToMusicServicesIPCProtoLib.so, libAlexaToMusicServicesIPCServer.so, libCommonTypes.so, libCore.so, libgssdp-1.0.so, libgssdp-1.0.so.3, libgssdp-1.0.so.3.0.1, libgupnp-1.0.so, libgupnp-1.0.so.4, libgupnp-1.0.so.4.0.1, libInfrastructureLite.so, libprotobuf-lite.so.7.0.0, libProtobufMessagingIPC.so, libprotobuf.so.7.0.0, libSoundTouchInternal.so, libSoundTouch_SDK_Protobuf.so, libspotify_embedded_shared.so, libSTSClient.so, libwebsockets.so.12",
+                "bins": "APServer, CAPS, FinnishStrings.txt, IoT, PtsServer, save-logread, SoundTouch, TradChineseStrings.txt, AVS, clean_logs, FrenchStrings.txt, ItalianStrings.txt, NorwegianStrings.txt, ReadLpmVersion, set-default-time, SpanishStrings.txt, TurkishStrings.txt, avs_demo_mode, CLIServer, FrontDoor, JapaneseStrings.txt, ntpservers.txt, reboot, setlog, start, turn-lcd-off, avs_dev_mode, CzechStrings.txt, frontdoorutil, killbyarg, Passport, set-rndis, start-avahi, turn-lcd-on, avs_mode, DanishStrings.txt, GalapagosClient, killwait, PlatformReset, set-usb-mode, stop, UpnpSource, avs_prod_mode, DataCollectionService, GermanStrings.txt, KoreanStrings.txt, PlatformResetIntoQfil, rlwrap, shepherdd, STSCertified, validate-mfgdata, avs_test_mode, DemoController, GreekStrings.txt, libBeClearAec.so, PolishStrings.txt, RomanianStrings.txt, shepherd-wait, SwedishStrings.txt, Vfe, BLESetup, DutchStrings.txt, HTTPProxy, libDspPlayback.so, PortugueseStrings.txt, RussianStrings.txt, show_splash, SWUpdateWebServer, wifimgr-ndc, BluetoothManager, Eddie, HungarianStrings.txt, libpryon.so, rw, SimpChineseStrings.txt, tap, wlan-stats, BT, EnglishStrings.txt, init-audio, libVfeBeamformer.so, sadi, SlovenianStrings.txt, test-splash, Xml, BTSource, factory_default, init-lcd, LPMService, SASSController, ThaiStrings.txt",
+                "conf": "ALEXA, DefaultAudioSettings.json, KeyConfiguration.json, Shepherd-AudioPath.xml, Shepherd-HTTPProxy.xml, SoftwareUpdatePackageConfiguration.xml, Voice_demo.xml, , APConfig.xml, directfbrc, product, Shepherd-avs.xml, Shepherd-LPMService.xml, SoundTouchSdkPrivateCfg.xml, Voice_dev.xml, , apigeekeys.txt, display_controller.json, profile, Shepherd-Bluetooth.xml, Shepherd-NetManager.xml, ssl, Voice_prod.xml, , bonjour.xml, FrontDoorWSSCfg.json, pts-handler, Shepherd-CLIServer.xml, Shepherd-Passport.xml, store-core, Voice_test.xml, , BoseVersion.json, FS_VERSION, RecoveryMgr, Shepherd-DataCollectionService.xml, Shepherd-SASSController.xml, UpnpSource.xml, Voice.xml, , CAPS.xml, GalapagosClient.json, sec.dat, Shepherd-DemoController.xml, Shepherd-swup.xml, VfeConfig.xml, VolumeAlgorithm.json, , chimes, InActivityTimer.json, secure, Shepherd-FrontDoor.xml, Shepherd.xml, vfe.xml, wpa_supplicant.conf, , DataCollection.json, KeyConfiguration-demo.json, services.json, Shepherd-GalapagosClient.xml, SoftwareUpdateConfiguration.xml, Voice"
+            },
+            "FrontDoor": {
+                "bins": "FrontDoor",
+                "conf": "Shepherd-FrontDoor.xml",
+                "libs": ""
+            },
+            "FrontDoorUtil": {
+                "bins": "frontdoorutil",
+                "conf": "",
+                "libs": ""
+            },
+            "NetManager": {
+                "bins": "NetManager",
+                "conf": "wpa_supplicant.conf, Shepherd-NetManager.xml",
+                "libs": ""
+            },
+            "SoftwareUpdate": {
+                "bins": "ProgressReport, SoftwareUpdateService, SWUpdateWebServer, pre_install, post_install, ResetUtil, RecoveryMain",
+                "conf": "SoftwareUpdateConfiguration.xml, SoftwareUpdatePackageConfiguration.xml, Shepherd-swup.xml, RecoveryMgr",
+                "libs": ""
+            },
+            "SoundTouch": {
+                "libs": "",
+                "bins": "SoundTouch",
+                "conf": ""
+            }
+        }
+    },
+    "hsp-ipk": {
+        "src_path": {
+            "conf": "builds/Release/hsp-ipk-stage/Bose/hsp/"
+        },
+        "dest_path": {
+            "conf": "/opt/Bose/hsp/"
+        },
+        "modules": {
+            "hsp": {
+                "conf": "HSP_VERSION, RecoveryMain, RecoveryMgr, update_ext4.zip"
+            }
+        }
+    },
+    "monaco-ipk": {
+        "src_path": {
+            "conf": "builds/Release/monaco-ipk-stage/Bose/"
+        },
+        "dest_path": {
+            "conf": "/opt/Bose/"
+        },
+        "modules": {
+            "monaco": {
+                "conf": "monaco/"
+            }
+        }
+    }
+}

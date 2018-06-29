@@ -1,0 +1,332 @@
+#!/bin/bash
+#
+# Create an IPK file for installing SoundTouch with opkg.
+#
+# To install:
+#   opkg install -d bose product.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
+#
+# To uninstall:
+#   opkg remove SoundTouch
+#
+this=${0##*/} # this script's name
+
+cfg=Release
+
+tryhelp () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+opts=$(getopt --name "$this" --shell sh \
+    -o uh \
+    -l "help" \
+    -- "$@") || tryhelp
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+	(--help | -h)
+	    cat <<EOF
+Usage: $this [options]
+
+Create an IPK file for installing SoundTouch with opkg.
+
+Options:
+EOF
+	    exit 0
+	    ;;
+
+	(--) break ;;
+	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+here=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$here/.." && echo "$PWD") || exit
+
+riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
+riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
+galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
+httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
+shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
+boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
+protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
+avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
+audiopath_dir=$(components get AudioPath-qc8017_32 installed_location) || exit
+audiopath64_dir=$(components get AudioPath-qc8017_64 installed_location) || exit
+castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
+castlesass_dir=$(components get SASS-qc8017_32 installed_location) || exit
+castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
+wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
+web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
+lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
+cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
+democontroller_dir=$(components get DemoController-qc8017_32 installed_location) || exit
+webkit_dir=$(components get Webkit installed_location) || exit
+productuiassets_dir=$(components get ProductUIAssets installed_location) || exit
+frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
+frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
+datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
+datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
+btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location) || exit
+btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
+blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
+bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
+btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
+lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
+telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
+
+sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
+tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
+tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
+
+stage=$wspace/builds/$cfg/product-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+output_dir=$wspace/builds/$cfg
+opt_dir=$stage/Bose
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
+
+rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
+
+components record "$stage" || exit
+
+version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
+cp "$version_json" "$opt_dir/etc" || exit
+cp "$wspace/components.json" "$opt_dir/etc" || exit
+
+cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
+
+# ----------------------------------------------------------------------------
+# Legacy SoundTouch-SDK stuff.  This will all go away soon.
+soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
+stfs=$soundtouch_sdk/fs
+cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
+cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
+cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
+cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
+# ----------------------------------------------------------------------------
+
+cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
+cp -a "$boselibs_dir/lib" "$opt_dir" || exit
+cp -a "$protobuf_dir/lib" "$opt_dir" || exit
+cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
+cp "$lpmmfgtool_dir/LpmMfgTool" "$opt_dir/bin" || exit
+
+t=$(date +%s)
+put_script "$opt_dir/bin/set-default-time" <<EOF
+#!/bin/bash
+if (( \$(date +%s) < $t )); then
+    logger -s -t set-default-time Using default time $(date -u -d@$t)
+    date -s@$t
+fi
+EOF
+
+# Copy public keys in FS for development key. EC will take care of generation for Production 
+secure_dir=$opt_dir/etc/secure/
+if [ -e "$secure_dir" ]; then
+    chmod -R 755 "$secure_dir" || exit
+fi
+
+mkdir -p "$secure_dir" || exit
+cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
+find "$secure_dir" -type d -exec chmod 550 {} \; || exit
+find "$secure_dir" -type f -exec chmod 440 {} \; || exit
+
+# On exit, make this dir writeable again to avoid spurious error messages
+# from `make clean` and such.
+trap 'chmod -R +w "$secure_dir"' EXIT
+
+# ----------------------------------------------------------------------------
+# Allow components to add to the staging area.
+
+"$avs_dir/stage" "$opt_dir" || exit
+"$audiopath_dir/stage" --product=eddie "$opt_dir" || exit
+"$audiopath64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
+"$castlenetworkservice_dir/stage" "$opt_dir" || exit
+"$castlesass_dir/stage" "$opt_dir" || exit
+"$castlepassport_dir/stage" "$opt_dir" || exit
+"$shepherd_dir/stage" "$opt_dir" || exit
+"$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
+"$lpmservice_dir/stage" "$opt_dir" || exit
+"$cli_dir/stage" "$opt_dir" || exit
+"$democontroller_dir/stage" "$opt_dir" || exit
+"$webkit_dir/stage" "$opt_dir" || exit
+"$productuiassets_dir/stage" --chimes=HomeSpeaker --type=flac "$opt_dir" || exit
+"$frontdoor_dir/stage" "$opt_dir" || exit
+"$frontdoorutility_dir/stage" "$opt_dir" || exit
+"$galapagosclient_dir/stage" "$opt_dir" || exit
+"$httpproxy_dir/stage" "$opt_dir" || exit
+"$datacollection_dir/stage" "$opt_dir" || exit
+"$datacollectionservice_dir/stage" "$opt_dir" || exit
+"$btstackadapter_dir/stage" "$opt_dir" || exit
+"$btsource_dir/stage" "$opt_dir" || exit
+"$blesetup_dir/stage" "$opt_dir" || exit
+"$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
+"$btstssink_dir/stage" "$opt_dir" || exit
+"$web_update_page_dir/stage" "$opt_dir/update/html" || exit
+"$telemetry_dir/stage" "$opt_dir" || exit
+
+# ----------------------------------------------------------------------------
+
+cd "$opt_dir"/lib || exit
+rm -f *.a
+
+PackageName=SoundTouch
+
+package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
+echo "Package version \"$package_version\""
+
+cat >"$stage/control" <<EOF || exit
+Package: $PackageName
+Version: $package_version
+Description: SoundTouch version $package_version
+ The SoundTouch app
+Section: soundtouch
+Priority: optional
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: soundtouch
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+echo "SoundTouch postinst"
+if [ -x /mnt/nv/postinst ]; then
+    /mnt/nv/postinst
+fi
+
+# make sure the public key file has read only permission
+find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
+find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
+
+# Set Progress End
+# CASTLE-14239: Currently, though not required by IPK itself
+#   every IPK is doing full system reset. This is required to clear
+#   LPM install animation - if LPM itself does not update.
+#   This should be considered as workaround as any IPK should be able
+#   to decide its own reboot requirements
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
+exit 0
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "SoundTouch postrm"
+EOF
+
+riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
+riviera_hsp_ver=${riviera_hsp_ver##*/}
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+echo "SoundTouch preinst"
+b="$riviera_hsp_ver"
+i="\$(awk '\$1 == "HSP" {print \$2}' /etc/riviera-version)"
+if [ "\$b" = "\$i" ]; then
+    echo "Riviera-HSP: \$i"
+else
+    echo "Built for Riviera-HSP: \$b"
+    echo "Installed Riviera-HSP: \$i"
+    echo "See https://github.com/BoseCorp/Eddie/blob/master/README.md#hsp"
+fi
+# Start Progress
+if [ -f /opt/Bose/bin/ProgressReport ]; then
+	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
+fi
+
+exit 0
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "SoundTouch prerm"
+EOF
+
+# -----------------------------------------------------------------------------
+# Strip symbols from the executables.
+# Save a copy of the unstripped executables for later debugging.
+
+unstripped_dir=$output_dir/product-unstripped
+unstripped_tar=$unstripped_dir.tar.gz
+rm -rf "$unstripped_dir" "$unstripped_tar"
+mkdir -p "$unstripped_dir" || exit
+
+# Our standard CentOS configuration has
+# LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib which causes
+# ${tool64_prefix}strip to segfault.  As a workaround, unset LD_LIBRARY_PATH
+# here and hope it wasn't actually needed for anything else this script does.
+if [ "$LD_LIBRARY_PATH" ]; then
+    echo "$this: unsetting LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+    unset LD_LIBRARY_PATH
+fi
+
+for i in "$stage"/Bose/{lib,bin}/*; do
+    type=$(file --brief "$i") || exit
+    case "$type" in
+        (*", stripped")
+            echo >&2 "$this: (warning) No debug symbols: $i"
+            ;;
+        (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
+            cp "$i" "$unstripped_dir" || exit
+            # `strip` fails without an error message if the file is empty
+            if ! "${tool64_prefix}strip" "$i"; then
+                echo >&2 "$this: Failed to strip $i"
+                exit 1
+            fi
+            ;;
+        (*", not stripped")
+            cp "$i" "$unstripped_dir" || exit
+            # `strip` fails without an error message if the file is empty
+            if ! "${tool_prefix}strip" "$i"; then
+                echo >&2 "$this: Failed to strip $i"
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+cd  || exit
+tar --owner=0 --group=0 -czf "$unstripped_tar" \
+    -C "$(dirname "$unstripped_dir")" \
+    "$(basename "$unstripped_dir")" \
+    || exit
+echo "Wrote $unstripped_tar"
+rm -rf "$unstripped_dir"
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk=$output_dir/product.ipk
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"

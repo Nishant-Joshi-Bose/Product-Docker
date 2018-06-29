@@ -1,0 +1,5 @@
+{
+  "NoAudioTimeout": 20,
+  "NoNetworkConfiguredTimeout": 120,
+  "NoUserInteractionTimeout": 0
+}
