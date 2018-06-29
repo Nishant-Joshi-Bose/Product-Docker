@@ -23,7 +23,7 @@ logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.DEBUG, fileLo
 expected_software_header = CONFIG["expected_text"]["software_version_text"]
 expected_hash_text = CONFIG["expected_text"]["expected_hash_text"]
 
-@pytest.mark.usefixtures('driver', 'device_id', 'device_ip', 'force_rndis')
+@pytest.mark.usefixtures('save_speaker_log', 'driver', 'device_id', 'device_ip', 'force_rndis')
 def test_diagnostics_mfgdata(driver, device_id, device_ip, riviera, request):
     """
     Navigates to DUT's diagnostics page and verfies the
