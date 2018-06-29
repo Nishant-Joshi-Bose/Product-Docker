@@ -257,6 +257,25 @@ if path == "/controller-version":
     sys.exit()
 
 # ----------------------------------------------------------------------------
+# Clear the "first greeting" flag.
+
+if path == "/clear-first-greeting":
+    only_for_usb()
+
+    http_ok()
+    try:
+        os.remove("/mnt/nv/product-persistence/FirstBootGreetingDone")
+        print "Cleared first greeting."
+        subprocess.call(["sync"])
+    except OSError, e:
+        if e.strerror == "No such file or directory":
+            print "The first greeting was already cleared."
+        else:
+            print "Unable to clear first greeting:", e.strerror
+
+    sys.exit()
+
+# ----------------------------------------------------------------------------
 # Open source license documents.
 # The customer end-user documentation references this URL path.
 
