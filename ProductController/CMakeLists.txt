@@ -93,6 +93,3 @@ TARGET_LINK_LIBRARIES(Eddie
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
-
-# This is temporary because ProductCliClient.cpp needs to include RivieraLPM_IpcProtocol.h
-SET_SOURCE_FILES_PROPERTIES(ProductCliClient.cpp PROPERTY COMPILE_FLAGS -I${RIVIERA_LPM_SERVICE_DIR}/internal_include)
