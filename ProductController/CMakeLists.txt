@@ -35,7 +35,7 @@ ADD_EXECUTABLE(ProductController
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
   ProductCliClient.cpp
   DataCollectionClientInterface.cpp
-  EddieProductController.cpp
+  CustomProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc

@@ -23,7 +23,7 @@
 
 namespace ProductApp
 {
-class EddieProductController;
+class CustomProductController;
 class ProductController;
 class ProductControllerHsm;
 
@@ -372,7 +372,7 @@ public:
 
 public:
     /// The custom version of this function returns the custom ProductController
-    static EddieProductController& GetCustomProductController();
+    static CustomProductController& GetCustomProductController();
 
     static ProductController* s_productController;
 

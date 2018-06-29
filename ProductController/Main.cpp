@@ -11,7 +11,7 @@
 #include "DPrint.h"
 #include "BoseVersion.h"
 #include "SystemUtils.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 
 namespace
 {
@@ -33,7 +33,7 @@ try
 
     ::signal( SIGPIPE, SIG_IGN );
 
-    ProductApp::EddieProductController eddieProductController;
+    ProductApp::CustomProductController eddieProductController;
     eddieProductController.Initialize();
     while( true )
         ::pause();
