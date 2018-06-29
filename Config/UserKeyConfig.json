@@ -5,7 +5,7 @@
         "commment": "power toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ON_OFF"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -13,7 +13,7 @@
         "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_BLUETOOTH_SOURCE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [0]
     },
     {
@@ -21,7 +21,7 @@
         "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_BLUETOOTH_SOURCE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [750]
     },
     {
@@ -29,7 +29,7 @@
         "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_BLUETOOTH_SOURCE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [10000]
     },
     {
@@ -45,7 +45,7 @@
         "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_1"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000]
     },
     {
@@ -53,7 +53,7 @@
         "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_2"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000]
     },
     {
@@ -61,7 +61,7 @@
         "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_3"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000]
     },
     {
@@ -69,7 +69,7 @@
         "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_4"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000]
     },
     {
@@ -77,7 +77,7 @@
         "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_5"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000]
     },
     {
@@ -85,7 +85,7 @@
         "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_6"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000]
     },
     {
@@ -93,7 +93,7 @@
         "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_1"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -101,7 +101,7 @@
         "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_2"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -109,7 +109,7 @@
         "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_3"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -117,7 +117,7 @@
         "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_4"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -125,7 +125,7 @@
         "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_5"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -133,7 +133,7 @@
         "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_6"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -141,7 +141,7 @@
         "commment": "volume up",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [0]
     },
     {
@@ -149,7 +149,7 @@
         "commment": "volume ramp up",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [300, 100]
     },
     {
@@ -157,7 +157,7 @@
         "commment": "volume ramp up cancel",
         "keyEvent": "RELEASE_ALWAYS",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -165,7 +165,7 @@
         "commment": "volume down",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [0]
     },
     {
@@ -173,7 +173,7 @@
         "commment": "volume ramp down",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [300, 100]
     },
     {
@@ -181,7 +181,7 @@
         "commment": "volume ramp down cancel",
         "keyEvent": "RELEASE_ALWAYS",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -189,7 +189,7 @@
         "commment": "play/pause",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PLAY"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -197,7 +197,7 @@
         "commment": "skip forward",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_FAST_FORWARD"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -205,7 +205,7 @@
         "commment": "skip forward",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_QUICK_SKIP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -213,7 +213,7 @@
         "commment": "skip back",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_FAST_REVERSE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -221,7 +221,7 @@
         "commment": "skip back",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_QUICK_REPLAY"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -229,7 +229,7 @@
         "commment": "mute toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_MUTE"],
-        "origin": ["IR", "TAP", "CEC", "RF", "CAPSENSE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
         "timeOutList": []
     },
     {
@@ -237,7 +237,7 @@
         "commment": "select soundtouch",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_SOUND_TOUCH_SOURCE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -245,7 +245,7 @@
         "commment": "connect",
         "keyEvent": "PRESS",
         "keyList": ["KEY_VAL_AVAIL_11"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -253,7 +253,7 @@
         "commment": "select tv",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_TV_SOURCE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
      {
@@ -261,7 +261,7 @@
         "commment": "select user configurable source game/ott",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_GAME_SOURCE"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -269,7 +269,7 @@
         "commment": "select user configurable source dvd",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_BD_DVD_SOURCE"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -277,7 +277,7 @@
         "commment": "select user configurable source cable/sat",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_AUX_SOURCE"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "RF", "NETWORK"],
         "timeOutList": []
     },   
     {
@@ -285,7 +285,7 @@
         "commment": "thumbs up",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAGE_THUMBS_UP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -293,7 +293,7 @@
         "commment": "thumbs down",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAGE_THUMBS_DOWN"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -301,7 +301,7 @@
         "commment": "factory default",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_FD"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -309,7 +309,7 @@
         "commment": "toggle wifi",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_WIFI_OFF"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -317,7 +317,7 @@
         "commment": "ap setup",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_AP_SETUP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -325,7 +325,7 @@
         "commment": "pair speakers",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAIR_SPKR"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -341,7 +341,7 @@
         "commment": "pts mode",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_USB_NET_SVR"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "RF", "NETWORK"],
         "timeOutList": []
     }
     ],
