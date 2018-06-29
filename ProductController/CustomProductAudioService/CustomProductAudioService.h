@@ -15,7 +15,7 @@
 
 namespace ProductApp
 {
-class EddieProductController;
+class CustomProductController;
 class CustomProductAudioService: public ProductAudioService
 {
 public:
@@ -25,7 +25,7 @@ public:
      * \param frontDoorClient The FrontDoor client instance to which to register events.
      * \param lpmClient LPM client interface. Used for requesting amp status.
      */
-    CustomProductAudioService( EddieProductController& productController,
+    CustomProductAudioService( CustomProductController& productController,
                                const FrontDoorClientIF_t& frontDoorClient,
                                LpmClientIF::LpmClientPtr lpmClient );
 

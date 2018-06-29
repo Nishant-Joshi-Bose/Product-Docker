@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file   EddieProductControllerStateTop.h
+/// @file   CustomProductControllerStateTop.h
 /// @brief  The Top State in the Eddie Product. Any methods getting
 ///         called in this state indicate an unexpected call or an error.
 ///
@@ -17,15 +17,15 @@ namespace ProductApp
 {
 class ProductControllerHsm;
 
-class EddieProductControllerStateTop : public ProductControllerStateTop
+class CustomProductControllerStateTop : public ProductControllerStateTop
 {
 public:
-    EddieProductControllerStateTop( ProductControllerHsm& hsm,
-                                    CHsmState* pSuperState,
-                                    Hsm::STATE stateId = 0,
-                                    const std::string& name = "TOP" );
+    CustomProductControllerStateTop( ProductControllerHsm& hsm,
+                                     CHsmState* pSuperState,
+                                     Hsm::STATE stateId = 0,
+                                     const std::string& name = "TOP" );
 
-    virtual ~EddieProductControllerStateTop()
+    virtual ~CustomProductControllerStateTop()
     {
     }
 

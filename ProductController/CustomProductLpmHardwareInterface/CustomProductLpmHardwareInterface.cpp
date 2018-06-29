@@ -27,7 +27,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,10 +40,10 @@ namespace ProductApp
 ///
 /// @name   CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface
 ///
-/// @brief  EddieProductController& ProductController
+/// @brief  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( EddieProductController&
+CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( CustomProductController&
                                                                       ProductController )
 
     : ProductLpmHardwareInterface( ProductController.GetTask( ),

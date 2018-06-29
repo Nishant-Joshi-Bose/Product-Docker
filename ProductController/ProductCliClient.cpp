@@ -11,7 +11,6 @@
 #include "DirUtils.h"
 #include "SystemUtils.h"
 #include "LpmClientFactory.h"
-#include "EddieProductController.h"
 
 namespace
 {

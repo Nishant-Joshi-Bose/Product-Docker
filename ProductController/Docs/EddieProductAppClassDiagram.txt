@@ -22,7 +22,7 @@ class ProductController {
 	inline std::string const& GetProductName() const
 }
 
-class EddieProductController {
+class CustomProductController {
 	Initialize()
 	HandleLPMReady()
 	HandleCAPSReady()
@@ -76,13 +76,13 @@ note bottom: Custom
 iHsm <|-- CHsm
 CHsm <|-- ProductControllerHsm
 
-ProductController <|-- EddieProductController
+ProductController <|-- CustomProductController
 ProductControllerHsm o-- ProductController
-ProductControllerHsm o-- EddieProductController
-EddieProductController *-- ProductControllerHsm
-EddieProductController *-- CustomProductControllerStateBooting
-EddieProductController *-- EddieProductControllerStateSetup
-EddieProductController *-- EddieProductControllerStateNetworkStandby
+ProductControllerHsm o-- CustomProductController
+CustomProductController *-- ProductControllerHsm
+CustomProductController *-- CustomProductControllerStateBooting
+CustomProductController *-- EddieProductControllerStateSetup
+CustomProductController *-- EddieProductControllerStateNetworkStandby
 
 CHsmState <|-- CustomProductControllerState 
 CustomProductControllerState <|-- ProductControllerState
