@@ -78,7 +78,6 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC on.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOn( );
     GetCustomProductController( ).GetDspHelper( )->SetNormalOperationsMonitor( true );
-    GetCustomProductController( ).GetBLERemoteManager( )->PowerOn( );
 
     // Limit the volume to threshold when entering PLAYING, perhaps volume was changed while system was in another state
     SetVolumeToThresholdLimit( );
@@ -129,7 +128,6 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
 
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC off.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOff( );
-    GetCustomProductController( ).GetBLERemoteManager( )->PowerOff( );
     GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( false );
 
     // Limit the volume to threshold when exiting PLAYING, so UI can show the value expected when we resume playing
