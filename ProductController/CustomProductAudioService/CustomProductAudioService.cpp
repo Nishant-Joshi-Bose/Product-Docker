@@ -9,7 +9,7 @@
 #include "APProductFactory.h"
 #include "DPrint.h"
 #include "FrontDoorClient.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
@@ -28,7 +28,7 @@ namespace ProductApp
 {
 /*!
  */
-CustomProductAudioService::CustomProductAudioService( EddieProductController& productController,
+CustomProductAudioService::CustomProductAudioService( CustomProductController& productController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( productController.GetTask( ),

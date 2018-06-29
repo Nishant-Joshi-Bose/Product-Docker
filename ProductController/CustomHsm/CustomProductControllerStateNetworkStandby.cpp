@@ -8,7 +8,7 @@
 
 #include "CustomProductControllerStateNetworkStandby.h"
 #include "ProductControllerHsm.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "CustomProductControllerStateNetworkStandby" );
