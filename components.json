@@ -17,11 +17,7 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/refactor/1.5.0-96+5d25101"
-  },
-  {
-    "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-2+72b6dcc"
+    "selected_version": "Release/master/1.5.0-82+e4b9243"
   },
   {
     "name": "bose-opkg-utils",
