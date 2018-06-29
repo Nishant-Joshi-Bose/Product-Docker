@@ -1,15 +1,15 @@
 
-Eddie 
-=====
-<a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Eddie'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Eddie/latest release/blue'></a>
-[Eddie Continuous build Testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/EddieProduct/job/Eddie_Continuous_Build_Testing/'><img src='http://jnkwebhook.ngrok.io/job/EddieProduct/job/Eddie_Continuous_Build_Testing/badge/icon'></a> [Eddie Nightly build testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/Pipelines/job/Eddie-Pipeline/'><img src='http://jnkwebhook.ngrok.io/job/Pipelines/job/Eddie-Pipeline/badge/icon'></a>
+Taylor
+======
+<a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Taylor'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Taylor/latest release/blue'></a>
+[Taylor Continuous build Testing] <a title='Jenkins build status for Taylor' href='http://jnkwebhook.ngrok.io/job/TaylorProduct/job/Taylor_Continuous_Build_Testing/'><img src='http://jnkwebhook.ngrok.io/job/TaylorProduct/job/Taylor_Continuous_Build_Testing/badge/icon'></a> [Taylor Nightly build testing] <a title='Jenkins build status for Taylor' href='http://jnkwebhook.ngrok.io/job/Pipelines/job/Taylor-Pipeline/'><img src='http://jnkwebhook.ngrok.io/job/Pipelines/job/Taylor-Pipeline/badge/icon'></a>
 
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
 
-This repo contains the source code and tools specific to the Eddie product.
+This repo contains the source code and tools specific to the Taylor product.
 
-![Eddie](misc/product.png)
+![Taylor](misc/product.png)
 
 ##### Table of Contents
 [Software Updates](#updates)   
@@ -24,14 +24,14 @@ This repo contains the source code and tools specific to the Eddie product.
 Different ways to perform Software Update are:
 #### Bonjour update
 To update the software (SoundTouch, HSP, LPM, etc) as a user, it is highly recommended to use Bonjour.
-Follow the instructions found on the wiki: [Bonjour Update of Eddie](https://wiki.bose.com/display/WSSW/Bonjour+Update+of+Eddie).
+Follow the instructions found on the wiki: [Bonjour Update of Taylor](https://wiki.bose.com/display/WSSW/Bonjour+Update+of+Taylor).
 
 For a simpler-way; see ./pushup script.
 
 To update the software, along with HSP, use product_update.zip file. To update the software, without HSP update (recommended only if HSP version you are updating to, is same as one on device), use product_update_no_hsp.zip.
 
 #### QFIL / VIP 
-If you suspect your system is not in correct state that Bonjour update can work or it no longer boots, please use QFIL / VIP programming. Follow the instructions found on the wiki: [Recoverying A Bricked Eddie](https://wiki.bose.com/display/WSSW/Recovering+A+Bricked+Eddie).
+If you suspect your system is not in correct state that Bonjour update can work or it no longer boots, please use QFIL / VIP programming. Follow the instructions found on the wiki: [Recoverying A Bricked Taylor](https://wiki.bose.com/display/WSSW/Recovering+A+Bricked+Taylor).
 
 #### push-to-target Script
 In case if you do not want to perform full software update and just copy binaries/libraries related to your module you can use push-to-target script under scripts directory.
@@ -59,15 +59,15 @@ Please note that this script will stop all services in your device so you will n
 
 ### Getting Started
 
-Checkout CastleTools.git and Eddie.git:
+Checkout CastleTools.git and Taylor.git:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone git@github.com:BoseCorp/Eddie.git
+$ git clone git@github.com:BoseCorp/Taylor.git
 ```
 
-Make sure your Eddie unit is accessible via adb.
+Make sure your Taylor unit is accessible via adb.
 ```shell session
 $ sudo adb start-server             # must be done as root. typically once per boot of the build host
 $ adb devices
@@ -79,10 +79,10 @@ $
 
 To perform Bonjour-Update; use the pushup script:
 
-From the Eddie workspace:
+From the Taylor workspace:
 
 ```shell session
-$ cd /scratch/Eddie
+$ cd /scratch/Taylor
 $ pip2.7 install -r Test/requirements.txt
 $ make all-packages
 ```
@@ -115,9 +115,9 @@ $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zip
 
 ### External References
 
-Eddie [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Guide)
+Taylor [Getting Started](https://wiki.bose.com/display/WSSW/Taylor+Quick+Start+Guide)
 
-[Updating Individual Components on Eddie](https://wiki.bose.com/display/WSSW/Updating+Individual+Components+on+Eddie)
+[Updating Individual Components on Taylor](https://wiki.bose.com/display/WSSW/Updating+Individual+Components+on+Taylor)
 
 ### Building different LPM BLOBs
 
@@ -142,8 +142,8 @@ $ make lpmupdater-ipk BUILD_TYPE=Release
 
 ### More...
 
-Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
-[here](mailto:Jonathan_Cooper@bose.com?subject=Add%20me%20to%20the%20SSG-Eddie%20mailing%20list).
+Ask to be added to the SSG-Taylor mailing list to stay in the loop by clicking
+[here](mailto:Jonathan_Cooper@bose.com?subject=Add%20me%20to%20the%20SSG-Taylor%20mailing%20list).
 
 Access the APQ console via the tap cable.
 
