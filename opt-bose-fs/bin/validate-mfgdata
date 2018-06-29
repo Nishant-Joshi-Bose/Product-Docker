@@ -108,7 +108,7 @@ if not pn: # allow any non-empty string
 pt = get("productType")
 if not pt: # allow any non-empty string
     warn("Invalid productType:", pt)
-    fixes.append("set productType eddie")
+    fixes.append("set productType taylor")
 
 # Match floating point values.
 fpv = r'\s*[-+]?(\d+\.?\d*|\.\d+)\s*'
