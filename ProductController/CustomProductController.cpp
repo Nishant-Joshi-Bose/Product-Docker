@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductController.cpp
-/// @brief  Eddie product controller class.
+/// @brief  Product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
@@ -153,11 +153,11 @@ void CustomProductController::InitializeAction()
     displayCtrlConfig.m_blackScreenDetectEnabled = true;
     m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
 
-    // Start Eddie ProductAudioService
+    // Start ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
     m_ProductAudioService -> Run();
 
-    // Start Eddie ProductKeyInputManager
+    // Start ProductKeyInputManager
     m_ProductKeyInputManager = std::make_shared< CustomProductKeyInputManager >( *this );
     m_ProductKeyInputManager -> Run();
 
@@ -452,7 +452,7 @@ void CustomProductController::HandleGetBootStatus( const std::list<std::string>&
     std::string SassInitialized( IsSassReady( )                 ? "true" : "false" );
     std::string SoftwareUpdateReady( IsSoftwareUpdateReady( )   ? "true" : "false" );
 
-    response  = "------------- Eddie Product Controller Booting Status -------------\n";
+    response  = "------------- Product Controller Booting Status -------------\n";
     response += "\n";
     response += "CAPS Initialized      : ";
     response += CapsInitialized;
