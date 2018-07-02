@@ -152,12 +152,20 @@
     "selected_version": "Release/master/1.5.0-866+acf4695"
   },
   {
+    "name": "ProductControllerCommonProto-native",
+    "selected_version": "Continuous/master/1.0.0-2+3b2e622"
+  },
+  {
+    "name": "ProductControllerCommonProto-x86_64",
+    "selected_version": "Continuous/master/1.0.0-2+3b2e622"
+  },
+  {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/PP_CASTLE-9853_0608/1.0.0-1+0c5a85e"
+    "selected_version": "Continuous/master/1.0.0-2+3b2e622"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "PP_CASTLE-9853_0608@0c5a85e3aa4071d05a81cf1c3158f22fbce4f841"
+    "selected_version": "PP_CASTLE-9853_0608@52a98fc1c3df5e1d6afc51f11109532e9125c39e"
   },
   {
     "name": "ProductUIAssets",

@@ -58,6 +58,7 @@ ADD_EXECUTABLE(Eddie
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
+  ProductControllerCommonProto
   DataCollectionClient
   LpmClient
   HttpInterface
@@ -90,7 +91,6 @@ TARGET_LINK_LIBRARIES(Eddie
   rt
   cap
   dl
-  ProductControllerCommonProto
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
