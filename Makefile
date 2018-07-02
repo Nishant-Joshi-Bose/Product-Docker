@@ -98,7 +98,7 @@ packages-gz-with-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk 
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
+	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Taylor builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build
