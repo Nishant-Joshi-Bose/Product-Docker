@@ -1,7 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.h
-/// @brief   This file contains source code for Eddie specific behavior for
-///         communicating with APProduct Server and APProduct related FrontDoor interaction
+/// @brief  This file contains source code for product specific behavior for
+///         communicating with APProduct Server and APProduct related FrontDoor
+///         interaction
+///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -15,17 +17,17 @@
 
 namespace ProductApp
 {
-class EddieProductController;
+class CustomProductController;
 class CustomProductAudioService: public ProductAudioService
 {
 public:
 
     /*! \brief Constructor.
-     * \param productController Reference to the Eddie product controller.
+     * \param productController Reference to the product controller.
      * \param frontDoorClient The FrontDoor client instance to which to register events.
      * \param lpmClient LPM client interface. Used for requesting amp status.
      */
-    CustomProductAudioService( EddieProductController& productController,
+    CustomProductAudioService( CustomProductController& productController,
                                const FrontDoorClientIF_t& frontDoorClient,
                                LpmClientIF::LpmClientPtr lpmClient );
 

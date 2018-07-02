@@ -9,11 +9,11 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/0.1.4-127+943c98b"
+    "selected_version": "Continuous/master/0.1.4-130+0c4f8e2"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-28_1426"
+    "selected_version": "Continuous/Castle-Fork/2018-06-29_1121"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/1.5.0-90+f887275"
+    "selected_version": "Release/master/1.5.1-93+cc68df2"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -201,7 +201,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-28_1426"
+    "selected_version": "Continuous/Castle-Fork/2018-06-29_1121"
   },
   {
     "name": "SystemEventService-qc8017_32",

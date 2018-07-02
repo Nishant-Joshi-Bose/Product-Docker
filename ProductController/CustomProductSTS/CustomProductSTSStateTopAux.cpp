@@ -4,7 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CustomProductSTSStateTopAux.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 
 static DPrint s_logger( "CustomProductSTSStateTopAux" );
 static constexpr uint32_t LOW_LATENCY_DELAYED_START_MS = 25;
@@ -178,7 +178,7 @@ void CustomProductSTSStateTopAux::RegisterAuxPlugStatusCallbacks()
 
     AsyncCallback<LpmServiceMessages::IpcAuxState_t> cb( func, m_account.s_ProductSTSController->GetTask() );
 
-    ( static_cast<ProductApp::EddieProductController*>( &( m_account.s_ProductSTSController->GetProductController() ) ) )->RegisterAuxEvents( cb );
+    ( static_cast<ProductApp::CustomProductController*>( &( m_account.s_ProductSTSController->GetProductController() ) ) )->RegisterAuxEvents( cb );
     return;
 }
 void CustomProductSTSStateTopAux::AuxPlay()

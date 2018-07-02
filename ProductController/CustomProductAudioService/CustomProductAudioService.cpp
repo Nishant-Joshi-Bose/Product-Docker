@@ -1,7 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.cpp
-/// @brief   This file contains source code for Eddie specific behavior for
-///         communicating with APProduct Server and APProduct related FrontDoor interaction
+/// @brief  This file contains source code for product specific behavior for
+///         communicating with APProduct Server and APProduct related FrontDoor
+///         interaction
+///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +11,7 @@
 #include "APProductFactory.h"
 #include "DPrint.h"
 #include "FrontDoorClient.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
@@ -28,7 +30,7 @@ namespace ProductApp
 {
 /*!
  */
-CustomProductAudioService::CustomProductAudioService( EddieProductController& productController,
+CustomProductAudioService::CustomProductAudioService( CustomProductController& productController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( productController.GetTask( ),

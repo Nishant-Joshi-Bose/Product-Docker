@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateOn.cpp
-/// @brief  The On State in the Eddie Product.
+/// @brief  The On State in the product controller.
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerHsm.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "CustomProductControllerStateOn" );

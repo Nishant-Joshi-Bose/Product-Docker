@@ -37,7 +37,6 @@
 #include "PlaybackRequestManager.h"
 #include "CountDownManager.h"
 #include "VoiceManager.h"
-#include "EddieProductController.h"
 
 static DPrint s_logger( "IntentHandler" );
 

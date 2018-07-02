@@ -3,9 +3,7 @@
 /// @file      ProductMessage.proto
 ///
 /// @brief     This header file declares a Protocol Buffer for creating messages to send as events
-///            to the Eddie product controller state machine.
-///
-/// @author    Stuart J. Lumby
+///            to the product controller state machine.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///

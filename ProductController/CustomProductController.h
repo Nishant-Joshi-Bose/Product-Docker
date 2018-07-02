@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file   EddieProductController.h
-/// @brief  Eddie Product controller class.
+/// @file   CustomProductController.h
+/// @brief  Product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
@@ -79,11 +79,11 @@ namespace ProductApp
 class CustomProductAudioService;
 class CustomProductKeyInputManager;
 
-class EddieProductController : public ProductController
+class CustomProductController : public ProductController
 {
 public:
-    EddieProductController();
-    virtual ~EddieProductController();
+    CustomProductController();
+    virtual ~CustomProductController();
 
     void Initialize();
     void InitializeKeyIdToKeyNameMap() override;
@@ -115,8 +115,8 @@ public:
 
 private:
     /// Disable copies
-    EddieProductController( const EddieProductController& ) = delete;
-    EddieProductController& operator=( const EddieProductController& ) = delete;
+    CustomProductController( const CustomProductController& ) = delete;
+    CustomProductController& operator=( const CustomProductController& ) = delete;
 
 private:
     ///Register with LPM for events notifications
@@ -278,7 +278,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Interfaces to the ProductSTSController, which implements the interactions
-///       between the Eddie Product Controller and the STS source proxies.
+///       between the Product Controller and the STS source proxies.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
     void SetupProductSTSController( void );
@@ -367,7 +367,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
-    ///       between the Eddie Product Controller and the STS source proxies.
+    ///       between the Product Controller and the STS source proxies.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool                                        m_isSTSReady = false;
