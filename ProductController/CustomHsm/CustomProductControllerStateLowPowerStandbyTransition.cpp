@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateLowPowerStandbyTransition.cpp
-/// @brief  Custom override state in Eddie for transitioning into and out of low power standby.
+/// @brief  Custom override state in the product controller for transitioning
+/// into and out of low power standby.
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////

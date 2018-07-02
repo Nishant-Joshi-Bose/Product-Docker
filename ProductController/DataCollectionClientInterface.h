@@ -1,6 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////
-//@file    DataCollectionClientInterface.h
-//@brief   This class is the Interface between Eddie and DataCollection
+/// @file  DataCollectionClientInterface.h
+/// @brief This class is the Interface between Product Controller and
+///        DataCollection
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "DataCollectionClientIF.h"
