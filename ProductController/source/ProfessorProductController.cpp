@@ -386,7 +386,7 @@ void ProfessorProductController::Run( )
       statePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
 
-    auto* statePlayingSelectedSilentSourceInvalid = new ProductControllerStatePlayingSelectedSilentSourceInvalid
+    auto* statePlayingSelectedSilentSourceInvalid = new CustomProductControllerStatePlayingSelectedSilentSourceInvalid
     ( GetHsm( ),
       statePlayingSelectedSilent,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID );

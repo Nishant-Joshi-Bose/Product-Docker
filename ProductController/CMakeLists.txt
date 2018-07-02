@@ -62,6 +62,7 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingSelected.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSetup.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
