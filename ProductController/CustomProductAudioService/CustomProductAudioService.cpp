@@ -1,7 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.cpp
-/// @brief   This file contains source code for Eddie specific behavior for
-///         communicating with APProduct Server and APProduct related FrontDoor interaction
+/// @brief  This file contains source code for product specific behavior for
+///         communicating with APProduct Server and APProduct related FrontDoor
+///         interaction
+///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -65,11 +65,11 @@ class CustomProductControllerStateBooting {
 }
 note bottom: Custom
 
-class EddieProductControllerStateSetup {
+class CustomProductControllerStateSetup {
 }
 note bottom: Custom
 
-class EddieProductControllerStateNetworkStandby {
+class CustomProductControllerStateNetworkStandby {
 }
 note bottom: Custom
 
@@ -81,8 +81,8 @@ ProductControllerHsm o-- ProductController
 ProductControllerHsm o-- CustomProductController
 CustomProductController *-- ProductControllerHsm
 CustomProductController *-- CustomProductControllerStateBooting
-CustomProductController *-- EddieProductControllerStateSetup
-CustomProductController *-- EddieProductControllerStateNetworkStandby
+CustomProductController *-- CustomProductControllerStateSetup
+CustomProductController *-- CustomProductControllerStateNetworkStandby
 
 CHsmState <|-- CustomProductControllerState 
 CustomProductControllerState <|-- ProductControllerState
@@ -92,8 +92,8 @@ ProductControllerState <|-- ProductControllerStateNetworkStandby
 ProductControllerState <|-- ProductControllerSubstate
 
 ProductControllerStateBooting <|-- CustomProductControllerStateBooting
-ProductControllerStateSetup <|-- EddieProductControllerStateSetup
-ProductControllerStateNetworkStandby <|-- EddieProductControllerStateNetworkStandby
+ProductControllerStateSetup <|-- CustomProductControllerStateSetup
+ProductControllerStateNetworkStandby <|-- CustomProductControllerStateNetworkStandby
 
 ProductControllerHsm ..> CustomProductControllerState
 

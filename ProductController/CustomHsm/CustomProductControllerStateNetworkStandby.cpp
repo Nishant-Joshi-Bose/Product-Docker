@@ -1,7 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateNetworkStandby.cpp
-/// @brief  Custom override of the "network standby" state for Eddie. Functionality
-///         here will also effect child states.
+/// @brief  Custom override of the "network standby" state for the
+///         product controller.  Functionality here will also affect
+///         child states.
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////

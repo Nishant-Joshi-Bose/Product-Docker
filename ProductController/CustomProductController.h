@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductController.h
-/// @brief  Eddie Product controller class.
+/// @brief  Product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
@@ -278,7 +278,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Interfaces to the ProductSTSController, which implements the interactions
-///       between the Eddie Product Controller and the STS source proxies.
+///       between the Product Controller and the STS source proxies.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
     void SetupProductSTSController( void );
@@ -367,7 +367,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
-    ///       between the Eddie Product Controller and the STS source proxies.
+    ///       between the Product Controller and the STS source proxies.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool                                        m_isSTSReady = false;

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateTop.h
-/// @brief  The Top State in the Eddie Product. Any methods getting
+/// @brief  The Top State in the product controller.  Any methods getting
 ///         called in this state indicate an unexpected call or an error.
 ///
 /// Copyright 2017 Bose Corporation

@@ -1,7 +1,5 @@
 /*
-  Eddie application.
-
-  This is the main file of Eddie application process.
+  Product controller daemon's main().
  */
 
 #include <unistd.h>
