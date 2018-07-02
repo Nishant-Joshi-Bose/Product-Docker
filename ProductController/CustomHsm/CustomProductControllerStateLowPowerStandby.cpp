@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateLowPowerStandby.cpp
-/// @brief  The Low Power Standby State in the Eddie Product.
+/// @brief  The Low Power Standby State in the product controller.
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CustomProductControllerStateLowPowerStandby.h"
 #include "ProductControllerHsm.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "CustomProductControllerStateLowPowerStandby" );

@@ -6,7 +6,7 @@ class ProductController {
 	std::shared_ptr<FrontDoorClientIF> m_FrontDoorClientIF
 }
 
-class EddieProductController {
+class CustomProductController {
 	void HandleAUXSourceKeyPress()
 }
 
@@ -27,8 +27,8 @@ class FrontDoorClientIF {
 	virtual CallbackConnection RegisterNotification()
 }
 
-ProductController <|-- EddieProductController
+ProductController <|-- CustomProductController
 ProductController *-- FrontDoorClientIF
-EddieProductController *-- ProductSource
-EddieProductController *-- KeyHandler
+CustomProductController *-- ProductSource
+CustomProductController *-- KeyHandler
 ProductSource o-- FrontDoorClientIF

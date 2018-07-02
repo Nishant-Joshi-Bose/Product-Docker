@@ -1,13 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateLowPowerStandbyTransition.cpp
-/// @brief  Custom override state in Eddie for transitioning into and out of low power standby.
+/// @brief  Custom override state in the product controller for transitioning
+/// into and out of low power standby.
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerHsm.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "DPrint.h"
 #include "AsyncCallback.h"
 

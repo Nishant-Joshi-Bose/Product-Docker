@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateSoftwareInstall.cpp
-/// @brief  The SoftwareInstall in Eddie Product.
+/// @brief  The SoftwareInstall in the product controller.
 ///
 /// Copyright 2018 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CustomProductControllerStateSoftwareInstall.h"
 #include "ProductControllerHsm.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "CustomProductControllerStateSoftwareInstall" );

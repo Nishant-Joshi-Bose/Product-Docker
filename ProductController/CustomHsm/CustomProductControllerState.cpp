@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////
 #include "CustomProductControllerState.h"
 #include "ProductControllerHsm.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "ProductController.h"
 
 static DPrint s_logger( "CustomProductControllerState" );
@@ -27,9 +27,9 @@ CustomProductControllerState::CustomProductControllerState( ProductControllerHsm
     BOSE_INFO( s_logger, __func__ );
 }
 
-EddieProductController& CustomProductControllerState::GetCustomProductController()
+CustomProductController& CustomProductControllerState::GetCustomProductController()
 {
-    return *static_cast<EddieProductController*>( s_productController );
+    return *static_cast<CustomProductController*>( s_productController );
 }
 
 } // namespace ProductApp

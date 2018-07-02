@@ -23,7 +23,7 @@
 
 namespace ProductApp
 {
-class EddieProductController;
+class CustomProductController;
 class ProductController;
 class ProductControllerHsm;
 
@@ -370,9 +370,14 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOff( )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
-    static EddieProductController& GetCustomProductController();
+    static CustomProductController& GetCustomProductController();
 
     static ProductController* s_productController;
 

@@ -1,5 +1,6 @@
 <ShepherdConfig>
-  <daemon name="Eddie"/>
+
+  <daemon name="ProductController"/>
 
   <daemon name="avahi-daemon"
           exe="start-avahi"/>

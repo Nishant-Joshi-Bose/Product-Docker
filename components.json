@@ -9,11 +9,11 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/0.1.4-127+943c98b"
+    "selected_version": "Continuous/master/0.1.4-130+0c4f8e2"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-27_1601"
+    "selected_version": "Continuous/Castle-Fork/2018-07-02_1206"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -33,7 +33,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.5.2-475+7476493"
+    "selected_version": "Continuous/master/1.5.2-481+51f5a61"
   },
   {
     "name": "BoseOPKG-native",
@@ -49,7 +49,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.4-402+8fe88b0"
+    "selected_version": "Release/master/1.5.5-410+f777ce3"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -65,15 +65,15 @@
   },
   {
     "name": "CastleLibs-native",
-    "selected_version": "branches/castle-libs@2636"
+    "selected_version": "branches/castle-libs@2684"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2636"
+    "selected_version": "branches/castle-libs@2684"
   },
   {
     "name": "CastleLibs-x86",
-    "selected_version": "branches/castle-libs@2636"
+    "selected_version": "branches/castle-libs@2684"
   },
   {
     "name": "Cli-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/1.5.0-90+f887275"
+    "selected_version": "Release/master/1.5.1-93+cc68df2"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -145,11 +145,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/1.5.0-866+acf4695"
+    "selected_version": "Release/master/1.5.0-884+c50e458"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/1.5.0-866+acf4695"
+    "selected_version": "Release/master/1.5.0-884+c50e458"
   },
   {
     "name": "ProductControllerCommonProto-native",
@@ -165,11 +165,35 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "PP_CASTLE-9853_0608@52a98fc1c3df5e1d6afc51f11109532e9125c39e"
+    "selected_version": "master@3b2e62216e1d6496ee2f46ea84b5548f1ad7dd5f"
   },
   {
     "name": "ProductUIAssets",
     "selected_version": "master@3abdcec9611e25ba45c7c0df9e856885ba891285"
+  },
+  {
+    "name": "opensource-zlib-native",
+    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
+  },
+  {
+    "name": "opensource-zlib-qc8017_32",
+    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
+  },
+  {
+    "name": "opensource-zlib-qc8017_64",
+    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
+  },
+  {
+    "name": "opensource-zlib-ti",
+    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
+  },
+  {
+    "name": "opensource-zlib-x86",
+    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
+  },
+  {
+    "name": "opensource-zlib-x86_64",
+    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
   },
   {
     "name": "protobuf-native",
@@ -213,7 +237,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-27_1601"
+    "selected_version": "Continuous/Castle-Fork/2018-07-02_1206"
   },
   {
     "name": "SystemEventService-qc8017_32",

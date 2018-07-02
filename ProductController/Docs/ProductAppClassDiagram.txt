@@ -22,7 +22,7 @@ class ProductController {
 	inline std::string const& GetProductName() const
 }
 
-class EddieProductController {
+class CustomProductController {
 	Initialize()
 	HandleLPMReady()
 	HandleCAPSReady()
@@ -65,24 +65,24 @@ class CustomProductControllerStateBooting {
 }
 note bottom: Custom
 
-class EddieProductControllerStateSetup {
+class CustomProductControllerStateSetup {
 }
 note bottom: Custom
 
-class EddieProductControllerStateNetworkStandby {
+class CustomProductControllerStateNetworkStandby {
 }
 note bottom: Custom
 
 iHsm <|-- CHsm
 CHsm <|-- ProductControllerHsm
 
-ProductController <|-- EddieProductController
+ProductController <|-- CustomProductController
 ProductControllerHsm o-- ProductController
-ProductControllerHsm o-- EddieProductController
-EddieProductController *-- ProductControllerHsm
-EddieProductController *-- CustomProductControllerStateBooting
-EddieProductController *-- EddieProductControllerStateSetup
-EddieProductController *-- EddieProductControllerStateNetworkStandby
+ProductControllerHsm o-- CustomProductController
+CustomProductController *-- ProductControllerHsm
+CustomProductController *-- CustomProductControllerStateBooting
+CustomProductController *-- CustomProductControllerStateSetup
+CustomProductController *-- CustomProductControllerStateNetworkStandby
 
 CHsmState <|-- CustomProductControllerState 
 CustomProductControllerState <|-- ProductControllerState
@@ -92,8 +92,8 @@ ProductControllerState <|-- ProductControllerStateNetworkStandby
 ProductControllerState <|-- ProductControllerSubstate
 
 ProductControllerStateBooting <|-- CustomProductControllerStateBooting
-ProductControllerStateSetup <|-- EddieProductControllerStateSetup
-ProductControllerStateNetworkStandby <|-- EddieProductControllerStateNetworkStandby
+ProductControllerStateSetup <|-- CustomProductControllerStateSetup
+ProductControllerStateNetworkStandby <|-- CustomProductControllerStateNetworkStandby
 
 ProductControllerHsm ..> CustomProductControllerState
 
