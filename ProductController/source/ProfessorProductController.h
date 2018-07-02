@@ -44,8 +44,8 @@
 #include "FrontDoorClientIF.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
+#include "SoundTouchInterface/AudioService.pb.h"
 #include "MacAddressInfo.h"
-#include "BoseVersion.h"
 #include "LightBarController.h"
 #include "SystemPowerProduct.pb.h"
 #include "DisplayController.pb.h"
@@ -222,11 +222,6 @@ public:
 
     std::string GetDefaultProductName() const override;
 
-    std::string GetProductVersionNumber() const override
-    {
-        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
-    }
-
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
@@ -249,6 +244,18 @@ public:
     void StopPairingBLERemote( );
 
     bool IsBLERemoteConnected( ) const;
+
+    bool AreAccessoriesKnown( ) const
+    {
+        return m_AccessoriesAreKnown;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is called to fetch the desired volume level for audio playback
+    ///        when entering the PLAYING state
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::pair<bool, int32_t> GetDesiredPlayingVolume( ) const;
 
 private:
 
@@ -299,6 +306,13 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following member variable is used to track whether the accessory state is known
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    bool m_AccessoriesAreKnown = false;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Professor Product Controller and the
     ///        STS source proxies.
@@ -341,6 +355,13 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void StartUiTimer();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration is for handling the /audio/volume frontdoor endpoint
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -396,6 +417,13 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     bool IsProductControlSurface( LpmServiceMessages::KeyOrigin_t keyOrigin ) const override;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member is used to store the /audio/volume data sent from CAPS
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    SoundTouchInterface::volume m_cachedVolume;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

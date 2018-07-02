@@ -116,7 +116,7 @@ private:
     APTimerPtr                      m_statusTimer;
     bool                            m_remoteConnected   = false;
     bool                            m_pairingPending    = false;
-    RemoteStatus::PairingStatus     m_remoteStatus      = RemoteStatus::PSTATE_UNKOWN;
+    RemoteStatus::PairingStatus     m_remoteStatus      = RemoteStatus::PSTATE_UNKNOWN;
     const int                       m_PairingTimeout    = 7200;
     bool                            m_poweredOn         = false;
     bool                            m_inSetup           = false;

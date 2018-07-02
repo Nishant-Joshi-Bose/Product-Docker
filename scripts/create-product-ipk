@@ -89,6 +89,7 @@ btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
 blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
 btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
+telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -215,6 +216,7 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$blesetup_dir/stage" "$opt_dir" || exit
 "$btstssink_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
+"$telemetry_dir/stage" "$opt_dir" || exit
 
 # remove Shepherd-vfe.xml
 if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
@@ -225,9 +227,6 @@ fi
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
-
-# Hack to enable logging for Monaco.  Delete this when we move to Dinghy.
-sed -i '/WPE_DYZSHM_CONSOLE_LOG/s/^\#//' "$opt_dir/webkit/run_wpe.sh" || exit
 
 PackageName=SoundTouch
 
@@ -270,7 +269,12 @@ find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
 find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 
 # Set Progress End
-/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
+# CASTLE-14239: Currently, though not required by IPK itself
+#   every IPK is doing full system reset. This is required to clear
+#   LPM install animation - if LPM itself does not update.
+#   This should be considered as workaround as any IPK should be able
+#   to decide its own reboot requirements
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
 exit 0
 EOF
 
@@ -295,7 +299,7 @@ else
 fi
 # Start Progress
 if [ -f /opt/Bose/bin/ProgressReport ]; then
-	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
 fi
 
 exit 0

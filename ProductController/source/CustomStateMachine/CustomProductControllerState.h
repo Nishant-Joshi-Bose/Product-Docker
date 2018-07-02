@@ -419,6 +419,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleAccessoriesAreKnown( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type
@@ -450,6 +456,8 @@ protected:
     /// The custom version of this function returns the custom ProductController.
     ///
     static ProfessorProductController& GetCustomProductController( );
+
+    static void FrontDoorErrorCallback( const FrontDoor::Error & error );
 
     static ProductController* s_productController;
 };
