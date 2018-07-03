@@ -152,8 +152,20 @@
     "selected_version": "Release/master/1.5.0-884+c50e458"
   },
   {
+    "name": "ProductControllerCommonProto-native",
+    "selected_version": "Continuous/master/1.0.0-2+3b2e622"
+  },
+  {
+    "name": "ProductControllerCommonProto-x86_64",
+    "selected_version": "Continuous/master/1.0.0-2+3b2e622"
+  },
+  {
+    "name": "ProductControllerCommonProto-qc8017_32",
+    "selected_version": "Continuous/master/1.0.0-2+3b2e622"
+  },
+  {
     "name": "ProductControllerCommon",
-    "selected_version": "master@a343a8db96fb4fa39c8b55a34c879888a6d1090d"
+    "selected_version": "master@3b2e62216e1d6496ee2f46ea84b5548f1ad7dd5f"
   },
   {
     "name": "ProductUIAssets",
