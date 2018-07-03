@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@878a2ad7a9882651d1bc23e348802609cd7c6598"
+    "selected_version": "master@6691f9d0798dedf7bc611c43355b3f035b2a5683"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -168,8 +168,12 @@
     "selected_version": "Release/master/1.5.0-884+c50e458"
   },
   {
+    "name": "ProductControllerCommonProto-qc8017_32",
+    "selected_version": "Continuous/master/1.0.0-3+51ea9e6"
+  },
+  {
     "name": "ProductControllerCommon",
-    "selected_version": "master@d94fe043c3c7c39486a50ea10be9d931e643d84d"
+    "selected_version": "PGC_1973_common@00a9ae593ea5887d4ff588040fea71988f5303bf"
   },
   {
     "name": "ProductUIAssets",

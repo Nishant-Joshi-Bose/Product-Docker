@@ -80,6 +80,7 @@ ADD_EXECUTABLE(Professor
 
 TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
+  ProductControllerCommonProto
   DataCollectionClient
   LpmClient
   HttpInterface

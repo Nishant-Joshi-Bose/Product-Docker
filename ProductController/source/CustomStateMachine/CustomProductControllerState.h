@@ -139,11 +139,6 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPowerOff( )
-    {
-        return false;
-    }
-
     virtual bool HandleIntentFactoryDefault( )
     {
         return false;
@@ -453,6 +448,11 @@ public:
     }
 
     virtual bool HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPowerOff( )
     {
         return false;
     }
