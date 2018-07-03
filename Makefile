@@ -37,7 +37,6 @@ endif
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
-A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
 RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
@@ -51,7 +50,6 @@ TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
-	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@
 	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
