@@ -72,8 +72,9 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/.s
 "$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
 
 InstallFileContent=$(<"$opt_dir/bin/install")
-InstallFileContent=${InstallFileContent//\/etc\//\/.swUpdateCache\/backup\/}
-InstallFileContent=${InstallFileContent//\/bin\//\/.swUpdateCache\/backup\/}
+InstallFileContent=${InstallFileContent//\/Bose\/etc\//\/Bose\/.swUpdateCache\/backup\/}
+InstallFileContent=${InstallFileContent//\/Bose\/bin\//\/Bose\/.swUpdateCache\/backup\/}
+InstallFileContent=${InstallFileContent//$/\\$}
 
 echo "Package version \"$package_version\""
 
