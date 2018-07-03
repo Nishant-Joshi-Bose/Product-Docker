@@ -176,23 +176,11 @@
     "selected_version": "master@3abdcec9611e25ba45c7c0df9e856885ba891285"
   },
   {
-    "name": "opensource-zlib-native",
-    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
-  },
-  {
     "name": "opensource-zlib-qc8017_32",
     "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
   },
   {
     "name": "opensource-zlib-qc8017_64",
-    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
-  },
-  {
-    "name": "opensource-zlib-ti",
-    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
-  },
-  {
-    "name": "opensource-zlib-x86",
     "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
   },
   {
