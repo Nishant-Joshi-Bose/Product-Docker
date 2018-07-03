@@ -39,6 +39,24 @@ CustomProductControllerStatePlayingSelectedSilentSourceInvalid::CustomProductCon
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief  CustomProductControllerStatePlayingSelectedSilentSourceInvalid::HandleIntentVolumeControl
+///
+/// @return This method returns a true Boolean value indicating that it has handled the event
+///         and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingSelectedSilentSourceInvalid::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
+
+    ///
+    /// The volume intent is ignored in this custom state.
+    ///
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief  CustomProductControllerStatePlayingSelectedSilentSourceInvalid::HandleIntentMuteControl
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
@@ -51,6 +69,9 @@ bool CustomProductControllerStatePlayingSelectedSilentSourceInvalid::HandleInten
 {
     BOSE_INFO( s_logger, "The %s state is in %s ignored the intent %u.", GetName( ).c_str( ), __func__, intent );
 
+    ///
+    /// The mute intent is ignored in this custom state.
+    ///
     return true;
 }
 

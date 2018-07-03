@@ -486,191 +486,193 @@ void ProfessorProductController::Run( )
     ///
     using namespace DeviceManagerPb;
     using namespace SystemPowerPb;
-    GetHsm( ).AddState( "",
-                        "",
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateTop );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::BOOTING,
+                        SystemPowerControl_State_Not_Notify,
                         stateBooting );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::FIRST_BOOT_GREETING,
+                        SystemPowerControl_State_Not_Notify,
                         stateFirstBootGreeting );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::UPDATING,
+                        SystemPowerControl_State_Not_Notify,
                         stateSoftwareUpdateTransition );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::UPDATING,
+                        SystemPowerControl_State_Not_Notify,
                         stateSoftwareInstall );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ),
-                        "",
+
+    GetHsm( ).AddState( NotifiedNames::CRITICAL_ERROR,
+                        SystemPowerControl_State_Not_Notify,
                         stateCriticalError );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::FACTORY_DEFAULT,
+                        SystemPowerControl_State_Not_Notify,
                         stateFactoryDefault );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateBooted );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateFirstBootGreetingTransition );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateLowPowerStandbyTransition );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
                         stateLowPowerStandby );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateLowPowerResume );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayableTransition );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayableTransitionInternal );
 
-    GetHsm( ).AddState( "",
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
                         statePlayableTransitionIdle );
 
-    GetHsm( ).AddState( "",
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
                         statePlayableTransitionNetworkStandby );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateOn );
 
-    GetHsm( ).AddState( "",
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
                         statePlayable );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+                        SystemPowerControl_State_OFF,
                         stateNetworkStandby );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+                        SystemPowerControl_State_OFF,
                         stateNetworkStandbyConfigured );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+                        SystemPowerControl_State_OFF,
                         stateNetworkStandbyNotConfigured );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( NotifiedNames::IDLE,
+                        SystemPowerControl_State_OFF,
                         stateIdle );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( NotifiedNames::IDLE,
+                        SystemPowerControl_State_OFF,
                         stateIdleVoiceConfigured );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( NotifiedNames::IDLE,
+                        SystemPowerControl_State_OFF,
                         stateIdleVoiceNotConfigured );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayingTransition );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayingTransitionSelected );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         statePlaying );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( NotifiedNames::DESELECTED,
+                        SystemPowerControl_State_OFF,
                         statePlayingDeselected );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayingSelected );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSilent );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::PLAYING_SOURCE_OFF ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_OFF ),
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_OFF,
                         statePlayingSelectedSilentSourceInvalid );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_ON ),
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
                         statePlayingSelectedSilentSourceValid );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_ON ),
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
                         statePlayingSelectedNotSilent );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_ON ),
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
                         statePlayingSelectedSetup );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_ON ),
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
                         statePlayingSelectedSetupNetwork );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupNetworkTransition );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        SystemPowerControl_State_Name( SystemPowerControl_State_ON ),
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
                         statePlayingSelectedSetupOther );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupExiting );
 
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),
-                        "",
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupExitingAP );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateStoppingStreams );
 
-    GetHsm( ).AddState( "",
-                        SystemPowerControl_State_Name( SystemPowerControl_State_ON ),
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_ON,
                         stateAccessoryPairing );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateAccessoryPairingCancelling );
 
-    GetHsm( ).AddState( "",
-                        SystemPowerControl_State_Name( SystemPowerControl_State_ON ),
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_ON,
                         stateAdaptIQ );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateAdaptIQExiting );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateStoppingStreamsDedicated );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateStoppingStreamsDedicatedForFactoryDefault );
 
-    GetHsm( ).AddState( "",
-                        "",
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
                         stateStoppingStreamsDedicatedForSoftwareUpdate );
 
     GetHsm( ).Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );

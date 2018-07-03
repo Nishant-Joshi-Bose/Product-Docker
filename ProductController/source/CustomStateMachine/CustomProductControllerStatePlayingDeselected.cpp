@@ -39,6 +39,25 @@ CustomProductControllerStatePlayingDeselected::CustomProductControllerStatePlayi
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief CustomProductControllerStatePlayingDeselected::HandleIntentVolumeControl
+///
+/// @param  KeyHandlerUtil::ActionType_t intent
+///
+/// @return This method returns a true Boolean value indicating that it is handling the volume intent
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingDeselected::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s. Volume intent is ignored", GetName( ).c_str( ), __func__ );
+
+    ///
+    /// The intent is ignored in this custom state.
+    ///
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief  CustomProductControllerStatePlayingDeselected::HandleIntentMuteControl
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
