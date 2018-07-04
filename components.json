@@ -68,6 +68,10 @@
     "selected_version": "branches/castle-libs@2684"
   },
   {
+    "name": "CastleLibs-native",
+    "selected_version": "branches/castle-libs@2684"
+  },
+  {
     "name": "CastleLibs-x86",
     "selected_version": "branches/castle-libs@2684"
   },
@@ -149,7 +153,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@3b2e62216e1d6496ee2f46ea84b5548f1ad7dd5f"
+    "selected_version": "VFE-Notification@14941c13e81845216622258202e0f7111b635888"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
