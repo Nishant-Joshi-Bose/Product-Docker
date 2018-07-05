@@ -152,6 +152,24 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentPowerOff
+///
+/// @return This method returns a true Boolean value indicating that it handles the PowerOff
+///         intent by changing to an accessory pairing cancelling state.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerOff( )
+{
+    BOSE_INFO( s_logger, "The %s state in %s cancelling the pairing playback.", GetName( ).c_str( ), __func__ );
+
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_CANCELLING );
+
+    return true;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStateAccessoryPairing::HandlePairingStatus
 ///
 /// @return This method returns a true Boolean value indicating that it handles the accessory

@@ -31,6 +31,7 @@
 #include "EndPointsDefines.h"
 #include "ProductSTS.pb.h"
 #include "SystemSourcesProperties.pb.h"
+#include "SHELBY_SOURCE.h"
 
 using namespace ProductPb;
 using namespace A4V_RemoteCommunicationServiceMessages;
@@ -299,6 +300,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
         case LedsSourceTypeMsg_t::TV:
             leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
             leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             if( visible )
             {
                 leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
@@ -307,7 +309,6 @@ void ProductBLERemoteManager::UpdateBacklight( )
                 leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             }
             break;
@@ -385,22 +386,13 @@ bool ProductBLERemoteManager::GetSourceLED(
     const auto& sourceAccountName = sourceItem->sourceaccountname();
 
     visible = sourceItem->visible();
-    if( sourceName.compare( ProductSourceSlot_Name( PRODUCT ) ) == 0 )
+    if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
     {
         if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection TV" );
             // Check for TV explicitly for now, since I don't know if Madrid will set deviceType for the TV
             sourceLED = LedsSourceTypeMsg_t::TV;
-        }
-        else if( sourceAccountName.compare( ProductSourceSlot_Name( SETUP ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection SETUP" );
-            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-        }
-        else if( sourceAccountName.compare( ProductSourceSlot_Name( PAIRING ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
         }
         else if( ( sourceAccountName.compare( 0, 4, ProductSourceSlot_Name( SLOT_0 ), 0, 4 ) == 0 ) and sourceItem->has_details() )
         {
@@ -426,20 +418,33 @@ bool ProductBLERemoteManager::GetSourceLED(
         }
         else
         {
-            BOSE_ERROR( s_logger, "%s product source with missing details/devicetype", __func__ );
+            BOSE_ERROR( s_logger, "%s PRODUCT source with missing details/devicetype", __func__ );
         }
     }
-    else
+    else if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
     {
-        if( sourceName.compare( "BLUETOOTH" ) == 0 )
+        if( sourceAccountName.compare( SetupSourceSlot_Name( SETUP ) ) == 0 )
         {
-            BOSE_INFO( s_logger, "update nowSelection BLUETOOTH" );
-            sourceLED = LedsSourceTypeMsg_t::BLUETOOTH;
+            BOSE_INFO( s_logger, "update nowSelection SETUP" );
+            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         }
-        else if( sourceName.compare( "INVALID_SOURCE" ) != 0 )
+        else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
         {
-            sourceLED = LedsSourceTypeMsg_t::SOUND_TOUCH;
+            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
         }
+        else
+        {
+            BOSE_ERROR( s_logger, "%s SETUP source with missing details/devicetype", __func__ );
+        }
+    }
+    else if( sourceName.compare( SHELBY_SOURCE::BLUETOOTH ) == 0 )
+    {
+        BOSE_INFO( s_logger, "update nowSelection BLUETOOTH" );
+        sourceLED = LedsSourceTypeMsg_t::BLUETOOTH;
+    }
+    else if( sourceName.compare( SHELBY_SOURCE::INVALID_SOURCE ) != 0 )
+    {
+        sourceLED = LedsSourceTypeMsg_t::SOUND_TOUCH;
     }
 
     return true;
@@ -473,7 +478,7 @@ void ProductBLERemoteManager::GetZoneLEDs( RCS_PB_MSG::LedsRawMsg_t& leds )
 
     const auto& sourceName = sourceItem->sourcename();
 
-    if( sourceName.compare( ProductSourceSlot_Name( PRODUCT ) ) != 0 )
+    if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) != 0 )
     {
         return;
     }
@@ -633,7 +638,7 @@ void ProductBLERemoteManager::CheckPairing( void )
     // Indeterminate states
     case RemoteStatus::PSTATE_INIT:
     case RemoteStatus::PSTATE_UNPAIRING:
-    case RemoteStatus::PSTATE_UNKOWN:
+    case RemoteStatus::PSTATE_UNKNOWN:
         break;
 
     // In these states, any pairing pending request isn't necessary (we're already paired)

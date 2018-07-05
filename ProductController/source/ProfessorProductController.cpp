@@ -85,11 +85,12 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateTop.h"
-#include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQCancelling.h"
 #include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStateBooting.h"
+#include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
@@ -110,12 +111,18 @@
 namespace ProductApp
 {
 
+namespace
+{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
+constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
+constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
+constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
+constexpr auto      g_DefaultVolumeThresholdsStateFile  = "DefaultVolumeThresholdsDone";
+}
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
 constexpr uint32_t UI_ALIVE_TIMEOUT = 60 * 1000;
@@ -230,10 +237,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
 
-    auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
+    auto* stateFirstBootGreetingTransition = new CustomProductControllerStateFirstBootGreetingTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
     auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
@@ -529,11 +536,15 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
-    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
                                     m_ProductLpmHardwareInterface->GetLpmClient( ) );
+    ///
+    /// ProductAdaptIQManager depends on CustomProductAudioService, so make sure that CustomProductAudioService is
+    /// instantiated first
+    ///
+    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductAudioService         == nullptr ||
@@ -553,6 +564,9 @@ void ProfessorProductController::Run( )
     /// Apply settings from persistence
     ///
     ApplyOpticalAutoWakeSettingFromPersistence( );
+
+    /// Register a callback so the autowake from persistence is sent to LPM when connected
+    RegisterOpticalAutowakeForLpmConnection( );
 
     ///
     /// Set up LightBarController
@@ -781,7 +795,7 @@ PassportPB::contentItem ProfessorProductController::GetOOBDefaultLastContentItem
     using namespace ProductSTS;
 
     PassportPB::contentItem item;
-    item.set_source( ProductSourceSlot_Name( PRODUCT ) );
+    item.set_source( SHELBY_SOURCE::PRODUCT );
     item.set_sourceaccount( ProductSourceSlot_Name( TV ) );
     return item;
 }
@@ -848,6 +862,38 @@ bool ProfessorProductController::IsBLERemoteConnected( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetDesiredPlayingVolume
+///
+/// @return std::pair<bool, int32_t> whether a volume change is desired, and the desired volume level
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::pair<bool, int32_t> ProfessorProductController::GetDesiredPlayingVolume( ) const
+{
+    BOSE_INFO( s_logger, "%s m_cachedVolume = {%s}", __func__, m_cachedVolume.DebugString( ).c_str( ) );
+
+    int32_t desiredVolume = 0; // 0 will never be returned with changeDesired == true
+    bool changeDesired = false;
+
+    if( m_cachedVolume.has_value() )
+    {
+        // vet against the threshold values
+        if( m_cachedVolume.value( ) < m_cachedVolume.min( ) )
+        {
+            desiredVolume = m_cachedVolume.min( );
+            changeDesired = true;
+        }
+        else if( m_cachedVolume.value( ) > m_cachedVolume.max( ) )
+        {
+            desiredVolume = m_cachedVolume.max( );
+            changeDesired = true;
+        }
+    }
+
+    return { changeDesired, desiredVolume };
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSController
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
@@ -860,18 +906,18 @@ void ProfessorProductController::SetupProductSTSController( )
 
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
-    ProductSTSStateFactory<ProductSTSStateTop>       commonStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopSilent> silentStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopAiQ>    aiqStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTop>          commonStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopAiQ>       aiqStateFactory;
 
     ///
     /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
     /// will always be available. SLOT sources need to be set-up before they become available.
     ///
-    ProductSTSController::SourceDescriptor descriptor_Setup   { SETUP,   ProductSourceSlot_Name( SETUP ),   false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup   { SETUP,   SetupSourceSlot_Name( SETUP ),   false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, ProductSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
-    ProductSTSController::SourceDescriptor descriptor_Pairing { PAIRING, ProductSourceSlot_Name( PAIRING ), false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
+    ProductSTSController::SourceDescriptor descriptor_Pairing { PAIRING, SetupSourceSlot_Name( PAIRING ), false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, commonStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, commonStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, commonStateFactory, true };
@@ -1009,6 +1055,22 @@ void ProfessorProductController::KillUiProcess()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProfessorProductController::HandleAudioVolumeNotification
+///
+/// @param const SoundTouchInterface::volume& volume
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume )
+{
+    BOSE_INFO( s_logger, "%s received: %s", __func__, ProtoToMarkup::ToJson( volume ).c_str() );
+
+    m_cachedVolume = volume;
+    m_ProductCecHelper->HandleFrontDoorVolume( volume );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::RegisterFrontDoorEndPoints
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1069,6 +1131,19 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
+    {
+        //Audio volume callback for notifications
+        AsyncCallback< SoundTouchInterface::volume >
+        audioVolumeCb( std::bind( &ProfessorProductController::HandleAudioVolumeNotification,
+                                  this,
+                                  std::placeholders::_1 ),
+                       GetTask( ) );
+
+        //Audio volume notification registration
+        m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::volume >(
+            FRONTDOOR_AUDIO_VOLUME_API,
+            audioVolumeCb );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1105,7 +1180,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     if( message.has_lpmstatus( ) )
     {
         ///
-        /// Register for product-specific LPM events if connected. Common handling of the product 
+        /// Register for product-specific LPM events if connected. Common handling of the product
         /// message is then done.
         ///
         if( message.lpmstatus( ).has_connected( ) && message.lpmstatus( ).connected( ) )
@@ -1123,8 +1198,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     {
         const auto& slot = message.selectsourceslot( ).slot( );
 
-        BOSE_DEBUG( s_logger, "An STS Select message was received for slot %s.",
-                    ProductSTS::ProductSourceSlot_Name( static_cast<ProductSTS::ProductSourceSlot>( slot ) ).c_str( ) );
+        BOSE_DEBUG( s_logger, "An STS Select message was received for slot %d.", slot );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Wireless network status messages are handled at this point.
@@ -1206,6 +1280,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
 
         NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
+
+        m_ProductLpmHardwareInterface->SendAutowakeStatus( m_IsAutoWakeEnabled );
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
@@ -1289,6 +1365,15 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_cecmode( ) )
     {
         m_ProductLpmHardwareInterface->SetCecMode( message.cecmode( ).cecmode( ) );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// accessoriesareknown  messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_accessoriesareknown( ) )
+    {
+        BOSE_DEBUG( s_logger, "accessoriesareknown received" );
+        m_AccessoriesAreKnown = true;
+        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAccessoriesAreKnown );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
@@ -1441,6 +1526,42 @@ void ProfessorProductController::SendInitialCapsData()
         message,
         { },
         m_errorCb );
+
+    std::string DefaultVolumeThresholdsDoneFile{ g_PersistenceRootDir };
+    DefaultVolumeThresholdsDoneFile += g_ProductPersistenceDir;
+    DefaultVolumeThresholdsDoneFile += g_DefaultVolumeThresholdsStateFile;
+    const bool defaultVolumeThresholdsDone = SystemUtils::Exists( DefaultVolumeThresholdsDoneFile );
+    if( defaultVolumeThresholdsDone )
+    {
+        // GET the current values, we may have missed an initial notification
+        AsyncCallback< SoundTouchInterface::volume >
+        audioVolumeCb( std::bind( &ProfessorProductController::HandleAudioVolumeNotification,
+                                  this,
+                                  std::placeholders::_1 ),
+                       GetTask( ) );
+
+        m_FrontDoorClientIF->SendGet<SoundTouchInterface::volume, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_VOLUME_API,
+            audioVolumeCb,
+            m_errorCb );
+    }
+    else
+    {
+        // Set the thresholds only once, after factory default
+        if( ! SystemUtils::WriteFile( "", DefaultVolumeThresholdsDoneFile ) )
+        {
+            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultVolumeThresholdsDoneFile.c_str( ) );
+        }
+        SoundTouchInterface::volume desiredVolume;
+        desiredVolume.set_min( VOLUME_MIN_THRESHOLD );
+        desiredVolume.set_max( VOLUME_MAX_THRESHOLD );
+        GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_VOLUME_API,
+            desiredVolume,
+            { },
+            m_errorCb );
+        BOSE_INFO( s_logger, "DefaultVolumeThresholdsDoneFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1622,6 +1743,50 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::RegisterOpticalAutowakeForLpmConnection
+///
+/// @brief This method registers callback with LPM connection. When LPM is connected it sends the
+///        autowake status read from NV to LPM
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::RegisterOpticalAutowakeForLpmConnection( )
+{
+    auto lpmFunc = [ this ]( bool connected )
+    {
+        if( connected )
+        {
+            m_ProductLpmHardwareInterface->SendAutowakeStatus( m_IsAutoWakeEnabled );
+        }
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmFunc );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::IsProductControlSurface
+///
+/// @brief  This method is called to determine whether the given key origin is a product control
+///         surface.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsProductControlSurface( LpmServiceMessages::KeyOrigin_t keyOrigin ) const
+{
+    switch( keyOrigin )
+    {
+    case LpmServiceMessages::KEY_ORIGIN_CONSOLE_BUTTON:
+    case LpmServiceMessages::KEY_ORIGIN_CAPSENSE:
+    case LpmServiceMessages::KEY_ORIGIN_IR:
+    case LpmServiceMessages::KEY_ORIGIN_RF:
+    case LpmServiceMessages::KEY_ORIGIN_TAP:
+        return true;
+
+    default:
+        return false;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

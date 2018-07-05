@@ -54,6 +54,7 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQCancelling.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
+  source/CustomStateMachine/CustomProductControllerStateFirstBootGreetingTransition.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
@@ -78,6 +79,7 @@ ADD_EXECUTABLE(Professor
 
 TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
+  ProductControllerCommonProto
   DataCollectionClient
   LpmClient
   HttpInterface

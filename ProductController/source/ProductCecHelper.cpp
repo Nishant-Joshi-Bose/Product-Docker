@@ -49,12 +49,6 @@ const std::string s_ModeAltOn      = "ALTERNATE_ON";
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following constants define FrontDoor endpoints used by the VolumeManager
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -108,14 +102,6 @@ bool ProductCecHelper::Run( )
         FRONTDOOR_CONTENT_NOWPLAYING_API,
         callback );
 
-
-    auto fNotify = [ this ]( SoundTouchInterface::volume v )
-    {
-        HandleFrontDoorVolume( v );
-    };
-
-    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
-    ( FRONTDOOR_AUDIO_VOLUME, fNotify );
 
     auto getFunc = [ this ]( const Callback< const CecModeResponse>& resp,
                              const Callback<FrontDoor::Error>& errorRsp )
@@ -443,11 +429,20 @@ void ProductCecHelper::HandleRawEDIDResponse( const A4VVideoManagerServiceMessag
 {
     BOSE_DEBUG( s_logger, "ProductCecHelper::SendEdidDataCollection" );
 
-    auto edidData = std::make_shared< DataCollection::HdmiEdid >( );
+    auto eedid = std::make_shared< DataCollection::HdmiEdid >( );
 
-    edidData->set_eedid( rawEdid.edid().c_str() );
+    //convert protobuf byte buffer to string
+    std::stringstream stringEdid;
+    const char *bytesBuf = rawEdid.edid().c_str();
+    stringEdid << std::hex;
+    for( uint i = 0; i < rawEdid.edid().size(); ++i )
+    {
+        stringEdid << ( int )bytesBuf[i];
+    }
 
-    m_DataCollectionClient->SendData( edidData, DATA_COLLECTION_EEDID );
+    eedid->set_ediddata( stringEdid.str() );
+
+    m_DataCollectionClient->SendData( eedid, DATA_COLLECTION_EEDID );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -511,11 +506,7 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
             nowPlayingStatus.container( ).contentitem( ).has_source( ) and
             nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
         {
-            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0   and
-                ( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( TV ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 ) )
+            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( SHELBY_SOURCE::PRODUCT ) == 0 )
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
 

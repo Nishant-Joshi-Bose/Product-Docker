@@ -1,12 +1,15 @@
 #!/bin/bash
 #
-# Create an IPK file to install /opt/Bose/etc/product script.
+# Create an IPK file for installing DinghyWebBrowser (WPE) with opkg.
 #
 # To install:
-#   opkg install product-script.ipk
+#   opkg install -d bose wpe.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
 #
 # To uninstall:
-#   opkg remove product-script.ipk
+#   opkg remove wpe
 #
 this=${0##*/} # this script's name
 
@@ -24,19 +27,17 @@ eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-	(--help | -h)
-	    cat <<EOF
+    (--help | -h)
+        cat <<EOF
 Usage: $this [options]
-
-Create an IPK file to install product script.
-
+Create an IPK file for installing WPE with opkg.
 Options:
 EOF
-	    exit 0
-	    ;;
+        exit 0
+        ;;
 
-	(--) break ;;
-	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    (--) break ;;
+    (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
     esac
 done
 
@@ -54,78 +55,83 @@ function put_script {
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
-stage=$wspace/builds/$cfg/product-script-ipk-stage
+wpe_dir=$(components get DinghyWebBrowser-qc8017_64 installed_location) || exit
+wpe_ver=$(components get DinghyWebBrowser-qc8017_64 selected_version) || exit
+wpe_ver=${wpe_ver##*/}
+
+stage=$wspace/builds/$cfg/wpe-ipk-stage
 rm -rf "$stage"
 echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" || exit
-# copy minimal image tar to /opt/Bose
-cp "$wspace/opt-bose-fs/etc/product"  "$opt_dir/etc/product-updated" || exit
+mkdir -p "$output_dir" "$opt_dir" || exit
 
-PackageName=product-script
+echo "Package version \"$wpe_ver\""
+cp -f "$wpe_dir/wpe.ipk" "$opt_dir/" || exit
+cd "$opt_dir" && ar -x "$opt_dir/wpe.ipk" || exit
+tar -xzf "$opt_dir/control.tar.gz" || exit
 
-version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
-package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
-echo "Package version \"$package_version\""
+PackageName=wpe
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName
-Version: $package_version
-Description: SoundTouch product script $package_version
-Section: soundtouch
-Priority: optional
+Version: $wpe_ver
+Description: WPE WebKit bundle $wpe_ver
+Section: web browser app
+Priority: required
 License: Commercial
 Architecture: armv7a-vfp-neon
-OE: soundtouch
+OE: web browser app
 Homepage: http://www.bose.com/
-#Depends: libc6 (>= 2.21)
 Source: None
 EOF
 
 # Installer scripts
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
-echo "Product script postinst"
+echo "wpe postinst"
+# Remove any left-over WPE (pre-dinghy) files.
+rm -rf /opt/Bose/webkit
 
-# TODO: check md5 sum of existing product vs. new
-# move product-updated to product - Danger danger
-sync
-mv /opt/Bose/etc/product-updated /opt/Bose/etc/product
-sync
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
-
 exit 0
 EOF
 
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
-echo "Product script postrm"
+echo "wpe postrm"
+exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
-echo "Product script preinst"
+echo "wpe preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
+exit 0
 EOF
 
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
-echo "Product script prerm"
+echo "wpe prerm"
+exit 0
 EOF
+
 
 # -----------------------------------------------------------------------------
 # Stage area is complete.  Package it into a *.ipk file.
 
 cd "$stage" || exit
 tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
-tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+mv "$opt_dir/data.tar.gz" "$stage"/ || exit
 echo "2.0" > debian-binary || exit
 
-ipk=$output_dir/product-script.ipk
+ipk_dir=$wspace/builds/$cfg
+ipk=$ipk_dir/wpe.ipk
+mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
+

@@ -25,6 +25,11 @@ public:
                                LpmClientIF::LpmClientPtr lpmClient );
     void SetThermalMonitorEnabled( bool enabled );
     void SetAiqInstalled( bool installed );
+    void BootDSPImage( LpmServiceMessages::IpcImage_t image )
+    {
+        m_DspIsRebooting = true;
+        m_ProductLpmHardwareInterface->BootDSPImage( image );
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// m_MainStreamAudioSettings is the structure holding information that APProduct would like to know
@@ -39,6 +44,8 @@ private:
     std::unique_ptr<CustomAudioSettingsManager>         m_AudioSettingsMgr;
     std::unique_ptr<ThermalMonitorTask>                 m_ThermalTask;
     std::shared_ptr< DataCollectionClientIF >           m_DataCollectionClient;
+    bool                                                m_DspIsRebooting = false;
+    Callback<bool>                                      m_StreamConfigResponseCb;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
@@ -81,5 +88,7 @@ private:
     /// FrontDoor handling functions
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterFrontDoorEvents() override;
+
+    LpmServiceMessages::IpcDspStreamConfigReqPayload_t m_DspStreamConfig;
 };
 }// namespace ProductApp

@@ -29,19 +29,13 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
 #include "ProductCommandLine.h"
+#include "ProductEndpointDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following constants define FrontDoor endpoints used by the VolumeManager
-///
-///////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -223,9 +217,12 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response +=  volumeLevelString;
             response += ". \r\n";
 
-            auto errFunc = []( const FrontDoor::Error & e )
+            auto errFunc = []( const FrontDoor::Error & error )
             {
-                BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+                BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor volume request.",
+                            error.code(),
+                            error.subcode(),
+                            error.message().c_str() );
             };
             auto respFunc = [ this ]( SoundTouchInterface::volume v )
             {
@@ -238,9 +235,9 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             SoundTouchInterface::volume pbVolume;
             pbVolume.set_value( volumeLevelValue );
 
-            BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted( ) );
+            BOSE_VERBOSE( s_logger, "Setting FrontDoor volume to %d", pbVolume.value( ) );
             m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-                ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
+                FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respFunc, errCb );
         }
         else
         {
@@ -283,9 +280,12 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        auto errFunc = []( const FrontDoor::Error & e )
+        auto errFunc = []( const FrontDoor::Error & error )
         {
-            BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+            BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor mute request.",
+                        error.code(),
+                        error.subcode(),
+                        error.message().c_str() );
         };
         auto respFunc = [ this ]( SoundTouchInterface::volume v )
         {
@@ -300,7 +300,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted( ) );
         m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-            ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
+            FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respFunc, errCb );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests changing the audio source on the device.

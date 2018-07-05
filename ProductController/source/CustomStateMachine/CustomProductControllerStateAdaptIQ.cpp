@@ -27,6 +27,8 @@
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductMessage.pb.h"
+#include "CustomProductAudioService.h"
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +90,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
         HandleTimeOut();
     } );
 
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
+    GetProductController( ).GetProductAudioServiceInstance( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,6 +155,8 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
         GetProductController( ).SendAllowSourceSelectMessage( true );
         GetProductController( ).SendStopPlaybackMessage( );
     }
+//JCH
+//    GetProductController( ).GetProductAudioServiceInstance( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,6 +223,20 @@ bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerAdaptIQ::HandleIntentPowerOff
+///
+/// @return This method returns a true Boolean value indicating that it has handled the
+///         PowerOff intent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQ::HandleIntentPowerOff( )
+{
+    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+    m_powerDownOnExit = true;
+    return true;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
