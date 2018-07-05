@@ -235,7 +235,7 @@ bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleIntentPowerOff( )
 {
-    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
     return true;
 }
 
