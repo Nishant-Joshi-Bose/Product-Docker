@@ -128,6 +128,10 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
 
         GetProductController( ).SendAllowSourceSelectMessage( true );
 
+        ///
+        /// flag the Exit handler that we're exiting due to something in the AiQ process
+        /// (as opposed to a power state change)
+        ///
         m_completed = true;
 
         ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
@@ -155,8 +159,6 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
         GetProductController( ).SendAllowSourceSelectMessage( true );
         GetProductController( ).SendStopPlaybackMessage( );
     }
-//JCH
-//    GetProductController( ).GetProductAudioServiceInstance( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,7 +236,6 @@ bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
 bool CustomProductControllerStateAdaptIQ::HandleIntentPowerOff( )
 {
     GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
-    m_powerDownOnExit = true;
     return true;
 }
 
