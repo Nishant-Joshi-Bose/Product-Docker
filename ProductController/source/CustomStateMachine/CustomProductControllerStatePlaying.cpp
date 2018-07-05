@@ -76,41 +76,10 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
     ProductControllerStatePlaying::HandleStateEnter( );
 
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC on.", GetName( ).c_str( ), __func__ );
-    GetCustomProductController( ).GetCecHelper( )->PowerOn( );
     GetCustomProductController( ).GetDspHelper( )->SetNormalOperationsMonitor( true );
 
     // Limit the volume to threshold when entering PLAYING, perhaps volume was changed while system was in another state
     SetVolumeToThresholdLimit( );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStateOn::HandleIntentMuteControl
-///
-/// @param  action
-///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlaying::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
-{
-    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, action );
-
-    GetCustomProductController( ).GetIntentHandler( ).Handle( action );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  CustomProductControllerStatePlaying::HandleIntentVolumeControl
-/// @param  KeyHandlerUtil::ActionType_t intent
-/// @return This method returns true, indicating that it has handled the event.
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlaying::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u.", GetName( ).c_str( ), __func__, intent );
-    GetProductController( ).GetIntentHandler( ).Handle( intent );
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +96,6 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
     ProductControllerStatePlaying::HandleStateExit( );
 
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC off.", GetName( ).c_str( ), __func__ );
-    GetCustomProductController( ).GetCecHelper( )->PowerOff( );
     GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( false );
 
     // Limit the volume to threshold when exiting PLAYING, so UI can show the value expected when we resume playing

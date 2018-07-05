@@ -169,18 +169,19 @@ bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateOn::HandleIntentVolumeControl
+/// @brief  CustomProductControllerStateOn::HandleIntentMuteControl
 ///
-/// @param  KeyHandlerUtil::ActionType_t intent
+/// @param  action
 ///
-/// @return This method returns true, indicating that it has handled the event.
+/// @return This method returns a true Boolean value indicating that it has handled the action.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateOn::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
 {
-    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
-    ///
-    /// The intent is ignored in the custom state.
-    ///
+    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, action );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( action );
+
     return true;
 }
 

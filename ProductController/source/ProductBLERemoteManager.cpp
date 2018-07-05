@@ -27,7 +27,6 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductBLERemoteManager.h"
 #include "SharedProto.pb.h"
-//#include "SystemState.pb.h"
 #include "ProtoToMarkup.h"
 #include "EndPointsDefines.h"
 #include "ProductSTS.pb.h"

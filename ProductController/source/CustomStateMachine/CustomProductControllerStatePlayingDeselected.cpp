@@ -12,7 +12,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "CustomProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStates.h"
-#include "ProductController.h"
 #include "Utilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@ CustomProductControllerStatePlayingDeselected::CustomProductControllerStatePlayi
         CHsmState* pSuperState,
         Hsm::STATE stateId,
         const std::string& name ) :
-    ProductControllerStateBooting( hsm, pSuperState, stateId, name )
+    ProductControllerStatePlayingDeselected( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
@@ -48,7 +47,7 @@ CustomProductControllerStatePlayingDeselected::CustomProductControllerStatePlayi
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingDeselected::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s. Volume intent is ignored", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
     ///
     /// The intent is ignored in this custom state.
@@ -68,8 +67,11 @@ bool CustomProductControllerStatePlayingDeselected::HandleIntentVolumeControl( K
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingDeselected::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s ignored the intent %u.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
+    ///
+    /// The intent is ignored in this custom state.
+    ///
     return true;
 }
 

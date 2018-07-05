@@ -96,6 +96,7 @@
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
+#include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingDeselected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
@@ -315,10 +316,10 @@ void ProfessorProductController::Run( )
     ///
     /// Playable State and Sub-States
     ///
-    auto* statePlayable = new ProductControllerStatePlayable
+    auto* statePlayable = new CustomProductControllerStatePlayable
     ( GetHsm( ),
       stateOn,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 
     auto* stateNetworkStandby = new ProductControllerStateNetworkStandby
     ( GetHsm( ),
@@ -371,7 +372,7 @@ void ProfessorProductController::Run( )
       stateOn,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING );
 
-    auto* statePlayingDeselected = new ProductControllerStatePlayingDeselected
+    auto* statePlayingDeselected = new CustomProductControllerStatePlayingDeselected
     ( GetHsm( ),
       statePlaying,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );

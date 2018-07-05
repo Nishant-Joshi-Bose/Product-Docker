@@ -1,13 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStatePlaying.h
+/// @file      CustomProductControllerStatePlayable.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
 ///            product playing state.
 ///
-/// @author    Stuart J. Lumby
-///
-/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+/// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
 ///            The Mountain Road,
@@ -21,21 +19,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following compiler directive prevents this header file from being included more than once,
-/// which may cause multiple declaration compiler errors.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma once
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
-#include "ProductControllerStatePlaying.h"
-#include "ProductControllerStates.h"
-#include "HsmState.h"
+#include "Utilities.h"
+#include "CustomProductControllerStatePlayable.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -45,38 +33,66 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-///            Forward Class Declarations
+/// @brief CustomProductControllerStatePlayable::CustomProductControllerStatePlayable
+///
+/// @param ProductControllerHsm& hsm
+///
+/// @param CHsmState*            pSuperState
+///
+/// @param Hsm::STATE            stateId
+///
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductControllerHsm;
+CustomProductControllerStatePlayable::CustomProductControllerStatePlayable(
+    ProductControllerHsm&       hsm,
+    CHsmState*                  pSuperState,
+    Hsm::STATE                  stateId,
+    const std::string&          name )
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @class CustomProductControllerStatePlaying
-///
-/// @brief This class is used for executing produce specific actions when in an playing state.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlaying : public ProductControllerStatePlaying
+    : ProductControllerStatePlayable( hsm, pSuperState, stateId, name )
 {
-public:
+    BOSE_INFO( s_logger, "The %s state is being constructed.", name.c_str() );
+}
 
-    CustomProductControllerStatePlaying( ProductControllerHsm& hsm,
-                                         CHsmState*            pSuperState,
-                                         Hsm::STATE            stateId,
-                                         const std::string&    name  = "CustomPlaying" );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayable::HandleIntentVolumeControl
+///
+/// @param  KeyHandlerUtil::ActionType_t intent
+///
+/// @return This method returns a true Boolean value indicating that it is handling the volume intent
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
-    ~CustomProductControllerStatePlaying( ) override
-    {
+    ///
+    /// The intent is ignored in this custom state.
+    ///
+    return true;
+}
 
-    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayable::HandleIntentMuteControl
+///
+/// @param  KeyHandlerUtil::ActionType_t intent
+///
+/// @return This method returns a true Boolean value indicating that it has handled the muting
+///         intent. It is ignored in the setup state.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
-    void HandleStateEnter( )                                              override;
-    void HandleStateExit( )                                               override;
-
-private:
-    void SetVolumeToThresholdLimit( );
-};
+    ///
+    /// The intent is ignored in this custom state.
+    ///
+    return true;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
