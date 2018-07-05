@@ -287,8 +287,8 @@ void CustomProductController::HandleSTSReady( void )
 bool CustomProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger,
-               "%s:|CAPS Ready=%d|LPMReady=%d|AudioPathReady=%d|NetworkModuleReady=%d"
-               "|m_isBluetoothReady=%d|STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d|IsVoiceModuleReady=%d",
+               "%s:|CAPS=%d|LPM=%d|AudioPath=%d|Network=%d|m_isBluetooth=%d"
+               "|STS=%d|IsSwUpdate=%d|IsUiConnected=%d|IsVoice=%d",
                __func__,
                IsCAPSReady() ,
                IsLpmReady(),
