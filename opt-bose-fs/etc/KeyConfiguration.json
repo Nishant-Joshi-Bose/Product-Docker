@@ -41,7 +41,6 @@
             ]
         }, 
         {
-<<<<<<< HEAD
             "origin": 5, 
             "keyEvent": 0, 
             "timeOutList": [], 
@@ -49,7 +48,9 @@
             "action": 4, 
             "keyList": [
                 76
-=======
+            ]
+        }, 
+        {
             "origin": 6, 
             "keyEvent": 0, 
             "timeOutList": [], 
@@ -67,7 +68,6 @@
             "action": 9, 
             "keyList": [
                 204
->>>>>>> master
             ]
         }, 
         {
