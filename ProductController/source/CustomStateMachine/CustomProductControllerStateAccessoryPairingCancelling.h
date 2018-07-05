@@ -61,6 +61,7 @@ public:
     bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )       override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
     bool HandleIntentPowerToggle( )                                             override;
+    bool HandleIntentPowerOff( )                                                override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

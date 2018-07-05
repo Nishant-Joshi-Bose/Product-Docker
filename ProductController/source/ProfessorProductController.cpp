@@ -85,11 +85,12 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateTop.h"
-#include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStateBooting.h"
+#include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
@@ -236,10 +237,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
 
-    auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
+    auto* stateFirstBootGreetingTransition = new CustomProductControllerStateFirstBootGreetingTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
     auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
@@ -1365,6 +1366,15 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_cecmode( ) )
     {
         m_ProductLpmHardwareInterface->SetCecMode( message.cecmode( ).cecmode( ) );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// accessoriesareknown  messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_accessoriesareknown( ) )
+    {
+        BOSE_DEBUG( s_logger, "accessoriesareknown received" );
+        m_AccessoriesAreKnown = true;
+        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAccessoriesAreKnown );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message

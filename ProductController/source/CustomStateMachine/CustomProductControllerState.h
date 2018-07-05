@@ -138,6 +138,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOff( )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentFactoryDefault( )
     {
         return false;
@@ -419,6 +424,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleAccessoriesAreKnown( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type

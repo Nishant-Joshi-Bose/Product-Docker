@@ -3,10 +3,10 @@
 
 """
 :Abstract: This python module is created to automate the process of profile entries for EC release builds.
-           For each release build there needs to be a corresponding entry in the profile database.
-           This python module takes in ProductType, Version and Enviroment, finds the product profile for
-           the given productType and version as 'latest' and posts the result with given version.
-           Profile data in version  'latest' is used as a template.
+					 For each release build there needs to be a corresponding entry in the profile database.
+					 This python module takes in ProductType, Version and Enviroment, finds the product profile for 
+					 the given productType and version as 'latest' and posts the result with given version.
+					 Profile data in version  'latest' is used as a template.
 
 :Organization:  BOSE CORPORATION
 :Author:  Manasi Bhandare
@@ -24,65 +24,57 @@ import logging
 import time
 import argparse
 import json
-import os
 
 try:
-  import requests
+	import requests
 except ImportError:
-  sys.exit("""You need requests!
-              Please run 'pip install requests'""")
+	sys.exit("""You need requests!
+							Please run 'pip install requests'""")
 
-PRODUCT_PROFILE = {
-"latest":"https://ingress-platform.live-aws-useast1.bose.io/dev/svc-iot-product-profile/latest/iot-product-profile-core",
-"integration":"https://ingress-platform.live-aws-useast1.bose.io/dev/svc-iot-product-profile/integration/iot-product-profile-core",
-"alpha":"https://ingress-platform.live-aws-useast1.bose.io/dev/svc-iot-product-profile/alpha/iot-product-profile-core"
-}
+PRODUCT_PROFILE = "https://ingress-platform.live-aws-useast1.bose.io/dev/svc-iot-product-profile/%s/iot-product-profile-core"
 
-PROFILE_ID = {
-"eddie":"5aeca08f2f9c840001877924",
-"ginger-cheevers":"5aeca1962f9c840001877926",
-"professor":"5aeca1452f9c840001877925"
-}
+def update_product_profile(product_type, version, environment):
+	
+	print "ENVIRONMENT: " + environment
+	print "URL: " + PRODUCT_PROFILE % environment
+	print "PRODUCT " + product_type
+	print "VERSION " + version
 
+	response = requests.get(PRODUCT_PROFILE % environment+"/profiles" + "?productType="+product_type + "&firmwareVersion=latest")
+	if response.status_code != requests.codes.ok:
+		print "ERROR: failed to get product profile with http code {} and message {}".format(response.status_code, response.reason)
+		return
+	
+	profiles =  response.json()
+	if 'results' not in profiles:
+		print "ERROR: failed to find profile in profile response: {}".format(json.dumps(profiles))
+		return
+	
+	profile = profiles['results'][0]
+	if 'firmwareVersion' not in profile:
+		print "ERROR: failed to find firmwareVersion in profile response: {}".format(json.dumps(profile))
+		return
 
-def update_product_profile(product_type, version, environment, debug):
-  if environment in PRODUCT_PROFILE:
-    print "ENVIRONMENT: " + environment
-    print "URL: " + PRODUCT_PROFILE[environment]
-    print "PRODUCT " + product_type
-    print "VERSION " + version
+	profile['firmwareVersion'] = version
+	response = requests.post(PRODUCT_PROFILE % environment+"/profiles", data=json.dumps(profile))
+	if not response.ok:
+		print "ERROR: failed to post product profile with http code {} and message {}".format(response.status_code, response.reason)
+		return
+	print "successfully posted data to productType {} and environment {}".format(product_type, environment)
+	
 
-    profile = json.load(open(os.path.dirname(os.path.realpath(__file__))  + "/default_profile.json"))
-    profile['firmwareVersion'] = version
-    profile['productType'] = product_type
-    profile['profileID'] = PROFILE_ID[product_type]
-
-    if debug:
-      print json.dumps(profile)
-    else:
-      response = requests.post(PRODUCT_PROFILE[environment]+"/profiles", data=json.dumps(profile))
-      if not response.ok:
-        print "ERROR: failed to post product profile with http code {} and message {}".format(response.status_code, response.reason)
-        return
-      print "successfully posted data to productType {} and environment {}".format(product_type, environment)
-
-  else:
-    print "ERROR: Please enter correct enviroment values from the following list => LATEST, INTEGRATION, ALPHA"
-    return
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument("--p", help="Product type to bind to", required=True)
   parser.add_argument("--v", help="Release version to bind to", required=True)
   parser.add_argument("--e", help="Environmrnt to bind to", required=True)
-  parser.add_argument("--d", help="Debug: print JSON instead of POSTing it", action='store_true', required=False)
 
   args = parser.parse_args()
 
   product_type = None
   version = None
   environment = None
-  debug = False
 
   if (args.p):
     product_type = args.p
@@ -93,13 +85,9 @@ def main():
   if (args.e):
     environment = args.e
 
-  if (args.d):
-    debug = True
-
   if product_type and version and environment:
-    update_product_profile(product_type, version, environment.lower(), debug)
+    update_product_profile(product_type, version, environment.lower())
     print "Exited"
   else:
-    print "Please read help. Use -h"
-
+  	print "Please read help. Use -h"
 main()

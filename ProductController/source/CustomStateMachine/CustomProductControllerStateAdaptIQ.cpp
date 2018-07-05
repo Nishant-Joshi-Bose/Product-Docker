@@ -220,6 +220,20 @@ bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerAdaptIQ::HandleIntentPowerOff
+///
+/// @return This method returns a true Boolean value indicating that it has handled the
+///         PowerOff intent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQ::HandleIntentPowerOff( )
+{
+    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+    m_powerDownOnExit = true;
+    return true;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
