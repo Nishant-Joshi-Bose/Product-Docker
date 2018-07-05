@@ -1,7 +1,8 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@6691f9d0798dedf7bc611c43355b3f035b2a5683"
+    "selected_version": "master@ad3c70a54c5d41d945777905fa8ff80056f514e3"
+
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -65,7 +66,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.4-402+8fe88b0"
+    "selected_version": "Release/master/1.5.5-410+f777ce3"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -173,7 +174,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "PGC_1973_common@b55fd1dd0a9f7c0af7204a1c93005914853a4a35"
+    "selected_version": "PGC_1973_common@bcaffa081fa85d8827c4a976dcd9ee6dd59c3e33"
   },
   {
     "name": "ProductUIAssets",
