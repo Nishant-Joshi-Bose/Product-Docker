@@ -75,7 +75,7 @@ public:
     bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd )               override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )      override;
     bool HandleIntentSetupBLERemote()                                           override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )         override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

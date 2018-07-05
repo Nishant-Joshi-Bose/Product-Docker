@@ -176,11 +176,11 @@ bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 /// @return This method returns a true Boolean value indicating that it has handled the action.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStateOn::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, action );
+    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, intent );
 
-    GetCustomProductController( ).GetIntentHandler( ).Handle( action );
+    GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
 
     return true;
 }

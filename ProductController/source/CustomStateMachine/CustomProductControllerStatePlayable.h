@@ -69,7 +69,7 @@ public:
 
     }
 
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )   override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )   override;
     bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent ) override;
 
 };
