@@ -17,7 +17,7 @@ if egrep -q "STATUS_ERROR|STATUS_INPROGRESS" /tmp/status.txt; then
     echo "Install is pending - error / inprogress"
     installPending=true
 else 
-    if egrep -q "STATUS_START" /tmp/status.txt && egrep -q "STATUS_COMPLETE" /tmp/status.txt; then
+    if egrep -q "STATUS_START" /tmp/status.txt && egrep -q "STATUS_OK" /tmp/status.txt; then
         echo "Install is pending - one or more complete"
         installPending=true        
     fi
@@ -35,7 +35,11 @@ if $installPending; then
     exec /opt/Bose/bin/SoundTouch "$@"
 else
     echo "Install is not pending"
-    /opt/Bose/bin/SoundTouch "$@" &
-    exec /opt/Bose/bin/install "$@" 
+    if [ -e /opt/Bose/bin/install ]; then
+        /opt/Bose/bin/SoundTouch "$@" &
+        exec /opt/Bose/bin/install "$@" 
+    else
+       exec /opt/Bose/bin/SoundTouch "$@" 
+    fi
 fi
 

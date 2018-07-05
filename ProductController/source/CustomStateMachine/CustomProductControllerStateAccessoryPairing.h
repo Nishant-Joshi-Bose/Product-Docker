@@ -61,6 +61,7 @@ public:
     bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )       override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
     bool HandleIntentPowerToggle( )                                             override;
+    bool HandleIntentPowerOff( )                                                override;
     bool HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )  override;
     bool HandleChimeSASSPlaybackCompleted( int32_t eventId )                    override;
 
