@@ -188,6 +188,11 @@ public:
         return false;
     }
 
+    virtual bool HandleVoiceModuleReadiness( )
+    {
+        return false;
+    }
+
     virtual bool HandleSTSSourcesInit( )
     {
         return false;
