@@ -243,6 +243,11 @@ public:
         return false;
     }
 
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
     virtual bool HandleLpmSoftwareUpdateState( )
     {
         return false;
