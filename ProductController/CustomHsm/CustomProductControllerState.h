@@ -16,6 +16,7 @@
 #include "KeyHandler.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductMessage.pb.h"
 #include "SystemEventMessage.pb.h"
 #include "InactivityTimers.h"
@@ -208,7 +209,7 @@ public:
         return false;
     }
 
-    virtual bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state )
+    virtual bool HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlaying )
     {
         return false;
     }

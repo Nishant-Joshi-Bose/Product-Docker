@@ -35,6 +35,7 @@
     "name": "BoseLibs-qc8017_32",
     "selected_version": "Release/master/1.5.3-487+1708b99"
   },
+  
   {
     "name": "BoseOPKG-native",
     "selected_version": "Release/master/1.0.0-30+960ca94"
@@ -62,6 +63,10 @@
   {
     "name": "BTSTSSink-qc8017_32",
     "selected_version": "Release/master/1.5.0-43+3b6c006"
+  },
+  {
+    "name": "CastleLibs-native",
+    "selected_version": "branches/castle-libs@2684"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -149,7 +154,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@e949cf2f374b38cf5858dd94b9ee7fd0fc0f9e8d"
+    "selected_version": "master@88f713845200e79fcec459182d6055aff4ed52f2"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
