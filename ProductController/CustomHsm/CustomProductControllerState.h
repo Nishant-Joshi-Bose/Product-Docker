@@ -370,6 +370,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOff( )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static CustomProductController& GetCustomProductController();
