@@ -120,7 +120,7 @@ bool CustomProductControllerStateAccessoryPairingCancelling::HandleIntentVolumeC
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairingCancelling::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s ignored the intent %u.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
     ///
     /// The intent is ignored in this custom state.
