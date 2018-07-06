@@ -58,6 +58,7 @@ ADD_EXECUTABLE(ProductController
 
 TARGET_LINK_LIBRARIES(ProductController
   CastleProductControllerCommon
+  ProductControllerCommonProto
   DataCollectionClient
   LpmClient
   HttpInterface
