@@ -596,7 +596,7 @@ void ProfessorProductController::Run( )
                         SystemPowerControl_State_Not_Notify,
                         statePlaying );
 
-    GetHsm( ).AddState( NotifiedNames::DESELECTED,
+    GetHsm( ).AddState( NotifiedNames::PLAYING_SOURCE_OFF,
                         SystemPowerControl_State_OFF,
                         statePlayingDeselected );
 
@@ -608,7 +608,7 @@ void ProfessorProductController::Run( )
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSilent );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( NotifiedNames::PLAYING_SOURCE_OFF,
                         SystemPowerControl_State_OFF,
                         statePlayingSelectedSilentSourceInvalid );
 
