@@ -328,7 +328,7 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 ///
 /// @name   CustomProductAudioService::SetMinimumOutputLatency
 ///
-/// @param  uint32_t latency
+/// @param  int32_t latency
 ///
 /// @brief  Send DSP minimumOutputLatency to AudioPath
 ///
