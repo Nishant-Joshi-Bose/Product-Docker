@@ -1,8 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@ad3c70a54c5d41d945777905fa8ff80056f514e3"
-
+    "selected_version": "master@4078f4227a6ff498a13ee7b49770ba641bbe69d3"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -30,7 +29,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/v1.0.0-0+3929310"
+    "selected_version": "Release/master/v1.0.1-0+0e4add4"
   },
   {
     "name": "BLESetup-qc8017_32",
