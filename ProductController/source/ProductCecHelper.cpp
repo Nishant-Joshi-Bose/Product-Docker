@@ -137,6 +137,21 @@ bool ProductCecHelper::Run( )
                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
+    //System power control notification registration and callback handling
+    auto handleSystemPowerControl = [this]( SystemPowerPb::SystemPowerControl systemPowerControlState )
+    {
+        if( systemPowerControlState.power() == SystemPowerPb::SystemPowerControl_State_ON )
+        {
+            PowerOn();
+        }
+        else
+        {
+            PowerOff();
+        }
+    };
+    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl );
+    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl, {} );
+
     return true;
 }
 
@@ -544,6 +559,8 @@ void ProductCecHelper::HandleFrontDoorVolume( SoundTouchInterface::volume const&
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::PowerOff( )
 {
+    BOSE_INFO( s_logger, __func__ );
+
     A4VVideoManagerServiceMessages::PowerStateMsg_t msg;
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Low );
@@ -562,6 +579,8 @@ void ProductCecHelper::PowerOff( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::PowerOn( )
 {
+    BOSE_INFO( s_logger, __func__ );
+
     A4VVideoManagerServiceMessages::PowerStateMsg_t msg;
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Full );

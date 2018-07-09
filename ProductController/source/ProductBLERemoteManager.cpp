@@ -83,6 +83,23 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
 
     m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection );
     m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection, {} );
+
+    //System power control notification registration and callback handling
+    auto handleSystemPowerControl = [this]( SystemPowerPb::SystemPowerControl systemPowerControlState )
+    {
+        if( systemPowerControlState.power() == SystemPowerPb::SystemPowerControl_State_ON )
+        {
+            PowerOn();
+        }
+        else
+        {
+            PowerOff();
+        }
+    };
+    //System power control get registration
+    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl );
+    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl, {} );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
