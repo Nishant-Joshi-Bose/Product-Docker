@@ -20,6 +20,7 @@
 #pragma once
 #include "ProductKeyInputManager.h"
 #include "A4VQuickSetServiceClientFactory.h"
+#include "SystemPowerMacro.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -47,6 +48,8 @@ public:
     /// CustomProductKeyInputManager Constructor
     ///
     explicit CustomProductKeyInputManager( ProfessorProductController& ProductController );
+
+    void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro );
 
 
     ///

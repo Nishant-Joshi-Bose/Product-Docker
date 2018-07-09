@@ -2,7 +2,6 @@
   {
     "name": "A4VQuickSetService",
     "selected_version": "master@ad3c70a54c5d41d945777905fa8ff80056f514e3"
-
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -170,7 +169,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@d6310f8fa6f1ff16509ac5a67fcd9f3e332292a2"
+    "selected_version": "AttemptToStartPlaybackVirtual@b4d49e7b9c47712755cce0cb25b34380eb41b162"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",

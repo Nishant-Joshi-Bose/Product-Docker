@@ -200,6 +200,36 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     return( isBlastedKey || ignoreCECKey );
 }
 
+void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro )
+{
+    if( pwrMacro.enabled() )
+    {
+        BOSE_INFO( s_logger, "Executing power macro : %s", pwrMacro.ShortDebugString().c_str() );
+        if( pwrMacro.powerontv() )
+        {
+            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+            if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
+            {
+                QSSMSG::BoseKeyReqMessage_t request;
+                request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+                request.set_keyval( LpmServiceMessages::BOSE_ASSERT_ON );
+                request.set_codeset( tvSource->details( ).cicode( ) );
+            }
+        }
+        if( pwrMacro.has_powerondevice() )
+        {
+            const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
+            if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
+            {
+                QSSMSG::BoseKeyReqMessage_t request;
+                request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+                request.set_keyval( LpmServiceMessages::BOSE_ASSERT_ON );
+                request.set_codeset( macroSrc->details( ).cicode( ) );
+            }
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductKeyInputManager::FilterIncompleteChord
