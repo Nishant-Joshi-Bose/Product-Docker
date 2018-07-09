@@ -333,7 +333,7 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 /// @brief  Send DSP minimumOutputLatency to AudioPath
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::SetMinimumOutputLatency( uint32_t latency )
+void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
 {
     BOSE_VERBOSE( s_logger, __func__ );
     if( latency != m_currentMinimumLatency )
