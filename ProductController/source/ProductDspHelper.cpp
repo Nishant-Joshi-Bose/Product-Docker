@@ -37,7 +37,6 @@ namespace
 {
 // Decided because CEC latency is 200ms so similar timing for autowake
 constexpr uint32_t s_PollingTimeAutoWakeMs         = 200;
-// @todo - PGC-942 - revisit with minimumOutputLatencyMs and totalLatencyMs handling
 constexpr uint32_t s_PollingTimeNormalOperationsMs = 5000;
 
 const std::string DEF_STR_AUDIO_FORMAT_LPCM = "LPCM";
@@ -194,12 +193,12 @@ void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus
         AutoWakeTriggered();
     }
 
-    // @todo - PGC-942update presentation latency
-
     m_dspStatus.CopyFrom( status );
 
     // Update /audio/eqSelect supported EQs based on AiqInstalled info
     m_ProductController.GetProductAudioServiceInstance()->SetAiqInstalled( ( status.aiqinstalled() > 0 ) ? true : false );
+    // Notify AudioPath about the minimumLatency value from DSP
+    m_ProductController.GetProductAudioServiceInstance()->SetMinimumOutputLatency( static_cast<uint32_t>( status.minimumoutputlatencyms() ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
