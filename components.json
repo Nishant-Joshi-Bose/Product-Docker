@@ -220,6 +220,10 @@
     "selected_version": "master@5574d60a95a42cb08dff1ef31b696ed8e104696c"
   },
   {
+    "name": "VPAController-qc8017_32",
+    "selected_version": "Continuous/master/0.1.0-15+b699282"
+  },
+  {
     "name": "Webkit",
     "selected_version": "Release/master/0.4.1-75+9747b6a"
   }
