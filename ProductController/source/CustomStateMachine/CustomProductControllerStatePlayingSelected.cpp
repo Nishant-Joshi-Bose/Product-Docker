@@ -51,15 +51,14 @@ CustomProductControllerStatePlayingSelected::CustomProductControllerStatePlaying
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingSelected::PossiblyGoToCustomState
+/// @brief  CustomProductControllerStatePlayingSelected::GoToNextState
 ///
-/// @return This is used for product specific conditional checks and potential state changes to
-///         custom states based on the product. It returns a true Boolean value if a custom
-///         state change is to take place; otherwise, it returns false and lets the method
-///         in the common state that calls this function handle any required state transitions.
+///         This is used for product specific conditional checks and potential state changes to
+///         custom states based on the product. If no custom state change required, it will execute
+///         Common GoToNextState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingSelected::PossiblyGoToCustomState( )
+void CustomProductControllerStatePlayingSelected::GoToNextState( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
@@ -72,20 +71,17 @@ bool CustomProductControllerStatePlayingSelected::PossiblyGoToCustomState( )
             if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
-
-                return true;
+                return;
             }
 
             if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
-
-                return true;
+                return;
             }
         }
     }
-
-    return false;
+    ProductControllerStatePlayingSelected::GoToNextState( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

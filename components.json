@@ -9,8 +9,8 @@
     "selected_version": "master@567a0fb2769e9c2b5aff0f57ff507f40fd633f98"
   },
   {
-    "name": "A4VVideoManagerService",
-    "selected_version": "master@b3e2d776f7d3b64319c712dcc7ed1300aaa43024"
+    "name": "A4VVideoManagerService-qc8017_32",
+    "selected_version": "Release/master/1.5.0-6+d30694e"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -22,11 +22,11 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/0.1.4-130+0c4f8e2"
+    "selected_version": "Release/master/1.5.0-136+edf72c5"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-03_1506"
+    "selected_version": "Release/Castle-Fork/1.5.15.42973.2897844"
   },
   {
     "name": "BLERemoteXCVR",
@@ -50,7 +50,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/1.5.2-481+51f5a61"
+    "selected_version": "Release/master/1.5.3-487+1708b99"
   },
   {
     "name": "BoseOPKG-native",
@@ -174,7 +174,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-3+51ea9e6"
+    "selected_version": "Release/master/1.0.0-7+a69452e"
   },
   {
     "name": "ProductUIAssets",
@@ -214,7 +214,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.5.3-445+c63927f"
+    "selected_version": "Release/master/1.5.4-475+524cfd0"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -222,11 +222,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.7-711+0e0622e"
+    "selected_version": "Continuous/master/1.5.7-718+5280974"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-03_1506"
+    "selected_version": "Release/Castle-Fork/1.5.15.42973.2897844"
   },
   {
     "name": "SystemEventService-qc8017_32",
