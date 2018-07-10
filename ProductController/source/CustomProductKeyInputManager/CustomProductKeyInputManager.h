@@ -21,6 +21,8 @@
 #include "ProductKeyInputManager.h"
 #include "A4VQuickSetServiceClientFactory.h"
 #include "SystemPowerMacro.pb.h"
+#include "FrontDoorClient.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -47,7 +49,8 @@ public:
     ///
     /// CustomProductKeyInputManager Constructor
     ///
-    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController );
+    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController,
+                                           const FrontDoorClientIF_t& frontDoorClient );
 
     void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro );
 
