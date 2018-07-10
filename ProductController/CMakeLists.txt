@@ -86,7 +86,11 @@ TARGET_LINK_LIBRARIES(ProductController
   BoseLibs
   jsoncpp
   protobuf
-  TinyXml
+  libwebsockets.a
+  libssl.a
+  libcrypto.a
+  libTinyXml.a
+  libz.a
   pthread
   rt
   cap
