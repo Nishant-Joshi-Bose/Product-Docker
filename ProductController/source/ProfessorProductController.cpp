@@ -1243,7 +1243,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 
 
     {
-        auto callback = [ = ]( Callback< ProductPb::PowerMacro > cb, Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( Callback< ProductPb::PowerMacro > cb, Callback< FrontDoor::Error > errorCb )
         {
             HandleGetPowerMacro( cb, errorCb );
         };
@@ -1254,7 +1254,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
                                            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto callback = [ = ]( ProductPb::PowerMacro macro, Callback< ProductPb::PowerMacro > cb, Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( ProductPb::PowerMacro macro, Callback< ProductPb::PowerMacro > cb, Callback< FrontDoor::Error > errorCb )
         {
             HandlePutPowerMacro( macro, cb, errorCb );
         };
@@ -1265,8 +1265,8 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
                                                                   FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto callback = [ = ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandleGetOpticalAutoWake( respCb, errorCb );
         };
@@ -1278,9 +1278,9 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
                                            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto callback = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
-                               Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                                  Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandlePutOpticalAutoWake( req, respCb, errorCb );
         };
@@ -1293,9 +1293,9 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto callback = [ = ]( DisplayControllerPb::UiHeartBeat req,
-                               Callback< DisplayControllerPb::UiHeartBeat > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( DisplayControllerPb::UiHeartBeat req,
+                                  Callback< DisplayControllerPb::UiHeartBeat > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandleUiHeartBeat( req, respCb, errorCb );
         };
@@ -1863,27 +1863,9 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::AttemptToStartPlayback()
 {
-    BOSE_INFO( s_logger, "HandlingC ustomAttemptToStartPlayback" );
-    ///
-    /// If we can play the last item, do so. If we can't (because last item was a streaming source
-    /// and the network is not configured) or there isn't one, then activate SETUP source
-    ///
-    /// Note that a subsequent audio path selected message will be sent that causes the actual
-    /// state transition to a playing or playing setup state.
-    ///
-    if( ( not m_NetworkServiceUtil.IsNetworkConfigured( ) and
-          IsLastContentItemStreaming( ) ) or
-        GetLastContentItem().source().compare( SHELBY_SOURCE::INVALID_SOURCE ) == 0 )
-    {
-        PassportPB::contentItem contentItem;
+    BOSE_INFO( s_logger, "Handling CustomAttemptToStartPlayback" );
 
-        contentItem.set_source( SHELBY_SOURCE::SETUP );
-        contentItem.set_sourceaccount( ProductSTS::SetupSourceSlot_Name( ProductSTS::SETUP ) );
-
-        SendPlaybackRequestFromContentItem( contentItem );
-        BOSE_INFO( s_logger, "An attempt to start setup has been made." );
-    }
-    else if( m_powerMacro.enabled() )
+    if( m_powerMacro.enabled() )
     {
         PassportPB::contentItem pwrMacroContentItem;
 
@@ -1894,13 +1876,11 @@ void ProfessorProductController::AttemptToStartPlayback()
         m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro );
 
         BOSE_INFO( s_logger, "An attempt to play the power macro content item %s has been made.",
-                   m_lastContentItem.DebugString().c_str( ) );
+                   pwrMacroContentItem.DebugString().c_str( ) );
     }
     else
     {
-        SendPlaybackRequestFromContentItem( m_lastContentItem );
-        BOSE_INFO( s_logger, "An attempt to play the last content item %s has been made.",
-                   m_lastContentItem.DebugString().c_str( ) );
+        ProductController::AttemptToStartPlayback();
     }
 }
 
@@ -1950,7 +1930,7 @@ void ProfessorProductController::HandlePutPowerMacro(
     {
         const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
 
-        if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
+        if( ( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) || not req.powerontv() )
         {
             const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
 
@@ -1981,7 +1961,7 @@ void ProfessorProductController::HandlePutPowerMacro(
         }
         else
         {
-            error.set_message( "TV is not configured!" );
+            error.set_message( "TV is not configured but power on tv requested!" );
         }
     }
 
