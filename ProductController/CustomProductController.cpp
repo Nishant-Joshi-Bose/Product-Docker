@@ -81,7 +81,6 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
-    m_dataCollectionClientInterface( m_FrontDoorClientIF, GetDataCollectionClient() ),
     m_ProductSTSController( *this )
 {
     BOSE_INFO( s_logger, __func__ );

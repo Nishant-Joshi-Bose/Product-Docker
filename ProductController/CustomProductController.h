@@ -71,7 +71,6 @@
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "DisplayController.h"
-#include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 
@@ -380,8 +379,6 @@ private:
     /// Shared Pointer to the LPM Custom Hardware Interface
     std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
 
-    //DataCollectionClientInterface
-    DataCollectionClientInterface                        m_dataCollectionClientInterface;
     ProductSTSController                                 m_ProductSTSController;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
