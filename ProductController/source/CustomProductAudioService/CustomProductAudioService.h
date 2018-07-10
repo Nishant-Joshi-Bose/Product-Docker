@@ -25,6 +25,7 @@ public:
                                LpmClientIF::LpmClientPtr lpmClient );
     void SetThermalMonitorEnabled( bool enabled );
     void SetAiqInstalled( bool installed );
+    void SetMinimumOutputLatency( int32_t latency );
     void BootDSPImage( LpmServiceMessages::IpcImage_t image )
     {
         m_DspIsRebooting = true;
@@ -90,5 +91,6 @@ private:
     void RegisterFrontDoorEvents() override;
 
     LpmServiceMessages::IpcDspStreamConfigReqPayload_t m_DspStreamConfig;
+    int32_t m_currentMinimumLatency;
 };
 }// namespace ProductApp

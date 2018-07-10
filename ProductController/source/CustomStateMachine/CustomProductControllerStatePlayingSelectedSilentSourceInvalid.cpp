@@ -1,22 +1,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file      CustomProductControllerStatePlayingSelectedSetup.cpp
+/// @file      CustomProductControllerStateBooting.cpp
 ///
-/// @brief     This source code file contains functionality to process events
-///            that occur in Professor during the product setup state.
+/// @brief     This source code file contains functionality to process events that occur during the
+///            product booting state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 ///            Included Header Files
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "Utilities.h"
-#include "CustomProductControllerStatePlayingSelectedSetup.h"
+#include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
 #include "ProductControllerStates.h"
-#include "ProfessorProductController.h"
-#include "ProductBLERemoteManager.h"
+#include "ProductController.h"
+#include "Utilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -25,70 +22,42 @@ namespace ProductApp
 {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingSelectedSetup::CustomProductControllerStatePlayingSelectedSetup
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingSelectedSetup::
-///        CustomProductControllerStatePlayingSelectedSetup
-///
+/// @name  CustomProductControllerStatePlayingSelectedSilentSourceInvalild::CustomProductControllerStatePlayingSelectedSilentSourceInvalild
 /// @param ProductControllerHsm& hsm
-///
 /// @param CHsmState*            pSuperState
-///
 /// @param Hsm::STATE            stateId
-///
 /// @param const std::string&    name
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStatePlayingSelectedSetup::CustomProductControllerStatePlayingSelectedSetup(
-    ProductControllerHsm& hsm,
-    CHsmState*            pSuperState,
-    Hsm::STATE            stateId,
-    const std::string&    name )
-
-    : ProductControllerStatePlayingSelectedSetup( hsm, pSuperState, stateId, name )
+CustomProductControllerStatePlayingSelectedSilentSourceInvalid::CustomProductControllerStatePlayingSelectedSilentSourceInvalid( ProductControllerHsm& hsm,
+        CHsmState* pSuperState,
+        Hsm::STATE stateId,
+        const std::string& name ) :
+    ProductControllerStatePlayingSelectedSilentSourceInvalid( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStatePlayingSelectedSetup::HandleStateEnter
+/// @brief  CustomProductControllerStatePlayingSelectedSilentSourceInvalid::HandleIntentVolumeControl
+///
+/// @return This method returns a true Boolean value indicating that it has handled the event
+///         and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayingSelectedSetup::HandleStateEnter()
+bool CustomProductControllerStatePlayingSelectedSilentSourceInvalid::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
-    ProductControllerStatePlayingSelectedSetup::HandleStateEnter();
-
-    GetCustomProductController().PossiblyPairBLERemote();
-    GetCustomProductController( ).GetBLERemoteManager( )->EnterSetup( );
+    ///
+    /// The volume intent is ignored in this custom state.
+    ///
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStatePlayingSelectedSetup::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayingSelectedSetup::HandleStateExit()
-{
-    BOSE_INFO( s_logger, __func__ );
-
-    GetCustomProductController().StopPairingBLERemote();
-
-    ProductControllerStatePlayingSelectedSetup::HandleStateExit();
-    GetCustomProductController( ).GetBLERemoteManager( )->ExitSetup( );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStatePlayingSelectedSetup::HandleIntentMuteControl
+/// @brief  CustomProductControllerStatePlayingSelectedSilentSourceInvalid::HandleIntentMuteControl
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
@@ -96,10 +65,13 @@ void CustomProductControllerStatePlayingSelectedSetup::HandleStateExit()
 ///         intent. It is ignored in the setup state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingSelectedSetup::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStatePlayingSelectedSilentSourceInvalid::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
+    ///
+    /// The mute intent is ignored in this custom state.
+    ///
     return true;
 }
 

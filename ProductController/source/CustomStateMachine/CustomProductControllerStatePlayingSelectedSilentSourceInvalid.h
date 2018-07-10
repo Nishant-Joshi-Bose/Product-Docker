@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file      CustomProductControllerStatePlayingSelected.h
+/// @file      CustomProductControllerStateBooting.h
 ///
 /// @brief     This header file declares functionality to process events that occur during the
-///            playing selected state that are custom to the Professor product.
+///            product booting state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -11,8 +11,7 @@
 ///            Included Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,30 +26,24 @@ namespace ProductApp
 class ProductControllerHsm;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief The CustomProductControllerStatePlayingSelected Class
+/// @brief The CustomProductControllerStatePlayingSelectedSilentSourceInvalid Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayingSelected : public ProductControllerStatePlayingSelected
+class CustomProductControllerStatePlayingSelectedSilentSourceInvalid : public ProductControllerStatePlayingSelectedSilentSourceInvalid
 {
 public:
 
-    CustomProductControllerStatePlayingSelected( ProductControllerHsm& hsm,
-                                                 CHsmState*            pSuperState,
-                                                 Hsm::STATE            stateId,
-                                                 const std::string&    name = "CustomPlayingSelected" );
+    CustomProductControllerStatePlayingSelectedSilentSourceInvalid( ProductControllerHsm& hsm,
+                                                                    CHsmState* pSuperState,
+                                                                    Hsm::STATE stateId,
+                                                                    const std::string& name = "CustomPlayingSelectedSilentSourceInvalid" );
 
-    ~CustomProductControllerStatePlayingSelected( ) override
+    ~CustomProductControllerStatePlayingSelectedSilentSourceInvalid( ) override
     {
 
     }
 
-protected:
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// @brief This overridden method is used for product specific conditional checks and potential
-    ///        state changes to custom states based on the product. It returns a true Boolean value
-    ///        if a product specific state change takes place or false otherwise.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void GoToNextState( )   override;
+    bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )   override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )     override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
