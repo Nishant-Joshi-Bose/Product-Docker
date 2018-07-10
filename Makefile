@@ -80,6 +80,7 @@ keyconfig: check_tools
 		--tap $(LPM_KEYS) \
 		--cec $(LPM_KEYS) \
 		--rf $(LPM_KEYS) \
+		--net $(LPM_KEYS) \
 		--outputcfg $(KEYCONFIG) \
 		--incdirs $(KEYCONFIG_INCS)
 

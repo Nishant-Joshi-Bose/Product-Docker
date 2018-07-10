@@ -693,7 +693,8 @@ void ProfessorProductController::Run( )
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
-    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
+    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this,
+                                    m_FrontDoorClientIF );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
@@ -881,7 +882,8 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( ) ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( )   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Voice Ready           :  %s", ( IsVoiceModuleReady( )     ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return ( IsLpmReady( )             and
@@ -891,7 +893,8 @@ bool ProfessorProductController::IsBooted( ) const
              IsSoftwareUpdateReady( )  and
              IsSassReady( )            and
              IsBluetoothModuleReady( ) and
-             IsNetworkModuleReady( ) );
+             IsNetworkModuleReady( )   and
+             IsVoiceModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
