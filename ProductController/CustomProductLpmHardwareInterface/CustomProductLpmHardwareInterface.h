@@ -39,7 +39,7 @@
 namespace ProductApp
 {
 
-class EddieProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -53,7 +53,7 @@ public:
     ///
     /// CustomProductLpmHardwareInterface Constructor
     ///
-    CustomProductLpmHardwareInterface( EddieProductController& ProductController );
+    CustomProductLpmHardwareInterface( CustomProductController& ProductController );
 
     ///
     /// CustomProductLpmHardwareInterface Deconstructor

@@ -15,7 +15,6 @@ PyTest Configuration & Fixtures for the Eddie Factory Default tests.
 import pytest
 import pexpect
 
-from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator

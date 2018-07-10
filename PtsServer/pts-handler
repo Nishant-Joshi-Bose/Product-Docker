@@ -134,7 +134,7 @@ if path.startswith("/diag/"):
 # View the log message buffer.
 
 if path == "/logread.txt":
-    only_for_usb()
+    #only_for_usb() -- iface restriction disabled for now for this URL
 
     http_ok()
     sys.stdout.flush()
@@ -144,7 +144,7 @@ if path == "/logread.txt":
 # View the log message buffer (compressed).
 
 if path == "/logread.txt.gz":
-    only_for_usb()
+    #only_for_usb() -- iface restriction disabled for now for this URL
 
     http_ok("application/x-gzip")
     sys.stdout.flush()
@@ -154,7 +154,7 @@ if path == "/logread.txt.gz":
 # View miscellaneous system status information.
 
 if path == "/pts.txt":
-    only_for_usb()
+    #only_for_usb() -- iface restriction disabled for now for this URL
 
     def call(*args):
         print ">", " ".join(args)
@@ -254,6 +254,25 @@ if path == "/controller-version":
     http_ok()
     redirect_stderr()
     subprocess.call(["ReadLpmVersion"])
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Clear the "first greeting" flag.
+
+if path == "/clear-first-greeting":
+    only_for_usb()
+
+    http_ok()
+    try:
+        os.remove("/mnt/nv/product-persistence/FirstBootGreetingDone")
+        print "Cleared first greeting."
+        subprocess.call(["sync"])
+    except OSError, e:
+        if e.strerror == "No such file or directory":
+            print "The first greeting was already cleared."
+        else:
+            print "Unable to clear first greeting:", e.strerror
+
     sys.exit()
 
 # ----------------------------------------------------------------------------

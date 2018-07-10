@@ -15,7 +15,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductKeyInputManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,10 +35,10 @@ constexpr const char* KEY_CONFIGURATION_FILE_NAME = "/var/run/KeyConfiguration.j
 ///
 /// @brief CustomProductKeyInputManager::CustomProductKeyInputManager
 ///
-/// @param EddieProductController& ProductController
+/// @param CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductKeyInputManager::CustomProductKeyInputManager( EddieProductController& ProductController )
+CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController )
 
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),

@@ -10,6 +10,34 @@
 #include "LpmClientIF.h"
 #include "ProductSTSController.h"
 
+// AuxSourceState includes(aggregates) the individual parameter states, like - Aux Cable (insert) state,
+// User Play selection
+union AuxSourceState_U
+{
+    AuxSourceState_U()
+    {
+        Reset();
+    };
+    uint32_t  key;
+    struct __State
+    {
+        bool auxInserted : 1;
+        bool userPlayStatus : 1;
+    } state;
+    void Reset()
+    {
+        key ^= key;//max value
+    }
+    bool operator != ( const AuxSourceState_U& t )
+    {
+        return ( t.key != key );
+    }
+    void operator = ( const AuxSourceState_U& t )
+    {
+        key = t.key;
+    }
+} ;
+
 class CustomProductSTSStateTopAux : public ProductSTSStateTop
 {
 public:
@@ -26,18 +54,18 @@ public:
     bool HandleStop( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
-    /// @brief Act on Stop request by translating a mute/unmute to CAPS based on internal state
+    /// @brief Act on Puase request
     /// @param Void
     /// @return true if successful
     ////////////////////////////////////////////////////////
     bool HandlePause( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
-    /// @brief Act HandleMuteStatus by generating a mute to CAPS and remembering it.
-    /// @param STS::MuteStatus
+    /// @brief Act on play request
+    /// @param Void
     /// @return true if successful
     ////////////////////////////////////////////////////////
-    bool HandleMuteStatus( const STS::MuteStatus& ms ) override;
+    bool HandlePlay( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
     /// @brief Act HandleAudioStatus only if the AUX cable is not inserted by doing SendAudioStopEvent
@@ -47,19 +75,45 @@ public:
     bool HandleAudioStatus( const STS::AudioStatus &audioStatus ) override;
 
     ////////////////////////////////////////////////////////
-    /// @brief Act HandleDeactivateRequest by generating a un-mute to CAPS and remembering it
+    /// @brief Act HandleDeactivateRequest by generating a stop to CAPS and remembering it
     /// and then executing HandleDeactivateRequest from base.
     /// @param STS::const STS::DeactivateRequest &req, uint32_t seq
     /// @return true if successful
     ////////////////////////////////////////////////////////
     bool HandleDeactivateRequest( const STS::DeactivateRequest &req, uint32_t seq ) override;
 
+    ////////////////////////////////////////////////////////
+    /// @brief Act on Activate request - send error response for wrong state
+    /// @param ActivateRequest - Proto buf of Activate message (unused)
+    /// @param seq - transaction sequence number
+    /// @return always true
+    ////////////////////////////////////////////////////////
+    bool HandleActivateRequest( const STS::Void &, uint32_t ) override;
 private:
-    void ToggleMute() const;
     void ProcessAUXCableState( );
     void HandleAUXCableDetect( LpmServiceMessages::IpcAuxState_t IpcAuxState );
     void RegisterAuxPlugStatusCallbacks();
-
-    bool m_mute         = false;
-    bool m_auxInserted = false;
+    void AuxPlay();
+    void AuxStopPlaying( bool isStop );
+    inline void SetUserPlayStatus( bool isPlay )
+    {
+        m_CurrentState.state.userPlayStatus = isPlay;
+    }
+    inline bool GetUserPlayStatus() const
+    {
+        return m_CurrentState.state.userPlayStatus;
+    }
+    inline void SetAuxInertedStatus( bool isInserted )
+    {
+        m_CurrentState.state.auxInserted = isInserted;
+    }
+    inline bool GetAuxInsertedStatus() const
+    {
+        return m_CurrentState.state.auxInserted;
+    }
+    void Init();
+    void ProcessAuxAggregateStatus();
+    AuxSourceState_U m_CurrentState;//current aggregate status
+    std::unordered_map<uint32_t, Callback<>> m_AuxStateActionMap;
+    AuxSourceState_U m_prevState;//used as cache
 };

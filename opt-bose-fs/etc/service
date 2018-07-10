@@ -140,6 +140,7 @@ if button == "apply" and (is_valid or force):
 mount -oremount,rw /persist
 mv {} {} /persist || exit
 mount -oremount,ro /persist
+LpmMfgTool || exit
 """.format(fn_json, fn_sig)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     apply_output = ph.stdout.readlines()
     if ph.wait() == 0:
@@ -184,7 +185,7 @@ print """\
 <script>
 function click_force() {
   force = document.getElementById("force");
-  apply = document.getElementById("apply");
+  apply = document.getElementById("xapply");
   apply.disabled = !force.checked;
 }
 </script>
@@ -217,7 +218,7 @@ if not applied:
 </div>
 <div class="box" id="apply">
   <input type="submit" name="b_validate" value="Validate">
-  <input type="submit" name="b_apply" id="apply" value="Apply" {}>
+  <input type="submit" name="b_apply" id="xapply" value="Apply" {}>
 </div>
 """.format("" if is_valid or force else "disabled")
 

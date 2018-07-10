@@ -19,6 +19,7 @@
 #include "ProductController.h"
 #include "Intents.h"
 #include "ProductSTS.pb.h"
+#include "SHELBY_SOURCE.h"
 
 static DPrint s_logger( "PlaybackRequestManager" );
 
@@ -58,12 +59,12 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
         if( not( ( GetProductController().GetNowPlaying().has_state() ) &&
                  ( GetProductController().GetNowPlaying().has_container() ) &&
                  ( GetProductController().GetNowPlaying().container().has_contentitem() ) &&
-                 ( GetProductController().GetNowPlaying().container().contentitem().source() == ProductSourceSlot_Name( PRODUCT ).c_str( ) ) &&
-                 ( GetProductController().GetNowPlaying().container().contentitem().sourceaccount() == ProductSourceSlot_Name( AUX ).c_str( ) )
+                 ( GetProductController().GetNowPlaying().container().contentitem().source() == SHELBY_SOURCE::PRODUCT ) &&
+                 ( GetProductController().GetNowPlaying().container().contentitem().sourceaccount() == ProductSourceSlot_Name( AUX ) )
                ) )
         {
             SoundTouchInterface::PlaybackRequest playbackRequestData;
-            playbackRequestData.set_source( ProductSourceSlot_Name( PRODUCT ) );
+            playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
             playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( AUX ) );
 
             GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( "/content/playbackRequest", playbackRequestData,

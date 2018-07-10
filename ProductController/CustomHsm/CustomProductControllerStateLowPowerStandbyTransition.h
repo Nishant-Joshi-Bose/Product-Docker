@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateLowPowerStandbyTransition.h
-/// @brief  Custom override state in Eddie for transitioning into and out of low power standby.
+/// @brief  Custom override state in the product controller for transitioning
+/// into and out of low power standby.
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
@@ -26,5 +27,20 @@ public:
     {
     }
     void HandleStateStart() override;
+
+protected:
+
+    /*! \copydoc ProductControllerStateLowPowerStandbyTransition::IsReadyForLowPowerState()
+     * Include custom handling for the LCD via DisplayController.
+     */
+    bool IsReadyForLowPowerState() const override;
+
+private:
+
+    /*! \brief Flag that the display controller is ready.
+     */
+    void SetDisplayControllerIsReady();
+
+    bool m_displayControllerIsReady;        //!< Received response from DisplayController.
 };
 } /// namespace ProductApp

@@ -1,4 +1,0 @@
-#!/bin/sh
-echo "wpe prerm"
-
-exit 0

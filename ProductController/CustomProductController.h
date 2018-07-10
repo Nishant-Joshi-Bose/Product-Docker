@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file   EddieProductController.h
-/// @brief  Eddie Product controller class.
+/// @file   CustomProductController.h
+/// @brief  Product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
@@ -38,6 +38,8 @@
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
@@ -72,7 +74,6 @@
 #include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
-#include "BoseVersion.h"
 
 namespace ProductApp
 {
@@ -80,11 +81,11 @@ namespace ProductApp
 class CustomProductAudioService;
 class CustomProductKeyInputManager;
 
-class EddieProductController : public ProductController
+class CustomProductController : public ProductController
 {
 public:
-    EddieProductController();
-    virtual ~EddieProductController();
+    CustomProductController();
+    virtual ~CustomProductController();
 
     void Initialize();
     void InitializeKeyIdToKeyNameMap() override;
@@ -95,10 +96,7 @@ public:
     {
         return {};
     }
-    std::string GetProductVersionNumber() const override
-    {
-        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
-    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
     /// @brief The following methods are used by the state machine to determine the status of the
@@ -119,8 +117,8 @@ public:
 
 private:
     /// Disable copies
-    EddieProductController( const EddieProductController& ) = delete;
-    EddieProductController& operator=( const EddieProductController& ) = delete;
+    CustomProductController( const CustomProductController& ) = delete;
+    CustomProductController& operator=( const CustomProductController& ) = delete;
 
 private:
     ///Register with LPM for events notifications
@@ -282,7 +280,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Interfaces to the ProductSTSController, which implements the interactions
-///       between the Eddie Product Controller and the STS source proxies.
+///       between the Product Controller and the STS source proxies.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
     void SetupProductSTSController( void );
@@ -292,21 +290,14 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief Turn ON/OFF LCD display
+/// @brief Returns an instance to the DisplayController.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-    void TurnDisplayOnOff( bool turnOn ) const
+    std::shared_ptr< DisplayController >& GetDisplayController( )
     {
-        m_displayController->TurnDisplayOnOff( turnOn );
+        return m_displayController;
     }
 
-    /*! \brief Enables/disables brightness cap for LCD during a standby state (not low power).
-     * \param enabled True to impose the cap and false to disable it.
-     */
-    void SetDisplayStandbyBrightnessCapEnabled( bool enabled )
-    {
-        m_displayController->SetStandbyLcdBrightnessCapEnabled( enabled );
-    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -340,6 +331,8 @@ private:
     ProductControllerStatePlayingDeselected                         m_ProductControllerStatePlayingDeselected;
     ProductControllerStatePlayingSelected                           m_ProductControllerStatePlayingSelected;
     ProductControllerStatePlayingSelectedSilent                     m_ProductControllerStatePlayingSelectedSilent;
+    ProductControllerStatePlayingSelectedSilentSourceInvalid        m_ProductControllerStatePlayingSelectedSilentSourceInvalid;
+    ProductControllerStatePlayingSelectedSilentSourceValid          m_ProductControllerStatePlayingSelectedSilentSourceValid;
     ProductControllerStatePlayingSelectedNotSilent                  m_ProductControllerStatePlayingSelectedNotSilent;
     ProductControllerStatePlayingSelectedSetup                      m_ProductControllerStatePlayingSelectedSetup;
     ProductControllerStatePlayingSelectedSetupNetwork               m_ProductControllerStatePlayingSelectedSetupNetwork;
@@ -370,7 +363,7 @@ private:
     ProductCliClient m_productCliClient;
 
     std::unique_ptr<LightBar::LightBarController>  m_lightbarController;
-    std::unique_ptr<DisplayController>             m_displayController;
+    std::shared_ptr<DisplayController>             m_displayController;
     IntentHandler                                  m_IntentHandler;
     bool                                           m_isBLEModuleReady  = false;
     bool                                           m_isUiConnected = false;
@@ -378,7 +371,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
-    ///       between the Eddie Product Controller and the STS source proxies.
+    ///       between the Product Controller and the STS source proxies.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool                                        m_isSTSReady = false;

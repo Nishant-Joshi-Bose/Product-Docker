@@ -72,8 +72,9 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/.s
 "$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
 
 InstallFileContent=$(<"$opt_dir/bin/install")
-InstallFileContent=${InstallFileContent//\/etc\//\/.swUpdateCache\/backup\/}
-InstallFileContent=${InstallFileContent//\/bin\//\/.swUpdateCache\/backup\/}
+InstallFileContent=${InstallFileContent//\/Bose\/etc\//\/Bose\/.swUpdateCache\/backup\/}
+InstallFileContent=${InstallFileContent//\/Bose\/bin\//\/Bose\/.swUpdateCache\/backup\/}
+InstallFileContent=${InstallFileContent//$/\\$}
 
 echo "Package version \"$package_version\""
 
@@ -97,6 +98,8 @@ put_script "$stage/postinst" <<EOF
 echo "SoftwareUpdate postinst"
 
 rm -rf /opt/Bose/.swUpdateCache/backup
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
 
 exit 0
 EOF
@@ -126,6 +129,9 @@ sed -i -e 's/\/update\/opkg/\/.swUpdateCache\/backup\/opkg/g' /opt/Bose/.swUpdat
 echo "$InstallFileContent" > /opt/Bose/.swUpdateCache/backup/install
 chmod 755 /opt/Bose/.swUpdateCache/backup/install
 sync
+# Set Progress start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
+
 exit 0
 EOF
 

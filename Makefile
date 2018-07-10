@@ -39,6 +39,7 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 RIVIERA_LPM_SERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
+PRODUCTCONTROLLERCOMMONPROTO = $(shell components get ProductControllerCommonProto installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -81,8 +82,8 @@ package-no-hsp: packages-gz
 
 #Create one more Zip file for Bonjour / Local update with HSP 
 #- This is temporary, till DP2 boards are not available.
-IPKS_HSP = recovery.ipk hsp.ipk product-script.ipk software-update.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = SoundTouchRecovery hsp product-script software-update wpe monaco SoundTouch lpm_updater
+IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp wpe monaco SoundTouch lpm_updater
 
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
@@ -141,7 +142,7 @@ product-script-ipk:
 
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph
-	./scripts/create-product-tar
+	./scripts/create-product-tar -i $(IPKS_HSP)
 
 .PHONY: clean
 clean:

@@ -112,7 +112,7 @@ def get_animation_db_data_cb(resp):
 
     assert resp, "No valid animation data response received."
     animation_data = resp
-    print(animation_data)
+    logger.debug("Animation Data: %s", animation_data)
     lbcs_xfer_event.set()
 
 

@@ -1,7 +1,7 @@
 @startuml
 
 
-title \n Eddie ProductController State Machine \n\n
+title \n CustomProductController State Machine \n\n
 
 'note top of TOP : This is Parent state
 

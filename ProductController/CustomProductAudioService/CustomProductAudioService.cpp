@@ -1,7 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.cpp
-/// @brief   This file contains source code for Eddie specific behavior for
-///         communicating with APProduct Server and APProduct related FrontDoor interaction
+/// @brief  This file contains source code for product specific behavior for
+///         communicating with APProduct Server and APProduct related FrontDoor
+///         interaction
+///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +11,7 @@
 #include "APProductFactory.h"
 #include "DPrint.h"
 #include "FrontDoorClient.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
@@ -28,7 +30,7 @@ namespace ProductApp
 {
 /*!
  */
-CustomProductAudioService::CustomProductAudioService( EddieProductController& productController,
+CustomProductAudioService::CustomProductAudioService( CustomProductController& productController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( productController.GetTask( ),
@@ -300,15 +302,15 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
  */
 EddieAudioSettings_t_AudioMode CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    if( modeName == "dialog" )
+    if( modeName == "DIALOG" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
-    else if( modeName == "direct" )
+    else if( modeName == "DIRECT" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIRECT;
     }
-    else if( modeName == "night" )
+    else if( modeName == "NIGHT" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_NIGHT;
     }

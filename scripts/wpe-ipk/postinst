@@ -1,9 +1,0 @@
-#!/bin/sh
-echo "wpe postinst"
-
-# Remove any left-over WPE (pre-dinghy) files.
-rm -rf /opt/Bose/webkit
-
-# Set Progress End - Success
-/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
-exit 0

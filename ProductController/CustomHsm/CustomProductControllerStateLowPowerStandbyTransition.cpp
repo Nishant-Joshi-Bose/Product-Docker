@@ -1,14 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateLowPowerStandbyTransition.cpp
-/// @brief  Custom override state in Eddie for transitioning into and out of low power standby.
+/// @brief  Custom override state in the product controller for transitioning
+/// into and out of low power standby.
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerHsm.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "DPrint.h"
+#include "AsyncCallback.h"
 
 static DPrint s_logger( "CustomProductControllerStateLowPowerStandbyTransition" );
 
@@ -18,7 +20,8 @@ CustomProductControllerStateLowPowerStandbyTransition::CustomProductControllerSt
         CHsmState* pSuperState,
         Hsm::STATE stateId,
         const std::string& name ) :
-    ProductControllerStateLowPowerStandbyTransition( hsm, pSuperState, stateId, name )
+    ProductControllerStateLowPowerStandbyTransition( hsm, pSuperState, stateId, name ),
+    m_displayControllerIsReady( false )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -27,11 +30,30 @@ void CustomProductControllerStateLowPowerStandbyTransition::HandleStateStart()
 {
     BOSE_INFO( s_logger, __func__ );
 
+    m_displayControllerIsReady = false;
+
     // Turn OFF LCD display controller.
-    BOSE_INFO( s_logger, "Turn LCD display OFF in %s.", __func__ );
-    GetCustomProductController().TurnDisplayOnOff( false );
+    AsyncCallback<void> dcReadyCb( std::bind( &CustomProductControllerStateLowPowerStandbyTransition::SetDisplayControllerIsReady, this ),
+                                   GetProductController( ).GetTask() );
+    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( false, &dcReadyCb );
 
     ProductControllerStateLowPowerStandbyTransition::HandleStateStart();
+}
+
+/*!
+ */
+bool CustomProductControllerStateLowPowerStandbyTransition::IsReadyForLowPowerState() const
+{
+    return ( ProductControllerStateLowPowerStandbyTransition::IsReadyForLowPowerState()
+             // Wait for display controller to return success of display off (asynchronous)
+             && m_displayControllerIsReady );
+}
+
+void CustomProductControllerStateLowPowerStandbyTransition::SetDisplayControllerIsReady()
+{
+    m_displayControllerIsReady = true;
+
+    PossiblyGoToNextState();
 }
 
 } /// namespace ProductApp
