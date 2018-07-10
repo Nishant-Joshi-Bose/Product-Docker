@@ -6,6 +6,7 @@ PRODUCTCONTROLLERCOMMON_DIR	:= $(shell components get ProductControllerCommon   
 RIVIERA_LPM_PROTO_DIR 		:= $(shell components get RivieraLpmService-$(sdk)      installed_location)
 SYSTEMEVENTSERVICE_DIR          := $(shell components get SystemEventService-$(sdk)     installed_location)
 AUDIOSOURCE_DIR          := $(shell components get AudioSource-$(sdk)     installed_location)
+PRODUCTCONTROLLERCOMMONPROTO_DIR := $(shell components get ProductControllerCommonProto-$(sdk) installed_location)
 
 PROTO_SOURCES = ProductMessage.proto          \
                 ProductSTS.proto              \
@@ -30,7 +31,8 @@ PROTO_IMPORT_DIRS :=    .                                         \
                         $(BOSELIBS_DIR)/include                   \
                         $(SOUNDTOUCH_SDK_DIR)/protobufs           \
                         $(SOUNDTOUCH_SDK_DIR)/prebuilt/include    \
-                        $(PRODUCTCONTROLLERCOMMON_DIR)/Protobufs  \
+                        $(PRODUCTCONTROLLERCOMMON_DIR)/Protobufs/private  \
+                        $(PRODUCTCONTROLLERCOMMONPROTO_DIR)/protobufs  \
                         $(RIVIERA_LPM_PROTO_DIR)/proto            \
                         $(SYSTEMEVENTSERVICE_DIR)/protobufs       \
                         $(AUDIOSOURCE_DIR)/proto                  \

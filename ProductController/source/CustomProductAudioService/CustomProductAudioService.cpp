@@ -24,6 +24,7 @@
 
 namespace ProductApp
 {
+constexpr uint32_t INVALID_LATENCY = -1;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
@@ -40,7 +41,8 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
     m_ThermalTask( std::unique_ptr<ThermalMonitorTask>( new ThermalMonitorTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, std::placeholders::_1 ) ) ) ),
-    m_DataCollectionClient( ProductController.GetDataCollectionClient() )
+    m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
+    m_currentMinimumLatency( INVALID_LATENCY )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -320,6 +322,30 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
     BOSE_DEBUG( s_logger, __func__ );
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
     m_APPointer -> SetMainStreamAudioSettings( mainStreamAudioSettings );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SetMinimumOutputLatency
+///
+/// @param  int32_t latency
+///
+/// @brief  Send DSP minimumOutputLatency to AudioPath
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
+{
+    BOSE_VERBOSE( s_logger, __func__ );
+    if( latency != m_currentMinimumLatency )
+    {
+        m_currentMinimumLatency = latency;
+        auto respCb = []( int32_t resp )
+        {
+            BOSE_VERBOSE( s_logger, "%s: received callback with latency(%d)", __func__, resp );
+        };
+        BOSE_INFO( s_logger, "%s: sending minimum output latency(%d) to AudioPath", __func__, m_currentMinimumLatency );
+        m_APPointer -> SetOutputLatency( m_currentMinimumLatency, respCb );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

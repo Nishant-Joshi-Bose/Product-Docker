@@ -38,6 +38,7 @@
 #include "ProductMessage.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 #include "SystemEventMessage.pb.h"
 #include "KeyManager.h"
 #include "CustomProductControllerStates.h"
@@ -138,6 +139,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOff( )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentFactoryDefault( )
     {
         return false;
@@ -208,7 +214,7 @@ public:
         return false;
     }
 
-    virtual bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state )
+    virtual bool HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlaying )
     {
         return false;
     }
@@ -419,6 +425,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleAccessoriesAreKnown( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type

@@ -1,5 +1,4 @@
 INCLUDE_DIRECTORIES(
-  ${A4VVIDEOMANAGER_DIR}/source/Client
   ${A4VQUICKSET_DIR}/source/Client
   ${CASTLECLI_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}
@@ -54,13 +53,17 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
+  source/CustomStateMachine/CustomProductControllerStateFirstBootGreetingTransition.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStateLowPowerResume.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingDeselected.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingSelected.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSetup.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
@@ -78,6 +81,7 @@ ADD_EXECUTABLE(Professor
 
 TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
+  ProductControllerCommonProto
   DataCollectionClient
   LpmClient
   HttpInterface
