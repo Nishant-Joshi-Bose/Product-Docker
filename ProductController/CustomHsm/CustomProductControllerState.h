@@ -179,6 +179,11 @@ public:
         return false;
     }
 
+    virtual bool HandleVoiceModuleReadiness( )
+    {
+        return false;
+    }
+
     virtual bool HandleBluetoothPairedList( )
     {
         return false;
