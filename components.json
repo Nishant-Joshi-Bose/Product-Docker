@@ -1,8 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@ad3c70a54c5d41d945777905fa8ff80056f514e3"
-
+    "selected_version": "master@4078f4227a6ff498a13ee7b49770ba641bbe69d3"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -30,7 +29,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/v1.0.0-0+3929310"
+    "selected_version": "Release/master/v1.0.1-0+0e4add4"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -222,7 +221,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/1.5.7-718+5280974"
+    "selected_version": "Release/master/1.5.7-711+0e0622e"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
