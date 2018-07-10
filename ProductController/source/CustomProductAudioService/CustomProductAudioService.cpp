@@ -429,11 +429,11 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    if( modeName == "normal" )
+    if( modeName == "NORMAL" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
     }
-    else if( modeName == "dialog" )
+    else if( modeName == "DIALOG" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
@@ -442,11 +442,11 @@ LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeName
 
 LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTypeNameToEnum( const std::string& contentTypeName )
 {
-    if( contentTypeName == "audio" )
+    if( contentTypeName == "AUDIO" )
     {
         return AUDIOSETTINGS_CONTENT_AUDIO;
     }
-    else if( contentTypeName == "video" )
+    else if( contentTypeName == "VIDEO" )
     {
         return AUDIOSETTINGS_CONTENT_VIDEO;
     }
@@ -455,11 +455,11 @@ LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTyp
 
 LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualMonoSelectNameToEnum( const std::string& dualMonoSelectName )
 {
-    if( dualMonoSelectName == "left" )
+    if( dualMonoSelectName == "LEFT" )
     {
         return AUDIOSETTINGS_DUAL_MONO_LEFT;
     }
-    else if( dualMonoSelectName == "video" )
+    else if( dualMonoSelectName == "RIGHT" )
     {
         return AUDIOSETTINGS_DUAL_MONO_RIGHT;
     }
