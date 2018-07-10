@@ -38,6 +38,8 @@
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
@@ -329,6 +331,8 @@ private:
     ProductControllerStatePlayingDeselected                         m_ProductControllerStatePlayingDeselected;
     ProductControllerStatePlayingSelected                           m_ProductControllerStatePlayingSelected;
     ProductControllerStatePlayingSelectedSilent                     m_ProductControllerStatePlayingSelectedSilent;
+    ProductControllerStatePlayingSelectedSilentSourceInvalid        m_ProductControllerStatePlayingSelectedSilentSourceInvalid;
+    ProductControllerStatePlayingSelectedSilentSourceValid          m_ProductControllerStatePlayingSelectedSilentSourceValid;
     ProductControllerStatePlayingSelectedNotSilent                  m_ProductControllerStatePlayingSelectedNotSilent;
     ProductControllerStatePlayingSelectedSetup                      m_ProductControllerStatePlayingSelectedSetup;
     ProductControllerStatePlayingSelectedSetupNetwork               m_ProductControllerStatePlayingSelectedSetupNetwork;

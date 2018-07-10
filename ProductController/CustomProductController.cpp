@@ -57,6 +57,8 @@ CustomProductController::CustomProductController():
     m_ProductControllerStatePlayingDeselected( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED ),
     m_ProductControllerStatePlayingSelected( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED ),
     m_ProductControllerStatePlayingSelectedSilent( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT ),
+    m_ProductControllerStatePlayingSelectedSilentSourceInvalid( GetHsm(), &m_ProductControllerStatePlayingSelectedSilent, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID ),
+    m_ProductControllerStatePlayingSelectedSilentSourceValid( GetHsm(), &m_ProductControllerStatePlayingSelectedSilent, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_VALID ),
     m_ProductControllerStatePlayingSelectedNotSilent( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT ),
     m_ProductControllerStatePlayingSelectedSetup( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP ),
     m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK ),
@@ -92,47 +94,178 @@ CustomProductController::~CustomProductController()
 void CustomProductController::InitializeHsm()
 {
     /// Add States to HSM object and initialize HSM before doing anything else.
-    GetHsm().AddState( "", &m_ProductControllerStateTop );
-    GetHsm().AddState( "", &m_ProductControllerStateLowPowerResume );
-    GetHsm().AddState( "", &m_CustomProductControllerStateLowPowerStandby );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_CustomProductControllerStateSwInstall );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_ProductControllerStateBooting );
-    GetHsm().AddState( "", &m_ProductControllerStateBooted );
-    GetHsm().AddState( "", &m_CustomProductControllerStateOn );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), &m_ProductControllerStateCriticalError );
-    GetHsm().AddState( "", &m_ProductControllerStatePlaying );
-    GetHsm().AddState( "", &m_ProductControllerStatePlayable );
-    GetHsm().AddState( "", &m_CustomProductControllerStateLowPowerStandbyTransition );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateIdle );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_CustomProductControllerStateNetworkStandby );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceConfigured );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceNotConfigured );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkConfigured );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkNotConfigured );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), &m_ProductControllerStateFactoryDefault );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), &m_ProductControllerStatePlayingDeselected );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelected );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSilent );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedNotSilent );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetup );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupNetwork );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupNetworkTransition );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupOther );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupExiting );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupExitingAP );
-    GetHsm().AddState( "", &m_ProductControllerStatePlayingSelectedStoppingStreams );
-    GetHsm().AddState( "", &m_ProductControllerStatePlayableTransition );
-    GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionInternal );
-    GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionIdle );
-    GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionNetworkStandby );
-    GetHsm().AddState( "", &m_ProductControllerStateSoftwareUpdateTransition );
-    GetHsm().AddState( "", &m_ProductControllerStatePlayingTransition );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), &m_ProductControllerStateFirstBootGreeting );
-    GetHsm().AddState( "", &m_ProductControllerStateFirstBootGreetingTransition );
-    GetHsm().AddState( "", &m_ProductControllerStatePlayingTransitionSwitch );
-    GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicated );
-    GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault );
-    GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
+    using namespace SystemPowerPb;
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateTop );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateLowPowerResume );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_OFF,
+                       &m_CustomProductControllerStateLowPowerStandby );
+
+    GetHsm().AddState( NotifiedNames::UPDATING,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_CustomProductControllerStateSwInstall );
+
+    GetHsm().AddState( NotifiedNames::BOOTING,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateBooting );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateBooted );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_CustomProductControllerStateOn );
+
+    GetHsm().AddState( NotifiedNames::CRITICAL_ERROR,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStateCriticalError );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlaying );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStatePlayable );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_CustomProductControllerStateLowPowerStandbyTransition );
+
+    GetHsm().AddState( NotifiedNames::IDLE ,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStateIdle );
+
+    GetHsm().AddState( NotifiedNames::NETWORK_STANDBY,
+                       SystemPowerControl_State_OFF,
+                       &m_CustomProductControllerStateNetworkStandby );
+
+    GetHsm().AddState( NotifiedNames::IDLE,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStateVoiceConfigured );
+
+    GetHsm().AddState( NotifiedNames::IDLE,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStateVoiceNotConfigured );
+
+    GetHsm().AddState( NotifiedNames::NETWORK_STANDBY,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStateNetworkConfigured );
+
+    GetHsm().AddState( NotifiedNames::NETWORK_STANDBY,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStateNetworkNotConfigured );
+
+    GetHsm().AddState( NotifiedNames::FACTORY_DEFAULT,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateFactoryDefault );
+
+    GetHsm().AddState( NotifiedNames::PLAYING_SOURCE_OFF,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStatePlayingDeselected );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayingSelected );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayingSelectedSilent );
+
+    GetHsm().AddState( NotifiedNames::PLAYING_SOURCE_OFF,
+                       SystemPowerControl_State_OFF,
+                       &m_ProductControllerStatePlayingSelectedSilentSourceInvalid );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedSilentSourceValid );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedNotSilent );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedSetup );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedSetupNetwork );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayingSelectedSetupNetworkTransition );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedSetupOther );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayingSelectedSetupExiting );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayingSelectedSetupExitingAP );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayingSelectedStoppingStreams );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayableTransition );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayableTransitionInternal );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayableTransitionIdle );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayableTransitionNetworkStandby );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateSoftwareUpdateTransition );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayingTransition );
+
+    GetHsm().AddState( NotifiedNames::FIRST_BOOT_GREETING,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateFirstBootGreeting );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateFirstBootGreetingTransition );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStatePlayingTransitionSwitch );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateStoppingStreamsDedicated );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
 
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 }

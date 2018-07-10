@@ -9,15 +9,15 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/0.1.4-130+0c4f8e2"
+    "selected_version": "Release/master/1.5.0-136+edf72c5"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-03_1156"
+    "selected_version": "Continuous/Castle-Fork/2018-07-06_1521"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.5.0-82+e4b9243"
+    "selected_version": "Release/master/1.5.1-115+9f4ad46"
   },
   {
     "name": "bose-opkg-utils",
@@ -33,7 +33,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/1.5.2-481+51f5a61"
+    "selected_version": "Release/master/1.5.3-487+1708b99"
   },
   {
     "name": "BoseOPKG-native",
@@ -57,11 +57,15 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/1.6.0-82+80ad03e"
+    "selected_version": "Release/master/1.6.2-91+2b83404"
   },
   {
     "name": "BTSTSSink-qc8017_32",
     "selected_version": "Release/master/1.5.0-43+3b6c006"
+  },
+  {
+    "name": "CastleLibs-native",
+    "selected_version": "branches/castle-libs@2684"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -125,7 +129,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.3-158+6b9b88e"
+    "selected_version": "Release/master/1.5.4-161+3b4c6bb"
   },
   {
     "name": "LpmMfgTool",
@@ -153,11 +157,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "VFE-Notification@14941c13e81845216622258202e0f7111b635888"
+    "selected_version": "master@c5f2fe03935fd1bbd7727fa064b7f874db37debc"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-2+3b2e622"
+    "selected_version": "Release/master/1.0.0-7+a69452e"
   },
   {
     "name": "ProductUIAssets",
@@ -181,7 +185,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.5.0-196+cab6049"
+    "selected_version": "Release/master/1.5.1-199+2ee913c"
   },
   {
     "name": "RivieraLpmTools",
@@ -193,7 +197,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.5.3-445+c63927f"
+    "selected_version": "Release/master/1.5.4-475+524cfd0"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -201,11 +205,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.6-696+4297f3f"
+    "selected_version": "Release/master/1.5.7-711+0e0622e"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-03_1156"
+    "selected_version": "Continuous/Castle-Fork/2018-07-06_1521"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -217,7 +221,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@83300a435da04eb935fd8d1381c465f27a1c0117"
+    "selected_version": "master@5574d60a95a42cb08dff1ef31b696ed8e104696c"
   },
   {
     "name": "Webkit",
