@@ -173,11 +173,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "PGC-1743-injectKey@115295049ac943b2cc43eeb9e0f3db23007b46d2"
+    "selected_version": "master@fae6612e2fdae4c9cba83776b6819360d7e9e9d1"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/PGC-1743-injectKey/1.0.0-32+0439a0e"
+    "selected_version": "Continuous/master/1.0.0-34+fae6612"
   },
   {
     "name": "ProductUIAssets",
