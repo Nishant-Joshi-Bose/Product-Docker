@@ -105,6 +105,7 @@ message ProductMessage
         optional LpmServiceMessages.IpcKeyInformation_t     keyevent                    = 23;
         optional bool                                       softwareupdatestatus        = 24;
         optional bool                                       accessoriesareknown         = 25;
+        optional bool                                       softwareinstall             = 26;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
