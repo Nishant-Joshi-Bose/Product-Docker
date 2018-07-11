@@ -17,7 +17,7 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-119+7cd34b3"
+    "selected_version": "Continuous/master/1.5.1-121+ad4aa53"
   },
   {
     "name": "bose-opkg-utils",
@@ -61,7 +61,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-45+eab6c3e"
+    "selected_version": "Continuous/master/1.5.0-47+43a547d"
   },
   {
     "name": "CastleLibs-native",
@@ -149,7 +149,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/1.5.0-900+105b35d"
+    "selected_version": "Continuous/master/1.5.0-902+fb0202d"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-34+fae6612"
+    "selected_version": "Continuous/master/1.0.0-35+52b8472"
   },
   {
     "name": "ProductUIAssets",
