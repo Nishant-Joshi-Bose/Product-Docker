@@ -1920,58 +1920,59 @@ void ProfessorProductController::HandlePutPowerMacro(
     error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
     error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_POWER_MACRO );
 
-    bool success = false;
+    bool success = true;
 
-    if( not req.has_powerondevice() )
+    if( req.powerontv() )
     {
-        error.set_message( "No power on device provided!" );
+        const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( not( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) )
+        {
+            error.set_message( "TV is not configured but power on tv requested!" );
+            success = false;
+        }
+    }
+    if( success and req.has_powerondevice() )
+    {
+        const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
+
+        if( not( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() ) )
+        {
+            error.set_message( "Requested source is not configured!" );
+            success = false;
+        }
     }
     else
     {
-        const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-
-        if( ( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) || not req.powerontv() )
-        {
-            const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
-
-            if( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() )
-            {
-                m_powerMacro.CopyFrom( req );
-                auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
-                try
-                {
-                    persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
-                    success = true;
-                }
-                catch( const ProtoToMarkup::MarkupError & e )
-                {
-                    BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
-                    error.set_message( e.what( ) );
-                }
-                catch( ProtoPersistenceIF::ProtoPersistenceException & e )
-                {
-                    BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
-                    error.set_message( e.what( ) );
-                }
-            }
-            else
-            {
-                error.set_message( "Requested source is not configured!" );
-            }
-        }
-        else
-        {
-            error.set_message( "TV is not configured but power on tv requested!" );
-        }
+        error.set_message( "No power on device provided!" );
+        success = false;
     }
 
     if( success )
     {
-        respCb( req );
+        m_powerMacro.CopyFrom( req );
+        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+        try
+        {
+            persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
+            respCb( req );
+        }
+        catch( const ProtoToMarkup::MarkupError & e )
+        {
+            BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
+            error.set_message( e.what( ) );
+            success = false;
+        }
+        catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+        {
+            BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
+            error.set_message( e.what( ) );
+            success = false;
+        }
     }
-    else
+
+    if( not success )
     {
-        errorCb.Send( error );
+        errorCb( error );
     }
 }
 
