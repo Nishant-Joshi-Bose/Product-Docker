@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@4078f4227a6ff498a13ee7b49770ba641bbe69d3"
+    "selected_version": "master@72a3816fac04fd20f7cb12ea883f76bde04a9adf"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@567a0fb2769e9c2b5aff0f57ff507f40fd633f98"
+    "selected_version": "master@4122010f99242c06ccaee77021a9ceef83b48464"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.15.42973.2897844"
+    "selected_version": "Release/Castle-Fork/1.5.16.43003.2903862"
   },
   {
     "name": "BLERemoteXCVR",
@@ -97,7 +97,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/1.0.1-99+b471e4f"
+    "selected_version": "Release/master/1.0.1-104+d65a101"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/1.5.2-400+b0e36f6"
+    "selected_version": "Release/master/1.5.3-418+d866963"
   },
   {
     "name": "FrontDoorService-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.4-161+3b4c6bb"
+    "selected_version": "Release/master/1.5.4-167+a7714d0"
   },
   {
     "name": "LpmMfgTool",
@@ -149,11 +149,15 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-384+d6cf54a"
+    "selected_version": "Release/master/1.5.5-434+d378706"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
     "selected_version": "Release/bose-master/1.8.3-14-g144ef57"
+  },
+  {
+    "name": "opensource-libwebsockets-qc8017_32",
+    "selected_version": "Release/bose-v2.4-stable/2.4.1-34+ge17bf91"
   },
   {
     "name": "opensource-zlib-qc8017_32",
@@ -169,7 +173,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "PGC-1743-injectKey@33f49cc1ff4d75d2ad6486cf2b73848ddaa58721"
+    "selected_version": "PGC-1743-injectKey@47258278aefbfd87f6e23b432129f9b45830909e"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -201,7 +205,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.5.1-199+2ee913c"
+    "selected_version": "Release/master/1.5.2-204+6dae9b7"
   },
   {
     "name": "RivieraLpmTools",
@@ -213,7 +217,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.5.4-475+524cfd0"
+    "selected_version": "Release/master/1.5.4-487+d1c1e20"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -225,11 +229,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.15.42973.2897844"
+    "selected_version": "Release/Castle-Fork/1.5.16.43003.2903862"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.5.2-66+fb291e4"
+    "selected_version": "Release/master/0.5.2-71+58057d5"
   },
   {
     "name": "Telemetry-qc8017_32",
