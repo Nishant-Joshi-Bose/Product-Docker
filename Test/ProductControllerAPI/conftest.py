@@ -36,7 +36,8 @@ def front_door_queue(request, ip_address_wlan):
     LOGGER.info("frontDoorQueue")
     if ip_address_wlan is None:
         pytest.fail("No valid device IP")
-    _frontdoor = FrontDoorQueue(ip_address_wlan)
+    galapagos_env = request.config.getoption("--galapagos-env")
+    _frontdoor = FrontDoorQueue(ip_address_wlan, env=galapagos_env)
 
     if _frontdoor is None:
         pytest.fail("Not able to create socket connection to front_door_queue")
@@ -91,24 +92,17 @@ def device_playing_from_amazon(request, front_door_queue):
     get_config = RESOURCES[current_resource]
 
     message_creator = MessageCreator(service_name)
-    common_behavior_handler = CommonBehaviorHandler(front_door_queue, message_creator, service_name, get_config['name'])
+    common_behavior_handler = CommonBehaviorHandler(front_door_queue, message_creator,
+                                                    service_name, get_config['name'],
+                                                    logger=LOGGER)
 
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')
     apikey = request.config.getoption('--api-key')
     LOGGER.info("Bose Person ID : %s ", front_door_queue._bosepersonID)
-    passport_user = PassportAPIUsers(front_door_queue._bosepersonID, apikey, front_door_queue._access_token,
-                                     passport_base_url, logger=LOGGER)
-
-    def delete_passport_user():
-        """
-        This function will delete passport user.
-        """
-        LOGGER.info("delete_passport_user")
-        assert passport_user.delete_users(), "Fail to delete person id: {}".format(passport_user.bosePersonID)
-        common_behavior_handler.performCloudSync()
-
-    request.addfinalizer(delete_passport_user)
+    passport_user = PassportAPIUsers(front_door_queue._bosepersonID, apikey,
+                                     front_door_queue._access_token, passport_base_url,
+                                     logger=LOGGER)
 
     LOGGER.info("music_service_account")
     account_id = passport_user.add_service_account(service=get_config['provider'], accountID=get_config['name'],
@@ -133,10 +127,14 @@ def device_playing_from_amazon(request, front_door_queue):
     common_behavior_handler.checkSourceStatus(service_name, get_config['name'])
 
     LOGGER.debug("-- Start to play " + str(content['container_name']))
-    playback_msg = message_creator.playback_msg(get_config['name'], content['container_location'],
+    playback_msg = message_creator.playback_msg(account_id, content['container_location'],
                                                 content['container_name'], content['track_location'])
-    now_playing = common_behavior_handler.playContentItemAndVerifyPlayStatus(playback_msg)
-    LOGGER.debug("Now Playing : " + str(now_playing))
+
+    # Play music from amazon
+    play_response = front_door_queue.sendPlaybackRequest(playback_msg)
+    LOGGER.debug("Now Playing : " + str(play_response))
+    common_behavior_handler.verify_device_playback_response(play_response)
+    common_behavior_handler.check_play_status(play_status='PLAY')
 
     # Verify device state which should be "SELECTED".
     state = front_door_queue.getState()

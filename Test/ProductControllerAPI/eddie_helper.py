@@ -14,6 +14,7 @@ Utility functions for testing frontdoor APIs provided by Eddie Product.
 """
 import time
 import os
+import json
 
 import pytest
 
@@ -25,6 +26,7 @@ from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 # Subcode
 SUBCODE_INVALID_KEY = 2005
 SUBCODE_INVALID_ARGS = 0
+SUBCODE_INVALID_PARAMETER = 1
 
 # Status code
 STATUS_OK = 200
@@ -247,6 +249,7 @@ def get_frontdoor_instance(request, wifi_config):
     :return: frontdoor instance
     """
     # get ip address and open frontdoor instance
+    galapagos_env = request.config.getoption("--galapagos-env")
     interface = request.config.getoption("--network-iface")
     router = request.config.getoption("--router")
     ssid = wifi_config.get(router, 'ssid')
@@ -257,5 +260,197 @@ def get_frontdoor_instance(request, wifi_config):
         device_id, interface, ssid, security, password)
     riviera_utils = RivieraUtils('ADB', device=device_id)
     assert riviera_utils.wait_for_galapagos_activation(timeout=120)
-    frontdoor = FrontDoorQueue(ip_address)
+    frontdoor = FrontDoorQueue(ip_address, env=galapagos_env)
     return frontdoor
+
+
+def verify_audio_get_api(frontdoor, audio_api):
+    """
+    This method verifies the get method for audio treble or audio bass api
+
+    :param frontdoor: Instance of frontdoor API
+    :param audio_api: /audio/bass or /audio/treble api for get request
+    :return response: response from get /audio/bass or /audio/treble api
+    """
+    LOGGER.info("Test of get method for %s api", audio_api)
+
+    if audio_api == AUDIO_BASS_API:
+        # execute get method for audio bass api
+        response = frontdoor.getBassLevel()
+    else:
+        # execute get method for audio treble api
+        response = frontdoor.getTreble()
+
+    check_error_and_response_header(response, audio_api, METHOD_GET, STATUS_OK)
+
+    # verify response of audio get api
+    assert response["body"]["persistence"],\
+        "persistence parameter not in response of get api {}".format(response["body"])
+
+    assert response["body"]["properties"],\
+        "properties parameter not in response of get api {}".format(response["body"])
+
+    assert response["body"]["properties"]["max"],\
+        "properties max parameter not in response of get api {}".format(response["body"])
+
+    assert response["body"]["properties"]["min"],\
+        "properties min parameter not in response of get api {}".format(response["body"])
+
+    assert response["body"]["properties"]["step"],\
+        "properties step parameter not in response of get api {}".format(response["body"])
+
+    assert response["body"]["properties"]["supportedPersistence"],\
+        "properties persistence values not in response of get api {}".format(response["body"])
+
+    assert response["body"]["value"] is not None,\
+        "properties audio value not in response of get api {}".format(response["body"])
+
+    return response
+
+
+def verify_audio_put_api(frontdoor, audio_api, audio_info):
+    """
+    This method verifies the put method for audio treble or audio bass api
+
+    :param frontdoor: Instance of frontdoor API
+    :param audio_api: /audio/bass or /audio/treble api for put request
+    :param audio_info: response from get /audio/bass or /audio/treble api
+    :return: None
+    """
+    LOGGER.info("Test of put method for %s api", audio_api)
+
+    # capture data for put api verification
+    persistence_params = audio_info["properties"]["supportedPersistence"]
+    max_value = int(audio_info["properties"]["max"]) + 1
+    min_value = int(audio_info["properties"]["min"])
+    step = int(audio_info["properties"]["step"])
+
+    # Verify put audio api for all persistence, max, min value and step
+    for item, value in [(item, value) for item in persistence_params for value in range(min_value,
+                                                                                        max_value,
+                                                                                        step)]:
+        LOGGER.info("Testing of set value for persistence : {} and value : {}".format(item, value))
+        audio_data = dict()
+        audio_data["persistence"] = item
+        audio_data["value"] = value
+        data = json.dumps(audio_data)
+
+        # Execute put request
+        if audio_api == AUDIO_BASS_API:
+            # Execute put method for audio bass api
+            response = frontdoor.setBassLevel(data)
+        else:
+            # Execute put method for audio treble api
+            response = frontdoor.setTreble(data)
+
+        check_error_and_response_header(response, audio_api, METHOD_PUT, STATUS_OK)
+
+        # Verify persistence and value is changed
+        assert response["body"]["persistence"] == audio_data["persistence"],\
+            "persistence value not set in put api {}".format(response["body"]["persistence"])
+        assert response["body"]["value"] == audio_data["value"],\
+            "audio value not set in put api {}".format(response["body"]["value"])
+        time.sleep(1)
+
+        # Verify notify response for persistence and value
+        notif_resp = get_last_notification(frontdoor, audio_api)
+        assert notif_resp["persistence"] == audio_data["persistence"],\
+            "persistence value not set in notification api {}".format(notif_resp["persistence"])
+        assert notif_resp["value"] == audio_data["value"],\
+            "audio value not set in notification api {}".format(notif_resp["persistence"])
+
+
+def set_initial_audio_values(initial_audio_data, frontdoor, audio_api):
+    """
+    This method sets the initial values back from response of audio api
+
+    :param initial_audio_data: response from get audio api
+    :param frontdoor: Instance of frontdoor API
+    :param audio_api: /audio/bass or /audio/treble api
+    :return: None
+    """
+    # Execute put request for audio api to set data
+    data = json.dumps(initial_audio_data)
+
+    if audio_api == AUDIO_BASS_API:
+        # Execute put method for audio bass api
+        response = frontdoor.setBassLevel(data)
+    else:
+        # Execute put method for audio treble api
+        response = frontdoor.setTreble(data)
+
+    check_error_and_response_header(response, audio_api, METHOD_PUT, STATUS_OK)
+
+    # Verify value and persistence are set in response
+    assert response["body"]["persistence"] == initial_audio_data["persistence"],\
+        "initial persistence not set {}".format(response["body"]["persistence"])
+    assert response["body"]["value"] == initial_audio_data["value"],\
+        "initial audio value not set {}".format(response["body"]["value"])
+
+
+def verify_audio_invalid_args(frontdoor, audio_info, audio_api):
+    """
+    This method verifies the put method for audio api
+
+    :param frontdoor: Instance of frontdoor API
+    :param audio_api: /audio/bass or /audio/treble api for put request
+    :param audio_info: response from get /audio/bass or /audio/treble api
+    :return: None
+    """
+    LOGGER.info("Test of put method for %s api for invalid arguments", audio_api)
+
+    # Capture current persistence
+    persistence_params = audio_info["properties"]["supportedPersistence"]
+
+    # Set error values after max and min value for error verification
+    max_value = int(audio_info["properties"]["max"]) + 1
+    min_value = int(audio_info["properties"]["min"]) - 1
+
+    # Verify that value does not exceed after max and min value of treble
+    for item, value in [(item, value) for item in persistence_params for value in (min_value,
+                                                                                   max_value)]:
+        LOGGER.info("Testing of set treble value for persistence : {} and value : {}".format(
+            item, value))
+        data_invalid_value = dict()
+        data_invalid_value["persistence"] = item
+        data_invalid_value["value"] = value
+        data = json.dumps(data_invalid_value)
+        # Execute put request
+        if audio_api == AUDIO_BASS_API:
+            response = frontdoor.setBassLevel(data)
+        else:
+            response = frontdoor.setTreble(data)
+        check_error_and_response_header(response, audio_api, METHOD_PUT, STATUS_ERROR,
+                                        is_error=True)
+
+        # Verify error code
+        assert response["error"]["subcode"] == SUBCODE_INVALID_PARAMETER,\
+            'Subcode should be {} for invalid parameter. Subcode got : {}'.format(
+                SUBCODE_INVALID_PARAMETER, response["error"]["subcode"])
+
+
+def verify_audio_keyerror(frontdoor, data_keyerror, audio_api):
+    """
+    This method verifies the keyerror for put method of audio api
+
+    :param frontdoor: Instance of frontdoor API
+    :param data_keyerror: keyerror value of audio bass or audio treble api
+    :param audio_api: /audio/bass or /audio/treble api for put request
+    :return: None
+    """
+    LOGGER.info("Test of put method for %s api for invalid keys", audio_api)
+
+    # Set keyerror values
+    data = json.dumps(data_keyerror)
+    if audio_api == AUDIO_BASS_API:
+        response = frontdoor.setBassLevel(data)
+    else:
+        response = frontdoor.setTreble(data)
+    check_error_and_response_header(response, audio_api,
+                                    METHOD_PUT,
+                                    STATUS_ERROR, is_error=True)
+
+    # Verify error code
+    assert response["error"]["subcode"] == SUBCODE_INVALID_KEY,\
+        'Subcode should be {} for invalid key. Subcode got : {}'.format(
+            SUBCODE_INVALID_KEY, response["error"]["subcode"])

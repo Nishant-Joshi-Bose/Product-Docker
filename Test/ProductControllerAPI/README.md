@@ -50,6 +50,7 @@ Many test suites can be found in the `ProductControllerAPI` test module:
 - `test_system_power_timeouts.py`
 - `test_system_reset.py`
 - `test_system_update_start.py`
+- `test_audio_treble.py`
 
 `test_system_info.py` contains tests related to system info API and ensuring API works from different device states. 
 The following self descriptive test names can be found in the suite:
@@ -100,3 +101,11 @@ The following self descriptive test names can be found in the suite:
 - `test_system_update_start_playing_from_aux`
 - `test_system_update_start_from_idle_state`
 - `test_system_update_start_errors`
+
+`test_audio_treble.py` contains tests related to audio treble API and ensuring API works from different device states. 
+The following self descriptive test names can be found in the suite:
+- `test_audio_treble_state`
+- `test_audio_treble_source`
+- `test_audio_treble_playing_amazon`
+- `test_audio_treble_invalid_value`
+- `test_audio_treble_keyerror`
