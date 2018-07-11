@@ -173,11 +173,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@fae6612e2fdae4c9cba83776b6819360d7e9e9d1"
+    "selected_version": "master@3ef8c36e3f5b736bd1d03d44e7aa541c42076a29"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-34+fae6612"
+    "selected_version": "Continuous/master/1.0.0-37+3ef8c36"
   },
   {
     "name": "ProductUIAssets",
