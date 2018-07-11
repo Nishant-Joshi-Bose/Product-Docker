@@ -105,17 +105,21 @@ TARGET_LINK_LIBRARIES(Professor
   STSProtoBufs
   SoundTouch_SDK_Protobuf_static
   SystemEventService
+  A4VRemoteCommClient
+  A4VVideoManagerClient
+  A4VQuickSetServiceClient
   BoseLibs
   jsoncpp
   protobuf
-  TinyXml
+  libwebsockets.a
+  libssl.a
+  libcrypto.a
+  libTinyXml.a
+  libz.a
   pthread
   rt
   cap
   dl
-  A4VRemoteCommClient
-  A4VVideoManagerClient
-  A4VQuickSetServiceClient
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})
