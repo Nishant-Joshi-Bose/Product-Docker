@@ -45,13 +45,15 @@ constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConf
 /// @param ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductKeyInputManager::CustomProductKeyInputManager( ProfessorProductController& ProductController )
+CustomProductKeyInputManager::CustomProductKeyInputManager( ProfessorProductController& ProductController,
+                                                            const FrontDoorClientIF_t& frontDoorClient )
 
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),
                               ProductController.GetLpmHardwareInterface( ),
                               ProductController.GetCommandLineInterface( ),
-                              KEY_CONFIGURATION_FILE_NAME ),
+                              KEY_CONFIGURATION_FILE_NAME,
+                              frontDoorClient ),
 
       m_ProductController( ProductController ),
       m_TimeOfChordRelease( 0 ),
