@@ -54,6 +54,8 @@ public:
 
     void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro );
 
+    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController );
+
 
     ///
     /// CustomProductKeyInputManager Deconstructor

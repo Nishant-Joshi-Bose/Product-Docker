@@ -411,6 +411,12 @@ public:
         return false;
     }
 
+    virtual bool HandleSoftwareUpdateInstall( )
+    {
+        return false;
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This handler is used to respond to the LPM detecting an amp fault.

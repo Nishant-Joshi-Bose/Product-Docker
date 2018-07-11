@@ -50,6 +50,8 @@
 #include "SystemPowerProduct.pb.h"
 #include "DisplayController.pb.h"
 #include "SystemPowerMacro.pb.h"
+#include "ProductFrontDoorKeyInjectIF.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -286,6 +288,7 @@ private:
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
+    std::shared_ptr< ProductFrontDoorKeyInjectIF       > m_ProductFrontDoorKeyInjectIF;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
     std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
