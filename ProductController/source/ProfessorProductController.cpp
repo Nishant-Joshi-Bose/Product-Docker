@@ -1689,6 +1689,15 @@ void ProfessorProductController::SendInitialCapsData()
 
     using namespace SoundTouchInterface;
 
+    auto sourcesRespCb = []( Sources sources )
+    {
+        BOSE_INFO( s_logger, "/system/sources response %d sources", sources.sources_size( ) );
+        for( int i = 0; i < sources.sources_size( ); ++i )
+        {
+            BOSE_INFO( s_logger, "/system/sources response source %d: %s\n", i, sources.sources( i ).DebugString( ).c_str( ) );
+        }
+    };
+
     std::string DefaultCAPSValuesStateFile{ g_PersistenceRootDir };
     DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
     DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
@@ -1723,103 +1732,33 @@ void ProfessorProductController::SendInitialCapsData()
             { },
             m_errorCb );
         BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
-
-        auto sourcesRespCb = []( Sources sources )
-        {
-            BOSE_INFO( s_logger, "/system/sources response %d sources", sources.sources_size( ) );
-            for( int i = 0; i < sources.sources_size( ); ++i )
-            {
-                BOSE_INFO( s_logger, "/system/sources response source %d: %s\n", i, sources.sources( i ).DebugString( ).c_str( ) );
-            }
-        };
-        // @TODO CASTLE-10740 need to use a separate PUT for the properties and for the sources
-        {
-            // Populate /system/sources::properties
-            Sources message;
-            auto messageProperties = message.mutable_properties();
-
-            for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
-                 activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
-                 ++activationKey )
-            {
-                messageProperties->add_supportedactivationkeys(
-                    SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
-            }
-            messageProperties->set_activationkeyrequired( true );
-
-            for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
-            {
-                messageProperties->add_supporteddevicetypes(
-                    SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
-            }
-            messageProperties->set_devicetyperequired( true );
-
-            messageProperties->add_supportedinputroutes(
-                SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
-
-            messageProperties->set_inputrouterequired( false );
-
-            GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
-                FRONTDOOR_SYSTEM_SOURCES_API,
-                message,
-                sourcesRespCb,
-                m_errorCb );
-            BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
-        }
+    }// @TODO CASTLE-17903 need to send the sources to CAPS at every boot, the persistence is broken
+    // @TODO CASTLE-10740 need to use a separate PUT for the properties and for the sources
+    {
+        // Populate /system/sources::properties
         Sources message;
+        auto messageProperties = message.mutable_properties();
 
-        // Populate status and visibility of PRODUCT sources.
-        using namespace ProductSTS;
+        for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
+             activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
+             ++activationKey )
+        {
+            messageProperties->add_supportedactivationkeys(
+                SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
+        }
+        messageProperties->set_activationkeyrequired( true );
 
-        Sources_SourceItem* source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-        source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
-        source->set_accountid( ProductSourceSlot_Name( TV ) );
-        source->set_status( SourceStatus::AVAILABLE );
-        source->set_visible( true );
+        for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
+        {
+            messageProperties->add_supporteddevicetypes(
+                SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
+        }
+        messageProperties->set_devicetyperequired( true );
 
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
-        source->set_accountid( ProductSourceSlot_Name( SLOT_0 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
-        source->set_visible( false );
+        messageProperties->add_supportedinputroutes(
+            SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
 
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
-        source->set_accountid( ProductSourceSlot_Name( SLOT_1 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
-        source->set_visible( false );
-
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
-        source->set_accountid( ProductSourceSlot_Name( SLOT_2 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
-        source->set_visible( false );
-
-        // Set the (in)visibility of SETUP sources.
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::SETUP );
-        source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
-        source->set_accountid( SetupSourceSlot_Name( SETUP ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
-        source->set_visible( false );
-
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::SETUP );
-        source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
-        source->set_accountid( SetupSourceSlot_Name( ADAPTIQ ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
-        source->set_visible( false );
-
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::SETUP );
-        source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
-        source->set_accountid( SetupSourceSlot_Name( PAIRING ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
-        source->set_visible( false );
+        messageProperties->set_inputrouterequired( false );
 
         GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
@@ -1828,6 +1767,67 @@ void ProfessorProductController::SendInitialCapsData()
             m_errorCb );
         BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
     }
+    Sources message;
+
+    // Populate status and visibility of PRODUCT sources.
+    using namespace ProductSTS;
+
+    Sources_SourceItem* source = message.add_sources( );
+    source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+    source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
+    source->set_accountid( ProductSourceSlot_Name( TV ) );
+    source->set_status( SourceStatus::AVAILABLE );
+    source->set_visible( true );
+
+    source = message.add_sources( );
+    source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+    source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
+    source->set_accountid( ProductSourceSlot_Name( SLOT_0 ) );
+    source->set_status( SourceStatus::NOT_CONFIGURED );
+    source->set_visible( false );
+
+    source = message.add_sources( );
+    source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+    source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
+    source->set_accountid( ProductSourceSlot_Name( SLOT_1 ) );
+    source->set_status( SourceStatus::NOT_CONFIGURED );
+    source->set_visible( false );
+
+    source = message.add_sources( );
+    source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+    source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
+    source->set_accountid( ProductSourceSlot_Name( SLOT_2 ) );
+    source->set_status( SourceStatus::NOT_CONFIGURED );
+    source->set_visible( false );
+
+    // Set the (in)visibility of SETUP sources.
+    source = message.add_sources( );
+    source->set_sourcename( SHELBY_SOURCE::SETUP );
+    source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
+    source->set_accountid( SetupSourceSlot_Name( SETUP ) );
+    source->set_status( SourceStatus::UNAVAILABLE );
+    source->set_visible( false );
+
+    source = message.add_sources( );
+    source->set_sourcename( SHELBY_SOURCE::SETUP );
+    source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
+    source->set_accountid( SetupSourceSlot_Name( ADAPTIQ ) );
+    source->set_status( SourceStatus::UNAVAILABLE );
+    source->set_visible( false );
+
+    source = message.add_sources( );
+    source->set_sourcename( SHELBY_SOURCE::SETUP );
+    source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
+    source->set_accountid( SetupSourceSlot_Name( PAIRING ) );
+    source->set_status( SourceStatus::UNAVAILABLE );
+    source->set_visible( false );
+
+    GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+        FRONTDOOR_SYSTEM_SOURCES_API,
+        message,
+        sourcesRespCb,
+        m_errorCb );
+    BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
