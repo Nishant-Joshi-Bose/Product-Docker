@@ -47,9 +47,7 @@ public:
     ///
     /// CustomProductKeyInputManager Constructor
     ///
-    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController,
-                                           const FrontDoorClientIF_t& frontDoorClient );
-
+    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController );
 
     ///
     /// CustomProductKeyInputManager Deconstructor
