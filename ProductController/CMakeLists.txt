@@ -45,6 +45,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
+  ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
   source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
