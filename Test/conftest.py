@@ -499,7 +499,7 @@ def ip_address_wlan(request, device_id, wifi_config):
         clear_profiles = ' '.join(['network', 'wifi', 'profiles', 'clear'])
         LOGGER.info("Clearing Network Profiles: %s", clear_profiles)
         adb_utils.adb_telnet_cmd(clear_profiles, expect_after='Profiles Deleted',
-                                 device_id=device_id)
+                                 device_id=device_id, timeout=120)
 
         # Acquire the Router information
         router = request.config.getoption("--router")
@@ -514,7 +514,7 @@ def ip_address_wlan(request, device_id, wifi_config):
         LOGGER.info("Adding Network Profile: %s", add_profile)
 
         adb_utils.adb_telnet_cmd(add_profile, expect_after='->OK', expect_last='ADD_PROFILE_SUCCEEDED',
-                                 async_response=True, device_id=device_id)
+                                 async_response=True, device_id=device_id, timeout=120)
 
         device_ip_address = network_base.check_inf_presence(interface, timeout=20)
 
@@ -765,7 +765,7 @@ def rebooted_and_out_of_booting_state_device(device_id, adb):
 
     # Wait for CLI-Server to start and listens on 17000 port.
     status = None
-    for _ in range(30):
+    for _ in range(90):
         status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
         if status and status.strip() == 'OK':
             break

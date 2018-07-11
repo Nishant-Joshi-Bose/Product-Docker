@@ -23,8 +23,8 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 LOGGER = get_logger(os.path.basename(__file__))
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'front_door_queue')
-def test_system_update_start_from_setup_state(front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'frontdoor_wlan')
+def test_system_update_start_from_setup_state(frontdoor_wlan):
     """
     Test for system update start api from SetupOther state
     Test Steps:
@@ -32,18 +32,18 @@ def test_system_update_start_from_setup_state(front_door_queue):
     2. Request system update start API with PUT method.
     """
     # 1. Check that endpoint is returned in capabilities.
-    eddie_helper.check_if_end_point_exists(front_door_queue, eddie_helper.SYSTEM_UPDATE_START_API)
+    eddie_helper.check_if_end_point_exists(frontdoor_wlan, eddie_helper.SYSTEM_UPDATE_START_API)
 
     # 2. Request system update start API with PUT method.
     LOGGER.info("Testing of system update start API")
     delay = 0
-    response = front_door_queue.sendSystemUpdateStartRequest(delay)
+    response = frontdoor_wlan.sendSystemUpdateStartRequest(delay)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
 
-@pytest.mark.usefixtures('front_door_queue', 'device_in_aux')
-def test_system_update_start_playing_from_aux(front_door_queue):
+@pytest.mark.usefixtures('frontdoor_wlan', 'device_in_aux')
+def test_system_update_start_playing_from_aux(frontdoor_wlan):
     """
     Test for system update start api while playing from aux
     Test Steps:
@@ -56,13 +56,13 @@ def test_system_update_start_playing_from_aux(front_door_queue):
     LOGGER.info("Testing of system update start API")
 
     delay = 0
-    response = front_door_queue.sendSystemUpdateStartRequest(delay)
+    response = frontdoor_wlan.sendSystemUpdateStartRequest(delay)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
 
-@pytest.mark.usefixtures('front_door_queue', 'device_in_aux')
-def test_system_update_start_from_idle_state(front_door_queue):
+@pytest.mark.usefixtures('frontdoor_wlan', 'device_in_aux')
+def test_system_update_start_from_idle_state(frontdoor_wlan):
     """
     Test for system update start api from Idle state
     Test Steps:
@@ -76,9 +76,9 @@ def test_system_update_start_from_idle_state(front_door_queue):
     data_request["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_request)
 
-    front_door_queue.setSystemPowerControl(data)
+    frontdoor_wlan.setSystemPowerControl(data)
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.IDLE:
             break
         time.sleep(1)
@@ -93,13 +93,13 @@ def test_system_update_start_from_idle_state(front_door_queue):
     LOGGER.info("Testing of system update start API")
 
     delay = 0
-    response = front_door_queue.sendSystemUpdateStartRequest(delay)
+    response = frontdoor_wlan.sendSystemUpdateStartRequest(delay)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
 
-@pytest.mark.usefixtures('front_door_queue')
-def test_system_update_start_errors(front_door_queue):
+@pytest.mark.usefixtures('frontdoor_wlan')
+def test_system_update_start_errors(frontdoor_wlan):
     """
     Test for PUT method of system update start api with negative scenarios.
     Test Steps:
@@ -113,7 +113,7 @@ def test_system_update_start_errors(front_door_queue):
 
     # 1. Validate error message by sending invalid delay value type.
     delay = "Invalid"
-    response = front_door_queue.sendSystemUpdateStartRequest(delay)
+    response = frontdoor_wlan.sendSystemUpdateStartRequest(delay)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # 2. Verify error subcode which should be "2005".
@@ -125,7 +125,7 @@ def test_system_update_start_errors(front_door_queue):
     data_request = dict()
     data_request["Invalid"] = 5
     data = json.dumps(data_request)
-    response = front_door_queue.sendSystemUpdateStartRequest(data)
+    response = frontdoor_wlan.sendSystemUpdateStartRequest(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_UPDATE_START_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # 4. Verify error subcode which should be "2005".

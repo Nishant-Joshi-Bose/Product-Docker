@@ -16,7 +16,6 @@ import time
 import pytest
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
-from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.RivieraUtils import adb_utils
 from CastleTestUtils.RivieraUtils.hardware.keys import keypress
@@ -52,7 +51,7 @@ def front_door_queue(request, ip_address_wlan):
 
 
 @pytest.fixture(scope='function')
-def device_in_aux(device_id, front_door_queue):
+def device_in_aux(device_id, frontdoor_wlan):
     """
     This fixture is used to change playing source to AUX and verifies the device state.
     Test steps:
@@ -66,13 +65,13 @@ def device_in_aux(device_id, front_door_queue):
     time.sleep(2)
 
     # Verify device state which should be "SELECTED".
-    state = front_door_queue.getState()
+    state = frontdoor_wlan.getState()
     assert state == eddie_helper.SELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
 
 @pytest.fixture(scope='function')
-def device_playing_from_amazon(request, front_door_queue):
+def device_playing_from_amazon(request, frontdoor_wlan, riviera, environment):
     """
     This fixture will send playback request to device and verifies the right station or track is playing.
     Test steps:
@@ -92,17 +91,26 @@ def device_playing_from_amazon(request, front_door_queue):
     get_config = RESOURCES[current_resource]
 
     message_creator = MessageCreator(service_name)
-    common_behavior_handler = CommonBehaviorHandler(front_door_queue, message_creator,
-                                                    service_name, get_config['name'],
-                                                    logger=LOGGER)
+    common_behavior_handler = CommonBehaviorHandler(frontdoor_wlan, message_creator,
+                                                    service_name, get_config['name'])
 
-    LOGGER.info("Create passport account")
-    passport_base_url = request.config.getoption('--passport-base-url')
+    LOGGER.info("Create passport account for music sources")
+    passport_base_url = riviera.get_passport_url(environment)
     apikey = request.config.getoption('--api-key')
-    LOGGER.info("Bose Person ID : %s ", front_door_queue._bosepersonID)
-    passport_user = PassportAPIUsers(front_door_queue._bosepersonID, apikey,
-                                     front_door_queue._access_token, passport_base_url,
-                                     logger=LOGGER)
+    LOGGER.info("Bose Person ID : %s ", frontdoor_wlan._bosepersonID)
+    passport_user = PassportAPIUsers(frontdoor_wlan._bosepersonID, apikey, frontdoor_wlan._access_token,
+                                     passport_base_url, logger=LOGGER)
+
+    def delete_passport_user():
+        """
+        This function will delete passport user.
+        """
+        LOGGER.info("delete_passport_user")
+        assert passport_user.delete_users(), "Fail to delete person id: {}".format(passport_user.bosePersonID)
+        common_behavior_handler.performCloudSync()
+
+    request.addfinalizer(delete_passport_user)
+
 
     LOGGER.info("music_service_account")
     account_id = passport_user.add_service_account(service=get_config['provider'], accountID=get_config['name'],
@@ -130,15 +138,17 @@ def device_playing_from_amazon(request, front_door_queue):
     playback_msg = message_creator.playback_msg(account_id, content['container_location'],
                                                 content['container_name'], content['track_location'])
 
-    # Play music from amazon
-    play_response = front_door_queue.sendPlaybackRequest(playback_msg)
-    LOGGER.debug("Now Playing : " + str(play_response))
+    # playing music
+    play_response = frontdoor_wlan.sendPlaybackRequest(playback_msg)
+    LOGGER.debug("Now Playing: %s", play_response)
     common_behavior_handler.verify_device_playback_response(play_response)
     common_behavior_handler.check_play_status(play_status='PLAY')
+    common_behavior_handler.performCloudSync()
+
 
     # Verify device state which should be "SELECTED".
-    state = front_door_queue.getState()
+    state = frontdoor_wlan.getState()
     assert state == eddie_helper.SELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
-    yield front_door_queue, common_behavior_handler, service_name, get_config
+    yield frontdoor_wlan, common_behavior_handler, service_name, get_config

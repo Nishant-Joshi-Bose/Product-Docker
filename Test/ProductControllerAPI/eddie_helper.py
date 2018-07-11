@@ -18,10 +18,10 @@ import json
 
 import pytest
 
-from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils import device_utils, adb_utils
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
+from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 
 # Subcode
 SUBCODE_INVALID_KEY = 2005
@@ -91,7 +91,7 @@ STATE_NW_NOT_CONFIGURED = "NetworkNotConfigured"
 STATE_VC_CONFIGURED = "VoiceConfigured"
 STATE_VC_NOT_CONFIGURED = "VoiceNotConfigured"
 SELECTED = "SELECTED"
-DESELECTED = "DESELECTED"
+DESELECTED = "PLAYING_SOURCE_OFF"
 IDLE = "IDLE"
 NETWORK_STANDBY = "NETWORK_STANDBY"
 FACTORY_DEFAULT = "FACTORY_DEFAULT"
@@ -256,11 +256,13 @@ def get_frontdoor_instance(request, wifi_config):
     security = wifi_config.get(router, 'security')
     password = wifi_config.get(router, 'password')
     device_id = request.config.getoption("--device-id")
-    ip_address = device_utils.get_ip_address(
-        device_id, interface, ssid, security, password)
+
+    ip_address = device_utils.get_ip_address(device_id, interface, ssid, security, password)
     riviera_utils = RivieraUtils('ADB', device=device_id)
-    assert riviera_utils.wait_for_galapagos_activation(timeout=120)
-    frontdoor = FrontDoorQueue(ip_address, env=galapagos_env)
+
+    assert riviera_utils.wait_for_galapagos_activation(timeout=120), "galapagos activation is not done yet."
+    frontdoor = FrontDoorQueue(ip_address)
+
     return frontdoor
 
 
