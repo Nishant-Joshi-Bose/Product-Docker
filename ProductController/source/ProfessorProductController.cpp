@@ -148,6 +148,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputManager( nullptr ),
+    m_ProductFrontDoorKeyInjectIF( nullptr ),
     m_ProductCecHelper( nullptr ),
     m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
@@ -694,6 +695,9 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
+    m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
+                                    m_ProductKeyInputManager,
+                                    m_FrontDoorClientIF );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
@@ -708,6 +712,7 @@ void ProfessorProductController::Run( )
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
+        m_ProductFrontDoorKeyInjectIF == nullptr ||
         m_ProductCecHelper            == nullptr ||
         m_ProductDspHelper            == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
@@ -747,6 +752,7 @@ void ProfessorProductController::Run( )
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputManager     ->Run( );
+    m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
@@ -881,7 +887,8 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( ) ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( )   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Voice Ready           :  %s", ( IsVoiceModuleReady( )     ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return ( IsLpmReady( )             and
@@ -891,7 +898,8 @@ bool ProfessorProductController::IsBooted( ) const
              IsSoftwareUpdateReady( )  and
              IsSassReady( )            and
              IsBluetoothModuleReady( ) and
-             IsNetworkModuleReady( ) );
+             IsNetworkModuleReady( )   and
+             IsVoiceModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1565,6 +1573,7 @@ void ProfessorProductController::Wait( )
     m_ProductLpmHardwareInterface->Stop( );
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
+    m_ProductFrontDoorKeyInjectIF->Stop( );
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );

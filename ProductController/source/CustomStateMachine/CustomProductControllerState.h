@@ -189,6 +189,11 @@ public:
         return false;
     }
 
+    virtual bool HandleVoiceModuleReadiness( )
+    {
+        return false;
+    }
+
     virtual bool HandleSTSSourcesInit( )
     {
         return false;
@@ -405,6 +410,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleSoftwareUpdateInstall( )
+    {
+        return false;
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
