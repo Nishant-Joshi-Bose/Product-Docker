@@ -48,8 +48,11 @@ Many test suites can be found in the `ProductControllerAPI` test module:
 - `test_system_power_control.py`
 - `test_system_setup.py`
 - `test_system_power_timeouts.py`
+- `test_product_settings.py`
 - `test_system_reset.py`
 - `test_system_update_start.py`
+- `test_audio_bass.py`
+- `test_audio_treble.py`
 
 `test_system_info.py` contains tests related to system info API and ensuring API works from different device states. 
 The following self descriptive test names can be found in the suite:
@@ -89,6 +92,12 @@ The following self descriptive test names can be found in the suite:
 - `test_system_power_timeouts_from_idle_state`
 - `test_system_power_timeouts_behaviour`
 
+`test_product_settings.py` contains tests related to system productsettings API and ensuring API works from different device states.
+The following self descriptive test names can be found in the suite:
+- `test_product_settings_with_device_state`
+- `test_product_settings_with_device_source`
+- `test_product_settings_play_amazon`
+
 `test_system_reset.py` contains tests related to system reset API and ensuring API works from different device states. 
 The following self descriptive test names can be found in the suite:
 - `test_system_reset_device_state`
@@ -100,3 +109,19 @@ The following self descriptive test names can be found in the suite:
 - `test_system_update_start_playing_from_aux`
 - `test_system_update_start_from_idle_state`
 - `test_system_update_start_errors`
+
+`test_audio_bass.py` contains tests related to audio bass API and ensuring API works from different device states. 
+The following self descriptive test names can be found in the suite:
+- `test_audio_bass_state`
+- `test_audio_bass_source`
+- `test_audio_bass_playing_amazon`
+- `test_audio_bass_invalid_value`
+- `test_audio_bass_keyerror`
+
+`test_audio_treble.py` contains tests related to audio treble API and ensuring API works from different device states. 
+The following self descriptive test names can be found in the suite:
+- `test_audio_treble_state`
+- `test_audio_treble_source`
+- `test_audio_treble_playing_amazon`
+- `test_audio_treble_invalid_value`
+- `test_audio_treble_keyerror`

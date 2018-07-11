@@ -179,6 +179,11 @@ public:
         return false;
     }
 
+    virtual bool HandleVoiceModuleReadiness( )
+    {
+        return false;
+    }
+
     virtual bool HandleBluetoothPairedList( )
     {
         return false;
@@ -239,7 +244,7 @@ public:
         return false;
     }
 
-    virtual bool HandleSoftwareUpdateStart( uint32_t delay )
+    virtual bool HandleSoftwareUpdateInstall( )
     {
         return false;
     }

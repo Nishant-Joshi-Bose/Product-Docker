@@ -26,8 +26,8 @@ import eddie_helper
 LOGGER = get_logger(os.path.basename(__file__))
 
 
-@pytest.mark.usefixtures('front_door_queue')
-def test_system_power_control_error(front_door_queue):
+@pytest.mark.usefixtures('frontdoor_wlan')
+def test_system_power_control_error(frontdoor_wlan):
     """
     Test for system power control api with error scenarios.
     Test Steps:
@@ -38,11 +38,11 @@ def test_system_power_control_error(front_door_queue):
     5. Validate error message by sending extra key and value.
     """
     # 1. Check that endpoint is returned in capabilities.
-    eddie_helper.check_if_end_point_exists(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    eddie_helper.check_if_end_point_exists(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
 
     # 2. Get system power control info and verify response.
     LOGGER.info("Testing get system power state")
-    response = front_door_queue.getSystemPowerControl()
+    response = frontdoor_wlan.getSystemPowerControl()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
 
@@ -54,7 +54,7 @@ def test_system_power_control_error(front_door_queue):
     data_invalid_key = dict()
     data_invalid_key["fake_key"] = eddie_helper.POWER_OFF
     data = json.dumps(data_invalid_key)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_ERROR, is_error=True)
 
@@ -68,7 +68,7 @@ def test_system_power_control_error(front_door_queue):
     data_invalid_value = dict()
     data_invalid_value["power"] = "Invalid"
     data = json.dumps(data_invalid_value)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_ERROR, is_error=True)
 
@@ -83,7 +83,7 @@ def test_system_power_control_error(front_door_queue):
     data_invalid["power"] = eddie_helper.POWER_OFF
     data_invalid["fake_key"] = "Invalid"
     data = json.dumps(data_invalid)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_ERROR, is_error=True)
 
@@ -93,8 +93,8 @@ def test_system_power_control_error(front_door_queue):
     time.sleep(1)
 
 
-@pytest.mark.usefixtures('front_door_queue', 'device_in_aux')
-def test_system_power_control_aux_play(front_door_queue):
+@pytest.mark.usefixtures('frontdoor_wlan', 'device_in_aux')
+def test_system_power_control_aux_play(frontdoor_wlan):
     """
     Test for system power control api while playing from AUX
     Test Steps:
@@ -109,7 +109,7 @@ def test_system_power_control_aux_play(front_door_queue):
 
     # 2. Get system power control info and verify response.
     LOGGER.info("Testing get system power state")
-    response = front_door_queue.getSystemPowerControl()
+    response = frontdoor_wlan.getSystemPowerControl()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
 
@@ -121,18 +121,18 @@ def test_system_power_control_aux_play(front_door_queue):
     data_dict = dict()
     data_dict["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_dict)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_OK)
 
     assert response["body"]["power"] == eddie_helper.POWER_ON, 'Device power response should be "ON".'
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.IDLE:
             break
         time.sleep(1)
 
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_OFF, 'Device power notification should be "OFF".'
 
     # Verify device state which should be "IDLE".
@@ -143,18 +143,18 @@ def test_system_power_control_aux_play(front_door_queue):
     LOGGER.info("Testing of set system power state to ON")
     data_dict["power"] = eddie_helper.POWER_ON
     data = json.dumps(data_dict)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_OK)
 
     assert response["body"]["power"] == eddie_helper.POWER_OFF, 'Device power response should be "OFF".'
     for _ in range(15):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.SELECTED:
             break
         time.sleep(1)
 
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_ON, 'Device power notification should be "ON".'
 
     # Verify device state which should be "SELECTED".
@@ -165,19 +165,19 @@ def test_system_power_control_aux_play(front_door_queue):
     LOGGER.info("Testing of set system power state to TOGGLE")
     data_dict["power"] = eddie_helper.POWER_TOGGLE
     data = json.dumps(data_dict)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, 200)
 
     assert response["body"]["power"] == eddie_helper.POWER_ON, 'Device power response should be "ON".'
     for _ in range(15):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.IDLE:
             break
         time.sleep(1)
 
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_OFF, 'Device power notification should be "OFF".'
 
     # Verify device state which should be "IDLE".
@@ -186,18 +186,18 @@ def test_system_power_control_aux_play(front_door_queue):
 
     # 6. Set system power control to "TOGGLE" again and verify response, notification and device state.
     LOGGER.info("Testing of set system power state to TOGGLE second time")
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_OK)
 
     assert response["body"]["power"] == eddie_helper.POWER_OFF, 'Device power response should be "OFF".'
     for _ in range(15):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.SELECTED:
             break
         time.sleep(1)
 
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_ON, 'Device power notification should be "ON".'
 
     # Verify device state which should be "SELECTED".
@@ -220,12 +220,12 @@ def test_system_power_control_sts_playing(device_playing_from_amazon):
     8. Verify MSP source is available and wait for music to play.
     """
     # 1. Configure Amazon MSP account and play music.
-    front_door_queue, common_behavior_handler, service_name, get_config = device_playing_from_amazon
+    frontdoor_wlan, common_behavior_handler, service_name, get_config = device_playing_from_amazon
     time.sleep(5)
 
     # 2. Get system power control info and verify response.
     LOGGER.info("Testing get system power state")
-    response = front_door_queue.getSystemPowerControl()
+    response = frontdoor_wlan.getSystemPowerControl()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
 
@@ -237,18 +237,18 @@ def test_system_power_control_sts_playing(device_playing_from_amazon):
     data_dict = dict()
     data_dict["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_dict)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_OK)
 
     assert response["body"]["power"] == eddie_helper.POWER_ON, 'Device power response should be "ON".'
     for _ in range(15):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.IDLE:
             break
         time.sleep(1)
 
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_OFF, 'Device power notification should be "OFF".'
 
     # Verify device state which should be "IDLE".
@@ -259,18 +259,18 @@ def test_system_power_control_sts_playing(device_playing_from_amazon):
     LOGGER.info("Testing of set system power state to ON")
     data_dict["power"] = eddie_helper.POWER_ON
     data = json.dumps(data_dict)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_OK)
 
     assert response["body"]["power"] == eddie_helper.POWER_OFF, 'Device power response should be "OFF".'
     for _ in range(15):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.SELECTED:
             break
         time.sleep(1)
 
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_ON, 'Device power notification should be "ON".'
 
     # Verify device state which should be "SELECTED".
@@ -282,7 +282,8 @@ def test_system_power_control_sts_playing(device_playing_from_amazon):
     common_behavior_handler.checkSourceStatus(service_name, get_config['name'])
 
     LOGGER.info("verify play status")
-    now_playing = common_behavior_handler.checkPlayStatus(playStatus='play')
+    now_playing = common_behavior_handler.check_play_status(play_status='PLAY')
+
     LOGGER.debug("Now Playing : " + str(now_playing))
     time.sleep(5)
 
@@ -290,19 +291,19 @@ def test_system_power_control_sts_playing(device_playing_from_amazon):
     LOGGER.info("Testing of set system power state to TOGGLE")
     data_dict["power"] = eddie_helper.POWER_TOGGLE
     data = json.dumps(data_dict)
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_OK)
 
     assert response["body"]["power"] == eddie_helper.POWER_ON, 'Device power response should be "ON".'
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.IDLE:
             break
         time.sleep(1)
 
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_OFF, 'Device power notification should be "OFF".'
 
     # Verify device state which should be "IDLE".
@@ -311,18 +312,18 @@ def test_system_power_control_sts_playing(device_playing_from_amazon):
 
     # 8. Set system power control to "TOGGLE" again and verify response, notification and device state.
     LOGGER.info("Testing of set system power state to TOGGLE second time")
-    response = front_door_queue.setSystemPowerControl(data)
+    response = frontdoor_wlan.setSystemPowerControl(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_POST, eddie_helper.STATUS_OK)
 
     assert response["body"]["power"] == eddie_helper.POWER_OFF, 'Device power response should be "OFF".'
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.SELECTED:
             break
         time.sleep(1)
 
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_ON, 'Device power notification should be "ON".'
 
     # Verify device state which should be "SELECTED".
@@ -334,12 +335,12 @@ def test_system_power_control_sts_playing(device_playing_from_amazon):
     common_behavior_handler.checkSourceStatus(service_name, get_config['name'])
 
     LOGGER.info("verify play status")
-    now_playing = common_behavior_handler.checkPlayStatus(playStatus='play')
+    now_playing = common_behavior_handler.check_play_status(play_status='PLAY')
     LOGGER.debug("Now Playing : " + str(now_playing))
 
 
-@pytest.mark.usefixtures('device_id', 'front_door_queue', 'device_in_aux')
-def test_system_power_control_notification_in_aux(device_id, front_door_queue):
+@pytest.mark.usefixtures('device_id', 'frontdoor_wlan', 'device_in_aux')
+def test_system_power_control_notification_in_aux(device_id, frontdoor_wlan):
     """
     Test for system power control api notification while playing from AUX and change state using keys.
     Test Steps:
@@ -353,7 +354,7 @@ def test_system_power_control_notification_in_aux(device_id, front_door_queue):
     """
     # 1. Get system power control info and verify response.
     LOGGER.info("Testing get system power state")
-    response = front_door_queue.getSystemPowerControl()
+    response = frontdoor_wlan.getSystemPowerControl()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
 
@@ -365,13 +366,13 @@ def test_system_power_control_notification_in_aux(device_id, front_door_queue):
     tap = adb_utils.adb_telnet_tap(device_id)
     keypress.press_key(tap, Keys.MULTIFUNCTION.value, 2000)
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.IDLE:
             break
         time.sleep(1)
 
     # 3. Verify notification of system power value which should be "OFF".
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_OFF, 'Device power notification should be "OFF".'
 
     # 4. Verify device state which should be "IDLE".
@@ -382,13 +383,13 @@ def test_system_power_control_notification_in_aux(device_id, front_door_queue):
     LOGGER.info("Testing notification of system power state for value ON")
     keypress.press_key(tap, Keys.MULTIFUNCTION.value, 2000)
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.SELECTED:
             break
         time.sleep(1)
 
     # 6. Verify notification of system power value which should be "ON".
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_ON, 'Device power notification should be "ON".'
 
     # 7. Verify device state which should be "SELECTED".
@@ -412,12 +413,12 @@ def test_system_power_control_notification_in_sts(device_id, device_playing_from
     9. Verify MSP source is available and wait for music to play.
     """
     # 1. Configure Amazon MSP account and play music.
-    front_door_queue, common_behavior_handler, service_name, get_config = device_playing_from_amazon
+    frontdoor_wlan, common_behavior_handler, service_name, get_config = device_playing_from_amazon
     time.sleep(5)
 
     # 2. Get system power control info and verify response.
     LOGGER.info("Testing get system power state")
-    response = front_door_queue.getSystemPowerControl()
+    response = frontdoor_wlan.getSystemPowerControl()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_CONTROL_API,
                                                  eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
 
@@ -429,13 +430,13 @@ def test_system_power_control_notification_in_sts(device_id, device_playing_from
     tap = adb_utils.adb_telnet_tap(device_id)
     keypress.press_key(tap, Keys.MULTIFUNCTION.value, 2000)
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.IDLE:
             break
         time.sleep(1)
 
     # 4. Verify notification of system power value which should be "OFF".
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_OFF, 'Device power notification should be "OFF".'
 
     # 5. Verify device state which should be "IDLE".
@@ -446,13 +447,13 @@ def test_system_power_control_notification_in_sts(device_id, device_playing_from
     LOGGER.info("Testing notification of system power state for value ON")
     keypress.press_key(tap, Keys.MULTIFUNCTION.value, 2000)
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.SELECTED:
             break
         time.sleep(1)
 
     # 7. Verify notification of system power value which should be "ON".
-    notif_resp = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_CONTROL_API)
+    notif_resp = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_CONTROL_API)
     assert notif_resp["power"] == eddie_helper.POWER_ON, 'Device power notification should be "ON".'
 
     # 8. Verify device state which should be "SELECTED".
@@ -464,5 +465,5 @@ def test_system_power_control_notification_in_sts(device_id, device_playing_from
     common_behavior_handler.checkSourceStatus(service_name, get_config['name'])
 
     LOGGER.info("verify play status")
-    now_playing = common_behavior_handler.checkPlayStatus(playStatus='play')
+    now_playing = common_behavior_handler.check_play_status(play_status='PLAY')
     LOGGER.debug("Now Playing : " + str(now_playing))

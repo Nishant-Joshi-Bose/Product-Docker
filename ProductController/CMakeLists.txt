@@ -17,6 +17,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${AUDIOSOURCE_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductNetworkService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSoftwareInstallScheduler
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   {PROTO_CC_DEST}
@@ -85,7 +86,11 @@ TARGET_LINK_LIBRARIES(ProductController
   BoseLibs
   jsoncpp
   protobuf
-  TinyXml
+  libwebsockets.a
+  libssl.a
+  libcrypto.a
+  libTinyXml.a
+  libz.a
   pthread
   rt
   cap
