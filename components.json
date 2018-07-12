@@ -33,11 +33,11 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/refactor/1.5.1-117+f1a8568"
+    "selected_version": "Continuous/refactor/1.5.1-122+937b578"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-15+d4add91"
+    "selected_version": "Continuous/master/1.5.0-20+0e287e7"
   },
   {
     "name": "bose-opkg-utils",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@011076ed43d24dce87cb7c70a5afa0fafbc2a328"
+    "selected_version": "master@124c228beea5e6bb9a91c808218e2ec871dfc050"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
