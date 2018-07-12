@@ -103,9 +103,9 @@ message ProductMessage
         optional ProductSystemEventServiceResponse          systemeventserviceresponse  = 21;
         optional uint32                                     chimetoplay                 = 22;
         optional LpmServiceMessages.IpcKeyInformation_t     keyevent                    = 23;
-        optional bool                                       softwareupdatestatus        = 24;
-        optional bool                                       accessoriesareknown         = 25;
-        optional bool                                       softwareinstall             = 26;
+        optional bool                                       softwareinstall             = 24;
+        optional bool                                       softwareupdatestatus        = 25;
+        optional bool                                       accessoriesareknown         = 26;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -109,6 +109,7 @@
 #include "ProtoPersistenceFactory.h"
 #include "PGCErrorCodes.h"
 #include "SystemUtils.h"
+#include "SystemPowerMacro.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -727,9 +728,11 @@ void ProfessorProductController::Run( )
     /// Apply settings from persistence
     ///
     ApplyOpticalAutoWakeSettingFromPersistence( );
+    LoadPowerMacroFromPersistance( );
 
     /// Register a callback so the autowake from persistence is sent to LPM when connected
     RegisterOpticalAutowakeForLpmConnection( );
+
 
     ///
     /// Set up LightBarController
@@ -1246,9 +1249,32 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 
     m_lightbarController->RegisterLightBarEndPoints( );
 
+
     {
-        auto callback = [ = ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( Callback< ProductPb::PowerMacro > cb, Callback< FrontDoor::Error > errorCb )
+        {
+            HandleGetPowerMacro( cb, errorCb );
+        };
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                           callback,
+                                           FrontDoor::PUBLIC,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
+    {
+        auto callback = [ this ]( ProductPb::PowerMacro macro, Callback< ProductPb::PowerMacro > cb, Callback< FrontDoor::Error > errorCb )
+        {
+            HandlePutPowerMacro( macro, cb, errorCb );
+        };
+        GetFrontDoorClient()->RegisterPut<ProductPb::PowerMacro>( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                                                  callback,
+                                                                  FrontDoor::PUBLIC,
+                                                                  FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                                  FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
+    {
+        auto callback = [ this ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandleGetOpticalAutoWake( respCb, errorCb );
         };
@@ -1260,9 +1286,9 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
                                            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto callback = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
-                               Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                                  Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandlePutOpticalAutoWake( req, respCb, errorCb );
         };
@@ -1275,9 +1301,9 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto callback = [ = ]( DisplayControllerPb::UiHeartBeat req,
-                               Callback< DisplayControllerPb::UiHeartBeat > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( DisplayControllerPb::UiHeartBeat req,
+                                  Callback< DisplayControllerPb::UiHeartBeat > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandleUiHeartBeat( req, respCb, errorCb );
         };
@@ -1838,6 +1864,151 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
         BOSE_ERROR( s_logger, "OpticalAutoWake store persistence error - %s", e.what( ) );
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::AttemptToStartPlayback
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::AttemptToStartPlayback()
+{
+    BOSE_INFO( s_logger, "Handling CustomAttemptToStartPlayback" );
+
+    if( m_powerMacro.enabled() )
+    {
+        PassportPB::contentItem pwrMacroContentItem;
+
+        pwrMacroContentItem.set_source( SHELBY_SOURCE::PRODUCT );
+        pwrMacroContentItem.set_sourceaccount( ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
+
+        SendPlaybackRequestFromContentItem( pwrMacroContentItem );
+        m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro );
+
+        BOSE_INFO( s_logger, "An attempt to play the power macro content item %s has been made.",
+                   pwrMacroContentItem.DebugString().c_str( ) );
+    }
+    else
+    {
+        ProductController::AttemptToStartPlayback();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::HandleGetPowerMacro
+///
+/// @param const Callback<SystemPowerProductPb::PowerMacro> & respCb
+///
+/// @param const Callback<FrontDoor::Error> & errorCb
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleGetPowerMacro(
+    const Callback<ProductPb::PowerMacro> & respCb,
+    const Callback<FrontDoor::Error> & errorCb ) const
+{
+    respCb( m_powerMacro );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::HandlePutPowerMacro
+///
+/// @param const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req
+///
+/// @param const Callback<SystemPowerProductPb::PowerMacro> & respCb
+///
+/// @param const Callback<FrontDoor::Error> & errorCb
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandlePutPowerMacro(
+    const ProductPb::PowerMacro & req,
+    const Callback<ProductPb::PowerMacro> & respCb,
+    const Callback<FrontDoor::Error> & errorCb )
+{
+    FrontDoor::Error error;
+    error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+    error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_POWER_MACRO );
+
+    bool success = true;
+
+    if( req.powerontv() )
+    {
+        const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( not( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) )
+        {
+            error.set_message( "TV is not configured but power on tv requested!" );
+            success = false;
+        }
+    }
+    if( success and req.has_powerondevice() )
+    {
+        const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
+
+        if( not( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() ) )
+        {
+            error.set_message( "Requested source is not configured!" );
+            success = false;
+        }
+    }
+    else
+    {
+        error.set_message( "No power on device provided!" );
+        success = false;
+    }
+
+    if( success )
+    {
+        m_powerMacro.CopyFrom( req );
+        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+        try
+        {
+            persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
+            respCb( req );
+        }
+        catch( const ProtoToMarkup::MarkupError & e )
+        {
+            BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
+            error.set_message( e.what( ) );
+            success = false;
+        }
+        catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+        {
+            BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
+            error.set_message( e.what( ) );
+            success = false;
+        }
+    }
+
+    if( not success )
+    {
+        errorCb( error );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::LoadPowerMacroFromPersistance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::LoadPowerMacroFromPersistance( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+
+    try
+    {
+        const std::string & s = persistence->Load( );
+        ProtoToMarkup::FromJson( s, &m_powerMacro );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro persistence error - %s", e.what( ) );
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

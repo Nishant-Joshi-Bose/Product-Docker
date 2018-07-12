@@ -49,7 +49,9 @@
 #include "LightBarController.h"
 #include "SystemPowerProduct.pb.h"
 #include "DisplayController.pb.h"
+#include "SystemPowerMacro.pb.h"
 #include "ProductFrontDoorKeyInjectIF.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -258,6 +260,13 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::pair<bool, int32_t> GetDesiredPlayingVolume( ) const;
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  AttemptToStartPlayback
+    /// @brief This function attempts to start playback previously played content item
+    ///        if not able to, go to SETUP
+    ///////////////////////////////////////////////////////////////////////////////
+    void AttemptToStartPlayback() override;
+
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -426,6 +435,21 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     SoundTouchInterface::volume m_cachedVolume;
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member is used to store the /system/power/macro settings
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ProductPb::PowerMacro m_powerMacro;
+    void HandlePutPowerMacro( const ProductPb::PowerMacro & req,
+                              const Callback<ProductPb::PowerMacro> & respCb,
+                              const Callback<FrontDoor::Error> & errorCb );
+    void HandleGetPowerMacro( const Callback<ProductPb::PowerMacro> & respCb,
+                              const Callback<FrontDoor::Error> & errorCb ) const;
+    void LoadPowerMacroFromPersistance( );
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

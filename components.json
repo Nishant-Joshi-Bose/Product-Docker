@@ -21,7 +21,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/1.5.0-136+edf72c5"
+    "selected_version": "Release/master/1.5.0-140+58cdd2d"
   },
   {
     "name": "AVS-qc8017_32",
@@ -49,7 +49,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.5.3-487+1708b99"
+    "selected_version": "Release/master/1.5.3-490+b30ee1c"
   },
   {
     "name": "BoseOPKG-native",
@@ -93,7 +93,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.5.1-79+3fcd225"
+    "selected_version": "Release/master/1.5.1-85+f18c756"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -125,11 +125,11 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/1.5.2-197+2352364"
+    "selected_version": "Release/master/1.5.3-206+6895b00"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/1.5.1-93+cc68df2"
+    "selected_version": "Release/master/1.5.1-98+7035410"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Release/bose-master/1.8.3-14-g144ef57"
+    "selected_version": "Release/bose-master/1.8.3-16-g40b3e67"
   },
   {
     "name": "opensource-libwebsockets-qc8017_32",
@@ -165,19 +165,19 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/1.5.0-884+c50e458"
+    "selected_version": "Release/master/1.5.0-900+105b35d"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/1.5.0-884+c50e458"
+    "selected_version": "Release/master/1.5.0-900+105b35d"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "PGC-1743-injectKey@0439a0ed8618eea355deb17d5435e3528dfed88f"
+    "selected_version": "master@011076ed43d24dce87cb7c70a5afa0fafbc2a328"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/PGC-1743-injectKey/1.0.0-32+0439a0e"
+    "selected_version": "Release/master/1.0.1-40+011076e"
   },
   {
     "name": "ProductUIAssets",
@@ -225,7 +225,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.7-711+0e0622e"
+    "selected_version": "Release/master/1.5.8-735+f8cc926"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
