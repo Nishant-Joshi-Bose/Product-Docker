@@ -930,3 +930,20 @@ def tap(device_ip):
     client = pexpect.spawn('telnet %s 17000' % device_ip)
     yield client
     client.close()
+
+
+@pytest.fixture(scope='class')
+def reboot_device_at_end(request, device_id, adb):
+    """
+    Reboots the device at the end.
+
+    :param request: PyTest command line request object
+    :param device_id: ADB Device ID of the device under test
+    :param adb: Get adb instance
+    """
+    LOGGER.info("reboot_device_at_end")
+    def teardown():
+        """ Teardown module to reboot device """
+        LOGGER.info("Rebooting device in teardown")
+        rebooted_and_out_of_booting_state_device(device_id, adb)
+    request.addfinalizer(teardown)
