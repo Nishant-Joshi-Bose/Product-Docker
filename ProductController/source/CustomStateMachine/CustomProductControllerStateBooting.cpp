@@ -29,9 +29,9 @@ namespace ProductApp
 /// @param const std::string&    name
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateBooting::CustomProductControllerStateBooting( ProductControllerHsm& hsm,
-                                                              CHsmState* pSuperState,
-                                                              Hsm::STATE stateId,
-                                                              const std::string& name ) :
+                                                                          CHsmState* pSuperState,
+                                                                          Hsm::STATE stateId,
+                                                                          const std::string& name ) :
     ProductControllerStateBooting( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
@@ -47,9 +47,9 @@ void CustomProductControllerStateBooting::PossiblyGoToNextState( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s. IsPartialSoftwareUpdatePending = %s",
                GetName( ).c_str( ), __func__,
-               GetProductController( ).IsPartialSoftwareUpdatePending( ) ? "true" : "false" );
+               GetProductController().GetProductSoftwareInstallScheduler().IsPartialSoftwareUpdatePending() ? "true" : "false" );
 
-    if( !GetProductController().IsPartialSoftwareUpdatePending( ) && !GetProductController( ).IsFirstBootGreetingDone() )
+    if( !GetProductController().GetProductSoftwareInstallScheduler().IsPartialSoftwareUpdatePending() && !GetProductController( ).IsFirstBootGreetingDone() )
     {
         // The next state will be PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION
         if( GetProductController().IsLpmReady( ) && GetProductController().IsAudioPathReady( ) )

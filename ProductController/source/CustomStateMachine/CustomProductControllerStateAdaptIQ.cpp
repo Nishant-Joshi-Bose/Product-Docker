@@ -82,7 +82,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
     /// Disable source selection while in AdaptIQ.
     ///
     GetProductController( ).SendAllowSourceSelectMessage( false );
-    m_powerDownOnExit = false;
+    m_completed = false;
 
     m_timer->SetTimeouts( ADAPTIQ_INACTIVITY_TIMEOUT, 0 );
     m_timer->Start( [ = ]( )
@@ -103,9 +103,9 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
     BOSE_INFO( s_logger, "A time out during AdaptIQ has occurred." );
 
     ///
-    /// Initiate a cancellation of AdaptIQ
+    /// Initiate cancellation of AdaptIQ, and proceed to Cancelling state
     ///
-    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,14 +123,18 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
     ProductAdaptIQStatus& status = const_cast<ProductAdaptIQStatus&>( aiqStatus );
     if( status.mutable_status()->smstate() == LpmServiceMessages::IpcAiqState_t::AIQ_STATE_NOT_RUNNING )
     {
-        if( m_powerDownOnExit )
-        {
-            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
-        }
-        else
-        {
-            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
-        }
+
+        HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
+
+        GetProductController( ).SendAllowSourceSelectMessage( true );
+
+        ///
+        /// flag the Exit handler that we're exiting due to something in the AiQ process
+        /// (as opposed to a power state change)
+        ///
+        m_completed = true;
+
+        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
     }
 
     return true;
@@ -143,16 +147,18 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 {
-    ///
-    /// Re-enable source selection when exiting AdaptIQ.
-    ///
-    GetProductController( ).SendAllowSourceSelectMessage( true );
 
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
     m_timer->Stop( );
 
-    GetProductController( ).GetProductAudioServiceInstance( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
-
+    if( m_completed )
+    {
+        ///
+        /// If AIQ Completed, stop playback andre-enable source selection
+        ///
+        GetProductController( ).SendAllowSourceSelectMessage( true );
+        GetProductController( ).SendStopPlaybackMessage( );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -215,8 +221,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
 {
-    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
-    m_powerDownOnExit = true;
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
     return true;
 }
 
@@ -230,8 +235,7 @@ bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleIntentPowerOff( )
 {
-    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
-    m_powerDownOnExit = true;
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
     return true;
 }
 

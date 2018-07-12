@@ -9,6 +9,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSoftwareInstallScheduler
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${DATACOLLECTIONCLIENT_DIR}
   ${KEYHANDLER_DIR}/include
@@ -44,6 +45,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
+  ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
   source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
@@ -51,7 +53,7 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairingCancelling.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
-  source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
+  source/CustomStateMachine/CustomProductControllerStateAdaptIQCancelling.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
   source/CustomStateMachine/CustomProductControllerStateFirstBootGreetingTransition.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
