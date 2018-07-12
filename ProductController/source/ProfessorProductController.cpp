@@ -772,11 +772,6 @@ void ProfessorProductController::Run( )
     SendCommonInitialRequests( );
 
     ///
-    /// Set up the STSProductController
-    ///
-    SetupProductSTSController( );
-
-    ///
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
@@ -1684,19 +1679,7 @@ void ProfessorProductController::SendInitialCapsData()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    // Do the Common stuff first
-    ProductController::SendInitialCapsData();
-
     using namespace SoundTouchInterface;
-
-    auto sourcesRespCb = []( Sources sources )
-    {
-        BOSE_INFO( s_logger, "/system/sources response %d sources", sources.sources_size( ) );
-        for( int i = 0; i < sources.sources_size( ); ++i )
-        {
-            BOSE_INFO( s_logger, "/system/sources response source %d: %s\n", i, sources.sources( i ).DebugString( ).c_str( ) );
-        }
-    };
 
     std::string DefaultCAPSValuesStateFile{ g_PersistenceRootDir };
     DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
@@ -1732,9 +1715,7 @@ void ProfessorProductController::SendInitialCapsData()
             { },
             m_errorCb );
         BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
-    }// @TODO CASTLE-17903 need to send the sources to CAPS at every boot, the persistence is broken
-    // @TODO CASTLE-10740 need to use a separate PUT for the properties and for the sources
-    {
+
         // Populate /system/sources::properties
         Sources message;
         auto messageProperties = message.mutable_properties();
@@ -1760,6 +1741,64 @@ void ProfessorProductController::SendInitialCapsData()
 
         messageProperties->set_inputrouterequired( false );
 
+        // Populate status and visibility of PRODUCT sources.
+        using namespace ProductSTS;
+
+        Sources_SourceItem* source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
+        source->set_accountid( ProductSourceSlot_Name( TV ) );
+        source->set_status( SourceStatus::AVAILABLE );
+        source->set_visible( true );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
+        source->set_accountid( ProductSourceSlot_Name( SLOT_0 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
+        source->set_accountid( ProductSourceSlot_Name( SLOT_1 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
+        source->set_accountid( ProductSourceSlot_Name( SLOT_2 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        // Set the (in)visibility of SETUP sources.
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
+        source->set_accountid( SetupSourceSlot_Name( SETUP ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
+        source->set_accountid( SetupSourceSlot_Name( ADAPTIQ ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
+        source->set_accountid( SetupSourceSlot_Name( PAIRING ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        auto sourcesRespCb = []( Sources sources )
+        {
+            BOSE_INFO( s_logger, FRONTDOOR_SYSTEM_SOURCES_API " properties: %s", sources.properties( ).DebugString( ).c_str( ) );
+        };
+
         GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
             message,
@@ -1767,67 +1806,9 @@ void ProfessorProductController::SendInitialCapsData()
             m_errorCb );
         BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
     }
-    Sources message;
 
-    // Populate status and visibility of PRODUCT sources.
-    using namespace ProductSTS;
-
-    Sources_SourceItem* source = message.add_sources( );
-    source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-    source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
-    source->set_accountid( ProductSourceSlot_Name( TV ) );
-    source->set_status( SourceStatus::AVAILABLE );
-    source->set_visible( true );
-
-    source = message.add_sources( );
-    source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-    source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
-    source->set_accountid( ProductSourceSlot_Name( SLOT_0 ) );
-    source->set_status( SourceStatus::NOT_CONFIGURED );
-    source->set_visible( false );
-
-    source = message.add_sources( );
-    source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-    source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
-    source->set_accountid( ProductSourceSlot_Name( SLOT_1 ) );
-    source->set_status( SourceStatus::NOT_CONFIGURED );
-    source->set_visible( false );
-
-    source = message.add_sources( );
-    source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-    source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
-    source->set_accountid( ProductSourceSlot_Name( SLOT_2 ) );
-    source->set_status( SourceStatus::NOT_CONFIGURED );
-    source->set_visible( false );
-
-    // Set the (in)visibility of SETUP sources.
-    source = message.add_sources( );
-    source->set_sourcename( SHELBY_SOURCE::SETUP );
-    source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
-    source->set_accountid( SetupSourceSlot_Name( SETUP ) );
-    source->set_status( SourceStatus::UNAVAILABLE );
-    source->set_visible( false );
-
-    source = message.add_sources( );
-    source->set_sourcename( SHELBY_SOURCE::SETUP );
-    source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
-    source->set_accountid( SetupSourceSlot_Name( ADAPTIQ ) );
-    source->set_status( SourceStatus::UNAVAILABLE );
-    source->set_visible( false );
-
-    source = message.add_sources( );
-    source->set_sourcename( SHELBY_SOURCE::SETUP );
-    source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
-    source->set_accountid( SetupSourceSlot_Name( PAIRING ) );
-    source->set_status( SourceStatus::UNAVAILABLE );
-    source->set_visible( false );
-
-    GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
-        FRONTDOOR_SYSTEM_SOURCES_API,
-        message,
-        sourcesRespCb,
-        m_errorCb );
-    BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
+    // Do the Common stuff last, the PUT above must come first
+    ProductController::SendInitialCapsData();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
