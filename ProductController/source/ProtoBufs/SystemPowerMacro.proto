@@ -1,0 +1,21 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file SystemPowerMacro.proto
+///
+/// @brief Protobuff for Power Macro 
+///
+/// Copyright 2017 Bose Corporation
+///
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+import "ProductSTS.proto";
+
+package ProductPb;
+
+message PowerMacro
+{
+    optional bool   enabled                             = 1;
+    optional ProductSTS.ProductSourceSlot powerOnDevice = 2;
+    optional bool   powerOnTv                           = 3;
+}

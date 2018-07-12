@@ -90,7 +90,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( );
     APTimerPtr m_timer;
-    bool m_powerDownOnExit;
+    bool m_completed;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -99,7 +99,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr<CustomProductLpmHardwareInterface>& HardwareIface( );
 
-    const uint32_t ADAPTIQ_TIMEOUT_MINUTES      = 20;
+    const uint32_t ADAPTIQ_TIMEOUT_MINUTES      = 3;
     const uint32_t ADAPTIQ_INACTIVITY_TIMEOUT   = 1 * ADAPTIQ_TIMEOUT_MINUTES * 60 * 1000;
 
 };
