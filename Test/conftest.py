@@ -99,7 +99,6 @@ def pytest_addoption(parser):
 
     parser.addoption("--router",
                      action="store",
-                     default="testRouter",
                      help="router: Specify which router from Configs/conf_wifiProfiles.ini is used to connect.")
 
     parser.addoption('--passport-base-url',
@@ -613,20 +612,31 @@ def add_wifi_at_end(request, device_id, wifi_config):
     Add the wifi network at the end.
     """
     LOGGER.debug("add_wifi_at_end")
+
     yield
+
+    if not request.config.getoption('--router'):
+        LOGGER.info("No router defined.")
+        return
+
     LOGGER.info("Executing after yield")
     riviera_comm = rivieraCommunication.getCommunicationType('ADB')
     riviera_comm.setCommunicationDetail(device_id)
+
     status = None
     for _ in range(90):
         status = riviera_comm.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
         if status and status.strip() == 'OK':
             break
         time.sleep(1)
+
     assert status, "CLIServer not started within 90s."
     assert (status.strip() == 'OK'), 'CLIServer is not stated even after 90 seconds'
+
     time.sleep(2)
+
     LOGGER.info("Executing ip_address_wlan")
+
     ip_address_wlan(request, device_id, wifi_config)
 
 
