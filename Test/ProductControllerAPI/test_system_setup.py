@@ -107,12 +107,12 @@ def test_system_setup_from_setup_state(frontdoor_wlan):
     get_and_set_system_setup(frontdoor_wlan)
     for _ in range(25):
         state = frontdoor_wlan.getState()
-        if state == eddie_helper.DESELECTED:
+        if state in eddie_helper.DESELECTED:
             break
         time.sleep(1)
 
     # 3. Verify device state which should be "DESELECTED".
-    assert state == eddie_helper.DESELECTED, \
+    assert state in eddie_helper.DESELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.DESELECTED, state)
 
 
@@ -183,7 +183,7 @@ def test_system_setup_cli_command(device_id, frontdoor_wlan):
     adb_utils.adb_telnet_cmd('setoobsetupcompleted', device_id=device_id)
     for _ in range(25):
         state = frontdoor_wlan.getState()
-        if state == eddie_helper.DESELECTED:
+        if state in eddie_helper.DESELECTED:
             break
         time.sleep(1)
 
@@ -196,7 +196,7 @@ def test_system_setup_cli_command(device_id, frontdoor_wlan):
             notification["networkConfigured"])
 
     # 3. Verify device state which should be "DESELECTED".
-    assert state == eddie_helper.DESELECTED, \
+    assert state in eddie_helper.DESELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.DESELECTED, state)
 
 

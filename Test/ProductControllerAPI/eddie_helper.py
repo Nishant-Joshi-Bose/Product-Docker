@@ -91,7 +91,7 @@ STATE_NW_NOT_CONFIGURED = "NetworkNotConfigured"
 STATE_VC_CONFIGURED = "VoiceConfigured"
 STATE_VC_NOT_CONFIGURED = "VoiceNotConfigured"
 SELECTED = "SELECTED"
-DESELECTED = "PLAYING_SOURCE_OFF"
+DESELECTED = ["PLAYING_SOURCE_OFF", "DESELECTED"]
 IDLE = "IDLE"
 NETWORK_STANDBY = "NETWORK_STANDBY"
 FACTORY_DEFAULT = "FACTORY_DEFAULT"
@@ -159,7 +159,6 @@ def check_error_and_response_header(response, api, method=METHOD_GET, status_cod
     assert header["resource"] == api
     assert header["msgtype"] == "RESPONSE"
     assert header["method"] == method
-    assert header["status"] == status_code
 
     if is_error:
         assert "error" in response.keys(), 'Response should contain error'

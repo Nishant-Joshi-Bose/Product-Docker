@@ -13,30 +13,30 @@
 Parent conftest.py for the Eddie repository
 """
 import datetime
-import pexpect
+from multiprocessing import Process, Manager
+import ConfigParser
+
 import glob
 import json
 import os
 import shutil
 import time
-import ConfigParser
-from multiprocessing import Process, Manager
 
 import pytest
+import pexpect
 
+from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
-from CastleTestUtils.LpmUtils.Lpm import Lpm
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
-from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 from CastleTestUtils.LpmUtils.Lpm import Lpm
+from CastleTestUtils.OAuthUtils.OAuthUtils import UserAccount
+
 from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
-from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
-from CastleTestUtils.OAuthUtils.OAuthUtils import UserAccount
 from services import SERVICES
 from ProductControllerAPI import eddie_helper
 
@@ -114,6 +114,7 @@ def pytest_addoption(parser):
                      default="latest",
                      help="Pass the Galapagos environment for frontdoor api object")
 
+
 def ping(ip):
     """ Pings a given IP Address """
     return os.system("ping -q -c 5 -i 0.2 -w 2 " + ip) == 0
@@ -159,8 +160,9 @@ def device_ip(request, device_id):
     if request.config.getoption("--target").lower() == 'device':
         network_base = NetworkBase(None, device_id)
         interface = request.config.getoption("--network-iface")
-        device_ip = network_base.check_inf_presence(interface)
-        return device_ip
+        ip_address = network_base.check_inf_presence(interface)
+        return ip_address
+
 
 @pytest.fixture(scope="class")
 def frontDoor(device_ip, request):
@@ -173,11 +175,15 @@ def frontDoor(device_ip, request):
     front_door = FrontDoorAPI(device_ip)
 
     def tear():
+        """
+        Close the frontDoor.
+        """
         if front_door:
             front_door.close()
     request.addfinalizer(tear)
 
     return front_door
+
 
 @pytest.fixture(scope='session')
 def passport_user_details(request):
@@ -192,8 +198,9 @@ def passport_user_details(request):
     LOGGER.debug("_dname is: %s", _dname)
     email = "Eddie_Automation" + _dname + "@bose.com"
     LOGGER.debug("email is: %s", email)
-    user_dict = {"email" : email, "password" : "bose901", "fname" : fname, "lname" : lname, "env" : env}
+    user_dict = {"email": email, "password": "bose901", "fname": fname, "lname": lname, "env": env}
     return user_dict
+
 
 @pytest.fixture(scope='session')
 def create_passport_user(request, passport_user_details):
@@ -203,7 +210,10 @@ def create_passport_user(request, passport_user_details):
     LOGGER.info("passport_user_withoutFD")
     gigya_url = "https://ingress-platform.live-aws-useast1.bose.io/dev/svc-id-gen-pub/" + passport_user_details["env"] + "/id-user-accounts-core/userAccounts/"
     user_account = UserAccount(url=gigya_url, logger=LOGGER)
-    user_account.create_user_account(passport_user_details["email"], passport_user_details["password"], passport_user_details["lname"], passport_user_details["fname"])
+    user_account.create_user_account(passport_user_details["email"],
+                                     passport_user_details["password"],
+                                     passport_user_details["lname"],
+                                     passport_user_details["fname"])
     response = user_account.authenticate_user_account(passport_user_details["email"], passport_user_details["password"])
     LOGGER.info("The bosePersonID is: %s", response["bosePersonID"])
     LOGGER.info("The access token is: %s", response["access_token"])
@@ -211,12 +221,54 @@ def create_passport_user(request, passport_user_details):
     LOGGER.info("The time to live is: %s", response["expires_in"])
 
     def tear():
+        """
+        Delete the user account at the end.
+        """
         user_account = UserAccount(url=gigya_url, logger=LOGGER)
         LOGGER.info("Deleting User-Account")
         user_account.delete_user_account(passport_user_details["email"], passport_user_details["password"])
     request.addfinalizer(tear)
 
     return response
+
+
+@pytest.mark.usefixtures('request')
+@pytest.fixture(scope='session')
+def environment(request):
+    """
+    Galapagos/Passport Environment for the test session.
+
+    :param request: PyTest command line request option
+    :return: Environment string
+    """
+    yield request.config.getoption("--galapagos-env")
+
+
+@pytest.fixture(scope="function")
+def frontDoor_without_user(request, ip_address_wlan, passport_user_details):
+    """
+    Get the frontDoor Instance
+    :param request: pytest request object
+    :param ip_address_wlan: Fixture returning ip address
+    :param passport_user_details: Fixture returnng passport user credential
+    :param front_door: Instance of FronDoorAPI
+    """
+    LOGGER.info("frontDoor_without_user")
+    if ip_address_wlan is None:
+        pytest.fail("No valid device IP")
+    front_door = FrontDoorAPI(ip_address_wlan, email=passport_user_details["email"],
+                              password=passport_user_details["password"])
+
+    def tear():
+        """
+        Close the FrontDoor
+        """
+        if front_door:
+            front_door.close()
+    request.addfinalizer(tear)
+
+    return front_door
+
 
 @pytest.fixture(scope='session')
 def passport_user(request, create_passport_user):
@@ -228,21 +280,6 @@ def passport_user(request, create_passport_user):
     LOGGER.info("Bose Person ID : %s ", _bosepersonID)
     passportUser = PassportAPIUsers(_bosepersonID, apikey, _access_token, passport_base_url, LOGGER)
     return passportUser
-
-
-@pytest.fixture(scope="function")
-def frontDoor_without_user(request, ip_address_wlan, passport_user_details):
-    LOGGER.info("frontDoor_without_user")
-    if ip_address_wlan is None:
-        pytest.fail("No valid device IP")
-    front_door = FrontDoorAPI(ip_address_wlan, email=passport_user_details["email"], password=passport_user_details["password"])
-
-    def tear():
-        if front_door:
-            front_door.close()
-    request.addfinalizer(tear)
-
-    return front_door
 
 
 @pytest.fixture(scope='session')
@@ -257,26 +294,59 @@ def music_service_account(request, passport_user):
     LOGGER.info("music_service_account")
     service_accountid = []
     for service in SERVICES:
-        print("Adding {} to {}".format(service, passport_user))
+        LOGGER.debug("Adding {} to {}".format(service, passport_user))
         account = SERVICES[service]['account']
         if account['provider'] != 'TUNEIN':
             accountId = passport_user.add_service_account(accountType=account['account_type'],
-                                                        service=account['provider'],
-                                                        accountID=account['name'],
-                                                        account_name=account['name'],
-                                                        refresh_token=account['secret'])
+                                                          service=account['provider'],
+                                                          accountID=account['name'],
+                                                          account_name=account['name'],
+                                                          refresh_token=account['secret'])
             service_accountid.append(accountId)
             assert accountId and accountId != "", "Fail to add music service account."
 
     def remove_music_service():
+        """
+        Delete the music services
+        """
         LOGGER.info("remove_music_service")
         # get account id for music service
-        for accountId in service_accountid:
-            assert passport_user.remove_service_account(accountId), "Fail to remove music account from passport account."
+        for account_id in service_accountid:
+            assert passport_user.remove_service_account(account_id), "Fail to remove music account from passport account."
     request.addfinalizer(remove_music_service)
 
 
-@pytest.fixture(scope='class')
+@pytest.fixture(scope='function')
+def create_passport_user_function(request, passport_user_details):
+    """
+    Get passport user object
+    """
+    LOGGER.info("create passport user at function scope")
+    gigya_url = "https://ingress-platform.live-aws-useast1.bose.io/dev/svc-id-gen-pub/" + passport_user_details["env"] + "/id-user-accounts-core/userAccounts/"
+    user_account = UserAccount(url=gigya_url, logger=LOGGER)
+    user_account.create_user_account(passport_user_details["email"],
+                                     passport_user_details["password"],
+                                     passport_user_details["lname"],
+                                     passport_user_details["fname"])
+    response = user_account.authenticate_user_account(passport_user_details["email"], passport_user_details["password"])
+    LOGGER.info("The bosePersonID is: %s", response["bosePersonID"])
+    LOGGER.info("The access token is: %s", response["access_token"])
+    LOGGER.info("The refresh token is: %s", response["refresh_token"])
+    LOGGER.info("The time to live is: %s", response["expires_in"])
+
+    def tear():
+        """
+        Delete the user account at the end.
+        """
+        user_account = UserAccount(url=gigya_url, logger=LOGGER)
+        LOGGER.info("Deleting User-Account")
+        user_account.delete_user_account(passport_user_details["email"], passport_user_details["password"])
+    request.addfinalizer(tear)
+
+    return response
+
+
+@pytest.fixture(scope='session')
 def riviera(device_id):
     """
     Get RivieraUtil instance.
@@ -284,16 +354,29 @@ def riviera(device_id):
     return rivieraUtils.RivieraUtils('ADB', device=device_id)
 
 
-@pytest.fixture(scope='class')
-def device_guid(frontDoor):
+@pytest.fixture(scope='session')
+@pytest.mark.usefixtures('riviera')
+def device_guid(riviera):
     """
-    Use front door API to obtain device GUID
+    Acquires the GUID for the Device under test
+    :param riviera: Instance of RivieraUtils
+    :return: GUID string
     """
-    LOGGER.info("Getting the GUID of the device")
-    device_guid = frontDoor.getInfo()["body"]["guid"]
-    assert device_guid != None
-    LOGGER.debug("GUID is: %s", device_guid)
-    return device_guid
+    guid = riviera.communication.executeCommand('mfgdata get guid').strip()
+    LOGGER.debug("GUID is: %s", guid)
+    return guid
+
+
+@pytest.fixture(scope='function')
+@pytest.mark.usefixtures('passport_user', 'device_guid')
+def frontDoor_with_user(environment, riviera, create_passport_user_function, passport_user_details, ip_address_wlan):
+    """
+    Adding the product using passportAPI
+    """
+    LOGGER.info("Link the product after user account")
+    product_response = riviera.link_product(environment=environment, ip_address=ip_address_wlan,
+                                            email=passport_user_details["email"], password=passport_user_details["password"])
+    LOGGER.debug("Product response is %s", product_response)
 
 
 @pytest.fixture(scope='function', autouse=False)
@@ -403,22 +486,12 @@ def eddie_master_latest_directory(tmpdir):
 
 
 @pytest.fixture(scope="session")
-def keyConfig():
-    keyConfigData = keyConfig["keyTable"]
-    return keyConfigData
-
-
-@pytest.fixture(scope='session')
-def deviceid(request):
+def key_config():
     """
-    This fixture will return the device-id
-    :return: device-id
+    Get the CLI key event details
     """
-    try:
-        return request.config.getoption("--device-id")
-    except Exception as exception:
-        LOGGER.info("Getting device id.... " + str(exception))
-    return False
+    key_data = keyConfig["keyTable"]
+    return key_data
 
 
 @pytest.fixture(scope='module')
@@ -440,6 +513,7 @@ def wifi_config():
     config.read(wifi_ini_file)
 
     yield config
+
 
 @pytest.mark.usefixture('request', 'device_id', 'wifi_config')
 @pytest.fixture(scope="function")
@@ -535,14 +609,17 @@ def ip_address_wlan(request, device_id, wifi_config):
 
 @pytest.fixture(scope='module')
 def add_wifi_at_end(request, device_id, wifi_config):
+    """
+    Add the wifi network at the end.
+    """
     LOGGER.debug("add_wifi_at_end")
     yield
     LOGGER.info("Executing after yield")
-    adb = rivieraCommunication.getCommunicationType('ADB')
-    adb.setCommunicationDetail(device_id)
+    riviera_comm = rivieraCommunication.getCommunicationType('ADB')
+    riviera_comm.setCommunicationDetail(device_id)
     status = None
-    for count in range(90):
-        status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
+    for _ in range(90):
+        status = riviera_comm.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
         if status and status.strip() == 'OK':
             break
         time.sleep(1)
@@ -658,14 +735,16 @@ def force_rndis(adb, device_id, request):
 
 
 @pytest.fixture(scope="function")
-def frontdoor_wlan(request, ip_address_wlan):
+@pytest.mark.usesfixtures('ip_address_wlan', 'passport_user_details')
+def frontdoor_wlan(ip_address_wlan, frontDoor_with_user, passport_user_details):
     """
     Frontdoor instance of the device connected to wlan.
     """
     LOGGER.info("frontDoorQueue")
     if ip_address_wlan is None:
         pytest.fail("No valid device IP")
-    _frontdoor = FrontDoorQueue(ip_address_wlan)
+    _frontdoor = FrontDoorQueue(ip_address_wlan, email=passport_user_details["email"],
+                                password=passport_user_details["password"])
 
     yield _frontdoor
 
@@ -686,19 +765,19 @@ def set_no_audio_timeout(device_id):
 
     :param device_id: ADB Device ID of the device under test
     """
-    adb = rivieraCommunication.getCommunicationType('ADB')
-    adb.setCommunicationDetail(device_id)
+    riviera_comm = rivieraCommunication.getCommunicationType('ADB')
+    riviera_comm.setCommunicationDetail(device_id)
     timer_file = '/opt/Bose/etc/InActivityTimer.json'
     # 1. Change "NoAudioTimeout" to 1 minute.
-    adb.executeCommand("/opt/Bose/bin/rw")
-    adb.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
-    adb.executeCommand('sync')
+    riviera_comm.executeCommand("/opt/Bose/bin/rw")
+    riviera_comm.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
+    riviera_comm.executeCommand('sync')
     # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(device_id, adb)
+    rebooted_and_out_of_booting_state_device(device_id, riviera_comm)
 
     # 3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id, timeout=120)
         if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
             break
         time.sleep(1)
@@ -710,11 +789,11 @@ def set_no_audio_timeout(device_id):
     yield
 
     # 4. At the end of test case revert "NoAudioTimeout" to 20 minutes.
-    adb.executeCommand("/opt/Bose/bin/rw")
-    adb.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
-    adb.executeCommand('sync')
+    riviera_comm.executeCommand("/opt/Bose/bin/rw")
+    riviera_comm.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
+    riviera_comm.executeCommand('sync')
     # 5. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(device_id, adb)
+    rebooted_and_out_of_booting_state_device(device_id, riviera_comm)
 
 
 @pytest.fixture(scope="function")
@@ -722,38 +801,40 @@ def set_lps_timeout(device_id):
     """
     This fixture changes "NoAudioTimeout" and "NoNetworkConfiguredTimeout" params to test Low power state transition.
     Test steps:
-    1. Change "NoAudioTimeout" to 1 minute and "NoNetworkConfiguredTimeout" to 2 minutes.
-    2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    3. At the end of test case revert "NoAudioTimeout" to 20 minutes and "NoNetworkConfiguredTimeout" to 120 minutes.
+    1. Change "NoAudioTimeout" to 1 minute and "NoNetworkConfiguredTimeout"
+       to 2 minutes.
+    2. Reboot and wait for CLI-Server to start and
+       device state get out of Booting.
+    3. At the end of test case revert "NoAudioTimeout" to 20 minutes and
+       "NoNetworkConfiguredTimeout" to 120 minutes.
     4. Reboot and wait for CLI-Server to start and device state get out of Booting.
 
     :param device_id: ADB Device ID of the device under test
     """
-    adb = rivieraCommunication.getCommunicationType('ADB')
-    adb.setCommunicationDetail(device_id)
+    riviera_comm = rivieraCommunication.getCommunicationType('ADB')
+    riviera_comm.setCommunicationDetail(device_id)
     timer_file = '/opt/Bose/etc/InActivityTimer.json'
     # 1. Change "NoAudioTimeout" to 1 minute and "NoNetworkConfiguredTimeout" to 2 minutes.
-    adb.executeCommand("/opt/Bose/bin/rw")
-    adb.executeCommand("sed 's/\\\"NoNetworkConfiguredTimeout\\\": 120,/\\\"NoNetworkConfiguredTimeout\\\": 2,/;"
-                       "s/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
-    adb.executeCommand('sync')
-    LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
+    riviera_comm.executeCommand("/opt/Bose/bin/rw")
+    riviera_comm.executeCommand("sed 's/\\\"NoNetworkConfiguredTimeout\\\": 120,/\\\"NoNetworkConfiguredTimeout\\\": 2,/;"
+                                "s/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
+    riviera_comm.executeCommand('sync')
+    LOGGER.info(riviera_comm.executeCommand("cat {}".format(timer_file)))
     # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
     rebooted_and_out_of_booting_state_device(device_id, adb)
-    LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
+    LOGGER.info(riviera_comm.executeCommand("cat {}".format(timer_file)))
 
     yield
 
     # 3. At the end of test case revert "NoAudioTimeout" to 20 minutes and "NoNetworkConfiguredTimeout" to 120 minutes.
-    adb.executeCommand("/opt/Bose/bin/rw")
-    adb.executeCommand("sed 's/\\\"NoNetworkConfiguredTimeout\\\": 2,/\\\"NoNetworkConfiguredTimeout\\\": 120,/;"
-                       "s/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
-    adb.executeCommand('sync')
-    LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
+    riviera_comm.executeCommand("/opt/Bose/bin/rw")
+    riviera_comm.executeCommand("sed 's/\\\"NoNetworkConfiguredTimeout\\\": 2,/\\\"NoNetworkConfiguredTimeout\\\": 120,/;"
+                                "s/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
+    riviera_comm.executeCommand('sync')
+    LOGGER.info(riviera_comm.executeCommand("cat {}".format(timer_file)))
 
     # 4. Reboot and wait for CLI-Server to start and device state get out of Booting.
     rebooted_and_out_of_booting_state_device(device_id, adb)
-
 
 
 @pytest.fixture(scope="function")
@@ -784,7 +865,8 @@ def rebooted_and_out_of_booting_state_device(device_id, adb):
 
     # Wait until product state come out from 'Booting' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ',
+                                                device_id=device_id, timeout=120)
         if device_state != eddie_helper.BOOTING:
             break
         LOGGER.debug("Current device state : %s", device_state)
@@ -805,12 +887,14 @@ def remove_oob_setup_state_and_reboot_device(device_id, adb):
 
     # Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ',
+                                                device_id=device_id, timeout=120)
         if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
             break
         time.sleep(1)
 
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ',
+                                            device_id=device_id, timeout=120)
     assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
         'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
                                                                         eddie_helper.SETUPNETWORK, device_state)
