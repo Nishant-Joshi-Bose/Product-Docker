@@ -430,15 +430,15 @@ void DisplayController::PushDefaultsToLPM()
     // Send to LPM.
     //
 
-    m_lpmClient->SetLightSensorParams( defaults, [this]( const IpcLpmGenericResponse_t& response )
-    {
-        if( response.code() == IPC_TRANSITION_COMPLETE )
-        {
-            m_defaultsSentToLpm = true;
+    Callback<IpcLpmGenericResponse_t> setParamsCb( std::bind( &DisplayController::HandleLpmSetLightSensorParams, this, std::placeholders::_1 ) );
+    AsyncCallback<const IpcLpmGenericResponse_t&> setParamsAsync( setParamsCb, m_task );
 
-            BOSE_DEBUG( s_logger, "IPC_PER_SET_LIGHTSENSOR_PARAMS success!" );
-        }
-    } );
+    auto f = [this, defaults, setParamsAsync]()
+    {
+        IpcLightSensorParams_t params = defaults;
+        m_lpmClient->SetLightSensorParams( params, setParamsAsync );
+    };
+    IL::BreakThread( f, m_productController.GetTask() );
 }
 
 /*!
@@ -467,14 +467,20 @@ void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
  */
 void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, uint16_t time )
 {
-    IpcUIBrightness_t lpmBrightness;
+    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
 
-    lpmBrightness.set_device( UI_BRIGTHNESS_DEVICE_LCD );
-    lpmBrightness.set_value( capPercent );
-    lpmBrightness.set_mode( UI_BRIGTHNESS_MODE_CAP_MAXIMUM );
-    lpmBrightness.set_time( time );
+    auto f = [this, capPercent, time]()
+    {
+        IpcUIBrightness_t lpmBrightness;
 
-    m_lpmClient->SetUIBrightness( lpmBrightness );
+        lpmBrightness.set_device( UI_BRIGTHNESS_DEVICE_LCD );
+        lpmBrightness.set_value( capPercent );
+        lpmBrightness.set_mode( UI_BRIGTHNESS_MODE_CAP_MAXIMUM );
+        lpmBrightness.set_time( time );
+
+        m_lpmClient->SetUIBrightness( lpmBrightness );
+    };
+    IL::BreakThread( f, m_productController.GetTask() );
 }
 
 /*!
@@ -781,14 +787,20 @@ void DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp )
  */
 void DisplayController::PullUIBrightnessFromLpm( IpcUIBrightnessDevice_t deviceType )
 {
-    IpcGetUIBrightnessParams_t params;
-    params.set_device( deviceType );
+    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
 
-    m_lpmClient->GetUIBrightness( params, [this]( const IpcUIBrightness_t& response )
+    Callback<IpcUIBrightness_t> cb( std::bind( &DisplayController::HandleLpmGetUIBrightness, this, std::placeholders::_1 ) );
+    AsyncCallback<const IpcUIBrightness_t&> cbAsync( cb, m_task );
+
+    auto f = [this, deviceType, cbAsync]()
     {
-        m_lcdBrightness.set_mode( BrightnessIpcEnumToProtoEnum( ( IpcUIBrightnessMode_t ) response.mode() ) );
-        m_lcdBrightness.set_value( response.value() );
-    } );
+        IpcGetUIBrightnessParams_t params;
+        params.set_device( deviceType );
+
+        m_lpmClient->GetUIBrightness( params, cbAsync );
+    };
+
+    IL::BreakThread( f, m_productController.GetTask() );
 }
 
 /*!
@@ -891,6 +903,26 @@ void DisplayController::HandleGetLcdBrightnessRequest( const Callback<Brightness
 
 /*!
  */
+void DisplayController::HandleLpmSetLightSensorParams( const IpcLpmGenericResponse_t& response )
+{
+    if( response.code() == IPC_TRANSITION_COMPLETE )
+    {
+        m_defaultsSentToLpm = true;
+
+        BOSE_DEBUG( s_logger, "IPC_PER_SET_LIGHTSENSOR_PARAMS success!" );
+    }
+}
+
+/*!
+ */
+void DisplayController::HandleLpmGetUIBrightness( const IpcUIBrightness_t& response )
+{
+    m_lcdBrightness.set_mode( BrightnessIpcEnumToProtoEnum( ( IpcUIBrightnessMode_t ) response.mode() ) );
+    m_lcdBrightness.set_value( response.value() );
+}
+
+/*!
+ */
 bool DisplayController::IsFrontdoorBrightnessDataValid( const Brightness& incoming,
                                                         const Brightness& spec, const char* endPoint )
 {
@@ -936,7 +968,6 @@ void DisplayController::HandlePutLcdBrightnessRequest( const Brightness& req, co
 
     if( incomingIsValid )
     {
-        IpcUIBrightness_t lpmBrightness;
         // User changes from Frontdoor will be persisted all modes except UI_BRIGTHNESS_MODE_CAP_MAXIMUM.
 
         // Persist locally.
@@ -944,8 +975,14 @@ void DisplayController::HandlePutLcdBrightnessRequest( const Brightness& req, co
         m_lcdBrightness.set_value( req.value() );
 
         // Send to LPM.
-        BuildLpmUIBrightnessStruct( &lpmBrightness, UI_BRIGTHNESS_DEVICE_LCD );
-        m_lpmClient->SetUIBrightness( lpmBrightness );
+        auto f = [this]()
+        {
+            IpcUIBrightness_t lpmBrightness;
+            BuildLpmUIBrightnessStruct( &lpmBrightness, UI_BRIGTHNESS_DEVICE_LCD );
+
+            m_lpmClient->SetUIBrightness( lpmBrightness );
+        };
+        IL::BreakThread( f, m_productController.GetTask() );
     }
 
     resp.Send( m_lcdBrightness );
@@ -1025,11 +1062,12 @@ void DisplayController::BuildLpmUIBrightnessStruct( IpcUIBrightness_t* out, IpcU
 
 /*!
  */
-void DisplayController::RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void>* completedCb )
+void DisplayController::RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void>& completedCb )
 {
     BOSE_DEBUG( s_logger, "%s, turnOn %i", __FUNCTION__, turnOn );
 
-    auto f = [this, turnOn, completedCb]()
+    // Need to use "mutable" so that completedCb gets value-copied.
+    auto f = [this, turnOn, completedCb]() mutable
     {
         if( m_config.m_hasLcd )
         {
@@ -1053,10 +1091,7 @@ void DisplayController::RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void
             }
         }
 
-        if( completedCb != nullptr )
-        {
-            ( *completedCb )();
-        }
+        completedCb();
     };
 
     IL::BreakThread( f, m_task );
