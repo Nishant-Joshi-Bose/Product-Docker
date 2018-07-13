@@ -81,7 +81,6 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
-    m_dataCollectionClientInterface( m_FrontDoorClientIF, GetDataCollectionClient() ),
     m_ProductSTSController( *this )
 {
     BOSE_INFO( s_logger, __func__ );
@@ -420,8 +419,8 @@ void CustomProductController::HandleSTSReady( void )
 bool CustomProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger,
-               "%s:|CAPS Ready=%d|LPMReady=%d|AudioPathReady=%d|NetworkModuleReady=%d"
-               "|m_isBluetoothReady=%d|STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d",
+               "%s:|CAPS=%d|LPM=%d|AudioPath=%d|Network=%d|Bluetooth=%d"
+               "|STS=%d|SWUpdate=%d|ProductUI=%d|SASS=%d|Voice=%d",
                __func__,
                IsCAPSReady() ,
                IsLpmReady(),
@@ -430,7 +429,9 @@ bool CustomProductController::IsAllModuleReady() const
                IsBluetoothModuleReady(),
                IsSTSReady(),
                IsSoftwareUpdateReady(),
-               IsUiConnected() );
+               IsUiConnected(),
+               IsSassReady(),
+               IsVoiceModuleReady() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
@@ -440,7 +441,8 @@ bool CustomProductController::IsAllModuleReady() const
              IsSTSReady() and
              IsSoftwareUpdateReady() and
              IsUiConnected() and
-             IsSassReady() ) ;
+             IsSassReady() and
+             IsVoiceModuleReady() ) ;
 }
 
 bool CustomProductController::IsBtLeModuleReady() const
@@ -584,6 +586,7 @@ void CustomProductController::HandleGetBootStatus( const std::list<std::string>&
 
     std::string SassInitialized( IsSassReady( )                 ? "true" : "false" );
     std::string SoftwareUpdateReady( IsSoftwareUpdateReady( )   ? "true" : "false" );
+    std::string VoiceInitialized( IsVoiceModuleReady( )         ? "true" : "false" );
 
     response  = "------------- Product Controller Booting Status -------------\n";
     response += "\n";
@@ -613,6 +616,9 @@ void CustomProductController::HandleGetBootStatus( const std::list<std::string>&
     response += "\n";
     response += "SASS Initialized      : ";
     response += SassInitialized;
+    response += "\n";
+    response += "Voice Initialized     : ";
+    response += VoiceInitialized;
     response += "\n";
     response += "\n";
 
