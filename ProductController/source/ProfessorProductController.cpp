@@ -1701,7 +1701,7 @@ void ProfessorProductController::SendInitialCapsData()
     }
     else
     {
-        // Set the thresholds only once, after factory default
+        // Do this only once, after factory default
         if( ! SystemUtils::WriteFile( "", DefaultCAPSValuesStateFile ) )
         {
             BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultCAPSValuesStateFile.c_str( ) );
