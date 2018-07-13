@@ -13,11 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.16.43003.2903862"
+    "selected_version": "Continuous/Castle-Fork/2018-07-13_1141"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-121+ad4aa53"
+    "selected_version": "Continuous/master/1.5.2-124+702e66f"
+  },
+  {
+    "name": "BLEToFrontDoorService-qc8017_32",
+    "selected_version": "Continuous/master/1.5.0-20+0e287e7"
   },
   {
     "name": "bose-opkg-utils",
@@ -157,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@124c228beea5e6bb9a91c808218e2ec871dfc050"
+    "selected_version": "master@05264b54203e8629b5938b970aa19a4effa950d3"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -209,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.16.43003.2903862"
+    "selected_version": "Continuous/Castle-Fork/2018-07-13_1141"
   },
   {
     "name": "SystemEventService-qc8017_32",
