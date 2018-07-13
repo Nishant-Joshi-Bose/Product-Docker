@@ -33,7 +33,7 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.5.1-115+9f4ad46"
+    "selected_version": "Continuous/master/1.5.1-121+ad4aa53"
   },
   {
     "name": "bose-opkg-utils",
@@ -69,15 +69,15 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/1.5.0-31+efc5ac4"
+    "selected_version": "Continuous/master/1.5.0-34+aeecd0b"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/1.6.2-91+2b83404"
+    "selected_version": "Continuous/master/1.6.2-95+40713e0"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/1.5.0-43+3b6c006"
+    "selected_version": "Continuous/master/1.5.0-47+43a547d"
   },
   {
     "name": "CastleLibs-native",
@@ -101,11 +101,11 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/1.0.1-55+6478504"
+    "selected_version": "Continuous/master/1.0.1-71+0fdb91e"
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/1.5.1-116+68c8ba2"
+    "selected_version": "Continuous/master/1.5.1-119+17f42e0"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -133,11 +133,11 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/1.5.1-116+bd66c32"
+    "selected_version": "Continuous/master/1.5.1-122+eb02bde"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.5.0-110+2bdc8bd"
+    "selected_version": "Continuous/master/1.5.0-114+870a165"
   },
   {
     "name": "LightBarController-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/1.5.0-900+105b35d"
+    "selected_version": "Continuous/master/1.5.0-902+fb0202d"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -173,7 +173,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@011076ed43d24dce87cb7c70a5afa0fafbc2a328"
+    "selected_version": "master@f2458bf6582bf7798a17810a200240823c47c9fd"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -221,7 +221,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.5.1-95+aa53fc1"
+    "selected_version": "Continuous/master/1.5.1-97+a6ad77c"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/1.5.1-16+8db70f0"
+    "selected_version": "Continuous/master/1.5.1-20+0c4331f"
   },
   {
     "name": "TestUtils",
@@ -249,6 +249,6 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/0.4.1-75+9747b6a"
+    "selected_version": "Continuous/master/0.4.1-76+f313726"
   }
 ]
