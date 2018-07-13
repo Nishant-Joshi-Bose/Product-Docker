@@ -67,6 +67,7 @@ lowpower=(
     Shepherd-BTSTSSink.xml
     Shepherd-BTSource.xml
     Shepherd-BLESetup.xml
+    Shepherd-BLEToFrontDoorService.xml
 )
 
 # For testing, make it easy to override what shepherd config files we use.
