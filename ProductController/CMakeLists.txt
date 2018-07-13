@@ -35,7 +35,6 @@ ADD_EXECUTABLE(ProductController
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandbyTransition.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
   ProductCliClient.cpp
-  DataCollectionClientInterface.cpp
   CustomProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
