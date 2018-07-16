@@ -1,0 +1,96 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file SystemSourcesProperties.proto
+///
+/// @brief Data types used by the /system/sources::properties data
+///
+/// @author Yishai Sered
+///
+/// Copyright 2017 Bose Corporation
+///
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+
+package SystemSourcesProperties;
+
+enum DEVICE_TYPE_
+{
+    DEVICE_TYPE_TV = 0;
+    DEVICE_TYPE_SMART_TV = 1;
+    DEVICE_TYPE_GAME = 2;
+    DEVICE_TYPE_CBL_SAT = 3;
+    DEVICE_TYPE_BD_DVD = 4;
+    DEVICE_TYPE_STREAMING = 5;
+}
+
+enum INPUT_ROUTE_HDMI_
+{
+    INPUT_ROUTE_HDMI_1          =  0;
+    INPUT_ROUTE_HDMI_2          =  1;
+    INPUT_ROUTE_HDMI_3          =  2;
+    INPUT_ROUTE_HDMI_4          =  3;
+    INPUT_ROUTE_HDMI_5          =  4;
+    INPUT_ROUTE_HDMI_6          =  5;
+    INPUT_ROUTE_TV              =  6;
+    INPUT_ROUTE_BLUETOOTH       =  7;
+    INPUT_ROUTE_ANALOG_FRONT    =  8;
+    INPUT_ROUTE_ANALOG_SIDE     =  9;
+    INPUT_ROUTE_ANALOG_1        = 10;
+    INPUT_ROUTE_ANALOG_2        = 11;
+    INPUT_ROUTE_ANALOG_3        = 12;
+    INPUT_ROUTE_COAX_1          = 13;
+    INPUT_ROUTE_COAX_2          = 14;
+    INPUT_ROUTE_COAX_3          = 15;
+    INPUT_ROUTE_OPTICAL_1       = 16;
+    INPUT_ROUTE_OPTICAL_2       = 17;
+    INPUT_ROUTE_OPTICAL_3       = 18;
+    INPUT_ROUTE_STREAMING       = 19;
+    INPUT_ROUTE_INTERNAL        = 20;
+    INPUT_ROUTE_USB             = 21;
+}
+
+enum ACTIVATION_KEY_
+{
+    ACTIVATION_KEY_NONE = 0;
+    ACTIVATION_KEY_GAME = 1;
+    ACTIVATION_KEY_CBL_SAT = 2;
+    ACTIVATION_KEY_BD_DVD = 3;
+    ACTIVATION_KEY_TV = 4;
+}
+
+enum FRIENDLY_NAME_
+{
+    FRIENDLY_NAME_CABLE_BOX                 =  0;
+    FRIENDLY_NAME_SAT_BOX                   =  1;
+    FRIENDLY_NAME_HDTV_TUNER                =  2;
+    FRIENDLY_NAME_DIGITIAL_TV_TUNER         =  3;
+    FRIENDLY_NAME_VCR                       =  4;
+    FRIENDLY_NAME_DVR                       =  5;
+    FRIENDLY_NAME_TIVO                      =  6;
+    FRIENDLY_NAME_SET_TOP_BOX               =  7;
+    FRIENDLY_NAME_APPLE_TV                  =  8;
+    FRIENDLY_NAME_VUDO                      =  9;
+    FRIENDLY_NAME_DVD_PLAYER                = 10;
+    FRIENDLY_NAME_BLUERAY_PLAYER            = 11;
+    FRIENDLY_NAME_DVD_RECORDER              = 12;
+    FRIENDLY_NAME_BLUERAY_RECORDER          = 13;
+    FRIENDLY_NAME_CD_PLAYER                 = 14;
+    FRIENDLY_NAME_DIGITIAL_MEDIA_PLAYER     = 15;
+    FRIENDLY_NAME_PLAYSTATION               = 16;
+    FRIENDLY_NAME_XBOX                      = 17;
+    FRIENDLY_NAME_WII                       = 18;
+    FRIENDLY_NAME_GAME_CONSOLE              = 19;
+    FRIENDLY_NAME_ROKU                      = 20;
+    FRIENDLY_NAME_COMPUTER                  = 21;
+    FRIENDLY_NAME_IPOD                      = 22;
+    FRIENDLY_NAME_RADIO_TUNER               = 23;
+    FRIENDLY_NAME_XBOX_ONE                  = 24;
+    FRIENDLY_NAME_XBOX_360                  = 25;
+    FRIENDLY_NAME_AMAZON_FIRE_TV            = 26;
+    FRIENDLY_NAME_CHROMECAST                = 27;
+    FRIENDLY_NAME_TV                        = 28;
+    FRIENDLY_NAME_SOUNDTOUCH                = 29;
+    FRIENDLY_NAME_BLUETOOTH                 = 30;
+}
+

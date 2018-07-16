@@ -1,0 +1,30 @@
+<ShepherdConfig>
+  <daemon name="Professor"
+          recovery="reboot">
+  </daemon>
+
+  <daemon name="avahi-daemon"
+          exe="start-avahi"/>
+
+  <daemon name="A4VRemoteCommunicationService"/>
+
+  <daemon name="A4VQuickSetService"/>
+
+  <daemon name="IoT"/>
+
+  <daemon name="UpnpSource">
+    <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
+  </daemon>
+
+  <daemon name="CAPS"
+          recovery="reboot">
+    <arg>-c/opt/Bose/etc/CAPS.xml</arg>
+  </daemon>
+
+  <daemon name="STSCertified"/>
+
+  <daemon name="PtsServer">
+    <arg>/opt/Bose/etc/pts-handler</arg>
+  </daemon>
+
+</ShepherdConfig>

@@ -1,0 +1,28 @@
+import "ProtoToMarkup/MarkupOptions.proto";
+
+package KeyNamesPB;
+
+enum keynames
+{
+    UNDEFINED   = 0;
+    VOLUME_UP   = 3;
+    VOLUME_DOWN = 5;
+    PRESET_1    = 8;
+    PRESET_2    = 9;
+    PRESET_3    = 10;
+    PRESET_4    = 11;
+    PRESET_5    = 12;
+    PRESET_6    = 13;
+}
+
+enum keyid
+{
+    VOLUME_DOWN_KEYID = 2;
+    VOLUME_UP_KEYID   = 3;
+    PRESET_1_KEYID    = 41;
+    PRESET_2_KEYID    = 42;
+    PRESET_3_KEYID    = 43;
+    PRESET_4_KEYID    = 44;
+    PRESET_5_KEYID    = 45;
+    PRESET_6_KEYID    = 46;
+}
