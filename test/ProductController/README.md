@@ -7,7 +7,7 @@ Background
 
 Based off of the CastleTestUtils testing framework, these tests exist to simplify testing of the Product Controller.
 
-NOTE: Do not include venv or pycache folder in git as they are generated every time the virtual environment is created.
+NOTE: The venv and pycache folders are git-ignored because they generated every time the virtual environment is created. The run_tests and run_install bash scripts are also git-ignored because each user will need to enter their own credentials to use. Running Tests steps 2 and 3 contain the same information as run_tests and Installation contains the same information as run_install.
 
 
 Running Tests
@@ -27,9 +27,9 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 ```
 
-3. Execute tests. Note that parameters need to be specified after each test. See Pytest documentation for other ways to run tests. Below is an example for running one test with its required parameters. (Change device ID)
+3. Execute tests. Note that parameters need to be specified after each test. See Pytest documentation for other ways to run tests. Below is an example for running one test with its required parameters. (Change device-id, email, and password to match your own device)
 ```
-pytest -sv AudioSettings/test_audio_settings.py --device-id 8857f8d --network-iface eth0 --target device
+pytest -sv AudioSettings/test_audio_settings.py --device-id 8857f8d --network-iface eth0 --target device --email jacqueline_lagasse@bose.com --password mypassword
 ```
 
 4. Deactivate virtual environment.
@@ -51,12 +51,12 @@ make
 pip install dist/CastleTestUtils-0.1.8.tar.gz
 ```
 
-2. To test if a specific CastleTestUtils script is working properly, run this in the virtual environment. (Change device ID)
+2. To test if a specific CastleTestUtils script is working properly, run this in the virtual environment. (Change device-id, email, and password to match your own device)
 ```
-pytest -sv tests/test_target_frontdoor.py --device 8857f8d
+pytest -sv AudioSettings/test_audio_settings.py --device-id 8857f8d --network-iface eth0 --target device --email jacqueline_lagasse@bose.com --password mypassword
 ```
 
-3. To all CastleTestUtils scripts, run this in the virtual environment. (Change device ID)
+3. To check all of the CastleTestUtils scripts, run this in the virtual environment. (Change device-id)
 ```
 make test device=8857f8d inf=eth0
 ```

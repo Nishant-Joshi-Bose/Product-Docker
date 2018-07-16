@@ -7,6 +7,10 @@ from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 
 LOGGER = get_logger(__name__)
 
+'''
+NOTE CURRENTLY PASSWORD IS HARD CODED IN FRONTDOORAPI FILE
+'''
+
 def pytest_addoption(parser):
     """
     Command line options for the pytest tests in this module.
@@ -33,6 +37,16 @@ def pytest_addoption(parser):
                      action="store",
                      default=None,
                      help="IP Address of Target under test")
+
+    parser.addoption("--email",
+                     action="store",
+                     default=True,
+                     help="email to SSH")
+
+    parser.addoption("--password",
+                     action="store",
+                     default=True,
+                     help="Password to SSH")
 
 @pytest.fixture(scope='session')
 def device_ip(request, device_id):
@@ -65,14 +79,14 @@ def device_id(request):
     return request.config.getoption('--device-id')
 
 @pytest.fixture(scope="session")
-def frontDoor_conn(device_ip, request):
+def frontDoor_conn(device_ip, password, email, request):
     """
     Get FrontDoorAPI instance.
     """
     LOGGER.info("Spawning a front door object")
     if device_ip is None:
         pytest.fail("No valid device IP")
-    front_door = FrontDoorAPI(device_ip)
+    front_door = FrontDoorAPI(device_ip, 8082, 'latest', None, None, email, password)
 
     def tear():
         if front_door:
@@ -80,3 +94,26 @@ def frontDoor_conn(device_ip, request):
     request.addfinalizer(tear)
 
     return front_door
+
+@pytest.fixture(scope='session')
+def email(request):
+    """
+    Use request object to get email from command line
+    return: email
+    """
+    email = request.config.getoption("--email")
+    if email is None:
+        pytest.fail("Provide valid --email")
+    return email
+
+
+@pytest.fixture(scope='session')
+def password(request):
+    """
+    Use request object to get password from command line
+    return: password
+    """
+    password = request.config.getoption("--password")
+    if password is None:
+        pytest.fail("Provide valid --password")
+    return password

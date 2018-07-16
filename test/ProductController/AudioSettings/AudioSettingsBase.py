@@ -7,7 +7,12 @@ def setSource(frontDoor_conn, source, sourceAccount):
 	message = {"source" : source,"sourceAccount" : sourceAccount}
 	jsonMessage = json.dumps(message, indent=4)
 	source_dict = frontDoor_conn.sendPlaybackRequest(jsonMessage)
-	time.sleep(5)
+	time.sleep(3)
+	#message = {"keyState" : "PRESS","key" : "BOSE_PLAY"}
+	message = {"duration" : 10,"key" : "BOSE_PLAY"}
+	jsonMessage = json.dumps(message, indent=4)
+	frontDoor_conn.setInjectKey(jsonMessage)
+	time.sleep(3)
 	assert source_dict['body']['container']['contentItem']['source'] == source
 	assert source_dict['body']['container']['contentItem']['sourceAccount'] == sourceAccount
 
