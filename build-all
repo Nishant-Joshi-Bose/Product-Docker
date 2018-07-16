@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# Build everything that ElectricCommander will build.
+#
+
+set -x
+make "$@" sdk=qc8017_32 cfg=Release || exit
+: success

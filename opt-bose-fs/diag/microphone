@@ -1,0 +1,141 @@
+#!/usr/bin/python2.7
+#
+# Invoked via pts-handler to display pages related to Microphone diagnostics.
+#
+import os
+import sys
+import re
+import json
+import datetime
+import subprocess
+
+# Output the table of microphone values, with the optional selected microphone highlighted and used to calculate offset values.
+def outputTable( values, selected = None ):
+
+    # HTTP Refresh header used to continuously poll data from the endpoint. Ensure users see up-to-date info.
+    print """HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nCache-Control: no-cache\r\nRefresh: 1\r\n\r"""
+    print datetime.datetime.now()
+    print """
+<html>
+<head>
+<style type="text/css">
+    body {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        overflow: auto;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+    td {
+        width: 8em;
+    }
+</style>
+</head>
+<body>
+<table>
+<tr>"""
+
+    print "<th>Value Type</th>"
+    for i in range(0, len(values)):
+        if i == selected:
+            print """<th style="background:yellow;"><a href="/diag/microphone/all">Mic {}</a></th>""".format(i+1)
+        else:
+            print """<th><a href="/diag/microphone/{}">Mic {}</a></th>""".format(i,i+1)
+    print "</tr>"
+
+    if not selected is None:
+        print "<tr>"
+        print "<td>Offset Values</td>"
+        for i in range(0, len(values)):
+            print """<td>{}</td>""".format((values[i]-values[selected]))
+        print "</tr>"
+
+    print "<tr>"
+    print "<td>Real Values in dBF</td>"
+    for i in range(0, len(values)):
+        print """<td>{}</td>""".format(values[i])
+    print "</tr>"
+
+    print """
+</table>
+</body>
+</html>"""
+
+
+# If argument given, return mic data.
+if len(sys.argv) > 1:
+
+    output = subprocess.Popen(["frontdoorutil","/vfe/meters"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+    try:
+        data = json.loads(output[0])
+        mics = data['body']['micLevels']
+        beams = data['body']['beamLevels']
+        raw = json.dumps(data['body'],indent=4)
+
+    # Catch error Parsing JSON, output error messages from utility.
+    except ValueError:
+        print output[1]
+        sys.exit()
+
+    # Catch Error finding specific fields, output message indicating that VFE is not enabled.
+    except KeyError:
+        print "The current software version does not support Microphone testing."
+        sys.exit()
+
+    # If "raw" argument, being asked for raw JSON data. 
+    if sys.argv[1]=="raw" or sys.argv[1]=="raw/":
+        print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\n\r"""
+        print raw
+
+    # If given a number, select that microphone as focus for offset.
+    elif sys.argv[1].isdigit():
+        outputTable(mics, int(sys.argv[1]))
+
+    # If given anything else, output values without offset.
+    else:
+        outputTable(mics)
+
+# Else, output main page.
+else:
+    print """
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Microphone Diagnostics</title>
+        <style type="text/css">
+            body {
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+                overflow: auto;
+            }
+            hr {
+                border: 1px solid blue;
+                color: #fff;
+                background-color: #fff;
+                height: 1px;
+                width: 100%;
+            }
+            iframe {
+                background-color: lightgrey;
+                white-space: pre-wrap;
+                border: thin dotted;
+                position:relative;
+                height: 10em;
+                width: 98%;
+                margin: 1%;
+                padding 1em;
+                display: block;
+                overflow: scroll;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id='header'>Microphones</h1>
+        <hr>
+        <li>Microphone Values [dBF]
+        <iframe id="values" src="/diag/microphone/all"></iframe>   <!-- inline frame loads the microphone data, mic selection changes src of iframe -->
+        <hr>
+    </body>
+</html>
+"""

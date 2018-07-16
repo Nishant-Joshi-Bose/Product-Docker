@@ -1,0 +1,100 @@
+@startuml
+
+class iHsm {
+	ChangeState()
+}
+
+class CHsm {
+	m_pTask : NotifyTargetTaskIF*
+}
+
+class ProductControllerHsm {
+	HandleEvent()
+}
+
+class ProductControllerHsm {
+	IsProductNeedsSetup()
+}
+note bottom: Custom and optional. \nClass for helper functions in Hsm.
+
+class ProductController {
+	inline NotifTargetTaskIF* GetTask() const
+	inline std::string const& GetProductName() const
+}
+
+class CustomProductController {
+	Initialize()
+	HandleLPMReady()
+	HandleCAPSReady()
+}
+
+class CHsmState {
+	HandleStateEnter()
+	HandleStateStart()
+	HandleStateExit()
+}
+
+class CustomProductControllerState {
+	CustomExecuteAction()
+}
+note left: Custom and Mandatory. \nThis class is needed at compile time.
+
+class ProductControllerState {
+	ExecuteAction()
+}
+note right: More states can be inherited from this class in future.
+
+class ProductControllerSubstate {
+	CustomExecuteAction()
+}
+note bottom: Optional
+
+class ProductControllerStateBooting {
+	ExecuteAction()
+}
+
+class ProductControllerStateSetup {
+	ExecuteAction()
+}
+
+class ProductControllerStateNetworkStandby {
+	ExecuteAction()
+}
+
+class CustomProductControllerStateBooting {
+}
+note bottom: Custom
+
+class CustomProductControllerStateSetup {
+}
+note bottom: Custom
+
+class CustomProductControllerStateNetworkStandby {
+}
+note bottom: Custom
+
+iHsm <|-- CHsm
+CHsm <|-- ProductControllerHsm
+
+ProductController <|-- CustomProductController
+ProductControllerHsm o-- ProductController
+ProductControllerHsm o-- CustomProductController
+CustomProductController *-- ProductControllerHsm
+CustomProductController *-- CustomProductControllerStateBooting
+CustomProductController *-- CustomProductControllerStateSetup
+CustomProductController *-- CustomProductControllerStateNetworkStandby
+
+CHsmState <|-- CustomProductControllerState 
+CustomProductControllerState <|-- ProductControllerState
+ProductControllerState <|-- ProductControllerStateBooting
+ProductControllerState <|-- ProductControllerStateSetup
+ProductControllerState <|-- ProductControllerStateNetworkStandby
+ProductControllerState <|-- ProductControllerSubstate
+
+ProductControllerStateBooting <|-- CustomProductControllerStateBooting
+ProductControllerStateSetup <|-- CustomProductControllerStateSetup
+ProductControllerStateNetworkStandby <|-- CustomProductControllerStateNetworkStandby
+
+ProductControllerHsm ..> CustomProductControllerState
+
+@enduml

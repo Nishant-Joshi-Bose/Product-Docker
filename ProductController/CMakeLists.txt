@@ -1,0 +1,96 @@
+INCLUDE_DIRECTORIES(
+  CustomProductAudioService
+  CustomProductKeyInputManager
+  CustomProductLpmHardwareInterface
+  CustomProductSTS
+  DisplayController
+  IntentHandler
+  ${CUSTOM_HSM_DIR}
+  ${DATACOLLECTIONCLIENT_DIR}
+  ${KEYHANDLER_DIR}/include
+  ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
+  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
+  ${AUDIOSOURCE_DIR}/include
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductNetworkService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  {PROTO_CC_DEST}
+  .
+)
+
+# -----------------------------------------------------------------------------
+# ProductController daemon.
+
+ADD_EXECUTABLE(ProductController
+  ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateSoftwareInstall.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandby.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandbyTransition.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
+  ProductCliClient.cpp
+  DataCollectionClientInterface.cpp
+  CustomProductController.cpp
+  Main.cpp
+  ${PROTO_CC_DEST}/ProductMessage.pb.cc
+  ${PROTO_CC_DEST}/ProductSTS.pb.cc
+  ${PROTO_CC_DEST}/KeyActions.pb.cc
+  ${PROTO_CC_DEST}/DisplayController.pb.cc
+  ${PROTO_CC_DEST}/IntentHandler.pb.cc
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/VolumeConfig.pb.cc
+  ${PROTO_CC_DEST}/KeyNames.pb.cc
+  IntentHandler/CountDownManager.cpp
+  IntentHandler/IntentHandler.cpp
+  IntentHandler/PlaybackRequestManager.cpp
+  DisplayController/DisplayController.cpp
+  CustomProductAudioService/CustomAudioSettingsManager.cpp
+  CustomProductAudioService/CustomProductAudioService.cpp
+  CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
+  CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
+  CustomProductSTS/CustomProductSTSStateTopAux.cpp
+)
+
+TARGET_LINK_LIBRARIES(ProductController
+  CastleProductControllerCommon
+  ProductControllerCommonProto
+  DataCollectionClient
+  LpmClient
+  HttpInterface
+  FrontDoorClient
+  NetworkServiceClient
+  KeyHandler
+  BLESetupServiceProto
+  BluetoothSinkServiceProto
+  LightBarController
+  VoiceServiceClient
+  CliClient
+  AudioLibs
+  EddieAudioSettings
+  PassportClient
+  GalapagosClient
+  SASSFrontDoorServiceProto
+  SoftwareUpdateAPI
+  STS
+  STSClient
+  ShelbyUtils
+  CommonTypes
+  STSProtoBufs
+  SoundTouch_SDK_Protobuf_static
+  SystemEventService
+  BoseLibs
+  jsoncpp
+  protobuf
+  TinyXml
+  pthread
+  rt
+  cap
+  dl
+)
+
+INSTALL(TARGETS ProductController DESTINATION ${OUTPUT_BIN_DIR})

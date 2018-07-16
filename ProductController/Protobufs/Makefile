@@ -1,0 +1,33 @@
+include $(BOSE_WORKSPACE)/Settings.mk
+
+BOSELIBS_DIR                := $(shell components get BoseLibs-$(sdk) installed_location)
+PRODUCTCONTROLLERCOMMON_DIR := $(shell components get ProductControllerCommon installed_location)
+RIVIERA_LPM_PROTO_DIR       := $(shell components get RivieraLpmService-$(sdk) installed_location)
+SOUNDTOUCH_SDK_DIR          := $(shell components get SoundTouch-SDK-$(sdk)         installed_location)
+SYSTEMEVENTSERVICE_DIR      := $(shell components get SystemEventService-$(sdk) installed_location)
+AUDIOSOURCE_DIR             := $(shell components get AudioSource-$(sdk) installed_location)
+PRODUCTCONTROLLERCOMMONPROTO := $(shell components get ProductControllerCommonProto-$(sdk) installed_location)
+
+PROTO_SOURCES = \
+  LightBarController.proto  \
+  ProductMessage.proto      \
+  KeyActions.proto          \
+  DisplayController.proto   \
+  AudioSettings.proto       \
+  KeyNames.proto            \
+  ProductSTS.proto
+
+# Where to search for imported *.proto files.
+PROTO_IMPORT_DIRS := \
+ . \
+ $(PROTO_CC_DEST) \
+ $(BOSELIBS_DIR)/protobufs \
+ $(PRODUCTCONTROLLERCOMMONPROTO)/protobufs \
+ $(PRODUCTCONTROLLERCOMMON_DIR)/Protobufs/private \
+ $(RIVIERA_LPM_PROTO_DIR)/proto \
+ $(SOUNDTOUCH_SDK_DIR)/protobufs \
+ $(SOUNDTOUCH_SDK_DIR)/prebuilt/include \
+ $(SYSTEMEVENTSERVICE_DIR)/protobufs \
+ $(AUDIOSOURCE_DIR)/proto \
+
+include $(BOSELIBS_DIR)/protobuf.mk
