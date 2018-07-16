@@ -33,6 +33,7 @@ constexpr char kSubwooferPolarityName   [] = "audioSubwooferPolarity";
 namespace ProductApp
 {
 using std::string;
+using namespace ProductPb;
 
 CustomAudioSettingsManager::CustomAudioSettingsManager()
 {
@@ -45,7 +46,7 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current bass value
 /////////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
+ResultCode_t CustomAudioSettingsManager::SetBass( const AudioBassLevel& bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !bass.has_value() )
@@ -63,7 +64,7 @@ ResultCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLeve
     return SetAudioProperties( bass, kBassName, m_currentBass );
 }
 
-const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
+const AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentBass;
@@ -74,7 +75,7 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current treble value
 ///////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
+ResultCode_t CustomAudioSettingsManager::SetTreble( const AudioTrebleLevel& treble )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !treble.has_value() )
@@ -92,7 +93,7 @@ ResultCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTreble
     return SetAudioProperties( treble, kTrebleName, m_currentTreble );
 }
 
-const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
+const AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentTreble;
@@ -103,7 +104,7 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current center value
 ///////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
+ResultCode_t CustomAudioSettingsManager::SetCenter( const AudioCenterLevel& center )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !center.has_value() )
@@ -121,7 +122,7 @@ ResultCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenter
     return SetAudioProperties( center, kCenterName, m_currentCenter );
 }
 
-const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
+const AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentCenter;
@@ -132,7 +133,7 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current surround value
 ///////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetSurround( const ProductPb::AudioSurroundLevel& surround )
+ResultCode_t CustomAudioSettingsManager::SetSurround( const AudioSurroundLevel& surround )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !surround.has_value() )
@@ -150,7 +151,7 @@ ResultCode_t CustomAudioSettingsManager::SetSurround( const ProductPb::AudioSurr
     return SetAudioProperties( surround, kSurroundName, m_currentSurround );
 }
 
-const ProductPb::AudioSurroundLevel& CustomAudioSettingsManager::GetSurround() const
+const AudioSurroundLevel& CustomAudioSettingsManager::GetSurround() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentSurround;
@@ -161,7 +162,7 @@ const ProductPb::AudioSurroundLevel& CustomAudioSettingsManager::GetSurround() c
 ///     setter returns a boolean which indicates whether current surroundDelay value is changed by setter
 ///     getter returns a protobuf of current surroundDelay value
 ///////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay )
+ResultCode_t CustomAudioSettingsManager::SetSurroundDelay( const AudioSurroundDelay& surroundDelay )
 {
     if( !surroundDelay.has_value() )
     {
@@ -178,7 +179,7 @@ ResultCode_t CustomAudioSettingsManager::SetSurroundDelay( const ProductPb::Audi
     return SetAudioProperties( surroundDelay, kSurroundDelayName, m_currentSurroundDelay );
 }
 
-const ProductPb::AudioSurroundDelay& CustomAudioSettingsManager::GetSurroundDelay() const
+const AudioSurroundDelay& CustomAudioSettingsManager::GetSurroundDelay() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentSurroundDelay;
@@ -189,7 +190,7 @@ const ProductPb::AudioSurroundDelay& CustomAudioSettingsManager::GetSurroundDela
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current gainOffset value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetGainOffset( const ProductPb::AudioGainOffset& gainOffset )
+ResultCode_t CustomAudioSettingsManager::SetGainOffset( const AudioGainOffset& gainOffset )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !gainOffset.has_value() )
@@ -207,7 +208,7 @@ ResultCode_t CustomAudioSettingsManager::SetGainOffset( const ProductPb::AudioGa
     return SetAudioProperties( gainOffset, kGainOffsetName, m_currentGainOffset );
 }
 
-const ProductPb::AudioGainOffset& CustomAudioSettingsManager::GetGainOffset() const
+const AudioGainOffset& CustomAudioSettingsManager::GetGainOffset() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentGainOffset;
@@ -218,7 +219,7 @@ const ProductPb::AudioGainOffset& CustomAudioSettingsManager::GetGainOffset() co
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current avSync value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetAvSync( const ProductPb::AudioAvSync& avSync )
+ResultCode_t CustomAudioSettingsManager::SetAvSync( const AudioAvSync& avSync )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !avSync.has_value() )
@@ -236,7 +237,7 @@ ResultCode_t CustomAudioSettingsManager::SetAvSync( const ProductPb::AudioAvSync
     return SetAudioProperties( avSync, kAvSyncName, m_currentAvSync );
 }
 
-const ProductPb::AudioAvSync& CustomAudioSettingsManager::GetAvSync() const
+const AudioAvSync& CustomAudioSettingsManager::GetAvSync() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentAvSync;
@@ -247,7 +248,7 @@ const ProductPb::AudioAvSync& CustomAudioSettingsManager::GetAvSync() const
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current subwooferGain value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain )
+ResultCode_t CustomAudioSettingsManager::SetSubwooferGain( const AudioSubwooferGain& subwooferGain )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !subwooferGain.has_value() )
@@ -265,7 +266,7 @@ ResultCode_t CustomAudioSettingsManager::SetSubwooferGain( const ProductPb::Audi
     return SetAudioProperties( subwooferGain, kSubwooferGainName, m_currentSubwooferGain );
 }
 
-const ProductPb::AudioSubwooferGain& CustomAudioSettingsManager::GetSubwooferGain() const
+const AudioSubwooferGain& CustomAudioSettingsManager::GetSubwooferGain() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentSubwooferGain;
@@ -276,7 +277,7 @@ const ProductPb::AudioSubwooferGain& CustomAudioSettingsManager::GetSubwooferGai
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current mode value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
+ResultCode_t CustomAudioSettingsManager::SetMode( const AudioMode& mode )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !mode.has_value() )
@@ -291,7 +292,7 @@ ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mo
     }
     return SetAudioProperties( mode, kModeName, m_currentMode );
 }
-const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode() const
+const AudioMode& CustomAudioSettingsManager::GetMode() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentMode;
@@ -302,7 +303,7 @@ const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode() const
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current contentType value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetContentType( const ProductPb::AudioContentType& contentType )
+ResultCode_t CustomAudioSettingsManager::SetContentType( const AudioContentType& contentType )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !contentType.has_value() )
@@ -317,7 +318,7 @@ ResultCode_t CustomAudioSettingsManager::SetContentType( const ProductPb::AudioC
     }
     return SetAudioProperties( contentType, kContentTypeName, m_currentContentType );
 }
-const ProductPb::AudioContentType& CustomAudioSettingsManager::GetContentType() const
+const AudioContentType& CustomAudioSettingsManager::GetContentType() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentContentType;
@@ -328,7 +329,7 @@ const ProductPb::AudioContentType& CustomAudioSettingsManager::GetContentType() 
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current dualMonoSelect value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& dualMonoSelect )
+ResultCode_t CustomAudioSettingsManager::SetDualMonoSelect( const AudioDualMonoSelect& dualMonoSelect )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !dualMonoSelect.has_value() )
@@ -355,7 +356,7 @@ ResultCode_t CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::Aud
     PersistAudioSettings();
     return ResultCode_t::NO_ERROR;
 }
-const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSelect() const
+const AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSelect() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentDualMonoSelect;
@@ -366,7 +367,7 @@ const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSel
 ///     setter returns a boolean which indicates whether current EqSelect value is changed by setter
 ///     getter returns a protobuf of current EqSelect value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetEqSelect( const ProductPb::AudioEqSelect& eqSelect )
+ResultCode_t CustomAudioSettingsManager::SetEqSelect( const AudioEqSelect& eqSelect )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !eqSelect.has_mode() )
@@ -393,7 +394,7 @@ ResultCode_t CustomAudioSettingsManager::SetEqSelect( const ProductPb::AudioEqSe
     PersistAudioSettings();
     return ResultCode_t::NO_ERROR;
 }
-const ProductPb::AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
+const AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentEqSelect;
@@ -401,17 +402,17 @@ const ProductPb::AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
 void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool supported )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    bool currSupported = isValueInArray( mode, m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"] );
+    bool currSupported = isValueInArray( mode, m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"] );
     // if new mode is supported, add it to the list
     // note: currently we don't have use case of dynamically removing modes (modes can only be reset by factory default).
     //       if use case does come up, rules have to be defined, and handling has to be added here
     if( supported && !currSupported )
     {
-        m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"].append( mode );
+        m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"].append( mode );
         m_currentEqSelect.mutable_properties()->add_supportedmodes( mode );
-        if (mode == "EQ_AIQ_A")
+        if( mode == AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ) )
         {
-            m_currentEqSelect.set_storedeqvalid(true);
+            m_currentEqSelect.set_storedeqvalid( true );
         }
         PersistAudioSettings();
     }
@@ -422,7 +423,7 @@ void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool 
 ///     setter returns a boolean which indicates whether current subwooferPolarity value is changed by setter
 ///     getter returns a protobuf of current subwooferPolarity value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity )
+ResultCode_t CustomAudioSettingsManager::SetSubwooferPolarity( const AudioSubwooferPolarity& subwooferPolarity )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !subwooferPolarity.has_value() )
@@ -447,7 +448,7 @@ ResultCode_t CustomAudioSettingsManager::SetSubwooferPolarity( const ProductPb::
     PersistAudioSettings();
     return ResultCode_t::NO_ERROR;
 }
-const ProductPb::AudioSubwooferPolarity& CustomAudioSettingsManager::GetSubwooferPolarity() const
+const AudioSubwooferPolarity& CustomAudioSettingsManager::GetSubwooferPolarity() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentSubwooferPolarity;
@@ -620,15 +621,15 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     m_audioSettings["audioSettingValues"][kEqSelectName]["persistenceLevel"]["persistenceSession"] = false;
     //Fill out protobuf
     m_currentEqSelect.set_mode( JsonToProtoField( m_currentEqSelect.mode(), m_audioSettings["audioSettingValues"][kEqSelectName]["values"][kPersistGlobal] ) );
-    m_currentEqSelect.set_storedeqvalid(false);
+    m_currentEqSelect.set_storedeqvalid( false );
     for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"].size(); i++ )
     {
         const string& supportedMode = m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"][i].asString();
-        if (supportedMode == "EQ_AIQ_A")
+        if( supportedMode == AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ) )
         {
-            m_currentEqSelect.set_storedeqvalid(true);
+            m_currentEqSelect.set_storedeqvalid( true );
         }
-        m_currentEqSelect.mutable_properties()->add_supportedmodes(supportedMode );
+        m_currentEqSelect.mutable_properties()->add_supportedmodes( supportedMode );
     }
 
     ///
