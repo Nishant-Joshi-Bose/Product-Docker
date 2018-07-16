@@ -38,6 +38,8 @@
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
@@ -69,7 +71,6 @@
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "DisplayController.h"
-#include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 
@@ -209,6 +210,7 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsLanguageSet();
+    void SendInitialCapsData() override;
     void SendActivateAccessPointCmd();
     void SendDeActivateAccessPointCmd();
 
@@ -281,7 +283,7 @@ public:
 ///       between the Product Controller and the STS source proxies.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-    void SetupProductSTSController( void );
+    void SetupProductSTSController( void ) override;
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
     void HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response );
@@ -329,6 +331,8 @@ private:
     ProductControllerStatePlayingDeselected                         m_ProductControllerStatePlayingDeselected;
     ProductControllerStatePlayingSelected                           m_ProductControllerStatePlayingSelected;
     ProductControllerStatePlayingSelectedSilent                     m_ProductControllerStatePlayingSelectedSilent;
+    ProductControllerStatePlayingSelectedSilentSourceInvalid        m_ProductControllerStatePlayingSelectedSilentSourceInvalid;
+    ProductControllerStatePlayingSelectedSilentSourceValid          m_ProductControllerStatePlayingSelectedSilentSourceValid;
     ProductControllerStatePlayingSelectedNotSilent                  m_ProductControllerStatePlayingSelectedNotSilent;
     ProductControllerStatePlayingSelectedSetup                      m_ProductControllerStatePlayingSelectedSetup;
     ProductControllerStatePlayingSelectedSetupNetwork               m_ProductControllerStatePlayingSelectedSetupNetwork;
@@ -376,8 +380,6 @@ private:
     /// Shared Pointer to the LPM Custom Hardware Interface
     std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
 
-    //DataCollectionClientInterface
-    DataCollectionClientInterface                        m_dataCollectionClientInterface;
     ProductSTSController                                 m_ProductSTSController;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =

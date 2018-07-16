@@ -20,13 +20,14 @@ import pytest
 from ApqTap import ApqTap
 
 
-@pytest.mark.usefixtures('ip_address_wlan')
-def test_backlight(ip_address_wlan):
+@pytest.mark.usefixtures('ip_address')
+def test_backlight(ip_address):
     """
     Set the backlight to a few different levels.
     """
 
-    with ApqTap(ip_address_wlan, 'adb') as tap:
+    with ApqTap(ip_address, None) as tap:
+        time.sleep(3)
 
         tap.send('lpm pt "backlight 100"', "OK")
         time.sleep(3)
@@ -35,3 +36,4 @@ def test_backlight(ip_address_wlan):
         time.sleep(3)
 
         tap.send('lpm pt "backlight 10"', "OK")
+        time.sleep(3)
