@@ -24,6 +24,7 @@
 
 namespace ProductApp
 {
+constexpr uint32_t INVALID_LATENCY = -1;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
@@ -40,7 +41,8 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
     m_ThermalTask( std::unique_ptr<ThermalMonitorTask>( new ThermalMonitorTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, std::placeholders::_1 ) ) ) ),
-    m_DataCollectionClient( ProductController.GetDataCollectionClient() )
+    m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
+    m_currentMinimumLatency( INVALID_LATENCY )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -324,6 +326,30 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductAudioService::SetMinimumOutputLatency
+///
+/// @param  int32_t latency
+///
+/// @brief  Send DSP minimumOutputLatency to AudioPath
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
+{
+    BOSE_VERBOSE( s_logger, __func__ );
+    if( latency != m_currentMinimumLatency )
+    {
+        m_currentMinimumLatency = latency;
+        auto respCb = []( int32_t resp )
+        {
+            BOSE_VERBOSE( s_logger, "%s: received callback with latency(%d)", __func__, resp );
+        };
+        BOSE_INFO( s_logger, "%s: sending minimum output latency(%d) to AudioPath", __func__, m_currentMinimumLatency );
+        m_APPointer -> SetOutputLatency( m_currentMinimumLatency, respCb );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   CustomProductAudioService::ThermalDataReceivedCb
 ///
 /// @param  const IpcSystemTemperatureData_t& data
@@ -380,11 +406,11 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    if( modeName == "normal" )
+    if( modeName == "NORMAL" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
     }
-    else if( modeName == "dialog" )
+    else if( modeName == "DIALOG" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
@@ -393,11 +419,11 @@ LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeName
 
 LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTypeNameToEnum( const std::string& contentTypeName )
 {
-    if( contentTypeName == "audio" )
+    if( contentTypeName == "AUDIO" )
     {
         return AUDIOSETTINGS_CONTENT_AUDIO;
     }
-    else if( contentTypeName == "video" )
+    else if( contentTypeName == "VIDEO" )
     {
         return AUDIOSETTINGS_CONTENT_VIDEO;
     }
@@ -406,11 +432,11 @@ LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTyp
 
 LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualMonoSelectNameToEnum( const std::string& dualMonoSelectName )
 {
-    if( dualMonoSelectName == "left" )
+    if( dualMonoSelectName == "LEFT" )
     {
         return AUDIOSETTINGS_DUAL_MONO_LEFT;
     }
-    else if( dualMonoSelectName == "video" )
+    else if( dualMonoSelectName == "RIGHT" )
     {
         return AUDIOSETTINGS_DUAL_MONO_RIGHT;
     }

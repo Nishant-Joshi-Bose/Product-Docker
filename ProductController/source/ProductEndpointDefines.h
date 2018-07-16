@@ -28,7 +28,6 @@
 /// from other processes or to send data to other processes to drive product functionality.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#define FRONTDOOR_SYSTEM_SOURCES_API "/system/sources"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -56,7 +55,9 @@
 #define FRONTDOOR_AUDIO_VOLUME_API                      "/audio/volume"
 #define FRONTDOOR_CEC_API                               "/cec"
 #define FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API "/system/power/mode/opticalAutoWake"
+#define FRONTDOOR_SYSTEM_POWER_MACRO_API                "/system/power/macro"
 #define FRONTDOOR_UI_ALIVE                              "/ui/alive"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

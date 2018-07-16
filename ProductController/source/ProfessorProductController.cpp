@@ -76,6 +76,8 @@
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
@@ -87,16 +89,19 @@
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
-#include "CustomProductControllerStateAdaptIQExiting.h"
+#include "CustomProductControllerStateAdaptIQCancelling.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
+#include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlaying.h"
+#include "CustomProductControllerStatePlayingDeselected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
+#include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
 #include "ProductBLERemoteManager.h"
@@ -104,6 +109,7 @@
 #include "ProtoPersistenceFactory.h"
 #include "PGCErrorCodes.h"
 #include "SystemUtils.h"
+#include "SystemPowerMacro.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -121,7 +127,7 @@ namespace
 constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
-constexpr auto      g_DefaultVolumeThresholdsStateFile  = "DefaultVolumeThresholdsDone";
+constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
 }
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -143,6 +149,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputManager( nullptr ),
+    m_ProductFrontDoorKeyInjectIF( nullptr ),
     m_ProductCecHelper( nullptr ),
     m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
@@ -311,10 +318,10 @@ void ProfessorProductController::Run( )
     ///
     /// Playable State and Sub-States
     ///
-    auto* statePlayable = new ProductControllerStatePlayable
+    auto* statePlayable = new CustomProductControllerStatePlayable
     ( GetHsm( ),
       stateOn,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 
     auto* stateNetworkStandby = new ProductControllerStateNetworkStandby
     ( GetHsm( ),
@@ -367,10 +374,10 @@ void ProfessorProductController::Run( )
       stateOn,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING );
 
-    auto* statePlayingDeselected = new ProductControllerStatePlayingDeselected
+    auto* statePlayingDeselected = new CustomProductControllerStatePlayingDeselected
     ( GetHsm( ),
       statePlaying,
-      PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
 
     auto* statePlayingSelected = new CustomProductControllerStatePlayingSelected
     ( GetHsm( ),
@@ -381,6 +388,16 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       statePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
+
+    auto* statePlayingSelectedSilentSourceInvalid = new CustomProductControllerStatePlayingSelectedSilentSourceInvalid
+    ( GetHsm( ),
+      statePlayingSelectedSilent,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID );
+
+    auto* statePlayingSelectedSilentSourceValid = new ProductControllerStatePlayingSelectedSilentSourceValid
+    ( GetHsm( ),
+      statePlayingSelectedSilent,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_VALID );
 
     auto* statePlayingSelectedNotSilent = new ProductControllerStatePlayingSelectedNotSilent
     ( GetHsm( ),
@@ -444,10 +461,10 @@ void ProfessorProductController::Run( )
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
-    auto* stateAdaptIQExiting = new CustomProductControllerStateAdaptIQExiting
+    auto* stateAdaptIQCancelling = new CustomProductControllerStateAdaptIQCancelling
     ( GetHsm( ),
       statePlayingSelected,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
 
     ///
     /// Stopping Dedicated Streams State and Sub-States
@@ -471,52 +488,195 @@ void ProfessorProductController::Run( )
     /// The states are added to the state machine and the state machine is initialized.
     ///
     using namespace DeviceManagerPb;
+    using namespace SystemPowerPb;
 
-    GetHsm( ).AddState( "", stateTop );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreeting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
-    GetHsm( ).AddState( "", stateBooted );
-    GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
-    GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
-    GetHsm( ).AddState( "", stateLowPowerStandby );
-    GetHsm( ).AddState( "", stateLowPowerResume );
-    GetHsm( ).AddState( "", statePlayableTransition );
-    GetHsm( ).AddState( "", statePlayableTransitionInternal );
-    GetHsm( ).AddState( "", statePlayableTransitionIdle );
-    GetHsm( ).AddState( "", statePlayableTransitionNetworkStandby );
-    GetHsm( ).AddState( "", stateOn );
-    GetHsm( ).AddState( "", statePlayable );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), stateNetworkStandby );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), stateNetworkStandbyConfigured );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), stateNetworkStandbyNotConfigured );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ), stateIdle );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ), stateIdleVoiceConfigured );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ), stateIdleVoiceNotConfigured );
-    GetHsm( ).AddState( "", statePlayingTransition );
-    GetHsm( ).AddState( "", statePlayingTransitionSelected );
-    GetHsm( ).AddState( "", statePlaying );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), statePlayingDeselected );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelected );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSilent );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedNotSilent );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSetup );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSetupNetwork );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSetupNetworkTransition );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSetupOther );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSetupExiting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ),   statePlayingSelectedSetupExitingAP );
-    GetHsm( ).AddState( "", stateStoppingStreams );
-    GetHsm( ).AddState( "", stateAccessoryPairing );
-    GetHsm( ).AddState( "", stateAccessoryPairingCancelling );
-    GetHsm( ).AddState( "", stateAdaptIQ );
-    GetHsm( ).AddState( "", stateAdaptIQExiting );
-    GetHsm( ).AddState( "", stateStoppingStreamsDedicated );
-    GetHsm( ).AddState( "", stateStoppingStreamsDedicatedForFactoryDefault );
-    GetHsm( ).AddState( "", stateStoppingStreamsDedicatedForSoftwareUpdate );
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateTop );
+
+    GetHsm( ).AddState( NotifiedNames::BOOTING,
+                        SystemPowerControl_State_Not_Notify,
+                        stateBooting );
+
+    GetHsm( ).AddState( NotifiedNames::FIRST_BOOT_GREETING,
+                        SystemPowerControl_State_Not_Notify,
+                        stateFirstBootGreeting );
+
+    GetHsm( ).AddState( NotifiedNames::UPDATING,
+                        SystemPowerControl_State_Not_Notify,
+                        stateSoftwareUpdateTransition );
+
+    GetHsm( ).AddState( NotifiedNames::UPDATING,
+                        SystemPowerControl_State_Not_Notify,
+                        stateSoftwareInstall );
+
+    GetHsm( ).AddState( NotifiedNames::CRITICAL_ERROR,
+                        SystemPowerControl_State_Not_Notify,
+                        stateCriticalError );
+
+    GetHsm( ).AddState( NotifiedNames::FACTORY_DEFAULT,
+                        SystemPowerControl_State_Not_Notify,
+                        stateFactoryDefault );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateBooted );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateFirstBootGreetingTransition );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateLowPowerStandbyTransition );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
+                        stateLowPowerStandby );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateLowPowerResume );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayableTransition );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayableTransitionInternal );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
+                        statePlayableTransitionIdle );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
+                        statePlayableTransitionNetworkStandby );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateOn );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
+                        statePlayable );
+
+    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+                        SystemPowerControl_State_OFF,
+                        stateNetworkStandby );
+
+    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+                        SystemPowerControl_State_OFF,
+                        stateNetworkStandbyConfigured );
+
+    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+                        SystemPowerControl_State_OFF,
+                        stateNetworkStandbyNotConfigured );
+
+    GetHsm( ).AddState( NotifiedNames::IDLE,
+                        SystemPowerControl_State_OFF,
+                        stateIdle );
+
+    GetHsm( ).AddState( NotifiedNames::IDLE,
+                        SystemPowerControl_State_OFF,
+                        stateIdleVoiceConfigured );
+
+    GetHsm( ).AddState( NotifiedNames::IDLE,
+                        SystemPowerControl_State_OFF,
+                        stateIdleVoiceNotConfigured );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingTransition );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingTransitionSelected );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlaying );
+
+    GetHsm( ).AddState( NotifiedNames::PLAYING_SOURCE_OFF,
+                        SystemPowerControl_State_OFF,
+                        statePlayingDeselected );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingSelected );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingSelectedSilent );
+
+    GetHsm( ).AddState( NotifiedNames::PLAYING_SOURCE_OFF,
+                        SystemPowerControl_State_OFF,
+                        statePlayingSelectedSilentSourceInvalid );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
+                        statePlayingSelectedSilentSourceValid );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
+                        statePlayingSelectedNotSilent );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
+                        statePlayingSelectedSetup );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
+                        statePlayingSelectedSetupNetwork );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingSelectedSetupNetworkTransition );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_ON,
+                        statePlayingSelectedSetupOther );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingSelectedSetupExiting );
+
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingSelectedSetupExitingAP );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateStoppingStreams );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_ON,
+                        stateAccessoryPairing );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateAccessoryPairingCancelling );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_ON,
+                        stateAdaptIQ );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateAdaptIQCancelling );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateStoppingStreamsDedicated );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateStoppingStreamsDedicatedForFactoryDefault );
+
+    GetHsm( ).AddState( Device_State_Not_Notify,
+                        SystemPowerControl_State_Not_Notify,
+                        stateStoppingStreamsDedicatedForSoftwareUpdate );
 
     GetHsm( ).Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -536,6 +696,9 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
+    m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
+                                    m_ProductKeyInputManager,
+                                    m_FrontDoorClientIF );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
@@ -550,6 +713,7 @@ void ProfessorProductController::Run( )
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
+        m_ProductFrontDoorKeyInjectIF == nullptr ||
         m_ProductCecHelper            == nullptr ||
         m_ProductDspHelper            == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
@@ -564,9 +728,11 @@ void ProfessorProductController::Run( )
     /// Apply settings from persistence
     ///
     ApplyOpticalAutoWakeSettingFromPersistence( );
+    LoadPowerMacroFromPersistance( );
 
     /// Register a callback so the autowake from persistence is sent to LPM when connected
     RegisterOpticalAutowakeForLpmConnection( );
+
 
     ///
     /// Set up LightBarController
@@ -589,6 +755,7 @@ void ProfessorProductController::Run( )
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputManager     ->Run( );
+    m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
@@ -603,11 +770,6 @@ void ProfessorProductController::Run( )
     /// Send initial endpoint requests to the front door.
     ///
     SendCommonInitialRequests( );
-
-    ///
-    /// Set up the STSProductController
-    ///
-    SetupProductSTSController( );
 
     ///
     /// Initialize and register intents for key actions for the Product Controller.
@@ -723,7 +885,8 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( ) ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( )   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Voice Ready           :  %s", ( IsVoiceModuleReady( )     ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return ( IsLpmReady( )             and
@@ -733,7 +896,8 @@ bool ProfessorProductController::IsBooted( ) const
              IsSoftwareUpdateReady( )  and
              IsSassReady( )            and
              IsBluetoothModuleReady( ) and
-             IsNetworkModuleReady( ) );
+             IsNetworkModuleReady( )   and
+             IsVoiceModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1080,9 +1244,32 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 
     m_lightbarController->RegisterLightBarEndPoints( );
 
+
     {
-        auto callback = [ = ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( Callback< ProductPb::PowerMacro > cb, Callback< FrontDoor::Error > errorCb )
+        {
+            HandleGetPowerMacro( cb, errorCb );
+        };
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                           callback,
+                                           FrontDoor::PUBLIC,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
+    {
+        auto callback = [ this ]( ProductPb::PowerMacro macro, Callback< ProductPb::PowerMacro > cb, Callback< FrontDoor::Error > errorCb )
+        {
+            HandlePutPowerMacro( macro, cb, errorCb );
+        };
+        GetFrontDoorClient()->RegisterPut<ProductPb::PowerMacro>( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                                                  callback,
+                                                                  FrontDoor::PUBLIC,
+                                                                  FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                                  FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
+    {
+        auto callback = [ this ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandleGetOpticalAutoWake( respCb, errorCb );
         };
@@ -1094,9 +1281,9 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
                                            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto callback = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
-                               Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                                  Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandlePutOpticalAutoWake( req, respCb, errorCb );
         };
@@ -1109,9 +1296,9 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto callback = [ = ]( DisplayControllerPb::UiHeartBeat req,
-                               Callback< DisplayControllerPb::UiHeartBeat > respCb,
-                               Callback< FrontDoor::Error > errorCb )
+        auto callback = [ this ]( DisplayControllerPb::UiHeartBeat req,
+                                  Callback< DisplayControllerPb::UiHeartBeat > respCb,
+                                  Callback< FrontDoor::Error > errorCb )
         {
             HandleUiHeartBeat( req, respCb, errorCb );
         };
@@ -1407,6 +1594,7 @@ void ProfessorProductController::Wait( )
     m_ProductLpmHardwareInterface->Stop( );
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
+    m_ProductFrontDoorKeyInjectIF->Stop( );
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
@@ -1491,77 +1679,136 @@ void ProfessorProductController::SendInitialCapsData()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    // Do the Common stuff first
-    ProductController::SendInitialCapsData();
+    using namespace SoundTouchInterface;
 
-    // PUT /system/sources::properties
-    SoundTouchInterface::Sources message;
-    auto messageProperties = message.mutable_properties();
-
-    for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
-         activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
-         ++activationKey )
-    {
-        messageProperties->add_supportedactivationkeys(
-            SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
-    }
-    messageProperties->set_activationkeyrequired( true );
-
-    for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
-    {
-        messageProperties->add_supporteddevicetypes(
-            SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
-    }
-    messageProperties->set_devicetyperequired( true );
-
-    messageProperties->add_supportedinputroutes(
-        SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
-
-    messageProperties->set_inputrouterequired( false );
-
-    BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
-
-    GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
-        FRONTDOOR_SYSTEM_SOURCES_API,
-        message,
-        { },
-        m_errorCb );
-
-    std::string DefaultVolumeThresholdsDoneFile{ g_PersistenceRootDir };
-    DefaultVolumeThresholdsDoneFile += g_ProductPersistenceDir;
-    DefaultVolumeThresholdsDoneFile += g_DefaultVolumeThresholdsStateFile;
-    const bool defaultVolumeThresholdsDone = SystemUtils::Exists( DefaultVolumeThresholdsDoneFile );
-    if( defaultVolumeThresholdsDone )
+    std::string DefaultCAPSValuesStateFile{ g_PersistenceRootDir };
+    DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
+    DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
+    const bool defaultCAPSValuesDone = SystemUtils::Exists( DefaultCAPSValuesStateFile );
+    if( defaultCAPSValuesDone )
     {
         // GET the current values, we may have missed an initial notification
-        AsyncCallback< SoundTouchInterface::volume >
+        AsyncCallback< volume >
         audioVolumeCb( std::bind( &ProfessorProductController::HandleAudioVolumeNotification,
                                   this,
                                   std::placeholders::_1 ),
                        GetTask( ) );
 
-        m_FrontDoorClientIF->SendGet<SoundTouchInterface::volume, FrontDoor::Error>(
+        m_FrontDoorClientIF->SendGet<volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API,
             audioVolumeCb,
             m_errorCb );
     }
     else
     {
-        // Set the thresholds only once, after factory default
-        if( ! SystemUtils::WriteFile( "", DefaultVolumeThresholdsDoneFile ) )
+        // Do this only once, after factory default
+        if( ! SystemUtils::WriteFile( "", DefaultCAPSValuesStateFile ) )
         {
-            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultVolumeThresholdsDoneFile.c_str( ) );
+            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultCAPSValuesStateFile.c_str( ) );
         }
-        SoundTouchInterface::volume desiredVolume;
+        volume desiredVolume;
         desiredVolume.set_min( VOLUME_MIN_THRESHOLD );
         desiredVolume.set_max( VOLUME_MAX_THRESHOLD );
-        GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API,
             desiredVolume,
             { },
             m_errorCb );
-        BOSE_INFO( s_logger, "DefaultVolumeThresholdsDoneFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
+        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
+
+        // Populate /system/sources::properties
+        Sources message;
+        auto messageProperties = message.mutable_properties();
+
+        for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
+             activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
+             ++activationKey )
+        {
+            messageProperties->add_supportedactivationkeys(
+                SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
+        }
+        messageProperties->set_activationkeyrequired( true );
+
+        for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
+        {
+            messageProperties->add_supporteddevicetypes(
+                SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
+        }
+        messageProperties->set_devicetyperequired( true );
+
+        messageProperties->add_supportedinputroutes(
+            SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
+
+        messageProperties->set_inputrouterequired( false );
+
+        // Populate status and visibility of PRODUCT sources.
+        using namespace ProductSTS;
+
+        Sources_SourceItem* source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
+        source->set_accountid( ProductSourceSlot_Name( TV ) );
+        source->set_status( SourceStatus::AVAILABLE );
+        source->set_visible( true );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
+        source->set_accountid( ProductSourceSlot_Name( SLOT_0 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
+        source->set_accountid( ProductSourceSlot_Name( SLOT_1 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
+        source->set_accountid( ProductSourceSlot_Name( SLOT_2 ) );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_visible( false );
+
+        // Set the (in)visibility of SETUP sources.
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
+        source->set_accountid( SetupSourceSlot_Name( SETUP ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
+        source->set_accountid( SetupSourceSlot_Name( ADAPTIQ ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
+        source->set_accountid( SetupSourceSlot_Name( PAIRING ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        auto sourcesRespCb = []( Sources sources )
+        {
+            BOSE_INFO( s_logger, FRONTDOOR_SYSTEM_SOURCES_API " properties: %s", sources.properties( ).DebugString( ).c_str( ) );
+        };
+
+        GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+            FRONTDOOR_SYSTEM_SOURCES_API,
+            message,
+            sourcesRespCb,
+            m_errorCb );
+        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
     }
+
+    // Do the Common stuff last, the PUT above must come first
+    ProductController::SendInitialCapsData();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1671,6 +1918,151 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
         BOSE_ERROR( s_logger, "OpticalAutoWake store persistence error - %s", e.what( ) );
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::AttemptToStartPlayback
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::AttemptToStartPlayback()
+{
+    BOSE_INFO( s_logger, "Handling CustomAttemptToStartPlayback" );
+
+    if( m_powerMacro.enabled() )
+    {
+        PassportPB::contentItem pwrMacroContentItem;
+
+        pwrMacroContentItem.set_source( SHELBY_SOURCE::PRODUCT );
+        pwrMacroContentItem.set_sourceaccount( ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
+
+        SendPlaybackRequestFromContentItem( pwrMacroContentItem );
+        m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro );
+
+        BOSE_INFO( s_logger, "An attempt to play the power macro content item %s has been made.",
+                   pwrMacroContentItem.DebugString().c_str( ) );
+    }
+    else
+    {
+        ProductController::AttemptToStartPlayback();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::HandleGetPowerMacro
+///
+/// @param const Callback<SystemPowerProductPb::PowerMacro> & respCb
+///
+/// @param const Callback<FrontDoor::Error> & errorCb
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleGetPowerMacro(
+    const Callback<ProductPb::PowerMacro> & respCb,
+    const Callback<FrontDoor::Error> & errorCb ) const
+{
+    respCb( m_powerMacro );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::HandlePutPowerMacro
+///
+/// @param const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req
+///
+/// @param const Callback<SystemPowerProductPb::PowerMacro> & respCb
+///
+/// @param const Callback<FrontDoor::Error> & errorCb
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandlePutPowerMacro(
+    const ProductPb::PowerMacro & req,
+    const Callback<ProductPb::PowerMacro> & respCb,
+    const Callback<FrontDoor::Error> & errorCb )
+{
+    FrontDoor::Error error;
+    error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+    error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_POWER_MACRO );
+
+    bool success = true;
+
+    if( req.powerontv() )
+    {
+        const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( not( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) )
+        {
+            error.set_message( "TV is not configured but power on tv requested!" );
+            success = false;
+        }
+    }
+    if( success and req.has_powerondevice() )
+    {
+        const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
+
+        if( not( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() ) )
+        {
+            error.set_message( "Requested source is not configured!" );
+            success = false;
+        }
+    }
+    else
+    {
+        error.set_message( "No power on device provided!" );
+        success = false;
+    }
+
+    if( success )
+    {
+        m_powerMacro.CopyFrom( req );
+        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+        try
+        {
+            persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
+            respCb( req );
+        }
+        catch( const ProtoToMarkup::MarkupError & e )
+        {
+            BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
+            error.set_message( e.what( ) );
+            success = false;
+        }
+        catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+        {
+            BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
+            error.set_message( e.what( ) );
+            success = false;
+        }
+    }
+
+    if( not success )
+    {
+        errorCb( error );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::LoadPowerMacroFromPersistance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::LoadPowerMacroFromPersistance( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+
+    try
+    {
+        const std::string & s = persistence->Load( );
+        ProtoToMarkup::FromJson( s, &m_powerMacro );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro persistence error - %s", e.what( ) );
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

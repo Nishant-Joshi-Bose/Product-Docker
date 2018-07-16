@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateAdaptIQExiting.h
+/// @file      CustomProductControllerStateAdaptIQCancelling.h
 ///
 /// @brief     This source code file contains functionality to process events that occur when the
-///            product is exiting AdaptIQ.
+///            product is cancelling AdaptIQ.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -52,25 +52,37 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateAdaptIQExiting
+/// @class CustomProductControllerStateAdaptIQCancelling
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateAdaptIQExiting : public ProductControllerState
+class CustomProductControllerStateAdaptIQCancelling : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateAdaptIQExiting( ProductControllerHsm& hsm,
+    CustomProductControllerStateAdaptIQCancelling( ProductControllerHsm& hsm,
                                                 CHsmState*            pSuperState,
                                                 Hsm::STATE            stateId,
-                                                const std::string&    name = "AdaptIQExiting" );
+                                                const std::string&    name = "AdaptIQCancelling" );
 
-    ~CustomProductControllerStateAdaptIQExiting( ) override
+    ~CustomProductControllerStateAdaptIQCancelling( ) override
     {
 
     }
 
     void HandleStateStart( ) override;
+    void HandleStateExit( )  override;
+    bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
+
+private:
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief CustomProductControllerStateAdaptIQ::HardwareIface
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr<CustomProductLpmHardwareInterface>& HardwareIface( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
