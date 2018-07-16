@@ -90,69 +90,13 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     Display GetDisplay();
 
-///////////////////////////////////////////////////////////////////////////////
-/// @name   HandlePutDisplayRequest
-/// @brief-
-/// @return void
-///////////////////////////////////////////////////////////////////////////////
-    void HandlePutDisplayRequest( const Display &req,
-                                  const Callback<Display>& resp );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name   HandleGetDisplayRequest
-/// @brief-
-/// @return void
-///////////////////////////////////////////////////////////////////////////////
-    void HandleGetDisplayRequest( const Callback<Display>& resp );
-
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name   HandleDeleteDisplayRequest
-/// @brief-
-/// @return void
-///////////////////////////////////////////////////////////////////////////////
-    void HandleDeleteDisplayRequest( const Display& req,
-                                     const Callback<Display>& resp );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name   HandlePostUiHeartBeat
-/// @brief-
-/// @return void
-///////////////////////////////////////////////////////////////////////////////
-    void HandlePostUiHeartBeat( const UiHeartBeat &req,
-                                Callback<UiHeartBeat> resp );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name   HandlePutUiHeartBeat
-/// @brief-
-/// @return void
-///////////////////////////////////////////////////////////////////////////////
-    void HandlePutUiHeartBeat( const UiHeartBeat &req,
-                               Callback<UiHeartBeat> resp );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name   HandleGetUiHeartBeat
-/// @brief-
-/// @return void
-///////////////////////////////////////////////////////////////////////////////
-    void HandleGetUiHeartBeat( Callback<UiHeartBeat> resp );
-
-    /*! \brief Frontdoor GET request handler for /ui/lcd/brightness.
-     * \param resp Callback into which will be written current LCD brightess as a Brightness protobuf.
-     */
-    void HandleGetLcdBrightnessRequest( const Callback<Brightness>& resp );
-
-    /*! \brief Frontdoor POST request handler for /ui/lcd/brightness.
-     * \param req Incoming Brightness settings to apply.
-     * \param resp Callback into which will be written current LCD brightess as a Brightness protobuf.
-     */
-    void HandlePutLcdBrightnessRequest( const Brightness &req, const Callback<Brightness>& resp );
-
     /*! \brief Put display in on or off state.
      * \param turnOn Pass true to turn the display on, and false to turn it off.
-     * \param completedCb Optional callback to be invoked when the action is complete, default NULL.
+     * \param completedCb Optional callback to be invoked when the action is complete, default empty.
+     *      If you don't want to use the callback, poss in a no-op one:
+     *      AsyncCallback<void> emptyCb( [] {}, nullptr )
      */
-    void RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void>* completedCb = nullptr );
+    void RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void>& completedCb );
 
     /*! \brief Enables/disables brightness cap for LCD during a standby state (not low power).
      * \param enabled True to impose the cap and false to disable it.
@@ -168,9 +112,66 @@ private:
      */
     void RegisterFrontdoorEndPoints();
 
+    /*!
+     */
     void HandleLpmResponse( LBCSResponse_t response, const Callback<Display>& resp );
+
+    /*!
+     */
     bool HandleLpmNotificationBackLight( IpcBackLight_t   lpmBackLight );
+
+    /*!
+     */
     bool HandleLpmNotificationUIBrightness( IpcUIBrightness_t lpmBrightness );
+
+    /*!
+     */
+    void HandlePutDisplayRequest( const Display &req,
+                                  const Callback<Display>& resp );
+    /*!
+     */
+    void HandleGetDisplayRequest( const Callback<Display>& resp );
+
+    /*!
+     */
+    void HandleDeleteDisplayRequest( const Display& req,
+                                     const Callback<Display>& resp );
+
+    /*!
+     */
+    void HandlePostUiHeartBeat( const UiHeartBeat &req,
+                                Callback<UiHeartBeat> resp );
+
+    /*!
+     */
+    void HandlePutUiHeartBeat( const UiHeartBeat &req,
+                               Callback<UiHeartBeat> resp );
+
+    /*!
+     */
+    void HandleGetUiHeartBeat( Callback<UiHeartBeat> resp );
+
+    /*! \brief Frontdoor GET request handler for /ui/lcd/brightness.
+     * \param resp Callback into which will be written current LCD brightess as a Brightness protobuf.
+     */
+    void HandleGetLcdBrightnessRequest( const Callback<Brightness>& resp );
+
+    /*! \brief Frontdoor POST request handler for /ui/lcd/brightness.
+     * \param req Incoming Brightness settings to apply.
+     * \param resp Callback into which will be written current LCD brightess as a Brightness protobuf.
+     */
+    void HandlePutLcdBrightnessRequest( const Brightness &req, const Callback<Brightness>& resp );
+
+    /*! \brief Callback for LPMClient SetLightSensorParams response handling.
+     */
+    void HandleLpmSetLightSensorParams( const IpcLpmGenericResponse_t& response );
+
+    /*! \brief Callback for LPMClient GetUIBrightness response handling.
+     */
+    void HandleLpmGetUIBrightness( const IpcUIBrightness_t& response );
+
+    /*!
+     */
     void UpdateUiConnected( bool currentStatus );
 
     /*! \brief Main update loop function.
