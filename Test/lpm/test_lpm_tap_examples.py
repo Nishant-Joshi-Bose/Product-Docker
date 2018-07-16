@@ -19,22 +19,29 @@ import pytest
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LpmUtils.Lpm import Lpm
 
-logger = get_logger(__file__)
+LOGGER = get_logger(__file__)
 
 
+@pytest.mark.skip(reason="Feature unreliable.")
 @pytest.mark.usefixtures('lpm_serial_client')
 def test_amp_fault_on(lpm_serial_client):
     """
     Manually set LPM into an amp fault state.
+
+    See details about Amp Fault here: https://wiki.bose.com/display/WSSW/Eddie+Amp+Fault+Handling
     """
     lpmVersion = lpm_serial_client.get_version()
     assert lpmVersion
-    logger.info("LPM found at version %s", lpmVersion)
+    LOGGER.info("LPM found at version %s", lpmVersion)
 
     lpm_serial_client.amp_fault_set_state(True)
 
     # Amp fault lasts until reboot
     lpm_serial_client.reboot()
+    LOGGER.debug("Waiting up to 60s for system to recover.")
+    assert lpm_serial_client.wait_for_system_state([Lpm.SystemState.On, Lpm.SystemState.Standby, Lpm.SystemState.Idle],
+                                                  timeout_seconds=60), \
+        "System never recovered from Amp Fault and Reboot."
 
 
 @pytest.mark.skip(reason="Induced functionality removed.")
@@ -43,23 +50,27 @@ def test_amp_fault_induce(lpm_serial_client):
     """
     Induce an amp fault.
     """
-    lpmVersion = lpm_serial_client.get_version()
+    lpm_version = lpm_serial_client.get_version()
 
-    assert lpmVersion, "Missing/invalid LPM version response."
-    logger.info("LPM found at version %s", lpmVersion)
+    assert lpm_version, "Missing/invalid LPM version response."
+    LOGGER.info("LPM found at version %s", lpm_version)
 
-    logger.info("Please wait. Inducing an amp fault takes about 15 seconds...")
+    LOGGER.info("Please wait. Inducing an amp fault takes about 15 seconds...")
     lpm_serial_client.amp_fault_induce()
 
     # amp fault will block until it is done, but just in case, let's wait a bit
     time.sleep(2)
     system_state = lpm_serial_client.get_system_state()
-    logger.debug("Current System State: %s", system_state)
+    LOGGER.debug("Current System State: %s", system_state)
     assert (system_state == Lpm.SystemState.Error), \
         "Amp fault did not result in Error system state."
 
     # Amp fault lasts until reboot
     lpm_serial_client.reboot()
+    LOGGER.debug("Waiting up to 60s for system to recover.")
+    assert lpm_serial_client.wait_for_system_state([Lpm.SystemState.On, Lpm.SystemState.Standby, Lpm.SystemState.Idle],
+                                                  timeout_seconds=60), \
+        "System never recovered from Amp Fault and Reboot."
 
 
 @pytest.mark.usefixtures('lpm_serial_client')
@@ -69,9 +80,9 @@ def test_some_keys(lpm_serial_client):
     These route down to the PSoC so it tests the entire chain up from PSoC through SoC.
     """
 
-    lpmVersion = lpm_serial_client.get_version()
-    assert lpmVersion, "Missing/invalid LPM version response."
-    logger.info("LPM found at version %s", lpmVersion)
+    lpm_version = lpm_serial_client.get_version()
+    assert lpm_version, "Missing/invalid LPM version response."
+    LOGGER.info("LPM found at version %s", lpm_version)
 
     # Button examples
 
