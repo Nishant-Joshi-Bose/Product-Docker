@@ -409,9 +409,9 @@ void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool 
     {
         m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"].append( mode );
         m_currentEqSelect.mutable_properties()->add_supportedmodes( mode );
-        if (mode == "EQ_AIQ_A")
+        if( mode == "EQ_AIQ_A" )
         {
-            m_currentEqSelect.set_storedeqvalid(true);
+            m_currentEqSelect.set_storedeqvalid( true );
         }
         PersistAudioSettings();
     }
@@ -620,15 +620,15 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     m_audioSettings["audioSettingValues"][kEqSelectName]["persistenceLevel"]["persistenceSession"] = false;
     //Fill out protobuf
     m_currentEqSelect.set_mode( JsonToProtoField( m_currentEqSelect.mode(), m_audioSettings["audioSettingValues"][kEqSelectName]["values"][kPersistGlobal] ) );
-    m_currentEqSelect.set_storedeqvalid(false);
+    m_currentEqSelect.set_storedeqvalid( false );
     for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"].size(); i++ )
     {
         const string& supportedMode = m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"][i].asString();
-        if (supportedMode == "EQ_AIQ_A")
+        if( supportedMode == "EQ_AIQ_A" )
         {
-            m_currentEqSelect.set_storedeqvalid(true);
+            m_currentEqSelect.set_storedeqvalid( true );
         }
-        m_currentEqSelect.mutable_properties()->add_supportedmodes(supportedMode );
+        m_currentEqSelect.mutable_properties()->add_supportedmodes( supportedMode );
     }
 
     ///
