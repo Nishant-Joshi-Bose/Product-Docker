@@ -48,7 +48,7 @@ cd /scratch/CastleTestUtils/
 make vsetup
 source ./venv/bin/activate
 make
-pip install dist/CastleTestUtils-0.1.8.tar.gz
+pip install dist/CastleTestUtils-1.0.4.tar.gz
 ```
 
 2. To test if a specific CastleTestUtils script is working properly, run this in the virtual environment. (Change device-id, email, and password to match your own device)
