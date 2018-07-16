@@ -38,13 +38,10 @@ import LpmServiceMessages_pb2 as IPCMessages
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
 # Logging utility.
-logger = get_logger(__file__)
+LOGGER = get_logger(__file__)
 
 # Used to wait for asynchronus requests to come back.
 lbcs_xfer_event = threading.Event()
-
-# Animation data that will be populated via a DB request.
-# animation_data = None
 
 # Used to verify that the anim we requested to be played was played.
 verify_animation_id = None
@@ -94,8 +91,8 @@ def get_animation_db_version_cb(resp):
 
     :param: resp Response from service in form of LBCSAnimationDBVersion_t.
     """
-    logger.info("LBCS animation db version: {0}.{1} valid checksum: {2}"
-                .format(resp.major, resp.minor, resp.animDBChecksumPassed))
+    LOGGER.info("LBCS animation db version: %s.%s valid checksum: %s", resp.major, resp.minor,
+                resp.animDBChecksumPassed)
     assert (resp.major > 0 or resp.minor > 0), "Invalid major/minor version of animation DB."
     assert resp.animDBChecksumPassed, "Animation DB 'checksum passed' field is false."
 
@@ -108,11 +105,10 @@ def get_animation_db_data_cb(resp):
 
     :param: resp Response from sevice in form of LBCSDbIndexDataResp_t
     """
-    # global animation_data
 
     assert resp, "No valid animation data response received."
     animation_data = resp
-    logger.debug("Animation Data: %s", animation_data)
+    LOGGER.debug("Animation Data: %s", animation_data)
     lbcs_xfer_event.set()
 
 
@@ -147,11 +143,13 @@ def stop_animation_request_cb(resp):
     lbcs_xfer_event.set()
 
 
-@pytest.mark.usefixtures('lpm_ipc_client', 'riviera_enabled_ipc')
+@pytest.mark.usefixtures('riviera_enabled_ipc', 'lpm_ipc_client')
 def test_get_animation_db_version(lpm_ipc_client):
     """
     Request animation DB version and status.
     Waits for request to complete using _lbcs_xfer_event.
+
+    :param lpm_ipc_client:
     """
 
     lbcs_xfer_event.clear()
@@ -165,19 +163,19 @@ def test_get_animation_db_data(lpm_ipc_client):
     Request animation DB data.
     Waits for request to complete using _lbcs_xfer_event.
 
-    :param client:
+    :param lpm_ipc_client:
     """
 
     lpm_ipc_client.RegisterEvent(AutoIPCMessages.IPC_LBCS_DB_INDEX_DATA_RESP,
-                          IPCMessages.LBCSDbIndexDataResp_t,
-                          get_animation_db_data_cb)
+                                 IPCMessages.LBCSDbIndexDataResp_t,
+                                 get_animation_db_data_cb)
 
     lbcs_xfer_event.clear()
     lpm_ipc_client.LBCSGetDBIndexData()
     lbcs_xfer_event.wait(10)
 
 
-@pytest.mark.usefixtures('animation_data', 'lpm_ipc_client')
+@pytest.mark.usefixtures('riviera_enabled_ipc', 'animation_data', 'lpm_ipc_client')
 def test_stop_animation(animation_data, lpm_ipc_client):
     """
     Test that the stop animation command works correctly.
@@ -188,13 +186,13 @@ def test_stop_animation(animation_data, lpm_ipc_client):
 
     assert animation_data, "No animation data loaded."
 
-    rndAnimationId = random.randint(1, len(animation_data.indexEntries))
+    random_animation_id = random.randint(1, len(animation_data.indexEntries))
 
-    verify_animation_id = rndAnimationId
-    start_animation_request(rndAnimationId, True, lpm_ipc_client)
+    verify_animation_id = random_animation_id
+    start_animation_request(random_animation_id, True, lpm_ipc_client)
     time.sleep(1.0)
 
-    verify_animation_id = rndAnimationId
+    verify_animation_id = random_animation_id
     stop_animation_request(lpm_ipc_client)
 
 
@@ -202,18 +200,21 @@ def test_stop_animation(animation_data, lpm_ipc_client):
 def test_abort_animation(animation_data, lpm_ipc_client):
     """
     Test that the abort animation command works correctly.
+
+    :param animation_data:
+    :param lpm_ipc_client:
     """
     global verify_animation_id
 
     assert animation_data, "No animation data loaded."
 
-    rndAnimationId = random.randint(1, len(animation_data.indexEntries))
+    random_animation_id = random.randint(1, len(animation_data.indexEntries))
 
-    verify_animation_id = rndAnimationId
-    start_animation_request(rndAnimationId, True, lpm_ipc_client)
+    verify_animation_id = random_animation_id
+    start_animation_request(random_animation_id, True, lpm_ipc_client)
     time.sleep(1.0)
 
-    verify_animation_id = rndAnimationId
+    verify_animation_id = random_animation_id
     abort_animation_request(lpm_ipc_client)
 
 
@@ -222,15 +223,18 @@ def test_play_all_animations(animation_data, lpm_ipc_client):
     """
     Starts every animation and plays it for a few seconds.
     _animationData must be previously populate (ideally via test_get_animation_db_version())
+
+    :param animation_data:
+    :param lpm_ipc_client:
     """
     global verify_animation_id
 
     assert animation_data, "No animation data loaded."
 
-    lastAnimationId = None
+    last_animation_id = None
 
     for entry in animation_data.indexEntries:
-        logger.info("Playing animation {0}: \"{1}\"".format(entry.animationId, entry.animationName))
+        LOGGER.info("Playing animation %s: %s", entry.animationId, entry.animationName)
 
         verify_animation_id = entry.animationId
         start_animation_request(entry.animationId, True, lpm_ipc_client)
@@ -242,18 +246,21 @@ def test_play_all_animations(animation_data, lpm_ipc_client):
     stop_animation_request(lpm_ipc_client)
 
 
-@pytest.mark.usefixtures('animation_data', 'lpm_ipc_client', 'riviera_enabled_ipc')
+@pytest.mark.usefixtures('riviera_enabled_ipc', 'animation_data', 'lpm_ipc_client')
 def test_play_all_animations_super_fast(animation_data, lpm_ipc_client):
     """
     Starts every animation and plays it for a few seconds.
     _animationData must be previously populate (ideally via test_get_animation_db_version())
+
+    :param animation_data:
+    :param lpm_ipc_client:
     """
     global verify_animation_id
 
     assert animation_data, "No animation data loaded."
 
     for entry in animation_data.indexEntries:
-        logger.info("Playing animation {0}: \"{1}\"".format(entry.animationId, entry.animationName))
+        LOGGER.info("Playing animation %s: %s", entry.animationId, entry.animationName)
 
         verify_animation_id = entry.animationId
         start_animation_request(entry.animationId, True, lpm_ipc_client)

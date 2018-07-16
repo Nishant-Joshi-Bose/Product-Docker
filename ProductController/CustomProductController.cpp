@@ -26,6 +26,7 @@
 #include "ProductSTSStateTopSilent.h"
 #include "CustomProductSTSStateTopAux.h"
 #include "ProductSTS.pb.h"
+#include "SystemUtils.h"
 
 static DPrint s_logger( "CustomProductController" );
 
@@ -34,6 +35,7 @@ using namespace DeviceManagerPb;
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
+const std::string g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
 
 CustomProductController::CustomProductController():
     m_ProductControllerStateTop( GetHsm(), nullptr ),
@@ -468,6 +470,60 @@ bool CustomProductController::IsLanguageSet()
     return m_deviceManager.IsLanguageSet();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::SendInitialCapsData
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::SendInitialCapsData()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    using namespace SoundTouchInterface;
+
+    std::string DefaultCAPSValuesStateFile{ g_PersistenceRootDir };
+    DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
+    DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
+    const bool defaultCAPSValuesDone = SystemUtils::Exists( DefaultCAPSValuesStateFile );
+    if( !defaultCAPSValuesDone )
+    {
+        // Do this only once, after factory default
+        if( ! SystemUtils::WriteFile( "", DefaultCAPSValuesStateFile ) )
+        {
+            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultCAPSValuesStateFile.c_str( ) );
+        }
+
+        // Populate status and visibility of PRODUCT sources.
+        using namespace ProductSTS;
+
+        Sources message;
+        Sources_SourceItem* source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+        source->set_sourceaccountname( ProductSourceSlot_Name( AUX ) );
+        source->set_accountid( ProductSourceSlot_Name( AUX ) );
+        source->set_status( SourceStatus::AVAILABLE );
+        source->set_visible( true );
+
+        // Set the (in)visibility of SETUP sources.
+        source = message.add_sources( );
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
+        source->set_accountid( SetupSourceSlot_Name( SETUP ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+            FRONTDOOR_SYSTEM_SOURCES_API,
+            message,
+            {},
+            m_errorCb );
+        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
+    }
+
+    // Do the Common stuff last, the PUT above must come first
+    ProductController::SendInitialCapsData();
+}
+
 void CustomProductController::SendActivateAccessPointCmd()
 {
     BOSE_INFO( s_logger, __func__ );
@@ -649,19 +705,12 @@ void CustomProductController::HandleProductMessage( const ProductMessage& produc
     if( productMessage.has_lpmstatus( ) )
     {
         ///
-        /// First register for product-specific LPM events if connected, and output the LPM system
-        /// state if available for debugging purposes. Common handling of the product message is
+        /// First register for product-specific LPM events if connected. Common handling of the product message is
         /// then done.
         ///
         if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
             RegisterLpmEvents();
-            SetupProductSTSController();
-        }
-        if( productMessage.lpmstatus( ).has_systemstate( ) )
-        {
-            BOSE_DEBUG( s_logger, "%s-The LPM system state was set to %s", __func__,
-                        IpcLpmSystemState_t_Name( productMessage.lpmstatus( ).systemstate( ) ).c_str( ) );
         }
 
         ( void ) HandleCommonProductMessage( productMessage );

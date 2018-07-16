@@ -27,7 +27,8 @@ void CustomProductControllerStateSoftwareInstall::HandleStateStart()
 {
     ///Turn OFF LCD display controller
     BOSE_INFO( s_logger, "Turn LCD display OFF in %s.", __func__ );
-    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( false );
+    AsyncCallback<void> emptyCb( [] {}, nullptr );
+    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( false, emptyCb );
 
     ProductControllerStateSoftwareInstall::HandleStateStart();
 }

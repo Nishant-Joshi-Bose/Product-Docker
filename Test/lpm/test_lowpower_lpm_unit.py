@@ -33,17 +33,17 @@ from CastleTestUtils.LpmUtils.Lpm import Lpm
 
 import lpmtestutils
 
-logger = get_logger(__file__)
+LOGGER = get_logger(__file__)
 
 
-@pytest.mark.usefixtures('riviera_enabled_ipc', 'lpm_serial_client', 'lpm_ipc_client', 'ip_address_wlan')
-def test_low_power_standby(lpm_ipc_client, lpm_serial_client, ip_address_wlan):
+@pytest.mark.usefixtures('riviera_enabled_ipc', 'lpm_serial_client', 'lpm_ipc_client', 'ip_address')
+def test_low_power_standby(lpm_ipc_client, lpm_serial_client, ip_address):
     """
     Enter standby state using IPC message, wait for key press, then resume.
 
     :param lpm_ipc_client: An Inter-Process Communication through IP connection
     :param lpm_serial_client: A serial connection to the LPM
-    :param ip_address_wlan: The IP Address of the Device over Wireless
+    :param ip_address: The IP Address of the Device over Wireless
     :return: None
     """
 
@@ -60,14 +60,14 @@ def test_low_power_standby(lpm_ipc_client, lpm_serial_client, ip_address_wlan):
 
     # Reboot to put LPM in a good state, if necessary
     if not lpmtestutils.is_in_good_state_for_testing(lpm_serial_client):
-        logger.info("LPM in incompatible state. Rebooting.")
+        LOGGER.info("LPM in incompatible state. Rebooting.")
         lpmtestutils.reboot_and_wait(lpm_serial_client)
         time.sleep(5)
 
     assert (lpm_serial_client.get_system_state() != Lpm.SystemState.LowPower), \
         "LPM already in LowPower state. Test aborted"
 
-    ipc_client = LpmClient.LpmClient(ip_address_wlan)
+    ipc_client = LpmClient.LpmClient(ip_address)
 
     def wake_on_key_event_cb(resp):
         """
@@ -81,7 +81,7 @@ def test_low_power_standby(lpm_ipc_client, lpm_serial_client, ip_address_wlan):
 
         if waiting_for_key_press:
             waiting_for_key_press = False
-            logger.info(resp)
+            LOGGER.info(resp)
 
             systemStateMsg = AutoIPCMessages.IpcLpmSystemStateSet_t()
             systemStateMsg.state = AutoIPCMessages.SYSTEM_STATE_STANDBY
@@ -96,7 +96,7 @@ def test_low_power_standby(lpm_ipc_client, lpm_serial_client, ip_address_wlan):
         :param resp: Response from service in form of IpcLpmStateResponse_t.
         """
         global verify_system_state_id
-        logger.info("System State: {}".format(verify_system_state_id))
+        LOGGER.info("System State: %s", verify_system_state_id)
         if verify_system_state_id is not None:
             assert (verify_system_state_id == resp.sysState), \
                 "System state {} does not match expected state {}".format(resp.sysState, verify_system_state_id)
@@ -108,7 +108,7 @@ def test_low_power_standby(lpm_ipc_client, lpm_serial_client, ip_address_wlan):
         AutoIPCMessages.IpcKeyInformation_t, wake_on_key_event_cb)
 
     # Enter low power system state.
-    logger.info("Putting LPM in low power state.")
+    LOGGER.info("Putting LPM in low power state.")
     systemStateMsg = AutoIPCMessages.IpcLpmSystemStateSet_t()
     systemStateMsg.state = AutoIPCMessages.SYSTEM_STATE_LOW_POWER
 
@@ -123,13 +123,13 @@ def test_low_power_standby(lpm_ipc_client, lpm_serial_client, ip_address_wlan):
     time.sleep(3)
 
     # Verify low power system state.
-    assert (lpm_serial_client.wait_for_system_state([Lpm.SystemState.LowPower], 10)), \
+    assert (lpm_serial_client.wait_for_system_state([Lpm.SystemState.LowPower], 20)), \
         "Failed to enter LowPower system state."
 
     # Generate a fake key press. This will come in to us via IPC as if we are the APQ.
-    logger.info("Waking LPM")
+    LOGGER.info("Waking LPM")
     lpm_serial_client.button_tap(5, 100)
 
     # Wait for and verify standby system state.
-    assert(lpm_serial_client.wait_for_system_state([Lpm.SystemState.Standby], 10)), \
+    assert(lpm_serial_client.wait_for_system_state([Lpm.SystemState.Standby], 20)), \
         "Failed to resume into Standby system state."

@@ -210,6 +210,7 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsLanguageSet();
+    void SendInitialCapsData() override;
     void SendActivateAccessPointCmd();
     void SendDeActivateAccessPointCmd();
 
@@ -282,7 +283,7 @@ public:
 ///       between the Product Controller and the STS source proxies.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-    void SetupProductSTSController( void );
+    void SetupProductSTSController( void ) override;
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
     void HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response );
