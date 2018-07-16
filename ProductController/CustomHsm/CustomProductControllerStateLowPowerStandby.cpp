@@ -27,7 +27,8 @@ void CustomProductControllerStateLowPowerStandby::HandleStateExit()
 {
     // Turn ON LCD display controller.
     BOSE_DEBUG( s_logger, "Turn LCD display ON in %s.", __func__ );
-    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( true );
+    AsyncCallback<void> emptyCb( [] {}, nullptr );
+    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( true, emptyCb );
 
     ProductControllerStateLowPowerStandby::HandleStateExit();
 }

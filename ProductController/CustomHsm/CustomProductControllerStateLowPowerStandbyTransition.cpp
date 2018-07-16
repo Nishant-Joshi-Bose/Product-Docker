@@ -35,7 +35,7 @@ void CustomProductControllerStateLowPowerStandbyTransition::HandleStateStart()
     // Turn OFF LCD display controller.
     AsyncCallback<void> dcReadyCb( std::bind( &CustomProductControllerStateLowPowerStandbyTransition::SetDisplayControllerIsReady, this ),
                                    GetProductController( ).GetTask() );
-    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( false, &dcReadyCb );
+    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( false, dcReadyCb );
 
     ProductControllerStateLowPowerStandbyTransition::HandleStateStart();
 }

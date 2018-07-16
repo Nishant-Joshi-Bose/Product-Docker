@@ -3,6 +3,9 @@ A suite of tests (unit and integration) that stress various parts of LPM functio
 
 The scripts in this folder should be run through pytest from the project root folder (where the pytest configuration file lives).
 
+Details about these tests can be found here:
+https://wiki.bose.com/display/WSSW/Riviera+LPM+Component+Test-Cases
+
 They invoke commands over LPM tap, APQ tap, LPM Service IPC messaging, or a combination. The requirements for each are:
 * LPM tap: CastleTestUtils must be in the path
 * APQ tap: Device must be reachable via adb

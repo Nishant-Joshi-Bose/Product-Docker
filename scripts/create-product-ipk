@@ -84,6 +84,7 @@ datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 insta
 btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location) || exit
 btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
 blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
+bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
@@ -157,6 +158,17 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 # from `make clean` and such.
 trap 'chmod -R +w "$secure_dir"' EXIT
 
+# Remove files that should belong to product-script
+# Any file on system can belong only to one IPK.
+# If more than one IPK has file with same path-name, the IPK that is 
+# installed last will own the file. In case of Riviera, as product.ipk
+# is installed after product-script.ipk, the critical files below belongs to
+# product.ipk. Next time, when product.ipk is installed, they become 0 byte 
+# - bricking the system
+rm "$opt_dir/.bashrc"
+rm "$opt_dir/.bash_profile"
+rm "$opt_dir/etc/product"
+
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
@@ -182,6 +194,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$btstackadapter_dir/stage" "$opt_dir" || exit
 "$btsource_dir/stage" "$opt_dir" || exit
 "$blesetup_dir/stage" "$opt_dir" || exit
+"$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$btstssink_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit

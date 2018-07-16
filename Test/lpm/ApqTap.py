@@ -51,9 +51,11 @@ class ApqTap():
         """
         Clean up any opened tap instance.
         """
-        if self.__tap != None:
-            self.__tap.terminate(True)
-            self.__tap = None
+        if self.__tap:
+            if not self.__tap.terminated:
+                self.__tap.terminate(True)
+            if not self.__tap.closed:
+                self.__tap.close()
 
     def send(self, command, expect=None):
         """
