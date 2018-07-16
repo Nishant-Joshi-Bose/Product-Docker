@@ -302,15 +302,15 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
  */
 EddieAudioSettings_t_AudioMode CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    if( modeName == "dialog" )
+    if( modeName == "DIALOG" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
-    else if( modeName == "direct" )
+    else if( modeName == "DIRECT" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIRECT;
     }
-    else if( modeName == "night" )
+    else if( modeName == "NIGHT" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_NIGHT;
     }
