@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-13_1141"
+    "selected_version": "Continuous/Castle-Fork/2018-07-16_0911"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-13_1141"
+    "selected_version": "Continuous/Castle-Fork/2018-07-16_0911"
   },
   {
     "name": "SystemEventService-qc8017_32",
