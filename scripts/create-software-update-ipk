@@ -1,0 +1,154 @@
+#!/bin/bash
+#
+# Create an IPK file to install SoftwareUpdate.
+#
+# To install:
+#   opkg install software-update.ipk
+#
+# To uninstall:
+#   opkg remove software-update.ipk
+#
+this=${0##*/} # this script's name
+
+cfg=Release
+
+tryhelp () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+opts=$(getopt --name "$this" --shell sh \
+    -o uh \
+    -l "help" \
+    -- "$@") || tryhelp
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+	(--help | -h)
+	    cat <<EOF
+Usage: $this [options]
+
+Create an IPK file to install SoftwareUpdate.
+
+Options:
+EOF
+	    exit 0
+	    ;;
+
+	(--) break ;;
+	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+here=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$here/.." && echo "$PWD") || exit
+
+softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
+swupdate_ver=$(components get SoftwareUpdate-qc8017_32 selected_version) || exit
+package_version=${swupdate_ver##*/}
+PackageName=software-update
+
+stage=$wspace/builds/$cfg/software-update-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+output_dir=$wspace/builds/$cfg
+opt_dir=$stage/Bose
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/.swUpdateCache" || exit
+# run stage for SoftwareUpdate
+"$softwareupdate_dir/stage" "$opt_dir" || exit
+"$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
+
+InstallFileContent=$(<"$opt_dir/bin/install")
+InstallFileContent=${InstallFileContent//\/Bose\/etc\//\/Bose\/.swUpdateCache\/backup\/}
+InstallFileContent=${InstallFileContent//\/Bose\/bin\//\/Bose\/.swUpdateCache\/backup\/}
+InstallFileContent=${InstallFileContent//$/\\$}
+
+echo "Package version \"$package_version\""
+
+cat >"$stage/control" <<EOF || exit
+Package: $PackageName
+Version: $package_version
+Description: Riviera Software Update $package_version
+Section: soundtouch
+Priority: optional
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: soundtouch
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+echo "SoftwareUpdate postinst"
+
+rm -rf /opt/Bose/.swUpdateCache/backup
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
+
+exit 0
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "SoftwareUpdate postrm"
+exit 0
+EOF
+
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+echo "SoftwareUpdate preinst"
+
+mkdir -p /opt/Bose/.swUpdateCache/backup
+# Copy softwareupdate, opkg, public keys
+cp /opt/Bose/bin/SoftwareUpdateService /opt/Bose/.swUpdateCache/backup/
+cp /opt/Bose/bin/ResetUtil /opt/Bose/.swUpdateCache/backup/ 
+cp /opt/Bose/bin/ProgressReport /opt/Bose/.swUpdateCache/backup/ 
+cp /opt/Bose/etc/SoftwareUpdate*.xml /opt/Bose/.swUpdateCache/backup/ 
+cp -fpr /opt/Bose/etc/secure /opt/Bose/.swUpdateCache/backup/
+cp -fpr /opt/Bose/update/opkg /opt/Bose/.swUpdateCache/backup/ 
+# replace path information in configuration files
+sed -i -e 's/\/etc/\/.swUpdateCache\/backup/g' /opt/Bose/.swUpdateCache/backup/SoftwareUpdateConfiguration.xml
+sed -i -e 's/\/update\/opkg/\/.swUpdateCache\/backup\/opkg/g' /opt/Bose/.swUpdateCache/backup/SoftwareUpdatePackageConfiguration.xml
+# Write script to start SoftwareUpdate
+echo "$InstallFileContent" > /opt/Bose/.swUpdateCache/backup/install
+chmod 755 /opt/Bose/.swUpdateCache/backup/install
+sync
+# Set Progress start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
+
+exit 0
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "SoftwareUpdate prerm"
+EOF
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk=$output_dir/software-update.ipk
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"

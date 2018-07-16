@@ -1,0 +1,25 @@
+<ShepherdConfig>
+
+  <daemon name="ProductController"/>
+
+  <daemon name="avahi-daemon"
+          exe="start-avahi"/>
+
+  <daemon name="IoT"/>
+
+  <daemon name="UpnpSource">
+    <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
+  </daemon>
+
+  <daemon name="CAPS"
+          recovery="reboot">
+    <arg>-c/opt/Bose/etc/CAPS.xml</arg>
+  </daemon>
+
+  <daemon name="STSCertified"/>
+
+  <daemon name="PtsServer">
+    <arg>/opt/Bose/etc/pts-handler</arg>
+  </daemon>
+
+</ShepherdConfig>

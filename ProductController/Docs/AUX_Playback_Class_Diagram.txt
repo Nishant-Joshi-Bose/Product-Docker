@@ -1,0 +1,34 @@
+@startuml
+
+class ProductController {
+	std::string const& m_ProductName
+	NotifyTargetTaskIF* m_ProdutControllerTask
+	std::shared_ptr<FrontDoorClientIF> m_FrontDoorClientIF
+}
+
+class CustomProductController {
+	void HandleAUXSourceKeyPress()
+}
+
+class KeyHandler {
+	void RegisterKeyHandler()
+	void HandleKeys()
+}
+
+class ProductSource {
+	void Initialize()
+	void SendPostAuxPlaybackRequest()
+	void PostAUXPlaybackRequestResponse()
+	void AUXPlaybackRequestCallbackError()
+}
+
+class FrontDoorClientIF {
+	virtual CallbackConnection SendPost()
+	virtual CallbackConnection RegisterNotification()
+}
+
+ProductController <|-- CustomProductController
+ProductController *-- FrontDoorClientIF
+CustomProductController *-- ProductSource
+CustomProductController *-- KeyHandler
+ProductSource o-- FrontDoorClientIF

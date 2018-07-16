@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package KeyActionPb;
+
+enum KEY_ACTION
+{
+    // This enumeration starts at 1; since the CastleKeyHandler appears to reserve action for 0.
+    KEY_ACTION_POWER = 1;
+    KEY_ACTION_SOURCE = 2;
+    KEY_ACTION_PRESET_1 = 3;
+    KEY_ACTION_PRESET_2 = 4;
+    KEY_ACTION_PRESET_3 = 5;
+    KEY_ACTION_PRESET_4 = 6;
+    KEY_ACTION_PRESET_5 = 7;
+    KEY_ACTION_PRESET_6 = 8;
+    KEY_ACTION_VOLUME_UP = 9;
+    KEY_ACTION_VOLUME_DOWN = 10;
+    KEY_ACTION_PLAY_PAUSE = 11;
+    KEY_ACTION_SKIP_FORWARD = 12;
+    KEY_ACTION_SKIP_BACK = 13;
+    KEY_ACTION_MUTE = 14;
+    KEY_ACTION_SOUNDTOUCH = 15;
+    KEY_ACTION_CONNECT = 16;
+    KEY_ACTION_ACTION = 17;
+    KEY_ACTION_TV = 18;
+    KEY_ACTION_THUMB_UP = 19;
+    KEY_ACTION_THUMB_DOWN = 20;
+    KEY_ACTION_FACTORY_DEFAULT = 21;
+    KEY_ACTION_WIFI_OFF = 22;
+    KEY_ACTION_AP_SETUP = 23;
+    KEY_ACTION_PAIR_SPEAKERS = 24;
+}
+
