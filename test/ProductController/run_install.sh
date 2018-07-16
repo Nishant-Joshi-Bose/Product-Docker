@@ -3,7 +3,7 @@ cd /scratch/CastleTestUtils/
 make vsetup
 source ./venv/bin/activate
 make
-pip install dist/CastleTestUtils-1.0.0.tar.gz
+pip install dist/CastleTestUtils-1.0.4.tar.gz
 
 # Run first test
 #pytest -sv tests/test_target_frontdoor.py --device 8857f8d
