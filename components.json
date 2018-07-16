@@ -5,7 +5,7 @@
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/1.5.8-21218"
+    "selected_version": "Release/Castle-Fork/1.5.10-21277"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-16_0911"
+    "selected_version": "Continuous/Castle-Fork/2018-07-16_1316"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-16_0911"
+    "selected_version": "Continuous/Castle-Fork/2018-07-16_1316"
   },
   {
     "name": "SystemEventService-qc8017_32",
