@@ -1,7 +1,7 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.8-21218"
+    "selected_version": "Release/Castle-Fork/1.5.10-21277"
   },
   {
     "name": "AudioPath-qc8017_64",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-16_0911"
+    "selected_version": "Continuous/Castle-Fork/2018-07-16_1316"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.0-46+8a6938e"
+    "selected_version": "Release/bose-master/1.0.0-61+504c312"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-16_0911"
+    "selected_version": "Continuous/Castle-Fork/2018-07-16_1316"
   },
   {
     "name": "SystemEventService-qc8017_32",
