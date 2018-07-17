@@ -9,7 +9,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-143+95a7507"
+    "selected_version": "Release/master/1.5.1-145+e4fc943"
   },
   {
     "name": "AVS-qc8017_32",
@@ -57,15 +57,15 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-36+64700b1"
+    "selected_version": "Release/master/1.5.0-37+66ffdd0"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/master/1.6.2-97+d4b24f8"
+    "selected_version": "Release/master/1.6.2-98+b5fb5ea"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-47+43a547d"
+    "selected_version": "Release/master/1.5.0-49+91c0753"
   },
   {
     "name": "CastleLibs-native",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Continuous/master/1.0.1-71+0fdb91e"
+    "selected_version": "Release/master/1.5.0-74+fe162f9"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -125,7 +125,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-114+870a165"
+    "selected_version": "Release/master/1.5.1-116+5a4f773"
   },
   {
     "name": "LightBarController-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-902+fb0202d"
+    "selected_version": "Release/master/1.5.1-910+22f0512"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -221,7 +221,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-23+0c4331f"
+    "selected_version": "Release/master/1.5.2-25+29cfe3b"
   },
   {
     "name": "TestUtils",
@@ -229,6 +229,6 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Continuous/master/0.4.1-76+f313726"
+    "selected_version": "Release/master/1.5.0-84+be2c295"
   }
 ]
