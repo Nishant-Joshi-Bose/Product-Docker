@@ -458,6 +458,11 @@ void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
         {
             m_screenBlackState = ScreenBlackState_Invalid;
         }
+        // No black screen detection? Turn on the display now.
+        else
+        {
+            SetDisplayBrightnessCap( m_lcdBrightnessCap, UI_BRIGHTNESS_TIME_DEFAULT );
+        }
 
         PullUIBrightnessFromLpm( UI_BRIGTHNESS_DEVICE_LCD );
     }
