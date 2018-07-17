@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-17_1051"
+    "selected_version": "Continuous/Castle-Fork/2018-07-17_1211"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-122+eb02bde"
+    "selected_version": "Release/master/1.5.3-126+feb24cd"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-17_1051"
+    "selected_version": "Continuous/Castle-Fork/2018-07-17_1211"
   },
   {
     "name": "SystemEventService-qc8017_32",
