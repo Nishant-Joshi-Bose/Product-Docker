@@ -14,6 +14,7 @@ This repo contains the source code and tools specific to the Eddie product.
 [Getting Started](#start)   
 [External References](#links)   
 [Building different LPM BLOBs](#lpmblobs)   
+[PTS Server Links](#pts)   
 [More...](#more)  
 
 <a name="updates"/>
@@ -163,6 +164,39 @@ $ make lpmupdater-ipk BUILD_TYPE=Nightly
 $ make lpmupdater-ipk BUILD_TYPE=Release
 ```
 
+<a name="pts"/>
+
+### PTS Server Links
+
+The PTS Server is a tiny embedded web server.  The server was originally
+intended for information to investigate customer problems reported to the
+technical support team.  The server has evolved to have a broader purpose.
+
+For security reasons, some endpoints are accessible only via certain
+interfaces.
+
+| Interface | Endpoint | Description |
+| -------- | -------- | ----------- |
+| usb | /diag/ | Quality Audit |
+| usb+ | /logread.txt | A snapshot of the system log ring buffer |
+| usb+ | /logread.txt.gz | Same as /logread.txt but compressed |
+| usb+ | /pts.txt | Various Linux and system status information (e.g., ifconfig) |
+| usb | /reflash | Force the unit into reflash mode (QFIL) |
+| usb | /bose-version | /opt/Bose/etc/BoseVersion.json |
+| usb | /kernel-version | /etc/riviera-version |
+| usb | /validate-mfgdata | Check the manufacturing data |
+| usb | /controller-version | The LPM version strings |
+| usb | /clear-first-greeting | Clear the flag indicating the unit's first boot |
+| any | /opensource | List the licenses of open source software used in the system |
+| any | /service | Remanufacturing. Only if the unit is in service mode |
+| usb, wlan1 | /, /index.html | Wi-Fi setup |
+
+\+ Not enforced until SOS.
+
+The USB IP address is 203.0.113.1.
+For example: http://203.0.113.1/pts.txt
+
+<a name="more"/>
 
 ### More...
 
