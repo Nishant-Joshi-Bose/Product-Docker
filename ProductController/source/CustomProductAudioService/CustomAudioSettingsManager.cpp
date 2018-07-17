@@ -54,10 +54,11 @@ ResultCode_t CustomAudioSettingsManager::SetBass( const AudioBassLevel& bass )
         BOSE_INFO( s_logger, "Bass doesn't contain any value (%s)", bass.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
+    const Json::Value& properties = m_audioSettings["audioSettingValues"][kBassName]["properties"];
     if( !isStepValueValid( bass.value(),
-                           m_audioSettings["audioSettingValues"][kBassName]["properties"]["min"].asInt(),
-                           m_audioSettings["audioSettingValues"][kBassName]["properties"]["max"].asInt(),
-                           m_audioSettings["audioSettingValues"][kBassName]["properties"]["step"].asInt() ) )
+                           properties["min"].asInt(),
+                           properties["max"].asInt(),
+                           properties["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -83,10 +84,11 @@ ResultCode_t CustomAudioSettingsManager::SetTreble( const AudioTrebleLevel& treb
         BOSE_INFO( s_logger, "Treble doesn't contain any value (%s)", treble.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
+    const Json::Value& properties = m_audioSettings["audioSettingValues"][kTrebleName]["properties"];
     if( !isStepValueValid( treble.value(),
-                           m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["min"].asInt(),
-                           m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["max"].asInt(),
-                           m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["step"].asInt() ) )
+                           properties["min"].asInt(),
+                           properties["max"].asInt(),
+                           properties["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -112,10 +114,11 @@ ResultCode_t CustomAudioSettingsManager::SetCenter( const AudioCenterLevel& cent
         BOSE_INFO( s_logger, "Center doesn't contain any value (%s)", center.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
+    const Json::Value& properties = m_audioSettings["audioSettingValues"][kCenterName]["properties"];
     if( !isStepValueValid( center.value(),
-                           m_audioSettings["audioSettingValues"][kCenterName]["properties"]["min"].asInt(),
-                           m_audioSettings["audioSettingValues"][kCenterName]["properties"]["max"].asInt(),
-                           m_audioSettings["audioSettingValues"][kCenterName]["properties"]["step"].asInt() ) )
+                           properties["min"].asInt(),
+                           properties["max"].asInt(),
+                           properties["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -141,10 +144,11 @@ ResultCode_t CustomAudioSettingsManager::SetSurround( const AudioSurroundLevel& 
         BOSE_INFO( s_logger, "Surround doesn't contain any value (%s)", surround.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
+    const Json::Value& properties = m_audioSettings["audioSettingValues"][kSurroundName]["properties"];
     if( !isStepValueValid( surround.value(),
-                           m_audioSettings["audioSettingValues"][kSurroundName]["properties"]["min"].asInt(),
-                           m_audioSettings["audioSettingValues"][kSurroundName]["properties"]["max"].asInt(),
-                           m_audioSettings["audioSettingValues"][kSurroundName]["properties"]["step"].asInt() ) )
+                           properties["min"].asInt(),
+                           properties["max"].asInt(),
+                           properties["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -169,10 +173,11 @@ ResultCode_t CustomAudioSettingsManager::SetSurroundDelay( const AudioSurroundDe
         BOSE_INFO( s_logger, "SurroundDelay doesn't contain any value (%s)", surroundDelay.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
+    const Json::Value& properties = m_audioSettings["audioSettingValues"][kSurroundName]["properties"];
     if( !isStepValueValid( surroundDelay.value(),
-                           m_audioSettings["audioSettingValues"][kSurroundDelayName]["properties"]["min"].asInt(),
-                           m_audioSettings["audioSettingValues"][kSurroundDelayName]["properties"]["max"].asInt(),
-                           m_audioSettings["audioSettingValues"][kSurroundDelayName]["properties"]["step"].asInt() ) )
+                           properties["min"].asInt(),
+                           properties["max"].asInt(),
+                           properties["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -198,10 +203,11 @@ ResultCode_t CustomAudioSettingsManager::SetGainOffset( const AudioGainOffset& g
         BOSE_INFO( s_logger, "GainOffset doesn't contain any value (%s)", gainOffset.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
+    const Json::Value& properties = m_audioSettings["audioSettingValues"][kGainOffsetName]["properties"];
     if( !isStepValueValid( gainOffset.value(),
-                           m_audioSettings["audioSettingValues"][kGainOffsetName]["properties"]["min"].asInt(),
-                           m_audioSettings["audioSettingValues"][kGainOffsetName]["properties"]["max"].asInt(),
-                           m_audioSettings["audioSettingValues"][kGainOffsetName]["properties"]["step"].asInt() ) )
+                           properties["min"].asInt(),
+                           properties["max"].asInt(),
+                           properties["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -227,10 +233,11 @@ ResultCode_t CustomAudioSettingsManager::SetAvSync( const AudioAvSync& avSync )
         BOSE_INFO( s_logger, "AvSync doesn't contain any value (%s)", avSync.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
+    const Json::Value& properties = m_audioSettings["audioSettingValues"][kAvSyncName]["properties"];
     if( !isStepValueValid( avSync.value(),
-                           m_audioSettings["audioSettingValues"][kAvSyncName]["properties"]["min"].asInt(),
-                           m_audioSettings["audioSettingValues"][kAvSyncName]["properties"]["max"].asInt(),
-                           m_audioSettings["audioSettingValues"][kAvSyncName]["properties"]["step"].asInt() ) )
+                           properties["min"].asInt(),
+                           properties["max"].asInt(),
+                           properties["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -256,10 +263,11 @@ ResultCode_t CustomAudioSettingsManager::SetSubwooferGain( const AudioSubwooferG
         BOSE_INFO( s_logger, "SubwooferGain doesn't contain any value (%s)", subwooferGain.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
+    const Json::Value& properties = m_audioSettings["audioSettingValues"][kSubwooferGainName]["properties"];
     if( !isStepValueValid( subwooferGain.value(),
-                           m_audioSettings["audioSettingValues"][kSubwooferGainName]["properties"]["min"].asInt(),
-                           m_audioSettings["audioSettingValues"][kSubwooferGainName]["properties"]["max"].asInt(),
-                           m_audioSettings["audioSettingValues"][kSubwooferGainName]["properties"]["step"].asInt() ) )
+                           properties["min"].asInt(),
+                           properties["max"].asInt(),
+                           properties["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -402,6 +410,7 @@ const AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
 void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool supported )
 {
     BOSE_DEBUG( s_logger, __func__ );
+
     bool currSupported = isValueInArray( mode, m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"] );
     // if new mode is supported, add it to the list
     // note: currently we don't have use case of dynamically removing modes (modes can only be reset by factory default).
