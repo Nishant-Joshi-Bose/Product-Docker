@@ -47,9 +47,9 @@ void CustomProductControllerStateBooting::PossiblyGoToNextState( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s. IsPartialSoftwareUpdatePending = %s",
                GetName( ).c_str( ), __func__,
-               GetProductController().GetProductSoftwareInstallScheduler().IsPartialSoftwareUpdatePending() ? "true" : "false" );
+               GetProductController().IsPartialSoftwareUpdatePending() ? "true" : "false" );
 
-    if( !GetProductController().GetProductSoftwareInstallScheduler().IsPartialSoftwareUpdatePending() && !GetProductController( ).IsFirstBootGreetingDone() )
+    if( !GetProductController().IsPartialSoftwareUpdatePending() && !GetProductController( ).IsFirstBootGreetingDone() )
     {
         // The next state will be PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION
         if( GetProductController().IsLpmReady( ) && GetProductController().IsAudioPathReady( ) )
