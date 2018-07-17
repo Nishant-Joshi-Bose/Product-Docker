@@ -13,6 +13,7 @@ This repo contains the source code and tools specific to the Eddie product.
 [Software Updates](#updates)   
 [Getting Started](#start)   
 [External References](#links)   
+[Building different LPM BLOBs](#lpmblobs)   
 [More...](#more)  
 
 <a name="updates"/>
@@ -136,6 +137,8 @@ $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zip
 Eddie [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Guide)
 
 [Updating Individual Components on Eddie](https://wiki.bose.com/display/WSSW/Updating+Individual+Components+on+Eddie)
+
+<a name="lpmblobs"/>
 
 ### Building different LPM BLOBs
 
