@@ -177,7 +177,7 @@ interfaces.
 
 | Interface | Endpoint | Description |
 | -------- | -------- | ----------- |
-| usb | /diag/ | Quality Audit |
+| usb | /diag | Quality Audit |
 | usb+ | /logread.txt | A snapshot of the system log ring buffer |
 | usb+ | /logread.txt.gz | Same as /logread.txt but compressed |
 | usb+ | /pts.txt | Various Linux and system status information (e.g., ifconfig) |
