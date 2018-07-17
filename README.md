@@ -1,11 +1,9 @@
-
-Eddie 
+Eddie
 =====
 <a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Eddie'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Eddie/latest release/blue'></a>
 [Eddie Continuous build Testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/EddieProduct/job/Eddie_Continuous_Build_Testing/'><img src='http://jnkwebhook.ngrok.io/job/EddieProduct/job/Eddie_Continuous_Build_Testing/badge/icon'></a> [Eddie Nightly build testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/Pipelines/job/Castle-Pipeline/'><img src='http://jnkwebhook.ngrok.io/job/Pipelines/job/Castle-Pipeline/badge/icon'></a>
 
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
-
 
 This repo contains the source code and tools specific to the Eddie product.
 
@@ -22,38 +20,58 @@ This repo contains the source code and tools specific to the Eddie product.
 ### Software Updates
 
 Different ways to perform Software Update are:
+
 #### Bonjour update
+
 To update the software (SoundTouch, HSP, LPM, etc) as a user, it is highly recommended to use Bonjour.
 Follow the instructions found on the wiki: [Bonjour Update of Eddie](https://wiki.bose.com/display/WSSW/Bonjour+Update+of+Eddie).
 
 For a simpler-way; see ./pushup script.
 
-To update the software, along with HSP, use product_update.zip file. To update the software, without HSP update (recommended only if HSP version you are updating to, is same as one on device), use product_update_no_hsp.zip.
+To update the software, along with HSP, use product_update.zip file. To update
+the software, without HSP update (recommended only if HSP version you are
+updating to, is same as one on device), use product_update_no_hsp.zip.
 
-#### QFIL / VIP 
-If you suspect your system is not in correct state that Bonjour update can work or it no longer boots, please use QFIL / VIP programming. Follow the instructions found on the wiki: [Recoverying A Bricked Eddie](https://wiki.bose.com/display/WSSW/Recovering+A+Bricked+Eddie).
+#### QFIL / VIP
+
+If you suspect your system is not in correct state that Bonjour update can
+work or it no longer boots, please use QFIL / VIP programming. Follow the
+instructions found on the wiki: [Recoverying A Bricked
+Eddie](https://wiki.bose.com/display/WSSW/Recovering+A+Bricked+Eddie).
 
 #### push-to-target Script
-In case if you do not want to perform full software update and just copy binaries/libraries related to your module you can use push-to-target script under scripts directory.
-Example usage : 
+
+In case if you do not want to perform full software update and just copy
+binaries/libraries related to your module you can use push-to-target script
+under scripts directory.  Example usage:
+
 1. Let say you want to push Software update module binaries to your device [same way you can use -l for libraries and -c for config files]
+
 ```shell session
     push-to-target -b SoftwareUpdateService [-i ADB_device_id] [-r reset_device]
 ```
-2. Let say you want to push Software Update components(libraries, binaries and configuration files) to your device 
+
+2. Let say you want to push Software Update components(libraries, binaries and configuration files) to your device
+
 ```shell session
     push-to-target -m SoftwareUpdate [-i ADB_device_id] [-r reset_device]
 ```
+
 3. Let say you want to push Software Update as well as NetManager components to your device
+
 ```shell session
     push-to-target -m SoftwareUpdate NetManager [-i ADB_device_id] [-r reset_device]
 ```
-4. You can copy all the binaries built in you local system using 
+
+4. You can copy all the binaries built in you local system using
+
 ```shell session
     push-to-target -a [-i ADB_device_id] [-r reset_device]
 ```
 
-Please note that this script will stop all services in your device so you will need to restart all services after copy or you can just use -r option to reset device after push operation.
+Please note that this script will stop all services in your device so you will
+need to restart all services after copy or you can just use -r option to reset
+device after push operation.
 
 <a name="start"/>
 
@@ -89,10 +107,10 @@ $ make all-packages
 
 ```shell session
 To update without HSP:
-$ ./scripts/pushup 
+$ ./scripts/pushup
 
 To update HSP:
-$ ./scripts/pushup --hsp 
+$ ./scripts/pushup --hsp
 
 When having multiple devices, without HSP:
 $ ./scripts/pushup --deviceid <deviceid>
@@ -121,8 +139,11 @@ Eddie [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Gui
 
 ### Building different LPM BLOBs
 
-By default the BLOB that is used to create the lpm_updater.ipk will be a Release BLOB based off of the release manifest xml located in
-the LpmManifestFiles directory. If you wish to create a BLOB based on Continuous or Nightly builds of components try building with the commands below:
+By default the BLOB that is used to create the lpm_updater.ipk will be a
+Release BLOB based off of the release manifest xml located in the
+LpmManifestFiles directory. If you wish to create a BLOB based on Continuous
+or Nightly builds of components try building with the commands below:
+
 ```shell session
 # Install components and run make normally
 $ make
