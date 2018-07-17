@@ -30,6 +30,9 @@ constexpr char kDualMonoSelectName      [] = "audioDualMonoSelect";
 constexpr char kEqSelectName            [] = "audioEqSelect";
 constexpr char kSubwooferPolarityName   [] = "audioSubwooferPolarity";
 
+constexpr char kAudioSettingValues      [] = "audioSettingValues";
+constexpr char kProperties              [] = "properties";
+
 namespace ProductApp
 {
 using std::string;
@@ -54,7 +57,7 @@ ResultCode_t CustomAudioSettingsManager::SetBass( const AudioBassLevel& bass )
         BOSE_INFO( s_logger, "Bass doesn't contain any value (%s)", bass.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings["audioSettingValues"][kBassName]["properties"];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kBassName][kProperties];
     if( !isStepValueValid( bass.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -84,7 +87,7 @@ ResultCode_t CustomAudioSettingsManager::SetTreble( const AudioTrebleLevel& treb
         BOSE_INFO( s_logger, "Treble doesn't contain any value (%s)", treble.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings["audioSettingValues"][kTrebleName]["properties"];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kTrebleName][kProperties];
     if( !isStepValueValid( treble.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -114,7 +117,7 @@ ResultCode_t CustomAudioSettingsManager::SetCenter( const AudioCenterLevel& cent
         BOSE_INFO( s_logger, "Center doesn't contain any value (%s)", center.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings["audioSettingValues"][kCenterName]["properties"];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kCenterName][kProperties];
     if( !isStepValueValid( center.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -144,7 +147,7 @@ ResultCode_t CustomAudioSettingsManager::SetSurround( const AudioSurroundLevel& 
         BOSE_INFO( s_logger, "Surround doesn't contain any value (%s)", surround.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings["audioSettingValues"][kSurroundName]["properties"];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kSurroundName][kProperties];
     if( !isStepValueValid( surround.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -173,7 +176,7 @@ ResultCode_t CustomAudioSettingsManager::SetSurroundDelay( const AudioSurroundDe
         BOSE_INFO( s_logger, "SurroundDelay doesn't contain any value (%s)", surroundDelay.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings["audioSettingValues"][kSurroundName]["properties"];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kSurroundName][kProperties];
     if( !isStepValueValid( surroundDelay.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -203,7 +206,7 @@ ResultCode_t CustomAudioSettingsManager::SetGainOffset( const AudioGainOffset& g
         BOSE_INFO( s_logger, "GainOffset doesn't contain any value (%s)", gainOffset.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings["audioSettingValues"][kGainOffsetName]["properties"];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kGainOffsetName][kProperties];
     if( !isStepValueValid( gainOffset.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -233,7 +236,7 @@ ResultCode_t CustomAudioSettingsManager::SetAvSync( const AudioAvSync& avSync )
         BOSE_INFO( s_logger, "AvSync doesn't contain any value (%s)", avSync.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings["audioSettingValues"][kAvSyncName]["properties"];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kAvSyncName][kProperties];
     if( !isStepValueValid( avSync.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -263,7 +266,7 @@ ResultCode_t CustomAudioSettingsManager::SetSubwooferGain( const AudioSubwooferG
         BOSE_INFO( s_logger, "SubwooferGain doesn't contain any value (%s)", subwooferGain.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings["audioSettingValues"][kSubwooferGainName]["properties"];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kSubwooferGainName][kProperties];
     if( !isStepValueValid( subwooferGain.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -294,7 +297,7 @@ ResultCode_t CustomAudioSettingsManager::SetMode( const AudioMode& mode )
         return ResultCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( mode.value(),
-                         m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"] ) )
+                         m_audioSettings[kAudioSettingValues][kModeName][kProperties]["supportedValues"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -320,7 +323,7 @@ ResultCode_t CustomAudioSettingsManager::SetContentType( const AudioContentType&
         return ResultCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( contentType.value(),
-                         m_audioSettings["audioSettingValues"][kContentTypeName]["properties"]["supportedValues"] ) )
+                         m_audioSettings[kAudioSettingValues][kContentTypeName][kProperties]["supportedValues"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -348,7 +351,7 @@ ResultCode_t CustomAudioSettingsManager::SetDualMonoSelect( const AudioDualMonoS
 
     // Check if new value is valid in supportedValue list
     if( !isValueInArray( dualMonoSelect.value(),
-                         m_audioSettings["audioSettingValues"][kDualMonoSelectName]["properties"]["supportedValues"] ) )
+                         m_audioSettings[kAudioSettingValues][kDualMonoSelectName][kProperties]["supportedValues"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -359,7 +362,7 @@ ResultCode_t CustomAudioSettingsManager::SetDualMonoSelect( const AudioDualMonoS
         BOSE_INFO( s_logger, "DualMonoSelect value doesn't change from last time (%s)", dualMonoSelect.DebugString().c_str() );
         return ResultCode_t::VALUE_UNCHANGED;
     }
-    m_audioSettings["audioSettingValues"][kDualMonoSelectName]["values"][kPersistGlobal] = dualMonoSelect.value();
+    m_audioSettings[kAudioSettingValues][kDualMonoSelectName]["values"][kPersistGlobal] = dualMonoSelect.value();
     m_currentDualMonoSelect.set_value( dualMonoSelect.value() );
     PersistAudioSettings();
     return ResultCode_t::NO_ERROR;
@@ -386,7 +389,7 @@ ResultCode_t CustomAudioSettingsManager::SetEqSelect( const AudioEqSelect& eqSel
 
     // Check if new value is valid in supportedValue list
     if( !isValueInArray( eqSelect.mode(),
-                         m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"] ) )
+                         m_audioSettings[kAudioSettingValues][kEqSelectName][kProperties]["supportedModes"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -397,7 +400,7 @@ ResultCode_t CustomAudioSettingsManager::SetEqSelect( const AudioEqSelect& eqSel
         BOSE_INFO( s_logger, "EqSelect value doesn't change from last time (%s)", eqSelect.DebugString().c_str() );
         return ResultCode_t::VALUE_UNCHANGED;
     }
-    m_audioSettings["audioSettingValues"][kEqSelectName]["values"][kPersistGlobal] = eqSelect.mode();
+    m_audioSettings[kAudioSettingValues][kEqSelectName]["values"][kPersistGlobal] = eqSelect.mode();
     m_currentEqSelect.set_mode( eqSelect.mode() );
     PersistAudioSettings();
     return ResultCode_t::NO_ERROR;
@@ -411,13 +414,13 @@ void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool 
 {
     BOSE_DEBUG( s_logger, __func__ );
 
-    bool currSupported = isValueInArray( mode, m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"] );
+    bool currSupported = isValueInArray( mode, m_audioSettings[kAudioSettingValues][kEqSelectName][kProperties]["supportedModes"] );
     // if new mode is supported, add it to the list
     // note: currently we don't have use case of dynamically removing modes (modes can only be reset by factory default).
     //       if use case does come up, rules have to be defined, and handling has to be added here
     if( supported && !currSupported )
     {
-        m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"].append( mode );
+        m_audioSettings[kAudioSettingValues][kEqSelectName][kProperties]["supportedModes"].append( mode );
         m_currentEqSelect.mutable_properties()->add_supportedmodes( mode );
         if( mode == AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ) )
         {
@@ -442,7 +445,7 @@ ResultCode_t CustomAudioSettingsManager::SetSubwooferPolarity( const AudioSubwoo
     }
     // Check if new value is valid in supportedValue list
     if( !isValueInArray( subwooferPolarity.value(),
-                         m_audioSettings["audioSettingValues"][kSubwooferPolarityName]["properties"]["supportedPolarity"] ) )
+                         m_audioSettings[kAudioSettingValues][kSubwooferPolarityName][kProperties]["supportedPolarity"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -452,7 +455,7 @@ ResultCode_t CustomAudioSettingsManager::SetSubwooferPolarity( const AudioSubwoo
         BOSE_INFO( s_logger, "SubwooferPolarity value doesn't change from last time (%s)", subwooferPolarity.DebugString().c_str() );
         return ResultCode_t::VALUE_UNCHANGED;
     }
-    m_audioSettings["audioSettingValues"][kSubwooferPolarityName]["values"][kPersistGlobal] = subwooferPolarity.value();
+    m_audioSettings[kAudioSettingValues][kSubwooferPolarityName]["values"][kPersistGlobal] = subwooferPolarity.value();
     m_currentSubwooferPolarity.set_value( subwooferPolarity.value() );
     PersistAudioSettings();
     return ResultCode_t::NO_ERROR;
@@ -519,7 +522,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
         else if( persistedAudioSettings.empty() ||
                  !persistedAudioSettings.isMember( "version" ) ||
                  !persistedAudioSettings.isMember( "supportedAudioSettings" ) ||
-                 !persistedAudioSettings.isMember( "audioSettingValues" ) )
+                 !persistedAudioSettings.isMember( kAudioSettingValues ) )
         {
             BOSE_ERROR( s_logger, "Persisted m_audioSettings doesn't contain valid data" );
         }
@@ -540,12 +543,12 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
             for( uint32_t i = 0; i < persistedAudioSettings["supportedAudioSettings"]["contentItemSensitive"].size(); i++ )
             {
                 string propName = persistedAudioSettings["supportedAudioSettings"]["contentItemSensitive"][i].asString();
-                m_audioSettings["audioSettingValues"][propName] = persistedAudioSettings["audioSettingValues"][propName];
+                m_audioSettings[kAudioSettingValues][propName] = persistedAudioSettings[kAudioSettingValues][propName];
             }
             for( uint32_t i = 0; i < persistedAudioSettings["supportedAudioSettings"]["contentItemNonSensitive"].size(); i++ )
             {
                 string propName = persistedAudioSettings["supportedAudioSettings"]["contentItemNonSensitive"][i].asString();
-                m_audioSettings["audioSettingValues"][propName] = persistedAudioSettings["audioSettingValues"][propName];
+                m_audioSettings[kAudioSettingValues][propName] = persistedAudioSettings[kAudioSettingValues][propName];
             }
         }
     }
@@ -568,72 +571,72 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     ///
     /// initialize mode proto
     ///
-    m_audioSettings["audioSettingValues"][kModeName]["persistenceLevel"]["persistenceSession"] = false;
+    m_audioSettings[kAudioSettingValues][kModeName]["persistenceLevel"]["persistenceSession"] = false;
     //Fill out protobuf
-    std::string currPersistLvlMode = m_audioSettings["audioSettingValues"][kModeName]["persistenceLevel"]["currentPersistenceLevel"].asString();
+    std::string currPersistLvlMode = m_audioSettings[kAudioSettingValues][kModeName]["persistenceLevel"]["currentPersistenceLevel"].asString();
     m_currentMode.set_persistence( currPersistLvlMode );
     if( currPersistLvlMode == kPersistContentItem )
     {
-        m_currentMode.set_value( JsonToProtoField( m_currentMode.value(), m_audioSettings["audioSettingValues"][kModeName]["values"][kPersistContentItem][m_currentContentItem] ) );
+        m_currentMode.set_value( JsonToProtoField( m_currentMode.value(), m_audioSettings[kAudioSettingValues][kModeName]["values"][kPersistContentItem][m_currentContentItem] ) );
     }
     else
     {
-        m_currentMode.set_value( JsonToProtoField( m_currentMode.value(), m_audioSettings["audioSettingValues"][kModeName]["values"][currPersistLvlMode] ) );
+        m_currentMode.set_value( JsonToProtoField( m_currentMode.value(), m_audioSettings[kAudioSettingValues][kModeName]["values"][currPersistLvlMode] ) );
     }
-    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"].size(); i++ )
+    for( uint32_t i = 0; i < m_audioSettings[kAudioSettingValues][kModeName][kProperties]["supportedValues"].size(); i++ )
     {
-        m_currentMode.mutable_properties()->add_supportedvalues( m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"][i].asString() );
+        m_currentMode.mutable_properties()->add_supportedvalues( m_audioSettings[kAudioSettingValues][kModeName][kProperties]["supportedValues"][i].asString() );
     }
-    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedPersistence"].size(); i++ )
+    for( uint32_t i = 0; i < m_audioSettings[kAudioSettingValues][kModeName][kProperties]["supportedPersistence"].size(); i++ )
     {
-        m_currentMode.mutable_properties()->add_supportedpersistence( m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedPersistence"][i].asString() );
+        m_currentMode.mutable_properties()->add_supportedpersistence( m_audioSettings[kAudioSettingValues][kModeName][kProperties]["supportedPersistence"][i].asString() );
     }
 
     ///
     /// initialize contentType proto
     ///
-    m_audioSettings["audioSettingValues"][kContentTypeName]["persistenceLevel"]["persistenceSession"] = false;
+    m_audioSettings[kAudioSettingValues][kContentTypeName]["persistenceLevel"]["persistenceSession"] = false;
     //Fill out protobuf
-    std::string currPersistLvlContentType = m_audioSettings["audioSettingValues"][kContentTypeName]["persistenceLevel"]["currentPersistenceLevel"].asString();
+    std::string currPersistLvlContentType = m_audioSettings[kAudioSettingValues][kContentTypeName]["persistenceLevel"]["currentPersistenceLevel"].asString();
     m_currentContentType.set_persistence( currPersistLvlContentType );
     if( currPersistLvlContentType == kPersistContentItem )
     {
-        m_currentContentType.set_value( JsonToProtoField( m_currentContentType.value(), m_audioSettings["audioSettingValues"][kContentTypeName]["values"][kPersistContentItem][m_currentContentItem] ) );
+        m_currentContentType.set_value( JsonToProtoField( m_currentContentType.value(), m_audioSettings[kAudioSettingValues][kContentTypeName]["values"][kPersistContentItem][m_currentContentItem] ) );
     }
     else
     {
-        m_currentContentType.set_value( JsonToProtoField( m_currentContentType.value(), m_audioSettings["audioSettingValues"][kContentTypeName]["values"][currPersistLvlContentType] ) );
+        m_currentContentType.set_value( JsonToProtoField( m_currentContentType.value(), m_audioSettings[kAudioSettingValues][kContentTypeName]["values"][currPersistLvlContentType] ) );
     }
-    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kContentTypeName]["properties"]["supportedValues"].size(); i++ )
+    for( uint32_t i = 0; i < m_audioSettings[kAudioSettingValues][kContentTypeName][kProperties]["supportedValues"].size(); i++ )
     {
-        m_currentContentType.mutable_properties()->add_supportedvalues( m_audioSettings["audioSettingValues"][kContentTypeName]["properties"]["supportedValues"][i].asString() );
+        m_currentContentType.mutable_properties()->add_supportedvalues( m_audioSettings[kAudioSettingValues][kContentTypeName][kProperties]["supportedValues"][i].asString() );
     }
-    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kContentTypeName]["properties"]["supportedPersistence"].size(); i++ )
+    for( uint32_t i = 0; i < m_audioSettings[kAudioSettingValues][kContentTypeName][kProperties]["supportedPersistence"].size(); i++ )
     {
-        m_currentContentType.mutable_properties()->add_supportedpersistence( m_audioSettings["audioSettingValues"][kContentTypeName]["properties"]["supportedPersistence"][i].asString() );
+        m_currentContentType.mutable_properties()->add_supportedpersistence( m_audioSettings[kAudioSettingValues][kContentTypeName][kProperties]["supportedPersistence"][i].asString() );
     }
 
     ///
     /// initialize dualMonoSelect proto
     ///
-    m_audioSettings["audioSettingValues"][kDualMonoSelectName]["persistenceLevel"]["persistenceSession"] = false;
+    m_audioSettings[kAudioSettingValues][kDualMonoSelectName]["persistenceLevel"]["persistenceSession"] = false;
     //Fill out protobuf
-    m_currentDualMonoSelect.set_value( JsonToProtoField( m_currentDualMonoSelect.value(), m_audioSettings["audioSettingValues"][kDualMonoSelectName]["values"][kPersistGlobal] ) );
-    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kDualMonoSelectName]["properties"]["supportedValues"].size(); i++ )
+    m_currentDualMonoSelect.set_value( JsonToProtoField( m_currentDualMonoSelect.value(), m_audioSettings[kAudioSettingValues][kDualMonoSelectName]["values"][kPersistGlobal] ) );
+    for( uint32_t i = 0; i < m_audioSettings[kAudioSettingValues][kDualMonoSelectName][kProperties]["supportedValues"].size(); i++ )
     {
-        m_currentDualMonoSelect.mutable_properties()->add_supportedvalues( m_audioSettings["audioSettingValues"][kDualMonoSelectName]["properties"]["supportedValues"][i].asString() );
+        m_currentDualMonoSelect.mutable_properties()->add_supportedvalues( m_audioSettings[kAudioSettingValues][kDualMonoSelectName][kProperties]["supportedValues"][i].asString() );
     }
 
     ///
     /// initialize eqSelect proto
     ///
-    m_audioSettings["audioSettingValues"][kEqSelectName]["persistenceLevel"]["persistenceSession"] = false;
+    m_audioSettings[kAudioSettingValues][kEqSelectName]["persistenceLevel"]["persistenceSession"] = false;
     //Fill out protobuf
-    m_currentEqSelect.set_mode( JsonToProtoField( m_currentEqSelect.mode(), m_audioSettings["audioSettingValues"][kEqSelectName]["values"][kPersistGlobal] ) );
+    m_currentEqSelect.set_mode( JsonToProtoField( m_currentEqSelect.mode(), m_audioSettings[kAudioSettingValues][kEqSelectName]["values"][kPersistGlobal] ) );
     m_currentEqSelect.set_storedeqvalid( false );
-    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"].size(); i++ )
+    for( uint32_t i = 0; i < m_audioSettings[kAudioSettingValues][kEqSelectName][kProperties]["supportedModes"].size(); i++ )
     {
-        const string& supportedMode = m_audioSettings["audioSettingValues"][kEqSelectName]["properties"]["supportedModes"][i].asString();
+        const string& supportedMode = m_audioSettings[kAudioSettingValues][kEqSelectName][kProperties]["supportedModes"][i].asString();
         if( supportedMode == AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ) )
         {
             m_currentEqSelect.set_storedeqvalid( true );
@@ -644,12 +647,12 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     ///
     /// initialize subwooferPolarity proto
     ///
-    m_audioSettings["audioSettingValues"][kSubwooferPolarityName]["persistenceLevel"]["persistenceSession"] = false;
+    m_audioSettings[kAudioSettingValues][kSubwooferPolarityName]["persistenceLevel"]["persistenceSession"] = false;
     //Fill out protobuf
-    m_currentSubwooferPolarity.set_value( JsonToProtoField( m_currentSubwooferPolarity.value(), m_audioSettings["audioSettingValues"][kSubwooferPolarityName]["values"][kPersistGlobal] ) );
-    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kSubwooferPolarityName]["properties"]["supportedPolarity"].size(); i++ )
+    m_currentSubwooferPolarity.set_value( JsonToProtoField( m_currentSubwooferPolarity.value(), m_audioSettings[kAudioSettingValues][kSubwooferPolarityName]["values"][kPersistGlobal] ) );
+    for( uint32_t i = 0; i < m_audioSettings[kAudioSettingValues][kSubwooferPolarityName][kProperties]["supportedPolarity"].size(); i++ )
     {
-        m_currentSubwooferPolarity.mutable_properties()->add_supportedpolarity( m_audioSettings["audioSettingValues"][kSubwooferPolarityName]["properties"]["supportedPolarity"][i].asString() );
+        m_currentSubwooferPolarity.mutable_properties()->add_supportedpolarity( m_audioSettings[kAudioSettingValues][kSubwooferPolarityName][kProperties]["supportedPolarity"][i].asString() );
     }
 }
 
