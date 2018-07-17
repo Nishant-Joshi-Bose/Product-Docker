@@ -203,6 +203,8 @@ For example: http://203.0.113.1/pts.txt
 Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
 [here](mailto:Jonathan_Cooper@bose.com?subject=Add%20me%20to%20the%20SSG-Eddie%20mailing%20list).
 
+[Join the Eddie Slack channel.](https://bosessg.slack.com/messages/C1WER8HA7)
+
 Access the APQ console via the tap cable.
 
 ```shell session
