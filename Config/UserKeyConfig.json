@@ -264,7 +264,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     },
-     {
+    {
         "action": "ACTION_GAME",
         "commment": "select user configurable source game/ott",
         "keyEvent": "PRESS",
@@ -277,7 +277,7 @@
         "commment": "select user configurable source dvd",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_BD_DVD_SOURCE"],
-        "origin": ["IR", "TAP", "RF", "NETWORK"],
+        "origin": ["IR", "TAP", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -285,9 +285,25 @@
         "commment": "select user configurable source cable/sat",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_AUX_SOURCE"],
-        "origin": ["IR", "TAP", "RF", "NETWORK"],
+        "origin": ["IR", "TAP", "NETWORK"],
         "timeOutList": []
-    },   
+    },
+    {
+        "action": "ACTION_DVD",
+        "commment": "select user configurable source dvd (Kepler)",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_AUX_SOURCE"],
+        "origin": ["RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_CABLESAT",
+        "commment": "select user configurable source cable/sat (Kepler)",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_BD_DVD_SOURCE"],
+        "origin": ["RF"],
+        "timeOutList": []
+    },
     {
         "action": "ACTION_THUMB_UP",
         "commment": "thumbs up",
