@@ -13,15 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-16_1316"
+    "selected_version": "Continuous/Castle-Fork/2018-07-17_0921"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/1.5.2-124+702e66f"
+    "selected_version": "Continuous/master/1.5.2-130+f33b8b4"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-20+0e287e7"
+    "selected_version": "Continuous/master/1.5.0-25+cfa33d9"
   },
   {
     "name": "bose-opkg-utils",
@@ -169,7 +169,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@3abdcec9611e25ba45c7c0df9e856885ba891285"
+    "selected_version": "master@a449d2dc2173bce17273263382770ad61d3e2faf"
   },
   {
     "name": "protobuf-native",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-16_1316"
+    "selected_version": "Continuous/Castle-Fork/2018-07-17_0921"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -221,11 +221,11 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-20+0c4331f"
+    "selected_version": "Continuous/master/1.5.1-23+0c4331f"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@5574d60a95a42cb08dff1ef31b696ed8e104696c"
+    "selected_version": "master@b4ea0050953ba69255a5df99d1884d66722e13c1"
   },
   {
     "name": "Webkit",
