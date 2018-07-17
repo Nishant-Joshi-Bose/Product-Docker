@@ -32,7 +32,7 @@ pytest --verbose --capture=no \
        --junitxml=aux_keys.xml \
        --device-id=<ADB Device ID> \
        --router=<Router ID> \
-       test_aux_key_scenario.py
+       test_*.py
 ```
 
 ## List of Files
@@ -40,6 +40,8 @@ pytest --verbose --capture=no \
 cli_key_helper.py                = Helper functions for cli key scenarios.
 
 test_aux_key_scenario.py         = Aux key test scenarios.
+
+test_pts_scenario.py             = System Info scenarios.
 
 ### Details of various KeyEvents
 

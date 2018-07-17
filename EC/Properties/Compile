@@ -17,8 +17,9 @@ export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 deploy || exit
 
 if [ "$[BuildType]" = "Release" ]; then
+    git clone git@github.com:BoseCorp/iot-profile-creator
     for env in alpha latest integration; do
-        python2.7 scripts/update_product_profile --p eddie --v $[Version] --e $env
+        python2.7 iot-profile-creator/update_product_profile.py --p eddie --v $[Version] --e $env
     done
 fi
 

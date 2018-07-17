@@ -13,10 +13,10 @@ import pytest
 import AutoLpmServiceMessages_pb2 as AutoIPCMessages
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
-logger = get_logger(__file__)
+LOGGER = get_logger(__file__)
 
 
-@pytest.mark.usefixtures('riviera_enabled_ipc', 'lpm_ipc_client', 'ip_address_wlan')
+@pytest.mark.usefixtures('riviera_enabled_ipc', 'lpm_ipc_client', 'ip_address')
 def test_get_thermal_data(lpm_ipc_client):
     """
     Get the amp temperature over IPC and verify that it is a sensible value.
@@ -45,7 +45,7 @@ def test_get_thermal_data(lpm_ipc_client):
         assert (resp.thermalData[0].value > 0 and resp.thermalData[0].value < 100), \
             "Thermal data 'value' is out of acceptable range."
 
-        logger.info("Successfully read amplifier temperature: %dC" % resp.thermalData[0].value)
+        LOGGER.info("Successfully read amplifier temperature: %dC" % resp.thermalData[0].value)
 
         _lbcs_xfer_event.set()
 

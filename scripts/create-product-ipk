@@ -84,6 +84,7 @@ datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 insta
 btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location) || exit
 btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
 blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
+bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
@@ -196,6 +197,7 @@ mv "$opt_dir"/etc/Shepherd-avs.xml "$opt_dir"/etc/Shepherd-avs.xml.DISABLED || e
 "$btstackadapter_dir/stage" "$opt_dir" || exit
 "$btsource_dir/stage" "$opt_dir" || exit
 "$blesetup_dir/stage" "$opt_dir" || exit
+"$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$btstssink_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit

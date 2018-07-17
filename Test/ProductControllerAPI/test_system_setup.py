@@ -24,7 +24,7 @@ import eddie_helper
 LOGGER = get_logger(os.path.basename(__file__))
 
 
-def get_and_set_system_setup(front_door_queue):
+def get_and_set_system_setup(frontdoor_wlan):
     """
     Common function to get system state and verify response.
     Test Steps:
@@ -35,7 +35,7 @@ def get_and_set_system_setup(front_door_queue):
     """
     # 1. Get system setup information and verify response.
     LOGGER.info("Testing get system setup information ")
-    response = front_door_queue.getSystemSetup()
+    response = frontdoor_wlan.getSystemSetup()
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_SETUP_API, eddie_helper.METHOD_GET,
                                                  eddie_helper.STATUS_OK)
@@ -52,13 +52,13 @@ def get_and_set_system_setup(front_door_queue):
     data_request = dict()
     data_request["isSetupCompleted"] = True
     data = json.dumps(data_request)
-    response = front_door_queue.setSystemSetup(data)
+    response = frontdoor_wlan.setSystemSetup(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_SETUP_API, eddie_helper.METHOD_PUT,
                                                  eddie_helper.STATUS_OK)
     time.sleep(10)
 
     # 4. Verify notification of system setup information.
-    notification = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_SETUP_API)
+    notification = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_SETUP_API)
     assert notification["isSetupCompleted"] is True, \
         'setup value should be True. Current value : {}'.format(notification["isSetupCompleted"])
     assert notification["networkConfigured"] is True, \
@@ -66,30 +66,24 @@ def get_and_set_system_setup(front_door_queue):
             notification["networkConfigured"])
 
 
-def set_and_verify_invalid_system_setup(front_door_queue, request_data, error_code):
+def set_and_verify_invalid_system_setup(frontdoor_wlan, request_data, error_code=None):
     """
     Common function to get system state and verify response.
     Test Steps:
     1. Configure OOB setup using PUT method.
-    2. Verify error subcode which should be "1".
-    3. Get system setup information and verify response.
-    4. Verify device setup which should be False and networkConfigured should be True.
+    2. Get system setup information and verify response.
+    3. Verify device setup which should be False and networkConfigured should be True.
     """
     # 1. Configure OOB setup using PUT method.
-    response = front_door_queue.setSystemSetup(request_data)
+    response = frontdoor_wlan.setSystemSetup(request_data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_SETUP_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
-    # 2. Verify error subcode which should be "1".
-    assert response["error"]["subcode"] == error_code, \
-        'Subcode should be {} for invalid key. Subcode got : {}'.format(error_code, response["error"]["subcode"])
-    time.sleep(2)
-
-    # 3. Get system setup information and verify response.
-    response = front_door_queue.getSystemSetup()
+    # 2. Get system setup information and verify response.
+    response = frontdoor_wlan.getSystemSetup()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_SETUP_API, eddie_helper.METHOD_GET,
                                                  eddie_helper.STATUS_OK)
 
-    # 4. Verify device setup which should be False and networkConfigured should be True.
+    # 3. Verify device setup which should be False and networkConfigured should be True.
     assert response["body"]["isSetupCompleted"] is False, \
         'setup value should be False. Current value : {}'.format(response["body"]["isSetupCompleted"])
 
@@ -97,8 +91,8 @@ def set_and_verify_invalid_system_setup(front_door_queue, request_data, error_co
         'networkConfigured value should be True. Current value : {}'.format(response["body"]["networkConfigured"])
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'front_door_queue')
-def test_system_setup_from_setup_state(front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'frontdoor_wlan')
+def test_system_setup_from_setup_state(frontdoor_wlan):
     """
     Test for GET method of system setup api after rebooting the device and from SetupOther state
     Test Steps:
@@ -107,23 +101,23 @@ def test_system_setup_from_setup_state(front_door_queue):
     3. Verify device state which should be "DESELECTED".
     """
     # 1. Check that endpoint is returned in capabilities.
-    eddie_helper.check_if_end_point_exists(front_door_queue, eddie_helper.SYSTEM_SETUP_API)
+    eddie_helper.check_if_end_point_exists(frontdoor_wlan, eddie_helper.SYSTEM_SETUP_API)
 
     # 2. Get and set system setup information and verify response.
-    get_and_set_system_setup(front_door_queue)
+    get_and_set_system_setup(frontdoor_wlan)
     for _ in range(25):
-        state = front_door_queue.getState()
-        if state == eddie_helper.DESELECTED:
+        state = frontdoor_wlan.getState()
+        if state in eddie_helper.DESELECTED:
             break
         time.sleep(1)
 
     # 3. Verify device state which should be "DESELECTED".
-    assert state == eddie_helper.DESELECTED, \
+    assert state in eddie_helper.DESELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.DESELECTED, state)
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'front_door_queue', 'device_in_aux')
-def test_system_setup_from_selected_state(front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'frontdoor_wlan', 'device_in_aux')
+def test_system_setup_from_selected_state(frontdoor_wlan):
     """
     Test for GET method of system setup api while playing from AUX
     Test Steps:
@@ -134,9 +128,9 @@ def test_system_setup_from_selected_state(front_door_queue):
     # 1. Change playing source to AUX and verifies the device state from fixture.
 
     # 2. Get and set system setup information and verify response.
-    get_and_set_system_setup(front_door_queue)
+    get_and_set_system_setup(frontdoor_wlan)
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.SELECTED:
             break
         time.sleep(1)
@@ -146,8 +140,8 @@ def test_system_setup_from_selected_state(front_door_queue):
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'front_door_queue', 'device_in_aux')
-def test_system_setup_from_idle_state(front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'frontdoor_wlan', 'device_in_aux')
+def test_system_setup_from_idle_state(frontdoor_wlan):
     """
     Test for GET method of system setup api while playing from AUX
     Test Steps:
@@ -161,9 +155,9 @@ def test_system_setup_from_idle_state(front_door_queue):
     data_request["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_request)
 
-    front_door_queue.setSystemPowerControl(data)
+    frontdoor_wlan.setSystemPowerControl(data)
     for _ in range(25):
-        state = front_door_queue.getState()
+        state = frontdoor_wlan.getState()
         if state == eddie_helper.IDLE:
             break
         time.sleep(1)
@@ -173,11 +167,11 @@ def test_system_setup_from_idle_state(front_door_queue):
         'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
     # 3. Get and set system state and verify response.
-    get_and_set_system_setup(front_door_queue)
+    get_and_set_system_setup(frontdoor_wlan)
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'device_id', 'front_door_queue')
-def test_system_setup_cli_command(device_id, front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'device_id', 'frontdoor_wlan')
+def test_system_setup_cli_command(device_id, frontdoor_wlan):
     """
     Test for GET method of system setup api after rebooting the device and from SetupOther state
     Test Steps:
@@ -188,13 +182,13 @@ def test_system_setup_cli_command(device_id, front_door_queue):
     # 1. Set OOB Setup completed using CLI command.
     adb_utils.adb_telnet_cmd('setoobsetupcompleted', device_id=device_id)
     for _ in range(25):
-        state = front_door_queue.getState()
-        if state == eddie_helper.DESELECTED:
+        state = frontdoor_wlan.getState()
+        if state in eddie_helper.DESELECTED:
             break
         time.sleep(1)
 
     # 2. Verify notification of system setup information.
-    notification = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_SETUP_API)
+    notification = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_SETUP_API)
     assert notification["isSetupCompleted"] is True, \
         'setup value should be True. Current value : {}'.format(notification["isSetupCompleted"])
     assert notification["networkConfigured"] is True, \
@@ -202,12 +196,12 @@ def test_system_setup_cli_command(device_id, front_door_queue):
             notification["networkConfigured"])
 
     # 3. Verify device state which should be "DESELECTED".
-    assert state == eddie_helper.DESELECTED, \
+    assert state in eddie_helper.DESELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.DESELECTED, state)
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'front_door_queue', 'device_in_aux')
-def test_system_setup_errors(front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'frontdoor_wlan', 'device_in_aux')
+def test_system_setup_errors(frontdoor_wlan):
     """
     Test for PUT method of system setup api with negative scenarios.
     Test Steps:
@@ -222,23 +216,23 @@ def test_system_setup_errors(front_door_queue):
     data_request = dict()
     data_request["isSetupCompleted"] = False
     data = json.dumps(data_request)
-    set_and_verify_invalid_system_setup(front_door_queue, data, eddie_helper.SUBCODE_INVALID_ARGS)
+    set_and_verify_invalid_system_setup(frontdoor_wlan, data, eddie_helper.SUBCODE_INVALID_ARGS)
 
     # 2. Validate error message by sending only networkConfigured value.
     data_request = dict()
     data_request["networkConfigured"] = True
     data = json.dumps(data_request)
-    set_and_verify_invalid_system_setup(front_door_queue, data, eddie_helper.SUBCODE_INVALID_ARGS)
+    set_and_verify_invalid_system_setup(frontdoor_wlan, data, eddie_helper.SUBCODE_INVALID_ARGS)
 
     # 3. Validate error message by sending networkConfigured value and invalid setup value.
     data_request = dict()
     data_request["networkConfigured"] = True
     data_request["isSetupCompleted"] = False
     data = json.dumps(data_request)
-    set_and_verify_invalid_system_setup(front_door_queue, data, eddie_helper.SUBCODE_INVALID_ARGS)
+    set_and_verify_invalid_system_setup(frontdoor_wlan, data, eddie_helper.SUBCODE_INVALID_ARGS)
 
     # 4. Validate error message by sending invalid key.
     data_request = dict()
     data_request["invalidKey"] = True
     data = json.dumps(data_request)
-    set_and_verify_invalid_system_setup(front_door_queue, data, eddie_helper.SUBCODE_INVALID_KEY)
+    set_and_verify_invalid_system_setup(frontdoor_wlan, data, eddie_helper.SUBCODE_INVALID_KEY)
