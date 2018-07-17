@@ -22,11 +22,11 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/1.5.0-140+58cdd2d"
+    "selected_version": "Continuous/master/1.5.0-143+95a7507"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-16_0911"
+    "selected_version": "Continuous/Castle-Fork/2018-07-17_1051"
   },
   {
     "name": "BLERemoteXCVR",
@@ -34,11 +34,11 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/1.5.2-124+702e66f"
+    "selected_version": "Continuous/master/1.5.2-130+f33b8b4"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-20+0e287e7"
+    "selected_version": "Continuous/master/1.5.0-25+cfa33d9"
   },
   {
     "name": "bose-opkg-utils",
@@ -70,15 +70,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.5-410+f777ce3"
+    "selected_version": "Release/master/1.5.6-423+c8886c6"
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-34+aeecd0b"
+    "selected_version": "Continuous/master/1.5.0-36+64700b1"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/master/1.6.2-95+40713e0"
+    "selected_version": "Continuous/master/1.6.2-97+d4b24f8"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -114,7 +114,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.0-46+8a6938e"
+    "selected_version": "Release/bose-master/1.0.0-61+504c312"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -178,7 +178,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@724db30ec94a5c06ff3db389d388fd052e36552f"
+    "selected_version": "master@b751818e08a8f6b9eb399819e799a6b9516e049d"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -222,11 +222,11 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.5.4-487+d1c1e20"
+    "selected_version": "Release/master/1.5.4-496+d2d5154"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-97+a6ad77c"
+    "selected_version": "Release/master/1.5.2-99+e680d47"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -234,7 +234,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-16_0911"
+    "selected_version": "Continuous/Castle-Fork/2018-07-17_1051"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -242,7 +242,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-20+0c4331f"
+    "selected_version": "Continuous/master/1.5.1-23+0c4331f"
   },
   {
     "name": "TestUtils",
