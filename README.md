@@ -15,7 +15,8 @@ For more information, see the [Professor wiki page](https://wiki.bose.com/displa
 [Compiling Professor](#compile)  
 [Installing Professor](#install)   
 [Reflash Riviera-HSP](#hsp)   
-[More...](#more)   
+[More...](#more)
+[Useful Links](#useful)   
 
 <a name="start"/>
 
@@ -53,13 +54,24 @@ Regardless of the method you used, you can verify that your update was successfu
 ```shell session
 adb shell LD_LIBRARY_PATH=/opt/Bose/update/opkg /opt/Bose/update/opkg/opkg -f /mnt/nv/update/opkg.conf --volatile-cache  --add-arch armv7a-vfp-neon:100  list
 ```
+
+QFIL/VIP can be used to recover or update the system, however it is highly recommended to use Bonjour when possible.
+
+If you are unable to update with Bonjour, follow the instructions on the wiki for [How to recover Professor with VIP](http://wiki.bose.com/display/A4V/How+to+recover+Professor+with+VIP)
+
+If the device is unresponsive after updating, perhaps the [How to tapload Professor / Ginger-Cheevers](http://wiki.bose.com/pages/viewpage.action?pageId=42180408) wiki article will be helpful.
+If you are having issues taploading (specifically with sending binaries to Professor) ensure that the tap cable is connected directly to your machine. Some USB hubs send erroneous characters before the binary file, causing the write to timeout prematurely. 
+
 #### Bonjour
 
 Method 1:
 
 Power on the device and attach an ethernet cable. Once the device is booted, use adb to query the ip address of the eth0 network interface:
 ```shell session
-$ ifconfig
+$ adb kill-server
+$ sudo adb start-server
+$ adb shell
+# ifconfig
 eth0      Link encap:Ethernet  HWaddr 04:B0:5E:56:76:FC
           inet addr:10.60.5.51  Bcast:10.60.46.255  Mask:255.255.255.0
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
@@ -202,6 +214,7 @@ $ make lpmupdater-ipk BUILD_TYPE=Nightly
 $ make lpmupdater-ipk BUILD_TYPE=Release
 ```
 
+<a name="more"/>
 ### More...
 
 Access the APQ console via the tap cable.
@@ -240,3 +253,12 @@ start is /opt/Bose/bin/start
 
 Certain important error and status messages go only to the console.
 You generally won't see this information via `adb shell`.
+
+<a name="useful"/>
+### Useful Links
+
+[Professor/Ginger-Cheevers Slack channel](https://profgc.slack.com/)
+[Professor Wiki](https://wiki.bose.com/display/A4V/Professor)
+[How-to & Board Setups](https://wiki.bose.com/pages/viewpage.action?pageId=33361043)
+[How to recover Professor with VIP](https://wiki.bose.com/display/A4V/How+to+recover+Professor+with+VIP)
+[How to tapload Professor / Ginger-Cheevers](https://wiki.bose.com/pages/viewpage.action?pageId=42180408)
