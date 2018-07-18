@@ -190,6 +190,7 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | usb | /clear-first-greeting | Clear the flag indicating the unit's first boot |
 | any | /opensource | List the licenses of open source software used in the system |
 | any | /service | Remanufacturing. Only if the unit is in service mode |
+| any | /dev | Developer links. Only if the unit is in development mode |
 | usb, wlan1 | /, /index.html | Wi-Fi setup |
 
 \+ Not enforced until SOS.
