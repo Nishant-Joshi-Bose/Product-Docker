@@ -218,20 +218,22 @@ std::string get_iface_name( sockaddr_storage const& addr, socklen_t len )
     }
 }
 
-std::string get_iface_name( int sockfd )
+std::string get_iface_name( int sockfd, std::string& local_address )
 {
     sockaddr_storage addr;
     socklen_t len = sizeof( addr );
     if( getsockname( sockfd, ( sockaddr* )&addr, &len ) == -1 )
     {
         LOG( "getsockname: " << err() );
+        local_address.erase();
         return {};
     }
-    //LOG( "getsockname '" << to_string( addr, len ) << '\'' );
+    local_address = to_string( addr, len );
     return get_iface_name( addr, len );
 }
 
-void handle_connection( int sockfd, std::string const& clientaddrstr,
+void handle_connection( int sockfd, std::string const& remote_address,
+                        std::string const& local_address,
                         std::string const& iface )
 {
     auto kid = fork();
@@ -258,12 +260,16 @@ void handle_connection( int sockfd, std::string const& clientaddrstr,
            This code assumes we execl and the temporary objects never actually
            get destroyed. */
 
-        auto env1 = "REMOTE_ADDRESS=" + clientaddrstr;
+        auto env1 = "REMOTE_ADDRESS=" + remote_address;
         if( putenv( const_cast< char* >( env1.c_str() ) ) != 0 )
             LOG( "putenv: " << err() );
 
-        auto env2 = "IFACE=" + iface;
+        auto env2 = "LOCAL_ADDRESS=" + local_address;
         if( putenv( const_cast< char* >( env2.c_str() ) ) != 0 )
+            LOG( "putenv: " << err() );
+
+        auto env3 = "IFACE=" + iface;
+        if( putenv( const_cast< char* >( env3.c_str() ) ) != 0 )
             LOG( "putenv: " << err() );
 
         execl( handler_program, handler_program, nullptr );
@@ -284,12 +290,13 @@ void listener( int listenfd )
             LOG( "accept: " << err() );
             break;
         }
-        auto clientaddrstr = to_string( clientaddr, clientlen );
-        auto iface = get_iface_name( connfd );
+        auto remote_address = to_string( clientaddr, clientlen );
+        std::string local_address;
+        auto iface = get_iface_name( connfd, local_address );
 
-        LOG( "accept " << clientaddrstr << " on " << iface );
+        LOG( "accept " << remote_address << " on " << iface << ' ' << local_address );
 
-        handle_connection( connfd, clientaddrstr, iface );
+        handle_connection( connfd, remote_address, local_address, iface );
         close( connfd );
     }
 }
