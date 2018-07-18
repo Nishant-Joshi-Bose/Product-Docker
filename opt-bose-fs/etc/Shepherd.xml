@@ -6,10 +6,6 @@
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
-  <daemon name="A4VRemoteCommunicationService"/>
-
-  <daemon name="A4VQuickSetService"/>
-
   <daemon name="IoT"/>
 
   <daemon name="CAPS"
