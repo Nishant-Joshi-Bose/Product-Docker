@@ -1,7 +1,7 @@
 [
   {
-    "name": "A4VQuickSetService",
-    "selected_version": "master@72a3816fac04fd20f7cb12ea883f76bde04a9adf"
+    "name": "A4VQuickSetService-qc8017_32",
+    "selected_version": "Release/master/1.5.4-4+a69422b"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -57,15 +57,15 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/1.0.2-31+e723a9a"
+    "selected_version": "Release/master/1.0.3-32+6335e0e"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/1.0.2-31+e723a9a"
+    "selected_version": "Release/master/1.0.3-32+6335e0e"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/1.0.2-31+e723a9a"
+    "selected_version": "Release/master/1.0.3-32+6335e0e"
   },
   {
     "name": "BoseWebMonaco",
@@ -229,7 +229,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.8-735+f8cc926"
+    "selected_version": "Release/master/1.5.10-764+7152736"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
