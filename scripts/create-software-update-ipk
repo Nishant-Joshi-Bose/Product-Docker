@@ -123,6 +123,7 @@ cp /opt/Bose/bin/ProgressReport /opt/Bose/.swUpdateCache/backup/
 cp /opt/Bose/etc/SoftwareUpdate*.xml /opt/Bose/.swUpdateCache/backup/ 
 cp -fpr /opt/Bose/etc/secure /opt/Bose/.swUpdateCache/backup/
 cp -fpr /opt/Bose/update/opkg /opt/Bose/.swUpdateCache/backup/ 
+cp -P /opt/Bose/update/lib/* /opt/Bose/.swUpdateCache/backup/
 # replace path information in configuration files
 sed -i -e 's/\/etc/\/.swUpdateCache\/backup/g' /opt/Bose/.swUpdateCache/backup/SoftwareUpdateConfiguration.xml
 sed -i -e 's/\/update\/opkg/\/.swUpdateCache\/backup\/opkg/g' /opt/Bose/.swUpdateCache/backup/SoftwareUpdatePackageConfiguration.xml
