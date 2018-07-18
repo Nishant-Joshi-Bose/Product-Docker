@@ -17,7 +17,7 @@
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/1.5.10-21277"
+    "selected_version": "Release/Castle-Fork/1.5.11-21290"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -29,7 +29,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/v1.0.1-0+0e4add4"
+    "selected_version": "Release/master/v1.0.2-0+ebcbd9e"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -69,7 +69,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.6-423+c8886c6"
+    "selected_version": "Release/master/1.5.7-427+0b30b93"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.3-190+2e4b431"
+    "selected_version": "Release/master/1.5.4-210+c5fa9d6"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
