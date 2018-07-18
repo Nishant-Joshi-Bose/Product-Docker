@@ -18,11 +18,16 @@ bssidRe = re.compile(r"^BSS\s(?P<oui>.+):..:..:..\s+\(on wlan0\).*$")
 regexps = [
     re.compile(r"^freq:\s+(?P<frequency>.+)$"),
     re.compile(r"^SSID:\s+(?P<ssid>.*)$"),
-    re.compile(r"^\*\s+UUID:\s+(?P<uuid>.+)$"),
+    re.compile(r"^last\sseen:\s+(?P<lastSeen>.*)\sms\sago$"),
+    re.compile(r"^Country:\s+(?P<country>.+)\tEnvironment:\s.*$"),
     re.compile(r"^\*\s+Manufacturer:\s+(?P<manufacturer>.+)$"),
     re.compile(r"^\*\s+Model:\s+(?P<model>.+)$"),
     re.compile(r"^\*\s+Model\s+Number:\s+(?P<modelNumber>.+)$"),
     re.compile(r"^\*\s+Device\s+name:\s+(?P<deviceName>.+)$"),
+]
+
+charegexps = [
+    re.compile(r"^Channels\s+(?P<channels>.+)$"),
 ]
 
 # Perform a site scan and save the results in a file.  This information
@@ -38,18 +43,34 @@ def scan():
 # Parses the response from the command "iw wlan0 scan"
 def parse(content):
     cells = []
+    channel = []
     lines = content.split('\n')
     for line in lines:
         line = line.strip()
         bssid = bssidRe.search(line)
         if bssid is not None:
             cells.append(bssid.groupdict())
+            cells[-1].update({'supportsN': False})
+            cells[-1].update({'supportsAC': False})
             continue
         for expression in regexps:
             result = expression.search(line)
             if result is not None:
                 cells[-1].update(result.groupdict())
                 continue
+            elif line in { "HT capabilities:"}:
+                cells[-1].update({'supportsN': True})
+                continue
+            elif line in {"VHT capabilities:" }:
+                cells[-1].update({'supportsAC': True})
+                continue
+        for expression in charegexps:
+            result = expression.search(line)
+            if result is not None:
+                channel.append(result.group(1))
+                cells[-1].update({'channels':channel})
+                continue
+            channel = []
     cells = json.dumps(cells, indent=4)
     return cells
 
