@@ -174,6 +174,7 @@ private:
     void CecModeHandlePut( const ProductPb::CecUpdateRequest req, const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );
     void PerhapsSetCecSource( );
     void SendCecSourceSelection( LPM_IPC_SOURCE_ID source );
+    void HandleCecState( const IpcCecState_t& state );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

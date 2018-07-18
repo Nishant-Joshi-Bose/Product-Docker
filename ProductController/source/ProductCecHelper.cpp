@@ -328,6 +328,12 @@ void ProductCecHelper::Connected( bool connected )
                                      std::placeholders::_1 ) );
 
     m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, CallbackForCecSource );
+
+    const Callback< IpcCecState_t > cecStateCb( [ this ]( IpcCecState_t state )
+    {
+        HandleCecState( state );
+    } );
+    m_ProductLpmHardwareInterface->RegisterForLpmEvents( static_cast< IpcOpcodes_t >( CEC_STATE_INFO ), cecStateCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -374,7 +380,7 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
 void ProductCecHelper::HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying&
                                                       response )
 {
-    BOSE_DEBUG( s_logger, "A response to the playback request %s was received." ,
+    BOSE_DEBUG( s_logger, "A response to the playback request %s was received.",
                 response.source( ).sourcedisplayname( ).c_str( ) );
 }
 
@@ -588,6 +594,20 @@ void ProductCecHelper::PowerOn( )
     m_LpmPowerIsOn = true;
 
     PerhapsSetCecSource( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ProductCecHelper::HandleCecState
+///
+/// @brief This method handles the CEC state message received from LPM
+///
+/// @param LpmServiceMessages::IpcCecState_t state
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
+{
+    BOSE_DEBUG( s_logger, "%s - %s", __PRETTY_FUNCTION__, ProtoToMarkup::ToJson( state ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
