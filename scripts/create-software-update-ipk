@@ -57,6 +57,7 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 swupdate_ver=$(components get SoftwareUpdate-qc8017_32 selected_version) || exit
+toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 package_version=${swupdate_ver##*/}
 PackageName=software-update
 
@@ -68,7 +69,7 @@ output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/.swUpdateCache" || exit
 # run stage for SoftwareUpdate
-"$softwareupdate_dir/stage" "$opt_dir" || exit
+"$softwareupdate_dir/stage" "$opt_dir" "$toolchain_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
 
 InstallFileContent=$(<"$opt_dir/bin/install")
