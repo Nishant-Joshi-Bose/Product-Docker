@@ -126,8 +126,15 @@ cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BMX "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Spotify "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Upnp "$opt_dir/bin" || exit
+#cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
