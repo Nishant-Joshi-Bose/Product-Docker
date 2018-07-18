@@ -34,6 +34,7 @@
 #include "HdmiEdid.pb.h"
 #include "ProductDataCollectionDefines.h"
 #include "ProductSTS.pb.h"
+#include "DataCollectionCecState.pb.h"
 
 using namespace ProductPb;
 
@@ -607,7 +608,38 @@ void ProductCecHelper::PowerOn( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
 {
+    // Presumably LPM sends these only on change, but there's no harm in filtering here just to be sure
+    if( state.SerializeAsString() == m_cecState.SerializeAsString() )
+    {
+        return;
+    }
+
     BOSE_DEBUG( s_logger, "%s - %s", __PRETTY_FUNCTION__, ProtoToMarkup::ToJson( state ).c_str( ) );
+
+    auto cecState = std::make_shared< DataCollectionPb::CecState >( );
+
+    cecState->set_physicaladdress( state.physicaladdress( ) );
+    cecState->set_logicaladdress( state.logicaladdress( ) );
+    cecState->set_activesource( state.actsrc( ) );
+    cecState->set_strmpath( state.strmpath( ) );
+
+    for( auto i = 0; i < state.cec_devices_size( ); i++ )
+    {
+        const auto& idev = state.cec_devices( i );
+        auto odev = cecState->add_cecdevices( );
+
+        odev->set_cecversion( CEC_VERSION_Name( idev.cecversion( ) ) );
+        odev->set_physicaladdress( idev.physicaladdress( ) );
+        odev->set_osd( idev.osd( ) );
+
+        for( auto j = 0; j < idev.vendorid_size( ); j++ )
+        {
+            odev->add_vendorid( idev.vendorid( j ) );
+        }
+    }
+
+    m_DataCollectionClient->SendData( cecState, DATA_COLLECTION_CEC_STATE );
+    m_cecState = state;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

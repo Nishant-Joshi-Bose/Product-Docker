@@ -19,6 +19,6 @@ message CecState
     optional int32      logicalAddress      = 2; 
     optional int32      activeSource        = 3; 
     optional int32      strmPath            = 4;
-    optional CECDevice  cecDevices          = 5; 
+    repeated CECDevice  cecDevices          = 5; 
 }
 
