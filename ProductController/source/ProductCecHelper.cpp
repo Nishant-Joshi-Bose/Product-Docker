@@ -631,10 +631,15 @@ void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
         const auto& idev = state.cec_devices( i );
         auto odev = cecState->add_cecdevices( );
 
+        // TODO: do we need to filter this list based on LA (i.e. does the list
+        // have a bunch of entries w/LA == CEC_UNREG_BCAST, and if so should we filter
+        // them out?)
+
         odev->set_cecversion( CEC_VERSION_Name( idev.cecversion( ) ) );
         odev->set_physicaladdress( idev.physicaladdress( ) );
         odev->set_osd( idev.osd( ) );
 
+        // should always be 3, but we'll be pedantic
         for( auto j = 0; j < idev.vendorid_size( ); j++ )
         {
             odev->add_vendorid( idev.vendorid( j ) );
