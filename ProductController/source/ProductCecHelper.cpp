@@ -24,7 +24,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductCecHelper.h"
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
@@ -54,16 +54,16 @@ namespace ProductApp
 ///
 /// @name   ProductCecHelper::ProductCecHelper
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCecHelper::ProductCecHelper( ProfessorProductController& ProductController )
+ProductCecHelper::ProductCecHelper( CustomProductController& ProductController )
 
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
       m_connected( false ),
-      m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) ),
+      m_CustomProductController( static_cast< CustomProductController & >( ProductController ) ),
       m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) )
 {
     m_cecresp.set_mode( "ON" );

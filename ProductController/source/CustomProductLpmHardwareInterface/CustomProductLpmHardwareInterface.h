@@ -2,7 +2,7 @@
 ///
 /// @file      CustomProductLpmHardwareInterface.h
 ///
-/// @brief     This header file contains custom Professor declarations for managing the hardware,
+/// @brief     This header file contains custom declarations for managing the hardware,
 ///            which interfaces with the Low Power Microprocessor or LPM on Riviera APQ boards.
 ///
 /// @note      This custom class declared here inherits a ProductLpmHardwareInterface class found in
@@ -50,7 +50,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -68,14 +68,14 @@ public:
     ///
     /// @brief  CustomProductLpmHardwareInterface Constructor
     ///
-    /// @param  ProfessorProductController& ProductController
+    /// @param  CustomProductController& ProductController
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    CustomProductLpmHardwareInterface( ProfessorProductController& ProductController );
+    CustomProductLpmHardwareInterface( CustomProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief These declarations are custom Professor utility calls, which send messages to the
+    /// @brief These declarations are custom utility calls, which send messages to the
     ///        LPM hardware client.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////

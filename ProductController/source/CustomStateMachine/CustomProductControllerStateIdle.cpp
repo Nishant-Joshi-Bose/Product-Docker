@@ -11,7 +11,7 @@
 ///            Included Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "ProductControllerStates.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductControllerStateIdle.h"
 #include "DPrint.h"
 

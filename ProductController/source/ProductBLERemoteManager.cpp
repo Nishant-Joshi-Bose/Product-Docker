@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductBLERemoteManager.h"
 #include "SharedProto.pb.h"
@@ -52,7 +52,7 @@ namespace ProductApp
 /// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductBLERemoteManager::ProductBLERemoteManager( ProfessorProductController& ProductController ) :
+ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
     m_ProductController( ProductController ),

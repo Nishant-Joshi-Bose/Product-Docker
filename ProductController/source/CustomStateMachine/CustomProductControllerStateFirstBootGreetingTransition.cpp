@@ -9,7 +9,7 @@
 
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "ProductControllerStates.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "APTimer.h"
 
 namespace ProductApp

@@ -28,7 +28,7 @@
 #include "Utilities.h"
 #include "CustomProductControllerState.h"
 #include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -72,13 +72,13 @@ CustomProductControllerState::CustomProductControllerState( ProductControllerHsm
 ///
 /// @name   CustomProductControllerState::GetCustomProductController
 ///
-/// @return This method returns the Professor Custom Product Controller Reference of type
-///         ProfessorProductController.
+/// @return This method returns the Custom Product Controller Reference of type
+///         CustomProductController.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProfessorProductController& CustomProductControllerState::GetCustomProductController( )
+CustomProductController& CustomProductControllerState::GetCustomProductController( )
 {
-    return *static_cast< ProfessorProductController* >( s_productController );
+    return *static_cast< CustomProductController* >( s_productController );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

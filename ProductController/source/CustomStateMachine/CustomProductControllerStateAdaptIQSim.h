@@ -48,7 +48,7 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -63,7 +63,7 @@ public:
 
     CustomProductControllerStateAdaptIQ( ProductControllerHsm&       hsm,
                                          CHsmState*                  pSuperState,
-                                         ProfessorProductController& productController,
+                                         CustomProductController& productController,
                                          Hsm::STATE                  stateId,
                                          const std::string&          name    = "CustomAdaptIQSim" );
 

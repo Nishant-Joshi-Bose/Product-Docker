@@ -3,7 +3,7 @@
 /// @file      ProductEndpointDefines.h
 ///
 /// @brief     This header file declares Front Door End Point definitions used by the custom product
-///            controller for Professor.
+///            controller.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ///
@@ -19,12 +19,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-///           Front Door Custom End Point Definitions Used by Professor
+///           Front Door Custom End Point Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following definitions are alphabetically listed end point resource strings, and are used by
-/// the custom product controller (specific to Professor) as a client or consumer to receive data
+/// the custom product controller as a client or consumer to receive data
 /// from other processes or to send data to other processes to drive product functionality.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following definitions are alphabetically listed end point resource strings, and are used by
-/// the custom product controller (specific to Professor) as a server or producer to send data
+/// the custom product controller as a server or producer to send data
 /// requested by other processes or to receive data from other processes to drive functionality.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

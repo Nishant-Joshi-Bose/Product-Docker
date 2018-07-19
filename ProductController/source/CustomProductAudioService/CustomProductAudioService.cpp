@@ -2,7 +2,7 @@
 ///
 /// @file      CustomProductAudioService.cpp
 ///
-/// @brief     This file contains source code for Professor specific behavior for communicating
+/// @brief     This file contains source code for custom behavior for communicating
 ///            with APProduct Server and APProduct related FrontDoor interaction
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
@@ -14,7 +14,7 @@
 #include "APProductFactory.h"
 #include "LpmClientFactory.h"
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductAudioService.h"
 #include "ProtoToMarkup.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
@@ -29,10 +29,10 @@ constexpr uint32_t INVALID_LATENCY = -1;
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController,
+CustomProductAudioService::CustomProductAudioService( CustomProductController& ProductController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( ProductController.GetTask( ),

@@ -47,7 +47,7 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductLpmHardwareInterface;
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -65,10 +65,10 @@ public:
     ///
     /// @name   ProductCommandLine Constructor
     ///
-    /// @param  ProfessorProductController& ProductController
+    /// @param  CustomProductController& ProductController
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductCommandLine( ProfessorProductController& ProductController );
+    ProductCommandLine( CustomProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -87,7 +87,7 @@ private:
     ///        the lower level LPM hardware.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProfessorProductController&                          m_ProductController;
+    CustomProductController&                             m_ProductController;
     NotifyTargetTaskIF*                                  m_ProductTask;
     Callback< ProductMessage >                           m_ProductNotify;
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;

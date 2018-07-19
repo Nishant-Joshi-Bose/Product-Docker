@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProfessorProductController.h
+/// @file      CustomProductController.h
 ///
-/// @brief     This header file declares a ProfessorProductController class that acts as a container
+/// @brief     This header file declares a CustomProductController class that acts as a container
 ///            to handle all the main functionality related to this program. A single instance of
 ///            this class is created in the main function for the Product Controller, where the Run
 ///            method for its instance is called to start and run this program.
@@ -74,7 +74,7 @@ class ProductBLERemoteManager;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class ProfessorProductController
+/// @class CustomProductController
 ///
 /// @brief This class acts as a container to handle all the main functionality related to this
 ///        program, including controlling the product states, as well as to instantiating module
@@ -82,7 +82,7 @@ class ProductBLERemoteManager;
 ///        higher level applications.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProfessorProductController : public ProductController
+class CustomProductController : public ProductController
 {
     friend class ProductCommandLine;
 
@@ -90,14 +90,14 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  Constructor for the ProfessorProductController Class
+    /// @brief  Constructor for the CustomProductController Class
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProfessorProductController( );
+    CustomProductController( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following public methods are used to start and run the Professor product
+    /// @brief  The following public methods are used to start and run the Custom product
     ///         controller in a single-threaded task, wait in a separate task until the product task
     ///         ends, and end product controller processing, respectively.
     ///
@@ -271,7 +271,7 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following private method is used to run the Professor product controller. It is
+    /// @brief  The following private method is used to run the Custom product controller. It is
     ///         dispatched from the public product controller Start method, which ensures that it
     ///         runs in the single-threaded product task.
     ///
@@ -325,7 +325,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declarations are used as interfaces to the ProductSTSController,
-    ///        which implements the interactions between the Professor Product Controller and the
+    ///        which implements the interactions between the Custom Product Controller and the
     ///        STS source proxies.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////

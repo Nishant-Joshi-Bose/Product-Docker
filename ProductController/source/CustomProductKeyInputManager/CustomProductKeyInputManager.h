@@ -35,7 +35,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -49,12 +49,12 @@ public:
     ///
     /// CustomProductKeyInputManager Constructor
     ///
-    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController,
+    explicit CustomProductKeyInputManager( CustomProductController& ProductController,
                                            const FrontDoorClientIF_t& frontDoorClient );
 
     void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro );
 
-    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController );
+    explicit CustomProductKeyInputManager( CustomProductController& ProductController );
 
 
     ///
@@ -77,7 +77,7 @@ private:
     ///
     /// Product Controller Reference
     ///
-    ProfessorProductController& m_ProductController;
+    CustomProductController& m_ProductController;
 
     ///
     /// Custom A4V Quick Set Service Client and Initialization
