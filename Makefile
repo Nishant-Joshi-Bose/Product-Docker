@@ -37,7 +37,6 @@ endif
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
-A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
 RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon installed_location)
@@ -50,7 +49,6 @@ PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommo
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
-	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
 	touch builds/__init__.py
 

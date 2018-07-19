@@ -18,7 +18,6 @@
             "keyList": [
                 144, 
                 208, 
-                248, 
                 48, 
                 193, 
                 192, 
@@ -32,7 +31,8 @@
                 "DEVICE_TYPE_SMART_TV", 
                 "DEVICE_TYPE_GAME", 
                 "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_CBL_SAT"
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_STREAMING"
             ], 
             "zone": "ZONE2"
         }, 
@@ -58,7 +58,8 @@
                 "DEVICE_TYPE_SMART_TV", 
                 "DEVICE_TYPE_GAME", 
                 "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_CBL_SAT"
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_STREAMING"
             ], 
             "zone": "ZONE4"
         }, 
