@@ -941,6 +941,15 @@ def tap(device_ip):
     yield client
     client.close()
 
+@pytest.fixture(scope="module")
+def clear_wifi_profiles(device_id):
+    """
+    This fixture will clear all wifi profiles from the device before test starts
+    """
+    # Clear any WiFi profiles on the device
+    clear_profiles = "network wifi profiles clear"
+    LOGGER.debug("Clearing Network Profiles: %s", clear_profiles)
+    adb_utils.adb_telnet_cmd(clear_profiles, expect_after='Profiles Deleted', device_id=device_id)
 
 @pytest.fixture(scope='class')
 def reboot_device_at_end(request, device_id, adb):
