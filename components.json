@@ -206,7 +206,7 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@2516"
+    "selected_version": "trunk@2772"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -214,7 +214,7 @@
   },
   {
     "name": "RivieraLpmTools",
-    "selected_version": "@2139"
+    "selected_version": "@2772"
   },
   {
     "name": "RivieraLpmUpdater",

@@ -182,7 +182,11 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductMessageHandler( static_cast< Callback < ProductMessage > >
                              ( std::bind( &ProfessorProductController::HandleMessage,
                                           this,
-                                          std::placeholders::_1 ) ) )
+                                          std::placeholders::_1 ) ) ),
+    m_AccessorySoftwareInstallManager( GetTask( ),
+                                       GetLpmHardwareInterface( ),
+                                       GetProductSoftwareInstallManager( ),
+                                       GetProductSoftwareInstallScheduler( ) )
 {
 
 }
