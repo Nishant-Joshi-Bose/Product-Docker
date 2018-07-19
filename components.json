@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.10-21277"
+    "selected_version": "Release/Castle-Fork/1.5.11-21290"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/1.5.10-21277"
+    "selected_version": "Release/Castle-Fork/1.5.11-21290"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-17_1211"
+    "selected_version": "Release/Castle-Fork/1.5.17.43085.2915066"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -41,19 +41,19 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/1.0.2-31+e723a9a"
+    "selected_version": "Release/master/1.0.3-32+6335e0e"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/1.0.2-31+e723a9a"
+    "selected_version": "Release/master/1.0.3-32+6335e0e"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/1.0.2-31+e723a9a"
+    "selected_version": "Release/master/1.0.3-32+6335e0e"
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.6-423+c8886c6"
+    "selected_version": "Release/master/1.5.7-427+0b30b93"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.3-190+2e4b431"
+    "selected_version": "Release/master/1.5.4-210+c5fa9d6"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
@@ -209,11 +209,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.8-735+f8cc926"
+    "selected_version": "Release/master/1.5.10-764+7152736"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-17_1211"
+    "selected_version": "Release/Castle-Fork/1.5.17.43085.2915066"
   },
   {
     "name": "SystemEventService-qc8017_32",
