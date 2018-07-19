@@ -323,18 +323,21 @@ void ProductCecHelper::Connected( bool connected )
 
     m_CecHelper->RegisterForHotplugEvent( CallbackForKeyEvents );
 
-    Callback< LpmServiceMessages::IPCSource_t >
-    CallbackForCecSource( std::bind( &ProductCecHelper::HandleSrcSwitch,
-                                     this,
-                                     std::placeholders::_1 ) );
-
-    m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, CallbackForCecSource );
-
-    const Callback< IpcCecState_t > cecStateCb( [ this ]( IpcCecState_t state )
+    auto lpmConnectCb = [ this ]( bool connected )
     {
-        HandleCecState( state );
-    } );
-    m_ProductLpmHardwareInterface->RegisterForLpmEvents( static_cast< IpcOpcodes_t >( CEC_STATE_INFO ), cecStateCb );
+        const Callback< IPCSource_t > cecSrcSwitchCb( [ this ]( IPCSource_t source )
+        {
+            HandleSrcSwitch( source );
+        } );
+        m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, cecSrcSwitchCb );
+
+        const Callback< IpcCecState_t > cecStateCb( [ this ]( IpcCecState_t state )
+        {
+            HandleCecState( state );
+        } );
+        m_ProductLpmHardwareInterface->RegisterForLpmEvents( static_cast< IpcOpcodes_t >( CEC_STATE_INFO ), cecStateCb );
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmConnectCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
