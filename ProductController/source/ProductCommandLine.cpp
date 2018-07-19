@@ -760,7 +760,6 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
-
     return 1;
 }
 
