@@ -52,12 +52,10 @@ constexpr uint32_t COVER_UP_SOFTWARE_INSTALL_TIMER_VAL     =  5 * ONE_SECOND_IN_
 using namespace ProductSoftwareUpdatePB;
 
 AccessorySoftwareInstallManager::
-AccessorySoftwareInstallManager( NotifyTargetTaskIF*                                        task,
-                                 std::shared_ptr< CustomProductLpmHardwareInterface >&  productLpmHardwareInterface,
+AccessorySoftwareInstallManager( NotifyTargetTaskIF*                                    task,
                                  ProductSoftwareInstallManager&                         productSoftwareInstallManager,
                                  ProductSoftwareInstallScheduler&                       productSoftwareInstallScheduler ):
     m_task( task ),
-    m_ProductLpmHardwareInterface( productLpmHardwareInterface ),
     m_productSoftwareInstallManager( productSoftwareInstallManager ),
     m_ProductSoftwareInstallScheduler( productSoftwareInstallScheduler ),
     m_TimerInstallSoftwareUpdate( APTimerFactory::CreateTimer( task,
@@ -65,13 +63,15 @@ AccessorySoftwareInstallManager( NotifyTargetTaskIF*                            
 {
 }
 
-void AccessorySoftwareInstallManager::Initialize( std::shared_ptr< AsyncCallback<void> > callbackForInstall )
+void AccessorySoftwareInstallManager::Initialize( std::shared_ptr< AsyncCallback<void> > callbackForInstall,
+                                                  std::shared_ptr< CustomProductLpmHardwareInterface >&  productLpmHardwareInterface )
 {
     BOSE_INFO( s_logger, "%s::%s ", CLASS_NAME, __FUNCTION__ );
 
-    RegisterLPMCallbacks( );
-
+    m_ProductLpmHardwareInterface = productLpmHardwareInterface;
     m_ProductNotifyCallbackForInstall = callbackForInstall; // Register Product Callback when Accessory Update needs to be triggered.
+
+    RegisterLPMCallbacks( );
 }
 
 void AccessorySoftwareInstallManager::Dump( std::ostringstream& oss ) const
@@ -136,7 +136,7 @@ void AccessorySoftwareInstallManager::RegisterLPMCallbacks( )
             bool success = m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAccessorySpeakerSoftwareStatusMessage_t > (
                                LpmServiceMessages::IPC_ACCESSORY_SPEAKER_SOFTWARE_STATUS, softwareStatusCB );
 
-            BOSE_INFO( s_logger, "%s registered for accessory speaker software status events from the LPM hardware.",
+            BOSE_INFO( s_logger, "%s %s registered for accessory speaker software status events from the LPM hardware.", CLASS_NAME,
                        ( success ? "Successfully" : "Unsuccessfully" ) );
         }
     };

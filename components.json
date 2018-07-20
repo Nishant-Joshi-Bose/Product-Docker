@@ -1,4 +1,3 @@
-
 [
   {
     "name": "A4VQuickSetService",
@@ -146,7 +145,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.4-167+a7714d0"
+    "selected_version": "Release/master/1.5.5-169+e9bded0"
   },
   {
     "name": "LpmMfgTool",
@@ -210,7 +209,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.5.2-204+6dae9b7"
+    "selected_version": "Release/master/1.5.3-211+daf7efb"
   },
   {
     "name": "RivieraLpmTools",

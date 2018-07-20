@@ -192,7 +192,6 @@ ProfessorProductController::ProfessorProductController( ) :
                                           this,
                                           std::placeholders::_1 ) ) ),
     m_AccessorySoftwareInstallManager( GetTask( ),
-                                       GetLpmHardwareInterface( ),
                                        GetProductSoftwareInstallManager( ),
                                        GetProductSoftwareInstallScheduler( ) )
 {
@@ -787,6 +786,11 @@ void ProfessorProductController::Run( )
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
+
+    ///
+    /// Initialize the AccessorySoftwareInstallManager.
+    ///
+    InitializeAccessorySoftwareInstallManager( );
 
     BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
@@ -2167,6 +2171,26 @@ void ProfessorProductController::RegisterOpticalAutowakeForLpmConnection( )
         }
     };
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmFunc );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::InitializeAccessorySoftwareInstallManager
+///
+/// @brief Initialize the AccessorySoftwareInstallManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::InitializeAccessorySoftwareInstallManager( )
+{
+    auto softwareInstallFunc = [this]( void )
+    {
+        ProductMessage productMessage;
+        productMessage.set_softwareinstall( true );
+        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+    };
+    auto softwareInstallcb = std::make_shared<AsyncCallback<void> > ( softwareInstallFunc, GetTask() );
+
+    m_AccessorySoftwareInstallManager.Initialize( softwareInstallcb, GetLpmHardwareInterface( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

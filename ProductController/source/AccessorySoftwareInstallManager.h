@@ -47,11 +47,11 @@ class AccessorySoftwareInstallManager
 {
 public:
     AccessorySoftwareInstallManager( NotifyTargetTaskIF*                                     task,
-                                     std::shared_ptr< CustomProductLpmHardwareInterface >&  productLpmHardwareInterface,
                                      ProductSoftwareInstallManager&                         productSoftwareInstallManager,
                                      ProductSoftwareInstallScheduler&                       productSoftwareInstallScheduler );
 
-    void Initialize( std::shared_ptr< AsyncCallback<void> > callbackForInstall );
+    void Initialize( std::shared_ptr< AsyncCallback<void> > callbackForInstall,
+                     std::shared_ptr< CustomProductLpmHardwareInterface >&  productLpmHardwareInterface );
 
     void InitiateSoftwareInstall();
 
