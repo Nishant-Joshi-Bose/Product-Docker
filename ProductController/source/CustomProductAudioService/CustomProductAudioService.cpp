@@ -337,6 +337,12 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
 {
     BOSE_VERBOSE( s_logger, __func__ );
+    // TODO: remove this if the DSP is changed to not send (uint16_t)-1
+    // at some point
+    if( latency == UINT16_MAX )
+    {
+        latency = 0;
+    }
     if( latency != m_currentMinimumLatency )
     {
         m_currentMinimumLatency = latency;
