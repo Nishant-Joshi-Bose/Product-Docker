@@ -226,6 +226,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 void ProductBLERemoteManager::UpdateBacklight( )
 {
     using namespace ProductSTS;
+    using namespace SystemSourcesProperties;
 
     RCS_PB_MSG::LedsRawMsg_t leds;
 
@@ -263,23 +264,24 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        if( not source.visible() )
+        if( ( not source.visible() ) or ( not source.has_details() ) )
         {
             // source isn't configured, don't light it
             continue;
         }
 
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 )
+        const auto& sourceDetailsActivationKey = source.details().activationkey();
+        if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
         {
             leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 )
-        {
-            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
-        }
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 )
+        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) ) == 0 )
         {
             leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
+        }
+        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) ) == 0 )
+        {
+            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
     }
 

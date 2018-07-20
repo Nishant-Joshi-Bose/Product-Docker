@@ -5,11 +5,11 @@
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-3+8a07047"
+    "selected_version": "Release/master/1.5.5-8+fa86981"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/master/1.5.0-6+d30694e"
+    "selected_version": "Release/master/1.5.1-12+b6b47a6"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.17.43078.2913887"
+    "selected_version": "Release/Castle-Fork/1.5.18.43125.2917968"
   },
   {
     "name": "BLERemoteXCVR",
@@ -49,7 +49,7 @@
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "master@0117055987ebb22729bdeed0155fb10c2558d001"
+    "selected_version": "master@42d683a01409593fa09d7cf4dd3e3541856f9e92"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@e7f937ad9d88ff7a4db514ad18fc0e9923c6275b"
+    "selected_version": "master@4f6f6588f8f5f11b1063f4ab22363fe687f5521e"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@3abdcec9611e25ba45c7c0df9e856885ba891285"
+    "selected_version": "master@220944def647a72ce0194d43ef23f1d3fe146987"
   },
   {
     "name": "protobuf-native",
@@ -233,7 +233,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.17.43078.2913887"
+    "selected_version": "Release/Castle-Fork/1.5.18.43125.2917968"
   },
   {
     "name": "SystemEventService-qc8017_32",
