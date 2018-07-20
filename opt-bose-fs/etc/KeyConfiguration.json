@@ -1805,16 +1805,6 @@
             ]
         }, 
         {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select user configurable source dvd", 
-            "action": 127, 
-            "keyList": [
-                83
-            ]
-        }, 
-        {
             "origin": 5, 
             "keyEvent": 0, 
             "timeOutList": [], 
@@ -1845,7 +1835,7 @@
             ]
         }, 
         {
-            "origin": 3, 
+            "origin": 5, 
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select user configurable source cable/sat", 
@@ -1855,13 +1845,23 @@
             ]
         }, 
         {
-            "origin": 5, 
+            "origin": 3, 
             "keyEvent": 0, 
             "timeOutList": [], 
-            "commment": "select user configurable source cable/sat", 
-            "action": 128, 
+            "commment": "select user configurable source dvd (Kepler)", 
+            "action": 127, 
             "keyList": [
                 13
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source cable/sat (Kepler)", 
+            "action": 128, 
+            "keyList": [
+                83
             ]
         }, 
         {
