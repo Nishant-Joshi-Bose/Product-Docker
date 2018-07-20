@@ -53,6 +53,8 @@ public:
 
     void Initialize( std::shared_ptr< AsyncCallback<void> > callbackForInstall );
 
+    void InitiateSoftwareInstall();
+
     bool IsSoftwareUpdatePending() const
     {
         return ( m_softwareStatusCache.status() == ACCESSORY_UPDATE_INSTALLATION_REQUIRED ||

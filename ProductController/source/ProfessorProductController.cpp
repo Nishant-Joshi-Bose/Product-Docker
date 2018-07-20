@@ -111,6 +111,14 @@
 #include "SystemUtils.h"
 #include "SystemPowerMacro.pb.h"
 
+///
+/// Class Name Declaration for Logging
+///
+namespace
+{
+constexpr char CLASS_NAME[ ] = "ProfessorProductController";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2183,6 +2191,49 @@ bool ProfessorProductController::IsProductControlSurface( LpmServiceMessages::Ke
     default:
         return false;
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::InitiateSoftwareInstall
+///
+/// @brief  This method is called to start the actual update installation
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::InitiateSoftwareInstall( )
+{
+    if( GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) && GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) )
+    {
+        GetProductSoftwareInstallManager( ).InitiateSoftwareInstall( );
+    }
+    else if( m_AccessorySoftwareInstallManager.IsSoftwareUpdatePending( ) )
+    {
+        m_AccessorySoftwareInstallManager.InitiateSoftwareInstall( );
+    }
+    else
+    {
+        // Let BOSE_CRITICAL reboot the system, we are in a terminal state and there is nothing to install!
+        BOSE_CRITICAL( s_logger, "%s::%s cannot initiate any update, we should not have gotten here!", CLASS_NAME, __func__ );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::IsSwUpdateForeground
+///
+/// @brief  This method is called to determine whether update installation should be in foreground
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsSwUpdateForeground( ) const
+{
+    if( GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) && GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) )
+    {
+        // We are en-route to Product Software Install, let it control
+        return GetProductSoftwareInstallManager( ).IsSwUpdateForeground( );
+    }
+
+    // We are likely en-route to accessory update, it's always in background
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -265,7 +265,17 @@ public:
     /// @brief This function attempts to start playback previously played content item
     ///        if not able to, go to SETUP
     ///////////////////////////////////////////////////////////////////////////////
-    void AttemptToStartPlayback() override;
+    void AttemptToStartPlayback( ) override;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Interfaces to the software updates components. Implement virtual functions
+    ///        to facilitate accessory update
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    virtual void InitiateSoftwareInstall( ) override;
+
+    virtual bool IsSwUpdateForeground( ) const override;
 
 private:
 

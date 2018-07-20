@@ -69,72 +69,33 @@ void AccessorySoftwareInstallManager::Initialize( std::shared_ptr< AsyncCallback
 {
     BOSE_INFO( s_logger, "%s::%s ", CLASS_NAME, __FUNCTION__ );
 
-    RegisterLPMCallbacks();
+    RegisterLPMCallbacks( );
 
     m_ProductNotifyCallbackForInstall = callbackForInstall; // Register Product Callback when Accessory Update needs to be triggered.
 }
 
 void AccessorySoftwareInstallManager::Dump( std::ostringstream& oss ) const
 {
-#if 0
-    oss << "Product Software Install Manager Status Dump" << std::endl;
-    oss << "Software Update Allowed(From Madrid) = " << ( uint32_t ) m_isSoftwareUpdateAllowed << std::endl;
-    oss << "Software Update Foreground = " << ( uint32_t ) IsSwUpdateForeground() << std::endl;
-    oss << "Product Software Update Cache: Software Update Module Ready = " << ( uint32_t ) IsSoftwareUpdateReady() << std::endl;
-    oss << "Product Software Update Cache: Software Update Pending = " << ( uint32_t ) IsSoftwareUpdatePending() << std::endl;
-    oss << "Product Software Update Cache: Partial Software Update Pending = " << ( uint32_t ) IsPartialSoftwareUpdatePending() << std::endl;
-    oss << "Product Software Update Cache: Local Software Update Pending = " << ( uint32_t ) IsLocalSoftwareUpdatePending() << std::endl;
-    oss << "Product Software Update Cache: Software Update Deferrable = " << ( uint32_t ) IsSoftwareUpdateDeferrable() << std::endl;
-    oss << "Product Software Update Cache: Immediate Software Update Needed = " << ( uint32_t ) IsImmediateSoftwareUpdateRequired() << std::endl;
-#endif
+
+    oss << "Accessory Software Install Manager Status Dump" << std::endl;
+    oss << "SpeakerSoftwareStatus (From LPM = " << m_softwareStatusCache.DebugString( ) << std::endl;
 }
 
-#if 0
-void AccessorySoftwareInstallManager::HandleSoftwareUpdateStatusCb( const SoftwareUpdateProto::StatusResponse& response )
-{
-    BOSE_INFO( s_logger, "%s::%s StatusResponse = %s ", CLASS_NAME, __func__, response.DebugString().c_str() );
-
-    m_softwareUpdateStatusCache.CopyFrom( response );
-
-    m_reTryMaxCount = 0; // This is a fresh status, don't reset everything, just the retry
-    HandleSoftwareUpdate();
-}
-
-void AccessorySoftwareInstallManager::HandleSystemUpdateStartRequest( const SystemUpdateStartPb::SystemUpdateStart &req,
-                                                                      const Callback<SystemUpdateStartPb::SystemUpdateStart> &resp,
-                                                                      const Callback<FrontDoor::Error> &error )
-{
-    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
-
-    SetSoftwareUpdateIsAllowed( );
-    resp( req );
-
-    HandleSoftwareUpdate();
-}
-#endif
 void AccessorySoftwareInstallManager::HandleSpeakerSoftwareStatus( LpmServiceMessages::IpcAccessorySpeakerSoftwareStatusMessage_t softwareStatus )
 {
-    BOSE_INFO( s_logger, "%s::%s: Accessory Software Status %s Current Version %s Installation Version %s Progress %u %%", CLASS_NAME, __func__,
+    BOSE_INFO( s_logger, "%s::%s: Accessory Software Status %s Progress %u %%", CLASS_NAME, __func__,
                IpcAccessorySpeakerSoftwareStatus_t_Name( softwareStatus.status( ) ).c_str( ),
-               softwareStatus.currentversion( ).c_str( ),
-               softwareStatus.installationversion( ).c_str( ),
                softwareStatus.progress( ) );
 
     m_softwareStatusCache = softwareStatus;
 
     ///
-    /// If a system software update is pending, then do not process the accessory software update request.
-    /// In this way, system software updates will take precedent over accessory software updates.
+    /// If a system software update is pending and allowed, then do not process the accessory software update request.
+    /// In this way, system software updates will take precedence over accessory software updates.
     ///
-    if( m_productSoftwareInstallManager.IsSoftwareUpdatePending( ) )
+    if( m_productSoftwareInstallManager.IsSoftwareUpdatePending( ) && m_productSoftwareInstallManager.IsSoftwareUpdateAllowed( ) )
     {
-        BOSE_WARNING( s_logger, "%s::%s System Software Update is already pending", CLASS_NAME, __func__ );
-        return;
-    }
-
-    if( !m_productSoftwareInstallManager.IsSoftwareUpdateAllowed( ) )
-    {
-        BOSE_INFO( s_logger, "%s::%s Software Update Not Allowed:", CLASS_NAME, __func__ );
+        BOSE_WARNING( s_logger, "%s::%s System Software Update is already pending and allowed", CLASS_NAME, __func__ );
         return;
     }
 
@@ -142,13 +103,13 @@ void AccessorySoftwareInstallManager::HandleSpeakerSoftwareStatus( LpmServiceMes
     {
         ProceedWithSoftwareUpdate( );
     };
-    auto cb1 = std::make_shared<AsyncCallback<void> > ( proceedWithSoftwareUpdateCb, &GetTask() );
+    auto cb1 = std::make_shared<AsyncCallback<void> > ( proceedWithSoftwareUpdateCb, &GetTask( ) );
 
-    if( IsSoftwareUpdatePending() )
+    if( IsSoftwareUpdatePending( ) )
     {
         BOSE_INFO( s_logger, "%s::%s Installation Pending", CLASS_NAME, __func__ );
         m_ProductSoftwareInstallScheduler.SetSoftwareUpdateIsPending( true, cb1 );
-        m_ProductSoftwareInstallScheduler.StartSoftwareUpdateAlgorithm();
+        m_ProductSoftwareInstallScheduler.StartSoftwareUpdateAlgorithm( );
     }
     else
     {
@@ -156,7 +117,7 @@ void AccessorySoftwareInstallManager::HandleSpeakerSoftwareStatus( LpmServiceMes
     }
 }
 
-void AccessorySoftwareInstallManager::RegisterLPMCallbacks()
+void AccessorySoftwareInstallManager::RegisterLPMCallbacks( )
 {
     BOSE_INFO( s_logger, "%s::%s ", CLASS_NAME, __FUNCTION__ );
 
@@ -183,23 +144,13 @@ void AccessorySoftwareInstallManager::RegisterLPMCallbacks()
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( LpmConnectionCb );
 }
 
-void AccessorySoftwareInstallManager::ProceedWithSoftwareUpdate()
+void AccessorySoftwareInstallManager::ProceedWithSoftwareUpdate( )
 {
     BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
 
-    ///
-    /// If a system software update is pending, then do not process the accessory software update request.
-    /// In this way, system software updates will take precedent over accessory software updates.
-    ///
-    if( m_productSoftwareInstallManager.IsSoftwareUpdatePending( ) )
+    if( !IsSoftwareUpdatePending( ) )
     {
-        BOSE_WARNING( s_logger, "%s::%s System Software Update is already pending", CLASS_NAME, __func__ );
-        return;
-    }
-
-    if( !IsSoftwareUpdatePending() )
-    {
-        BOSE_INFO( s_logger, "%s:%s: Looks like something changed recently, No Software Update Pending, Anymore", CLASS_NAME, __FUNCTION__ );
+        BOSE_WARNING( s_logger, "%s:%s: Looks like something changed recently, No Software Update Pending, Anymore", CLASS_NAME, __FUNCTION__ );
         return;
     }
 
@@ -208,11 +159,20 @@ void AccessorySoftwareInstallManager::ProceedWithSoftwareUpdate()
     {
         m_reTryMaxCount++;
         BOSE_INFO( s_logger, "%s::%s Go ahead with software update: Attempt number = %d", CLASS_NAME, __func__, m_reTryMaxCount );
-        InstallSoftwareUpdateTimer()->SetTimeouts( COVER_UP_SOFTWARE_INSTALL_TIMER_VAL, 0 );
-        InstallSoftwareUpdateTimer()->Start( std::bind( &AccessorySoftwareInstallManager::ProceedWithSoftwareUpdate, this ) );
+        InstallSoftwareUpdateTimer( )->SetTimeouts( COVER_UP_SOFTWARE_INSTALL_TIMER_VAL, 0 );
+        InstallSoftwareUpdateTimer( )->Start( std::bind( &AccessorySoftwareInstallManager::ProceedWithSoftwareUpdate, this ) );
 
-        ( *m_ProductNotifyCallbackForInstall )();
+        ( *m_ProductNotifyCallbackForInstall )( );
     }
+}
+
+void AccessorySoftwareInstallManager::InitiateSoftwareInstall( )
+{
+    BOSE_INFO( s_logger, "%s::%s Accessory Update Initiated", CLASS_NAME, __func__ );
+    InstallSoftwareUpdateTimer( )->Stop( );
+    m_ProductSoftwareInstallScheduler.SoftwareInstallInitiated( );
+
+    m_ProductLpmHardwareInterface->SendAccessorySoftwareUpdate( );
 }
 
 }
