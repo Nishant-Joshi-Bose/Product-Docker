@@ -23,6 +23,8 @@
 #include "ProductDataCollectionDefines.h"
 #include "RivieraLPM_IpcProtocol.h"
 
+using namespace std::placeholders;
+
 namespace ProductApp
 {
 using namespace ProductPb;
@@ -41,7 +43,11 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
                          frontDoorClient ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
-    m_ThermalTask( std::unique_ptr<ThermalMonitorTask>( new ThermalMonitorTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, std::placeholders::_1 ) ) ) ),
+    m_ThermalTask( std::unique_ptr<ThermalMonitorTask>(
+                       new ThermalMonitorTask( lpmClient, ProductController.GetTask( ),
+                                               AsyncCallback<const IpcSystemTemperatureData_t&>(
+                                                   std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
+                                                   ProductController.GetTask( ) ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
     m_currentMinimumLatency( IPC_LATENCY_VALUE_UNKNOWN )
 {
