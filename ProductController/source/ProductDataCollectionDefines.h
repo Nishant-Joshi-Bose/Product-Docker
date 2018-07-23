@@ -16,3 +16,4 @@
 #define DATA_COLLECTION_EQSELECT            "eqselect-audio-parameters-changed"
 #define DATA_COLLECTION_MOUNT_ORIENTATION   "mountorientation-audio-parameters-changed"
 #define DATA_COLLECTION_SUBWOOFER_POLARITY  "subwooferpolarity-audio-parameters-changed"
+#define DATA_COLLECTION_CEC_STATE           "cec-state-changed"
