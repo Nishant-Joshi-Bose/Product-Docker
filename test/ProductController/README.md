@@ -18,10 +18,11 @@ Like CastleTestUtils, these tests are run in a python virtual environment. The p
 1. Ensure that you have CastleTestUtils copied to your local invironment.
 ```
 cd /scratch
-git clone git@github.com:BoseCorp/CastleTools.git
+git clone git@github.com:BoseCorp/CastleTestUtils.git
 ```
 2. Create the virtual environment.
 ```
+cd /scratch/Professor/test/ProductController
 virtualenv -p /usr/bin/python ./venv
 source ./venv/bin/activate
 pip install -r requirements.txt
@@ -29,7 +30,7 @@ pip install -r requirements.txt
 
 3. Execute tests. Note that parameters need to be specified after each test. See Pytest documentation for other ways to run tests. Below is an example for running one test with its required parameters. (Change device-id, email, and password to match your own device)
 ```
-pytest -sv AudioSettings/test_audio_settings.py --device-id 8857f8d --network-iface eth0 --target device --email jacqueline_lagasse@bose.com --password mypassword
+pytest -sv AudioSettings/test_audio_settings.py --device-id 8857f8d --network-iface eth0 --target device --email professor_product_controller@bose.com --password 02bosebose
 ```
 
 4. Deactivate virtual environment.
@@ -48,12 +49,13 @@ cd /scratch/CastleTestUtils/
 make vsetup
 source ./venv/bin/activate
 make
-pip install dist/CastleTestUtils-0.1.8.tar.gz
+# Check for the latest version of CastleTestUtils: https://github.com/BoseCorp/CastleTestUtils
+pip install dist/CastleTestUtils-1.0.4.tar.gz
 ```
 
 2. To test if a specific CastleTestUtils script is working properly, run this in the virtual environment. (Change device-id, email, and password to match your own device)
 ```
-pytest -sv AudioSettings/test_audio_settings.py --device-id 8857f8d --network-iface eth0 --target device --email jacqueline_lagasse@bose.com --password mypassword
+pytest -sv AudioSettings/test_audio_settings.py --device-id 8857f8d --network-iface eth0 --target device --email professor_product_controller@bose.com --password 02bosebose
 ```
 
 3. To check all of the CastleTestUtils scripts, run this in the virtual environment. (Change device-id)
