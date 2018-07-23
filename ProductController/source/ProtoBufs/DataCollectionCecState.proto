@@ -1,0 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @DataCollectionCec.proto
+/// Copyright 2018 Bose Corporation 
+//////////////////////////////////////////////////////////////////////////////// 
+
+package DataCollectionPb; 
+
+message CECDevice
+{
+    optional string     cecVersion          = 1;
+    optional int32      physicalAddress     = 2;
+    optional string     osd                 = 3;
+    repeated int32      vendorID            = 4;
+}
+
+message CecState
+{ 
+    optional int32      physicalAddress     = 1; 
+    optional int32      logicalAddress      = 2; 
+    optional int32      activeSource        = 3; 
+    optional int32      strmPath            = 4;
+    repeated CECDevice  cecDevices          = 5; 
+}
+
