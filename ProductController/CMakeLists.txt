@@ -1,5 +1,4 @@
 INCLUDE_DIRECTORIES(
-  ${A4VQUICKSET_DIR}/source/Client
   ${CASTLECLI_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
@@ -34,7 +33,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/AudioFormat.pb.cc
-  ${PROTO_CC_DEST}/BlasterConfig.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
   ${PROTO_CC_DEST}/HdmiEdid.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
@@ -46,6 +44,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
+  ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
   source/AccessorySoftwareInstallManager.cpp
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
   source/CustomProductAudioService/CustomProductAudioService.cpp
