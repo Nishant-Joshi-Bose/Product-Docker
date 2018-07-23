@@ -2236,8 +2236,8 @@ void ProfessorProductController::InitiateSoftwareInstall( )
     }
     else
     {
-        // Let BOSE_CRITICAL reboot the system, we are in a terminal state and there is nothing to install!
-        BOSE_CRITICAL( s_logger, "%s::%s cannot initiate any update, we should not have gotten here!", CLASS_NAME, __func__ );
+        // Let BOSE_DIE reboot the system, we are in a terminal state and there is nothing to install!
+        BOSE_DIE( "ProfessorProductController::InitiateSoftwareInstall( ) cannot initiate any update, we should not have gotten here!" );
     }
 }
 
