@@ -45,6 +45,8 @@ class ProductSoftwareInstallManager;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class AccessorySoftwareInstallManager
 {
+    friend class ProductCommandLine;
+
 public:
     AccessorySoftwareInstallManager( NotifyTargetTaskIF*                                     task,
                                      ProductSoftwareInstallManager&                         productSoftwareInstallManager,
