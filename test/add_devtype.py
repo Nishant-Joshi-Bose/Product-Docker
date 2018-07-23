@@ -23,12 +23,13 @@ def main():
                 "activationKey"     : "ACTIVATION_KEY_BD_DVD"
             },
             "displayName"       : "SLOT_0",
+            "accountId"         : "SLOT_0",
             "local"             : True,
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_0",
             "sourceName"        : "PRODUCT",
-            "status"            : "available",
-            "visible"           : "true",
+            "status"            : "AVAILABLE",
+            "visible"           : True
         },
         {
             "details" : {
@@ -37,38 +38,43 @@ def main():
                 "activationKey"     : "ACTIVATION_KEY_GAME"
             },
             "displayName"       : "SLOT_1",
+            "accountId"         : "SLOT_1",
             "local"             : True,
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_1",
             "sourceName"        : "PRODUCT",
-            "status"            : "available",
-            "visible"           : "true",
+            "status"            : "AVAILABLE",
+            "visible"           : True
         },
         {
             "details" : {
                 "deviceType" : "DEVICE_TYPE_CBL_SAT",
-                "ciCode"        : "T2778",
+                "ciCode"        : "T2051",
                 "activationKey"     : "ACTIVATION_KEY_CBL_SAT"
             },
             "displayName"       : "SLOT_2",
+            "accountId"         : "SLOT_2",
             "local"             : True,
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_2",
             "sourceName"        : "PRODUCT",
-            "status"            : "available",
-            "visible"           : "true",
+            "status"            : "AVAILABLE",
+            "visible"           : True
         },
         {
             "details" : {
                 "deviceType"    : "DEVICE_TYPE_TV",
-                "ciCode"        : "",
+                "ciCode"        : "T2051",
+                "activationKey"     : "ACTIVATION_KEY_TV"
             },
             "displayName": "TV", 
+            "accountId": "TV", 
             "local"             : True, 
             "multiroom"         : True, 
             "sourceAccountName" : "TV", 
             "sourceName"        : "PRODUCT", 
-            "status"            : "available"
+            "status"            : "AVAILABLE",
+            "visible"           : True
         }
     ]
 

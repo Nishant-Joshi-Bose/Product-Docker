@@ -83,6 +83,23 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
 
     m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection );
     m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection, {} );
+
+    //System power control notification registration and callback handling
+    auto handleSystemPowerControl = [this]( SystemPowerPb::SystemPowerControl systemPowerControlState )
+    {
+        if( systemPowerControlState.power() == SystemPowerPb::SystemPowerControl_State_ON )
+        {
+            PowerOn();
+        }
+        else
+        {
+            PowerOff();
+        }
+    };
+    //System power control get registration
+    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl );
+    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl, {} );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,6 +226,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 void ProductBLERemoteManager::UpdateBacklight( )
 {
     using namespace ProductSTS;
+    using namespace SystemSourcesProperties;
 
     RCS_PB_MSG::LedsRawMsg_t leds;
 
@@ -246,23 +264,24 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        if( not source.visible() )
+        if( ( not source.visible() ) or ( not source.has_details() ) )
         {
             // source isn't configured, don't light it
             continue;
         }
 
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 )
+        const auto& sourceDetailsActivationKey = source.details().activationkey();
+        if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
         {
             leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 )
-        {
-            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
-        }
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 )
+        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) ) == 0 )
         {
             leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
+        }
+        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) ) == 0 )
+        {
+            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
     }
 
@@ -300,6 +319,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
         case LedsSourceTypeMsg_t::TV:
             leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
             leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             if( visible )
             {
                 leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
@@ -308,7 +328,6 @@ void ProductBLERemoteManager::UpdateBacklight( )
                 leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             }
             break;

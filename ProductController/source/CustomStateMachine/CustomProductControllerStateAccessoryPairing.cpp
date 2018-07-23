@@ -125,7 +125,7 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentVolumeControl( Ke
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s ignored the intent %u.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
     ///
     /// The intent is ignored in this custom state.
@@ -149,6 +149,24 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle( )
 
     return true;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentPowerOff
+///
+/// @return This method returns a true Boolean value indicating that it handles the PowerOff
+///         intent by changing to an accessory pairing cancelling state.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerOff( )
+{
+    BOSE_INFO( s_logger, "The %s state in %s cancelling the pairing playback.", GetName( ).c_str( ), __func__ );
+
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_CANCELLING );
+
+    return true;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
