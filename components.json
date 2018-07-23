@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.17.43085.2915066"
+    "selected_version": "Continuous/Castle-Fork/2018-07-20_1911"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -33,7 +33,7 @@
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "master@0117055987ebb22729bdeed0155fb10c2558d001"
+    "selected_version": "master@42d683a01409593fa09d7cf4dd3e3541856f9e92"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.17.43085.2915066"
+    "selected_version": "Continuous/Castle-Fork/2018-07-20_1911"
   },
   {
     "name": "SystemEventService-qc8017_32",
