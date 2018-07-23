@@ -21,12 +21,13 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
+#include "RivieraLPM_IpcProtocol.h"
 
 using namespace std::placeholders;
 
 namespace ProductApp
 {
-constexpr uint32_t INVALID_LATENCY = -1;
+using namespace ProductPb;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
@@ -48,7 +49,7 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
                                                    ProductController.GetTask( ) ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
-    m_currentMinimumLatency( INVALID_LATENCY )
+    m_currentMinimumLatency( IPC_LATENCY_VALUE_UNKNOWN )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -325,8 +326,8 @@ void CustomProductAudioService::InternalMuteCallback( bool mute )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
-    BOSE_DEBUG( s_logger, __func__ );
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
+    BOSE_DEBUG( s_logger, "%s: %s", __func__, mainStreamAudioSettings.c_str() );
     m_APPointer -> SetMainStreamAudioSettings( mainStreamAudioSettings );
 }
 
@@ -342,16 +343,17 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
 {
     BOSE_VERBOSE( s_logger, __func__ );
-    if( latency != m_currentMinimumLatency )
+    if( ( latency == IPC_LATENCY_VALUE_UNKNOWN ) or ( latency == m_currentMinimumLatency ) )
     {
-        m_currentMinimumLatency = latency;
-        auto respCb = []( int32_t resp )
-        {
-            BOSE_VERBOSE( s_logger, "%s: received callback with latency(%d)", __func__, resp );
-        };
-        BOSE_INFO( s_logger, "%s: sending minimum output latency(%d) to AudioPath", __func__, m_currentMinimumLatency );
-        m_APPointer -> SetOutputLatency( m_currentMinimumLatency, respCb );
+        return;
     }
+    m_currentMinimumLatency = latency;
+    auto respCb = []( int32_t resp )
+    {
+        BOSE_VERBOSE( s_logger, "%s: received callback with latency(%d)", __func__, resp );
+    };
+    BOSE_INFO( s_logger, "%s: sending minimum output latency(%d) to AudioPath", __func__, m_currentMinimumLatency );
+    m_APPointer -> SetOutputLatency( m_currentMinimumLatency, respCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -401,7 +403,7 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SetAiqInstalled( bool installed )
 {
-    m_AudioSettingsMgr->UpdateEqSelectSupportedMode( "EQ_AIQ_A", installed );
+    m_AudioSettingsMgr->UpdateEqSelectSupportedMode( AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ), installed );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -412,11 +414,11 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    if( modeName == "NORMAL" )
+    if( modeName == AudioMode_supportedMode_Name( AudioMode_supportedMode_NORMAL ) )
     {
         return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
     }
-    else if( modeName == "DIALOG" )
+    else if( modeName == AudioMode_supportedMode_Name( AudioMode_supportedMode_DIALOG ) )
     {
         return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
@@ -425,11 +427,11 @@ LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeName
 
 LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTypeNameToEnum( const std::string& contentTypeName )
 {
-    if( contentTypeName == "AUDIO" )
+    if( contentTypeName == AudioContentType_supportedValue_Name( AudioContentType_supportedValue_AUDIO ) )
     {
         return AUDIOSETTINGS_CONTENT_AUDIO;
     }
-    else if( contentTypeName == "VIDEO" )
+    else if( contentTypeName == AudioContentType_supportedValue_Name( AudioContentType_supportedValue_VIDEO ) )
     {
         return AUDIOSETTINGS_CONTENT_VIDEO;
     }
@@ -438,11 +440,11 @@ LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTyp
 
 LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualMonoSelectNameToEnum( const std::string& dualMonoSelectName )
 {
-    if( dualMonoSelectName == "LEFT" )
+    if( dualMonoSelectName == AudioDualMonoSelect_supportedValue_Name( AudioDualMonoSelect_supportedValue_LEFT ) )
     {
         return AUDIOSETTINGS_DUAL_MONO_LEFT;
     }
-    else if( dualMonoSelectName == "RIGHT" )
+    else if( dualMonoSelectName == AudioDualMonoSelect_supportedValue_Name( AudioDualMonoSelect_supportedValue_RIGHT ) )
     {
         return AUDIOSETTINGS_DUAL_MONO_RIGHT;
     }
@@ -451,11 +453,11 @@ LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualM
 
 LpmServiceMessages::AudioSettingsSubwooferPolarity_t CustomProductAudioService::SubwooferPolarityNameToEnum( const std::string& subwooferPolarityName )
 {
-    if( subwooferPolarityName == "AUDIOSETTINGS_SUBWOOFERPOLARITY_INPHASE" )
+    if( subwooferPolarityName == AudioSubwooferPolarity_supportedValue_Name( AudioSubwooferPolarity_supportedValue_POLARITY_IN_PHASE ) )
     {
         return AUDIOSETTINGS_SUBWOOFERPOLARITY_INPHASE;
     }
-    else if( subwooferPolarityName == "AUDIOSETTINGS_SUBWOOFERPOLARITY_OUTOFPHASE" )
+    else if( subwooferPolarityName == AudioSubwooferPolarity_supportedValue_Name( AudioSubwooferPolarity_supportedValue_POLARITY_OUT_OF_PHASE ) )
     {
         return AUDIOSETTINGS_SUBWOOFERPOLARITY_OUTOFPHASE;
     }
@@ -469,24 +471,15 @@ LpmServiceMessages::AudioSettingsSubwooferPolarity_t CustomProductAudioService::
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 LpmServiceMessages::AudioSettingsDeltaEqSelect_t CustomProductAudioService::EqSelectNameToEnum( const std::string& modeName )
 {
-    static const std::map<std::string, LpmServiceMessages::AudioSettingsDeltaEqSelect_t> map =
+    if( modeName == AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ) )
     {
-        {"EQ_OFF",      AUDIOSETTINGS_DELTAEQ_NONE},
-        {"EQ_AIQ_A",    AUDIOSETTINGS_DELTAEQ_AIQ_A},
-        {"EQ_AIQ_B",    AUDIOSETTINGS_DELTAEQ_AIQ_B},
-        {"EQ_RETAIL_A", AUDIOSETTINGS_DELTAEQ_RETAIL_A},
-        {"EQ_RETAIL_B", AUDIOSETTINGS_DELTAEQ_RETAIL_B},
-        {"EQ_RETAIL_C", AUDIOSETTINGS_DELTAEQ_RETAIL_C},
-    };
-
-    auto ret = map.find( modeName );
-
-    if( ret == map.end() )
-    {
-        return AUDIOSETTINGS_DELTAEQ_NONE;
+        return AUDIOSETTINGS_DELTAEQ_AIQ_A;
     }
-
-    return ret->second;
+    else if( modeName == AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_RETAIL_A ) )
+    {
+        return AUDIOSETTINGS_DELTAEQ_RETAIL_A;
+    }
+    return AUDIOSETTINGS_DELTAEQ_NONE;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -508,7 +501,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetBass( );
     };
-    auto setBassAction = [this]( ProductPb::AudioBassLevel val )
+    auto setBassAction = [this]( AudioBassLevel val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetBass( val );
 
@@ -517,14 +510,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioBassLevel >( m_AudioSettingsMgr->GetBass( ) ),
+                std::make_shared< AudioBassLevel >( m_AudioSettingsMgr->GetBass( ) ),
                 DATA_COLLECTION_BASS );
         }
         return error;
     };
 
-    m_AudioBassSetting = std::unique_ptr< AudioSetting< ProductPb::AudioBassLevel > >
-                         ( new AudioSetting< ProductPb::AudioBassLevel >
+    m_AudioBassSetting = std::unique_ptr< AudioSetting< AudioBassLevel > >
+                         ( new AudioSetting< AudioBassLevel >
                            ( FRONTDOOR_AUDIO_BASS_API,
                              getBassAction,
                              setBassAction,
@@ -540,7 +533,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetTreble( );
     };
-    auto setTrebleAction = [ this ]( ProductPb::AudioTrebleLevel val )
+    auto setTrebleAction = [ this ]( AudioTrebleLevel val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetTreble( val );
 
@@ -549,13 +542,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioTrebleLevel >( m_AudioSettingsMgr->GetTreble( ) ),
+                std::make_shared< AudioTrebleLevel >( m_AudioSettingsMgr->GetTreble( ) ),
                 DATA_COLLECTION_TREBLE );
         }
         return error;
     };
-    m_AudioTrebleSetting = std::unique_ptr< AudioSetting< ProductPb::AudioTrebleLevel > >
-                           ( new AudioSetting< ProductPb::AudioTrebleLevel >
+    m_AudioTrebleSetting = std::unique_ptr< AudioSetting< AudioTrebleLevel > >
+                           ( new AudioSetting< AudioTrebleLevel >
                              ( FRONTDOOR_AUDIO_TREBLE_API,
                                getTrebleAction,
                                setTrebleAction,
@@ -571,7 +564,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetCenter( );
     };
-    auto setCenterAction = [ this ]( ProductPb::AudioCenterLevel val )
+    auto setCenterAction = [ this ]( AudioCenterLevel val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetCenter( val );
 
@@ -580,13 +573,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioCenterLevel >( m_AudioSettingsMgr->GetCenter( ) ),
+                std::make_shared< AudioCenterLevel >( m_AudioSettingsMgr->GetCenter( ) ),
                 DATA_COLLECTION_CENTER );
         }
         return error;
     };
-    m_AudioCenterSetting = std::unique_ptr< AudioSetting< ProductPb::AudioCenterLevel > >
-                           ( new AudioSetting<ProductPb::AudioCenterLevel>
+    m_AudioCenterSetting = std::unique_ptr< AudioSetting< AudioCenterLevel > >
+                           ( new AudioSetting<AudioCenterLevel>
                              ( FRONTDOOR_AUDIO_CENTER_API,
                                getCenterAction,
                                setCenterAction,
@@ -602,7 +595,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetSurround( );
     };
-    auto setSurroundAction = [ this ]( ProductPb::AudioSurroundLevel val )
+    auto setSurroundAction = [ this ]( AudioSurroundLevel val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetSurround( val );
 
@@ -611,13 +604,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioSurroundLevel >( m_AudioSettingsMgr->GetSurround( ) ),
+                std::make_shared< AudioSurroundLevel >( m_AudioSettingsMgr->GetSurround( ) ),
                 DATA_COLLECTION_SURROUND );
         }
         return error;
     };
-    m_AudioSurroundSetting = std::unique_ptr< AudioSetting< ProductPb::AudioSurroundLevel > >
-                             ( new AudioSetting< ProductPb::AudioSurroundLevel >
+    m_AudioSurroundSetting = std::unique_ptr< AudioSetting< AudioSurroundLevel > >
+                             ( new AudioSetting< AudioSurroundLevel >
                                ( FRONTDOOR_AUDIO_SURROUND_API,
                                  getSurroundAction,
                                  setSurroundAction,
@@ -633,7 +626,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetSurroundDelay( );
     };
-    auto setSurroundDelayAction = [ this ]( ProductPb::AudioSurroundDelay val )
+    auto setSurroundDelayAction = [ this ]( AudioSurroundDelay val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetSurroundDelay( val );
         if( error == ResultCode_t::NO_ERROR )
@@ -641,13 +634,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_surrounddelay( m_AudioSettingsMgr->GetSurroundDelay( ).value() );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioSurroundDelay >( m_AudioSettingsMgr->GetSurroundDelay( ) ),
+                std::make_shared< AudioSurroundDelay >( m_AudioSettingsMgr->GetSurroundDelay( ) ),
                 DATA_COLLECTION_SURROUND_DELAY );
         }
         return error;
     };
-    m_AudioSurroundDelaySetting = std::unique_ptr< AudioSetting< ProductPb::AudioSurroundDelay > >
-                                  ( new AudioSetting< ProductPb::AudioSurroundDelay >
+    m_AudioSurroundDelaySetting = std::unique_ptr< AudioSetting< AudioSurroundDelay > >
+                                  ( new AudioSetting< AudioSurroundDelay >
                                     ( FRONTDOOR_AUDIO_SURROUNDDELAY_API,
                                       getSurroundDelayAction,
                                       setSurroundDelayAction,
@@ -663,7 +656,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetGainOffset( );
     };
-    auto setGainOffsetAction = [ this ]( ProductPb::AudioGainOffset val )
+    auto setGainOffsetAction = [ this ]( AudioGainOffset val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetGainOffset( val );
 
@@ -672,13 +665,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioGainOffset >( m_AudioSettingsMgr->GetGainOffset( ) ),
+                std::make_shared< AudioGainOffset >( m_AudioSettingsMgr->GetGainOffset( ) ),
                 DATA_COLLECTION_GAIN_OFFSET );
         }
         return error;
     };
-    m_AudioGainOffsetSetting =  std::unique_ptr< AudioSetting< ProductPb::AudioGainOffset > >
-                                ( new AudioSetting< ProductPb::AudioGainOffset >
+    m_AudioGainOffsetSetting =  std::unique_ptr< AudioSetting< AudioGainOffset > >
+                                ( new AudioSetting< AudioGainOffset >
                                   ( FRONTDOOR_AUDIO_GAINOFFSET_API,
                                     getGainOffsetAction,
                                     setGainOffsetAction,
@@ -694,7 +687,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetAvSync( );
     };
-    auto setAvSyncAction = [ this ]( ProductPb::AudioAvSync val )
+    auto setAvSyncAction = [ this ]( AudioAvSync val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetAvSync( val );
 
@@ -703,13 +696,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioAvSync >( m_AudioSettingsMgr->GetAvSync( ) ),
+                std::make_shared< AudioAvSync >( m_AudioSettingsMgr->GetAvSync( ) ),
                 DATA_COLLECTION_AVSYNC );
         }
         return error;
     };
-    m_AudioAvSyncSetting = std::unique_ptr< AudioSetting< ProductPb::AudioAvSync > >
-                           ( new AudioSetting< ProductPb::AudioAvSync >
+    m_AudioAvSyncSetting = std::unique_ptr< AudioSetting< AudioAvSync > >
+                           ( new AudioSetting< AudioAvSync >
                              ( FRONTDOOR_AUDIO_AVSYNC_API,
                                getAvSyncAction,
                                setAvSyncAction,
@@ -725,7 +718,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetSubwooferGain( );
     };
-    auto setSubwooferGainAction = [ this ]( ProductPb::AudioSubwooferGain val )
+    auto setSubwooferGainAction = [ this ]( AudioSubwooferGain val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetSubwooferGain( val );
 
@@ -736,13 +729,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
 
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioSubwooferGain >( m_AudioSettingsMgr->GetSubwooferGain( ) ),
+                std::make_shared< AudioSubwooferGain >( m_AudioSettingsMgr->GetSubwooferGain( ) ),
                 DATA_COLLECTION_SUBWOOFER_GAIN );
         }
         return error;
     };
-    m_AudioSubwooferGainSetting = std::unique_ptr< AudioSetting<ProductPb::AudioSubwooferGain > >
-                                  ( new AudioSetting< ProductPb::AudioSubwooferGain >
+    m_AudioSubwooferGainSetting = std::unique_ptr< AudioSetting<AudioSubwooferGain > >
+                                  ( new AudioSetting< AudioSubwooferGain >
                                     ( FRONTDOOR_AUDIO_SUBWOOFERGAIN_API,
                                       getSubwooferGainAction,
                                       setSubwooferGainAction,
@@ -758,7 +751,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetMode( );
     };
-    auto setModeAction = [ this ]( ProductPb::AudioMode val )
+    auto setModeAction = [ this ]( AudioMode val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetMode( val );
 
@@ -768,13 +761,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                 ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioMode >( m_AudioSettingsMgr->GetMode( ) ),
+                std::make_shared< AudioMode >( m_AudioSettingsMgr->GetMode( ) ),
                 DATA_COLLECTION_MODE );
         }
         return error;
     };
-    m_AudioModeSetting = std::unique_ptr< AudioSetting<ProductPb::AudioMode > >
-                         ( new AudioSetting< ProductPb::AudioMode >
+    m_AudioModeSetting = std::unique_ptr< AudioSetting<AudioMode > >
+                         ( new AudioSetting< AudioMode >
                            ( FRONTDOOR_AUDIO_MODE_API,
                              getModeAction,
                              setModeAction,
@@ -790,7 +783,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetContentType( );
     };
-    auto setContentTypeAction = [ this ]( ProductPb::AudioContentType val )
+    auto setContentTypeAction = [ this ]( AudioContentType val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetContentType( val );
 
@@ -800,13 +793,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                                            m_AudioSettingsMgr->GetContentType( ).value() ) );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioContentType >( m_AudioSettingsMgr->GetContentType( ) ),
+                std::make_shared< AudioContentType >( m_AudioSettingsMgr->GetContentType( ) ),
                 DATA_COLLECTION_CONTENT_TYPE );
         }
         return error;
     };
-    m_AudioContentTypeSetting = std::unique_ptr< AudioSetting<ProductPb::AudioContentType > >
-                                ( new AudioSetting< ProductPb::AudioContentType >
+    m_AudioContentTypeSetting = std::unique_ptr< AudioSetting<AudioContentType > >
+                                ( new AudioSetting< AudioContentType >
                                   ( FRONTDOOR_AUDIO_CONTENTTYPE_API,
                                     getContentTypeAction,
                                     setContentTypeAction,
@@ -822,7 +815,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetDualMonoSelect( );
     };
-    auto setDualMonoSelectAction = [ this ]( ProductPb::AudioDualMonoSelect val )
+    auto setDualMonoSelectAction = [ this ]( AudioDualMonoSelect val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetDualMonoSelect( val );
 
@@ -832,13 +825,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                                               m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioDualMonoSelect >( m_AudioSettingsMgr->GetDualMonoSelect( ) ),
+                std::make_shared< AudioDualMonoSelect >( m_AudioSettingsMgr->GetDualMonoSelect( ) ),
                 DATA_COLLECTION_DUALMONO_SELECT );
         }
         return error;
     };
-    m_DualMonoSelectSetting = std::unique_ptr< AudioSetting<ProductPb::AudioDualMonoSelect > >
-                              ( new AudioSetting< ProductPb::AudioDualMonoSelect >
+    m_DualMonoSelectSetting = std::unique_ptr< AudioSetting<AudioDualMonoSelect > >
+                              ( new AudioSetting< AudioDualMonoSelect >
                                 ( FRONTDOOR_AUDIO_DUALMONOSELECT_API,
                                   getDualMonoSelectAction,
                                   setDualMonoSelectAction,
@@ -854,7 +847,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetEqSelect( );
     };
-    auto setEqSelectAction = [ this ]( ProductPb::AudioEqSelect val )
+    auto setEqSelectAction = [ this ]( AudioEqSelect val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetEqSelect( val );
 
@@ -864,13 +857,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                 EqSelectNameToEnum( m_AudioSettingsMgr->GetEqSelect( ).mode() ) );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioEqSelect >( m_AudioSettingsMgr->GetEqSelect( ) ),
+                std::make_shared< AudioEqSelect >( m_AudioSettingsMgr->GetEqSelect( ) ),
                 DATA_COLLECTION_EQSELECT );
         }
         return error;
     };
-    m_EqSelectSetting = std::unique_ptr< AudioSetting< ProductPb::AudioEqSelect > >
-                        ( new AudioSetting< ProductPb::AudioEqSelect >
+    m_EqSelectSetting = std::unique_ptr< AudioSetting< AudioEqSelect > >
+                        ( new AudioSetting< AudioEqSelect >
                           ( FRONTDOOR_AUDIO_EQSELECT_API,
                             getEqSelectAction,
                             setEqSelectAction,
@@ -886,7 +879,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetSubwooferPolarity( );
     };
-    auto setSubwooferPolarityAction = [ this ]( ProductPb::AudioSubwooferPolarity val )
+    auto setSubwooferPolarityAction = [ this ]( AudioSubwooferPolarity val )
     {
         ResultCode_t error = m_AudioSettingsMgr->SetSubwooferPolarity( val );
         if( error == ResultCode_t::NO_ERROR )
@@ -895,13 +888,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                 SubwooferPolarityNameToEnum( m_AudioSettingsMgr->GetSubwooferPolarity( ).value() ) );
             SendMainStreamAudioSettingsEvent();
             m_DataCollectionClient->SendData(
-                std::make_shared< ProductPb::AudioSubwooferPolarity >( m_AudioSettingsMgr->GetSubwooferPolarity( ) ),
+                std::make_shared< AudioSubwooferPolarity >( m_AudioSettingsMgr->GetSubwooferPolarity( ) ),
                 DATA_COLLECTION_SUBWOOFER_POLARITY );
         }
         return error;
     };
-    m_SubwooferPolaritySetting = std::unique_ptr< AudioSetting< ProductPb::AudioSubwooferPolarity > >
-                                 ( new AudioSetting< ProductPb::AudioSubwooferPolarity >
+    m_SubwooferPolaritySetting = std::unique_ptr< AudioSetting< AudioSubwooferPolarity > >
+                                 ( new AudioSetting< AudioSubwooferPolarity >
                                    ( FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API,
                                      getSubwooferPolarityAction,
                                      setSubwooferPolarityAction,
