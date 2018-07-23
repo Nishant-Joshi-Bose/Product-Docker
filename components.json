@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.18.43125.2917968"
+    "selected_version": "Continuous/Castle-Fork/2018-07-23_1036"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@dc022909a18171078455fd8bb0c77eb120dab1bd"
+    "selected_version": "master@bf7e63a80f1ac09735d61af258693d235345c3dc"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -181,11 +181,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/sop/3.10.3"
+    "selected_version": "Release/master/4.0"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.10"
+    "selected_version": "Release/master/4.0"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.18.43125.2917968"
+    "selected_version": "Continuous/Castle-Fork/2018-07-23_1036"
   },
   {
     "name": "SystemEventService-qc8017_32",
