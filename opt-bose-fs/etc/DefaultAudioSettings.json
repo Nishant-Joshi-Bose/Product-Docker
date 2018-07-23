@@ -1,6 +1,6 @@
 {
 	"version": {
-        "major": 3,
+        "major": 4,
         "minor": 0
 	},
     "supportedAudioSettings": {
@@ -102,9 +102,9 @@
 			},
 			"defaultValue":0,
 			"properties": {
-				"min": -100,
-				"max": 100,
-				"step": 10,
+                "min": 0,
+                "max": 30,
+                "step": 5,
 				"supportedPersistence": ["SESSION", "GLOBAL", "CONTENT_ITEM"]
 			}
 		},
@@ -130,7 +130,7 @@
 		},
 		"audioAvSync": {		
 			"persistenceLevel": {
-				"currentPersistenceLevel": "GLOBAL",
+                "currentPersistenceLevel": "CONTENT_ITEM",
 				"persistenceSession": false
 			},
 			"values": {
@@ -142,8 +142,8 @@
 			},
 			"defaultValue":0,
 			"properties": {
-				"min": -100,
-				"max": 100,
+                "min": 0,
+                "max": 200,
 				"step": 10,
 				"supportedPersistence": ["SESSION", "GLOBAL", "CONTENT_ITEM"]
 			}
@@ -170,8 +170,8 @@
 		},
 		"audioMode": {		
 			"persistenceLevel": {
-				"currentPersistenceLevel": "GLOBAL",
-				"persistenceSession": false
+                "currentPersistenceLevel": "GLOBAL",
+                "persistenceSession": true
 			},
 			"values": {
 				"GLOBAL": "NORMAL",
@@ -188,7 +188,7 @@
 		},
 		"audioContentType": {		
 			"persistenceLevel": {
-				"currentPersistenceLevel": "GLOBAL",
+                "currentPersistenceLevel": "CONTENT_ITEM",
 				"persistenceSession": false
 			},
 			"values": {
@@ -206,8 +206,8 @@
 		},
 		"audioDualMonoSelect": {		
 			"persistenceLevel": {
-				"currentPersistenceLevel": "GLOBAL",
-				"persistenceSession": false
+                "currentPersistenceLevel": "GLOBAL",
+                "persistenceSession": true
 			},
 			"values": {
 				"GLOBAL": "BOTH"

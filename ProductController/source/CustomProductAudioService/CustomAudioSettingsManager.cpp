@@ -13,7 +13,7 @@
 #include "ProtoToMarkup.h"
 
 constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
-constexpr uint32_t kConfigVersionMajor = 3;
+constexpr uint32_t kConfigVersionMajor = 4;
 constexpr uint32_t kConfigVersionMinor = 0;
 
 constexpr char kBassName                [] = "audioBassLevel";
