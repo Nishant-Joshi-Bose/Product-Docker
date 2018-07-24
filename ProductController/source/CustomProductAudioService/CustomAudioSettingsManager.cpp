@@ -176,7 +176,7 @@ ResultCode_t CustomAudioSettingsManager::SetSurroundDelay( const AudioSurroundDe
         BOSE_INFO( s_logger, "SurroundDelay doesn't contain any value (%s)", surroundDelay.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kSurroundName][kProperties];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kSurroundDelayName][kProperties];
     if( !isStepValueValid( surroundDelay.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
