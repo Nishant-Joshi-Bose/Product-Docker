@@ -4,8 +4,8 @@
         "minor": 0
 	},
     "supportedAudioSettings": {
-        "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioSurroundDelay", "audioGainOffset", "audioAvSync", "audioSubwooferGain", "audioMode", "audioContentType"],
-        "contentItemNonSensitive": ["dualMonoSelect", "audioEqSelect", "audioSubwooferPolarity"]
+        "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioDualMonoSelect","audioSurroundLevel", "audioSurroundDelay", "audioGainOffset", "audioAvSync", "audioSubwooferGain", "audioMode", "audioContentType"],
+        "contentItemNonSensitive": ["audioEqSelect", "audioSubwooferPolarity"]
     },
 	"audioSettingValues": {
 		"audioBassLevel": {		
