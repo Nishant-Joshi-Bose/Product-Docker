@@ -48,11 +48,11 @@ class AccessorySoftwareInstallManager
     friend class ProductCommandLine;
 
 public:
-    AccessorySoftwareInstallManager( NotifyTargetTaskIF*                                     task,
+    AccessorySoftwareInstallManager( NotifyTargetTaskIF*                                    task,
                                      ProductSoftwareInstallManager&                         productSoftwareInstallManager,
                                      ProductSoftwareInstallScheduler&                       productSoftwareInstallScheduler );
 
-    void Initialize( std::shared_ptr< AsyncCallback<void> > callbackForInstall,
+    void Initialize( std::shared_ptr< AsyncCallback<void> >&                callbackForInstall,
                      std::shared_ptr< CustomProductLpmHardwareInterface >&  productLpmHardwareInterface );
 
     void InitiateSoftwareInstall();
@@ -69,6 +69,8 @@ public:
     }
 
     void Dump( std::ostringstream& oss ) const;
+
+    void ProductSoftwareUpdateStateNotified( );
 
 private:
     NotifyTargetTaskIF& GetTask() const

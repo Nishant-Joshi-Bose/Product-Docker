@@ -63,7 +63,7 @@ AccessorySoftwareInstallManager( NotifyTargetTaskIF*                            
 {
 }
 
-void AccessorySoftwareInstallManager::Initialize( std::shared_ptr< AsyncCallback<void> > callbackForInstall,
+void AccessorySoftwareInstallManager::Initialize( std::shared_ptr< AsyncCallback<void> >&                callbackForInstall,
                                                   std::shared_ptr< CustomProductLpmHardwareInterface >&  productLpmHardwareInterface )
 {
     BOSE_INFO( s_logger, "%s::%s ", CLASS_NAME, __FUNCTION__ );
@@ -79,6 +79,14 @@ void AccessorySoftwareInstallManager::Dump( std::ostringstream& oss ) const
 
     oss << "Accessory Software Install Manager Status Dump" << std::endl;
     oss << "SpeakerSoftwareStatus (From LPM = " << m_softwareStatusCache.DebugString( ) << std::endl;
+}
+
+void AccessorySoftwareInstallManager::ProductSoftwareUpdateStateNotified( )
+{
+    BOSE_INFO( s_logger, "%s::%s ", CLASS_NAME, __FUNCTION__ );
+
+    // We should re-assess whether we need to schedule ourselves based on the newly notified ProductSoftwareUpdateState
+    HandleSpeakerSoftwareStatus( m_softwareStatusCache );
 }
 
 void AccessorySoftwareInstallManager::HandleSpeakerSoftwareStatus( LpmServiceMessages::IpcAccessorySpeakerSoftwareStatusMessage_t softwareStatus )

@@ -1579,6 +1579,14 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         GetHsm( ).Handle<>( &CustomProductControllerState::HandleAccessoriesAreKnown );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// softwareupdatestatus needs to be forwarded to AccessorySoftwareInstallManager in addition to Common handling
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    if( message.has_softwareupdatestatus() )
+    {
+        m_AccessorySoftwareInstallManager.ProductSoftwareUpdateStateNotified( );
+        ( void ) HandleCommonProductMessage( message );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
     /// type is unknown.
     ///////////////////////////////////////////////////////////////////////////////////////////////
