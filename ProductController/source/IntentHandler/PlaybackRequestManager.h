@@ -3,7 +3,7 @@
 /// @file      PlaybackRequestManager.h
 ///
 /// @brief     This header file declares an intent manager class for implementing playbacks for
-///            Professor product specific source selection key actions, typically based on remote
+///            product specific source selection key actions, typically based on remote
 ///            key actions.
 ///
 /// @author    Stuart J. Lumby
@@ -100,7 +100,7 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following member variable stores the Professor product controller instance.
+    /// @brief The following member variable stores the product controller instance.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ProductController&                      m_ProductController;

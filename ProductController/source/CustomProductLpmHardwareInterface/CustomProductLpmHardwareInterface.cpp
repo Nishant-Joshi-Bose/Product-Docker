@@ -2,7 +2,7 @@
 ///
 /// @file      CustomProductLpmHardwareInterface.cpp
 ///
-/// @brief     This source code file contains custom Professor functionality for managing the
+/// @brief     This source code file contains custom functionality for managing the
 ///            hardware, which interfaces with the Low Power Microprocessor or LPM on Riviera
 ///            APQ boards.
 ///
@@ -32,7 +32,7 @@
 #include "Utilities.h"
 #include "LpmClientFactory.h"
 #include "AutoLpmServiceMessages.pb.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,10 +52,10 @@ constexpr uint32_t BLUETOOTH_MAC_LENGTH = 6;
 ///
 /// @name   CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface
 ///
-/// @brief  ProfessorProductController& ProductController
+/// @brief  CustomrProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( ProfessorProductController&
+CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( CustomProductController&
                                                                       ProductController )
 
     : ProductLpmHardwareInterface( ProductController.GetTask( ),
