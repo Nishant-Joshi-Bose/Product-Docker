@@ -34,6 +34,7 @@
 #include "HdmiEdid.pb.h"
 #include "ProductDataCollectionDefines.h"
 #include "ProductSTS.pb.h"
+#include "DataCollectionCecState.pb.h"
 
 using namespace ProductPb;
 
@@ -322,12 +323,21 @@ void ProductCecHelper::Connected( bool connected )
 
     m_CecHelper->RegisterForHotplugEvent( CallbackForKeyEvents );
 
-    Callback< LpmServiceMessages::IPCSource_t >
-    CallbackForCecSource( std::bind( &ProductCecHelper::HandleSrcSwitch,
-                                     this,
-                                     std::placeholders::_1 ) );
+    auto lpmConnectCb = [ this ]( bool connected )
+    {
+        const Callback< IPCSource_t > cecSrcSwitchCb( [ this ]( IPCSource_t source )
+        {
+            HandleSrcSwitch( source );
+        } );
+        m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, cecSrcSwitchCb );
 
-    m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, CallbackForCecSource );
+        const Callback< IpcCecState_t > cecStateCb( [ this ]( IpcCecState_t state )
+        {
+            HandleCecState( state );
+        } );
+        m_ProductLpmHardwareInterface->RegisterForLpmEvents( static_cast< IpcOpcodes_t >( CEC_STATE_INFO ), cecStateCb );
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmConnectCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -374,7 +384,7 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
 void ProductCecHelper::HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying&
                                                       response )
 {
-    BOSE_DEBUG( s_logger, "A response to the playback request %s was received." ,
+    BOSE_DEBUG( s_logger, "A response to the playback request %s was received.",
                 response.source( ).sourcedisplayname( ).c_str( ) );
 }
 
@@ -588,6 +598,56 @@ void ProductCecHelper::PowerOn( )
     m_LpmPowerIsOn = true;
 
     PerhapsSetCecSource( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ProductCecHelper::HandleCecState
+///
+/// @brief This method handles the CEC state message received from LPM
+///
+/// @param LpmServiceMessages::IpcCecState_t state
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
+{
+    // Presumably LPM sends these only on change, but there's no harm in filtering here just to be sure
+    if( state.SerializeAsString() == m_cecState.SerializeAsString() )
+    {
+        return;
+    }
+
+    BOSE_DEBUG( s_logger, "%s - %s", __PRETTY_FUNCTION__, ProtoToMarkup::ToJson( state ).c_str( ) );
+
+    auto cecState = std::make_shared< DataCollectionPb::CecState >( );
+
+    cecState->set_physicaladdress( state.physicaladdress( ) );
+    cecState->set_logicaladdress( state.logicaladdress( ) );
+    cecState->set_activesource( state.actsrc( ) );
+    cecState->set_strmpath( state.strmpath( ) );
+
+    for( auto i = 0; i < state.cec_devices_size( ); i++ )
+    {
+        const auto& idev = state.cec_devices( i );
+        auto odev = cecState->add_cecdevices( );
+
+        // TODO: do we need to filter this list based on LA (i.e. does the list
+        // have a bunch of entries w/LA == CEC_UNREG_BCAST, and if so should we filter
+        // them out?)
+
+        odev->set_cecversion( CEC_VERSION_Name( idev.cecversion( ) ) );
+        odev->set_physicaladdress( idev.physicaladdress( ) );
+        odev->set_osd( idev.osd( ) );
+
+        // should always be 3, but we'll be pedantic
+        for( auto j = 0; j < idev.vendorid_size( ); j++ )
+        {
+            odev->add_vendorid( idev.vendorid( j ) );
+        }
+    }
+
+    m_DataCollectionClient->SendData( cecState, DATA_COLLECTION_CEC_STATE );
+    m_cecState = state;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
