@@ -485,19 +485,18 @@ void CustomAudioSettingsManager::UpdateAllProtos()
     BOSE_DEBUG( s_logger, __func__ );
     // Only required for contentItem sensitive audio settings
     // contentItem non-sensitive audio settings will only be set through setters, no other ways
-    UpdateCurrentProto( kBassName,              m_currentBass );
-    UpdateCurrentProto( kTrebleName,            m_currentTreble );
-    UpdateCurrentProto( kCenterName,            m_currentCenter );
-    UpdateCurrentProto( kSurroundName,          m_currentSurround );
-    UpdateCurrentProto( kSurroundDelayName,     m_currentSurroundDelay );
-    UpdateCurrentProto( kGainOffsetName,        m_currentGainOffset );
-    UpdateCurrentProto( kAvSyncName,            m_currentAvSync );
-    UpdateCurrentProto( kSubwooferGainName,     m_currentSubwooferGain );
-    UpdateCurrentProto( kModeName,              m_currentMode );
-    UpdateCurrentProto( kContentTypeName,       m_currentContentType );
+    UpdateCurrentProto( kBassName,          m_currentBass );
+    UpdateCurrentProto( kTrebleName,        m_currentTreble );
+    UpdateCurrentProto( kCenterName,        m_currentCenter );
+    UpdateCurrentProto( kSurroundName,      m_currentSurround );
+    UpdateCurrentProto( kSurroundDelayName, m_currentSurroundDelay );
+    UpdateCurrentProto( kGainOffsetName,    m_currentGainOffset );
+    UpdateCurrentProto( kAvSyncName,        m_currentAvSync );
+    UpdateCurrentProto( kSubwooferGainName, m_currentSubwooferGain );
+    UpdateCurrentProto( kModeName,          m_currentMode );
+    UpdateCurrentProto( kContentTypeName,   m_currentContentType );
 
     //dualMonoSelect proto has different format than above, has to be specially handled
-    //kDualMonoSelectName,    m_currentDualMonoSelect );
     string persistLevel;
     const Json::Value& dualMonoSelect = m_audioSettings["audioSettingValues"][kDualMonoSelectName];
     if( dualMonoSelect["persistenceLevel"]["persistenceSession"] == true )
@@ -574,11 +573,13 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
             for( uint32_t i = 0; i < persistedAudioSettings["supportedAudioSettings"]["contentItemSensitive"].size(); i++ )
             {
                 string propName = persistedAudioSettings["supportedAudioSettings"]["contentItemSensitive"][i].asString();
+                m_audioSettings[kAudioSettingValues][propName].clear();
                 m_audioSettings[kAudioSettingValues][propName] = persistedAudioSettings[kAudioSettingValues][propName];
             }
             for( uint32_t i = 0; i < persistedAudioSettings["supportedAudioSettings"]["contentItemNonSensitive"].size(); i++ )
             {
                 string propName = persistedAudioSettings["supportedAudioSettings"]["contentItemNonSensitive"][i].asString();
+                m_audioSettings[kAudioSettingValues][propName].clear();
                 m_audioSettings[kAudioSettingValues][propName] = persistedAudioSettings[kAudioSettingValues][propName];
             }
         }
