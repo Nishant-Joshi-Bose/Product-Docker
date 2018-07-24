@@ -229,7 +229,7 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
         error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_CEC );
         errorRsp.Send( error );
     }
-
+    SetCecModeDefaultProperties( m_cecresp );
     m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, m_cecresp );
 }
 
