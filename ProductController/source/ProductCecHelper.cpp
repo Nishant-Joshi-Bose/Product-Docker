@@ -191,6 +191,7 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
 {
     ProductMessage msg;
     FrontDoor::Error error;
+    CecModeResponse tempResp;
 
     if( !req.has_mode() )
     {
@@ -229,8 +230,9 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
         error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_CEC );
         errorRsp.Send( error );
     }
-    SetCecModeDefaultProperties( m_cecresp );
-    m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, m_cecresp );
+    tempResp = m_cecresp;
+    SetCecModeDefaultProperties( tempResp );
+    m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, tempResp );
 }
 
 
