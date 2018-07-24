@@ -2,7 +2,7 @@
 /// @file      CustomProductControllerStatePlayingSelected.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            playing selected state that are custom to the Professor product.
+///            playing selected state that are custom for the product.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////

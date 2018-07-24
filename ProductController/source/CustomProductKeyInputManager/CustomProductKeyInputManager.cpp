@@ -18,7 +18,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductSourceInfo.h"
 #include "CustomProductKeyInputManager.h"
 #include "MonotonicClock.h"
@@ -42,10 +42,10 @@ constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConf
 ///
 /// @brief CustomProductKeyInputManager::CustomProductKeyInputManager
 ///
-/// @param ProfessorProductController& ProductController
+/// @param CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductKeyInputManager::CustomProductKeyInputManager( ProfessorProductController& ProductController )
+CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController )
 
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),

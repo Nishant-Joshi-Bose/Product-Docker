@@ -2,7 +2,7 @@
 /// @file      CustomProductControllerStatePlayingSelected.h
 ///
 /// @brief     This header file declares functionality to process events that occur during the
-///            playing selected state that are custom to the Professor product.
+///            playing selected state that are custom to product.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////

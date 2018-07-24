@@ -77,7 +77,7 @@ ADD_EXECUTABLE(Professor
   source/ProductStart.cpp
   source/ProductSTSStateTopAiQ.cpp
 
-  source/ProfessorProductController.cpp
+  source/CustomProductController.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor

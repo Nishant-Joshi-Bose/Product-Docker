@@ -21,7 +21,7 @@
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductControllerHsm.h"
 #include "SpeakerPairingManager.h"
-#include "ProfessorChimeEvents.h"
+#include "CustomChimeEvents.h"
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
