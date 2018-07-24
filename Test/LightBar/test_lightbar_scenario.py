@@ -1,4 +1,4 @@
-# test_lightbar_scenario.py
+# LightBar/test_lightbar_scenario.py
 #
 # :Organization:  BOSE CORPORATION
 #
@@ -15,6 +15,7 @@ Automated Tests for LightBar Animations for Eddie
 import json
 import os
 import random
+import time
 import ConfigParser
 from time import sleep
 
@@ -37,7 +38,7 @@ def pytest_generate_tests(metafunc):
     """
     if str(metafunc.function.__name__) == 'test_play_valid_animation':
         device_id = metafunc.config.getoption("--device-id")
-        environment = metafunc.config.getoption("--galapagos-env")
+        environment = metafunc.config.getoption("--environment")
 
         network_base = NetworkBase(None, device_id)
 
