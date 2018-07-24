@@ -200,6 +200,10 @@
     "selected_version": "Release/master/1.0.0-58+75a9930"
   },
   {
+    "name": "RivieraSwUpRecovery-qc8017_32",
+    "selected_version": "Release/master/1.5.0-3+9f060fe"
+  },
+  {
     "name": "SASS-qc8017_32",
     "selected_version": "Release/master/1.5.4-496+d2d5154"
   },
@@ -209,7 +213,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.10-764+7152736"
+    "selected_version": "Release/master/1.5.11-776+555b2af"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
