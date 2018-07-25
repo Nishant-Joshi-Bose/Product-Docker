@@ -1,9 +1,9 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      PlaybackRequestManager.cpp
 ///
 /// @brief     This source code file contains functionality to implement an intent manager class for
-///            starting playbacks for Professor product specific source selection key actions,
+///            starting playbacks for product specific source selection key actions,
 ///            typically based on remote key actions for TV and SoundTouch sources.
 ///
 /// @author    Stuart J. Lumby

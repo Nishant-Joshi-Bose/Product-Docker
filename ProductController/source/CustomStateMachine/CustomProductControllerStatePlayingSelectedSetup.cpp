@@ -2,7 +2,7 @@
 /// @file      CustomProductControllerStatePlayingSelectedSetup.cpp
 ///
 /// @brief     This source code file contains functionality to process events
-///            that occur in Professor during the product setup state.
+///            that occur during the product setup state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@
 #include "Utilities.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStates.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductBLERemoteManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

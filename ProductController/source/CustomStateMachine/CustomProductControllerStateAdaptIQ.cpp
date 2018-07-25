@@ -25,7 +25,7 @@
 #include "Utilities.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductMessage.pb.h"
 #include "CustomProductAudioService.h"
 
@@ -49,7 +49,7 @@ namespace ProductApp
 ///
 /// @param CHsmState*                  pSuperState       This argument references the parent state.
 ///
-/// @param ProfessorProductController& productController This argument references the product controller.
+/// @param CustomProductController& productController This argument references the product controller.
 ///
 /// @param Hsm::STATE                  stateId           This enumeration represents the state ID.
 ///
@@ -59,7 +59,7 @@ namespace ProductApp
 CustomProductControllerStateAdaptIQ::
 CustomProductControllerStateAdaptIQ( ProductControllerHsm&       hsm,
                                      CHsmState*                  pSuperState,
-                                     ProfessorProductController& productController,
+                                     CustomProductController&    productController,
                                      Hsm::STATE                  stateId,
                                      const std::string&          name )
 
