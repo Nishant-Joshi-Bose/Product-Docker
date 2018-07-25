@@ -24,7 +24,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductCecHelper.h"
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
@@ -55,16 +55,16 @@ namespace ProductApp
 ///
 /// @name   ProductCecHelper::ProductCecHelper
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCecHelper::ProductCecHelper( ProfessorProductController& ProductController )
+ProductCecHelper::ProductCecHelper( CustomProductController& ProductController )
 
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
       m_connected( false ),
-      m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) ),
+      m_CustomProductController( static_cast< CustomProductController & >( ProductController ) ),
       m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) )
 {
     m_cecresp.set_mode( "ON" );
@@ -191,6 +191,7 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
 {
     ProductMessage msg;
     FrontDoor::Error error;
+    CecModeResponse tempResp;
 
     if( !req.has_mode() )
     {
@@ -229,8 +230,9 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
         error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_CEC );
         errorRsp.Send( error );
     }
-
-    m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, m_cecresp );
+    tempResp = m_cecresp;
+    SetCecModeDefaultProperties( tempResp );
+    m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, tempResp );
 }
 
 

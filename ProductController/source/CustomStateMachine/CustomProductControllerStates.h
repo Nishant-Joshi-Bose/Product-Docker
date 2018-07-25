@@ -43,7 +43,7 @@ enum CustomProductControllerStates
     CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP                  = PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP,
     CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID  = PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID,
     ///
-    /// Custom product controller states that are specific to Professor are defined below.
+    /// Custom product controller states that are product-specific are defined below.
     ///
     CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ = PRODUCT_CONTROLLER_STATE_LAST,
     CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING,

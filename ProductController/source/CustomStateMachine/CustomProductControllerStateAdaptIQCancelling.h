@@ -48,7 +48,7 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -60,9 +60,9 @@ class CustomProductControllerStateAdaptIQCancelling : public ProductControllerSt
 public:
 
     CustomProductControllerStateAdaptIQCancelling( ProductControllerHsm& hsm,
-                                                CHsmState*            pSuperState,
-                                                Hsm::STATE            stateId,
-                                                const std::string&    name = "AdaptIQCancelling" );
+                                                   CHsmState*            pSuperState,
+                                                   Hsm::STATE            stateId,
+                                                   const std::string&    name = "AdaptIQCancelling" );
 
     ~CustomProductControllerStateAdaptIQCancelling( ) override
     {

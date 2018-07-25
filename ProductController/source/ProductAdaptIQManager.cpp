@@ -24,7 +24,7 @@
 #include <string>
 #include "DPrint.h"
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductAdaptIQManager.h"
 #include "SharedProto.pb.h"
@@ -62,7 +62,7 @@ namespace ProductApp
 /// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& ProductController ) :
+ProductAdaptIQManager::ProductAdaptIQManager( CustomProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
