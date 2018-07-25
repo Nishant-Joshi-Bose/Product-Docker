@@ -126,7 +126,7 @@ rm -f /cache/recovery/last_kmsg.*
 
 if [ -e /opt/Bose/hsp/RecoveryMain ]; then
     mv /opt/Bose/hsp/RecoveryMain /cache/ || exiterror
-    chmod +x /cache/RecoveryMain || exit error
+    chmod +x /cache/RecoveryMain || exiterror
 fi
 
 if [ -e /opt/Bose/hsp/RecoveryMgr ]; then
@@ -163,7 +163,7 @@ echo "hsp preinst"
 # Should be removed in IP3, when stopping services is 
 # taken care of by Shepherd / Product / SoftwareUpdateService. 
 # Set Progress Start
-/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r RECOVERY -b 0 -p 1
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r APQ -b 0 -p 1
 
 echo "Stopping LPM"
 pkill LPMService
