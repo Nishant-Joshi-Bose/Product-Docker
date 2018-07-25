@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Release/master/1.5.4-4+a69422b"
+    "selected_version": "Release/master/1.5.5-10+e0fe722"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.19.43144.2922658"
+    "selected_version": "Continuous/Castle-Fork/2018-07-24_1111"
   },
   {
     "name": "BLERemoteXCVR",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@bf7e63a80f1ac09735d61af258693d235345c3dc"
+    "selected_version": "master@08d6f085f5477e3fad48b65c478889cf9513fa36"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -205,7 +205,7 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@2516"
+    "selected_version": "trunk@2772"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "RivieraLpmTools",
-    "selected_version": "@2139"
+    "selected_version": "@2962"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -233,7 +233,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.19.43144.2922658"
+    "selected_version": "Continuous/Castle-Fork/2018-07-24_1111"
   },
   {
     "name": "SystemEventService-qc8017_32",

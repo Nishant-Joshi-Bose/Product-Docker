@@ -1,9 +1,9 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      MuteManager.cpp
 ///
 /// @brief     This source code file contains functionality to implement an intent manager class for
-///            volume and mute control based on Professor product specific key actions
+///            volume and mute control based on product specific key actions
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "FrontDoorClient.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "MuteManager.h"
 #include "ProductEndpointDefines.h"
 
@@ -55,7 +55,7 @@ MuteManager::MuteManager( NotifyTargetTaskIF&        task,
                           ProductController&         productController )
 
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
-      m_CustomProductController( static_cast< ProfessorProductController & >( productController ) ),
+      m_CustomProductController( static_cast< CustomProductController & >( productController ) ),
       m_ProductTask( m_CustomProductController.GetTask( ) ),
       m_ProductNotify( m_CustomProductController.GetMessageHandler( ) )
 {
@@ -88,7 +88,7 @@ void MuteManager::Initialize( )
 ///
 /// @brief  MuteManager::Handle
 ///
-/// @brief  This method is used to process volume and mute Professor product specific key actions.
+/// @brief  This method is used to process volume and mute product specific key actions.
 ///
 /// @param  KeyHandlerUtil::ActionType_t& action
 ///

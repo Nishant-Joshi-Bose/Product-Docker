@@ -58,7 +58,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
 class ProductController;
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -438,8 +438,8 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// This method returns the Professor Custom Product Controller reference of type
-    /// ProfessorProductController.
+    /// This method returns the Custom Product Controller reference of type
+    /// CustomProductController.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     inline static void SetProductController( ProductController* productController )
@@ -466,7 +466,7 @@ protected:
     ///
     /// The custom version of this function returns the custom ProductController.
     ///
-    static ProfessorProductController& GetCustomProductController( );
+    static CustomProductController& GetCustomProductController( );
 
     static void FrontDoorErrorCallback( const FrontDoor::Error & error );
 

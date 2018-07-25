@@ -2,7 +2,7 @@
 ///
 /// @file      CustomProductAudioService.cpp
 ///
-/// @brief     This file contains source code for Professor specific behavior for communicating
+/// @brief     This file contains source code for custom behavior for communicating
 ///            with APProduct Server and APProduct related FrontDoor interaction
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
@@ -14,13 +14,17 @@
 #include "APProductFactory.h"
 #include "LpmClientFactory.h"
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductAudioService.h"
 #include "ProtoToMarkup.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
+// TODO - JCH - fix this as part of PGC-2476
+//#include "RivieraLPM_IpcProtocol.h"
+#define IPC_LATENCY_VALUE_UNKNOWN 0xffff
+// end TODO
 
 using namespace std::placeholders;
 
@@ -31,10 +35,10 @@ using namespace ProductPb;
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController,
+CustomProductAudioService::CustomProductAudioService( CustomProductController& ProductController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( ProductController.GetTask( ),
