@@ -14,7 +14,7 @@
 namespace ProductApp
 {
 class ProductControllerHsm;
-class ProfessorProductController;
+class CustomProductController;
 
 class CustomProductControllerStateFirstBootGreetingTransition :
     public ProductControllerStateFirstBootGreetingTransition

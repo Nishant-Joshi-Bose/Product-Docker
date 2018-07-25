@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Release/master/1.5.4-4+a69422b"
+    "selected_version": "Release/master/1.5.5-10+e0fe722"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.5.1-85+f18c756"
+    "selected_version": "Release/master/1.5.2-92+7c46990"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.4-167+a7714d0"
+    "selected_version": "Release/master/1.5.5-169+e9bded0"
   },
   {
     "name": "LpmMfgTool",
@@ -157,15 +157,15 @@
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Release/bose-master/1.8.3-16-g40b3e67"
+    "selected_version": "Release/bose-master/1.8.3-17-g016bc77"
   },
   {
     "name": "opensource-libwebsockets-qc8017_32",
-    "selected_version": "Release/bose-v2.4-stable/2.4.1-34+ge17bf91"
+    "selected_version": "Release/bose-v2.4-stable/2.4.1-35+g6107c43"
   },
   {
     "name": "opensource-zlib-qc8017_32",
-    "selected_version": "Release/bose-master/v1.2.11-3-gce215f7"
+    "selected_version": "Release/bose-master/v1.2.11-4-g324f6d0"
   },
   {
     "name": "Passport-qc8017_32",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@bf7e63a80f1ac09735d61af258693d235345c3dc"
+    "selected_version": "master@08d6f085f5477e3fad48b65c478889cf9513fa36"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -205,15 +205,15 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@2516"
+    "selected_version": "trunk@2772"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.5.2-204+6dae9b7"
+    "selected_version": "Release/master/1.5.3-211+daf7efb"
   },
   {
     "name": "RivieraLpmTools",
-    "selected_version": "@2139"
+    "selected_version": "@2962"
   },
   {
     "name": "RivieraLpmUpdater",

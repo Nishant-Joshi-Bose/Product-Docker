@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      SpeakerPairingManager.cpp
 ///
@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "FrontDoorClient.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "SpeakerPairingManager.h"
 #include "ProductEndpointDefines.h"
@@ -67,7 +67,7 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
                                               ProductController&         productController )
 
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
-      m_CustomProductController( static_cast< ProfessorProductController & >( productController ) ),
+      m_CustomProductController( static_cast< CustomProductController & >( productController ) ),
       m_ProductTask( m_CustomProductController.GetTask( ) ),
       m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) ),

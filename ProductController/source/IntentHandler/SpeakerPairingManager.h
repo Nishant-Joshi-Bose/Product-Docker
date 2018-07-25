@@ -3,8 +3,7 @@
 /// @file      SpeakerPairingManager.h
 ///
 /// @brief     This header file declares an intent manager class for managing the wireless
-///            speaker accessories, including pairing and active speaker control, on Professor
-///            Devices
+///            speaker accessories, including pairing and active speaker control.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -51,7 +50,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -111,10 +110,10 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following member variable stores the custom Professor product controller instance.
+    /// @brief The following member variable stores the custom product controller instance.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProfessorProductController& m_CustomProductController;
+    CustomProductController& m_CustomProductController;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

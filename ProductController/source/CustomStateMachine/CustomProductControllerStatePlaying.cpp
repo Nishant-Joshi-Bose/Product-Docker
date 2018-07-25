@@ -29,7 +29,7 @@
 #include "ProductControllerHsm.h"
 #include "ProductControllerState.h"
 #include "CustomProductLpmHardwareInterface.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductBLERemoteManager.h"
 #include "ProductEndpointDefines.h"
 
