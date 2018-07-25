@@ -35,7 +35,7 @@ public:
     const ProductPb::AudioAvSync& GetAvSync() const;
     ResultCode_t SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
     const ProductPb::AudioSubwooferGain& GetSubwooferGain() const;
-    ResultCode_t SetMode( const ProductPb::AudioMode& mode );
+    ResultCode_t SetMode( ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
     ResultCode_t SetContentType( const ProductPb::AudioContentType& contentType );
     const ProductPb::AudioContentType& GetContentType() const;
