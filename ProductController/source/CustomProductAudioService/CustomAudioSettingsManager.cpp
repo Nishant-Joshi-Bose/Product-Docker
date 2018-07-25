@@ -13,7 +13,7 @@
 #include "ProtoToMarkup.h"
 
 constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
-constexpr uint32_t kConfigVersionMajor = 3;
+constexpr uint32_t kConfigVersionMajor = 4;
 constexpr uint32_t kConfigVersionMinor = 0;
 
 constexpr char kBassName                [] = "audioBassLevel";
@@ -176,7 +176,7 @@ ResultCode_t CustomAudioSettingsManager::SetSurroundDelay( const AudioSurroundDe
         BOSE_INFO( s_logger, "SurroundDelay doesn't contain any value (%s)", surroundDelay.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
-    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kSurroundName][kProperties];
+    const Json::Value& properties = m_audioSettings[kAudioSettingValues][kSurroundDelayName][kProperties];
     if( !isStepValueValid( surroundDelay.value(),
                            properties["min"].asInt(),
                            properties["max"].asInt(),
@@ -288,7 +288,7 @@ const AudioSubwooferGain& CustomAudioSettingsManager::GetSubwooferGain() const
 ///     setter returns a ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current mode value
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetMode( const AudioMode& mode )
+ResultCode_t CustomAudioSettingsManager::SetMode( AudioMode& mode )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !mode.has_value() )
@@ -300,6 +300,11 @@ ResultCode_t CustomAudioSettingsManager::SetMode( const AudioMode& mode )
                          m_audioSettings[kAudioSettingValues][kModeName][kProperties]["supportedValues"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
+    }
+    // /audio/mode's persistence level is default to "SESSION"
+    if( !mode.has_persistence() )
+    {
+        mode.set_persistence( kPersistSession );
     }
     return SetAudioProperties( mode, kModeName, m_currentMode );
 }
@@ -362,7 +367,11 @@ ResultCode_t CustomAudioSettingsManager::SetDualMonoSelect( const AudioDualMonoS
         BOSE_INFO( s_logger, "DualMonoSelect value doesn't change from last time (%s)", dualMonoSelect.DebugString().c_str() );
         return ResultCode_t::VALUE_UNCHANGED;
     }
-    m_audioSettings[kAudioSettingValues][kDualMonoSelectName]["values"][kPersistGlobal] = dualMonoSelect.value();
+
+    // /audio/dualMonoSelect doesn't allow user to set persistence, and the persistence is default to "SESSION"
+    // Once content item change, the setting will be reverted to global setting, until next time user sets it
+    m_audioSettings[kAudioSettingValues][kDualMonoSelectName]["persistenceLevel"]["persistenceSession"] = true;
+    m_audioSettings[kAudioSettingValues][kDualMonoSelectName]["values"][kPersistSession] = dualMonoSelect.value();
     m_currentDualMonoSelect.set_value( dualMonoSelect.value() );
     PersistAudioSettings();
     return ResultCode_t::NO_ERROR;
@@ -467,6 +476,10 @@ const AudioSubwooferPolarity& CustomAudioSettingsManager::GetSubwooferPolarity()
 }
 
 
+///////////////////////////////////////////////////////////
+/// CustomAudioSettingsManager::UpdateAllProtos
+///     make sure protos are up to date with latest m_AudioSettings
+/////////////////////////////////////////////////////////
 void CustomAudioSettingsManager::UpdateAllProtos()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -482,6 +495,23 @@ void CustomAudioSettingsManager::UpdateAllProtos()
     UpdateCurrentProto( kSubwooferGainName, m_currentSubwooferGain );
     UpdateCurrentProto( kModeName,          m_currentMode );
     UpdateCurrentProto( kContentTypeName,   m_currentContentType );
+
+    //dualMonoSelect proto has different format than above, has to be specially handled
+    string persistLevel;
+    const Json::Value& dualMonoSelect = m_audioSettings["audioSettingValues"][kDualMonoSelectName];
+    if( dualMonoSelect["persistenceLevel"]["persistenceSession"] == true )
+    {
+        persistLevel = kPersistSession;
+    }
+    else
+    {
+        persistLevel = dualMonoSelect["persistenceLevel"]["currentPersistenceLevel"].asString();
+    }
+    const Json::Value& currValue = GetCurrentSettingValue( kDualMonoSelectName, persistLevel );
+    if( m_currentDualMonoSelect.value() != JsonToProtoField( m_currentDualMonoSelect.value(), currValue ) )
+    {
+        m_currentDualMonoSelect.set_value( JsonToProtoField( m_currentDualMonoSelect.value(), currValue ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
