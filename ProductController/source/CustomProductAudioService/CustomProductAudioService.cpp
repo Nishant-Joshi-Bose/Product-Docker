@@ -21,7 +21,10 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
-#include "RivieraLPM_IpcProtocol.h"
+// TODO - JCH - fix this as part of PGC-2476
+//#include "RivieraLPM_IpcProtocol.h"
+#define IPC_LATENCY_VALUE_UNKNOWN 0xffff
+// end TODO
 
 using namespace std::placeholders;
 

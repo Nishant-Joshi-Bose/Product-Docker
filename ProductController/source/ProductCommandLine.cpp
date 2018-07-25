@@ -30,6 +30,7 @@
 #include "CustomProductController.h"
 #include "ProductCommandLine.h"
 #include "ProductEndpointDefines.h"
+#include "AccessorySoftwareInstallManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -175,6 +176,10 @@ std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product volume",
                                                                              "This command sets the volume to a specified level.",
                                                                              "\t\t product volume [int from 0 to 100] \t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_accessory_update",
+                                                                             "This command triggers the accessory update flow.",
+                                                                             "\t\t product test_accessory_update \t" ) ) );
 
     return commands;
 }
@@ -777,6 +782,18 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         response += " with ID ";
         response += std::to_string( static_cast< unsigned int >( stateId ) );
         response += ".";
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// This command triggers the accessory update flow.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    else if( command.compare( "product test_accessory_update" ) == 0 )
+    {
+        LpmServiceMessages::IpcAccessorySpeakerSoftwareStatusMessage_t softwareStatus;
+        softwareStatus.set_status( ACCESSORY_UPDATE_INSTALLATION_PENDING );
+        m_ProductController.m_AccessorySoftwareInstallManager.m_softwareStatusCache = softwareStatus;
+        m_ProductController.m_AccessorySoftwareInstallManager.ProceedWithSoftwareUpdate( );
+
+        response  = "Accessory update triggered";
     }
 
     return 1;
