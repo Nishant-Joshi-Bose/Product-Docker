@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.19.43160.2924129"
+    "selected_version": "Release/Castle-Fork/1.5.20.43171.2925264"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -57,7 +57,7 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/1.5.0-37+66ffdd0"
+    "selected_version": "Release/master/1.5.0-60+b113fb6"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
@@ -217,7 +217,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.19.43160.2924129"
+    "selected_version": "Release/Castle-Fork/1.5.20.43171.2925264"
   },
   {
     "name": "SystemEventService-qc8017_32",
