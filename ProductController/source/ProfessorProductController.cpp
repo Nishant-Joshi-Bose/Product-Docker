@@ -2234,6 +2234,11 @@ bool ProfessorProductController::IsProductControlSurface( LpmServiceMessages::Ke
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::InitiateSoftwareInstall( )
 {
+    BOSE_INFO( s_logger, "%s::%s: ProductSoftware is %spending and %sallowed; AccessorySoftware is %spending", CLASS_NAME, __func__,
+               GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) ? "" : "not ",
+               GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) ? "" : "not ",
+               m_AccessorySoftwareInstallManager.IsSoftwareUpdatePending( ) ? "" : "not " );
+
     if( GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) && GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) )
     {
         GetProductSoftwareInstallManager( ).InitiateSoftwareInstall( );
@@ -2258,6 +2263,11 @@ void ProfessorProductController::InitiateSoftwareInstall( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsSwUpdateForeground( ) const
 {
+    BOSE_INFO( s_logger, "%s::%s: ProductSoftware is %spending and %sallowed and %sforeground", CLASS_NAME, __func__,
+               GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) ? "" : "not ",
+               GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) ? "" : "not ",
+               GetProductSoftwareInstallManager( ).IsSwUpdateForeground( ) ? "" : "not " );
+
     if( GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) && GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) )
     {
         // We are en-route to Product Software Install, let it control

@@ -21,13 +21,7 @@
 #include "AccessorySoftwareInstallManager.h"
 #include "ProductSoftwareInstallScheduler.h"
 #include "ProductSoftwareInstallManager.h"
-#include "stdio.h"
-#include "time.h"
-#include "SystemUtils.h"
-#include "PersistenceFiles.h"
-#include "ProductConstants.h"
 #include "ProductLogger.h"
-#include "EndPointsDefines.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -72,13 +66,6 @@ void AccessorySoftwareInstallManager::Initialize( std::shared_ptr< AsyncCallback
     m_ProductNotifyCallbackForInstall = callbackForInstall; // Register Product Callback when Accessory Update needs to be triggered.
 
     RegisterLPMCallbacks( );
-}
-
-void AccessorySoftwareInstallManager::Dump( std::ostringstream& oss ) const
-{
-
-    oss << "Accessory Software Install Manager Status Dump" << std::endl;
-    oss << "SpeakerSoftwareStatus (From LPM = " << m_softwareStatusCache.DebugString( ) << std::endl;
 }
 
 void AccessorySoftwareInstallManager::ProductSoftwareUpdateStateNotified( )

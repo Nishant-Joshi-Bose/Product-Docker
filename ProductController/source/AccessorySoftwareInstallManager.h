@@ -68,8 +68,6 @@ public:
         return m_swUpdateForeground;
     }
 
-    void Dump( std::ostringstream& oss ) const;
-
     void ProductSoftwareUpdateStateNotified( );
 
 private:
