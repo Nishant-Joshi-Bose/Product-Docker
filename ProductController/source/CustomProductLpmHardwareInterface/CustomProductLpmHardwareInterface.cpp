@@ -205,6 +205,31 @@ bool CustomProductLpmHardwareInterface::SendAccessoryDisband( const Callback<Ipc
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name  CustomProductLpmHardwareInterface::SendAccessorySoftwareUpdate
+///
+/// @brief This method sends a request to start accessory update
+///
+/// @param none
+///
+/// @return bool The method returns true when the software update command was successfully sent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::SendAccessorySoftwareUpdate( )
+{
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM accessory software update could not be made, as no connection is available." );
+
+        return false;
+    }
+
+    GetLpmClient()->LoadAccessorySpeakerSoftware( );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name  CustomProductLpmHardwareInterface::GetDspStatus
 ///
 /// @brief This method sends a request to get the dsp status

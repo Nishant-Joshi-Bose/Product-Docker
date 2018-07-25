@@ -94,12 +94,13 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief These methods pertain to the accessory speakers and pairing.
+    /// @brief These methods pertain to the accessory speakers pairing and software updates.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool SendAccessoryPairing( bool enabled, const Callback<LpmServiceMessages::IpcSpeakerPairingMode_t>& cb );
     bool SendAccessoryActive( bool rears, bool subs,  const Callback<IpcSpeakersActive_t> &cb );
     bool SendAccessoryDisband( const Callback<IpcAccessoryDisbandCommand_t> &cb );
+    bool SendAccessorySoftwareUpdate( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
