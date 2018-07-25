@@ -573,13 +573,11 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
             for( uint32_t i = 0; i < persistedAudioSettings["supportedAudioSettings"]["contentItemSensitive"].size(); i++ )
             {
                 string propName = persistedAudioSettings["supportedAudioSettings"]["contentItemSensitive"][i].asString();
-                m_audioSettings[kAudioSettingValues][propName].clear();
                 m_audioSettings[kAudioSettingValues][propName] = persistedAudioSettings[kAudioSettingValues][propName];
             }
             for( uint32_t i = 0; i < persistedAudioSettings["supportedAudioSettings"]["contentItemNonSensitive"].size(); i++ )
             {
                 string propName = persistedAudioSettings["supportedAudioSettings"]["contentItemNonSensitive"][i].asString();
-                m_audioSettings[kAudioSettingValues][propName].clear();
                 m_audioSettings[kAudioSettingValues][propName] = persistedAudioSettings[kAudioSettingValues][propName];
             }
         }
