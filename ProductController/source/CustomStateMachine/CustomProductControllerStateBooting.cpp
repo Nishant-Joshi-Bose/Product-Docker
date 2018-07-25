@@ -39,7 +39,7 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @name  CustomProductControllerStateBooting::PossiblyGoToNextState
-/// @brief The functionality contained here is specific to Professor/GingerCheevers. We want the LPM
+/// @brief The functionality contained here is customized for Professor/GingerCheevers. We want the LPM
 ///        to go to SYSTEM_STATE_ON soonest, so that the wired accessory discovery can start and complete
 ///        without intruding into the First Boot Greeting chime. See PGC-1926.
 ////////////////////////////////////////////////////////////////////////////////////////////////////

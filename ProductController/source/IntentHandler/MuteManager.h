@@ -3,7 +3,7 @@
 /// @file      MuteManager.h
 ///
 /// @brief     This header file declares an intent manager class for implementing volume and mute
-///            control based on Professor product specific key actions
+///            control based on product specific key actions
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -46,7 +46,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -69,7 +69,7 @@ public:
     ///
     /// @param const FrontDoorClientIF_t&  frontDoorClient
     ///
-    /// @param ProfessorProductController& productController
+    /// @param CustomProductController& productController
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     MuteManager( NotifyTargetTaskIF&        task,
@@ -103,10 +103,10 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following member variable stores the custom Professor product controller instance.
+    /// @brief The following member variable stores the custom product controller instance.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProfessorProductController& m_CustomProductController;
+    CustomProductController& m_CustomProductController;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It

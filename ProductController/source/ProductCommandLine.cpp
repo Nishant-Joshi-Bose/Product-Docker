@@ -27,7 +27,7 @@
 #include "Intents.h"
 #include "IntentHandler.h"
 #include "CustomProductLpmHardwareInterface.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductCommandLine.h"
 #include "ProductEndpointDefines.h"
 #include "AccessorySoftwareInstallManager.h"
@@ -42,10 +42,10 @@ namespace ProductApp
 ///
 /// @name   ProductCommandLine::ProductCommandLine
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCommandLine::ProductCommandLine( ProfessorProductController& ProductController )
+ProductCommandLine::ProductCommandLine( CustomProductController& ProductController )
 
     : m_ProductController( ProductController ),
       m_ProductTask( ProductController.GetTask( ) ),

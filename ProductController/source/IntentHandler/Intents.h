@@ -2,7 +2,7 @@
 ///
 /// @file      Intents.h
 ///
-/// @brief     This header file contains custom actions, grouped into intents, for a Professor
+/// @brief     This header file contains custom actions, grouped into intents, for an
 ///            IntentHandler class.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
@@ -123,7 +123,7 @@ enum class Action
     ACTION_COMMON_LAST = 100,
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Custom Professor Defined Actions Valued 101 and Higher
+    /// Custom Defined Actions Valued 101 and Higher
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // unused                   = 101,
     ACTION_SETUP_BLE_REMOTE     = 102,
