@@ -111,6 +111,14 @@
 #include "SystemUtils.h"
 #include "SystemPowerMacro.pb.h"
 
+///
+/// Class Name Declaration for Logging
+///
+namespace
+{
+constexpr char CLASS_NAME[ ] = "CustomProductController";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +190,10 @@ CustomProductController::CustomProductController( ) :
     m_ProductMessageHandler( static_cast< Callback < ProductMessage > >
                              ( std::bind( &CustomProductController::HandleMessage,
                                           this,
-                                          std::placeholders::_1 ) ) )
+                                          std::placeholders::_1 ) ) ),
+    m_AccessorySoftwareInstallManager( GetTask( ),
+                                       GetProductSoftwareInstallManager( ),
+                                       GetProductSoftwareInstallScheduler( ) )
 {
 
 }
@@ -775,6 +786,11 @@ void CustomProductController::Run( )
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
+
+    ///
+    /// Initialize the AccessorySoftwareInstallManager.
+    ///
+    InitializeAccessorySoftwareInstallManager( );
 
     BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
@@ -1563,6 +1579,14 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         GetHsm( ).Handle<>( &CustomProductControllerState::HandleAccessoriesAreKnown );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// softwareupdatestatus needs to be forwarded to AccessorySoftwareInstallManager in addition to Common handling
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    if( message.has_softwareupdatestatus() )
+    {
+        m_AccessorySoftwareInstallManager.ProductSoftwareUpdateStateNotified( );
+        ( void ) HandleCommonProductMessage( message );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
     /// type is unknown.
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -2159,6 +2183,26 @@ void CustomProductController::RegisterOpticalAutowakeForLpmConnection( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name CustomProductController::InitializeAccessorySoftwareInstallManager
+///
+/// @brief Initialize the AccessorySoftwareInstallManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::InitializeAccessorySoftwareInstallManager( )
+{
+    auto softwareInstallFunc = [this]( void )
+    {
+        ProductMessage productMessage;
+        productMessage.set_softwareinstall( true );
+        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+    };
+    auto softwareInstallcb = std::make_shared<AsyncCallback<void> > ( softwareInstallFunc, GetTask() );
+
+    m_AccessorySoftwareInstallManager.Initialize( softwareInstallcb, GetLpmHardwareInterface( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   CustomProductController::IsProductControlSurface
 ///
 /// @brief  This method is called to determine whether the given key origin is a product control
@@ -2179,6 +2223,59 @@ bool CustomProductController::IsProductControlSurface( LpmServiceMessages::KeyOr
     default:
         return false;
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::InitiateSoftwareInstall
+///
+/// @brief  This method is called to start the actual update installation
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::InitiateSoftwareInstall( )
+{
+    BOSE_INFO( s_logger, "%s::%s: ProductSoftware is %spending and %sallowed; AccessorySoftware is %spending", CLASS_NAME, __func__,
+               GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) ? "" : "not ",
+               GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) ? "" : "not ",
+               m_AccessorySoftwareInstallManager.IsSoftwareUpdatePending( ) ? "" : "not " );
+
+    if( GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) && GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) )
+    {
+        GetProductSoftwareInstallManager( ).InitiateSoftwareInstall( );
+    }
+    else if( m_AccessorySoftwareInstallManager.IsSoftwareUpdatePending( ) )
+    {
+        m_AccessorySoftwareInstallManager.InitiateSoftwareInstall( );
+    }
+    else
+    {
+        // Let BOSE_DIE reboot the system, we are in a terminal state and there is nothing to install!
+        BOSE_DIE( "CustomProductController::InitiateSoftwareInstall( ) cannot initiate any update, we should not have gotten here!" );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::IsSwUpdateForeground
+///
+/// @brief  This method is called to determine whether update installation should be in foreground
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductController::IsSwUpdateForeground( ) const
+{
+    BOSE_INFO( s_logger, "%s::%s: ProductSoftware is %spending and %sallowed and %sforeground", CLASS_NAME, __func__,
+               GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) ? "" : "not ",
+               GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) ? "" : "not ",
+               GetProductSoftwareInstallManager( ).IsSwUpdateForeground( ) ? "" : "not " );
+
+    if( GetProductSoftwareInstallManager( ).IsSoftwareUpdatePending( ) && GetProductSoftwareInstallManager( ).IsSoftwareUpdateAllowed( ) )
+    {
+        // We are en-route to Product Software Install, let it control
+        return GetProductSoftwareInstallManager( ).IsSwUpdateForeground( );
+    }
+
+    // We are likely en-route to accessory update, it's always in background
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
