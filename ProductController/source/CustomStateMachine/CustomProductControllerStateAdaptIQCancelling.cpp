@@ -25,7 +25,7 @@
 #include "Utilities.h"
 #include "CustomProductControllerStateAdaptIQCancelling.h"
 #include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ namespace ProductApp
 ///
 /// @param CHsmState*                  pSuperState       This argument references the parent state.
 ///
-/// @param ProfessorProductController& productController This argument references the product controller.
+/// @param CustomProductController& productController This argument references the product controller.
 ///
 /// @param Hsm::STATE                  stateId           This enumeration represents the state ID.
 ///

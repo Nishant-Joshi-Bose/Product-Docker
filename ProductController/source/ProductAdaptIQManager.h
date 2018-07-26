@@ -62,7 +62,7 @@ public:
     /// @return This method does not return anything.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductAdaptIQManager( ProfessorProductController& ProductController );
+    ProductAdaptIQManager( CustomProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.

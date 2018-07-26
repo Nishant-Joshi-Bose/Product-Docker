@@ -2,7 +2,7 @@
 ///
 /// @file      CustomProductLpmHardwareInterface.cpp
 ///
-/// @brief     This source code file contains custom Professor functionality for managing the
+/// @brief     This source code file contains custom functionality for managing the
 ///            hardware, which interfaces with the Low Power Microprocessor or LPM on Riviera
 ///            APQ boards.
 ///
@@ -32,7 +32,7 @@
 #include "Utilities.h"
 #include "LpmClientFactory.h"
 #include "AutoLpmServiceMessages.pb.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,10 +52,10 @@ constexpr uint32_t BLUETOOTH_MAC_LENGTH = 6;
 ///
 /// @name   CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface
 ///
-/// @brief  ProfessorProductController& ProductController
+/// @brief  CustomrProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( ProfessorProductController&
+CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( CustomProductController&
                                                                       ProductController )
 
     : ProductLpmHardwareInterface( ProductController.GetTask( ),
@@ -199,6 +199,31 @@ bool CustomProductLpmHardwareInterface::SendAccessoryDisband( const Callback<Ipc
     command.set_disband( true );
 
     GetLpmClient()->DisbandAccessorySpeakers( command, cb );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductLpmHardwareInterface::SendAccessorySoftwareUpdate
+///
+/// @brief This method sends a request to start accessory update
+///
+/// @param none
+///
+/// @return bool The method returns true when the software update command was successfully sent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::SendAccessorySoftwareUpdate( )
+{
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM accessory software update could not be made, as no connection is available." );
+
+        return false;
+    }
+
+    GetLpmClient()->LoadAccessorySpeakerSoftware( );
 
     return true;
 }

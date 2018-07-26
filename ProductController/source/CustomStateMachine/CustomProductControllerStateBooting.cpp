@@ -39,7 +39,7 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @name  CustomProductControllerStateBooting::PossiblyGoToNextState
-/// @brief The functionality contained here is specific to Professor/GingerCheevers. We want the LPM
+/// @brief The functionality contained here is customized for Professor/GingerCheevers. We want the LPM
 ///        to go to SYSTEM_STATE_ON soonest, so that the wired accessory discovery can start and complete
 ///        without intruding into the First Boot Greeting chime. See PGC-1926.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,9 +47,9 @@ void CustomProductControllerStateBooting::PossiblyGoToNextState( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s. IsPartialSoftwareUpdatePending = %s",
                GetName( ).c_str( ), __func__,
-               GetProductController().GetProductSoftwareInstallScheduler().IsPartialSoftwareUpdatePending() ? "true" : "false" );
+               GetProductController().IsPartialSoftwareUpdatePending() ? "true" : "false" );
 
-    if( !GetProductController().GetProductSoftwareInstallScheduler().IsPartialSoftwareUpdatePending() && !GetProductController( ).IsFirstBootGreetingDone() )
+    if( !GetProductController().IsPartialSoftwareUpdatePending() && !GetProductController( ).IsFirstBootGreetingDone() )
     {
         // The next state will be PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION
         if( GetProductController().IsLpmReady( ) && GetProductController().IsAudioPathReady( ) )

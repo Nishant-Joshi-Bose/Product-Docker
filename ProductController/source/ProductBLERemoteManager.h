@@ -69,7 +69,7 @@ public:
     /// @return This method does not return anything.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    explicit ProductBLERemoteManager( ProfessorProductController& ProductController );
+    explicit ProductBLERemoteManager( CustomProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
@@ -112,7 +112,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     NotifyTargetTaskIF*             m_ProductTask       = nullptr;
     Callback< ProductMessage >      m_ProductNotify     = nullptr;
-    ProfessorProductController&     m_ProductController;
+    CustomProductController&        m_ProductController;
     APTimerPtr                      m_statusTimer;
     bool                            m_remoteConnected   = false;
     bool                            m_pairingPending    = false;
