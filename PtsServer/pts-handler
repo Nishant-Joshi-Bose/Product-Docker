@@ -103,6 +103,9 @@ def redirect_stderr():
     os.dup2(sys.stdout.fileno(), sys.stderr.fileno())
     sys.stdout.flush()
 
+def is_development():
+    return 0 == subprocess.call(["is-development"])
+
 # ----------------------------------------------------------------------------
 
 if method != "GET":
@@ -172,10 +175,11 @@ if path == "/pts.txt":
     call("ip", "route", "list")
     call("wpa_cli", "status")
     call("wpa_cli", "scan_results")
+    call("ReadLpmVersion")
     call("sh", "-c", "head -20 /mnt/nv/product-persistence/*")
     call("ls", "-lHt", "/mnt/nv/BoseLog")
     call("ps")
-    call("ReadLpmVersion")
+    call("printenv")
     sys.exit()
 
 # ----------------------------------------------------------------------------
@@ -288,6 +292,146 @@ http_redirect(path.lower(), "/opensource/", "/licenses.txt")
 if path == "/service" or path.startswith("/service?"):
     prog = "/opt/Bose/etc/service"
     os.execv(prog, [prog, path[len("/service?"):]])
+
+# ----------------------------------------------------------------------------
+# Development links.
+
+if path == "/dev" and is_development():
+    http_ok("text/html")
+    print """\
+<html>
+<head>
+<title>Development Links</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+ td {
+   padding: 3px;
+ }
+ tr.even {
+   background-color: lightgrey;
+ }
+ span.error {
+   color: red;
+ }
+ td.iface {
+   text-align: center;
+ }
+</style>
+
+<script>
+
+function set_address() {
+  var ain = document.getElementById("address");
+  var address = ain.value.trim();
+  var err;
+  if (address.match(/^[-\w.]+$/)) {
+    var anchors = document.getElementsByTagName("a");
+    for (var i = anchors.length; --i >= 0;) {
+      a = anchors[i];
+      a.href = "http://" + address + a.text;
+    }
+  }
+  else {
+    err = "(malformed)";
+  }
+  document.getElementById("error").textContent = err;
+  ain.setSelectionRange(0, ain.value.length);
+}
+
+</script>
+</head>
+<body onload="set_address()">
+<h1>Development Links</h1>
+"""
+
+    print """\
+<p>
+Address:
+<input type="text" id="address" value="{local_address}" onchange="set_address()">
+<span class="error" id="error"/>
+""".format(local_address=os.environ.get("LOCAL_ADDRESS", ""))
+
+    print """\
+<p>
+<table>
+  <tr>
+    <th>Interface</th>
+    <th>Endpoint</th>
+    <th>Description</th>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/diag</a></td>
+    <td>Quality Audit</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">usb</td>
+    <td><a>/logread.txt</a></td>
+    <td>A snapshot of the system log ring buffer</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/logread.txt.gz</a></td>
+    <td>Same as /logread.txt but compressed</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">usb</td>
+    <td><a>/pts.txt</a></td>
+    <td>Various Linux and system status information (e.g., ifconfig)</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/reflash</a></td>
+    <td>Force the unit into reflash mode (QFIL)</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">usb</td>
+    <td><a>/bose-version</a></td>
+    <td>/opt/Bose/etc/BoseVersion.json</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/kernel-version</a></td>
+    <td>/etc/riviera-version</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">usb</td>
+    <td><a>/validate-mfgdata</a></td>
+    <td>Check the manufacturing data</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/controller-version</a></td>
+    <td>The LPM version strings</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">usb</td>
+    <td><a>/clear-first-greeting</a></td>
+    <td>Clear the flag indicating the unit's first boot</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">any</td>
+    <td><a>/opensource</a></td>
+    <td>List the licenses of open source software used in the system</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/service</a></td>
+    <td>Remanufacturing. Only if the unit is in service mode</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb, wlan1</td>
+    <td><a>/</a>, <a>/index.html</a></td>
+    <td>Wi-Fi setup</td>
+  </tr>
+</table>
+
+</body>
+</html>
+"""
+    sys.exit()
 
 # ----------------------------------------------------------------------------
 # Serve static content.

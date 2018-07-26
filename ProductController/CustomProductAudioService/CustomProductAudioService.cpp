@@ -37,7 +37,9 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& p
                          productController.GetMessageHandler() ,
                          frontDoorClient ),
     m_audioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
-    m_thermalTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ) ),
+    m_thermalTask( lpmClient, productController.GetTask( ),
+                   AsyncCallback<const IpcSystemTemperatureData_t&>(
+                       std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ), productController.GetTask( ) ) ),
     m_dataCollectionClient( productController.GetDataCollectionClient() )
 {
     BOSE_DEBUG( s_logger, __func__ );

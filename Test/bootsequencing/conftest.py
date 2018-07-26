@@ -14,8 +14,6 @@
 PyTest configuration and fixtures used by the Boot Sequencing Tests.
 
 """
-import time
-
 import pytest
 
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger

@@ -16,10 +16,8 @@ import datetime
 from multiprocessing import Process, Manager
 import ConfigParser
 
-import glob
 import json
 import os
-import shutil
 import time
 
 import pytest
@@ -33,9 +31,9 @@ from CastleTestUtils.LpmUtils.Lpm import Lpm
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.OAuthUtils.OAuthUtils import UserAccount
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
+from CastleTestUtils.PassportUtils.passport_utils import get_passport_url
 from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
 
-from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
 from services import SERVICES
 from ProductControllerAPI import eddie_helper
@@ -59,7 +57,7 @@ def pytest_addoption(parser):
                      action="store",
                      default="native",
                      help="target: [native/device], \
-                            Specify whether the tests need to be executed on native or on device")
+                           Specify whether the tests need to be executed on native or on device")
 
     parser.addoption("--log-dir",
                      action="store",
@@ -91,26 +89,16 @@ def pytest_addoption(parser):
                      default=None,
                      help="serial port of the device")
 
-    parser.addoption("--timeout",
-                     action="store",
-                     default=30,
-                     type=int,
-                     help="Timeout for most of the commands")
-
     parser.addoption("--router",
                      action="store",
                      help="router: Specify which router from Configs/conf_wifiProfiles.ini is used to connect.")
-
-    parser.addoption('--passport-base-url',
-                     default='https://test.users.api.bose.io/latest/passport-core/',
-                     help='Passport base URL')
 
     parser.addoption('--api-key',
                      default='9zf6kcZgF5IEsXbrKU6fvG8vFGWzF1Ih',
                      help='Passport API KEY')
 
-    parser.addoption("--galapagos-env",
-                     default="latest",
+    parser.addoption("--environment",
+                     default="integration",
                      help="Pass the Galapagos environment for frontdoor api object")
 
 
@@ -119,10 +107,17 @@ def ping(ip):
     return os.system("ping -q -c 5 -i 0.2 -w 2 " + ip) == 0
 
 
-@pytest.fixture(scope='session')
-def scm_ip(request):
-    """ Get the IP address of Device under Test """
-    return request.config.getoption("--scm-ip")
+def create_log_dir(foldername):
+    """
+    Create a directory to store logs.
+    :return: dir - name of the log directory.
+    """
+    if not os.path.exists(foldername):
+        os.mkdir(foldername)
+    subfolder = foldername + "/Logs-" + str(datetime.date.today())
+    if not os.path.exists(subfolder):
+        os.makedirs(subfolder)
+    return subfolder
 
 
 @pytest.fixture(scope='function')
@@ -163,72 +158,25 @@ def device_ip(request, device_id):
         return ip_address
 
 
-@pytest.fixture(scope="class")
-def frontDoor(device_ip, request):
+@pytest.fixture(scope='session')
+def riviera(device_id):
     """
-    Get FrontDoorAPI instance.
+    Get RivieraUtil instance.
     """
-    LOGGER.info("Spawning a front door object")
-    if device_ip is None:
-        pytest.fail("No valid device IP")
-    front_door = FrontDoorAPI(device_ip)
-
-    def tear():
-        """
-        Close the frontDoor.
-        """
-        if front_door:
-            front_door.close()
-    request.addfinalizer(tear)
-
-    return front_door
+    return rivieraUtils.RivieraUtils('ADB', device=device_id)
 
 
 @pytest.fixture(scope='session')
-def passport_user_details(request):
+@pytest.mark.usefixtures('riviera')
+def device_guid(riviera):
     """
-    Get User details.
+    Acquires the GUID for the Device under test
+    :param riviera: Instance of RivieraUtils
+    :return: GUID string
     """
-    LOGGER.info("passport_user_details")
-    fname = "eddie"
-    lname = "automation"
-    env = request.config.getoption('--galapagos-env')
-    _dname = str(time.time()*1000)
-    LOGGER.debug("_dname is: %s", _dname)
-    email = "Eddie_Automation" + _dname + "@bose.com"
-    LOGGER.debug("email is: %s", email)
-    user_dict = {"email": email, "password": "bose901", "fname": fname, "lname": lname, "env": env}
-    return user_dict
-
-
-@pytest.fixture(scope='session')
-def create_passport_user(request, passport_user_details):
-    """
-    Get passport user object
-    """
-    LOGGER.info("passport_user_withoutFD")
-    gigya_url = "https://ingress-platform.live-aws-useast1.bose.io/dev/svc-id-gen-pub/" + passport_user_details["env"] + "/id-user-accounts-core/userAccounts/"
-    user_account = UserAccount(url=gigya_url, logger=LOGGER)
-    user_account.create_user_account(passport_user_details["email"],
-                                     passport_user_details["password"],
-                                     passport_user_details["lname"],
-                                     passport_user_details["fname"])
-    response = user_account.authenticate_user_account(passport_user_details["email"], passport_user_details["password"])
-    LOGGER.info("The bosePersonID is: %s", response["bosePersonID"])
-    LOGGER.info("The access token is: %s", response["access_token"])
-    LOGGER.info("The refresh token is: %s", response["refresh_token"])
-    LOGGER.info("The time to live is: %s", response["expires_in"])
-
-    def tear():
-        """
-        Delete the user account at the end.
-        """
-        user_account = UserAccount(url=gigya_url, logger=LOGGER)
-        LOGGER.info("Deleting User-Account")
-        user_account.delete_user_account(passport_user_details["email"], passport_user_details["password"])
-    request.addfinalizer(tear)
-
-    return response
+    guid = riviera.communication.executeCommand('mfgdata get guid').strip()
+    LOGGER.debug("GUID is: %s", guid)
+    return guid
 
 
 @pytest.mark.usefixtures('request')
@@ -240,13 +188,14 @@ def environment(request):
     :param request: PyTest command line request option
     :return: Environment string
     """
-    yield request.config.getoption("--galapagos-env")
+    yield request.config.getoption("--environment")
 
 
 @pytest.fixture(scope="function")
-def frontDoor_without_user(request, ip_address_wlan, passport_user_details):
+def frontDoor_without_user(request, ip_address_wlan, user_details):
     """
     Get the frontDoor Instance
+
     :param request: pytest request object
     :param ip_address_wlan: Fixture returning ip address
     :param passport_user_details: Fixture returnng passport user credential
@@ -255,33 +204,125 @@ def frontDoor_without_user(request, ip_address_wlan, passport_user_details):
     LOGGER.info("frontDoor_without_user")
     if ip_address_wlan is None:
         pytest.fail("No valid device IP")
-    front_door = FrontDoorAPI(ip_address_wlan, email=passport_user_details["email"],
-                              password=passport_user_details["password"])
+    front_door = FrontDoorAPI(ip_address_wlan, email=user_details["email"],
+                              password=user_details["password"])
 
-    def tear():
-        """
-        Close the FrontDoor
-        """
-        if front_door:
-            front_door.close()
-    request.addfinalizer(tear)
+    yield front_door
 
-    return front_door
+    # Close the FrontDoor
+    if front_door:
+        front_door.close()
 
 
-@pytest.fixture(scope='session')
-def passport_user(request, create_passport_user):
+@pytest.fixture(scope="function")
+@pytest.mark.usesfixtures('ip_address_wlan', 'user_account', 'environment', 'passport_user_with_device')
+def frontdoor_wlan(ip_address_wlan, user_account, environment, passport_user_with_device):
+    """
+    Frontdoor instance of the device connected to wlan.
+    """
+    LOGGER.info("frontDoorQueue")
+    if ip_address_wlan is None:
+        pytest.fail("No valid device IP")
+    front_door = FrontDoorQueue(ip_address_wlan, access_token=user_account['access_token'], env=environment)
+
+    # Need to subscribe to notifications
+    front_door.send("PUT", '/subscription', json.dumps({"notifications" : [ {"resource" : "*","version" : 1}]}) )
+
+    yield front_door
+
+    if front_door:
+        front_door.close()
+
+
+@pytest.fixture(scope='function')
+@pytest.mark.usefixtures('request', 'environment', 'user_account')
+def passport_user(request, environment, user_account):
+    """
+    A Passport User object based upon the environment and Gigya User Account.
+    """
     LOGGER.info("passport_user")
-    passport_base_url = request.config.getoption('--passport-base-url')
+    passport_base_url = get_passport_url(environment)
     apikey = request.config.getoption('--api-key')
-    _bosepersonID = create_passport_user["bosePersonID"]
-    _access_token = create_passport_user["access_token"]
+
+    _bosepersonID = user_account["bosePersonID"]
+    _access_token = user_account["access_token"]
+
     LOGGER.info("Bose Person ID : %s ", _bosepersonID)
-    passportUser = PassportAPIUsers(_bosepersonID, apikey, _access_token, passport_base_url, LOGGER)
-    return passportUser
+
+    passportUser = PassportAPIUsers(_bosepersonID, apikey, _access_token, passport_base_url)
+    LOGGER.debug("Passport User created: %s", passportUser)
+
+    yield passportUser
+
+    response = passportUser.delete_users()
+    assert response, "Failed to Delete User: {}".format(passportUser)
+
+
+@pytest.fixture(scope='function')
+@pytest.mark.usefixtures('device_guid', 'passport_user')
+def passport_user_with_device(device_guid, passport_user):
+    """
+    Uses the defined Passport User and adds local Eddie to its account
+    """
+    LOGGER.info("Adding device (%s) to ", device_guid)
+
+    add_response = passport_user.add_product(device_guid, "Eco2Products")
+
+    LOGGER.debug("Add Product Response: %s", add_response)
+
+    yield passport_user
 
 
 @pytest.fixture(scope='session')
+def user_details():
+    """
+    Generate Automation User details.
+    """
+    LOGGER.info("Generating Automation User details")
+
+    first_name = "eddie"
+    last_name = "automation"
+    time_stamp = int(time.time() * 1000)
+
+    email = "Eddie_Automation_{}@bose.com".format(time_stamp)
+    LOGGER.debug("email is: %s", email)
+
+    user_dict = {'email': email, 'password': 'bose901',
+                 'first_name': first_name, 'last_name': last_name}
+
+    return user_dict
+
+
+@pytest.fixture(scope='function')
+def user_account(environment, user_details):
+    """
+    Creates a User Account (Gigya) object with Session scoping
+    """
+    LOGGER.info("Generating User Account with Session Scope")
+    gigya_url = 'https://ingress-platform.live-aws-useast1.bose.io/dev/svc-id-gen-pub/{}/id-user-accounts-core/userAccounts/'.format(environment)
+
+    user_account = UserAccount(url=gigya_url, logger=LOGGER)
+    user_account.create_user_account(user_details['email'],
+                                     user_details['password'],
+                                     user_details['last_name'],
+                                     user_details['first_name'])
+
+    response = user_account.authenticate_user_account(user_details['email'], user_details['password'])
+    LOGGER.debug("bosePersonID: %s", response['bosePersonID'])
+    LOGGER.debug("access_token: %s", response['access_token'])
+    LOGGER.debug("refresh_token: %s", response['refresh_token'])
+    LOGGER.debug("expires_in: %s", response['expires_in'])
+
+    yield response
+
+    # Delete the user account at the end.
+    LOGGER.info("Deleting User-Account")
+    deletion_response = user_account.delete_user_account(user_details["email"], user_details["password"])
+    assert deletion_response.status_code == 204, \
+        "Failed to Delete account: {}".format(response["bosePersonID"])
+
+
+@pytest.fixture(scope='function')
 def music_service_account(request, passport_user):
     """
     Add music service account
@@ -315,69 +356,6 @@ def music_service_account(request, passport_user):
     request.addfinalizer(remove_music_service)
 
 
-@pytest.fixture(scope='function')
-def create_passport_user_function(request, passport_user_details):
-    """
-    Get passport user object
-    """
-    LOGGER.info("create passport user at function scope")
-    gigya_url = "https://ingress-platform.live-aws-useast1.bose.io/dev/svc-id-gen-pub/" + passport_user_details["env"] + "/id-user-accounts-core/userAccounts/"
-    user_account = UserAccount(url=gigya_url, logger=LOGGER)
-    user_account.create_user_account(passport_user_details["email"],
-                                     passport_user_details["password"],
-                                     passport_user_details["lname"],
-                                     passport_user_details["fname"])
-    response = user_account.authenticate_user_account(passport_user_details["email"], passport_user_details["password"])
-    LOGGER.info("The bosePersonID is: %s", response["bosePersonID"])
-    LOGGER.info("The access token is: %s", response["access_token"])
-    LOGGER.info("The refresh token is: %s", response["refresh_token"])
-    LOGGER.info("The time to live is: %s", response["expires_in"])
-
-    def tear():
-        """
-        Delete the user account at the end.
-        """
-        user_account = UserAccount(url=gigya_url, logger=LOGGER)
-        LOGGER.info("Deleting User-Account")
-        user_account.delete_user_account(passport_user_details["email"], passport_user_details["password"])
-    request.addfinalizer(tear)
-
-    return response
-
-
-@pytest.fixture(scope='session')
-def riviera(device_id):
-    """
-    Get RivieraUtil instance.
-    """
-    return rivieraUtils.RivieraUtils('ADB', device=device_id)
-
-
-@pytest.fixture(scope='session')
-@pytest.mark.usefixtures('riviera')
-def device_guid(riviera):
-    """
-    Acquires the GUID for the Device under test
-    :param riviera: Instance of RivieraUtils
-    :return: GUID string
-    """
-    guid = riviera.communication.executeCommand('mfgdata get guid').strip()
-    LOGGER.debug("GUID is: %s", guid)
-    return guid
-
-
-@pytest.fixture(scope='function')
-@pytest.mark.usefixtures('passport_user', 'device_guid')
-def frontDoor_with_user(environment, riviera, create_passport_user_function, passport_user_details, ip_address_wlan):
-    """
-    Adding the product using passportAPI
-    """
-    LOGGER.info("Link the product after user account")
-    product_response = riviera.link_product(environment=environment, ip_address=ip_address_wlan,
-                                            email=passport_user_details["email"], password=passport_user_details["password"])
-    LOGGER.debug("Product response is %s", product_response)
-
-
 @pytest.fixture(scope='function', autouse=False)
 def test_log_banner(request):
     """
@@ -391,19 +369,6 @@ def test_log_banner(request):
         LOGGER.info("\n%s\n----- Completed test:    %s\n%s\n", "-" * 60, test_name, "-" * 60)
 
     request.addfinalizer(teardown)
-
-
-def create_log_dir(foldername):
-    """
-    Create a directory to store logs.
-    :return: dir - name of the log directory.
-    """
-    if not os.path.exists(foldername):
-        os.mkdir(foldername)
-    subfolder = foldername + "/Logs-" + str(datetime.date.today())
-    if not os.path.exists(subfolder):
-        os.makedirs(subfolder)
-    return subfolder
 
 
 @pytest.mark.usefixture('device_id')
@@ -447,50 +412,6 @@ def adb_versions(riviera):
     versions['fs'] = riviera.getDeviceFsVersion()
 
     yield versions
-
-
-@pytest.fixture(scope='function')
-def eddie_master_latest_directory(tmpdir):
-    """
-    Fixture to download the latest Continuous Master Eddie build locally.
-    :param tmpdir: Pytest temporary directory fixture
-    :yield: The location of the Eddie Tar and Flash
-    """
-    # The IP2 Release latest directory
-    eddie_latest = os.path.join('/', 'home', 'softlib', 'verisoft', 'Eddie', 'Continuous', 'master', 'latest')
-
-    eddie_flash = 'eddie_flash'
-    eddie_tar = 'eddie_*.tar'
-
-    # Copy Eddie Flash File
-    eddie_flash_latest = glob.glob(os.path.join(eddie_latest, eddie_flash))[0]
-    shutil.copy(eddie_flash_latest, os.path.join(str(tmpdir), 'eddie_flash'))
-
-    # Copy Eddie Tar File
-    eddie_tar_latest = glob.glob(os.path.join(eddie_latest, eddie_tar))[0]
-    eddie_tar_name = os.path.basename(eddie_tar_latest)
-    shutil.copy(eddie_tar_latest, os.path.join(str(tmpdir), eddie_tar_name))
-
-    # Change to tmpdir
-    cwd = os.getcwd()
-    os.chdir(str(tmpdir))
-
-    yield tmpdir, {'eddie_tar': os.path.join(str(tmpdir), eddie_tar_name),
-                   'eddie_flash': os.path.join(str(tmpdir), eddie_flash)}
-
-    # Go back to original working directory
-    os.chdir(cwd)
-    # Remove everything in the tmpdir
-    tmpdir.remove()
-
-
-@pytest.fixture(scope="session")
-def key_config():
-    """
-    Get the CLI key event details
-    """
-    key_data = keyConfig["keyTable"]
-    return key_data
 
 
 @pytest.fixture(scope='module')
@@ -745,24 +666,6 @@ def force_rndis(adb, device_id, request):
 
 
 @pytest.fixture(scope="function")
-@pytest.mark.usesfixtures('ip_address_wlan', 'passport_user_details')
-def frontdoor_wlan(ip_address_wlan, frontDoor_with_user, passport_user_details):
-    """
-    Frontdoor instance of the device connected to wlan.
-    """
-    LOGGER.info("frontDoorQueue")
-    if ip_address_wlan is None:
-        pytest.fail("No valid device IP")
-    _frontdoor = FrontDoorQueue(ip_address_wlan, email=passport_user_details["email"],
-                                password=passport_user_details["password"])
-
-    yield _frontdoor
-
-    if _frontdoor:
-        _frontdoor.close()
-
-
-@pytest.fixture(scope="function")
 def set_no_audio_timeout(device_id):
     """
     This fixture changes "NoAudioTimeout" param to test NetworkStandby state transition.
@@ -783,7 +686,7 @@ def set_no_audio_timeout(device_id):
     riviera_comm.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
     riviera_comm.executeCommand('sync')
     # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(device_id, riviera_comm)
+    rebooted_and_out_of_booting_state_device(device_id)
 
     # 3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     for _ in range(30):
@@ -803,7 +706,7 @@ def set_no_audio_timeout(device_id):
     riviera_comm.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
     riviera_comm.executeCommand('sync')
     # 5. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(device_id, riviera_comm)
+    rebooted_and_out_of_booting_state_device(device_id)
 
 
 @pytest.fixture(scope="function")
@@ -831,7 +734,7 @@ def set_lps_timeout(device_id):
     riviera_comm.executeCommand('sync')
     LOGGER.info(riviera_comm.executeCommand("cat {}".format(timer_file)))
     # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(device_id, adb)
+    rebooted_and_out_of_booting_state_device(device_id)
     LOGGER.info(riviera_comm.executeCommand("cat {}".format(timer_file)))
 
     yield
@@ -844,20 +747,23 @@ def set_lps_timeout(device_id):
     LOGGER.info(riviera_comm.executeCommand("cat {}".format(timer_file)))
 
     # 4. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(device_id, adb)
+    rebooted_and_out_of_booting_state_device(device_id)
 
 
-@pytest.fixture(scope="function")
-def rebooted_and_out_of_booting_state_device(device_id, adb):
+@pytest.fixture(scope='function')
+@pytest.mark.usefixtures('device_id', 'riviera')
+def rebooted_and_out_of_booting_state_device(device_id):
     """
     This fixture is used to reboot the device and wait until device come out of 'Booting' state.
     """
-    adb.rebootDevice_adb()
+    riviera_communication = rivieraCommunication.getCommunicationType('ADB')
+    riviera_communication.setCommunicationDetail(device_id)
+    riviera_communication.executeCommand('/opt/Bose/bin/PlatformReset')
 
     # Wait for CLI-Server to start and listens on 17000 port.
     status = None
     for _ in range(90):
-        status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
+        status = riviera_communication.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
         if status and status.strip() == 'OK':
             break
         time.sleep(1)
@@ -868,7 +774,7 @@ def rebooted_and_out_of_booting_state_device(device_id, adb):
     time.sleep(2)
 
     for _ in range(10):
-        if adb.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
+        if riviera_communication.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
             break
         time.sleep(1)
     LOGGER.debug("getproductstate command is registered to CLI-Server.")
@@ -878,6 +784,7 @@ def rebooted_and_out_of_booting_state_device(device_id, adb):
         device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ',
                                                 device_id=device_id, timeout=120)
         if device_state != eddie_helper.BOOTING:
+            LOGGER.debug("Current device state : %s", device_state)
             break
         LOGGER.debug("Current device state : %s", device_state)
         time.sleep(1)
@@ -893,7 +800,7 @@ def remove_oob_setup_state_and_reboot_device(device_id, adb):
     adb.executeCommand("/opt/Bose/bin/rw")
     adb.executeCommand("rm {}".format(oob_setup_file))
     adb.executeCommand('sync')
-    rebooted_and_out_of_booting_state_device(device_id, adb)
+    rebooted_and_out_of_booting_state_device(device_id)
 
     # Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     for _ in range(30):
@@ -908,6 +815,21 @@ def remove_oob_setup_state_and_reboot_device(device_id, adb):
     assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
         'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
                                                                         eddie_helper.SETUPNETWORK, device_state)
+
+
+@pytest.fixture(scope='function')
+def factory_defaulted_device(riviera):
+    """
+    Performs factory default on device
+
+    :param riviera: Riviera connection throught ADB
+    """
+    LOGGER.info("Perform factory default")
+
+    # Perform factory default
+    riviera.perform_factory_default()
+
+    yield riviera
 
 
 @pytest.fixture(scope='session')
@@ -930,16 +852,27 @@ def lpm_serial_client(request):
 
 
 @pytest.fixture(scope="function")
-def tap(device_ip):
+def tap(ip_address_wlan):
     """
     This fixture is used to get the pexpect client for performing tap commands of CLI keys.
     """
     LOGGER.info("tap - pexpect telnet client")
-    if device_ip is None:
+    if ip_address_wlan is None:
         pytest.fail("No valid device IP")
-    client = pexpect.spawn('telnet %s 17000' % device_ip)
+    client = pexpect.spawn('telnet %s 17000' % ip_address_wlan)
     yield client
     client.close()
+
+
+@pytest.fixture(scope="module")
+def clear_wifi_profiles(device_id):
+    """
+    This fixture will clear all wifi profiles from the device before test starts
+    """
+    # Clear any WiFi profiles on the device
+    clear_profiles = "network wifi profiles clear"
+    LOGGER.debug("Clearing Network Profiles: %s", clear_profiles)
+    adb_utils.adb_telnet_cmd(clear_profiles, expect_after='Profiles Deleted', device_id=device_id)
 
 
 @pytest.fixture(scope='class')
@@ -955,5 +888,5 @@ def reboot_device_at_end(request, device_id, adb):
     def teardown():
         """ Teardown module to reboot device """
         LOGGER.info("Rebooting device in teardown")
-        rebooted_and_out_of_booting_state_device(device_id, adb)
+        rebooted_and_out_of_booting_state_device(device_id)
     request.addfinalizer(teardown)

@@ -173,11 +173,12 @@ intended for information to investigate customer problems reported to the
 technical support team.  The server has evolved to have a broader purpose.
 
 For security reasons, some endpoints are accessible only via certain
-interfaces.
+interfaces.  For testing, you can disable this
+restriction: `touch /mnt/nv/product-persistence/anyiface`.
 
 | Interface | Endpoint | Description |
 | -------- | -------- | ----------- |
-| usb | /diag/ | Quality Audit |
+| usb | /diag | Quality Audit |
 | usb+ | /logread.txt | A snapshot of the system log ring buffer |
 | usb+ | /logread.txt.gz | Same as /logread.txt but compressed |
 | usb+ | /pts.txt | Various Linux and system status information (e.g., ifconfig) |
@@ -189,6 +190,7 @@ interfaces.
 | usb | /clear-first-greeting | Clear the flag indicating the unit's first boot |
 | any | /opensource | List the licenses of open source software used in the system |
 | any | /service | Remanufacturing. Only if the unit is in service mode |
+| any | /dev | Developer links. Only if the unit is in development mode |
 | usb, wlan1 | /, /index.html | Wi-Fi setup |
 
 \+ Not enforced until SOS.
