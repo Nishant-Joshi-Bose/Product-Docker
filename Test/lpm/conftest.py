@@ -80,25 +80,6 @@ def ip_address(request, device_id, wifi_config):
 
 
 @pytest.fixture(scope='session')
-def lpm_serial_client(request):
-    """
-    Generates an LPM Serial Client using the supplied port.
-
-    :param request: PyTest command line request object
-    :yield: LPM Serial Client connection
-    """
-    lpm_serial_path = request.config.getoption('--lpm-port')
-
-    # LPM tap client.
-    lpm_serial = Lpm(lpm_serial_path)
-
-    yield lpm_serial
-
-    # Close the client
-    del lpm_serial
-
-
-@pytest.fixture(scope='session')
 def riviera_enabled_ipc(request):
     """
     Sets up a Riviera Device with IPC external communication enabled on
