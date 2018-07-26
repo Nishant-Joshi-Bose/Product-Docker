@@ -20,12 +20,13 @@ This repo contains the source code and tools specific to the Taylor product.
 
 ### Getting Started
 
-Checkout CastleTools.git and Eddie.git:
+Clone CastleTools.git and CastleProducts.git:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone git@github.com:BoseCorp/Eddie.git
+$ git clone git@github.com:BoseCorp/CastleProducts.git
+$ git checkout taylor/master
 ```
 
 Make sure your Taylor unit is accessible via adb.
