@@ -10,11 +10,10 @@ This repo contains the source code and tools specific to the Eddie product.
 ![Eddie](misc/product.png)
 
 ##### Table of Contents
-[Getting Started](#start)   
-[Software Updates](#updates)   
-[External References](#links)   
-[Building different LPM BLOBs](#lpmblobs)   
-[PTS Server Links](#pts)   
+[Getting Started](#start)  
+[Software Updates](#updates)  
+[Building different LPM BLOBs](#lpmblobs)  
+[PTS Server Links](#pts)  
 [More...](#more)  
 
 <a name="start"/>
@@ -38,6 +37,54 @@ List of devices attached
 
 $
 ```
+
+Access the APQ console via the tap cable.
+
+```shell session
+$ cat /etc/minirc.usb0
+pr port             /dev/ttyUSB0
+pu baudrate         115200
+pu bits             8
+pu parity           N
+pu stopbits         1
+pu minit
+pu mreset
+pu mhangup
+pu rtscts           No
+pu logfname         /dev/null
+$ minicom -w -C minicom.cap usb0
+```
+
+Use `dmesg` to see if your tap cable is actually USB0.
+
+If you use `adb shell` to login, you won't have the usual environment by
+default.  To setup the usual environment:
+
+```shell session
+$ adb shell
+Sat Sep  2 12:10:12 UTC 2017
+Device name: "Bose SoundTouch C7E3A2"
+mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68
+#
+# type start
+start is /opt/Bose/bin/start
+#
+```
+
+Certain important error and status messages go only to the console.
+You generally won't see this information via `adb shell`.
+
+To enable development mode:
+
+```shell session
+# mount -oremount,rw /persist
+# mfgdata set development true
+# mount -oremount,ro /persist
+```
+
+This flag enables core dumps, telnet access and other debug features.
+In particular, if a daemon dies unexpectedly, no automatic recovery
+happens when development mode is enabled.
 
 To perform Bonjour-Update; use the pushup script:
 
@@ -131,14 +178,6 @@ Please note that this script will stop all services in your device so you will
 need to restart all services after copy or you can just use -r option to reset
 device after push operation.
 
-<a name="links"/>
-
-### External References
-
-Eddie [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Guide)
-
-[Updating Individual Components on Eddie](https://wiki.bose.com/display/WSSW/Updating+Individual+Components+on+Eddie)
-
 <a name="lpmblobs"/>
 
 ### Building different LPM BLOBs
@@ -211,50 +250,6 @@ Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
 
 [Join the Eddie Slack channel.](https://bosessg.slack.com/messages/C1WER8HA7)
 
-Access the APQ console via the tap cable.
+More on [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Guide)
 
-```shell session
-$ cat /etc/minirc.usb0
-pr port             /dev/ttyUSB0
-pu baudrate         115200
-pu bits             8
-pu parity           N
-pu stopbits         1
-pu minit
-pu mreset
-pu mhangup
-pu rtscts           No
-pu logfname         /dev/null
-$ minicom -w -C minicom.cap usb0
-```
-
-Use `dmesg` to see if your tap cable is actually USB0.
-
-If you use `adb shell` to login, you won't have the usual environment by default.
-To setup the usual environment:
-
-```shell session
-$ adb shell
-Sat Sep  2 12:10:12 UTC 2017
-Device name: "Bose SoundTouch C7E3A2"
-mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68
-#
-# type start
-start is /opt/Bose/bin/start
-#
-```
-
-Certain important error and status messages go only to the console.
-You generally won't see this information via `adb shell`.
-
-To enable development mode:
-
-```shell session
-# mount -oremount,rw /persist
-# mfgdata set development true
-# mount -oremount,ro /persist
-```
-
-This flag enables core dumps, telnet access and other debug features.
-In particular, if a daemon dies unexpectedly, no automatic recovery
-happens when development mode is enabled.
+[Updating Individual Components on Eddie](https://wiki.bose.com/display/WSSW/Updating+Individual+Components+on+Eddie)
