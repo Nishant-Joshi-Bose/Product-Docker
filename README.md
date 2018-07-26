@@ -10,12 +10,68 @@ This repo contains the source code and tools specific to the Eddie product.
 ![Eddie](misc/product.png)
 
 ##### Table of Contents
-[Software Updates](#updates)   
 [Getting Started](#start)   
+[Software Updates](#updates)   
 [External References](#links)   
 [Building different LPM BLOBs](#lpmblobs)   
 [PTS Server Links](#pts)   
 [More...](#more)  
+
+<a name="start"/>
+
+### Getting Started
+
+Checkout CastleTools.git and Eddie.git:
+```shell session
+$ cd /scratch
+$ git clone git@github.com:BoseCorp/CastleTools.git
+$ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
+$ git clone git@github.com:BoseCorp/Eddie.git
+```
+
+Make sure your Eddie unit is accessible via adb.
+```shell session
+$ sudo adb start-server             # must be done as root. typically once per boot of the build host
+$ adb devices
+List of devices attached
+5166240	device
+
+$
+```
+
+To perform Bonjour-Update; use the pushup script:
+
+From the Eddie workspace:
+
+```shell session
+$ cd /scratch/Eddie
+$ pip2.7 install -r Test/requirements.txt
+$ make all-packages
+```
+
+```shell session
+To update without HSP:
+$ ./scripts/pushup
+
+To update HSP:
+$ ./scripts/pushup --hsp
+
+When having multiple devices, without HSP:
+$ ./scripts/pushup --deviceid <deviceid>
+
+When having multiple devices, with HSP:
+$ ./scripts/pushup --deviceid <deviceid> --hsp
+```
+
+In general:
+
+```shell session
+$ cd /scratch
+$ git clone git@github.com:BoseCorp/CastleTestUtils.git
+$ cd CastleTestUtils
+$ pip2.7 install -r requirements.txt
+$ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
+```
 
 <a name="updates"/>
 
@@ -74,62 +130,6 @@ under scripts directory.  Example usage:
 Please note that this script will stop all services in your device so you will
 need to restart all services after copy or you can just use -r option to reset
 device after push operation.
-
-<a name="start"/>
-
-### Getting Started
-
-Checkout CastleTools.git and Eddie.git:
-```shell session
-$ cd /scratch
-$ git clone git@github.com:BoseCorp/CastleTools.git
-$ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone git@github.com:BoseCorp/Eddie.git
-```
-
-Make sure your Eddie unit is accessible via adb.
-```shell session
-$ sudo adb start-server             # must be done as root. typically once per boot of the build host
-$ adb devices
-List of devices attached
-5166240	device
-
-$
-```
-
-To perform Bonjour-Update; use the pushup script:
-
-From the Eddie workspace:
-
-```shell session
-$ cd /scratch/Eddie
-$ pip2.7 install -r Test/requirements.txt
-$ make all-packages
-```
-
-```shell session
-To update without HSP:
-$ ./scripts/pushup
-
-To update HSP:
-$ ./scripts/pushup --hsp
-
-When having multiple devices, without HSP:
-$ ./scripts/pushup --deviceid <deviceid>
-
-When having multiple devices, with HSP:
-$ ./scripts/pushup --deviceid <deviceid> --hsp
-```
-
-In general:
-
-```shell session
-$ cd /scratch
-$ git clone git@github.com:BoseCorp/CastleTestUtils.git
-$ cd CastleTestUtils
-$ pip2.7 install -r requirements.txt
-$ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
-```
 
 <a name="links"/>
 
