@@ -52,7 +52,7 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
                                                    ProductController.GetTask( ) ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
-    m_currentMinimumLatency( IPC_LATENCY_VALUE_UNKNOWN )
+    m_currentMinimumLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -346,7 +346,7 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
 {
     BOSE_VERBOSE( s_logger, __func__ );
-    if( ( latency == IPC_LATENCY_VALUE_UNKNOWN ) or ( latency == m_currentMinimumLatency ) )
+    if( ( latency == LpmServiceMessages::LATENCY_VALUE_UNKNOWN ) or ( latency == m_currentMinimumLatency ) )
     {
         return;
     }
