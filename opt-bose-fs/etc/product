@@ -11,6 +11,18 @@
 # Todo: Change egrep to jq query
 # Status is Pending install Only if Status is ERROR / INPROGRESS Or 
 # Atleast one status is In START when atleast one is COMPLETE   
+
+# create swUpdateCache if not already exists
+swUpCache=/opt/Bose/.swUpdateCache
+if [ ! -d "$swUpCache" ]; then
+    /opt/Bose/bin/pre_install
+    mkdir -p $swUpCache
+    /opt/Bose/bin/post_install
+
+    mount --bind /opt/Bose/.swUpdateCache /opt/Bose/.swUpdateCache 
+    mount -o remount -w /opt/Bose/.swUpdateCache /opt/Bose/.swUpdateCache 
+fi
+
 installPending=false
 jq .SwUpComponents.elements[].status /mnt/nv/updateSwUpComponentStatus.dat > /tmp/status.txt
 if egrep -q "STATUS_ERROR|STATUS_INPROGRESS" /tmp/status.txt; then

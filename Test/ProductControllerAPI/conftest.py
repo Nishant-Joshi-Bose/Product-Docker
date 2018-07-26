@@ -12,6 +12,7 @@
 """
 PyTest Configuration & Fixtures for the Product Controller frontdoor APIs.
 """
+import json
 import time
 import pytest
 
@@ -32,6 +33,7 @@ LOGGER = get_logger(__name__)
 
 
 @pytest.fixture(scope='function')
+@pytest.mark.usefixtures('device_id', 'frontdoor_wlan')
 def device_in_aux(device_id, frontdoor_wlan):
     """
     This fixture is used to change playing source to AUX and verifies the device state.
@@ -52,7 +54,8 @@ def device_in_aux(device_id, frontdoor_wlan):
 
 
 @pytest.fixture(scope='function')
-def device_playing_from_amazon(request, frontdoor_wlan, environment, passport_user_details):
+@pytest.mark.usefixtures('request', 'frontdoor_wlan', 'environment', 'user_details', 'passport_user_with_device')
+def device_playing_from_amazon(request, frontdoor_wlan, environment, user_details, passport_user_with_device):
     """
     This fixture will send playback request to device and verifies the right station or track is playing.
     Test steps:
@@ -75,38 +78,8 @@ def device_playing_from_amazon(request, frontdoor_wlan, environment, passport_us
     common_behavior_handler = CommonBehaviorHandler(frontdoor_wlan, message_creator,
                                                     service_name, get_config['name'])
 
-    LOGGER.info("Create passport account for music sources")
-    passport_base_url = get_passport_url(environment)
-    apikey = request.config.getoption('--api-key')
-    gigya_url = "https://ingress-platform.live-aws-useast1.bose.io/dev/svc-id-gen-pub/" + \
-                str(environment) + "/id-user-accounts-core/userAccounts/"
-
-    # Authenticate user account
-    user_account = UserAccount(url=gigya_url, logger=LOGGER)
-    response = user_account.authenticate_user_account(passport_user_details["email"],
-                                                      passport_user_details["password"])
-    boseperson_id = response["bosePersonID"]
-    access_token = response["access_token"]
-    LOGGER.debug("The bosePersonID is: %s", response["bosePersonID"])
-    LOGGER.debug("The access token is: %s", response["access_token"])
-
-    # Create passport user
-    passport_user = PassportAPIUsers(boseperson_id, apikey,
-                                     access_token, passport_base_url,
-                                     logger=LOGGER)
-
-    def delete_passport_user():
-        """
-        This function will delete passport user.
-        """
-        LOGGER.info("delete_passport_user")
-        assert passport_user.delete_users(), "Fail to delete person id: {}".format(passport_user.bosePersonID)
-        common_behavior_handler.performCloudSync()
-
-    request.addfinalizer(delete_passport_user)
-
     LOGGER.info("music_service_account")
-    account_id = passport_user.add_service_account(service=get_config['provider'], accountID=get_config['name'],
+    account_id = passport_user_with_device.add_service_account(service=get_config['provider'], accountID=get_config['name'],
                                                    account_name=get_config['provider_account_id'],
                                                    refresh_token=get_config['secret'])
     assert account_id and account_id != "", "Fail to add music service account."
@@ -117,15 +90,23 @@ def device_playing_from_amazon(request, frontdoor_wlan, environment, passport_us
         """
         LOGGER.info("remove_music_service")
         # get account id for music service
-        assert passport_user.remove_service_account(account_id), \
+        assert passport_user_with_device.remove_service_account(account_id), \
             "Fail to remove music account from passport account."
 
     request.addfinalizer(remove_music_service)
 
-    common_behavior_handler.performCloudSync()
+    try:
+        common_behavior_handler.performCloudSync()
+    except KeyError as error:
+        LOGGER.error("Could not perform cloudSync operation: %s", error.message)
+        LOGGER.debug("Trying cloudSync again.")
+        response = frontdoor_wlan.cloudSync(json.dumps({"update": ["ALL"]}, indent=4))
+        LOGGER.debug("Cloud Sync Response: %s", response)
+
+    time.sleep(10)
 
     LOGGER.info("verify_device_source")
-    common_behavior_handler.checkSourceStatus(service_name, get_config['name'])
+    common_behavior_handler.checkSourceStatus(service_name, get_config['name'], timeout=5)
 
     LOGGER.debug("-- Start to play " + str(content['container_name']))
     playback_msg = message_creator.playback_msg(account_id, content['container_location'],
