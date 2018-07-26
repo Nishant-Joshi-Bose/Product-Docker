@@ -119,6 +119,7 @@ def driver():
 
     chrome.close()
 
+
 @pytest.fixture(scope='function')
 @pytest.mark.usefixtures('riviera_service_enabled')
 def manufacturing_data(riviera_service_enabled):
