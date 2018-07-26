@@ -179,9 +179,11 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | Interface | Endpoint | Description |
 | -------- | -------- | ----------- |
 | usb | /diag | Quality Audit |
-| usb+ | /logread.txt | A snapshot of the system log ring buffer |
-| usb+ | /logread.txt.gz | Same as /logread.txt but compressed |
-| usb+ | /pts.txt | Various Linux and system status information (e.g., ifconfig) |
+| usb | /logread.txt | A snapshot of the system log ring buffer * |
+| usb | /logread.txt.gz | Same as /logread.txt but compressed * |
+| usb | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
+| any | /pts | Same as /pts.txt but encrypted ** |
+| any | /logread | Same as /logread.txt but encrypted ** |
 | usb | /reflash | Force the unit into reflash mode (QFIL) |
 | usb | /bose-version | /opt/Bose/etc/BoseVersion.json |
 | usb | /kernel-version | /etc/riviera-version |
@@ -190,10 +192,12 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | usb | /clear-first-greeting | Clear the flag indicating the unit's first boot |
 | any | /opensource | List the licenses of open source software used in the system |
 | any | /service | Remanufacturing. Only if the unit is in service mode |
-| any | /dev | Developer links. Only if the unit is in development mode |
+| any | /dev | Developer links * |
 | usb, wlan1 | /, /index.html | Wi-Fi setup |
 
-\+ Not enforced until SOS.
+\* Only if the unit is in development mode
+
+\** See [decrypt-logs](https://github.com/BoseCorp/CastleTools/blob/master/bin/decrypt-logs) to decrypt
 
 The USB IP address is 203.0.113.1.
 For example: http://203.0.113.1/pts.txt
