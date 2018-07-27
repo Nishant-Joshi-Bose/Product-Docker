@@ -146,7 +146,7 @@ softwareupdate-ipk: cmake_build
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
-	./scripts/create-hsp-ipk $(cfg)
+	./scripts/create-hsp-sos-special-ipk $(cfg)
 
 .PHONY: lpm-bos
 lpm-bos:
