@@ -136,51 +136,33 @@ if path.startswith("/diag/"):
 # ----------------------------------------------------------------------------
 # View the log message buffer.
 
-if path == "/logread.txt":
-    #only_for_usb() -- iface restriction disabled for now for this URL
-
+if path == "/logread.txt" and is_development():
     http_ok()
     sys.stdout.flush()
     os.execl("/sbin/logread", "logread")
 
-# ----------------------------------------------------------------------------
-# View the log message buffer (compressed).
-
-if path == "/logread.txt.gz":
-    #only_for_usb() -- iface restriction disabled for now for this URL
-
+if path == "/logread.txt.gz" and is_development(): # same but compressed
     http_ok("application/x-gzip")
     sys.stdout.flush()
     os.execl("/bin/sh", "sh", "-c", "logread | gzip")
 
+if path == "/logread":          # same but encrypted
+    http_ok("text/plain")       # base64 encoded
+    sys.stdout.flush()
+    os.execlp("encrypt-logs", "encrypt-logs", "logread")
+
 # ----------------------------------------------------------------------------
 # View miscellaneous system status information.
 
-if path == "/pts.txt":
-    #only_for_usb() -- iface restriction disabled for now for this URL
-
-    def call(*args):
-        print ">", " ".join(args)
-        sys.stdout.flush()
-        subprocess.call(args)
-
+if path == "/pts.txt" and is_development():
     http_ok()
-    redirect_stderr()
-    call("date")
-    call("uptime")
-    call("cat", "/opt/Bose/etc/BoseVersion.json")
-    call("cat", "/persist/mfg_data.json")
-    call("free", "-m")
-    call("ifconfig", "-a")
-    call("ip", "route", "list")
-    call("wpa_cli", "status")
-    call("wpa_cli", "scan_results")
-    call("ReadLpmVersion")
-    call("sh", "-c", "head -20 /mnt/nv/product-persistence/*")
-    call("ls", "-lHt", "/mnt/nv/BoseLog")
-    call("ps")
-    call("printenv")
-    sys.exit()
+    sys.stdout.flush()
+    os.execlp("pts-info", "pts-info")
+
+if path == "/pts":              # same but encrypted
+    http_ok("text/plain")       # base64 encoded
+    sys.stdout.flush()
+    os.execlp("encrypt-logs", "encrypt-logs", "pts-info")
 
 # ----------------------------------------------------------------------------
 # Force the system into reflash mode (QFIL).
@@ -380,6 +362,16 @@ Address:
     <td class="iface">usb</td>
     <td><a>/pts.txt</a></td>
     <td>Various Linux and system status information (e.g., ifconfig)</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">any</td>
+    <td><a>/pts</a></td>
+    <td>Same as /pts.txt but encrypted</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/logread</a></td>
+    <td>Same as /logread.txt but encrypted</td>
   </tr>
   <tr class="even">
     <td class="iface">usb</td>
