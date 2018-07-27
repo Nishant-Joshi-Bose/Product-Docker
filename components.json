@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-25_1311"
+    "selected_version": "Continuous/Castle-Fork/2018-07-27_1136"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.8-437+189d3bc"
+    "selected_version": "Continuous/develop/1.5.8-443+38d77b4"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -217,7 +217,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-25_1311"
+    "selected_version": "Continuous/Castle-Fork/2018-07-27_1136"
   },
   {
     "name": "svc-pts-log-decrypt",
