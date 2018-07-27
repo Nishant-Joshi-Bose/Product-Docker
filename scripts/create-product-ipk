@@ -302,6 +302,7 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "SoundTouch postrm"
+exit 0
 EOF
 
 riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
@@ -329,6 +330,7 @@ EOF
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "SoundTouch prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------
