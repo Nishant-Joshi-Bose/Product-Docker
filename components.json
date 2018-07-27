@@ -109,7 +109,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-245+72b9d68"
+    "selected_version": "Release/master/1.5.5-249+47b2bba"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.5-171+1d3fce5"
+    "selected_version": "Release/master/1.5.6-173+430f704"
   },
   {
     "name": "LpmMfgTool",
@@ -161,15 +161,15 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/1.5.1-936+7396e0e"
+    "selected_version": "Release/master/1.5.1-941+c392de8"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@a106a27c524815b9b1d940ddf0a37175101e3f32"
+    "selected_version": "master@20178773cd2f10d2ac46ddf6b56ef0ac0f76884a"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/1.0.1-64+a106a27"
+    "selected_version": "Release/master/1.0.2-67+7bd77f7"
   },
   {
     "name": "ProductUIAssets",
@@ -193,11 +193,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.5.3-216+beea0ad"
+    "selected_version": "Release/master/1.5.4-222+d42081b"
   },
   {
     "name": "RivieraLpmTools",
-    "selected_version": "@2139"
+    "selected_version": "@2962"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -224,6 +224,10 @@
     "selected_version": "Continuous/Castle-Fork/2018-07-25_1311"
   },
   {
+    "name": "svc-pts-log-decrypt",
+    "selected_version": "master@18c13afce2d583571bbf8717cd2409ef0a7827d5"
+  },
+  {
     "name": "SystemEventService-qc8017_32",
     "selected_version": "Release/master/0.5.2-72+af175e4"
   },
@@ -233,7 +237,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@567283f25907c4e856d879a9081a10bcfdf105f8"
+    "selected_version": "master@0507674ea2b781eddb7e41cc320b0a1e552dc8d1"
   },
   {
     "name": "VPAController-qc8017_32",
