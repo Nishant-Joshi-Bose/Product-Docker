@@ -140,6 +140,7 @@ EOF
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "SoftwareUpdate prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------

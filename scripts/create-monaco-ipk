@@ -101,6 +101,7 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "monaco postrm"
+exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
@@ -114,6 +115,7 @@ EOF
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "monaco prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------
