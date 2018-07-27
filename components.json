@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.20.43171.2925264"
+    "selected_version": "Continuous/Castle-Fork/2018-07-27_1136"
   },
   {
     "name": "BLERemoteXCVR",
@@ -69,7 +69,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.8-437+189d3bc"
+    "selected_version": "Continuous/develop/1.5.8-443+38d77b4"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-245+72b9d68"
+    "selected_version": "Release/master/1.5.5-249+47b2bba"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@7bd77f7b4423bc3410414dfabd79e6a4e4c725a5"
+    "selected_version": "master@14f095b41c0f3abed2e77d452976b74cac5b61c7"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.20.43171.2925264"
+    "selected_version": "Continuous/Castle-Fork/2018-07-27_1136"
   },
   {
     "name": "svc-pts-log-decrypt",

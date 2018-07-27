@@ -135,17 +135,15 @@ fi
 rm -f /cache/recovery/last_log.*
 rm -f /cache/recovery/last_kmsg.*
 
-# move minimal rpoduct image to cache partition
-mv /opt/Bose/Bose_minimal.tar.gz /cache/
+# move minimal product image to cache partition
+mv /opt/Bose/Bose_minimal.tar.gz /cache/ || exit
 
 # move RecoveryMain binary to /cache partition
-mv /opt/Bose/bin/RecoveryMain /cache/
-
-# todo: once HSP team changes path replace cp with mv
-cp /opt/Bose/etc/RecoveryMgr /cache/
+mv /opt/Bose/bin/RecoveryMain /cache/ || exit
+mv /opt/Bose/etc/RecoveryMgr /cache/ || exit
 
 # move network check script to /cache
-cp /opt/Bose/bin/isNetworkConfigured /cache/ 
+cp /opt/Bose/bin/isNetworkConfigured /cache/ || exit 
 
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
@@ -156,6 +154,7 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "SoundTouch recovery postrm"
+exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
@@ -163,12 +162,13 @@ put_script "$stage/preinst" <<EOF
 echo "SoundTouch recovery preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
-
+exit 0
 EOF
 
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "SoundTouch recovery prerm"
+exit 0
 EOF
 
 # Our standard CentOS configuration has

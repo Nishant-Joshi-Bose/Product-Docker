@@ -158,19 +158,14 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "hsp postrm"
+exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
 echo "hsp preinst"
-# This is temporary for IP2. 
-# Should be removed in IP3, when stopping services is 
-# taken care of by Shepherd / Product / SoftwareUpdateService. 
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r APQ -b 0 -p 1
-
-echo "Stopping LPM"
-pkill LPMService
 exit 0
 
 EOF
@@ -178,6 +173,7 @@ EOF
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "hsp prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------
