@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-27_1136"
+    "selected_version": "Continuous/Castle-Fork/2018-07-29_1606"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.0-61+504c312"
+    "selected_version": "Release/bose-master/1.0.0-67+155c3e8"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -217,7 +217,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-27_1136"
+    "selected_version": "Continuous/Castle-Fork/2018-07-29_1606"
   },
   {
     "name": "svc-pts-log-decrypt",

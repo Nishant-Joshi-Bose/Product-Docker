@@ -133,7 +133,7 @@ def test_aux_key_release(request, device_state, wifi_config, device_id):
     assert current_source == AUX_SOURCE, \
         "Device did not factory reset cancel properly and current device source is {}".format(current_source)
 
-@pytest.mark.usefixtures("request", "adb", "wifi_config")
+@pytest.mark.usefixtures("request", "adb", "wifi_config", 'add_wifi_at_end')
 @pytest.mark.parametrize("device_state", ["SETUP", "ON", "OFF"])
 def test_factory_reset(request, device_state, wifi_config, device_id):
     """
