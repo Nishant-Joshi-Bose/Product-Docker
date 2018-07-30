@@ -22,6 +22,7 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils import device_utils, adb_utils
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
+from CastleTestUtils.RivieraUtils.device_utils import PRODUCT_STATE
 
 # Subcode
 SUBCODE_INVALID_KEY = 2005
@@ -191,33 +192,6 @@ def check_if_end_point_exists(frontdoor, endpoint):
     assert False, "Front door end point {} does not exists".format(endpoint)
 
 
-def wait_for_device_commands(device_id, adb):
-    """
-    This method will wait for device to accept CLI commands
-
-    :param device_id: device_id
-    :param adb: ADB Instance
-    :return: telnet_status (True or False)
-    """
-    telnet_status = False
-    for _ in range(device_utils.TIMEOUT):
-        status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
-        if status:
-            LOGGER.debug("Telnet serive started in the device")
-            telnet_status = True
-            if adb.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
-                device_state = adb_utils.adb_telnet_cmd('getproductstate',
-                                                        expect_after='Current State: ',
-                                                        timeout=30, device_id=device_id)
-                LOGGER.info("Device State: %s", device_state)
-                assert (device_state in [FIRSTBOOTGREETING, BOOTING, SETUPOTHER, PLAYINGDESELECTED]), \
-                    'Device not in expected state. Current state: {}.'.format(device_state)
-                break
-
-        time.sleep(1)
-    return telnet_status
-
-
 def wait_for_setup_state(device_id):
     """
     This method will wait for device be in set up state after reboot
@@ -228,7 +202,7 @@ def wait_for_setup_state(device_id):
     LOGGER.info("Waiting for Setup device state after booting")
     time.sleep(device_utils.TIMEOUT)
     for _ in range(device_utils.TIMEOUT):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate',
+        device_state = adb_utils.adb_telnet_cmd(PRODUCT_STATE,
                                                 expect_after='Current State: ',
                                                 timeout=30,
                                                 device_id=device_id)
