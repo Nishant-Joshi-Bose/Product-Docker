@@ -33,6 +33,7 @@ from CastleTestUtils.OAuthUtils.OAuthUtils import UserAccount
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.PassportUtils.passport_utils import get_passport_url
 from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
+from CastleTestUtils.RivieraUtils.device_utils import PRODUCT_STATE
 
 from bootsequencing.stateutils import network_checker, UNKNOWN
 from services import SERVICES
@@ -192,11 +193,10 @@ def environment(request):
 
 
 @pytest.fixture(scope="function")
-def frontDoor_without_user(request, ip_address_wlan, user_details):
+def frontDoor_without_user(ip_address_wlan, user_details):
     """
     Get the frontDoor Instance
 
-    :param request: pytest request object
     :param ip_address_wlan: Fixture returning ip address
     :param passport_user_details: Fixture returnng passport user credential
     :param front_door: Instance of FronDoorAPI
@@ -226,7 +226,7 @@ def frontdoor_wlan(ip_address_wlan, user_account, environment, passport_user_wit
     front_door = FrontDoorQueue(ip_address_wlan, access_token=user_account['access_token'], env=environment)
 
     # Need to subscribe to notifications
-    front_door.send("PUT", '/subscription', json.dumps({"notifications" : [ {"resource" : "*","version" : 1}]}) )
+    front_door.send("PUT", '/subscription', json.dumps({"notifications": [{"resource": "*", "version": 1}]}))
 
     yield front_door
 
@@ -490,25 +490,40 @@ def ip_address_wlan(request, device_id, wifi_config):
 
     if not device_ip_address:
         # Clear any WiFi profiles on the device
+        # Clear any WiFi profiles on the device
         clear_profiles = ' '.join(['network', 'wifi', 'profiles', 'clear'])
-        LOGGER.info("Clearing Network Profiles: %s", clear_profiles)
-        adb_utils.adb_telnet_cmd(clear_profiles, expect_after='Profiles Deleted',
-                                 device_id=device_id, timeout=120)
+        clear_profiles = "echo {} | nc 0 17000".format(clear_profiles)
+        LOGGER.info("Clearing Network Profiles: {}".format(clear_profiles))
+
+        for _ in range(60):
+            network_response = riviera_device.communication.executeCommand(clear_profiles)
+            LOGGER.info("Clear wifi profiles response is %s" % network_response)
+            if 'Profiles Deleted' in network_response:
+                LOGGER.info("Cleared wifi profiles")
+                break
+            time.sleep(1)
 
         # Acquire the Router information
         router = request.config.getoption("--router")
-        LOGGER.debug("Router Connection Name: %s", router)
         router_name = wifi_config.get(router, 'ssid')
         security = wifi_config.get(router, 'security')
         password = wifi_config.get(router, 'password')
 
+        time.sleep(1)
+
         # Add Router information to the Device
         add_profile = ' '.join(['network', 'wifi', 'profiles', 'add',
                                 router_name, security.upper(), password])
-        LOGGER.info("Adding Network Profile: %s", add_profile)
+        add_profile = "echo {} | nc 0 17000".format(add_profile)
+        LOGGER.info("Adding Network Profile: {}".format(add_profile))
 
-        adb_utils.adb_telnet_cmd(add_profile, expect_after='->OK', expect_last='ADD_PROFILE_SUCCEEDED',
-                                 async_response=True, device_id=device_id, timeout=120)
+        for _ in range(60):
+            network_response = riviera_device.communication.executeCommand(add_profile)
+            LOGGER.info("Add wifi profiles response is %s" % network_response)
+            if 'ADD_PROFILE_SUCCEEDED' in network_response:
+                LOGGER.info("Added wifi profiles")
+                break
+            time.sleep(1)
 
         device_ip_address = network_base.check_inf_presence(interface, timeout=20)
 
@@ -637,32 +652,28 @@ def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
 
 
 @pytest.fixture(scope='function')
-def force_rndis(adb, device_id, request):
+def force_rndis(adb, device_id, request, wifi_config):
     """
     This fixture enables ADB in PTS mode by creating /mnt/nv/force-rndis
     Reboots the system and checks for rndis0 in the "ifconfig" list
     param: adb - ADB instance
     param: device_id - This fixture will return the device id
+    param: wifi_config - Wifi Configuration details
     """
     LOGGER.info("force_rndis")
     command = "touch /mnt/nv/force-rndis"
     adb.executeCommand(command)
     adb.rebootDevice()
     adb.waitforDevice()
-    network_base = NetworkBase(None, device=device_id, logger=LOGGER)
-    interface = request.config.getoption("--network-iface")
-    device_ip_address = None
-    try:
-        device_ip_address = network_base.check_inf_presence(interface, timeout=300)
-        LOGGER.info("Found Device IP: %s", device_ip_address)
-    except UnboundLocalError as exception:
-        LOGGER.warning("Not able to acquire IP Address: %s", exception)
+
+    ip_address = ip_address_wlan(request, device_id, wifi_config)
+    LOGGER.info("IP address is %s", ip_address)
+
     network_interface_list_command = "ifconfig | sed 's/[ \t].*//;/^$/d'"
     output = adb.executeCommand(network_interface_list_command)
     network_list = output.strip().replace('\r', '').split('\n')
     LOGGER.info(network_list)
-    if 'rndis0' not in network_list:
-        raise Exception('rndis0 interface not in the list')
+    assert 'rndis0' in network_list, "rndis0 interface not in the network interface list"
 
 
 @pytest.fixture(scope="function")
@@ -690,12 +701,12 @@ def set_no_audio_timeout(device_id):
 
     # 3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id, timeout=120)
+        device_state = adb_utils.adb_telnet_cmd(PRODUCT_STATE, expect_after='Current State: ', device_id=device_id, timeout=120)
         if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
             break
         time.sleep(1)
 
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+    device_state = adb_utils.adb_telnet_cmd(PRODUCT_STATE, expect_after='Current State: ', device_id=device_id)
     assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
         'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
                                                                         eddie_helper.SETUPNETWORK, device_state)
@@ -773,15 +784,17 @@ def rebooted_and_out_of_booting_state_device(device_id):
 
     time.sleep(2)
 
-    for _ in range(10):
-        if riviera_communication.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
+    command = "echo '?' | nc 0 17000 | grep {}".format(PRODUCT_STATE)
+
+    for _ in range(30):
+        if riviera_communication.executeCommand(command):
             break
         time.sleep(1)
-    LOGGER.debug("getproductstate command is registered to CLI-Server.")
+    LOGGER.debug("product state command is registered to CLI-Server.")
 
     # Wait until product state come out from 'Booting' state.
-    for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ',
+    for _ in range(90):
+        device_state = adb_utils.adb_telnet_cmd(PRODUCT_STATE, expect_after='Current State: ',
                                                 device_id=device_id, timeout=120)
         if device_state != eddie_helper.BOOTING:
             LOGGER.debug("Current device state : %s", device_state)
@@ -804,13 +817,13 @@ def remove_oob_setup_state_and_reboot_device(device_id, adb):
 
     # Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ',
+        device_state = adb_utils.adb_telnet_cmd(PRODUCT_STATE, expect_after='Current State: ',
                                                 device_id=device_id, timeout=120)
         if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
             break
         time.sleep(1)
 
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ',
+    device_state = adb_utils.adb_telnet_cmd(PRODUCT_STATE, expect_after='Current State: ',
                                             device_id=device_id, timeout=120)
     assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
         'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
@@ -876,7 +889,7 @@ def clear_wifi_profiles(device_id):
 
 
 @pytest.fixture(scope='class')
-def reboot_device_at_end(request, device_id, adb):
+def reboot_device_at_end(request, device_id):
     """
     Reboots the device at the end.
 
@@ -885,6 +898,7 @@ def reboot_device_at_end(request, device_id, adb):
     :param adb: Get adb instance
     """
     LOGGER.info("reboot_device_at_end")
+
     def teardown():
         """ Teardown module to reboot device """
         LOGGER.info("Rebooting device in teardown")
