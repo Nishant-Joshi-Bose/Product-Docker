@@ -7,4 +7,4 @@
 /components/
 *.sublime-project
 *.sublime-workspace
-
+*.orig
