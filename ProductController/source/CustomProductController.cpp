@@ -550,7 +550,7 @@ void CustomProductController::Run( )
                         stateLowPowerResume );
 
     GetHsm( ).AddState( Device_State_Not_Notify,
-                        SystemPowerControl_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
                         statePlayableTransition );
 
     GetHsm( ).AddState( Device_State_Not_Notify,
@@ -658,7 +658,7 @@ void CustomProductController::Run( )
                         statePlayingSelectedSetupExitingAP );
 
     GetHsm( ).AddState( Device_State_Not_Notify,
-                        SystemPowerControl_State_Not_Notify,
+                        SystemPowerControl_State_OFF,
                         stateStoppingStreams );
 
     GetHsm( ).AddState( Device_State_Not_Notify,
