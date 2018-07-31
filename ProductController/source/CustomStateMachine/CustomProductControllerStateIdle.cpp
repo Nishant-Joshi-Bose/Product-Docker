@@ -14,7 +14,7 @@
 #include "CustomProductController.h"
 #include "CustomProductControllerStateIdle.h"
 #include "DPrint.h"
-#include "Utilities.h"
+#include "ProductLogger.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The following declares a DPrint class type object for logging information for this state class.
@@ -43,7 +43,7 @@ CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductContr
                                                                     const std::string& name )
     : ProductControllerStateIdle( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", CLASS_NAME, __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s::%s - is being constructed.", CLASS_NAME, __FUNCTION__ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
