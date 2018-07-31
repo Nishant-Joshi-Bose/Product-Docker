@@ -406,7 +406,7 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SetAiqInstalled( bool installed )
 {
-    BOSE_DEBUG( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, "%s: installed = %s", __func__, installed ? "true" : "false" );
     ResultCode_t ret = m_AudioSettingsMgr->UpdateEqSelectSupportedMode( AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ), installed );
     if( ret == ResultCode_t::NO_ERROR )
     {
