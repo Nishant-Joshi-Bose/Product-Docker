@@ -9,7 +9,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/0.1.0-20+914ef41"
+    "selected_version": "Continuous/master/0.1.0-75+97a4382"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-30_2326"
+    "selected_version": "Continuous/Castle-Fork/2018-07-31_1511"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.5.5-519+0adbab3"
+    "selected_version": "Release/master/2.0.0-542+474c93e"
   },
   {
     "name": "BoseOPKG-native",
@@ -221,7 +221,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-31_0816"
+    "selected_version": "Continuous/Castle-Fork/2018-07-31_1511"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,15 +233,15 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/1.5.3-28+18fc83b"
+    "selected_version": "Release/master/1.5.4-34+8178648"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@0507674ea2b781eddb7e41cc320b0a1e552dc8d1"
+    "selected_version": "master@319e9c62f2cfb86b031d750a0bbea37c605d859e"
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-70+4308f7a"
+    "selected_version": "Continuous/master/0.1.0-82+ce182b0"
   },
   {
     "name": "Webkit",
