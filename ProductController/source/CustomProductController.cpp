@@ -110,6 +110,7 @@
 #include "PGCErrorCodes.h"
 #include "SystemUtils.h"
 #include "SystemPowerMacro.pb.h"
+#include "CustomChimeEvents.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -1347,6 +1348,22 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_AUDIO_VOLUME_API,
             audioVolumeCb );
     }
+    {
+        AsyncCallback< ProductPb::AccessoriesPlayTonesRequest, Callback< ProductPb::AccessoriesPlayTonesRequest >, Callback<FrontDoor::Error> >
+        putAccessoriesCb( std::bind( &CustomProductController::AccessoriesPlayTonesPutHandler,
+                                     this,
+                                     std::placeholders::_1,
+                                     std::placeholders::_2,
+                                     std::placeholders::_3 ) ,
+                          GetTask( ) );
+
+        m_FrontDoorClientIF->RegisterPut<ProductPb::AccessoriesPlayTonesRequest>(
+            FRONTDOOR_ACCESSORIES_PLAYTONES_API,
+            putAccessoriesCb,
+            FrontDoor::PUBLIC,
+            FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2111,6 +2128,100 @@ string CustomProductController::GetChimesFilesLocation( ) const
     string retVal{ g_ChimesPath };
     retVal += GetProductType( );
     return retVal + '/';
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::HandleChimeResponse
+///
+/// @param ChimesControllerPb::ChimesStatus status
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleChimeResponse( ChimesControllerPb::ChimesStatus status )
+{
+    if( !HandleAccessoriesPlayTonesResponse( status ) )
+    {
+        ProductController::HandleChimeResponse( status );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::HandleAccessoriesPlayTonesResponse
+///
+/// @param ChimesControllerPb::ChimesStatus status
+///
+/// @return true if the chime is Accessory-specific
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductController::HandleAccessoriesPlayTonesResponse( ChimesControllerPb::ChimesStatus status )
+{
+    BOSE_INFO( s_logger, "%s::%s received %s", CLASS_NAME, __FUNCTION__, status.DebugString( ).c_str( ) );
+
+    if( status.event_id( ) != CHIME_ACCESSORY_PAIRING_COMPLETE_SUB_FROM_LAN  &&
+        status.event_id( ) != CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER_FROM_LAN )
+    {
+        // Defer to common handler
+        return false;
+    }
+
+    if( m_queueRearAccessoryTone &&
+        status.event_id( ) == CHIME_ACCESSORY_PAIRING_COMPLETE_SUB_FROM_LAN &&
+        status.state( ) == ChimesControllerPb::ChimesStatus_ChimeState_COMPLETED )
+    {
+        m_queueRearAccessoryTone = false;
+        HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER_FROM_LAN );
+    }
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief SpeakerPairingManager::AccessoriesPlayTonesPutHandler
+///
+/// @param const ProductPb::AccessoriesPlayTonesRequest& req
+///
+/// @param const Callback<ProductPb::AccessoriesPlayTonesRequest>& resp
+///
+/// @param const Callback<FrontDoor::Error>& error
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::AccessoriesPlayTonesPutHandler( const ProductPb::AccessoriesPlayTonesRequest &req,
+                                                              const Callback<ProductPb::AccessoriesPlayTonesRequest>& resp,
+                                                              const Callback<FrontDoor::Error>& error )
+{
+    BOSE_INFO( s_logger, "%s::%s received %s", CLASS_NAME, __FUNCTION__, req.DebugString( ).c_str( ) );
+
+    bool playChime = false;
+    if( req.has_subs( ) )
+    {
+        playChime = true;
+        HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_SUB_FROM_LAN );
+    }
+    if( req.has_rears( ) )
+    {
+        if( playChime )
+        {
+            m_queueRearAccessoryTone = true;
+        }
+        else
+        {
+            playChime = true;
+            HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER_FROM_LAN );
+        }
+    }
+
+    if( !playChime )
+    {
+        BOSE_ERROR( s_logger, "Received empty PUT request!" );
+        FrontDoor::Error errorMessage;
+        errorMessage.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        errorMessage.set_subcode( PGCErrorCodes::ERROR_SUBCODE_ACCESSORIES );
+        errorMessage.set_message( "Accessory tone request empty." );
+        error.Send( errorMessage );
+        return;
+    }
+    resp( req );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

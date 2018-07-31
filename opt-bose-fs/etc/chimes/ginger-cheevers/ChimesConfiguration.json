@@ -79,6 +79,20 @@
             "comment":"Rear Surround Speaker(s) pairing complete",
             "volume":45,
             "presentation_location":["LEFT_SURROUND_SPEAKER", "RIGHT_SURROUND_SPEAKER"]
+        },
+        {
+            "event_id":22,
+            "tone":"T16_bass_box_pairing_complete.flac",
+            "comment":"Bass Box pairing from LAN complete",
+            "volume":45,
+            "presentation_location":["SUBWOOFER_SPEAKER"]
+        },
+        {
+            "event_id":23,
+            "tone":"T17_rear_surround_pairing_complete.flac",
+            "comment":"Rear Surround Speaker(s) pairing from LAN complete",
+            "volume":45,
+            "presentation_location":["LEFT_SURROUND_SPEAKER", "RIGHT_SURROUND_SPEAKER"]
         }
     ]
 }
