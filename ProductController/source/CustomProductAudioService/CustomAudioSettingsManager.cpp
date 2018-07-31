@@ -419,7 +419,7 @@ const AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentEqSelect;
 }
-void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool supported )
+ResultCode_t CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool supported )
 {
     BOSE_DEBUG( s_logger, __func__ );
 
@@ -436,6 +436,11 @@ void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool 
             m_currentEqSelect.set_storedeqvalid( true );
         }
         PersistAudioSettings();
+        return ResultCode_t::NO_ERROR;
+    }
+    else
+    {
+        return ResultCode_t::VALUE_UNCHANGED;
     }
 }
 
