@@ -2041,6 +2041,10 @@ void CustomProductController::HandlePutPowerMacro(
         {
             persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
             respCb( req );
+
+            GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                                     m_powerMacro );
+
         }
         catch( const ProtoToMarkup::MarkupError & e )
         {
