@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-28_1026"
+    "selected_version": "Continuous/Castle-Fork/2018-07-29_1606"
   },
   {
     "name": "BLERemoteXCVR",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@14f095b41c0f3abed2e77d452976b74cac5b61c7"
+    "selected_version": "master@b2648e56e5389f457b49663017c2cb490c901da0"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-28_1026"
+    "selected_version": "Continuous/Castle-Fork/2018-07-29_1606"
   },
   {
     "name": "svc-pts-log-decrypt",
