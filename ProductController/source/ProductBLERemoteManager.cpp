@@ -264,7 +264,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        if( ( not source.visible() ) or ( not source.has_details() ) )
+        if( ( not IsSourceAvailable( source ) ) or ( not source.has_details() ) )
         {
             // source isn't configured, don't light it
             continue;
@@ -404,7 +404,7 @@ bool ProductBLERemoteManager::GetSourceLED(
     const auto& sourceName = sourceItem->sourcename();
     const auto& sourceAccountName = sourceItem->sourceaccountname();
 
-    visible = sourceItem->visible();
+    visible = IsSourceAvailable( *sourceItem );
     if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
     {
         if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
