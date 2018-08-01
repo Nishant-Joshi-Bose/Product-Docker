@@ -2006,7 +2006,7 @@ void CustomProductController::HandleGetPowerMacro(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductController::HandlePutPowerMacro
+/// @brief CustomProductController::HandlePutPowerMacro 
 ///
 /// @param const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req
 ///
@@ -2026,30 +2026,29 @@ void CustomProductController::HandlePutPowerMacro(
 
     bool success = true;
 
-    if( req.powerontv() )
+    if( req.enabled() )
     {
-        const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-        if( not( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) )
+        if( req.powerontv() )
         {
-            error.set_message( "TV is not configured but power on tv requested!" );
-            success = false;
+            const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+            if( not( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) )
+            {
+                error.set_message( "TV is not configured but power on tv requested!" );
+                success = false;
+            }
         }
-    }
-    if( success and req.has_powerondevice() )
-    {
-        const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
+        if( success and req.has_powerondevice() )
+        {
+            const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
 
-        if( not( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() ) )
-        {
-            error.set_message( "Requested source is not configured!" );
-            success = false;
+            if( not( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() ) )
+            {
+                error.set_message( "Requested source is not configured or available!" );
+                success = false;
+            }
         }
     }
-    else
-    {
-        error.set_message( "No power on device provided!" );
-        success = false;
-    }
+    // else no op as we wont act on it if enabled == false
 
     if( success )
     {
@@ -2059,6 +2058,10 @@ void CustomProductController::HandlePutPowerMacro(
         {
             persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
             respCb( req );
+
+            GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                                     m_powerMacro );
+
         }
         catch( const ProtoToMarkup::MarkupError & e )
         {

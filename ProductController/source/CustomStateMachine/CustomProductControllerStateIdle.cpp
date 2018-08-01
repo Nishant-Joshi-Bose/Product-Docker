@@ -14,11 +14,15 @@
 #include "CustomProductController.h"
 #include "CustomProductControllerStateIdle.h"
 #include "DPrint.h"
+#include "ProductLogger.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The following declares a DPrint class type object for logging information for this state class.
+/// Class name declaration for logging
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
+namespace
+{
+constexpr char CLASS_NAME[ ] = "CustomProductControllerStateIdle";
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -39,7 +43,7 @@ CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductContr
                                                                     const std::string& name )
     : ProductControllerStateIdle( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "%s::%s - is being constructed.", CLASS_NAME, __FUNCTION__ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
