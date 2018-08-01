@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Release/master/1.5.6-14+c7b1d78"
+    "selected_version": "Release/master/2.0.0-18+3f4fe5c"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-29_1606"
+    "selected_version": "Continuous/Castle-Fork/2018-07-30_2326"
   },
   {
     "name": "BLERemoteXCVR",
@@ -69,7 +69,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Continuous/develop/1.5.8-443+38d77b4"
+    "selected_version": "Release/master/2.0.0-449+ff53022"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.0-61+504c312"
+    "selected_version": "Release/bose-master/1.0.0-67+155c3e8"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-29_1606"
+    "selected_version": "Continuous/Castle-Fork/2018-07-30_2326"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -249,7 +249,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/1.5.3-28+18fc83b"
+    "selected_version": "Release/master/1.5.4-34+8178648"
   },
   {
     "name": "TestUtils",
