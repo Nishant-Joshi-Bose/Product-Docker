@@ -393,27 +393,6 @@ def device_id(request):
     return request.config.getoption('--device-id')
 
 
-@pytest.mark.usefixture('riviera')
-@pytest.fixture(scope='function')
-def adb_versions(riviera):
-    """
-    This fixture will return information regarding version information on the
-        ADB system
-
-    :param riviera: Riviera connection throught ADB
-    :return: Dictionary of Version information of the device
-    """
-    versions = {}
-
-    # Get Product information
-    bose_version = riviera.getDeviceBoseVersion()
-    versions['bose'] = json.loads(bose_version)
-    # Get FS information
-    versions['fs'] = riviera.getDeviceFsVersion()
-
-    yield versions
-
-
 @pytest.fixture(scope='module')
 def wifi_config():
     """
@@ -487,6 +466,15 @@ def ip_address_wlan(request, device_id, wifi_config):
         retries -= 1
         time.sleep(1)
     assert lpm_state and cli_state, "LPM ({}) and CLI ({}) not activated.".format(lpm_state, cli_state)
+
+    retries = 25
+    while retries > 0:
+        response = riviera_device.communication.executeCommand("echo '?' | nc 0 17000 | grep 'network'")
+        if response and 'network' in response:
+            break
+        retries -= 1
+        time.sleep(1)
+    assert 'network' in response, "Network CLI service never came up."
 
     if not device_ip_address:
         # Clear any WiFi profiles on the device
