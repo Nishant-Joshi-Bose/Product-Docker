@@ -129,7 +129,6 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     const auto& nowSelection = m_ProductController.GetNowSelection( );
     std::string cicode;
 
-    // @TODO: the second half of this check (keystate != KEY_RELEASED) is a temporary workaround for PGC-1827;
     // we don't want to leave the keyhandler with a pressed key if that key causes us to switch out of a source where CEC keys would normally
     // be accepted, so always allow releases from CEC
     bool ignoreCECKey = ( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CEC ) && ( keyEvent.keystate() != LpmServiceMessages::KEY_RELEASED );
