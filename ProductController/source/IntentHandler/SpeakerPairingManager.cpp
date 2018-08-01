@@ -312,7 +312,7 @@ void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
                                                 const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB )
 {
     KeyHandlerUtil::ActionType_t pairingAction =
-        static_cast< KeyHandlerUtil::ActionType_t >( pair ? Action::ACTION_START_PAIR_SPEAKERS : Action::ACTION_STOP_PAIR_SPEAKERS );
+        static_cast< KeyHandlerUtil::ActionType_t >( pair ? Action::ACTION_START_PAIR_SPEAKERS_LAN : Action::ACTION_STOP_PAIR_SPEAKERS );
 
     ProductMessage productMessage;
     productMessage.set_action( pairingAction );
