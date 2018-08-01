@@ -82,7 +82,6 @@ frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_locat
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
 btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location) || exit
-btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
 blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
 bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
@@ -200,7 +199,6 @@ rm "$opt_dir/etc/product"
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
 "$btstackadapter_dir/stage" "$opt_dir" || exit
-"$btsource_dir/stage" "$opt_dir" || exit
 "$blesetup_dir/stage" "$opt_dir" || exit
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$btstssink_dir/stage" "$opt_dir" || exit
