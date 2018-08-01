@@ -43,7 +43,7 @@ public:
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
     ResultCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
     const ProductPb::AudioEqSelect& GetEqSelect() const;
-    void UpdateEqSelectSupportedMode( string mode, bool supported );
+    ResultCode_t UpdateEqSelectSupportedMode( string mode, bool supported );
     ResultCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
     const ProductPb::AudioSubwooferPolarity& GetSubwooferPolarity() const;
 
