@@ -125,10 +125,6 @@ std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
                                                                              "This command selects the audio source.",
                                                                              "\t\t product source [tv | st] \t\t" ) ) );
 
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product state",
-                                                                             "This command returns the current state name and ID.",
-                                                                             "\t\t product state \t\t\t\t" ) ) );
-
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_ap",
                                                                              "This command tests setting the audio path to an on or off state.",
                                                                              "\t product test_ap [on | off] \t\t" ) ) );
@@ -768,20 +764,6 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         response  = "An attempt to pair with another speaker to this device will be made.";
 
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// This command returns the current state name and ID.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( command.compare( "product state" ) == 0 )
-    {
-        Hsm::STATE  stateId   = m_ProductController.GetHsm( ).GetCurrentState( )->GetId( );
-        std::string stateName = m_ProductController.GetHsm( ).GetCurrentState( )->GetName( );
-
-        response  = "The current state name is ";
-        response += stateName;
-        response += " with ID ";
-        response += std::to_string( static_cast< unsigned int >( stateId ) );
-        response += ".";
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command triggers the accessory update flow.
