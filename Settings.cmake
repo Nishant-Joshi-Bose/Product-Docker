@@ -146,6 +146,7 @@ INCLUDE_DIRECTORIES(
   ${NETWORKSERVICE_DIR}/include
   ${PASSPORTCLIENT_DIR}/include
   ${AUDIOSOURCE_DIR}/include
+  ${SOUNDTOUCH_SDK_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${AVSLIBS_DIR}/include
@@ -183,6 +184,7 @@ LINK_DIRECTORIES(
   ${LIGHTBARCONTROLLER_DIR}/lib
   ${NETWORKSERVICE_DIR}/lib
   ${AUDIOSOURCE_DIR}/lib
+  ${SOUNDTOUCH_SDK_DIR}/lib
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs
   ${KEYHANDLER_DIR}/lib
   ${AVSLIBS_DIR}/lib
