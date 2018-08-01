@@ -17,7 +17,7 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
-#include "ProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductControllerHsm.h"
 #include "SpeakerPairingManager.h"
@@ -184,7 +184,12 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
 
     if( not pairingStatus.pairing( ) )
     {
-        // When accessory pairing is done, play the pairing complete chime
+        if( GetCustomProductController( ).GetSpeakerPairingIsFromLAN( ) )
+        {
+            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
+            return true;
+        }
+        // When accessory pairing (not from LAN) is done, play the pairing complete chime
         // Order has to be followed here: subwoofer chime first, then rear surround speakers
         m_pairingCompleteChimeToPlay.clear();
         // Add subwoofer pairing complete chime to queue, if all subs are valid

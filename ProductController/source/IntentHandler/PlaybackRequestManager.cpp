@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "PlaybackRequestManager.h"
-#include "ProductController.h"
+#include "CustomProductController.h"
 #include "Intents.h"
 #include "EndPointsDefines.h"
 #include "ProductSourceInfo.h"
@@ -155,8 +155,15 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         playbackRequestData.set_sourceaccount( SetupSourceSlot_Name( ADAPTIQ ) );
         playbackRequestData.set_source( SHELBY_SOURCE::SETUP );
     }
+    else if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS_LAN )
+    {
+        GetCustomProductController( ).SetSpeakerPairingIsFromLAN( true );
+        playbackRequestData.set_sourceaccount( SetupSourceSlot_Name( PAIRING ) );
+        playbackRequestData.set_source( SHELBY_SOURCE::SETUP );
+    }
     else if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
     {
+        GetCustomProductController( ).SetSpeakerPairingIsFromLAN( false );
         playbackRequestData.set_sourceaccount( SetupSourceSlot_Name( PAIRING ) );
         playbackRequestData.set_source( SHELBY_SOURCE::SETUP );
     }
@@ -233,6 +240,18 @@ void PlaybackRequestManager::UpdateSources( const SoundTouchInterface::Sources& 
             m_cablesatSourcePlaybackRq.set_sourceaccount( source.sourceaccountname() );
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief PlaybackRequestManager::GetCustomProductController
+///
+/// @return This method returns the custom product controller instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CustomProductController& PlaybackRequestManager::GetCustomProductController( ) const
+{
+    return static_cast<CustomProductController&>( m_ProductController );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
