@@ -95,6 +95,7 @@ typedef enum
 }
 PlaybackSource_t;
 
+// TODO this utility function might make sense to add to the ProductSourceInfo class
 inline bool IsSourceAvailable( const SoundTouchInterface::Sources_SourceItem& source )
 {
     return source.has_status( ) and ( source.status( ) == SoundTouchInterface::SourceStatus::AVAILABLE );
