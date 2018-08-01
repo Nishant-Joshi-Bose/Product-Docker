@@ -1410,11 +1410,10 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
 
         ( void ) HandleCommonProductMessage( message );
     }
-
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    if( message.has_selectsourceslot( ) )
+    else if( message.has_selectsourceslot( ) )
     {
         const auto& slot = message.selectsourceslot( ).slot( );
 
@@ -1598,10 +1597,17 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// softwareupdatestatus needs to be forwarded to AccessorySoftwareInstallManager in addition to Common handling
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    if( message.has_softwareupdatestatus() )
+    else if( message.has_softwareupdatestatus() )
     {
         m_AccessorySoftwareInstallManager.ProductSoftwareUpdateStateNotified( );
         ( void ) HandleCommonProductMessage( message );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// accessoriesplaytones messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_accessoriesplaytones() )
+    {
+        AccessoriesPlayTones( message.accessoriesplaytones( ).subs( ), message.accessoriesplaytones( ).rears( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
@@ -2158,19 +2164,19 @@ bool CustomProductController::HandleAccessoriesPlayTonesResponse( ChimesControll
 {
     BOSE_INFO( s_logger, "%s::%s received %s", CLASS_NAME, __FUNCTION__, status.DebugString( ).c_str( ) );
 
-    if( status.event_id( ) != CHIME_ACCESSORY_PAIRING_COMPLETE_SUB_FROM_LAN  &&
-        status.event_id( ) != CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER_FROM_LAN )
+    if( status.event_id( ) != CHIME_ACCESSORY_PAIRING_COMPLETE_SUB  &&
+        status.event_id( ) != CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER )
     {
         // Defer to common handler
         return false;
     }
 
     if( m_queueRearAccessoryTone &&
-        status.event_id( ) == CHIME_ACCESSORY_PAIRING_COMPLETE_SUB_FROM_LAN &&
+        status.event_id( ) == CHIME_ACCESSORY_PAIRING_COMPLETE_SUB &&
         status.state( ) == ChimesControllerPb::ChimesStatus_ChimeState_COMPLETED )
     {
         m_queueRearAccessoryTone = false;
-        HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER_FROM_LAN );
+        HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER );
     }
     return true;
 }
@@ -2192,26 +2198,11 @@ void CustomProductController::AccessoriesPlayTonesPutHandler( const ProductPb::A
 {
     BOSE_INFO( s_logger, "%s::%s received %s", CLASS_NAME, __FUNCTION__, req.DebugString( ).c_str( ) );
 
-    bool playChime = false;
-    if( req.has_subs( ) )
+    if( req.has_subs( ) || req.has_rears( ) )
     {
-        playChime = true;
-        HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_SUB_FROM_LAN );
+        AccessoriesPlayTones( req.has_subs( ), req.has_rears( ) );
     }
-    if( req.has_rears( ) )
-    {
-        if( playChime )
-        {
-            m_queueRearAccessoryTone = true;
-        }
-        else
-        {
-            playChime = true;
-            HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER_FROM_LAN );
-        }
-    }
-
-    if( !playChime )
+    else
     {
         BOSE_ERROR( s_logger, "Received empty PUT request!" );
         FrontDoor::Error errorMessage;
@@ -2222,6 +2213,34 @@ void CustomProductController::AccessoriesPlayTonesPutHandler( const ProductPb::A
         return;
     }
     resp( req );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief SpeakerPairingManager::AccessoriesPlayTones
+///
+/// @param bool subs
+///
+/// @param bool rears
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::AccessoriesPlayTones( bool subs, bool rears )
+{
+    if( subs )
+    {
+        HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_SUB );
+    }
+    if( rears )
+    {
+        if( subs )
+        {
+            m_queueRearAccessoryTone = true;
+        }
+        else
+        {
+            HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER );
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

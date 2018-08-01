@@ -436,6 +436,7 @@ private:
     void AccessoriesPlayTonesPutHandler( const ProductPb::AccessoriesPlayTonesRequest &req,
                                          const Callback<ProductPb::AccessoriesPlayTonesRequest> &resp,
                                          const Callback<FrontDoor::Error>& error );
+    void AccessoriesPlayTones( bool subs, bool rears );
     bool m_queueRearAccessoryTone = false;
     bool m_speakerPairingIsFromLAN = false;
 
