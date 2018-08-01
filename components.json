@@ -5,11 +5,11 @@
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-8+fa86981"
+    "selected_version": "Release/master/2.0.0-9+fdc5625"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/master/1.5.2-15+0d90f3f"
+    "selected_version": "Release/master/2.0.0-16+a7f91a3"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-30_2326"
+    "selected_version": "Continuous/Castle-Fork/2018-07-31_1821"
   },
   {
     "name": "BLERemoteXCVR",
@@ -33,27 +33,27 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.5.2-154+ca97106"
+    "selected_version": "Continuous/SOS/1.7.0-170+eecb49e"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.0-43+cd2163b"
+    "selected_version": "Continuous/SOS/1.7.0-53+c8b2325"
   },
   {
     "name": "bose-opkg-utils",
-    "selected_version": "master@964c29cc453ccd3d1b28fb40bae8df11c0dc3b3c"
+    "selected_version": "SOS@964c29cc453ccd3d1b28fb40bae8df11c0dc3b3c"
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@6b8a79c34eb1839c98ba3d8b4608a41eb32fed78"
+    "selected_version": "SOS@6b8a79c34eb1839c98ba3d8b4608a41eb32fed78"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "master@42d683a01409593fa09d7cf4dd3e3541856f9e92"
+    "selected_version": "SOS@42d683a01409593fa09d7cf4dd3e3541856f9e92"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.5.5-519+0adbab3"
+    "selected_version": "Release/master/2.0.0-542+474c93e"
   },
   {
     "name": "BoseOPKG-native",
@@ -69,19 +69,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Continuous/develop/1.5.8-443+38d77b4"
-  },
-  {
-    "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/1.5.0-60+b113fb6"
+    "selected_version": "Release/master/2.0.0-449+ff53022"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/1.6.2-111+12631a9"
+    "selected_version": "Continuous/SOS/1.7.0-140+dc7e89a"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/1.5.0-64+4e6d2e4"
+    "selected_version": "Continuous/SOS/1.7.0-78+6993011"
   },
   {
     "name": "CastleLibs-native",
@@ -109,7 +105,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/1.5.2-122+c5496ed"
+    "selected_version": "Release/SOS/2.0.0-125+fcd85c2"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -177,7 +173,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@b2648e56e5389f457b49663017c2cb490c901da0"
+    "selected_version": "master@ed2e6ab216a7c55bb77b45c5cd0812297cd4571c"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -185,7 +181,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@220944def647a72ce0194d43ef23f1d3fe146987"
+    "selected_version": "SOS@220944def647a72ce0194d43ef23f1d3fe146987"
   },
   {
     "name": "protobuf-native",
@@ -201,7 +197,7 @@
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/4.0"
+    "selected_version": "Release/sos/3.10.5"
   },
   {
     "name": "RivieraLPM",
@@ -237,11 +233,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-30_2326"
+    "selected_version": "Continuous/Castle-Fork/2018-07-31_1821"
   },
   {
     "name": "svc-pts-log-decrypt",
-    "selected_version": "master@18c13afce2d583571bbf8717cd2409ef0a7827d5"
+    "selected_version": "SOS@18c13afce2d583571bbf8717cd2409ef0a7827d5"
   },
   {
     "name": "SystemEventService-qc8017_32",
