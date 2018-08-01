@@ -29,7 +29,7 @@
 #include "IntentHandler.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductControllerState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

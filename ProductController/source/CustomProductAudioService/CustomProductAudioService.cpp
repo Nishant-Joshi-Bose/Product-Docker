@@ -2,7 +2,7 @@
 ///
 /// @file      CustomProductAudioService.cpp
 ///
-/// @brief     This file contains source code for Professor specific behavior for communicating
+/// @brief     This file contains source code for custom behavior for communicating
 ///            with APProduct Server and APProduct related FrontDoor interaction
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
@@ -14,14 +14,17 @@
 #include "APProductFactory.h"
 #include "LpmClientFactory.h"
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductAudioService.h"
 #include "ProtoToMarkup.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
-#include "RivieraLPM_IpcProtocol.h"
+// TODO - JCH - fix this as part of PGC-2476
+//#include "RivieraLPM_IpcProtocol.h"
+#define IPC_LATENCY_VALUE_UNKNOWN 0xffff
+// end TODO
 
 using namespace std::placeholders;
 
@@ -32,10 +35,10 @@ using namespace ProductPb;
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController,
+CustomProductAudioService::CustomProductAudioService( CustomProductController& ProductController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( ProductController.GetTask( ),
@@ -49,7 +52,7 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
                                                    ProductController.GetTask( ) ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
-    m_currentMinimumLatency( IPC_LATENCY_VALUE_UNKNOWN )
+    m_currentMinimumLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -343,7 +346,7 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
 {
     BOSE_VERBOSE( s_logger, __func__ );
-    if( ( latency == IPC_LATENCY_VALUE_UNKNOWN ) or ( latency == m_currentMinimumLatency ) )
+    if( ( latency == LpmServiceMessages::LATENCY_VALUE_UNKNOWN ) or ( latency == m_currentMinimumLatency ) )
     {
         return;
     }
@@ -403,7 +406,12 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SetAiqInstalled( bool installed )
 {
-    m_AudioSettingsMgr->UpdateEqSelectSupportedMode( AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ), installed );
+    BOSE_DEBUG( s_logger, "%s: installed = %s", __func__, installed ? "true" : "false" );
+    ResultCode_t ret = m_AudioSettingsMgr->UpdateEqSelectSupportedMode( AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ), installed );
+    if( ret == ResultCode_t::NO_ERROR )
+    {
+        m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

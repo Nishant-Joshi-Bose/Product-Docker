@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.h
-/// @brief   This file contains source code for Professor specific behavior for
+/// @brief   This file contains source code for custom behavior for
 ///         communicating with APProduct Server and APProduct related FrontDoor interaction
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,11 +16,11 @@
 
 namespace ProductApp
 {
-class ProfessorProductController;
+class CustomProductController;
 class CustomProductAudioService: public ProductAudioService
 {
 public:
-    CustomProductAudioService( ProfessorProductController& ProductController,
+    CustomProductAudioService( CustomProductController& ProductController,
                                const FrontDoorClientIF_t& frontDoorClient,
                                LpmClientIF::LpmClientPtr lpmClient );
     void SetThermalMonitorEnabled( bool enabled );

@@ -1,8 +1,8 @@
-SoundTouch Professor
-====================
+Professor
+=========
 <a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Professor'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Professor/latest release/blue'></a>
 
-This repo contains the source code and tools specific to the SoundTouch Professor product.
+This repo contains the source code and tools specific to the Professor product.
 
 For updates about new releases of this software, you can subscribe [here](https://platform.bose.io/dev/svc-embedded-releases/stable-test/web-server/).
 
@@ -13,10 +13,11 @@ For more information, see the [Professor wiki page](https://wiki.bose.com/displa
 ##### Table of Contents
 [Getting Started](#start)  
 [Compiling Professor](#compile)  
-[Installing Professor](#install)   
-[Reflash Riviera-HSP](#hsp)   
-[More...](#more)
-[Useful Links](#useful)   
+[Installing Professor](#install)  
+[Reflash Riviera-HSP](#hsp)  
+[PTS Server Links](#pts)  
+[More...](#more)  
+[Useful Links](#useful)  
 
 <a name="start"/>
 
@@ -117,10 +118,10 @@ $ make all-packages
 
 ```shell session
 To update without HSP:
-$ ./scripts/pushup 
+$ ./scripts/pushup
 
 To update HSP:
-$ ./scripts/pushup --hsp 
+$ ./scripts/pushup --hsp
 
 When having multiple devices, without HSP:
 $ ./scripts/pushup --deviceid <deviceid>
@@ -214,8 +215,49 @@ $ make lpmupdater-ipk BUILD_TYPE=Nightly
 $ make lpmupdater-ipk BUILD_TYPE=Release
 ```
 
+<a name="pts"/>
+
+### PTS Server Links
+
+The PTS Server is a tiny embedded web server.  The server was originally
+intended for information to investigate customer problems reported to the
+technical support team.  The server has evolved to have a broader purpose.
+
+For security reasons, some endpoints are accessible only via certain
+interfaces.  For testing, you can disable this
+restriction: `touch /mnt/nv/product-persistence/anyiface`.
+
+| Interface | Endpoint | Description |
+| -------- | -------- | ----------- |
+| usb | /diag | Quality Audit |
+| any | /logread.txt | A snapshot of the system log ring buffer * |
+| any | /logread.txt.gz | Same as /logread.txt but compressed * |
+| any | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
+| any | /pts | Same as /pts.txt but encrypted ** |
+| any | /logread | Same as /logread.txt but encrypted ** |
+| usb | /reflash | Force the unit into reflash mode (QFIL) |
+| usb | /bose-version | /opt/Bose/etc/BoseVersion.json |
+| usb | /kernel-version | /etc/riviera-version |
+| usb | /validate-mfgdata | Check the manufacturing data |
+| usb | /controller-version | The LPM version strings |
+| usb | /clear-first-greeting | Clear the flag indicating the unit's first boot |
+| any | /opensource | List the licenses of open source software used in the system |
+| any | /service | Remanufacturing. Only if the unit is in service mode |
+| any | /dev | Developer links * |
+| usb, wlan1 | /, /index.html | Wi-Fi setup |
+
+\* Only if the unit is in development mode
+
+\** See [decrypt-logs](https://github.com/BoseCorp/CastleTools/blob/master/bin/decrypt-logs) to decrypt
+
+The USB IP address is 203.0.113.1.
+For example: http://203.0.113.1/pts.txt
+
 <a name="more"/>
+
 ### More...
+
+[Join the Professor Slack channel.](https://bosessg.slack.com/messages/CBMRG7ATV)
 
 Access the APQ console via the tap cable.
 
@@ -241,7 +283,6 @@ To setup the usual environment:
 
 ```shell session
 $ adb shell
-/ # . ~/.profile
 Sat Sep  2 12:10:12 UTC 2017
 Device name: "Bose SoundTouch C7E3A2"
 mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68
@@ -253,6 +294,18 @@ start is /opt/Bose/bin/start
 
 Certain important error and status messages go only to the console.
 You generally won't see this information via `adb shell`.
+
+To enable development mode:
+
+```shell session
+# mount -oremount,rw /persist
+# mfgdata set development true
+# mount -oremount,ro /persist
+```
+
+This flag enables core dumps, telnet access and other debug features.
+In particular, if a daemon dies unexpectedly, no automatic recovery
+happens when development mode is enabled.
 
 <a name="useful"/>
 ### Useful Links

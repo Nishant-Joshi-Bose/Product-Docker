@@ -101,6 +101,7 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "monaco postrm"
+exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
@@ -108,14 +109,13 @@ put_script "$stage/preinst" <<EOF
 echo "monaco preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
-echo "Stopping dyz-shm"
-pkill dyz-shm
 exit 0
 EOF
 
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "monaco prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------

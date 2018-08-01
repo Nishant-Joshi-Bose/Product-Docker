@@ -35,7 +35,7 @@ public:
     const ProductPb::AudioAvSync& GetAvSync() const;
     ResultCode_t SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
     const ProductPb::AudioSubwooferGain& GetSubwooferGain() const;
-    ResultCode_t SetMode( const ProductPb::AudioMode& mode );
+    ResultCode_t SetMode( ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
     ResultCode_t SetContentType( const ProductPb::AudioContentType& contentType );
     const ProductPb::AudioContentType& GetContentType() const;
@@ -43,7 +43,7 @@ public:
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
     ResultCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
     const ProductPb::AudioEqSelect& GetEqSelect() const;
-    void UpdateEqSelectSupportedMode( string mode, bool supported );
+    ResultCode_t UpdateEqSelectSupportedMode( string mode, bool supported );
     ResultCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
     const ProductPb::AudioSubwooferPolarity& GetSubwooferPolarity() const;
 

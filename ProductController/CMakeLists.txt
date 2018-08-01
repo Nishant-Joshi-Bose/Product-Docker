@@ -45,6 +45,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
+  source/AccessorySoftwareInstallManager.cpp
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
   source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
@@ -77,7 +78,7 @@ ADD_EXECUTABLE(Professor
   source/ProductStart.cpp
   source/ProductSTSStateTopAiQ.cpp
 
-  source/ProfessorProductController.cpp
+  source/CustomProductController.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor
