@@ -9,7 +9,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/0.1.0-75+97a4382"
+    "selected_version": "Continuous/master/0.1.0-90+67610d4"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-31_1511"
+    "selected_version": "Continuous/Castle-Fork/2018-08-02_1511"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/1.0.1-108+fc930dc"
+    "selected_version": "Release/master/2.0.0-111+272f93a"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-501+970dfba"
+    "selected_version": "Release/master/1.5.6-514+cf44936"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -221,7 +221,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-31_1511"
+    "selected_version": "Continuous/Castle-Fork/2018-08-02_1511"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -237,11 +237,11 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@319e9c62f2cfb86b031d750a0bbea37c605d859e"
+    "selected_version": "master@c8e7ae905ce41921069b29bb85cd33ab280fb66f"
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-82+ce182b0"
+    "selected_version": "Continuous/master/0.1.0-88+e7b48ef"
   },
   {
     "name": "Webkit",
