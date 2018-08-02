@@ -505,10 +505,16 @@ def ip_address_wlan(request, device_id, wifi_config):
         add_profile = "echo {} | nc 0 17000".format(add_profile)
         LOGGER.info("Adding Network Profile: {}".format(add_profile))
 
+        add_profile_response = riviera_device.communication.executeCommand(add_profile)
+        LOGGER.info("Adding Network Profile Response : {}".format(add_profile_response))
+
+        check_profile = ' '.join(['network', 'wifi', 'status'])
+        check_profile = "echo {} | nc 0 17000".format(check_profile)
+
         for _ in range(60):
-            network_response = riviera_device.communication.executeCommand(add_profile)
-            LOGGER.info("Add wifi profiles response is %s" % network_response)
-            if 'ADD_PROFILE_SUCCEEDED' in network_response:
+            network_response = riviera_device.communication.executeCommand(check_profile)
+            LOGGER.info("Check wifi profiles response is %s" % network_response)
+            if 'WIFI_STATION_CONNECTED' in network_response:
                 LOGGER.info("Added wifi profiles")
                 break
             time.sleep(1)

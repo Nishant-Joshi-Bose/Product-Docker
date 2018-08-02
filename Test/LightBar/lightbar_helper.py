@@ -161,7 +161,7 @@ def get_lightbar_animations(device_id, ip_address, environment):
     response = riviera_utils.link_product(environment=environment, ip_address=ip_address,
                                           email=email, password=password)
     LOGGER.info("Response is %s", response)
-    assert riviera_utils.wait_for_galapagos_activation(timeout=120), "Galapagos status error"
+    assert riviera_utils.wait_for_galapagos_activation(timeout=180), "Galapagos status error"
     LOGGER.info("frontDoorQueue")
     front_door = FrontDoorQueue(ip_address, email=email, password=password)
 

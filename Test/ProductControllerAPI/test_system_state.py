@@ -20,6 +20,8 @@ from CastleTestUtils.RivieraUtils.hardware.keys import keypress
 from CastleTestUtils.RivieraUtils.hardware.keys.keys import Keys
 from CastleTestUtils.RivieraUtils import adb_utils
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+from CastleTestUtils.RivieraUtils.device_utils import PRODUCT_STATE
+
 import eddie_helper
 
 LOGGER = get_logger(os.path.basename(__file__))
@@ -229,17 +231,18 @@ def test_system_state_factory_default(device_id, adb, frontdoor_wlan):
     time.sleep(2)
 
     for _ in range(20):
-        if adb.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
+        command = "echo '?' | nc 0 17000 | grep '{}'".format(PRODUCT_STATE)
+        if adb.executeCommand(command):
             break
         time.sleep(1)
 
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+        device_state = adb_utils.adb_telnet_cmd(PRODUCT_STATE, expect_after='Current State: ', device_id=device_id)
         if device_state == eddie_helper.SETUPNETWORK:
             break
         time.sleep(1)
 
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
+    device_state = adb_utils.adb_telnet_cmd(PRODUCT_STATE, expect_after='Current State: ', device_id=device_id)
     assert device_state == eddie_helper.SETUPNETWORK, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SETUPNETWORK, device_state)
 
