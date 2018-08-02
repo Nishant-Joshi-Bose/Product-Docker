@@ -106,6 +106,7 @@ message ProductMessage
         optional bool                                       softwareinstall             = 24;
         optional bool                                       softwareupdatestatus        = 25;
         optional bool                                       accessoriesareknown         = 26;
+        optional ProductPb.AccessoriesPlayTonesRequest      accessoriesplaytones        = 27;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
