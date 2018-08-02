@@ -101,25 +101,15 @@ public:
     ///
     static bool IsIntentMuteControl( KeyHandlerUtil::ActionType_t argument )
     {
-        return ( argument == ( uint16_t )Action::ACTION_MUTE );
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_MUTE );
     }
 
     static bool IsIntentSpeakerPairing( KeyHandlerUtil::ActionType_t argument )
     {
-        if( argument == ( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS )
-        {
-            return true;
-        }
-        if( argument == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
-        {
-            return true;
-        }
-        if( argument == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS )
-        {
-            return true;
-        }
-        return false;
-
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_LPM_PAIR_SPEAKERS ||
+                 argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS_LAN ||
+                 argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS ||
+                 argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_STOP_PAIR_SPEAKERS );
     }
 
     static bool IsIntentPlayProductSource( KeyHandlerUtil::ActionType_t argument )
@@ -132,12 +122,12 @@ public:
 
     static bool IsIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t argument )
     {
-        return ( argument == ( uint16_t )Action::ACTION_SOUNDTOUCH );
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_SOUNDTOUCH );
     }
 
     static bool IsIntentSetupBLERemote( KeyHandlerUtil::ActionType_t argument )
     {
-        return ( argument == ( uint16_t )Action::ACTION_SETUP_BLE_REMOTE );
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_SETUP_BLE_REMOTE );
     }
 };
 
