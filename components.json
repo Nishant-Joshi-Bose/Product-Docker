@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-02_1100"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.0.43270.2936924"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-02_1100"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.0.43270.2936924"
   },
   {
     "name": "svc-pts-log-decrypt",
