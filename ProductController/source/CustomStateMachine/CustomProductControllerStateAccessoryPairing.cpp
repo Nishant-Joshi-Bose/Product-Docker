@@ -17,11 +17,10 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
-#include "ProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductControllerHsm.h"
 #include "SpeakerPairingManager.h"
-#include "CustomChimeEvents.h"
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,89 +181,50 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
                GetName( ).c_str( ),
                pairingStatus.pairing( ) ? "pairing active" : "pairing inactive" );
 
-    if( not pairingStatus.pairing( ) )
+    if( pairingStatus.pairing( ) )
     {
-        // When accessory pairing is done, play the pairing complete chime
-        // Order has to be followed here: subwoofer chime first, then rear surround speakers
-        m_pairingCompleteChimeToPlay.clear();
+        return true;
+    }
+
+    if( !GetCustomProductController( ).GetSpeakerPairingIsFromLAN( ) )
+    {
+        // When accessory pairing (not from LAN) is done, play the pairing complete chime
         // Add subwoofer pairing complete chime to queue, if all subs are valid
+        bool isSubValid = true;
         if( pairingStatus.subs_size() > 0 )
         {
-            bool isSubValid = true;
             for( int i = 0; i < pairingStatus.subs_size(); i++ )
             {
                 if( pairingStatus.subs( i ).configurationstatus( ) != "VALID" )
                 {
                     isSubValid = false;
+                    break;
                 }
-            }
-            if( isSubValid )
-            {
-                m_pairingCompleteChimeToPlay.push_back( CHIME_ACCESSORY_PAIRING_COMPLETE_SUB );
             }
         }
         // Add rear surround speakers pairing complete chime to queue, if all rears are valid
+        bool isRearValid = true;
         if( pairingStatus.rears_size() > 0 )
         {
-            bool isRearValid = true;
             for( int i = 0; i < pairingStatus.rears_size(); i++ )
             {
                 if( pairingStatus.rears( i ).configurationstatus( ) != "VALID" )
                 {
                     isRearValid = false;
+                    break;
                 }
             }
-            if( isRearValid )
-            {
-                m_pairingCompleteChimeToPlay.push_back( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER );
-            }
         }
 
-        // Start playing pairing completed chime if there's any chime in queue; otherwise exit pairing state
-        if( m_pairingCompleteChimeToPlay.empty( ) )
-        {
-            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
-        }
-        else
-        {
-            GetProductController( ).HandleChimePlayRequest( m_pairingCompleteChimeToPlay.front() );
-        }
+        ProductMessage message;
+        message.mutable_accessoriesplaytones( )->set_subs( isSubValid );
+        message.mutable_accessoriesplaytones( )->set_rears( isRearValid );
+        IL::BreakThread( std::bind( GetProductController( ).GetMessageHandler( ),
+                                    message ),
+                         GetProductController( ).GetTask( ) );
     }
 
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateAccessoryPairing::HandleChimeSASSPlaybackCompleted
-///
-///         This method removes finished chime from chime queue, and start playing next chime
-///         if chimes are completed, exit pairing state
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairing::HandleChimeSASSPlaybackCompleted( int32_t eventId )
-{
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
-
-    if( eventId == m_pairingCompleteChimeToPlay.front() )
-    {
-        m_pairingCompleteChimeToPlay.pop_front();
-        // Play next accessory pairing completed chime if there's one
-        if( m_pairingCompleteChimeToPlay.empty( ) )
-        {
-            BOSE_INFO( s_logger, "The %s state is exiting the pairing playback.", GetName( ).c_str( ) );
-            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
-        }
-        else
-        {
-            GetProductController( ).HandleChimePlayRequest( m_pairingCompleteChimeToPlay.front() );
-        }
-    }
-    else
-    {
-        BOSE_INFO( s_logger, "%s - eventId(%d) is not what we expect(%d), ignore it.",
-                   __func__, eventId, m_pairingCompleteChimeToPlay.front() );
-    }
+    ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
     return true;
 }
 
