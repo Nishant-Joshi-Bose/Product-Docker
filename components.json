@@ -5,11 +5,11 @@
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-8+fa86981"
+    "selected_version": "Release/master/2.1.0-14+1407fec"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/master/1.5.2-15+0d90f3f"
+    "selected_version": "Release/master/2.1.0-21+fd7bdef"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-30_2326"
+    "selected_version": "Continuous/Castle-Fork/2018-08-01_1236"
   },
   {
     "name": "BLERemoteXCVR",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@b2648e56e5389f457b49663017c2cb490c901da0"
+    "selected_version": "master@e554d9a852b77d956184864de1d51d8c9c0422b8"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-30_2326"
+    "selected_version": "Continuous/Castle-Fork/2018-08-01_1236"
   },
   {
     "name": "svc-pts-log-decrypt",
