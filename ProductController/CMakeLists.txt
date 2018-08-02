@@ -106,6 +106,7 @@ TARGET_LINK_LIBRARIES(Professor
   CommonTypes
   STSProtoBufs
   SoundTouch_SDK_Protobuf_static
+  CapsUtils
   SystemEventService
   A4VRemoteCommClient
   A4VVideoManagerClient

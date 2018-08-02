@@ -133,7 +133,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-129+292f554"
+    "selected_version": "Release/SOS/2.0.0-130+eba064e"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -173,7 +173,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@b2648e56e5389f457b49663017c2cb490c901da0"
+    "selected_version": "SOS@8a86a18a064e9402e133644b5b64ff66ac68e1fa"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
