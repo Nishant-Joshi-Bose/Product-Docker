@@ -68,8 +68,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
         {
             const auto& source = sources.sources( i );
 
-            // TODO - we need to check "visible" here as well, but it's not yet supported
-            if( source.has_details() and source.details().has_cicode() )
+            if( source.has_details() and source.details().has_cicode() and IsSourceAvailable( source ) )
             {
                 codes.add_cicode( source.details().cicode() );
             }
@@ -158,7 +157,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
 
         // if it's a key that normally would have been blasted but the source isn't configured,
         // just consume it
-        if( isBlastedKey && sourceItem and ( not sourceItem->visible() ) )
+        if( isBlastedKey && sourceItem and ( not IsSourceAvailable( *sourceItem ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key", __func__ );
             return true;
