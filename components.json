@@ -5,11 +5,11 @@
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/2.0.0-9+fdc5625"
+    "selected_version": "Release/SOS/2.0.0-11+fdc5625"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/master/2.0.0-16+a7f91a3"
+    "selected_version": "Release/SOS/2.0.0-18+a7f91a3"
   },
   {
     "name": "AudioPath-qc8017_32",
