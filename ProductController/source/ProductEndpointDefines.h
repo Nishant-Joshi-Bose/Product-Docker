@@ -37,6 +37,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #define FRONTDOOR_ACCESSORIES_API                       "/accessories"
+#define FRONTDOOR_ACCESSORIES_PLAYTONES_API             "/accessories/playTones"
 #define FRONTDOOR_ADAPTIQ_API                           "/adaptiq"
 #define FRONTDOOR_AUDIO_AVSYNC_API                      "/audio/avSync"
 #define FRONTDOOR_AUDIO_BASS_API                        "/audio/bass"

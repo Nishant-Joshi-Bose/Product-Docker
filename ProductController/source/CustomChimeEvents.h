@@ -11,7 +11,7 @@ namespace ProductApp
 
 typedef enum
 {
-    CHIME_ACCESSORY_PAIRING_COMPLETE_SUB              = 20,   // starting at 20 to avoid collision with common ChimeEvents enum
-    CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER     = 21,
+    CHIME_ACCESSORY_PAIRING_COMPLETE_SUB                    = 20,   // starting at 20 to avoid collision with common ChimeEvents enum
+    CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER           = 21
 } CustomChimeEvents_t;
 }//namespace ProductApp
