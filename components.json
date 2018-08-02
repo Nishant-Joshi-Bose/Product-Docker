@@ -197,7 +197,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-8+c75d92c"
+    "selected_version": "Release/SOS/2.0.0-10+f9d3b67"
   },
   {
     "name": "SASS-qc8017_32",
@@ -209,7 +209,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-808+3f04d64"
+    "selected_version": "Release/SOS/2.0.0-809+d77df51"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
