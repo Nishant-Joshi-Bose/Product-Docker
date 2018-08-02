@@ -1789,7 +1789,7 @@ void CustomProductController::SendInitialCapsData()
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
         source->set_accountid( ProductSourceSlot_Name( TV ) );
-        source->set_status( SourceStatus::AVAILABLE );
+        source->set_status( SourceStatus::NOT_CONFIGURED );
         source->set_visible( true );
 
         source = message.add_sources( );
@@ -2006,7 +2006,7 @@ void CustomProductController::HandleGetPowerMacro(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductController::HandlePutPowerMacro 
+/// @brief CustomProductController::HandlePutPowerMacro
 ///
 /// @param const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req
 ///

@@ -39,6 +39,7 @@
 #include "IPCMessageRouterIF.h"
 #include "CliClient.h"
 #include "CliClientMT.h"
+#include "ContentSelectionService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -93,6 +94,13 @@ typedef enum
     SOURCE_SOUNDTOUCH
 }
 PlaybackSource_t;
+
+// TODO: this will be moved to the common product class ProductSourceInfo after SOS
+// (this is already done on master, see PGC-1169 and associated pull requests)
+inline bool IsSourceAvailable( const SoundTouchInterface::Sources_SourceItem& source )
+{
+    return source.status( ) == SoundTouchInterface::SourceStatus::AVAILABLE;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

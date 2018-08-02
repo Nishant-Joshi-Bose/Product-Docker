@@ -264,7 +264,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        if( ( not source.visible() ) or ( not source.has_details() ) )
+        if( ( not IsSourceAvailable( source ) ) or ( not source.has_details() ) )
         {
             // source isn't configured, don't light it
             continue;
@@ -300,8 +300,8 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // set the active source and associated zones
     A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
-    bool visible;
-    bool valid = GetSourceLED( sourceLED, visible );
+    bool available;
+    bool valid = GetSourceLED( sourceLED, available );
     if( valid )
     {
         // zone selection here is from section 6.5.4 ("Zone Assignments per Device")
@@ -320,7 +320,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
             leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
             leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            if( visible )
+            if( available )
             {
                 leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
@@ -370,19 +370,19 @@ void ProductBLERemoteManager::UpdateBacklight( )
 /// @brief ProductBLERemoteManager::GetSourceLED
 ///
 /// @param  sourceLED - reference to sourceLED to illuminate
-///         visible - reference to flag indicating whether source is configured
+///         available - reference to flag indicating whether source is configured
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::GetSourceLED(
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& visible )
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
 
-    visible = false;
+    available = false;
 
     if( m_inSetup )
     {
@@ -404,7 +404,7 @@ bool ProductBLERemoteManager::GetSourceLED(
     const auto& sourceName = sourceItem->sourcename();
     const auto& sourceAccountName = sourceItem->sourceaccountname();
 
-    visible = sourceItem->visible();
+    available = IsSourceAvailable( *sourceItem );
     if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
     {
         if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
