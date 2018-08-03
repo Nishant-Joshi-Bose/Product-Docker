@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOS/2.0.0.43262.2936464"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.0.43270.2936924"
   },
   {
     "name": "BLERemoteXCVR",
@@ -37,7 +37,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/SOS/1.7.0-54+217231e"
+    "selected_version": "Release/SOS/2.0.0-56+373e9ab"
   },
   {
     "name": "bose-opkg-utils",
@@ -169,15 +169,15 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-958+5a1b669"
+    "selected_version": "Release/SOS/2.0.0-962+3df1152"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@8a86a18a064e9402e133644b5b64ff66ac68e1fa"
+    "selected_version": "SOS@36bbd32fc8f950c341199eb9accc706c20a73d80"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-78+6d82236"
+    "selected_version": "Release/SOS/2.0.0-82+36bbd32"
   },
   {
     "name": "ProductUIAssets",
@@ -217,7 +217,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-8+c75d92c"
+    "selected_version": "Release/SOS/2.0.0-10+f9d3b67"
   },
   {
     "name": "SASS-qc8017_32",
@@ -229,11 +229,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-808+3f04d64"
+    "selected_version": "Release/SOS/2.0.0-809+d77df51"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOS/2.0.0.43262.2936464"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.0.43270.2936924"
   },
   {
     "name": "svc-pts-log-decrypt",
