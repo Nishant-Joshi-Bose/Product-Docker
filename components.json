@@ -37,7 +37,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.5.5-519+0adbab3"
+    "selected_version": "Release/master/2.0.0-542+474c93e"
   },
   {
     "name": "BoseOPKG-native",
@@ -81,7 +81,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/1.0.1-108+fc930dc"
+    "selected_version": "Release/master/2.0.0-111+272f93a"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -149,15 +149,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-956+5fc8b1c"
+    "selected_version": "Continuous/master/1.5.1-965+ed1ea02"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-956+5fc8b1c"
+    "selected_version": "Continuous/master/1.5.1-2+ed1ea02"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@c43977060e51df5ff379885697c18009014c157f"
+    "selected_version": "master@e554d9a852b77d956184864de1d51d8c9c0422b8"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -225,11 +225,11 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/1.5.3-28+18fc83b"
+    "selected_version": "Release/master/1.5.4-34+8178648"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@0507674ea2b781eddb7e41cc320b0a1e552dc8d1"
+    "selected_version": "master@c8e7ae905ce41921069b29bb85cd33ab280fb66f"
   },
   {
     "name": "Webkit",
