@@ -146,10 +146,12 @@ if path == "/logread.txt.gz" and is_development(): # same but compressed
     sys.stdout.flush()
     os.execl("/bin/sh", "sh", "-c", "logread | gzip")
 
-if path == "/logread":          # same but encrypted
-    http_ok("text/plain")       # base64 encoded
+if path == "/logread.dat":      # same but encrypted
+    http_ok("application/octet-stream")
     sys.stdout.flush()
-    os.execlp("encrypt-logs", "encrypt-logs", "logread")
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs logread | gzip")
+
+http_redirect(path, "/logread", "/logread.dat")
 
 # ----------------------------------------------------------------------------
 # View miscellaneous system status information.
@@ -159,10 +161,12 @@ if path == "/pts.txt" and is_development():
     sys.stdout.flush()
     os.execlp("pts-info", "pts-info")
 
-if path == "/pts":              # same but encrypted
-    http_ok("text/plain")       # base64 encoded
+if path == "/pts.dat":          # same but encrypted
+    http_ok("application/octet-stream")
     sys.stdout.flush()
-    os.execlp("encrypt-logs", "encrypt-logs", "pts-info")
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs pts-info | gzip")
+
+http_redirect(path, "/pts", "/pts.dat")
 
 # ----------------------------------------------------------------------------
 # Force the system into reflash mode (QFIL).
@@ -307,7 +311,7 @@ if path == "/dev" and is_development():
 function set_address() {
   var ain = document.getElementById("address");
   var address = ain.value.trim();
-  var err;
+  var err = "";
   if (address.match(/^[-\w.]+$/)) {
     var anchors = document.getElementsByTagName("a");
     for (var i = anchors.length; --i >= 0;) {
@@ -365,12 +369,12 @@ Address:
   </tr>
   <tr class="even">
     <td class="iface">any</td>
-    <td><a>/pts</a></td>
+    <td><a>/pts.dat</a></td>
     <td>Same as /pts.txt but encrypted</td>
   </tr>
   <tr class="odd">
     <td class="iface">any</td>
-    <td><a>/logread</a></td>
+    <td><a>/logread.dat</a></td>
     <td>Same as /logread.txt but encrypted</td>
   </tr>
   <tr class="even">
