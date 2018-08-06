@@ -13,11 +13,11 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-135+890ff59"
+    "selected_version": "Release/SOS/2.0.1-171+5407fa4"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/SOS/2.0.0-135+890ff59"
+    "selected_version": "Release/SOS/2.0.1-171+5407fa4"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-03_2146"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.0.43293.2938383"
   },
   {
     "name": "BLERemoteXCVR",
@@ -37,7 +37,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/SOS/1.7.0-54+217231e"
+    "selected_version": "Release/SOS/2.0.0-57+0bd20b0"
   },
   {
     "name": "bose-opkg-utils",
@@ -169,15 +169,15 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-958+5a1b669"
+    "selected_version": "Release/SOS/2.0.0-962+3df1152"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@97bbeb3bd2786a48670e996edeb47da5a569cf9b"
+    "selected_version": "SOS@15f0a227cf61e545bde4a95b05beb9d5da8b4fb6"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-78+6d82236"
+    "selected_version": "Release/SOS/2.0.0-84+ec809af"
   },
   {
     "name": "ProductUIAssets",
@@ -217,7 +217,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-8+c75d92c"
+    "selected_version": "Release/SOS/2.0.0-10+f9d3b67"
   },
   {
     "name": "SASS-qc8017_32",
@@ -229,11 +229,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-808+3f04d64"
+    "selected_version": "Release/SOS/2.0.0-809+d77df51"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-03_2146"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.0.43293.2938383"
   },
   {
     "name": "svc-pts-log-decrypt",
