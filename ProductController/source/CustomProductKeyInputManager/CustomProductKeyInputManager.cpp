@@ -23,6 +23,7 @@
 #include "CustomProductKeyInputManager.h"
 #include "MonotonicClock.h"
 #include "AutoLpmServiceMessages.pb.h"
+#include "SystemSourcesProperties.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -133,6 +134,20 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     if( nowSelection.has_contentitem( ) )
     {
         auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
+
+        // TV source won't have "details" after a factory default (before /system/sources has been written)
+        // In this case, we need to consume keys that normally would have been blasted
+        if(
+            sourceItem and
+            ( sourceItem->sourceaccountname().compare( ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) ) == 0 ) and
+            ( not sourceItem->has_details( ) ) and
+            m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( SystemSourcesProperties::DEVICE_TYPE_TV ) ) )
+        {
+            BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
+            return true;
+        }
+
+
 
         // TV_INPUT key should always be sent to tv source
         if( keyEvent.keyid( ) == BOSE_TV_INPUT )
