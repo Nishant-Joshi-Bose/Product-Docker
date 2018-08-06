@@ -26,7 +26,6 @@
 #include "SystemSourcesProperties.pb.h"
 
 using namespace ProductSTS;
-using namespace LpmServiceMessages;
 using namespace SystemSourcesProperties;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +128,7 @@ void CustomProductKeyInputManager::BlastKey(
     request.set_keyval( keyEvent.keyid( ) );
     request.set_codeset( cicode );
 
-    if( keyEvent.keystate( ) ==  LpmServiceMessages::KEY_PRESSED )
+    if( keyEvent.keystate( ) ==  KEY_PRESSED )
     {
         request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_CONTINUOUS_PRESS );
     }
@@ -139,7 +138,7 @@ void CustomProductKeyInputManager::BlastKey(
     }
 
     BOSE_INFO( s_logger, "Blasting 0x%08x/%s (%s)", request.keyval( ), request.codeset( ).c_str( ),
-               ( keyEvent.keystate( ) ==  LpmServiceMessages::KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
+               ( keyEvent.keystate( ) ==  KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
 
     m_QSSClient->SendKey( request );
 }
@@ -148,14 +147,14 @@ void CustomProductKeyInputManager::BlastKey(
 ///
 /// @name   CustomProductKeyInputManager::CustomProcessKeyEvent
 ///
-/// @param  const LpmServiceMessages::IpcKeyInformation_t& keyEvent
+/// @param  const IpcKeyInformation_t& keyEvent
 ///
 /// @return This method returns a true value if the key is to be blasted so that no further
 ///         processing of the key event in the base ProductKeyInputManager class takes place;
 ///         otherwise, it returns false to allow further processing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessages::IpcKeyInformation_t&
+bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformation_t&
                                                           keyEvent )
 {
 
@@ -255,7 +254,7 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
             {
                 QSSMSG::BoseKeyReqMessage_t request;
                 request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( LpmServiceMessages::BOSE_ASSERT_ON );
+                request.set_keyval( BOSE_ASSERT_ON );
                 request.set_codeset( tvSource->details( ).cicode( ) );
             }
         }
@@ -266,7 +265,7 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
             {
                 QSSMSG::BoseKeyReqMessage_t request;
                 request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( LpmServiceMessages::BOSE_ASSERT_ON );
+                request.set_keyval( BOSE_ASSERT_ON );
                 request.set_codeset( macroSrc->details( ).cicode( ) );
             }
         }
@@ -277,7 +276,7 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
 ///
 /// @name   CustomProductKeyInputManager::FilterIncompleteChord
 ///
-/// @param  const LpmServiceMessages::IpcKeyInformation_t& keyEvent
+/// @param  const IpcKeyInformation_t& keyEvent
 ///
 /// @return This method returns a true value if the key is to be ignored because of incomplete
 ///         chord processing. That would be when keys A and B are PnH so they produce a special
@@ -289,7 +288,7 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
 ///         This is driven by the remote defects described in PGC-1427.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::FilterIncompleteChord( const LpmServiceMessages::IpcKeyInformation_t&
+bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformation_t&
                                                           keyEvent )
 {
     constexpr int64_t CHORD_RECOVERY_TIME_MS = 20;
