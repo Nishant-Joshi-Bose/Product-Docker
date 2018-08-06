@@ -349,19 +349,19 @@ Address:
     <td>Quality Audit</td>
   </tr>
   <tr class="odd">
-    <td class="iface">usb</td>
+    <td class="iface">any</td>
     <td><a>/logread.txt</a></td>
-    <td>A snapshot of the system log ring buffer</td>
+    <td>A snapshot of the system log ring buffer*</td>
   </tr>
   <tr class="even">
-    <td class="iface">usb</td>
+    <td class="iface">any</td>
     <td><a>/logread.txt.gz</a></td>
-    <td>Same as /logread.txt but compressed</td>
+    <td>Same as /logread.txt but compressed*</td>
   </tr>
   <tr class="odd">
-    <td class="iface">usb</td>
+    <td class="iface">any</td>
     <td><a>/pts.txt</a></td>
-    <td>Various Linux and system status information (e.g., ifconfig)</td>
+    <td>Various Linux and system status information (e.g., ifconfig)*</td>
   </tr>
   <tr class="even">
     <td class="iface">any</td>
@@ -406,12 +406,12 @@ Address:
   <tr class="even">
     <td class="iface">any</td>
     <td><a>/opensource</a></td>
-    <td>List the licenses of open source software used in the system</td>
+    <td>The licenses of open source software used in the system</td>
   </tr>
   <tr class="odd">
     <td class="iface">any</td>
     <td><a>/service</a></td>
-    <td>Remanufacturing. Only if the unit is in service mode</td>
+    <td>Remanufacturing. Only in service mode</td>
   </tr>
   <tr class="even">
     <td class="iface">usb, wlan1</td>
@@ -419,6 +419,9 @@ Address:
     <td>Wi-Fi setup</td>
   </tr>
 </table>
+
+<p>
+* Only in development mode.
 
 </body>
 </html>
