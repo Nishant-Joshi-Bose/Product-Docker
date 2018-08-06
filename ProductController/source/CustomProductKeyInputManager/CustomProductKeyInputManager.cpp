@@ -25,6 +25,10 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "SystemSourcesProperties.pb.h"
 
+using namespace ProductSTS;
+using namespace LpmServiceMessages;
+using namespace SystemSourcesProperties;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,6 +110,42 @@ void CustomProductKeyInputManager::InitializeQuickSetService( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductKeyInputManager::BlastKey
+///
+/// @param  const IpcKeyInformat_t& keyEvent
+///
+/// @param  const std::string& cicode
+///
+/// @return None
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductKeyInputManager::BlastKey(
+    const IpcKeyInformation_t&  keyEvent,
+    const std::string&          cicode
+)
+{
+    QSSMSG::BoseKeyReqMessage_t request;
+
+    request.set_keyval( keyEvent.keyid( ) );
+    request.set_codeset( cicode );
+
+    if( keyEvent.keystate( ) ==  LpmServiceMessages::KEY_PRESSED )
+    {
+        request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_CONTINUOUS_PRESS );
+    }
+    else
+    {
+        request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_END_PRESS );
+    }
+
+    BOSE_INFO( s_logger, "Blasting 0x%08x/%s (%s)", request.keyval( ), request.codeset( ).c_str( ),
+               ( keyEvent.keystate( ) ==  LpmServiceMessages::KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
+
+    m_QSSClient->SendKey( request );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   CustomProductKeyInputManager::CustomProcessKeyEvent
 ///
 /// @param  const LpmServiceMessages::IpcKeyInformation_t& keyEvent
@@ -118,100 +158,89 @@ void CustomProductKeyInputManager::InitializeQuickSetService( )
 bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessages::IpcKeyInformation_t&
                                                           keyEvent )
 {
+
     if( FilterIncompleteChord( keyEvent ) )
     {
         return true;
     }
-    ///
-    /// Decide if this key should be blasted or sent to the key handler
-    ///
-    bool isBlastedKey = false;
+
+    // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
+    if( keyEvent.keyid( ) == BOSE_TV_INPUT )
+    {
+        const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSourceSlot_Name( TV ) );
+
+        if( tvSource and tvSource->has_details( ) )
+        {
+            BlastKey( keyEvent, tvSource->details( ).cicode( ) );
+        }
+
+        return true;
+    }
+
+    // Do some sanity-checks to see if we can proceed
+    // We can't determine anything more related to key blasting without knowing what source is selected
     const auto& nowSelection = m_ProductController.GetNowSelection( );
-    std::string cicode;
-
-    bool ignoreCECKey = ( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CEC );
-
-    if( nowSelection.has_contentitem( ) )
+    if( not nowSelection.has_contentitem( ) )
     {
-        auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
-
-        // TV source won't have "details" after a factory default (before /system/sources has been written)
-        // In this case, we need to consume keys that normally would have been blasted
-        if(
-            sourceItem and
-            ( sourceItem->sourceaccountname().compare( ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) ) == 0 ) and
-            ( not sourceItem->has_details( ) ) and
-            m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( SystemSourcesProperties::DEVICE_TYPE_TV ) ) )
-        {
-            BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
-            return true;
-        }
-
-
-
-        // TV_INPUT key should always be sent to tv source
-        if( keyEvent.keyid( ) == BOSE_TV_INPUT )
-        {
-            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( tvSource and tvSource->has_details( ) )
-            {
-                cicode = tvSource->details( ).cicode( );
-                isBlastedKey = true;
-            }
-        }
-        else if( sourceItem and sourceItem->has_details( ) )
-        {
-            const auto& sourceDetails = sourceItem->details( );
-            if( sourceDetails.has_devicetype( ) )
-            {
-                isBlastedKey = m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceDetails.devicetype( ) );
-            }
-
-            cicode = sourceDetails.cicode( );
-        }
-
-        // if it's a key that normally would have been blasted but the source isn't configured,
-        // just consume it
-        if( isBlastedKey && sourceItem and ( not m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) ) )
-        {
-            BOSE_INFO( s_logger, "%s consuming key", __func__ );
-            return true;
-        }
-
-        // ignore CEC keys if we're not in PRODUCT sources
-        if( sourceItem and ( sourceItem->sourcename().compare( SHELBY_SOURCE::PRODUCT ) == 0 ) )
-        {
-            ignoreCECKey = false;
-        }
+        return false;
+    }
+    auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
+    if( not sourceItem )
+    {
+        return false;
     }
 
-    if( isBlastedKey )
+    // CEC key handling is also special.
+    // We need to make sure not to pass CEC key presses to the keyhandler if we're not in a product source
+    // (key releases are okay to pass to KeyHandler in this case)
+    // This limitation is required so that CEC keys that may be sent from a TV during a source switch to a non-product source
+    // don't end up affecting the new source (for instance a TV may send a "mute" key when we're switching
+    // from TV to Bluetooth; we don't want to process this)
+    if(
+        ( keyEvent.keyorigin( ) == KEY_ORIGIN_CEC ) and
+        ( keyEvent.keystate( ) == KEY_PRESSED ) and
+        ( sourceItem->sourcename().compare( SHELBY_SOURCE::PRODUCT ) != 0 )
+    )
     {
-        ///
-        /// This key should be blasted.
-        ///
-        QSSMSG::BoseKeyReqMessage_t request;
+        return true;
+    }
 
-        request.set_keyval( keyEvent.keyid( ) );
-        request.set_codeset( cicode );
-
-        if( keyEvent.keystate( ) ==  LpmServiceMessages::KEY_PRESSED )
-        {
-            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_CONTINUOUS_PRESS );
-        }
-        else
-        {
-            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_END_PRESS );
-        }
-
-        BOSE_INFO( s_logger, "Blasting 0x%08x/%s (%s)", request.keyval( ), request.codeset( ).c_str( ),
-                   ( keyEvent.keystate( ) ==  LpmServiceMessages::KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
-
-        m_QSSClient->SendKey( request );
+    // TV source won't have "details" after a factory default (before /system/sources has been written)
+    // In this case, we need to consume keys that normally would have been blasted
+    if(
+        ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
+        ( not sourceItem->has_details( ) ) and
+        m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
+    {
+        BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
+        return true;
     }
 
 
-    return( isBlastedKey || ignoreCECKey );
+    // The rest of the checks require a valid details field; if it doesn't exist, pass this to the KeyHandler
+    if( not sourceItem->has_details( ) )
+    {
+        return false;
+    }
+
+    // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
+    if( not m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceItem->details( ).devicetype( ) ) )
+    {
+        return false;
+    }
+
+    // If the device has been configured, blast the key (if it hasn't been configured but it's a key
+    // that normally would have been blasted, we'll consume the key)
+    if( m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) )
+    {
+        BlastKey( keyEvent, sourceItem->details( ).cicode( ) );
+    }
+    else
+    {
+        BOSE_INFO( s_logger, "%s unconfigured source - consuming key", __func__ );
+    }
+
+    return true;
 }
 
 void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro )

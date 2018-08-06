@@ -92,6 +92,8 @@ private:
 
     void InitializeQuickSetService( );
     bool FilterIncompleteChord( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );
+
+    void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
