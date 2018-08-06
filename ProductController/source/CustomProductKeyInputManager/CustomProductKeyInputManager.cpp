@@ -204,21 +204,19 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
         return true;
     }
 
-    // TV source won't have "details" after a factory default (before /system/sources has been written)
-    // In this case, we need to consume keys that normally would have been blasted
-    if(
-        ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
-        ( not sourceItem->has_details( ) ) and
-        m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
-    {
-        BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
-        return true;
-    }
-
-
     // The rest of the checks require a valid details field; if it doesn't exist, pass this to the KeyHandler
     if( not sourceItem->has_details( ) )
     {
+        // TV source won't have "details" after a factory default (before /system/sources has been written)
+        // In this case, we need to consume keys that normally would have been blasted
+        if( 
+                ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
+                m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
+        {
+            BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
+            return true;
+        }
+
         return false;
     }
 
