@@ -13,15 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-25_1311"
+    "selected_version": "Continuous/Castle-Fork/2018-08-03_2101"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.5.2-154+ca97106"
+    "selected_version": "Continuous/master/1.5.2-174+433e5c6"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.0-43+cd2163b"
+    "selected_version": "Continuous/master/1.5.0-52+eeada44"
   },
   {
     "name": "bose-opkg-utils",
@@ -37,7 +37,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.5.5-519+0adbab3"
+    "selected_version": "Release/master/2.0.0-542+474c93e"
   },
   {
     "name": "BoseOPKG-native",
@@ -53,19 +53,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.8-437+189d3bc"
-  },
-  {
-    "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/1.5.0-60+b113fb6"
+    "selected_version": "Release/master/2.0.0-449+ff53022"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/1.6.2-111+12631a9"
+    "selected_version": "Continuous/master/1.7.0-144+5d21584"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/1.5.0-64+4e6d2e4"
+    "selected_version": "Continuous/master/1.5.0-75+c3d0160"
   },
   {
     "name": "CastleLibs-native",
@@ -85,7 +81,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/1.0.1-108+fc930dc"
+    "selected_version": "Release/master/2.0.0-111+272f93a"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -93,11 +89,11 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/1.5.2-122+c5496ed"
+    "selected_version": "Continuous/master/1.5.2-124+b6b8c90"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.0-61+504c312"
+    "selected_version": "Release/bose-master/1.0.0-67+155c3e8"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -129,7 +125,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.5-171+1d3fce5"
+    "selected_version": "Release/master/1.5.6-173+430f704"
   },
   {
     "name": "LpmMfgTool",
@@ -137,7 +133,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-501+970dfba"
+    "selected_version": "Release/master/1.5.6-514+cf44936"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -153,19 +149,19 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/1.5.1-941+c392de8"
+    "selected_version": "Continuous/master/1.5.1-965+ed1ea02"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/1.5.1-936+7396e0e"
+    "selected_version": "Continuous/master/1.5.1-2+ed1ea02"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@a106a27c524815b9b1d940ddf0a37175101e3f32"
+    "selected_version": "master@a811ddd3778a623cf6fb532c9228ec31e5dbb684"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/1.0.1-64+a106a27"
+    "selected_version": "Release/master/1.0.2-67+7bd77f7"
   },
   {
     "name": "ProductUIAssets",
@@ -189,11 +185,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.5.3-216+beea0ad"
+    "selected_version": "Release/master/1.5.4-222+d42081b"
   },
   {
     "name": "RivieraLpmTools",
-    "selected_version": "@2139"
+    "selected_version": "@2962"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -217,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-07-25_1311"
+    "selected_version": "Continuous/Castle-Fork/2018-08-03_2101"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -229,11 +225,11 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/1.5.3-28+18fc83b"
+    "selected_version": "Release/master/1.5.4-34+8178648"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@567283f25907c4e856d879a9081a10bcfdf105f8"
+    "selected_version": "master@c8e7ae905ce41921069b29bb85cd33ab280fb66f"
   },
   {
     "name": "Webkit",

@@ -1,4 +1,4 @@
-# test_eec_no_crash.py
+# EEC/test_eec_no_crash.py
 #
 # :Organization:  BOSE CORPORATION
 #
@@ -8,6 +8,9 @@
 #                  BOSE CORPORATION
 #                  The Mountain,
 #                  Framingham, MA 01701-9168
+"""
+Tests to ensure that Low Power is exited to proper running system.
+"""
 import time
 import pytest
 
@@ -15,9 +18,9 @@ from CastleTestUtils.LpmUtils.Lpm import Lpm
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils.rivieraCommunication import getCommunicationType
 
-logger = get_logger(__name__)
+LOGGER = get_logger(__name__)
 
-process_list = ["Telnet", "APServer", "BLESetup", "BLEToFrontDoorService", "BT", "BTSource",
+PROCESS_LIST = ["Telnet", "APServer", "BLESetup", "BLEToFrontDoorService", "BT", "BTSource",
                 "BluetoothManager", "CLIServer", "DataCollectionService", "DemoController",
                 "FrontDoor", "GalapagosClient", "HTTPProxy", "LPMService", "Monaco", "NetManager",
                 "Passport", "SASSController", "Telemetry", "AVS", "Vfe", "SWUpdateWebServer",
@@ -40,17 +43,17 @@ def test_eec_no_crash(lpm_serial_client, device_id):
         1. Revert NoNetworkConfiguredTimeout to 20 minutes and reboot
         2. Add wifi profile back
     """
-    logger.info("test_all_processes_running")
+    LOGGER.info("test_all_processes_running")
 
     # Get ADB comm
     adb_comm = getCommunicationType('ADB')
     adb_comm.setCommunicationDetail(device_id)
 
     # Verify processes are running before LPS
-    assert adb_comm.areProcessesRunning(process_list)
+    assert adb_comm.areProcessesRunning(PROCESS_LIST)
 
     # Wait for device to enter low power standby
-    logger.info("Check for the Low Power Standby state after 2 minutes")
+    LOGGER.info("Check for the Low Power Standby state after 2 minutes")
     assert lpm_serial_client.wait_for_power_state([Lpm.PowerState.LowPower], 130), \
         "System did not go into Low Power state on time"
 
@@ -58,15 +61,15 @@ def test_eec_no_crash(lpm_serial_client, device_id):
     time.sleep(30)
 
     # Simulate a key press to wake it up.
-    logger.info("Simulating a MFB key press.")
+    LOGGER.info("Simulating a MFB key press.")
     lpm_serial_client.button_tap(4, 15)
 
     # Verify we are back in standby state.
-    logger.debug("Waiting 60s for power state to be {} or {}"
-                 .format(Lpm.PowerState.Standby, Lpm.PowerState.On))
-    logger.debug("Current Power State: {}".format(lpm_serial_client.get_power_state()))
-    assert lpm_serial_client.wait_for_power_state([Lpm.PowerState.Standby, Lpm.PowerState.On], 60), \
-        "Failed to resume into Standby system state."
+    LOGGER.debug("Waiting 60s for power state to be %s or %s", Lpm.PowerState.Standby,
+                 Lpm.PowerState.On)
+    LOGGER.debug("Current Power State: %s", lpm_serial_client.get_power_state())
+    assert lpm_serial_client.wait_for_power_state([Lpm.PowerState.Standby, Lpm.PowerState.On],
+                                                  60), "Failed to resume into Standby system state."
 
     # Check processes again
-    assert adb_comm.areProcessesRunning(process_list)
+    assert adb_comm.areProcessesRunning(PROCESS_LIST)
