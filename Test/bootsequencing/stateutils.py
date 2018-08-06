@@ -87,7 +87,7 @@ def network_checker(network_connection, maximum_time, data, device_id):
     return data
 
 
-def state_checker(ip_address, run_time, data, delay=5):
+def state_checker(ip_address, run_time, data, details, environment, delay=5):
     """
     This will collect the states seen by the system, the time it was first seen,
     and the time it was last seen. The collected information will be saved
@@ -105,7 +105,9 @@ def state_checker(ip_address, run_time, data, delay=5):
         data['state'] = {}
     time.sleep(delay)
 
-    api = FrontDoorAPI.FrontDoorAPI(ip_address, logger=LOGGER)
+    token = details['access_token']
+
+    api = FrontDoorAPI.FrontDoorAPI(ip_address, env=environment, access_token=token, logger=LOGGER)
     start_time = time.time()
     data['state']['start'] = start_time
 

@@ -393,27 +393,6 @@ def device_id(request):
     return request.config.getoption('--device-id')
 
 
-@pytest.mark.usefixture('riviera')
-@pytest.fixture(scope='function')
-def adb_versions(riviera):
-    """
-    This fixture will return information regarding version information on the
-        ADB system
-
-    :param riviera: Riviera connection throught ADB
-    :return: Dictionary of Version information of the device
-    """
-    versions = {}
-
-    # Get Product information
-    bose_version = riviera.getDeviceBoseVersion()
-    versions['bose'] = json.loads(bose_version)
-    # Get FS information
-    versions['fs'] = riviera.getDeviceFsVersion()
-
-    yield versions
-
-
 @pytest.fixture(scope='module')
 def wifi_config():
     """
@@ -488,6 +467,15 @@ def ip_address_wlan(request, device_id, wifi_config):
         time.sleep(1)
     assert lpm_state and cli_state, "LPM ({}) and CLI ({}) not activated.".format(lpm_state, cli_state)
 
+    retries = 25
+    while retries > 0:
+        response = riviera_device.communication.executeCommand("echo '?' | nc 0 17000 | grep 'network'")
+        if response and 'network' in response:
+            break
+        retries -= 1
+        time.sleep(1)
+    assert 'network' in response, "Network CLI service never came up."
+
     if not device_ip_address:
         # Clear any WiFi profiles on the device
         # Clear any WiFi profiles on the device
@@ -517,10 +505,16 @@ def ip_address_wlan(request, device_id, wifi_config):
         add_profile = "echo {} | nc 0 17000".format(add_profile)
         LOGGER.info("Adding Network Profile: {}".format(add_profile))
 
+        add_profile_response = riviera_device.communication.executeCommand(add_profile)
+        LOGGER.info("Adding Network Profile Response : {}".format(add_profile_response))
+
+        check_profile = ' '.join(['network', 'wifi', 'status'])
+        check_profile = "echo {} | nc 0 17000".format(check_profile)
+
         for _ in range(60):
-            network_response = riviera_device.communication.executeCommand(add_profile)
-            LOGGER.info("Add wifi profiles response is %s" % network_response)
-            if 'ADD_PROFILE_SUCCEEDED' in network_response:
+            network_response = riviera_device.communication.executeCommand(check_profile)
+            LOGGER.info("Check wifi profiles response is %s" % network_response)
+            if 'WIFI_STATION_CONNECTED' in network_response:
                 LOGGER.info("Added wifi profiles")
                 break
             time.sleep(1)

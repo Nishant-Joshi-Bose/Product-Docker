@@ -180,7 +180,7 @@ def test_system_setup_cli_command(device_id, frontdoor_wlan):
     3. Verify device state which should be "DESELECTED".
     """
     # 1. Set OOB Setup completed using CLI command.
-    adb_utils.adb_telnet_cmd('setoobsetupcompleted', device_id=device_id)
+    adb_utils.adb_telnet_cmd('product setup_complete', device_id=device_id)
     for _ in range(25):
         state = frontdoor_wlan.getState()
         if state in eddie_helper.DESELECTED:

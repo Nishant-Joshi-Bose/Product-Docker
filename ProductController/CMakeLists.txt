@@ -82,6 +82,7 @@ TARGET_LINK_LIBRARIES(ProductController
   CommonTypes
   STSProtoBufs
   SoundTouch_SDK_Protobuf_static
+  CapsUtils
   SystemEventService
   BoseLibs
   jsoncpp
