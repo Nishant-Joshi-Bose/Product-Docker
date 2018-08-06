@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-01_1236"
+    "selected_version": "Continuous/Castle-Fork/2018-08-05_1026"
   },
   {
     "name": "BLERemoteXCVR",
@@ -53,7 +53,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.5.5-519+0adbab3"
+    "selected_version": "Release/master/2.0.0-542+474c93e"
   },
   {
     "name": "BoseOPKG-native",
@@ -101,7 +101,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/1.0.1-108+fc930dc"
+    "selected_version": "Release/master/2.0.0-111+272f93a"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-501+970dfba"
+    "selected_version": "Release/master/1.5.6-514+cf44936"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@e554d9a852b77d956184864de1d51d8c9c0422b8"
+    "selected_version": "master@ee77b3eba3b216c10e62c7f926d251e3080ab19b"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-01_1236"
+    "selected_version": "Continuous/Castle-Fork/2018-08-05_1026"
   },
   {
     "name": "svc-pts-log-decrypt",
