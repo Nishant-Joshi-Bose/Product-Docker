@@ -63,3 +63,9 @@ message AccessorySpeakerState
     optional SpeakerControls enabled      = 5;
     optional bool disbandAccessories      = 6;
 }
+
+message AccessoriesPlayTonesRequest
+{
+    optional bool rears = 1;
+    optional bool subs  = 2;
+}
