@@ -16,25 +16,25 @@ def demoUtils(adb):
     return DemoUtils(adb, logger)
 
 @pytest.fixture(scope='function', autouse=True)
-def setDemoOff(request, frontDoor_reboot, demoUtils, deviceid):
+def setDemoOff(request, front_door_email, demoUtils, deviceid):
     """
     Set demoMode off and delete keyConfig
     """
     logger.info("setDemoOff")
-    setDemo(request, frontDoor_reboot, demoUtils, deviceid)
-    demoUtils.deleteKeyConfig(frontDoor_reboot)
-    demoUtils.verifyDemoKeyConfig(frontDoor_reboot, "Error Reading configuration file")
+    setDemo(request, front_door_email, demoUtils, deviceid)
+    demoUtils.deleteKeyConfig(front_door_email)
+    demoUtils.verifyDemoKeyConfig(front_door_email, "Error Reading configuration file")
 
-def setDemo(request, frontDoor_reboot, demoUtils, deviceid):
+def setDemo(request, front_door_email, demoUtils, deviceid):
     """
     Set demoMode False if True
     """
-    demoResponse = frontDoor_reboot.getDemoMode()
+    demoResponse = front_door_email.getDemoMode()
     logger.info("demoResponse " + str(demoResponse))
     if demoResponse == True:
-        demoUtils.setDemoMode(False, deviceid, frontDoor_reboot, True, 3,
+        demoUtils.setDemoMode(False, deviceid, front_door_email, True, 3,
                               request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoMode(False, frontDoor_reboot)
+        demoUtils.verifyDemoMode(False, front_door_email)
 
 @pytest.fixture(scope='session')
 def get_config():
@@ -44,9 +44,9 @@ def get_config():
     """
     data = keyConfig
     return data
-
+"""
 @pytest.fixture(scope='function')
-def frontDoor_reboot(request, device_ip):
+def front_door_email(request, device_ip):
     frontDoorAPI = FrontDoorAPI(device_ip, email=request.config.getoption("--email"),
                                 password=request.config.getoption("--password"))
     def tear():
@@ -54,20 +54,18 @@ def frontDoor_reboot(request, device_ip):
             frontDoorAPI.close()
     request.addfinalizer(tear)
     return frontDoorAPI
-
+"""
 @pytest.fixture(scope='function', autouse=True)
-def resetDemo(request, frontDoor_reboot, demoUtils, device_id):
+def resetDemo(request, front_door_email, demoUtils, device_id):
     """
     reset demoMode False if True
     :param request:
-    :param frontDoor_reboot:
+    :param front_door_email:
     :param demoUtils:
     :param device_id:
     :return:
     """
     def teardown():
         logger.info("set demoMode False towards the end of every test")
-        setDemo(request, frontDoor_reboot, demoUtils, device_id)
-        demoUtils.deleteKeyConfig(frontDoor_reboot)
-        demoUtils.verifyDemoKeyConfig(frontDoor_reboot, "Error Reading configuration file")
+        setDemo(request, front_door_email, demoUtils, device_id)
     request.addfinalizer(teardown)
