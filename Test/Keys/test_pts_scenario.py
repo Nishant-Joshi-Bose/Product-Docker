@@ -36,7 +36,7 @@ REBOOT_TIMEOUT = 10
 PTS_TIMEOUT = 5.2
 
 
-@pytest.mark.usefixtures("reboot_device_at_end", "adb", "device_id")
+@pytest.mark.usefixtures("reboot_device_at_end", "adb", "device_id", 'add_wifi_at_end')
 @pytest.mark.parametrize("device_source", ["AUX", "BLUETOOTH"])
 def test_pts_mode_device_source(adb, device_source, device_id):
     """
@@ -91,7 +91,7 @@ def test_pts_mode_device_source(adb, device_source, device_id):
         "Not able to ping PTS mode IP address and ping status: {0}".format(ping_status)
 
 
-@pytest.mark.usefixtures("reboot_device_at_end", "adb", "device_id")
+@pytest.mark.usefixtures("reboot_device_at_end", "adb", "device_id", 'add_wifi_at_end')
 @pytest.mark.parametrize("device_state", ["ON", "OFF", "SETUP"])
 def test_pts_mode_device_state(adb, device_state, device_id):
     """

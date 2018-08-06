@@ -20,7 +20,7 @@ This repo contains the source code and tools specific to the Eddie product.
 
 ### Getting Started
 
-Checkout CastleTools.git and Eddie.git:
+Clone CastleTools.git and Eddie.git:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git

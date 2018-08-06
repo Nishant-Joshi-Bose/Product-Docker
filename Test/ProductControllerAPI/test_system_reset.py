@@ -80,9 +80,7 @@ def test_system_reset_device_state(frontdoor_wlan, request, adb, device_state):
     adb.waitForRebootDevice()
     LOGGER.debug("Device rebooted & waiting for telnet service to get started")
 
-    telnet_status = eddie_helper.wait_for_device_commands(device_id, adb)
-
-    assert telnet_status, "CLIServer not started. Telnet status: {}".format(telnet_status)
+    device_utils.check_for_telnet_service(device_id=device_id)
 
     # Wait for next device state after booting
     device_state = eddie_helper.wait_for_setup_state(device_id)
@@ -144,10 +142,7 @@ def test_system_reset_device_source(frontdoor_wlan, request, adb, device_source)
     adb.waitForRebootDevice()
     LOGGER.debug("Device rebooted and waiting for telnet service to get started")
 
-    # Wait for CLI-Server to start and listens on 17000 port.
-    telnet_status = eddie_helper.wait_for_device_commands(device_id, adb)
-    assert telnet_status, "CLIServer not started. Telnet status: {}".format(telnet_status)
-
+    device_utils.check_for_telnet_service(device_id=device_id)
     # Wait for next device state after booting
     device_state = eddie_helper.wait_for_setup_state(device_id)
 
