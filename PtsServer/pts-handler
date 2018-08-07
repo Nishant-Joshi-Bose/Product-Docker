@@ -146,10 +146,12 @@ if path == "/logread.txt.gz" and is_development(): # same but compressed
     sys.stdout.flush()
     os.execl("/bin/sh", "sh", "-c", "logread | gzip")
 
-if path == "/logread":          # same but encrypted
-    http_ok("text/plain")       # base64 encoded
+if path == "/logread.dat":      # same but encrypted
+    http_ok("application/octet-stream")
     sys.stdout.flush()
-    os.execlp("encrypt-logs", "encrypt-logs", "logread")
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs logread | gzip")
+
+http_redirect(path, "/logread", "/logread.dat")
 
 # ----------------------------------------------------------------------------
 # View miscellaneous system status information.
@@ -159,10 +161,12 @@ if path == "/pts.txt" and is_development():
     sys.stdout.flush()
     os.execlp("pts-info", "pts-info")
 
-if path == "/pts":              # same but encrypted
-    http_ok("text/plain")       # base64 encoded
+if path == "/pts.dat":          # same but encrypted
+    http_ok("application/octet-stream")
     sys.stdout.flush()
-    os.execlp("encrypt-logs", "encrypt-logs", "pts-info")
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs pts-info | gzip")
+
+http_redirect(path, "/pts", "/pts.dat")
 
 # ----------------------------------------------------------------------------
 # Force the system into reflash mode (QFIL).
@@ -307,7 +311,7 @@ if path == "/dev" and is_development():
 function set_address() {
   var ain = document.getElementById("address");
   var address = ain.value.trim();
-  var err;
+  var err = "";
   if (address.match(/^[-\w.]+$/)) {
     var anchors = document.getElementsByTagName("a");
     for (var i = anchors.length; --i >= 0;) {
@@ -349,28 +353,28 @@ Address:
     <td>Quality Audit</td>
   </tr>
   <tr class="odd">
-    <td class="iface">usb</td>
+    <td class="iface">any</td>
     <td><a>/logread.txt</a></td>
-    <td>A snapshot of the system log ring buffer</td>
-  </tr>
-  <tr class="even">
-    <td class="iface">usb</td>
-    <td><a>/logread.txt.gz</a></td>
-    <td>Same as /logread.txt but compressed</td>
-  </tr>
-  <tr class="odd">
-    <td class="iface">usb</td>
-    <td><a>/pts.txt</a></td>
-    <td>Various Linux and system status information (e.g., ifconfig)</td>
+    <td>A snapshot of the system log ring buffer*</td>
   </tr>
   <tr class="even">
     <td class="iface">any</td>
-    <td><a>/pts</a></td>
+    <td><a>/logread.txt.gz</a></td>
+    <td>Same as /logread.txt but compressed*</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/pts.txt</a></td>
+    <td>Various Linux and system status information (e.g., ifconfig)*</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">any</td>
+    <td><a>/pts.dat</a></td>
     <td>Same as /pts.txt but encrypted</td>
   </tr>
   <tr class="odd">
     <td class="iface">any</td>
-    <td><a>/logread</a></td>
+    <td><a>/logread.dat</a></td>
     <td>Same as /logread.txt but encrypted</td>
   </tr>
   <tr class="even">
@@ -406,12 +410,12 @@ Address:
   <tr class="even">
     <td class="iface">any</td>
     <td><a>/opensource</a></td>
-    <td>List the licenses of open source software used in the system</td>
+    <td>The licenses of open source software used in the system</td>
   </tr>
   <tr class="odd">
     <td class="iface">any</td>
     <td><a>/service</a></td>
-    <td>Remanufacturing. Only if the unit is in service mode</td>
+    <td>Remanufacturing. Only in service mode</td>
   </tr>
   <tr class="even">
     <td class="iface">usb, wlan1</td>
@@ -419,6 +423,9 @@ Address:
     <td>Wi-Fi setup</td>
   </tr>
 </table>
+
+<p>
+* Only in development mode.
 
 </body>
 </html>
