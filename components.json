@@ -1,15 +1,15 @@
 [
   {
     "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Release/master/1.5.6-14+c7b1d78"
+    "selected_version": "Release/master/2.0.0-18+3f4fe5c"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-8+fa86981"
+    "selected_version": "Release/master/2.1.0-14+1407fec"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/master/1.5.2-15+0d90f3f"
+    "selected_version": "Release/master/2.1.0-21+fd7bdef"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -25,11 +25,11 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.20.43171.2925264"
+    "selected_version": "Continuous/Castle-Fork/2018-08-05_1026"
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/v1.0.2-0+ebcbd9e"
+    "selected_version": "Release/master/v2.0.0-0+9c2b8b9"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.5.5-519+0adbab3"
+    "selected_version": "Release/master/2.0.0-542+474c93e"
   },
   {
     "name": "BoseOPKG-native",
@@ -69,7 +69,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.8-437+189d3bc"
+    "selected_version": "Release/SOS/2.0.1-455+72fd4f9"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/1.0.1-108+fc930dc"
+    "selected_version": "Release/master/2.0.0-111+272f93a"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.0-61+504c312"
+    "selected_version": "Release/bose-master/1.0.0-67+155c3e8"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-245+72b9d68"
+    "selected_version": "Release/master/1.5.5-249+47b2bba"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.5-501+970dfba"
+    "selected_version": "Release/master/1.5.6-514+cf44936"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -169,15 +169,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/1.5.1-941+c392de8"
+    "selected_version": "Continuous/master/1.5.1-956+5fc8b1c"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/1.5.1-941+c392de8"
+    "selected_version": "Continuous/master/1.5.1-956+5fc8b1c"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@7bd77f7b4423bc3410414dfabd79e6a4e4c725a5"
+    "selected_version": "master@ee77b3eba3b216c10e62c7f926d251e3080ab19b"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.20.43171.2925264"
+    "selected_version": "Continuous/Castle-Fork/2018-08-05_1026"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -249,7 +249,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/1.5.3-28+18fc83b"
+    "selected_version": "Release/master/1.5.4-34+8178648"
   },
   {
     "name": "TestUtils",

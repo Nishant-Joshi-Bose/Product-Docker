@@ -68,8 +68,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
         {
             const auto& source = sources.sources( i );
 
-            // TODO - we need to check "visible" here as well, but it's not yet supported
-            if( source.has_details() and source.details().has_cicode() )
+            if( source.has_details() and source.details().has_cicode() and m_ProductController.GetSourceInfo().IsSourceAvailable( source ) )
             {
                 codes.add_cicode( source.details().cicode() );
             }
@@ -129,7 +128,9 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     const auto& nowSelection = m_ProductController.GetNowSelection( );
     std::string cicode;
 
-    bool ignoreCECKey = ( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CEC );
+    // we don't want to leave the keyhandler with a pressed key if that key causes us to switch out of a source where CEC keys would normally
+    // be accepted, so always allow releases from CEC
+    bool ignoreCECKey = ( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CEC ) && ( keyEvent.keystate() != LpmServiceMessages::KEY_RELEASED );
 
     if( nowSelection.has_contentitem( ) )
     {
@@ -158,7 +159,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
 
         // if it's a key that normally would have been blasted but the source isn't configured,
         // just consume it
-        if( isBlastedKey && sourceItem and ( not sourceItem->visible() ) )
+        if( isBlastedKey && sourceItem and ( not m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key", __func__ );
             return true;

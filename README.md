@@ -230,11 +230,11 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | Interface | Endpoint | Description |
 | -------- | -------- | ----------- |
 | usb | /diag | Quality Audit |
-| usb | /logread.txt | A snapshot of the system log ring buffer * |
-| usb | /logread.txt.gz | Same as /logread.txt but compressed * |
-| usb | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
-| any | /pts | Same as /pts.txt but encrypted ** |
-| any | /logread | Same as /logread.txt but encrypted ** |
+| any | /logread.txt | A snapshot of the system log ring buffer * |
+| any | /logread.txt.gz | Same as /logread.txt but compressed * |
+| any | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
+| any | /pts.dat | Same as /pts.txt but encrypted ** |
+| any | /logread.dat | Same as /logread.txt but encrypted ** |
 | usb | /reflash | Force the unit into reflash mode (QFIL) |
 | usb | /bose-version | /opt/Bose/etc/BoseVersion.json |
 | usb | /kernel-version | /etc/riviera-version |
