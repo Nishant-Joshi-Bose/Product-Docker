@@ -22,6 +22,7 @@
 #include "A4VQuickSetServiceClientFactory.h"
 #include "SystemPowerMacro.pb.h"
 #include "FrontDoorClient.h"
+#include "CommonProductCommandLine.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,6 +45,8 @@ class CustomProductController;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductKeyInputManager : public ProductKeyInputManager
 {
+    friend class ProductController;
+
 public:
 
     ///

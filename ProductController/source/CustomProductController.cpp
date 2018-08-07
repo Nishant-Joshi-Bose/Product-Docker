@@ -156,7 +156,7 @@ CustomProductController::CustomProductController( ) :
     /// Construction of the Product Controller Modules
     ///
     m_ProductLpmHardwareInterface( nullptr ),
-    m_ProductCommandLine( nullptr ),
+    //TEMP m_ProductCommandLine( nullptr ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductFrontDoorKeyInjectIF( nullptr ),
     m_ProductCecHelper( nullptr ),
@@ -181,7 +181,7 @@ CustomProductController::CustomProductController( ) :
     /// Intent Handler Initialization
     ///
     m_IntentHandler( *GetTask(),
-                     m_CliClientMT,
+                     GetCommonProductCommandLine().GetCommandLineInterface( ),
                      m_FrontDoorClientIF,
                      *this ),
 
@@ -706,7 +706,7 @@ void CustomProductController::Run( )
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
-    m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    //TEMP m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
                                     m_ProductKeyInputManager,
@@ -723,7 +723,7 @@ void CustomProductController::Run( )
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductAudioService         == nullptr ||
-        m_ProductCommandLine          == nullptr ||
+        //TEMP m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
         m_ProductFrontDoorKeyInjectIF == nullptr ||
         m_ProductCecHelper            == nullptr ||
@@ -765,7 +765,7 @@ void CustomProductController::Run( )
     ///
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
-    m_ProductCommandLine         ->Run( );
+    //TEMP m_ProductCommandLine         ->Run( );
     m_ProductKeyInputManager     ->Run( );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
@@ -1639,7 +1639,7 @@ void CustomProductController::Wait( )
     /// Stop all the submodules.
     ///
     m_ProductLpmHardwareInterface->Stop( );
-    m_ProductCommandLine         ->Stop( );
+    //TEMP m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductFrontDoorKeyInjectIF->Stop( );
     m_ProductCecHelper           ->Stop( );
@@ -2012,7 +2012,7 @@ void CustomProductController::HandleGetPowerMacro(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductController::HandlePutPowerMacro 
+/// @brief CustomProductController::HandlePutPowerMacro
 ///
 /// @param const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req
 ///
