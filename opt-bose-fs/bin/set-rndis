@@ -17,7 +17,7 @@ script = open(script_name).read()
 enabled = "/sbin/usb/compositions/9059 n 2"
 disabled = "/sbin/usb/compositions/901D n"
 
-sys.argv.pop(0)
+this_script = os.path.basename(sys.argv.pop(0))
 
 if len(sys.argv) == 0:
     if disabled in script:
@@ -33,7 +33,7 @@ if len(sys.argv) == 1 and sys.argv[0] == "on":
 elif len(sys.argv) == 1 and sys.argv[0] == "off":
     old, new = enabled, disabled
 else:
-    sys.exit("usage: set-rndis [on|off]")
+    sys.exit("usage: {} [on|off]".format(this_script))
 
 if new in script:
     #print "unchanged"
@@ -41,7 +41,7 @@ if new in script:
 
 i = script.find(old)
 if i == -1:
-    sys.exit("set-rndis: not enabled and not disabled?")
+    sys.exit("{}: not enabled and not disabled?".format(this_script))
 
 remount = False
 if not os.access(script_name, os.W_OK):
@@ -50,9 +50,12 @@ if not os.access(script_name, os.W_OK):
 
 with open(script_name, "w") as fh:
     fh.write(script[:i] + new + script[i+len(old):])
-print "wrote", script_name
+print "{}: wrote {}".format(this_script, script_name)
 
 if remount:
     subprocess.call(["mount", "-oremount,ro", "/"])
+
+print "{}: running {}".format(this_script, new)
+subprocess.call(new.split())
 
 sys.exit()
