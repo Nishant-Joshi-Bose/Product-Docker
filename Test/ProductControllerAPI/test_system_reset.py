@@ -25,23 +25,23 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 LOGGER = get_logger(__file__)
 
 
-@pytest.mark.usefixtures("request", "adb", "wifi_config", "ip_address_wlan")
-@pytest.mark.parametrize("device_state", ["ON", "OFF", "SETUP"])
-def test_system_reset_device_state(request, adb, device_state, wifi_config):
+@pytest.mark.usefixtures("adb", "ip_address_wlan")
+@pytest.mark.parametrize("device_state", ["ON", "OFF"])
+def test_system_reset_device_state(frontdoor_wlan, request, adb, device_state):
     """
     This test will verify device state after system reset api
-        while device states are ON, OFF, SETUP
+        while device states are ON and OFF.
 
     Test Steps:
-    1. Change the device state(ON, OFF, SETUP)
+    1. Change the device state(ON, OFF)
     2. Check the FrontDoor API exists
     3. Reset the device by calling /system/reset
     4. Verify the device state
 
+    :param frontdoor_wlan: Instance of FrontDoor API
     :param request: A request for a fixture from a test or fixture function.
     :param adb: ADB Instance
-    :param device_state: device state (ON, OFF, SETUP)
-    :param wifi_config: Wifi configuraion details
+    :param device_state: device state (ON, OFF)
     :return: None
     """
     LOGGER.info("Testing system reset")
@@ -50,20 +50,17 @@ def test_system_reset_device_state(request, adb, device_state, wifi_config):
     device_id = request.config.getoption("--device-id")
     device_utils.change_current_device_state(device_state, device_id)
 
-    # get frontdoor instance
-    front_door = eddie_helper.get_frontdoor_instance(request, wifi_config)
-
     # check for frontDoor API exist
-    eddie_helper.check_if_end_point_exists(front_door, eddie_helper.SYSTEM_RESET_API)
+    eddie_helper.check_if_end_point_exists(frontdoor_wlan, eddie_helper.SYSTEM_RESET_API)
 
     # verify the GET response
-    response = front_door.getSystemReset()
+    response = frontdoor_wlan.getSystemReset()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_RESET_API, eddie_helper.METHOD_GET, 200)
     assert not response["body"]["resetProduct"], "Error in response of API: {}".format(response)
 
     # verify the PUT response
     data = {"resetProduct": "true"}
-    response = front_door.setSystemReset(json.dumps(data))
+    response = frontdoor_wlan.setSystemReset(json.dumps(data))
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_RESET_API, eddie_helper.METHOD_PUT, 200)
     assert response["body"]["resetProduct"], "Device doesn't reset: {}".format(response)
 
@@ -83,9 +80,7 @@ def test_system_reset_device_state(request, adb, device_state, wifi_config):
     adb.waitForRebootDevice()
     LOGGER.debug("Device rebooted & waiting for telnet service to get started")
 
-    telnet_status = eddie_helper.wait_for_device_commands(device_id, adb)
-
-    assert telnet_status, "CLIServer not started. Telnet status: {}".format(telnet_status)
+    device_utils.check_for_telnet_service(device_id=device_id)
 
     # Wait for next device state after booting
     device_state = eddie_helper.wait_for_setup_state(device_id)
@@ -93,9 +88,9 @@ def test_system_reset_device_state(request, adb, device_state, wifi_config):
     assert device_state != eddie_helper.BOOTING, "Device is still in Booting ({}) state.".format(device_state)
 
 
-@pytest.mark.usefixtures("request", "adb", "wifi_config", "ip_address_wlan")
+@pytest.mark.usefixtures("adb", "ip_address_wlan")
 @pytest.mark.parametrize("device_source", ["AUX", "BLUETOOTH"])
-def test_system_reset_device_source(request, adb, device_source, wifi_config):
+def test_system_reset_device_source(frontdoor_wlan, request, adb, device_source):
     """
     This test will verify device state after system reset api
         while device sources are AUX and BLUETOOTH.
@@ -106,10 +101,10 @@ def test_system_reset_device_source(request, adb, device_source, wifi_config):
     3. Reset the device by calling /system/reset
     4. Verify the device state by /system/reset
 
+    :param frontdoor_wlan: Instance of FrontDoor API
     :param request: A request for a fixture from a test or fixture function.
     :param adb: ADB Instance
     :param device_source: device source (AUX, BLUETOOTH)
-    :param wifi_config: Wifi configuraion details
     :return: None
     """
     LOGGER.info("Testing system reset")
@@ -118,19 +113,17 @@ def test_system_reset_device_source(request, adb, device_source, wifi_config):
     device_id = request.config.getoption("--device-id")
     device_utils.set_device_source(device_source, device_id)
 
-    # get frontdoor instance
-    front_door = eddie_helper.get_frontdoor_instance(request, wifi_config)
     # check for frontDoor API exist
-    eddie_helper.check_if_end_point_exists(front_door, eddie_helper.SYSTEM_RESET_API)
+    eddie_helper.check_if_end_point_exists(frontdoor_wlan, eddie_helper.SYSTEM_RESET_API)
 
     # verify the GET response
-    response = front_door.getSystemReset()
+    response = frontdoor_wlan.getSystemReset()
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_RESET_API, eddie_helper.METHOD_GET, 200)
     assert not response["body"]["resetProduct"], "Error in response of API and response is {}".format(response)
 
     # verify the PUT response
     data = {"resetProduct": "true"}
-    response = front_door.setSystemReset(json.dumps(data))
+    response = frontdoor_wlan.setSystemReset(json.dumps(data))
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_RESET_API, eddie_helper.METHOD_PUT, 200)
     assert response["body"]["resetProduct"], "Device doesn't reset. Response: {}".format(response)
 
@@ -149,10 +142,7 @@ def test_system_reset_device_source(request, adb, device_source, wifi_config):
     adb.waitForRebootDevice()
     LOGGER.debug("Device rebooted and waiting for telnet service to get started")
 
-    # Wait for CLI-Server to start and listens on 17000 port.
-    telnet_status = eddie_helper.wait_for_device_commands(device_id, adb)
-    assert telnet_status, "CLIServer not started. Telnet status: {}".format(telnet_status)
-
+    device_utils.check_for_telnet_service(device_id=device_id)
     # Wait for next device state after booting
     device_state = eddie_helper.wait_for_setup_state(device_id)
 

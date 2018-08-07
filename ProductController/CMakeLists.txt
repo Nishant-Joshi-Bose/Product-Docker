@@ -17,6 +17,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${AUDIOSOURCE_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductNetworkService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSoftwareInstallScheduler
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   {PROTO_CC_DEST}
@@ -24,9 +25,9 @@ INCLUDE_DIRECTORIES(
 )
 
 # -----------------------------------------------------------------------------
-# Eddie daemon.
+# ProductController daemon.
 
-ADD_EXECUTABLE(Eddie
+ADD_EXECUTABLE(ProductController
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateSoftwareInstall.cpp
@@ -34,8 +35,7 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandbyTransition.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
   ProductCliClient.cpp
-  DataCollectionClientInterface.cpp
-  EddieProductController.cpp
+  CustomProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
@@ -56,8 +56,9 @@ ADD_EXECUTABLE(Eddie
   CustomProductSTS/CustomProductSTSStateTopAux.cpp
 )
 
-TARGET_LINK_LIBRARIES(Eddie
+TARGET_LINK_LIBRARIES(ProductController
   CastleProductControllerCommon
+  ProductControllerCommonProto
   DataCollectionClient
   LpmClient
   HttpInterface
@@ -81,18 +82,20 @@ TARGET_LINK_LIBRARIES(Eddie
   CommonTypes
   STSProtoBufs
   SoundTouch_SDK_Protobuf_static
+  CapsUtils
   SystemEventService
   BoseLibs
   jsoncpp
   protobuf
-  TinyXml
+  libwebsockets.a
+  libssl.a
+  libcrypto.a
+  libTinyXml.a
+  libz.a
   pthread
   rt
   cap
   dl
 )
 
-INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
-
-# This is temporary because ProductCliClient.cpp needs to include RivieraLPM_IpcProtocol.h
-SET_SOURCE_FILES_PROPERTIES(ProductCliClient.cpp PROPERTY COMPILE_FLAGS -I${RIVIERA_LPM_SERVICE_DIR}/internal_include)
+INSTALL(TARGETS ProductController DESTINATION ${OUTPUT_BIN_DIR})

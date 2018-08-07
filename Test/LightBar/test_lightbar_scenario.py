@@ -1,4 +1,4 @@
-# test_lightbar_scenario.py
+# LightBar/test_lightbar_scenario.py
 #
 # :Organization:  BOSE CORPORATION
 #
@@ -15,6 +15,7 @@ Automated Tests for LightBar Animations for Eddie
 import json
 import os
 import random
+import time
 import ConfigParser
 from time import sleep
 
@@ -24,7 +25,6 @@ import lightbar_helper
 
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
-from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 
 LOGGER = get_logger(__file__)
@@ -38,6 +38,7 @@ def pytest_generate_tests(metafunc):
     """
     if str(metafunc.function.__name__) == 'test_play_valid_animation':
         device_id = metafunc.config.getoption("--device-id")
+        environment = metafunc.config.getoption("--environment")
 
         network_base = NetworkBase(None, device_id)
 
@@ -64,14 +65,8 @@ def pytest_generate_tests(metafunc):
             if not device_ip_address:
                 pytest.fail("Not able to gather IP Address on {}".format(device_id))
 
-        front_door = FrontDoorQueue(device_ip_address)
-        lightbar_response = front_door.getActiveAnimation()
-        if front_door:
-            front_door.close()
-
-        LOGGER.debug("Lightbar response is %s", lightbar_response)
-        animation_values = lightbar_response["properties"]["supportedValues"]
-
+        animation_values = lightbar_helper.get_lightbar_animations(device_id, device_ip_address, environment)
+        LOGGER.debug("Lightbar response is %s", animation_values)
         metafunc.parametrize("animation_value", animation_values)
 
 

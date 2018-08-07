@@ -2,11 +2,27 @@
 Conftest.py for DemoController
 """
 import pytest
+
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
 from ..commonData import keyConfig
+
 logger = get_logger(__name__)
 
+<<<<<<< HEAD
+=======
+@pytest.fixture(scope='class', autouse=True)
+def resetDemo(request, frontDoor, demoUtils, device_id):
+    """
+    reset demoMode False if True
+    """
+    def teardown():
+        logger.info("set demoMode False towards the end of all the tests")
+        setDemo(request, frontDoor, demoUtils, device_id)
+    request.addfinalizer(teardown)
+
+
+>>>>>>> origin/master
 @pytest.fixture(scope='class')
 def demoUtils(adb):
     """
@@ -14,6 +30,10 @@ def demoUtils(adb):
     """
     logger.info("demoUtils")
     return DemoUtils(adb, logger)
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 
 @pytest.fixture(scope='function', autouse=True)
 def setDemoOff(request, front_door_email, demoUtils, deviceid):
@@ -25,7 +45,12 @@ def setDemoOff(request, front_door_email, demoUtils, deviceid):
     demoUtils.deleteKeyConfig(front_door_email)
     demoUtils.verifyDemoKeyConfig(front_door_email, "Error Reading configuration file")
 
+<<<<<<< HEAD
 def setDemo(request, front_door_email, demoUtils, deviceid):
+=======
+
+def setDemo(request, frontDoor, demoUtils, device_id):
+>>>>>>> origin/master
     """
     Set demoMode False if True
     """
@@ -36,6 +61,7 @@ def setDemo(request, front_door_email, demoUtils, deviceid):
                               request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode(False, front_door_email)
 
+
 @pytest.fixture(scope='session')
 def get_config():
     """
@@ -44,6 +70,7 @@ def get_config():
     """
     data = keyConfig
     return data
+<<<<<<< HEAD
 """
 @pytest.fixture(scope='function')
 def front_door_email(request, device_ip):
@@ -69,3 +96,5 @@ def resetDemo(request, front_door_email, demoUtils, device_id):
         logger.info("set demoMode False towards the end of every test")
         setDemo(request, front_door_email, demoUtils, device_id)
     request.addfinalizer(teardown)
+=======
+>>>>>>> origin/master

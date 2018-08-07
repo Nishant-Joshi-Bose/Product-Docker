@@ -23,8 +23,8 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 LOGGER = get_logger(os.path.basename(__file__))
 
 
-@pytest.mark.usefixtures('front_door_queue', 'device_in_aux')
-def test_system_power_timeouts_errors(front_door_queue):
+@pytest.mark.usefixtures('frontdoor_wlan', 'device_in_aux')
+def test_system_power_timeouts_errors(frontdoor_wlan):
     """
     Test for PUT method of system power timeouts api with negative scenarios.
     Test Steps:
@@ -36,14 +36,14 @@ def test_system_power_timeouts_errors(front_door_queue):
     LOGGER.info("Testing set invalid system power timeouts")
 
     # 1. Check that endpoint is returned in capabilities.
-    eddie_helper.check_if_end_point_exists(front_door_queue, eddie_helper.SYSTEM_POWER_TIMEOUTS_API)
+    eddie_helper.check_if_end_point_exists(frontdoor_wlan, eddie_helper.SYSTEM_POWER_TIMEOUTS_API)
 
     # 2. Validate error request by sending invalid key.
     data_request = dict()
     data_request["notValid"] = False
     data = json.dumps(data_request)
 
-    response = eddie_helper.set_system_power_timeouts(front_door_queue, data)
+    response = frontdoor_wlan.setSystemPowerTimeouts(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # Verify error subcode which should be "2005".
@@ -57,7 +57,7 @@ def test_system_power_timeouts_errors(front_door_queue):
     data_request["noAudio"] = "invalidValue"
     data = json.dumps(data_request)
 
-    response = eddie_helper.set_system_power_timeouts(front_door_queue, data)
+    response = frontdoor_wlan.setSystemPowerTimeouts(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # Verify error subcode which should be "2005".
@@ -71,7 +71,7 @@ def test_system_power_timeouts_errors(front_door_queue):
     data_request["noVideo"] = "invalidValue"
     data = json.dumps(data_request)
 
-    response = eddie_helper.set_system_power_timeouts(front_door_queue, data)
+    response = frontdoor_wlan.setSystemPowerTimeouts(data)
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                  eddie_helper.METHOD_PUT, eddie_helper.STATUS_ERROR, is_error=True)
     # Verify error subcode which should be "2005".
@@ -80,8 +80,8 @@ def test_system_power_timeouts_errors(front_door_queue):
                                                                         response["error"]["subcode"])
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'front_door_queue')
-def test_system_power_timeouts_from_setup_state(front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'frontdoor_wlan')
+def test_system_power_timeouts_from_setup_state(frontdoor_wlan):
     """
     Test for system power timeouts api after rebooting the device and from SetupOther state
     Test Steps:
@@ -93,7 +93,8 @@ def test_system_power_timeouts_from_setup_state(front_door_queue):
     """
     # 1. Get system power timeouts information and verify response.
     LOGGER.info("Testing get system power timeouts")
-    response = eddie_helper.get_system_power_timeouts(front_door_queue)
+
+    response = frontdoor_wlan.getSystemPowerTimeouts()
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                  eddie_helper.METHOD_GET, eddie_helper.STATUS_OK)
@@ -112,7 +113,7 @@ def test_system_power_timeouts_from_setup_state(front_door_queue):
         data_request = dict()
         data_request["noAudio"] = no_audio
 
-        response = eddie_helper.set_system_power_timeouts(front_door_queue, json.dumps(data_request))
+        response = frontdoor_wlan.setSystemPowerTimeouts(json.dumps(data_request))
         eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                      eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
@@ -122,18 +123,18 @@ def test_system_power_timeouts_from_setup_state(front_door_queue):
         assert response["body"]["noAudio"] == no_audio, \
             'Audio timeout should be {}. Current value : {}'.format(no_audio, response["body"]["noAudio"])
 
-        time.sleep(2)
+        time.sleep(10)
 
         # 5. Verify notification of system power timeouts.
-        notification = eddie_helper.get_last_notification(front_door_queue, eddie_helper.SYSTEM_POWER_TIMEOUTS_API)
+        notification = eddie_helper.get_last_notification(frontdoor_wlan, eddie_helper.SYSTEM_POWER_TIMEOUTS_API)
         assert notification["noVideo"] is False, \
             'Video timeout should be False in Eddie product. Current value : {}'.format(notification["noVideo"])
         assert notification["noAudio"] == no_audio, \
             'Audio timeout should be {}. Current value : {}'.format(no_audio, notification["noAudio"])
 
 
-@pytest.mark.usefixtures('front_door_queue', 'device_in_aux')
-def test_system_power_timeouts_from_selected_state(front_door_queue):
+@pytest.mark.usefixtures('frontdoor_wlan', 'device_in_aux')
+def test_system_power_timeouts_from_selected_state(frontdoor_wlan):
     """
     Test for system power timeouts api while playing from AUX
     Test Steps:
@@ -148,16 +149,21 @@ def test_system_power_timeouts_from_selected_state(front_door_queue):
     # 1. Change playing source to AUX and verifies the device state from fixture.
 
     # 2. Verify device state which should be "SELECTED".
-    state = front_door_queue.getState()
+    for _ in range(25):
+        state = frontdoor_wlan.getState()
+        if state == eddie_helper.SELECTED:
+            break
+        time.sleep(1)
+
     assert state == eddie_helper.SELECTED, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
     # [3-7]. Get and Set system power timeouts information and verify responses.
-    test_system_power_timeouts_from_setup_state(front_door_queue)
+    test_system_power_timeouts_from_setup_state(frontdoor_wlan)
 
 
-@pytest.mark.usefixtures('front_door_queue', 'device_in_aux')
-def test_system_power_timeouts_from_idle_state(front_door_queue):
+@pytest.mark.usefixtures('frontdoor_wlan', 'device_in_aux')
+def test_system_power_timeouts_from_idle_state(frontdoor_wlan):
     """
     Test for system power timeouts api from Idle state
     Test Steps:
@@ -174,20 +180,23 @@ def test_system_power_timeouts_from_idle_state(front_door_queue):
     data_request = dict()
     data_request["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_request)
-    eddie_helper.set_system_power_control(front_door_queue, data)
-    time.sleep(2)
+    frontdoor_wlan.setSystemPowerControl(data)
+    for _ in range(25):
+        state = frontdoor_wlan.getState()
+        if state == eddie_helper.IDLE:
+            break
+        time.sleep(1)
 
     # 2. Verify device state which should be "IDLE".
-    state = front_door_queue.getState()
     assert state == eddie_helper.IDLE, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
     # [3-7]. Get and Set system power timeouts information and verify responses.
-    test_system_power_timeouts_from_setup_state(front_door_queue)
+    test_system_power_timeouts_from_setup_state(frontdoor_wlan)
 
 
-@pytest.mark.usefixtures('set_no_audio_timeout', 'front_door_queue', 'device_in_aux')
-def test_system_power_timeouts_behaviour(front_door_queue):
+@pytest.mark.usefixtures('set_no_audio_timeout', 'frontdoor_wlan', 'device_in_aux')
+def test_system_power_timeouts_behaviour(frontdoor_wlan):
     """
     Test for system power timeouts api behaviour
     Test Steps:
@@ -207,15 +216,19 @@ def test_system_power_timeouts_behaviour(front_door_queue):
     data_request = dict()
     data_request["power"] = eddie_helper.POWER_OFF
     data = json.dumps(data_request)
-    eddie_helper.set_system_power_control(front_door_queue, data)
+    frontdoor_wlan.setSystemPowerControl(data)
     time.sleep(2)
-
+    state = frontdoor_wlan.getState()
     # Set noAudio timeout to False.
     no_audio = False
 
     for _ in range(2):
         # Verify device state which should be "IDLE".
-        state = front_door_queue.getState()
+        for _ in range(25):
+            state = frontdoor_wlan.getState()
+            if state == eddie_helper.IDLE:
+                break
+            time.sleep(1)
         assert state == eddie_helper.IDLE, \
             'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
@@ -224,7 +237,7 @@ def test_system_power_timeouts_behaviour(front_door_queue):
         data_request = dict()
         data_request["noAudio"] = no_audio
 
-        response = eddie_helper.set_system_power_timeouts(front_door_queue, json.dumps(data_request))
+        response = frontdoor_wlan.setSystemPowerTimeouts(json.dumps(data_request))
         eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_POWER_TIMEOUTS_API,
                                                      eddie_helper.METHOD_PUT, eddie_helper.STATUS_OK)
 
@@ -241,6 +254,6 @@ def test_system_power_timeouts_behaviour(front_door_queue):
         no_audio = True
 
     # Verify device state which should be "NETWORK_STANDBY".
-    state = front_door_queue.getState()
+    state = frontdoor_wlan.getState()
     assert state == eddie_helper.NETWORK_STANDBY, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.NETWORK_STANDBY, state)

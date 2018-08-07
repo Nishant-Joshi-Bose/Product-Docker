@@ -19,22 +19,10 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
+from CastleTestUtils.PassportUtils.passport_utils import get_passport_url
 from CastleTestUtils.scripts.config_madrid import RESOURCES
 
 LOGGER = get_logger(__name__)
-
-
-@pytest.fixture(scope="function")
-def tap(ip_address_wlan):
-    """
-    This fixture is used to get the pexpect client for performing tap commands of CLI keys.
-    """
-    LOGGER.info("tap - pexpect telnet client")
-    if ip_address_wlan is None:
-        pytest.fail("No valid device IP")
-    client = pexpect.spawn('telnet %s 17000' % ip_address_wlan)
-    yield client
-    client.close()
 
 
 @pytest.fixture(scope='module')
@@ -45,14 +33,15 @@ def router(request, wifi_config):
     LOGGER.info("Router Information")
     router_name = request.config.getoption("--router")
 
-    router.ssid = wifi_config.get(router_name, 'ssid')
+    router.ssid = wifi_config.get(router_name)
     router.security = wifi_config.get(router_name, 'security')
     router.password = wifi_config.get(router_name, 'password')
+
     yield router
 
 
 @pytest.fixture(scope='function')
-def device_playing_from_amazon(request, frontdoor_wlan):
+def device_playing_from_amazon(request, frontdoor_wlan, user_account, environment):
     """
     This fixture will send playback request to device and verifies the right station or track is playing.
     Steps:
@@ -75,13 +64,17 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     get_config = RESOURCES[current_resource]
 
     message_creator = MessageCreator(service_name)
-    common_behavior_handler = CommonBehaviorHandler(frontdoor_wlan, message_creator, service_name, get_config['name'])
+    common_behavior_handler = CommonBehaviorHandler(frontdoor_wlan, message_creator, service_name,
+                                                    get_config['name'])
 
     LOGGER.info("Create passport account")
-    passport_base_url = request.config.getoption('--passport-base-url')
+    passport_base_url = get_passport_url(environment)
     apikey = request.config.getoption('--api-key')
-    LOGGER.info("Bose Person ID : %s ", frontdoor_wlan._bosepersonID)
-    passport_user = PassportAPIUsers(frontdoor_wlan._bosepersonID, apikey, frontdoor_wlan._access_token, passport_base_url, logger=LOGGER)
+
+    LOGGER.info("Bose Person ID : %s ", user_account['bosePersonID'])
+    passport_user = PassportAPIUsers(user_account['bosePersonID'], apikey,
+                                     user_account['access_token'], passport_base_url,
+                                     logger=LOGGER)
 
     def delete_passport_user():
         """

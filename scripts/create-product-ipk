@@ -82,11 +82,12 @@ frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_locat
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
 btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location) || exit
-btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
 blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
+bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
+svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -119,8 +120,15 @@ cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BMX "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Spotify "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Upnp "$opt_dir/bin" || exit
+#cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
@@ -157,6 +165,17 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 # from `make clean` and such.
 trap 'chmod -R +w "$secure_dir"' EXIT
 
+# Remove files that should belong to product-script
+# Any file on system can belong only to one IPK.
+# If more than one IPK has file with same path-name, the IPK that is 
+# installed last will own the file. In case of Riviera, as product.ipk
+# is installed after product-script.ipk, the critical files below belongs to
+# product.ipk. Next time, when product.ipk is installed, they become 0 byte 
+# - bricking the system
+rm "$opt_dir/.bashrc"
+rm "$opt_dir/.bash_profile"
+rm "$opt_dir/etc/product"
+
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
@@ -180,11 +199,12 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
 "$btstackadapter_dir/stage" "$opt_dir" || exit
-"$btsource_dir/stage" "$opt_dir" || exit
 "$blesetup_dir/stage" "$opt_dir" || exit
+"$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$btstssink_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
+"$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
@@ -236,6 +256,7 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "SoundTouch postrm"
+exit 0
 EOF
 
 riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
@@ -263,6 +284,7 @@ EOF
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "SoundTouch prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------

@@ -14,6 +14,7 @@ Tests for the Manufacturing Service Page
 # pylint: disable=E1101
 
 import requests
+
 import pytest
 
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
@@ -37,7 +38,7 @@ def test_service_page_unavailable(ip_address_wlan):
 
 
 @pytest.mark.usefixtures('ip_address_wlan', 'riviera_service_enabled')
-def test_service_page_availabile(ip_address_wlan):
+def test_service_page_available(ip_address_wlan):
     """
     Test to ensure service page is available with service flag set
 
@@ -49,3 +50,15 @@ def test_service_page_availabile(ip_address_wlan):
     assert response.status_code == requests.codes.ok, \
        "With service flag enabled we should retrieve a {} response, not {}.".format(requests.codes.ok,
                                                                                     response.status_code)
+
+
+@pytest.mark.usefixtures('riviera_service_enabled', 'base_service_page')
+@pytest.mark.parametrize('identifier', ['keys', 'apply'])
+def test_service_page_ids(base_service_page, identifier):
+    """
+    Ensure we have a the proper ids first loading
+    :param base_service_page: BeautifulSoup service page
+    :param identifier: The Box ID for the Div element
+    """
+    keys_elements = base_service_page.find_all('div', {'class': 'box', 'id': identifier})
+    assert len(keys_elements) == 1, "{} div not found.".format(identifier)

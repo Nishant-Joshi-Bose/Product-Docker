@@ -62,7 +62,6 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
-swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 riviera_hsp_ver=${riviera_hsp_ver##*/}
 
 stage=$wspace/builds/$cfg/hsp-ipk-stage
@@ -75,11 +74,6 @@ mkdir -p "$opt_dir/hsp" || exit
 echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
 echo "Package version \"$riviera_hsp_ver\""
 cp "$riviera_hsp_images_dir"/update_ext4.zip "$opt_dir/hsp/" || exit
-
-# Fix for issue CASTLE-13393, We need Recovery related binaries and scripts in cache partition from HSP 3.6 onwards
-# If we decide to separate and create recovery.ipk, then these files should go there.
-cp "$swup_dir"/bin/RecoveryMain "$opt_dir"/hsp/ || exit
-cp "$swup_dir"/etc/RecoveryMgr "$opt_dir"/hsp/ || exit
 
 PackageName=hsp
 
@@ -132,7 +126,7 @@ rm -f /cache/recovery/last_kmsg.*
 
 if [ -e /opt/Bose/hsp/RecoveryMain ]; then
     mv /opt/Bose/hsp/RecoveryMain /cache/ || exiterror
-    chmod +x /cache/RecoveryMain || exit error
+    chmod +x /cache/RecoveryMain || exiterror
 fi
 
 if [ -e /opt/Bose/hsp/RecoveryMgr ]; then
@@ -160,19 +154,14 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "hsp postrm"
+exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
 echo "hsp preinst"
-# This is temporary for IP2. 
-# Should be removed in IP3, when stopping services is 
-# taken care of by Shepherd / Product / SoftwareUpdateService. 
 # Set Progress Start
-/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r RECOVERY -b 0 -p 1
-
-echo "Stopping LPM"
-pkill LPMService
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r APQ -b 0 -p 1
 exit 0
 
 EOF
@@ -180,6 +169,7 @@ EOF
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "hsp prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------

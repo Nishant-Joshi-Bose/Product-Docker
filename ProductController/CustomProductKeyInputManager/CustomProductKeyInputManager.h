@@ -29,7 +29,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class EddieProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -43,7 +43,7 @@ public:
     ///
     /// CustomProductKeyInputManager Constructor
     ///
-    CustomProductKeyInputManager( EddieProductController& ProductController );
+    CustomProductKeyInputManager( CustomProductController& ProductController );
 
 
     ///
@@ -66,7 +66,7 @@ private:
     ///
     /// Custom Product Controller Reference
     ///
-    EddieProductController& m_ProductController;
+    CustomProductController& m_ProductController;
 
 };
 
