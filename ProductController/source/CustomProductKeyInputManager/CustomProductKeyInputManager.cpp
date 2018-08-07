@@ -205,6 +205,8 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     }
 
     // The rest of the checks require a valid details field; if it doesn't exist, pass this to the KeyHandler
+    // (note that sourceItem->has_details() is effectively a check for product source as well, since a non-product
+    // source won't have details)
     if( not sourceItem->has_details( ) )
     {
         // TV source won't have "details" after a factory default (before /system/sources has been written)
