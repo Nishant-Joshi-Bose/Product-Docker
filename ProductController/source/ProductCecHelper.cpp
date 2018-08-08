@@ -37,7 +37,7 @@
 #include "DataCollectionCecState.pb.h"
 
 using namespace ProductPb;
-
+constexpr char cecModePersistPath[] = "CecMode.json";
 namespace
 {
 const std::string s_ModeOn         = "ON";
@@ -67,7 +67,7 @@ ProductCecHelper::ProductCecHelper( CustomProductController& ProductController )
       m_CustomProductController( static_cast< CustomProductController & >( ProductController ) ),
       m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) )
 {
-    m_cecresp.set_mode( "ON" );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +81,9 @@ ProductCecHelper::ProductCecHelper( CustomProductController& ProductController )
 bool ProductCecHelper::Run( )
 {
     BOSE_DEBUG( s_logger, "The hardware connection to the A4VVideoManager is being established." );
+    m_cecModePersistence = ProtoPersistenceFactory :: Create( cecModePersistPath, g_ProductPersistenceDir );
+    LoadFromPersistence();
+
     m_CecHelper = A4VVideoManagerClientFactory::Create( "ProductCecHelper", m_ProductTask );
     Callback< bool > ConnectedCallback( std::bind( &ProductCecHelper::Connected,
                                                    this,
@@ -170,6 +173,7 @@ bool ProductCecHelper::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::CecModeHandleGet( const Callback<const CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp )
 {
+
     CecModeResponse cec = m_cecresp;
     SetCecModeDefaultProperties( cec );
     resp.Send( cec );
@@ -232,6 +236,7 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
     }
     tempResp = m_cecresp;
     SetCecModeDefaultProperties( tempResp );
+    PersistCecMode();
     m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, tempResp );
 }
 
@@ -652,6 +657,31 @@ void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
     m_cecState = state;
 }
 
+void ProductCecHelper::PersistCecMode()
+{
+    BOSE_DEBUG( s_logger, "%s", __func__ );
+    m_cecModePersistence->Remove();
+    m_cecModePersistence->Store( ProtoToMarkup::ToJson( m_cecresp ) );
+}
+
+void ProductCecHelper::LoadFromPersistence()
+{
+    try
+    {
+        ProtoToMarkup::FromJson( m_cecModePersistence->Load(), &m_cecresp );
+        BOSE_INFO( s_logger, "%s: %s",  __func__, ProtoToMarkup::ToJson( m_cecresp ).c_str() );
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_LOG( ERROR, "CEC mode setting from persistence failed markup error - " << e.what() );
+        m_cecresp.set_mode( "ON" ); //defaulting to ON
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
+    {
+        BOSE_LOG( ERROR, "CEC mode setting from persistence failed - " << e.what() );
+        m_cecresp.set_mode( "ON" ); //defaulting to ON
+    }
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
