@@ -13,12 +13,9 @@ logger = get_logger(__name__, "DemoLog.log", level=logging.INFO, fileLoglevel=lo
 @pytest.mark.usefixtures("save_speaker_log")
 class TestDemoFactoryDefault():
     """ Test Class for Demo factorydefault """
-    #@pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "frontDoor_reboot") change
-    #@pytest.mark.skip("")
-    #def test_demoOffAfterTimeout(self, demoUtils, device_ip, request, deviceid, frontDoor_reboot): change
-    @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "front_door_email")
-    #@pytest.mark.skip("")
-    def test_demoOffAfterTimeout(self, demoUtils, device_ip, request, deviceid, front_door_email):
+    @pytest.mark.usefixtures("demoUtils", "device_id", "device_ip", "request", "frontdoor_wlan")
+    @pytest.mark.factorydefault
+    def test_demoOffAfterTimeout(self, demoUtils, device_ip, request, device_id, frontdoor_wlan):
         """
         This test verifies demoMode is False after timeout
         Test steps:
@@ -28,25 +25,13 @@ class TestDemoFactoryDefault():
         4. Verify device stays in demoMode True
         5. Verify device factory defaults within the specified time and demoMode is set to False
         """
-        """
         logger.info("Start test_demoOffAfterTimeout")
-        demoUtils.setDemoMode(True, deviceid, front_door_email, True, 3,
+        demoUtils.setDemoMode(True, device_id, frontdoor_wlan, True, 3,
                               request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoMode(True, front_door_email)
+        demoUtils.verifyDemoMode(True, frontdoor_wlan)
         status = demoUtils.setDemoTimeout(device_ip)
         assert status, "Error: Demo timeout not set"
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, "Demo timeout reported Exception {} " + responseTimeout
-        demoUtils.verifyFactoryDefault(responseTimeout * 2, frontDoor_reboot, deviceid,
-                                       request.config.getoption("--network-iface"))        
-        """
-        logger.info("Start test_demoOffAfterTimeout")
-        demoUtils.setDemoMode(True, deviceid, front_door_email, True, 3,
-                              request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoMode(True, front_door_email)
-        status = demoUtils.setDemoTimeout(device_ip)
-        assert status, "Error: Demo timeout not set"
-        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
-        assert status, "Demo timeout reported Exception {} " + responseTimeout
-        demoUtils.verifyFactoryDefault(responseTimeout * 2, front_door_email, deviceid,
+        demoUtils.verifyFactoryDefault(responseTimeout * 2, frontdoor_wlan, device_id,
                                        request.config.getoption("--network-iface"))

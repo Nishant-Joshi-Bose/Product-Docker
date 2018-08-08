@@ -9,8 +9,6 @@ from ..commonData import keyConfig
 
 logger = get_logger(__name__)
 
-<<<<<<< HEAD
-=======
 @pytest.fixture(scope='class', autouse=True)
 def resetDemo(request, frontDoor, demoUtils, device_id):
     """
@@ -22,7 +20,6 @@ def resetDemo(request, frontDoor, demoUtils, device_id):
     request.addfinalizer(teardown)
 
 
->>>>>>> origin/master
 @pytest.fixture(scope='class')
 def demoUtils(adb):
     """
@@ -30,37 +27,27 @@ def demoUtils(adb):
     """
     logger.info("demoUtils")
     return DemoUtils(adb, logger)
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 
 @pytest.fixture(scope='function', autouse=True)
-def setDemoOff(request, front_door_email, demoUtils, deviceid):
+def setDemoOff(request, frontdoor_wlan, demoUtils, device_id):
     """
     Set demoMode off and delete keyConfig
     """
     logger.info("setDemoOff")
-    setDemo(request, front_door_email, demoUtils, deviceid)
-    demoUtils.deleteKeyConfig(front_door_email)
-    demoUtils.verifyDemoKeyConfig(front_door_email, "Error Reading configuration file")
+    setDemo(request, frontdoor_wlan, demoUtils, device_id)
+    demoUtils.deleteKeyConfig(frontdoor_wlan)
+    demoUtils.verifyDemoKeyConfig(frontdoor_wlan, "Error Reading configuration file")
 
-<<<<<<< HEAD
-def setDemo(request, front_door_email, demoUtils, deviceid):
-=======
-
-def setDemo(request, frontDoor, demoUtils, device_id):
->>>>>>> origin/master
+def setDemo(request, frontdoor_wlan, demoUtils, device_id):
     """
     Set demoMode False if True
     """
-    demoResponse = front_door_email.getDemoMode()
+    demoResponse = frontdoor_wlan.getDemoMode()
     logger.info("demoResponse " + str(demoResponse))
     if demoResponse == True:
-        demoUtils.setDemoMode(False, deviceid, front_door_email, True, 3,
+        demoUtils.setDemoMode(False, device_id, frontdoor_wlan, True, 3,
                               request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoMode(False, front_door_email)
-
+        demoUtils.verifyDemoMode(False, frontdoor_wlan)
 
 @pytest.fixture(scope='session')
 def get_config():
@@ -70,31 +57,22 @@ def get_config():
     """
     data = keyConfig
     return data
-<<<<<<< HEAD
-"""
-@pytest.fixture(scope='function')
-def front_door_email(request, device_ip):
-    frontDoorAPI = FrontDoorAPI(device_ip, email=request.config.getoption("--email"),
-                                password=request.config.getoption("--password"))
-    def tear():
-        if frontDoorAPI:
-            frontDoorAPI.close()
-    request.addfinalizer(tear)
-    return frontDoorAPI
-"""
+
 @pytest.fixture(scope='function', autouse=True)
-def resetDemo(request, front_door_email, demoUtils, device_id):
+def resetDemo(request, frontdoor_wlan, demoUtils, device_id):
     """
     reset demoMode False if True
     :param request:
-    :param front_door_email:
+    :param frontdoor_wlan:
     :param demoUtils:
     :param device_id:
     :return:
     """
     def teardown():
-        logger.info("set demoMode False towards the end of every test")
-        setDemo(request, front_door_email, demoUtils, device_id)
+        if 'factorydefault' in request.keywords:
+            print "factory default"
+        else:
+            print "no factory default"
+            logger.info("set demoMode False towards the end of every test")
+            setDemo(request, frontdoor_wlan, demoUtils, device_id)
     request.addfinalizer(teardown)
-=======
->>>>>>> origin/master
