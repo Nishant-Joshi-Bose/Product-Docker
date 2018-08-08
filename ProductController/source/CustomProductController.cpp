@@ -2012,7 +2012,7 @@ void CustomProductController::HandleGetPowerMacro(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductController::HandlePutPowerMacro 
+/// @brief CustomProductController::HandlePutPowerMacro
 ///
 /// @param const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req
 ///
