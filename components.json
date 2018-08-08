@@ -72,10 +72,6 @@
     "selected_version": "Release/SOS/2.0.1-455+72fd4f9"
   },
   {
-    "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/1.5.0-60+b113fb6"
-  },
-  {
     "name": "BTStackAdapter-qc8017_32",
     "selected_version": "Release/master/1.6.2-111+12631a9"
   },

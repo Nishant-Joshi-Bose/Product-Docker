@@ -65,7 +65,6 @@ lowpower=(
     Shepherd-avs.xml
     Shepherd-BTStackAdapter.xml
     Shepherd-BTSTSSink.xml
-    Shepherd-BTSource.xml
     Shepherd-BLESetup.xml
     Shepherd-BLEToFrontDoorService.xml
 )
@@ -203,7 +202,7 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
 
     log info "Clearing product persistence"
     rm -rfv /mnt/nv/product-persistence/*
-    
+
     if ! [ -e /mnt/nv/update/install-status.dat ]; then
         # Clear pending update status and packages- if any
         # Checking for install-status.dat protect against clearing partial install
@@ -213,7 +212,7 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
     else
         log warning "Partially installed Software Update found. Will not clear Update during Factory Default"
     fi
-    
+
     reset_timezone_to_default force
     sync
 
