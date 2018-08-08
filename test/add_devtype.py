@@ -73,7 +73,7 @@ def main():
             "multiroom"         : True, 
             "sourceAccountName" : "TV", 
             "sourceName"        : "PRODUCT", 
-            "status"            : "AVAILABLE",
+            "status"            : "NOT_CONFIGURED",
             "visible"           : True
         }
     ]
