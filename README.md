@@ -11,6 +11,8 @@ Repo admins:
 * [Jonathan Cooper](mailto:Jonathan_cooper@bose.com)
 * [Michael Cook](mailto:Michael_Cook@bose.com)
 * [Santosh Ghondi](mailto:Santosh_Gondi@bose.com)
+* [Vikram Singh](mailto:Vikram_Singh@bose.com)
+* [Ranjeet Ravidran](mailto:Ranjeet_Ravindran@bose.com)
 * [Alfred von Campe](mailto:Alfred_vonCampe@bose.com)
 * [Trevor Lai](mailto:Trevor_Lai@bose.com)
 
