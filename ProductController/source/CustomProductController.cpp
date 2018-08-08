@@ -34,6 +34,7 @@
 #include "CustomAudioSettingsManager.h"
 #include "CustomProductKeyInputManager.h"
 #include "ProductCommandLine.h"
+#include "CommonProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
@@ -156,7 +157,8 @@ CustomProductController::CustomProductController( ) :
     /// Construction of the Product Controller Modules
     ///
     m_ProductLpmHardwareInterface( nullptr ),
-    //TEMP m_ProductCommandLine( nullptr ),
+    m_ProductCommandLine( nullptr ),
+    m_CommonProductCommandLine( ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductFrontDoorKeyInjectIF( nullptr ),
     m_ProductCecHelper( nullptr ),
@@ -706,7 +708,8 @@ void CustomProductController::Run( )
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
-    //TEMP m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_CommonProductCommandLine    = std::make_shared< CommonProductCommandLine          >( );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
                                     m_ProductKeyInputManager,
@@ -723,7 +726,8 @@ void CustomProductController::Run( )
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductAudioService         == nullptr ||
-        //TEMP m_ProductCommandLine          == nullptr ||
+        m_ProductCommandLine          == nullptr ||
+        m_CommonProductCommandLine    == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
         m_ProductFrontDoorKeyInjectIF == nullptr ||
         m_ProductCecHelper            == nullptr ||
@@ -765,7 +769,7 @@ void CustomProductController::Run( )
     ///
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
-    //TEMP m_ProductCommandLine         ->Run( );
+    m_ProductCommandLine         ->Run( );
     m_ProductKeyInputManager     ->Run( );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
@@ -1639,7 +1643,7 @@ void CustomProductController::Wait( )
     /// Stop all the submodules.
     ///
     m_ProductLpmHardwareInterface->Stop( );
-    //TEMP m_ProductCommandLine         ->Stop( );
+    m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductFrontDoorKeyInjectIF->Stop( );
     m_ProductCecHelper           ->Stop( );

@@ -68,6 +68,7 @@ class CustomProductLpmHardwareInterface;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
+class CommonProductCommandLine;
 class CustomProductKeyInputManager;
 class ProductAdaptIQManager;
 class ProductBLERemoteManager;
@@ -85,6 +86,7 @@ class ProductBLERemoteManager;
 class CustomProductController : public ProductController
 {
     friend class ProductCommandLine;
+    friend class CommonProductCommandLine;
 
 public:
 
@@ -307,6 +309,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
+    std::shared_ptr< CommonProductCommandLine          > m_CommonProductCommandLine;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductFrontDoorKeyInjectIF       > m_ProductFrontDoorKeyInjectIF;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
