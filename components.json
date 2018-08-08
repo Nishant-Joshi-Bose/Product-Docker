@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-03_2101"
+    "selected_version": "Continuous/Castle-Fork/2018-08-08_0151"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -157,7 +157,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@a811ddd3778a623cf6fb532c9228ec31e5dbb684"
+    "selected_version": "master@1da995e395afedac66255e353ef603ef4aca1810"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-03_2101"
+    "selected_version": "Continuous/Castle-Fork/2018-08-08_0151"
   },
   {
     "name": "svc-pts-log-decrypt",
