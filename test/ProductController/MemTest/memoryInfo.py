@@ -11,8 +11,8 @@
 #
 import re
 
-from ..RivieraUtils.rivieraUtils import RivieraUtils
-from ..RivieraUtils.rivieraCommunication import ADBCommunication
+from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
+from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 
 adb = ADBCommunication()
 """

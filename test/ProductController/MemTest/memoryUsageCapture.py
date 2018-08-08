@@ -21,7 +21,7 @@ import time
 import platform
 
 from threading import Thread
-from ..LoggerUtils.BTelnet import TelnetClass
+from CastleTestUtils.LoggerUtils.BTelnet import TelnetClass
 
 class MemoryUsageCapture(object):
     """

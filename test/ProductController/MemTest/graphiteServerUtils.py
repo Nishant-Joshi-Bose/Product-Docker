@@ -17,7 +17,7 @@ import socket
 import time
 import urllib2
 
-from ..LoggerUtils.CastleLogger import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
 class GraphiteUtils(object):
     """

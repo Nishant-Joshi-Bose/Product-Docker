@@ -13,16 +13,15 @@
 conftest file for Memory Consumption tests
 """
 import json
-import logging
 import pytest
 import pexpect
 
 from conf_memoryConsumption import CONFIG
-from ..LoggerUtils.CastleLogger import get_logger
-from ..NetworkUtils.network_base import NetworkBase
-from ..FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
-from ..RivieraUtils.rivieraCommunication import ADBCommunication
-from ..RivieraUtils.rivieraUtils import RivieraUtils
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+from CastleTestUtils.NetworkUtils.network_base import NetworkBase
+from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
+from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
+from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 
 adb = ADBCommunication()
 
@@ -70,7 +69,7 @@ def frontdoor(request):
     networkbase = NetworkBase(None, device=device)
     interface = request.config.getoption("--network-interface")
     ip_address = networkbase.check_inf_presence(interface)
-    frontdoorobj = FrontDoorAPI(ip_address, email="lia_esper@bose.com", password="password")
+    frontdoorobj = FrontDoorAPI(ip_address, email="your_email@bose.com", password="password")
 
     def tear():
         """Closing frontdoor Object"""

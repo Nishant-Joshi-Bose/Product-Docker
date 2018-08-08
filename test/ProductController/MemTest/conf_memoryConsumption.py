@@ -29,7 +29,7 @@ CONFIG = {
     'Device_Param': {
         'SEND_FROM'     : 'ATG_Station2@bose.com',
         # Add more emails by putting a ";" then the address in the string
-        'SEND_TO'       : "lia_esper@bose.com",
+        'SEND_TO'       : "your_email@bose.com",
         'MAIL_SERVER'   : 'smtp.bose.com',
         'DEVICE_IP'     : '203.0.113.1',
         'DEVICE_PORT'   : '23',

@@ -26,12 +26,12 @@ import pytest
 import hashlib
 
 from conf_memoryConsumption import CONFIG
-from ..RivieraUtils.rivieraCommunication import ADBCommunication
+from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 from .graphiteServerUtils import GraphiteUtils
 from .memoryInfo import MemoryInfo
-from ..LoggerUtils.CastleLogger import get_logger
-from ..RivieraUtils.hardware.keys import keypress
-from ..SupportUtils import emailSupport
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+from CastleTestUtils.RivieraUtils.hardware.keys import keypress
+from CastleTestUtils.SupportUtils import emailSupport
 
 
 from enum import IntEnum
@@ -502,7 +502,7 @@ def get_tune_in_content():
     TuneIn Data - 100.7 WZLX
     """
     data = '{"source":"IHEART",\
-                    "sourceAccount":"de8e404e-c6e9-4e72-8130-d81818fe7e0b",\
+                    "sourceAccount":"Your Account Hash",\
                     "preset":{"type":"stationurl",\
                                 "location":"/playback/containerType/live/containerId/1097/containerName/KISS 108",\
                                 "name":"KISS 108",\
