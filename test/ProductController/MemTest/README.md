@@ -40,7 +40,7 @@ into the config file field.
 ```
  pytest -vs test_memoryConsumption.py --network-interface <wlan0, eth0> --device <adb device id> --IsMandatoryDataPush=True --test-duration=<# of minutes between 1 and 29>
 ```
-The Grafana board that the results are posted to is found here: http://ssg-dashboard.bose.com/d/SiehovKik/memory-cpu-disk-io-usage-overview-professor?orgId=1&from=now-2d&to=now
+The results are posted to the Grafana board here: http://ssg-dashboard.bose.com/d/SiehovKik/memory-cpu-disk-io-usage-overview-professor?orgId=1&from=now-2d&to=now
 
 **System Metrics**:
 **Memory / CPU Capture Details**:
