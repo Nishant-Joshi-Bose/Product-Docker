@@ -30,7 +30,7 @@ __'Gigya_Account': 'Email'__ - Email for the Madird/Gigya account the Professor 
 __'Gigya_Account': 'Password'__ - Password for the Madird/Gigya account
 
 __'Source_Data': 'sourceAccount'__ - Do the following:
-1. On Linux, run the commands:
+1. Run the commands:
 ```
 adb shell ifconfig # Take note of the IP address of your Professor
 google-chrome --ignore-certificate-errors --disable-b-security --user-data-dir # You will Google Chrome to run this
@@ -38,9 +38,9 @@ google-chrome --ignore-certificate-errors --disable-b-security --user-data-dir #
 2. Copy/Paste this URL into Chrome and plug in your Professor's IP address: file:///scratch/bose-web-test-page/index.html?<IP Address>
 3. Press __ACCOUNT LOGIN__ and log into your Madrid account
 4. Press __CONNECT__
-5. Select __Method" as "GET__
-6. Type /system/sources into the __Path__ and press __SEND__
-7. Find the entry for iHEART Radio (It should list __IHEART__ as __sourceName__ and copy/paste the contents for the __accountId__ found for that entry 
+5. Select __Method__ as __GET__
+6. Type _/system/sources_ into the __Path__ and press __SEND__
+7. Find the entry for iHEART Radio (It should list __IHEART__ as __sourceName__) and copy/paste the contents for the __accountId__ found for that entry 
 into the config file field.
 
 **To run the Memory Consumption Test:**
@@ -48,6 +48,9 @@ into the config file field.
 ```
  pytest -vs test_memoryConsumption.py --network-interface <wlan0, eth0> --device <adb device id> --IsMandatoryDataPush=True --test-duration=<# of minutes between 1 and 29>
 ```
+
+Note: The connection to the Professor will time out if the duration is aet to 30 minutes or longer. Also, the duration of the test is actually longer than set e.g. duration=29 takes about an hour to complete
+
 The results are posted to the Grafana board here: http://ssg-dashboard.bose.com/d/SiehovKik/memory-cpu-disk-io-usage-overview-professor?orgId=1&from=now-2d&to=now
 
 **System Metrics**:
