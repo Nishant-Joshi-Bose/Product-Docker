@@ -422,7 +422,7 @@ def store_presets(device_ip, frontdoor, riviera_utils):
     # We want to make sure the Key Press store is properly stored
     DELAY_AFTER_PRESET_SET = 10
 
-    data = get_tune_in_content()
+    data = CONFIG["Source_Data"]
     frontdoor.sendPlaybackRequest(data)
 
     time.sleep(3)
@@ -497,23 +497,6 @@ def get_volume_content():
                "value" : 0 }'
     return data
 
-def get_tune_in_content():
-    """
-    TuneIn Data - 100.7 WZLX
-    """
-    data = '{"source":"IHEART",\
-                    "sourceAccount":"Your Account Hash",\
-                    "preset":{"type":"stationurl",\
-                                "location":"/playback/containerType/live/containerId/1097/containerName/KISS 108",\
-                                "name":"KISS 108",\
-                                "presetable":"true",\
-                                "containerArt":"http://i.iheart.com/v3/re/assets/images/1097.png"},\
-                    "playbackLocation":{"type":"stationurl",\
-                                "location":"/playback/containerType/live/containerId/1097/containerName/KISS 108",\
-                                "name":"KISS 108",\
-                                "presetable":"true",\
-                                "containerArt":"http://i.iheart.com/v3/re/assets/images/1097.png"}}'
-    return data
 
 @pytest.mark.usefixtures("frontdoor", "perform_cloud_sync", "device_ip", "riviera_utils")
 def test_iheartradio_memory_consumption(frontdoor, perform_cloud_sync, device_ip, riviera_utils, request):

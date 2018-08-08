@@ -13,6 +13,7 @@
 conftest file for Memory Consumption tests
 """
 import json
+import logging
 import pytest
 import pexpect
 
@@ -69,7 +70,8 @@ def frontdoor(request):
     networkbase = NetworkBase(None, device=device)
     interface = request.config.getoption("--network-interface")
     ip_address = networkbase.check_inf_presence(interface)
-    frontdoorobj = FrontDoorAPI(ip_address, email="your_email@bose.com", password="password")
+    frontdoorobj = FrontDoorAPI(ip_address, email=CONFIG['Gigya_Account']['Email'],
+                                password=CONFIG['Gigya_Account']['Password'])
 
     def tear():
         """Closing frontdoor Object"""

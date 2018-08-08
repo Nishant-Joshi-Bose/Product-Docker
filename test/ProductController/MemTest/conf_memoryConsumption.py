@@ -27,9 +27,9 @@ CONFIG = {
 
     # DEVICE & EMAIL PARAMETERS
     'Device_Param': {
-        'SEND_FROM'     : 'ATG_Station2@bose.com',
+        'SEND_FROM'     : 'ProfessorMemTest@bose.com',
         # Add more emails by putting a ";" then the address in the string
-        'SEND_TO'       : "your_email@bose.com",
+        'SEND_TO'       : "SET ME",
         'MAIL_SERVER'   : 'smtp.bose.com',
         'DEVICE_IP'     : '203.0.113.1',
         'DEVICE_PORT'   : '23',
@@ -57,7 +57,24 @@ CONFIG = {
         'CMD3' : "./run_wpe.sh TEST5 0.5 PORTRAIT'"
     },
 
-    #TuneIn Items
-    'Tune_In': {
-        'SERVICE_NAME' : 'TUNEIN'}
+    #Madrid Credentials
+    'Gigya_Account': {
+        'Email': 'SET ME',
+        'Password': 'SET ME'
+    },
+
+    #Playback source Information
+    'Source_Data': '{"source":"IHEART",\
+                    "sourceAccount":"SET ME",\
+                    "preset":{"type":"stationurl",\
+                                "location":"/playback/containerType/live/containerId/1097/containerName/KISS 108",\
+                                "name":"KISS 108",\
+                                "presetable":"true",\
+                                "containerArt":"http://i.iheart.com/v3/re/assets/images/1097.png"},\
+                    "playbackLocation":{"type":"stationurl",\
+                                "location":"/playback/containerType/live/containerId/1097/containerName/KISS 108",\
+                                "name":"KISS 108",\
+                                "presetable":"true",\
+                                "containerArt":"http://i.iheart.com/v3/re/assets/images/1097.png"}}'
+
 }
