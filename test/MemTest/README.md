@@ -4,6 +4,14 @@ This folder contains memory consumption and graphite server utilities that assis
 
 #### Pre-test Setup
 
+Virtual Environment Set-up
+```
+cd /scratch/Professor/test/MemTest
+virtualenv -p /usr/bin/python ./venv
+source ./venv/bin/activate
+pip install git+ssh://git@github.com/BoseCorp/CastleTestUtils.git@<version> # latest version found posted here: https://github.com/BoseCorp/CastleTestUtils
+```
+
 Before running the memory tests in this directory, the following must be done first:
 1. You must have a Madrid/Gigya account. If you do not already have one, create one through the Madrid app.
 2. Put the Gigya account and Professor under test on the INTEGRATION environment here: https://ingress-platform.live-aws-useast1.bose.io/dev/svc-cloudops/prod/cloudops-service/manageatp
