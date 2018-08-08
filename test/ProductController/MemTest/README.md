@@ -6,7 +6,8 @@ This folder contains memory consumption and graphite server utilities that assis
 
 Before running the memory tests in this directory, the following must be done first:
 1. You must have a Madrid/Gigya account. If you do not already have one, create one through the Madrid app.
-2. Put the Gigya account and Professor under test on the INTEGRATION environment here: https://ingress-platform.live-aws-useast1.bose.io/dev/svc-cloudops/prod/cloudops-service/manageatp
+2. Put the Gigya account and Professor under test on the INTEGRATION environment here:
+https://ingress-platform.live-aws-useast1.bose.io/dev/svc-cloudops/prod/cloudops-service/manageatp
 3. Set up the Professor on that account using the Madrid app.
 4. Configure iHeart radio as an MSP through Madrid (You will need an iHeart Radio account) and make sure it plays on the Professor
 5. Set Kiss 108 as a preset for the 6 preset slots
@@ -40,7 +41,8 @@ into the config file field.
 ```
  pytest -vs test_memoryConsumption.py --network-interface <wlan0, eth0> --device <adb device id> --IsMandatoryDataPush=True --test-duration=<# of minutes between 1 and 29>
 ```
-The Grafana board that the results are posted to is found here: http://ssg-dashboard.bose.com/d/SiehovKik/memory-cpu-disk-io-usage-overview-professor?orgId=1&from=now-2d&to=now
+The Grafana board that the results are posted to is found here:
+http://ssg-dashboard.bose.com/d/SiehovKik/memory-cpu-disk-io-usage-overview-professor?orgId=1&from=now-2d&to=now
 
 **System Metrics**:
 **Memory / CPU Capture Details**:
