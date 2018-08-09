@@ -359,28 +359,32 @@ void ProductCecHelper::Connected( bool connected )
 void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource )
 {
     BOSE_DEBUG( s_logger, "CEC Source Switch Message received from LPM  %d",  cecSource.source() );
-    if( cecSource.source() == LPM_IPC_SOURCE_TV )
+    if( m_ignoreSourceSwitch )
     {
-        ProductMessage productMessage;
+        BOSE_INFO( s_logger, "%s Ignoring CEC source switch", __PRETTY_FUNCTION__ );
+        return;
+    }
+
+    ProductMessage productMessage;
+    auto source = cecSource.source( );
+
+    switch( source )
+    {
+    case LPM_IPC_SOURCE_TV:
         productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV ) );
+        break;
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-
-        BOSE_INFO( s_logger, "An attempt to play the TV source has been made from CEC." );
-    }
-    else if( cecSource.source() == LPM_IPC_SOURCE_INTERNAL )
-    {
-        ProductMessage productMessage;
+    case LPM_IPC_SOURCE_INTERNAL:
         productMessage.set_action( static_cast< uint32_t >( Action::POWER_TOGGLE ) );
+        break;
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-
-        BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made from CEC." );
-    }
-    else
-    {
+    default:
         BOSE_ERROR( s_logger, "An invalid intent action has been supplied." );
+        return;
     }
+
+    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    BOSE_INFO( s_logger, "An attempt to play the %s has been made from CEC.", LPM_IPC_SOURCE_ID_Name( source ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -529,7 +533,11 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
 {
     using namespace ProductSTS;
 
-    BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
+    BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received %s.", ProtoToMarkup::ToJson( nowPlayingStatus ).c_str( ) );
+
+    // Default to allowing CEC source switch (we'll get nowPlaying with INVALID_SOURCE after setup, so we need to make sure
+    // this defaults to cleared)
+    m_ignoreSourceSwitch = false;
 
     if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::PLAY )
     {
@@ -538,11 +546,19 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
             nowPlayingStatus.container( ).contentitem( ).has_source( ) and
             nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
         {
-            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( SHELBY_SOURCE::PRODUCT ) == 0 )
+            const auto& source = nowPlayingStatus.container( ).contentitem( ).source( );
+            if( source.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
 
                 m_LpmSourceID = LPM_IPC_SOURCE_TV;
+            }
+            else if( source.compare( SHELBY_SOURCE::SETUP ) == 0 )
+            {
+                BOSE_DEBUG( s_logger, "CEC CAPS in setup, ignoring CEC active source requests." );
+
+                m_ignoreSourceSwitch = true;
+                m_LpmSourceID = LPM_IPC_SOURCE_INTERNAL;
             }
             else
             {
