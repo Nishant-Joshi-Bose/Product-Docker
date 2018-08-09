@@ -13,7 +13,6 @@
 conftest file for Memory Consumption tests
 """
 import json
-import logging
 import pytest
 import pexpect
 

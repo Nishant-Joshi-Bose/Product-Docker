@@ -27,7 +27,7 @@ import hashlib
 
 from conf_memoryConsumption import CONFIG
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
-from .graphiteServerUtils import GraphiteUtils
+from CastleTestUtils.MemoryUtils.graphiteServerUtils import GraphiteUtils
 from .memoryInfo import MemoryInfo
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils.hardware.keys import keypress
