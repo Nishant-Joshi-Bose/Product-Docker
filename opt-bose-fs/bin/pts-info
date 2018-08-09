@@ -26,3 +26,7 @@ head -20 /mnt/nv/product-persistence/*
 ls -lHt /mnt/nv/BoseLog
 ps
 printenv
+cat /mnt/nv/update/updateStates.txt
+cat /mnt/nv/update/updateStatus.txt
+jq . /mnt/nv/update/telemetry.json
+jq . /mnt/nv/updateSwUpdateCompStatus.json

@@ -7,6 +7,12 @@ Taylor
 
 This repo contains the source code and tools specific to the Taylor product.
 
+Repo admins:
+* [Jonathan Cooper](mailto:Jonathan_cooper@bose.com)
+* [Michael Cook](mailto:Michael_Cook@bose.com)
+* [Alfred von Campe](mailto:Alfred_vonCampe@bose.com)
+* [Trevor Lai](mailto:Trevor_Lai@bose.com)
+
 ![Taylor](misc/product.png)
 
 ##### Table of Contents
@@ -222,8 +228,8 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | any | /logread.txt | A snapshot of the system log ring buffer * |
 | any | /logread.txt.gz | Same as /logread.txt but compressed * |
 | any | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
-| any | /pts | Same as /pts.txt but encrypted ** |
-| any | /logread | Same as /logread.txt but encrypted ** |
+| any | /pts.dat | Same as /pts.txt but encrypted ** |
+| any | /logread.dat | Same as /logread.txt but encrypted ** |
 | usb | /reflash | Force the unit into reflash mode (QFIL) |
 | usb | /bose-version | /opt/Bose/etc/BoseVersion.json |
 | usb | /kernel-version | /etc/riviera-version |
