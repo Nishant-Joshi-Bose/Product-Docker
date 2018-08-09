@@ -14,6 +14,7 @@ End-to-End test showing CPU and Memory consumption for the Riviera product.
 """
 
 import csv
+import re
 import os
 import time
 import logging
@@ -28,7 +29,7 @@ import hashlib
 from conf_memoryConsumption import CONFIG
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 from CastleTestUtils.MemoryUtils.graphiteServerUtils import GraphiteUtils
-from .memoryInfo import MemoryInfo
+from CastleTestUtils.MemoryUtils.memoryInfo import MemoryInfo
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils.hardware.keys import keypress
 from CastleTestUtils.SupportUtils import emailSupport
@@ -349,6 +350,47 @@ def memory_capture(device, when, run_time=1):
     assert True, "Memory Consumption has been captured."
     # TODO: Insert restore factory default Code here
 
+
+def getDiskUsage(adb_obj):
+    """
+    Get Disk space information via df -h command and fetch CPU % via regular experssion.
+    """
+    try:
+        resp = adb_obj.executeCommand("df -h")
+        print "Disk Usage :" + resp
+        if resp:
+            resp = re.sub(' +', ' ', resp)
+            resp = re.findall(r'([^\s]+)', resp)
+            print "Disk Usage rootfs Usage:" + resp[0]
+            ds = []
+            for v in range(7, len(resp), 6):
+                ds.append((resp[v] + " -> " + resp[v + 5], resp[v + 4]))
+            return ds
+    except Exception as e:
+        print "getRootfsUsage: Get Root fs Unsuccessful - %s" % str(e)
+        assert False, "getRootfsUsage: Get Root fs Unsuccessful - %s" % str(e)
+
+
+def getIOWrite(adb_obj):
+    """
+
+    :return:
+    """
+    try:
+        resp = adb_obj.executeCommand("iostat -d -k")
+        print "iostat :" + resp
+        if resp:
+            resp = re.sub(' +', ' ', resp)
+            resp = re.findall(r'([^\s]+)', resp)
+            ds = []
+            for v in range(13, len(resp), 6):
+                ds.append((resp[v], resp[v + 1], resp[v + 2], resp[v + 3], resp[v + 4], resp[v + 5]))
+            return ds
+    except Exception as e:
+        print "getIOWrite: Get iostat Unsuccessful - %s" % str(e)
+        assert False, "getIOWrite: Get iostat Unsuccessful - %s" % str(e)
+
+
 def check_is_data_push():
     """
     Determines if we are going to push data to the server.
@@ -529,7 +571,7 @@ def test_iheartradio_memory_consumption(frontdoor, perform_cloud_sync, device_ip
         logger.info(" -------- Calling memory_capture_before --------")
 
         # before, collect root fs usage info, write and flush to new file
-        ds = memoryInfo.getDiskUsage()
+        ds = getDiskUsage(memoryInfo.adb)
         i = 0
         for d, p in ds:
             CONFIG["Memory_Consumption"]["FILE_COLUMN"]["Disk Usage"].append((d, p))
@@ -537,7 +579,7 @@ def test_iheartradio_memory_consumption(frontdoor, perform_cloud_sync, device_ip
         CONFIG['Memory_Consumption']['FILE_COLUMN']['Build'] = get_build_version(riviera_utils, request)
         logger.info(" ------------ Build Version ---------- " + CONFIG["Memory_Consumption"]["FILE_COLUMN"]['Build'])
 
-        beforeIO = memoryInfo.getIOWrite()
+        beforeIO = getIOWrite(memoryInfo.adb)
 
         # capture stats before the device is used
         memory_capture(device, "before", run_time)
@@ -557,7 +599,7 @@ def test_iheartradio_memory_consumption(frontdoor, perform_cloud_sync, device_ip
         music_play_process.join()
         memory_capture_process.join()
 
-        afterIO = memoryInfo.getIOWrite()
+        afterIO = getIOWrite(memoryInfo.adb)
 
         for i in range(0, len(beforeIO)):
             d1, tps1, rps1, wps1, r1, w1 = beforeIO[i]
