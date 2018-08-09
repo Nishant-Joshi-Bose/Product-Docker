@@ -373,8 +373,7 @@ def getDiskUsage(adb_obj):
 
 def getIOWrite(adb_obj):
     """
-
-    :return:
+    Gets IO statistics
     """
     try:
         resp = adb_obj.executeCommand("iostat -d -k")
