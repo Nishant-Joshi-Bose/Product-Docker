@@ -73,7 +73,7 @@ protected:
     ///
     /// CustomProcessKeyEvent Override
     ///
-    bool CustomProcessKeyEvent( const LpmServiceMessages::IpcKeyInformation_t& keyEvent ) override;
+    bool CustomProcessKeyEvent( const IpcKeyInformation_t& keyEvent ) override;
 
 private:
 
@@ -94,7 +94,9 @@ private:
     ::google::protobuf::uint32 m_KeyIdOfIncompleteChordRelease;
 
     void InitializeQuickSetService( );
-    bool FilterIncompleteChord( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );
+    bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
+
+    void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
