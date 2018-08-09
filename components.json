@@ -1,15 +1,15 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/master/1.5.13-68+c00dc3d"
+    "selected_version": "Continuous/master/2.1.0-355+172b2bb"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/master/1.5.13-68+c00dc3d"
+    "selected_version": "Continuous/master/2.1.0-355+172b2bb"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-106+d683abc"
+    "selected_version": "Continuous/master/2.1.0-114+6200804"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -17,11 +17,11 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-06_1322"
+    "selected_version": "Continuous/Castle-Fork/2018-08-08_2046"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-179+45abdca"
+    "selected_version": "Continuous/master/2.1.0-183+bb72844"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
@@ -57,15 +57,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/SOS/2.0.2-458+d88e486"
+    "selected_version": "Release/SOS/2.0.3-462+c267170"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-155+c37a006"
+    "selected_version": "Continuous/master/2.1.0-179+36a9726"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-83+836c5a6"
+    "selected_version": "Continuous/master/2.1.0-90+57fce31"
   },
   {
     "name": "CastleLibs-native",
@@ -117,7 +117,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/1.5.2-105+5014763"
+    "selected_version": "Release/master/2.1.1-114+43817d8"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -153,15 +153,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-965+ed1ea02"
+    "selected_version": "Continuous/master/2.1.0-987+1f316e3"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-2+ed1ea02"
+    "selected_version": "Continuous/master/2.1.0-12+1f316e3"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@af165c20191205dfbd1964f959a2b17788c1f331"
+    "selected_version": "master@2a9cfc8c834743a40d9e60d4cec41aa05c5751aa"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -213,11 +213,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.11-779+e94f083"
+    "selected_version": "Release/master/2.1.0-822+6a076dc"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-06_1322"
+    "selected_version": "Continuous/Castle-Fork/2018-08-08_2046"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,11 +233,11 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@d5da6e440f20d3225d638e7e77ac0056bc04c2b6"
+    "selected_version": "master@d466b900ec18c7136eb3c0584a0dc72be7c19dfc"
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-101+1e489c8"
+    "selected_version": "Continuous/master/2.1.0-107+ded53b7"
   },
   {
     "name": "Webkit",
