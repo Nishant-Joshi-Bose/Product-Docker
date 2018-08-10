@@ -27,6 +27,7 @@
 #include "CustomProductSTSStateTopAux.h"
 #include "ProductSTS.pb.h"
 #include "SystemUtils.h"
+#include "CommonProductCommandLine.h"
 
 static DPrint s_logger( "CustomProductController" );
 
@@ -81,7 +82,8 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicated( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED ),
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
-    m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
+    m_CommonProductCommandLine( ),
+    m_IntentHandler( *GetTask(), GetCommonCliClientMP(), m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_ProductSTSController( *this )
 {
@@ -542,8 +544,8 @@ NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationa
 void CustomProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "Translated Intent %d", intent );
-    m_CliClientMT.SendAsyncResponse( "Translated intent = " + \
-                                     std::to_string( intent ) );
+    GetCommonCliClientMP().SendAsyncResponse( "Translated intent = " + \
+                                              std::to_string( intent ) );
 
     if( HandleCommonIntents( intent ) )
     {
@@ -599,12 +601,12 @@ void CustomProductController::RegisterCliClientCmds()
         HandleCliCmd( cmdKey, argList, respCb, transact_id );
     };
 
-    m_CliClientMT.RegisterCLIServerCommands( "product boot_status",
-                                             "command to output the status of the boot up state.",
-                                             "\t product boot_status \t\t\t",
-                                             GetTask(),
-                                             cb,
-                                             static_cast<int>( CLICmdKeys::GET_BOOT_STATUS ) );
+    GetCommonCliClientMP().RegisterCLIServerCommands( "product boot_status",
+                                                      "command to output the status of the boot up state.",
+                                                      "\t product boot_status \t\t\t",
+                                                      GetTask(),
+                                                      cb,
+                                                      static_cast<int>( CLICmdKeys::GET_BOOT_STATUS ) );
 }
 
 void CustomProductController::HandleCliCmd( uint16_t cmdKey,
