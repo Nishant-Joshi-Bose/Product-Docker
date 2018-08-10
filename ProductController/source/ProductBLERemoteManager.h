@@ -93,17 +93,6 @@ public:
         m_poweredOn = false;
         UpdateBacklight( );
     }
-    void EnterSetup( )
-    {
-        m_inSetup = true;
-        UpdateBacklight( );
-    }
-    void ExitSetup( )
-    {
-        m_inSetup = false;
-        UpdateBacklight( );
-    }
-
 
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +108,6 @@ private:
     RemoteStatus::PairingStatus     m_remoteStatus      = RemoteStatus::PSTATE_UNKNOWN;
     const int                       m_PairingTimeout    = 7200;
     bool                            m_poweredOn         = false;
-    bool                            m_inSetup           = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -136,7 +124,7 @@ private:
     void InitializeRCS();
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
     void UpdateBacklight( );
-    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available );
+    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& inAiQ );
     void CheckPairing( void );
     void GetZoneLEDs( RCS_PB_MSG::LedsRawMsg_t& leds );
 };

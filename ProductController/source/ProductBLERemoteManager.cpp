@@ -223,6 +223,9 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 /// @return This method does not return anything.
 ///
 ///
+/// TODO: This function is probably long-overdue for refactoring
+///
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::UpdateBacklight( )
 {
@@ -301,8 +304,8 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // set the active source and associated zones
     A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
-    bool available;
-    bool valid = GetSourceLED( sourceLED, available );
+    bool available, inAiQ;
+    bool valid = GetSourceLED( sourceLED, available, inAiQ );
     if( valid )
     {
         // zone selection here is from section 6.5.4 ("Zone Assignments per Device")
@@ -353,8 +356,20 @@ void ProductBLERemoteManager::UpdateBacklight( )
             GetZoneLEDs( leds );
             break;
         case LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE:
-            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            if( !inAiQ )
+            {
+                leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            }
+            else
+            {
+                leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+                leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+                leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+                leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+                leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+                leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            }
             leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             break;
         }
@@ -379,18 +394,13 @@ void ProductBLERemoteManager::UpdateBacklight( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::GetSourceLED(
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available )
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& inAiQ )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
 
     available = false;
-
-    if( m_inSetup )
-    {
-        sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-        return true;
-    }
+    inAiQ = false;
 
     if( !m_nowSelection.has_contentitem() )
     {
@@ -405,6 +415,31 @@ bool ProductBLERemoteManager::GetSourceLED(
 
     const auto& sourceName = sourceItem->sourcename();
     const auto& sourceAccountName = sourceItem->sourceaccountname();
+
+    if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
+    {
+        if( sourceAccountName.compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
+        {
+            BOSE_INFO( s_logger, "update nowSelection ADAPTIQ" );
+            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
+            inAiQ = true;
+        }
+        else if( sourceAccountName.compare( SetupSourceSlot_Name( SETUP ) ) == 0 )
+        {
+            BOSE_INFO( s_logger, "update nowSelection SETUP" );
+            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
+        }
+        else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
+        {
+            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "%s SETUP source with missing details/devicetype", __func__ );
+        }
+
+        return true;
+    }
 
     available = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
     if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
@@ -440,22 +475,6 @@ bool ProductBLERemoteManager::GetSourceLED(
         else
         {
             BOSE_ERROR( s_logger, "%s PRODUCT source with missing details/devicetype", __func__ );
-        }
-    }
-    else if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
-    {
-        if( sourceAccountName.compare( SetupSourceSlot_Name( SETUP ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection SETUP" );
-            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-        }
-        else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "%s SETUP source with missing details/devicetype", __func__ );
         }
     }
     else if( sourceName.compare( SHELBY_SOURCE::BLUETOOTH ) == 0 )
