@@ -183,7 +183,7 @@ CustomProductController::CustomProductController( ) :
     /// Intent Handler Initialization
     ///
     m_IntentHandler( *GetTask(),
-                     GetCommonCliClientMP(),
+                     GetCommonCliClientMT(),
                      m_FrontDoorClientIF,
                      *this ),
 
