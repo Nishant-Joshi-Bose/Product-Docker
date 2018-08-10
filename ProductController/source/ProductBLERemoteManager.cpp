@@ -433,7 +433,7 @@ bool ProductBLERemoteManager::GetSourceLED(
         }
         else
         {
-            BOSE_ERROR( s_logger, "%s SETUP source with missing details/devicetype", __func__ );
+            BOSE_ERROR( s_logger, "%s SETUP source with missing source or account name", __func__ );
         }
 
         return true;
