@@ -1,15 +1,15 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-355+172b2bb"
+    "selected_version": "Continuous/master/2.1.0-369+5aedade"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-355+172b2bb"
+    "selected_version": "Continuous/master/2.1.0-369+5aedade"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-114+6200804"
+    "selected_version": "Continuous/master/2.1.0-119+cfaab58"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-08_2046"
+    "selected_version": "Continuous/Castle-Fork/2018-08-09_1931"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.5.2-92+7c46990"
+    "selected_version": "Release/master/2.1.0-102+3e07b8d"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Release/master/1.5.4-86+ac1804a"
+    "selected_version": "Release/master/2.1.0-108+cc22bfb"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -153,11 +153,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-987+1f316e3"
+    "selected_version": "Continuous/master/2.1.0-991+eb28561"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-12+1f316e3"
+    "selected_version": "Release/master/2.1.0-15+eb28561"
   },
   {
     "name": "ProductControllerCommon",
@@ -209,7 +209,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.5.2-100+591dd48"
+    "selected_version": "Release/master/2.1.0-109+32ba500"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -217,7 +217,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-08_2046"
+    "selected_version": "Continuous/Castle-Fork/2018-08-09_1931"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,7 +233,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@d466b900ec18c7136eb3c0584a0dc72be7c19dfc"
+    "selected_version": "master@f991679e9fe426f97e380ab4ea21dba5baf3ae63"
   },
   {
     "name": "VPAController-qc8017_32",
