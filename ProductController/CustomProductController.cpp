@@ -83,7 +83,7 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
     m_CommonProductCommandLine( ),
-    m_IntentHandler( *GetTask(), GetCommonCliClientMP(), m_FrontDoorClientIF, *this ),
+    m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_ProductSTSController( *this )
 {
@@ -544,7 +544,7 @@ NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationa
 void CustomProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "Translated Intent %d", intent );
-    GetCommonCliClientMP().SendAsyncResponse( "Translated intent = " + \
+    GetCommonCliClientMT().SendAsyncResponse( "Translated intent = " + \
                                               std::to_string( intent ) );
 
     if( HandleCommonIntents( intent ) )
@@ -601,7 +601,7 @@ void CustomProductController::RegisterCliClientCmds()
         HandleCliCmd( cmdKey, argList, respCb, transact_id );
     };
 
-    GetCommonCliClientMP().RegisterCLIServerCommands( "product boot_status",
+    GetCommonCliClientMT().RegisterCLIServerCommands( "product boot_status",
                                                       "command to output the status of the boot up state.",
                                                       "\t product boot_status \t\t\t",
                                                       GetTask(),
