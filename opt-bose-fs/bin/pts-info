@@ -29,4 +29,6 @@ printenv
 cat /mnt/nv/update/updateStates.txt
 cat /mnt/nv/update/updateStatus.txt
 jq . /mnt/nv/update/telemetry.json
-jq . /mnt/nv/updateSwUpdateCompStatus.json
+jq . /mnt/nv/updateSwUpComponentStatus.dat
+ls -lHt /opt/Bose/.swUpdateCache/ipks
+ls -lHt /opt/Bose/.swUpdateCache/localupdate
