@@ -1,15 +1,15 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-369+5aedade"
+    "selected_version": "Continuous/master/2.1.0-383+d320faa"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-369+5aedade"
+    "selected_version": "Continuous/master/2.1.0-383+d320faa"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-119+cfaab58"
+    "selected_version": "Continuous/master/2.1.0-123+5586f1c"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-991+eb28561"
+    "selected_version": "Continuous/master/2.1.0-995+01f9031"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -233,11 +233,11 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@f991679e9fe426f97e380ab4ea21dba5baf3ae63"
+    "selected_version": "master@3de10ad2d2b8d11c84e2f1535a3cde7a2b2f6cf6"
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-107+ded53b7"
+    "selected_version": "Continuous/master/2.1.0-111+411975d"
   },
   {
     "name": "Webkit",
