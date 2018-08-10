@@ -54,7 +54,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),
                               ProductController.GetLpmHardwareInterface( ),
-                              ProductController.GetCommonProductCommandLine().GetCommandLineInterface( ),
+                              ProductController.GetCommonCliClientMP(),
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController ),
@@ -211,9 +211,9 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     {
         // TV source won't have "details" after a factory default (before /system/sources has been written)
         // In this case, we need to consume keys that normally would have been blasted
-        if( 
-                ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
-                m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
+        if(
+            ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
+            m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
             return true;
