@@ -13,15 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-08_0151"
+    "selected_version": "Continuous/Castle-Fork/2018-08-09_1931"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/1.5.2-174+433e5c6"
+    "selected_version": "Continuous/master/2.1.0-183+bb72844"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-52+eeada44"
+    "selected_version": "Continuous/master/2.1.0-71+5129e5f"
   },
   {
     "name": "bose-opkg-utils",
@@ -57,11 +57,11 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/master/1.7.0-144+5d21584"
+    "selected_version": "Continuous/master/2.1.0-179+36a9726"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/1.5.0-75+c3d0160"
+    "selected_version": "Continuous/master/2.1.0-90+57fce31"
   },
   {
     "name": "CastleLibs-native",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/master/1.5.2-124+b6b8c90"
+    "selected_version": "Continuous/master/2.1.0-129+3e3cf26"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -113,7 +113,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/1.5.2-105+5014763"
+    "selected_version": "Release/master/2.1.1-114+43817d8"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -149,15 +149,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-965+ed1ea02"
+    "selected_version": "Continuous/master/2.1.0-991+eb28561"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-2+ed1ea02"
+    "selected_version": "Continuous/master/2.1.0-14+eb28561"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@1da995e395afedac66255e353ef603ef4aca1810"
+    "selected_version": "master@2a9cfc8c834743a40d9e60d4cec41aa05c5751aa"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -209,11 +209,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.11-779+e94f083"
+    "selected_version": "Release/master/2.1.0-822+6a076dc"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-08_0151"
+    "selected_version": "Continuous/Castle-Fork/2018-08-09_1931"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@c8e7ae905ce41921069b29bb85cd33ab280fb66f"
+    "selected_version": "master@f991679e9fe426f97e380ab4ea21dba5baf3ae63"
   },
   {
     "name": "Webkit",
