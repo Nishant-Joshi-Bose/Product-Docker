@@ -124,7 +124,7 @@ private:
     void InitializeRCS();
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
     void UpdateBacklight( );
-    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& inAiQ );
+    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& sourceChangeProhibited );
     void CheckPairing( void );
     void GetZoneLEDs( RCS_PB_MSG::LedsRawMsg_t& leds );
 };

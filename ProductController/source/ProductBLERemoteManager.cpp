@@ -304,8 +304,8 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // set the active source and associated zones
     A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
-    bool available, inAiQ;
-    bool valid = GetSourceLED( sourceLED, available, inAiQ );
+    bool available, sourceChangeProhibited;
+    bool valid = GetSourceLED( sourceLED, available, sourceChangeProhibited );
     if( valid )
     {
         // zone selection here is from section 6.5.4 ("Zone Assignments per Device")
@@ -356,7 +356,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
             GetZoneLEDs( leds );
             break;
         case LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE:
-            if( !inAiQ )
+            if( !sourceChangeProhibited )
             {
                 leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
@@ -394,13 +394,13 @@ void ProductBLERemoteManager::UpdateBacklight( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::GetSourceLED(
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& inAiQ )
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& sourceChangeProhibited )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
 
     available = false;
-    inAiQ = false;
+    sourceChangeProhibited = false;
 
     if( !m_nowSelection.has_contentitem() )
     {
@@ -418,20 +418,18 @@ bool ProductBLERemoteManager::GetSourceLED(
 
     if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
     {
-        if( sourceAccountName.compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
+        if(
+            sourceAccountName.compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 or
+            sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
         {
-            BOSE_INFO( s_logger, "update nowSelection ADAPTIQ" );
+            BOSE_INFO( s_logger, "update nowSelection ADAPTIQ/PAIRING" );
             sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-            inAiQ = true;
+            sourceChangeProhibited = true;
         }
         else if( sourceAccountName.compare( SetupSourceSlot_Name( SETUP ) ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection SETUP" );
             sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-        }
-        else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
         }
         else
         {
