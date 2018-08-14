@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Release/master/2.1.1-27+ab48325"
+    "selected_version": "Release/master/2.1.1-28+e3b011c"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-05_1026"
+    "selected_version": "Continuous/Castle-Fork/2018-08-13_1206"
   },
   {
     "name": "BLERemoteXCVR",
@@ -33,11 +33,11 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.5.2-154+ca97106"
+    "selected_version": "Continuous/master/2.1.0-186+27f4c74"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/1.5.0-43+cd2163b"
+    "selected_version": "Continuous/master/2.1.0-71+5129e5f"
   },
   {
     "name": "bose-opkg-utils",
@@ -69,15 +69,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/SOS/2.0.1-455+72fd4f9"
+    "selected_version": "Release/SOS/2.0.3-462+c267170"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/1.6.2-111+12631a9"
+    "selected_version": "Continuous/master/2.1.0-189+89ea5dc"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/1.5.0-64+4e6d2e4"
+    "selected_version": "Continuous/master/2.1.0-94+a131396"
   },
   {
     "name": "CastleLibs-native",
@@ -93,11 +93,11 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.5.2-92+7c46990"
+    "selected_version": "Release/master/2.1.0-102+3e07b8d"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/2.0.0-111+272f93a"
+    "selected_version": "Release/master/2.1.1-130+35a067c"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/1.5.2-122+c5496ed"
+    "selected_version": "Continuous/master/2.1.0-129+3e3cf26"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -121,7 +121,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Release/master/1.5.4-86+ac1804a"
+    "selected_version": "Release/master/2.1.0-108+cc22bfb"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -129,7 +129,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/1.5.2-105+5014763"
+    "selected_version": "Release/master/2.1.1-114+43817d8"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -165,15 +165,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-956+5fc8b1c"
+    "selected_version": "Continuous/master/2.0.0-999+8079006"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-956+5fc8b1c"
+    "selected_version": "Release/master/2.1.0-15+eb28561"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@ee77b3eba3b216c10e62c7f926d251e3080ab19b"
+    "selected_version": "master@2a9cfc8c834743a40d9e60d4cec41aa05c5751aa"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -201,7 +201,7 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@2772"
+    "selected_version": "trunk@3099"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -225,15 +225,15 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.5.2-100+591dd48"
+    "selected_version": "Release/master/2.1.0-109+32ba500"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.11-779+e94f083"
+    "selected_version": "Release/master/2.1.0-822+6a076dc"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-05_1026"
+    "selected_version": "Continuous/Castle-Fork/2018-08-13_1206"
   },
   {
     "name": "svc-pts-log-decrypt",
