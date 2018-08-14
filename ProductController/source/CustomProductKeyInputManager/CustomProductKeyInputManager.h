@@ -45,7 +45,6 @@ class CustomProductController;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductKeyInputManager : public ProductKeyInputManager
 {
-    friend class ProductController;
 
 public:
 
