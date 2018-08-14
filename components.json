@@ -13,15 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-09_1931"
+    "selected_version": "Continuous/Castle-Fork/2018-08-14_1446"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-183+bb72844"
+    "selected_version": "Continuous/master/2.1.0-187+cef7ed4"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-71+5129e5f"
+    "selected_version": "Continuous/master/2.1.0-74+27f2771"
   },
   {
     "name": "bose-opkg-utils",
@@ -53,15 +53,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/SOS/2.0.3-462+c267170"
+    "selected_version": "Release/SOS/2.0.4-464+1a54242"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-179+36a9726"
+    "selected_version": "Continuous/master/2.1.0-206+95bb543"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-90+57fce31"
+    "selected_version": "Continuous/master/2.1.0-95+b2f8d56"
   },
   {
     "name": "CastleLibs-native",
@@ -81,7 +81,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/2.0.0-111+272f93a"
+    "selected_version": "Release/master/2.1.1-130+35a067c"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-991+eb28561"
+    "selected_version": "Continuous/master/2.0.0-999+8079006"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -157,7 +157,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@2a9cfc8c834743a40d9e60d4cec41aa05c5751aa"
+    "selected_version": "master@86b97c1e2e38808e499b4a7f8f2386d7b484c820"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-09_1931"
+    "selected_version": "Continuous/Castle-Fork/2018-08-14_1446"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@f991679e9fe426f97e380ab4ea21dba5baf3ae63"
+    "selected_version": "master@4cbad16dc98b1bcb19c389dce7bea287c0b3039b"
   },
   {
     "name": "Webkit",
