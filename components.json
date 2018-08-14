@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/SOS/2.0.6-328+b0c7973"
+    "selected_version": "Continuous/SOS/2.0.6-488+c5893a4"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/SOS/2.0.6-328+b0c7973"
+    "selected_version": "Continuous/SOS/2.0.6-488+c5893a4"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,15 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-14_1245"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-14_1543"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-188+16ab11b"
+    "selected_version": "Continuous/SOS/2.0.2-189+daca1d8"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-75+d9ae4b5"
+    "selected_version": "Continuous/SOS/2.0.2-77+aa4796a"
   },
   {
     "name": "bose-opkg-utils",
@@ -57,11 +57,11 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-207+e39b1a3"
+    "selected_version": "Continuous/SOS/2.0.2-209+9d568f7"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-96+13537d8"
+    "selected_version": "Continuous/SOS/2.0.2-97+0c369e7"
   },
   {
     "name": "CastleLibs-native",
@@ -81,7 +81,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-115+caadad5"
+    "selected_version": "Release/SOS/2.0.2-132+e3fb2c0"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-130+b38f5ce"
+    "selected_version": "Continuous/SOS/2.0.0-131+560a214"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -97,7 +97,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-462+ce0db95"
+    "selected_version": "Release/SOS/2.0.0-480+62bf410"
   },
   {
     "name": "FrontDoorService-qc8017_32",
@@ -125,7 +125,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-177+2d01499"
+    "selected_version": "Release/SOS/2.0.0-188+b227716"
   },
   {
     "name": "LpmMfgTool",
@@ -133,7 +133,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-517+e508032"
+    "selected_version": "Release/SOS/2.0.0-532+63aa040"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -153,15 +153,15 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-958+5a1b669"
+    "selected_version": "Release/SOS/2.0.0-1001+ea62e3d"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@979000cd1c0e79b8068487dde29a341ba7dd211f"
+    "selected_version": "SOS@37d6f8486ef2bf1dc0e6f2048b802859206dc1e3"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-92+979000c"
+    "selected_version": "Continuous/SOS/2.0.0-101+37d6f84"
   },
   {
     "name": "ProductUIAssets",
@@ -185,7 +185,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-225+45f489f"
+    "selected_version": "Release/SOS/2.0.0-234+ef49cf8"
   },
   {
     "name": "RivieraLpmTools",
@@ -197,11 +197,11 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-13+bf67099"
+    "selected_version": "Release/SOS/2.0.0-15+9f37b4d"
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-562+b6fbcef"
+    "selected_version": "Continuous/SOS/2.0.0-575+794df84"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -209,11 +209,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-831+2616d71"
+    "selected_version": "Release/SOS/2.0.2-833+d72587c"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-14_1245"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-14_1543"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -221,7 +221,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-76+3dce6c0"
+    "selected_version": "Release/SOS/2.0.0-81+128aeaa"
   },
   {
     "name": "Telemetry-qc8017_32",
