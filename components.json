@@ -17,11 +17,11 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-184+0d7b955"
+    "selected_version": "Continuous/SOS/2.0.2-188+16ab11b"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-73+fc4cedc"
+    "selected_version": "Continuous/SOS/2.0.2-75+d9ae4b5"
   },
   {
     "name": "bose-opkg-utils",
@@ -57,11 +57,11 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-178+2912009"
+    "selected_version": "Continuous/SOS/2.0.2-207+e39b1a3"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-91+ea87dcd"
+    "selected_version": "Continuous/SOS/2.0.2-96+13537d8"
   },
   {
     "name": "CastleLibs-native",
