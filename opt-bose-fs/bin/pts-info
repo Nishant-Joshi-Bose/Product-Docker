@@ -15,6 +15,7 @@ date
 uptime
 cat /opt/Bose/etc/BoseVersion.json
 cat /persist/mfg_data.json
+cat /etc/riviera-version
 free -m
 df -h
 ifconfig -a
@@ -26,3 +27,9 @@ head -20 /mnt/nv/product-persistence/*
 ls -lHt /mnt/nv/BoseLog
 ps
 printenv
+cat /mnt/nv/update/updateStates.txt
+cat /mnt/nv/update/updateStatus.txt
+jq . /mnt/nv/update/telemetry.json
+jq . /mnt/nv/updateSwUpComponentStatus.dat
+ls -lHt /opt/Bose/.swUpdateCache/ipks
+ls -lHt /opt/Bose/.swUpdateCache/localupdate
