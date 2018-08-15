@@ -2207,7 +2207,7 @@ void CustomProductController::AccessoriesPlayTonesPutHandler( const ProductPb::A
 
     if( req.has_subs( ) || req.has_rears( ) )
     {
-        AccessoriesPlayTones( req.has_subs( ), req.has_rears( ) );
+        AccessoriesPlayTones( req.subs( ), req.rears( ) );
     }
     else
     {
