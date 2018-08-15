@@ -209,7 +209,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-833+d72587c"
+    "selected_version": "Release/SOS/2.0.2-837+0454e4b"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@ea250fab4d800b637d04df2317bc8415b354b878"
+    "selected_version": "master@610f48fd2f06094a250e03cca1a156cfa7cc93ec"
   },
   {
     "name": "Webkit",
