@@ -17,6 +17,7 @@ union AuxSourceState_U
     AuxSourceState_U()
     {
         Reset();
+        SetPlaying();//to set the status for PLAY
     };
     uint32_t  key;
     struct __State
@@ -27,6 +28,13 @@ union AuxSourceState_U
     void Reset()
     {
         key ^= key;//max value
+    }
+    // PLAY would happen only when
+    // Aux is inserted and User has selected to PLAY
+    void SetPlaying()
+    {
+        state.auxInserted = true;
+        state.userPlayStatus = true;
     }
     bool operator != ( const AuxSourceState_U& t )
     {

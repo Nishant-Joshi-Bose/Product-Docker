@@ -147,6 +147,10 @@ bool CustomProductSTSStateTopAux::HandleActivateRequest( const STS::Void &req, u
     m_np.set_canstop( true );
     //update the canPause field
     m_np.set_canpause( true );
+    // Activate would start PLAYing, so set the prev state
+    // to PLAYing. This is to avoid triggering the PLAY again
+    // when we get the audioStatus().
+    m_prevState.SetPlaying();
     ProductSTSStateTop::HandleActivateRequest( req, seq );
     return true;
 }
