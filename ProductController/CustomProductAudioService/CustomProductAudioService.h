@@ -90,7 +90,7 @@ private:
     std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>      m_audioCenterSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_audioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>      m_audioTrebleSetting;
-    std::shared_ptr< DataCollectionClientIF >                       m_dataCollectionClient;
+    DataCollectionClientIF::DataCollectionClientPtr                 m_dataCollectionClient;
 
 };
 
