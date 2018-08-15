@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.6-524+1c78e3d"
+    "selected_version": "Release/SOS/2.0.7-537+a0226cf"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/SOS/2.0.6-524+1c78e3d"
+    "selected_version": "Release/SOS/2.0.7-537+a0226cf"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,15 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-15_1447"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.2.43477.2955862"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-190+6628520"
+    "selected_version": "Release/SOS/2.0.2-191+6c243f5"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-77+aa4796a"
+    "selected_version": "Release/SOS/2.0.2-78+ae56d05"
   },
   {
     "name": "bose-opkg-utils",
@@ -57,11 +57,11 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-216+c7b474f"
+    "selected_version": "Release/SOS/2.0.2-223+a975e71"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-98+968b7b1"
+    "selected_version": "Release/SOS/2.0.2-101+c1191d7"
   },
   {
     "name": "CastleLibs-native",
@@ -85,11 +85,11 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.1-98+541b14a"
+    "selected_version": "Release/SOS/2.0.1-99+541b14a"
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-132+5020ea2"
+    "selected_version": "Release/SOS/2.0.0-133+a5be814"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -109,7 +109,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-228+34e6e0a"
+    "selected_version": "Release/SOS/2.0.0-229+34e6e0a"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -117,7 +117,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.1-137+c2229bc"
+    "selected_version": "Release/SOS/2.0.1-138+94f690b"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-101+37d6f84"
+    "selected_version": "Release/SOS/2.0.0-107+4bba75a"
   },
   {
     "name": "ProductUIAssets",
@@ -197,11 +197,11 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-16+242c5da"
+    "selected_version": "Release/SOS/2.0.0-17+1f47e46"
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-581+3b92b0a"
+    "selected_version": "Release/SOS/2.0.0-582+c1bf4d6"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -209,11 +209,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-840+0454e4b"
+    "selected_version": "Release/SOS/2.0.2-841+1b9634d"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-15_1447"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.2.43477.2955862"
   },
   {
     "name": "svc-pts-log-decrypt",
