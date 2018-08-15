@@ -79,9 +79,12 @@ namespace ProductApp
 
 class CustomProductAudioService;
 class CustomProductKeyInputManager;
+class CommonProductCommandLine;
 
 class CustomProductController : public ProductController
 {
+    friend class CommonProductCommandLine;
+
 public:
     CustomProductController();
     virtual ~CustomProductController();
@@ -359,6 +362,8 @@ private:
 
     /// ProductKeyInputManager
     std::shared_ptr< CustomProductKeyInputManager> m_ProductKeyInputManager;
+
+    std::shared_ptr< CommonProductCommandLine                       > m_CommonProductCommandLine;
 
     ProductCliClient m_productCliClient;
 
