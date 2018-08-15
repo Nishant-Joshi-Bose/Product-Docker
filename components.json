@@ -9,7 +9,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/1.5.1-149+56aad0f"
+    "selected_version": "Continuous/master/1.5.1-153+d97239a"
   },
   {
     "name": "AVS-qc8017_32",
@@ -22,6 +22,10 @@
   {
     "name": "BLEToFrontDoorService-qc8017_32",
     "selected_version": "Continuous/master/2.1.0-74+27f2771"
+  },
+  {
+    "name": "Bluetooth-qc8017_32",
+    "selected_version": "Continuous/master/1.0.0-9+70396ed"
   },
   {
     "name": "bose-opkg-utils",
@@ -54,10 +58,6 @@
   {
     "name": "BoseWebMonaco",
     "selected_version": "Release/SOS/2.0.4-464+1a54242"
-  },
-  {
-    "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-206+95bb543"
   },
   {
     "name": "BTSTSSink-qc8017_32",
