@@ -65,7 +65,7 @@ private:
 
     /*! \brief Callback function invoked when new thermal data is received in ThermalMonitorTask.
      */
-    void ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data );
+    void ThermalDataReceivedCb( IpcSystemTemperatureData_t data );
 
     /*! \brief Converts a string for "mode" into an enum value.
      * \param modeName String to convert.
