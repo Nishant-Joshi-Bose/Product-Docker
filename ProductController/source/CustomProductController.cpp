@@ -34,6 +34,7 @@
 #include "CustomAudioSettingsManager.h"
 #include "CustomProductKeyInputManager.h"
 #include "ProductCommandLine.h"
+#include "CommonProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
@@ -157,6 +158,7 @@ CustomProductController::CustomProductController( ) :
     ///
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductCommandLine( nullptr ),
+    m_CommonProductCommandLine( ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductFrontDoorKeyInjectIF( nullptr ),
     m_ProductCecHelper( nullptr ),
@@ -181,7 +183,7 @@ CustomProductController::CustomProductController( ) :
     /// Intent Handler Initialization
     ///
     m_IntentHandler( *GetTask(),
-                     m_CliClientMT,
+                     GetCommonCliClientMT(),
                      m_FrontDoorClientIF,
                      *this ),
 
@@ -707,6 +709,7 @@ void CustomProductController::Run( )
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_CommonProductCommandLine    = std::make_shared< CommonProductCommandLine          >( );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
                                     m_ProductKeyInputManager,
@@ -724,6 +727,7 @@ void CustomProductController::Run( )
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
+        m_CommonProductCommandLine    == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
         m_ProductFrontDoorKeyInjectIF == nullptr ||
         m_ProductCecHelper            == nullptr ||
@@ -2203,7 +2207,7 @@ void CustomProductController::AccessoriesPlayTonesPutHandler( const ProductPb::A
 
     if( req.has_subs( ) || req.has_rears( ) )
     {
-        AccessoriesPlayTones( req.has_subs( ), req.has_rears( ) );
+        AccessoriesPlayTones( req.subs( ), req.rears( ) );
     }
     else
     {
