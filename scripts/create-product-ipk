@@ -66,6 +66,7 @@ boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
+vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get AudioPath-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
@@ -189,6 +190,7 @@ rm "$opt_dir/etc/product"
 "$avs_dir/stage" "$opt_dir" || exit
 mv "$opt_dir"/etc/Shepherd-avs.xml "$opt_dir"/etc/Shepherd-avs.xml.DISABLED || exit
 "$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
+"$vpacontroller_dir/stage" "$opt_dir" || exit
 
 # below is temporary due to stage issue in 1.0.1 Audiopath release that expects these folders ( although empty )
 mkdir -p "$audiopath_dir/professor/lib"
