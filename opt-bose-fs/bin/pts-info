@@ -33,3 +33,7 @@ jq . /mnt/nv/update/telemetry.json
 jq . /mnt/nv/updateSwUpComponentStatus.dat
 ls -lHt /opt/Bose/.swUpdateCache/ipks
 ls -lHt /opt/Bose/.swUpdateCache/localupdate
+tap-command 'lpm pt "lb history"'
+tap-command product chimes history
+tap-command product software_update_status
+tap-command softwareupdate state

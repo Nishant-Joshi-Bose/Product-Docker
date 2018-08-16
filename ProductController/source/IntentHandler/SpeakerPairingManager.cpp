@@ -247,8 +247,8 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
 /// @param resp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                                   const Callback<FrontDoor::Error>& error )
+void SpeakerPairingManager::AccessoriesGetHandler( Callback<ProductPb::AccessorySpeakerState> resp,
+                                                   Callback<FrontDoor::Error> error )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
@@ -259,14 +259,14 @@ void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::Acc
 ///
 /// @brief SpeakerPairingManager::AccessoriesPutHandler
 ///
-/// @param const ProductPb::AccessorySpeakerState& req
+/// @param ProductPb::AccessorySpeakerState req
 ///
-/// @param const Callback<ProductPb::AccessorySpeakerState>& resp
+/// @param Callback<ProductPb::AccessorySpeakerState> resp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpeakerState& req,
-                                                   const Callback<ProductPb::AccessorySpeakerState>& resp,
-                                                   const Callback<FrontDoor::Error>& error )
+void SpeakerPairingManager::AccessoriesPutHandler( ProductPb::AccessorySpeakerState req,
+                                                   Callback<ProductPb::AccessorySpeakerState> resp,
+                                                   Callback<FrontDoor::Error> error )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 

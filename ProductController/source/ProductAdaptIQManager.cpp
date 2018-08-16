@@ -98,8 +98,8 @@ void ProductAdaptIQManager::Run( )
 
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( Callback<bool>( lpmFunc ) );
 
-    auto getFunc = [ this ]( const Callback< const AdaptIQStatus >& resp,
-                             const Callback< FrontDoor::Error >&    errorRsp )
+    auto getFunc = [ this ]( Callback< const AdaptIQStatus > resp,
+                             Callback< FrontDoor::Error >    errorRsp )
     {
         HandleGet( resp, errorRsp );
     };
@@ -113,9 +113,9 @@ void ProductAdaptIQManager::Run( )
                                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
-    auto putFunc = [ this ]( const AdaptIQReq                       req,
-                             const Callback< const AdaptIQStatus >& resp,
-                             const Callback< FrontDoor::Error >&    errorRsp )
+    auto putFunc = [ this ]( AdaptIQReq                      req,
+                             Callback< const AdaptIQStatus > resp,
+                             Callback< FrontDoor::Error >    errorRsp )
     {
         HandlePut( req, resp, errorRsp );
     };
@@ -208,7 +208,7 @@ void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, b
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandleGet( const Callback<const AdaptIQStatus> & resp, const Callback<FrontDoor::Error> & errorRsp )
+void ProductAdaptIQManager::HandleGet( Callback<AdaptIQStatus> resp, Callback<FrontDoor::Error> errorRsp )
 {
     AdaptIQStatus status = m_status;
     SetDefaultProperties( status );
@@ -227,7 +227,7 @@ void ProductAdaptIQManager::HandleGet( const Callback<const AdaptIQStatus> & res
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, const Callback<const AdaptIQStatus> & resp, const Callback<FrontDoor::Error> & errorRsp )
+void ProductAdaptIQManager::HandlePut( AdaptIQReq req, Callback<AdaptIQStatus> resp, Callback<FrontDoor::Error> errorRsp )
 {
     ProductMessage msg;
     FrontDoor::Error error;

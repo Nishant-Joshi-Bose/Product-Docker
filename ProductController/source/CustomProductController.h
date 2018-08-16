@@ -395,7 +395,7 @@ private:
     /// @brief The following declaration is for handling the /audio/volume frontdoor endpoint
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume );
+    void HandleAudioVolumeNotification( SoundTouchInterface::volume volume );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

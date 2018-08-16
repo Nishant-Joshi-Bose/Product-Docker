@@ -207,11 +207,11 @@ private:
     /// @brief The following methods are used as Front Door callbacks.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    void AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                const Callback<FrontDoor::Error>& error );
-    void AccessoriesPutHandler( const ProductPb::AccessorySpeakerState &req,
-                                const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                const Callback<FrontDoor::Error>& error );
+    void AccessoriesGetHandler( Callback<ProductPb::AccessorySpeakerState> resp,
+                                Callback<FrontDoor::Error> error );
+    void AccessoriesPutHandler( ProductPb::AccessorySpeakerState req,
+                                Callback<ProductPb::AccessorySpeakerState> resp,
+                                Callback<FrontDoor::Error> error );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
