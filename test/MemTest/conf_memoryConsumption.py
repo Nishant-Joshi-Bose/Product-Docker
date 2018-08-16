@@ -29,7 +29,7 @@ CONFIG = {
     'Device_Param': {
         'SEND_FROM'     : 'ProfessorMemTest@bose.com',
         # Add more emails by putting a ";" then the address in the string
-        'SEND_TO'       : "SET ME",
+        'SEND_TO'       : "lia_esper@bose.com; barry_clark@bose.com",
         'MAIL_SERVER'   : 'smtp.bose.com',
         'DEVICE_IP'     : '203.0.113.1',
         'DEVICE_PORT'   : '23',
@@ -59,13 +59,13 @@ CONFIG = {
 
     #Madrid Credentials
     'Gigya_Account': {
-        'Email': 'SET ME',
-        'Password': 'SET ME'
+        'Email': 'a4vauto_testing@bose.com',
+        'Password': '02bosebose'
     },
 
     #Playback source Information
     'Source_Data': '{"source":"IHEART",\
-                    "sourceAccount":"SET ME",\
+                    "sourceAccount":"bfb895f5-67bd-446d-bcd3-1900eb715621",\
                     "preset":{"type":"stationurl",\
                                 "location":"/playback/containerType/live/containerId/1097/containerName/KISS 108",\
                                 "name":"KISS 108",\
