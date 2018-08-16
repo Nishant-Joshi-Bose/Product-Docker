@@ -383,7 +383,7 @@
     {
         "zone": "ZONE3",
         "keyList": ["BOSE_INFO", "BOSE_DVR", "BOSE_RECORD"],
-        "blastDevices": ["DEVICE_TYPE_CBL_SAT"]
+        "blastDevices": ["DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV"]
     },
     {
         "zone": "ZONE4",
