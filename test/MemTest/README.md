@@ -40,7 +40,7 @@ git clone git@github.com:BoseCorp/bose-web-test-page.git
 adb shell ifconfig # Take note of the IP address of your Professor
 google-chrome --ignore-certificate-errors --disable-web-security --user-data-dir # You will need Google Chrome to run this
 ```
-3. Copy/Paste this URL into Chrome and plug in your Professor's IP address: file:///scratch/bose-web-test-page/index.html?__IP Address__
+3. Copy/Paste this URL into Chrome and plug in your Professor's IP address: _file:///scratch/bose-web-test-page/index.html?IP Address_
 4. Press __ACCOUNT LOGIN__ and log into your Madrid account
 5. Press __CONNECT__
 6. Select __Method__ as __GET__
