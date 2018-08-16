@@ -44,7 +44,9 @@
                 156
             ], 
             "blastDevices": [
-                "DEVICE_TYPE_CBL_SAT"
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV"
             ], 
             "zone": "ZONE3"
         }, 
