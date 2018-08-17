@@ -159,7 +159,7 @@ void MuteManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume const& vol
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void MuteManager::ToggleMute( )
 {
-    auto errFunc = []( const FrontDoor::Error & error )
+    auto errFunc = []( FrontDoor::Error error )
     {
         BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor mute request.",
                     error.code(),

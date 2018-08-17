@@ -395,7 +395,7 @@ private:
     /// @brief The following declaration is for handling the /audio/volume frontdoor endpoint
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume );
+    void HandleAudioVolumeNotification( SoundTouchInterface::volume volume );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -436,9 +436,9 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleChimeResponse( ChimesControllerPb::ChimesStatus status ) override;
     bool HandleAccessoriesPlayTonesResponse( ChimesControllerPb::ChimesStatus status );
-    void AccessoriesPlayTonesPutHandler( const ProductPb::AccessoriesPlayTonesRequest &req,
-                                         const Callback<ProductPb::AccessoriesPlayTonesRequest> &resp,
-                                         const Callback<FrontDoor::Error>& error );
+    void AccessoriesPlayTonesPutHandler( ProductPb::AccessoriesPlayTonesRequest req,
+                                         Callback<ProductPb::AccessoriesPlayTonesRequest> resp,
+                                         Callback<FrontDoor::Error> error );
     void AccessoriesPlayTones( bool subs, bool rears );
     bool m_queueRearAccessoryTone = false;
     bool m_speakerPairingIsFromLAN = false;
