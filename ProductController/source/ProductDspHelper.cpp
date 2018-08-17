@@ -23,7 +23,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductDspHelper.h"
@@ -59,10 +59,10 @@ namespace ProductApp
 ///
 /// @name   ProductDspHelper::ProductDspHelper
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductDspHelper::ProductDspHelper( ProfessorProductController& ProductController )
+ProductDspHelper::ProductDspHelper( CustomProductController& ProductController )
 
     : m_timer( APTimer::Create( ProductController.GetTask( ), "DspStatusPollTimer" ) ),
       m_ProductController( ProductController )

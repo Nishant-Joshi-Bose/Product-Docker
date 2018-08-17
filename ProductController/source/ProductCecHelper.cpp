@@ -24,7 +24,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductCecHelper.h"
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
@@ -34,9 +34,10 @@
 #include "HdmiEdid.pb.h"
 #include "ProductDataCollectionDefines.h"
 #include "ProductSTS.pb.h"
+#include "DataCollectionCecState.pb.h"
 
 using namespace ProductPb;
-
+constexpr char cecModePersistPath[] = "CecMode.json";
 namespace
 {
 const std::string s_ModeOn         = "ON";
@@ -54,19 +55,19 @@ namespace ProductApp
 ///
 /// @name   ProductCecHelper::ProductCecHelper
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCecHelper::ProductCecHelper( ProfessorProductController& ProductController )
+ProductCecHelper::ProductCecHelper( CustomProductController& ProductController )
 
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
       m_connected( false ),
-      m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) ),
+      m_CustomProductController( static_cast< CustomProductController & >( ProductController ) ),
       m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) )
 {
-    m_cecresp.set_mode( "ON" );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +81,9 @@ ProductCecHelper::ProductCecHelper( ProfessorProductController& ProductControlle
 bool ProductCecHelper::Run( )
 {
     BOSE_DEBUG( s_logger, "The hardware connection to the A4VVideoManager is being established." );
+    m_cecModePersistence = ProtoPersistenceFactory :: Create( cecModePersistPath, g_ProductPersistenceDir );
+    LoadFromPersistence();
+
     m_CecHelper = A4VVideoManagerClientFactory::Create( "ProductCecHelper", m_ProductTask );
     Callback< bool > ConnectedCallback( std::bind( &ProductCecHelper::Connected,
                                                    this,
@@ -169,6 +173,7 @@ bool ProductCecHelper::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::CecModeHandleGet( const Callback<const CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp )
 {
+
     CecModeResponse cec = m_cecresp;
     SetCecModeDefaultProperties( cec );
     resp.Send( cec );
@@ -190,6 +195,7 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
 {
     ProductMessage msg;
     FrontDoor::Error error;
+    CecModeResponse tempResp;
 
     if( !req.has_mode() )
     {
@@ -228,8 +234,10 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
         error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_CEC );
         errorRsp.Send( error );
     }
-
-    m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, m_cecresp );
+    tempResp = m_cecresp;
+    SetCecModeDefaultProperties( tempResp );
+    PersistCecMode();
+    m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, tempResp );
 }
 
 
@@ -322,12 +330,21 @@ void ProductCecHelper::Connected( bool connected )
 
     m_CecHelper->RegisterForHotplugEvent( CallbackForKeyEvents );
 
-    Callback< LpmServiceMessages::IPCSource_t >
-    CallbackForCecSource( std::bind( &ProductCecHelper::HandleSrcSwitch,
-                                     this,
-                                     std::placeholders::_1 ) );
+    auto lpmConnectCb = [ this ]( bool connected )
+    {
+        const Callback< IPCSource_t > cecSrcSwitchCb( [ this ]( IPCSource_t source )
+        {
+            HandleSrcSwitch( source );
+        } );
+        m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, cecSrcSwitchCb );
 
-    m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, CallbackForCecSource );
+        const Callback< IpcCecState_t > cecStateCb( [ this ]( IpcCecState_t state )
+        {
+            HandleCecState( state );
+        } );
+        m_ProductLpmHardwareInterface->RegisterForLpmEvents( static_cast< IpcOpcodes_t >( CEC_STATE_INFO ), cecStateCb );
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmConnectCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -342,28 +359,32 @@ void ProductCecHelper::Connected( bool connected )
 void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource )
 {
     BOSE_DEBUG( s_logger, "CEC Source Switch Message received from LPM  %d",  cecSource.source() );
-    if( cecSource.source() == LPM_IPC_SOURCE_TV )
+    if( m_ignoreSourceSwitch )
     {
-        ProductMessage productMessage;
+        BOSE_INFO( s_logger, "%s Ignoring CEC source switch", __PRETTY_FUNCTION__ );
+        return;
+    }
+
+    ProductMessage productMessage;
+    auto source = cecSource.source( );
+
+    switch( source )
+    {
+    case LPM_IPC_SOURCE_TV:
         productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV ) );
+        break;
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-
-        BOSE_INFO( s_logger, "An attempt to play the TV source has been made from CEC." );
-    }
-    else if( cecSource.source() == LPM_IPC_SOURCE_INTERNAL )
-    {
-        ProductMessage productMessage;
+    case LPM_IPC_SOURCE_INTERNAL:
         productMessage.set_action( static_cast< uint32_t >( Action::POWER_TOGGLE ) );
+        break;
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-
-        BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made from CEC." );
-    }
-    else
-    {
+    default:
         BOSE_ERROR( s_logger, "An invalid intent action has been supplied." );
+        return;
     }
+
+    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    BOSE_INFO( s_logger, "An attempt to play the %s has been made from CEC.", LPM_IPC_SOURCE_ID_Name( source ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -374,7 +395,7 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
 void ProductCecHelper::HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying&
                                                       response )
 {
-    BOSE_DEBUG( s_logger, "A response to the playback request %s was received." ,
+    BOSE_DEBUG( s_logger, "A response to the playback request %s was received.",
                 response.source( ).sourcedisplayname( ).c_str( ) );
 }
 
@@ -512,7 +533,11 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
 {
     using namespace ProductSTS;
 
-    BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
+    BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received %s.", ProtoToMarkup::ToJson( nowPlayingStatus ).c_str( ) );
+
+    // Default to allowing CEC source switch (we'll get nowPlaying with INVALID_SOURCE after setup, so we need to make sure
+    // this defaults to cleared)
+    m_ignoreSourceSwitch = false;
 
     if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::PLAY )
     {
@@ -521,11 +546,19 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
             nowPlayingStatus.container( ).contentitem( ).has_source( ) and
             nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
         {
-            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( SHELBY_SOURCE::PRODUCT ) == 0 )
+            const auto& source = nowPlayingStatus.container( ).contentitem( ).source( );
+            if( source.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
 
                 m_LpmSourceID = LPM_IPC_SOURCE_TV;
+            }
+            else if( source.compare( SHELBY_SOURCE::SETUP ) == 0 )
+            {
+                BOSE_DEBUG( s_logger, "CEC CAPS in setup, ignoring CEC active source requests." );
+
+                m_ignoreSourceSwitch = true;
+                m_LpmSourceID = LPM_IPC_SOURCE_INTERNAL;
             }
             else
             {
@@ -590,6 +623,81 @@ void ProductCecHelper::PowerOn( )
     PerhapsSetCecSource( );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ProductCecHelper::HandleCecState
+///
+/// @brief This method handles the CEC state message received from LPM
+///
+/// @param LpmServiceMessages::IpcCecState_t state
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
+{
+    // Presumably LPM sends these only on change, but there's no harm in filtering here just to be sure
+    if( state.SerializeAsString() == m_cecState.SerializeAsString() )
+    {
+        return;
+    }
+
+    BOSE_DEBUG( s_logger, "%s - %s", __PRETTY_FUNCTION__, ProtoToMarkup::ToJson( state ).c_str( ) );
+
+    auto cecState = std::make_shared< DataCollectionPb::CecState >( );
+
+    cecState->set_physicaladdress( state.physicaladdress( ) );
+    cecState->set_logicaladdress( state.logicaladdress( ) );
+    cecState->set_activesource( state.actsrc( ) );
+    cecState->set_strmpath( state.strmpath( ) );
+
+    for( auto i = 0; i < state.cec_devices_size( ); i++ )
+    {
+        const auto& idev = state.cec_devices( i );
+        auto odev = cecState->add_cecdevices( );
+
+        // TODO: do we need to filter this list based on LA (i.e. does the list
+        // have a bunch of entries w/LA == CEC_UNREG_BCAST, and if so should we filter
+        // them out?)
+
+        odev->set_cecversion( CEC_VERSION_Name( idev.cecversion( ) ) );
+        odev->set_physicaladdress( idev.physicaladdress( ) );
+        odev->set_osd( idev.osd( ) );
+
+        // should always be 3, but we'll be pedantic
+        for( auto j = 0; j < idev.vendorid_size( ); j++ )
+        {
+            odev->add_vendorid( idev.vendorid( j ) );
+        }
+    }
+
+    m_DataCollectionClient->SendData( cecState, DATA_COLLECTION_CEC_STATE );
+    m_cecState = state;
+}
+
+void ProductCecHelper::PersistCecMode()
+{
+    BOSE_DEBUG( s_logger, "%s", __func__ );
+    m_cecModePersistence->Remove();
+    m_cecModePersistence->Store( ProtoToMarkup::ToJson( m_cecresp ) );
+}
+
+void ProductCecHelper::LoadFromPersistence()
+{
+    try
+    {
+        ProtoToMarkup::FromJson( m_cecModePersistence->Load(), &m_cecresp );
+        BOSE_INFO( s_logger, "%s: %s",  __func__, ProtoToMarkup::ToJson( m_cecresp ).c_str() );
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_LOG( ERROR, "CEC mode setting from persistence failed markup error - " << e.what() );
+        m_cecresp.set_mode( "ON" ); //defaulting to ON
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
+    {
+        BOSE_LOG( ERROR, "CEC mode setting from persistence failed - " << e.what() );
+        m_cecresp.set_mode( "ON" ); //defaulting to ON
+    }
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

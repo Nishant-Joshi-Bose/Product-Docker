@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
 #include "Utilities.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductBLERemoteManager.h"
 #include "SharedProto.pb.h"
@@ -32,6 +32,7 @@
 #include "ProductSTS.pb.h"
 #include "SystemSourcesProperties.pb.h"
 #include "SHELBY_SOURCE.h"
+#include "CustomProductKeyInputManager.h"
 
 using namespace ProductPb;
 using namespace A4V_RemoteCommunicationServiceMessages;
@@ -52,7 +53,7 @@ namespace ProductApp
 /// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductBLERemoteManager::ProductBLERemoteManager( ProfessorProductController& ProductController ) :
+ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
     m_ProductController( ProductController ),
@@ -226,6 +227,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 void ProductBLERemoteManager::UpdateBacklight( )
 {
     using namespace ProductSTS;
+    using namespace SystemSourcesProperties;
 
     RCS_PB_MSG::LedsRawMsg_t leds;
 
@@ -263,23 +265,24 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        if( not source.visible() )
+        if( ( not m_ProductController.GetSourceInfo().IsSourceAvailable( source ) ) or ( not source.has_details() ) )
         {
             // source isn't configured, don't light it
             continue;
         }
 
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 )
+        const auto& sourceDetailsActivationKey = source.details().activationkey();
+        if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
         {
             leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 )
-        {
-            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
-        }
-        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 )
+        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) ) == 0 )
         {
             leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
+        }
+        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) ) == 0 )
+        {
+            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
     }
 
@@ -298,8 +301,8 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // set the active source and associated zones
     A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
-    bool visible;
-    bool valid = GetSourceLED( sourceLED, visible );
+    bool available;
+    bool valid = GetSourceLED( sourceLED, available );
     if( valid )
     {
         // zone selection here is from section 6.5.4 ("Zone Assignments per Device")
@@ -318,10 +321,11 @@ void ProductBLERemoteManager::UpdateBacklight( )
             leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
             leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            if( visible )
+            if( available )
             {
                 leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
@@ -368,19 +372,19 @@ void ProductBLERemoteManager::UpdateBacklight( )
 /// @brief ProductBLERemoteManager::GetSourceLED
 ///
 /// @param  sourceLED - reference to sourceLED to illuminate
-///         visible - reference to flag indicating whether source is configured
+///         available - reference to flag indicating whether source is configured
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::GetSourceLED(
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& visible )
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
 
-    visible = false;
+    available = false;
 
     if( m_inSetup )
     {
@@ -402,7 +406,7 @@ bool ProductBLERemoteManager::GetSourceLED(
     const auto& sourceName = sourceItem->sourcename();
     const auto& sourceAccountName = sourceItem->sourceaccountname();
 
-    visible = sourceItem->visible();
+    available = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
     if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
     {
         if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
@@ -518,6 +522,7 @@ void ProductBLERemoteManager::GetZoneLEDs( RCS_PB_MSG::LedsRawMsg_t& leds )
     }
     else if( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_BD_DVD ) ) == 0 )
     {
+        leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
         leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
         leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
         leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );

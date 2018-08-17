@@ -23,12 +23,13 @@ def main():
                 "activationKey"     : "ACTIVATION_KEY_BD_DVD"
             },
             "displayName"       : "SLOT_0",
+            "accountId"         : "SLOT_0",
             "local"             : True,
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_0",
             "sourceName"        : "PRODUCT",
             "status"            : "AVAILABLE",
-            "visible"           : False
+            "visible"           : True
         },
         {
             "details" : {
@@ -37,12 +38,13 @@ def main():
                 "activationKey"     : "ACTIVATION_KEY_GAME"
             },
             "displayName"       : "SLOT_1",
+            "accountId"         : "SLOT_1",
             "local"             : True,
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_1",
             "sourceName"        : "PRODUCT",
             "status"            : "AVAILABLE",
-            "visible"           : False
+            "visible"           : True
         },
         {
             "details" : {
@@ -51,12 +53,13 @@ def main():
                 "activationKey"     : "ACTIVATION_KEY_CBL_SAT"
             },
             "displayName"       : "SLOT_2",
+            "accountId"         : "SLOT_2",
             "local"             : True,
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_2",
             "sourceName"        : "PRODUCT",
             "status"            : "AVAILABLE",
-            "visible"           : False
+            "visible"           : True
         },
         {
             "details" : {
@@ -65,11 +68,12 @@ def main():
                 "activationKey"     : "ACTIVATION_KEY_TV"
             },
             "displayName": "TV", 
+            "accountId": "TV", 
             "local"             : True, 
             "multiroom"         : True, 
             "sourceAccountName" : "TV", 
             "sourceName"        : "PRODUCT", 
-            "status"            : "AVAILABLE",
+            "status"            : "NOT_CONFIGURED",
             "visible"           : True
         }
     ]

@@ -35,7 +35,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProfessorProductController;
+class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -49,12 +49,12 @@ public:
     ///
     /// CustomProductKeyInputManager Constructor
     ///
-    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController,
+    explicit CustomProductKeyInputManager( CustomProductController& ProductController,
                                            const FrontDoorClientIF_t& frontDoorClient );
 
     void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro );
 
-    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController );
+    explicit CustomProductKeyInputManager( CustomProductController& ProductController );
 
 
     ///
@@ -70,14 +70,14 @@ protected:
     ///
     /// CustomProcessKeyEvent Override
     ///
-    bool CustomProcessKeyEvent( const LpmServiceMessages::IpcKeyInformation_t& keyEvent ) override;
+    bool CustomProcessKeyEvent( const IpcKeyInformation_t& keyEvent ) override;
 
 private:
 
     ///
     /// Product Controller Reference
     ///
-    ProfessorProductController& m_ProductController;
+    CustomProductController& m_ProductController;
 
     ///
     /// Custom A4V Quick Set Service Client and Initialization
@@ -91,7 +91,9 @@ private:
     ::google::protobuf::uint32 m_KeyIdOfIncompleteChordRelease;
 
     void InitializeQuickSetService( );
-    bool FilterIncompleteChord( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );
+    bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
+
+    void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

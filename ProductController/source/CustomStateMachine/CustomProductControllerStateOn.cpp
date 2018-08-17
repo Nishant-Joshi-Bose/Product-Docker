@@ -29,7 +29,7 @@
 #include "IntentHandler.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductControllerState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,8 @@ bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil:
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    if( intent == ( unsigned int )Action::ACTION_START_PAIR_SPEAKERS )
+    if( intent == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS ||
+        intent == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS_LAN )
     {
         GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
     }

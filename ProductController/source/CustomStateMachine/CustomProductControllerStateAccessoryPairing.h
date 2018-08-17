@@ -18,7 +18,6 @@
 #include "ProductControllerState.h"
 #include "HsmState.h"
 #include "LpmServiceMessages.pb.h"
-#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -63,10 +62,8 @@ public:
     bool HandleIntentPowerToggle( )                                             override;
     bool HandleIntentPowerOff( )                                                override;
     bool HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )  override;
-    bool HandleChimeSASSPlaybackCompleted( int32_t eventId )                    override;
 
 private:
-    std::deque<int32_t> m_pairingCompleteChimeToPlay;
 
 };
 

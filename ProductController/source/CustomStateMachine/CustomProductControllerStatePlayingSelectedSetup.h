@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file      CustomProductControllerStatePlayingSelectedSetup.h
 ///
-/// @brief     This header file declares functionality to process custom events that occur in
-///            Professor during the product setup state.
+/// @brief     This header file declares functionality to process custom events that occur
+///            during the product setup state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////

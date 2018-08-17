@@ -41,7 +41,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "IntentHandler.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "CliClientMT.h"
 #include "MuteManager.h"
 #include "SpeakerPairingManager.h"
@@ -91,7 +91,7 @@ void IntentHandler::Initialize( )
     CommonIntentHandler::Initialize( );
 
     ///
-    /// Custom intent managers for Professor are constructed at this point.
+    /// Custom intent managers are constructed at this point.
     ///
     IntentManagerPtr_t muteManager = std::make_shared< MuteManager >
                                      ( GetTask( ),
@@ -113,7 +113,7 @@ void IntentHandler::Initialize( )
 
     ///
     /// A map is created to associate the custom volume and mute control intent manager with volume
-    /// and mute key actions. Note that these actions are product specific to Professor devices,
+    /// and mute key actions. Note that these actions are product specific,
     /// typically based on remote key actions.
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ] = muteManager;
@@ -122,9 +122,10 @@ void IntentHandler::Initialize( )
     /// A map is created to associate the custom speaker pairing intent manager with pair speaker key
     /// actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_START_PAIR_SPEAKERS ] = playbackRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS ]   = speakerPairingManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ]  = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_START_PAIR_SPEAKERS ]     = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_START_PAIR_SPEAKERS_LAN ] = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS ]       = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ]      = speakerPairingManager;
 
     ///
     /// A map is created to associate the custom playback intent manager with product specific

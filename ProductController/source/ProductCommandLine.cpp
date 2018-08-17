@@ -27,9 +27,10 @@
 #include "Intents.h"
 #include "IntentHandler.h"
 #include "CustomProductLpmHardwareInterface.h"
-#include "ProfessorProductController.h"
+#include "CustomProductController.h"
 #include "ProductCommandLine.h"
 #include "ProductEndpointDefines.h"
+#include "AccessorySoftwareInstallManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -41,10 +42,10 @@ namespace ProductApp
 ///
 /// @name   ProductCommandLine::ProductCommandLine
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCommandLine::ProductCommandLine( ProfessorProductController& ProductController )
+ProductCommandLine::ProductCommandLine( CustomProductController& ProductController )
 
     : m_ProductController( ProductController ),
       m_ProductTask( ProductController.GetTask( ) ),
@@ -124,10 +125,6 @@ std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
                                                                              "This command selects the audio source.",
                                                                              "\t\t product source [tv | st] \t\t" ) ) );
 
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product state",
-                                                                             "This command returns the current state name and ID.",
-                                                                             "\t\t product state \t\t\t\t" ) ) );
-
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_ap",
                                                                              "This command tests setting the audio path to an on or off state.",
                                                                              "\t product test_ap [on | off] \t\t" ) ) );
@@ -175,6 +172,10 @@ std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product volume",
                                                                              "This command sets the volume to a specified level.",
                                                                              "\t\t product volume [int from 0 to 100] \t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_accessory_update",
+                                                                             "This command triggers the accessory update flow.",
+                                                                             "\t\t product test_accessory_update \t" ) ) );
 
     return commands;
 }
@@ -765,18 +766,16 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// This command returns the current state name and ID.
+    /// This command triggers the accessory update flow.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( command.compare( "product state" ) == 0 )
+    else if( command.compare( "product test_accessory_update" ) == 0 )
     {
-        Hsm::STATE  stateId   = m_ProductController.GetHsm( ).GetCurrentState( )->GetId( );
-        std::string stateName = m_ProductController.GetHsm( ).GetCurrentState( )->GetName( );
+        LpmServiceMessages::IpcAccessorySpeakerSoftwareStatusMessage_t softwareStatus;
+        softwareStatus.set_status( ACCESSORY_UPDATE_INSTALLATION_PENDING );
+        m_ProductController.m_AccessorySoftwareInstallManager.m_softwareStatusCache = softwareStatus;
+        m_ProductController.m_AccessorySoftwareInstallManager.ProceedWithSoftwareUpdate( );
 
-        response  = "The current state name is ";
-        response += stateName;
-        response += " with ID ";
-        response += std::to_string( static_cast< unsigned int >( stateId ) );
-        response += ".";
+        response  = "Accessory update triggered";
     }
 
     return 1;
