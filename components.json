@@ -21,11 +21,11 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/1.5.1-149+56aad0f"
+    "selected_version": "Continuous/master/2.1.0-157+676b234"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-13_1206"
+    "selected_version": "Continuous/Castle-Fork/2018-08-16_1042"
   },
   {
     "name": "BLERemoteXCVR",
@@ -33,11 +33,15 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-186+27f4c74"
+    "selected_version": "Continuous/master/2.1.0-187+cef7ed4"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-71+5129e5f"
+    "selected_version": "Continuous/master/2.1.0-74+27f2771"
+  },
+  {
+    "name": "Bluetooth-qc8017_32",
+    "selected_version": "Continuous/master/1.0.0-15+27fe590"
   },
   {
     "name": "bose-opkg-utils",
@@ -69,15 +73,11 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/SOS/2.0.3-462+c267170"
-  },
-  {
-    "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-189+89ea5dc"
+    "selected_version": "Release/SOS/2.0.4-464+1a54242"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-94+a131396"
+    "selected_version": "Continuous/master/2.1.0-95+b2f8d56"
   },
   {
     "name": "CastleLibs-native",
@@ -101,7 +101,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/1.5.0-77+f641608"
+    "selected_version": "Release/master/2.1.0-102+9997dc9"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-999+8079006"
+    "selected_version": "Continuous/master/2.0.0-1006+53126a7"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -173,7 +173,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@437ad5c1afd3673ae8a6ac514f5283fd95bc2313"
+    "selected_version": "master@ac017826d8a059cd0ee26b864fd820840b19c2ae"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -233,11 +233,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-13_1206"
+    "selected_version": "Continuous/Castle-Fork/2018-08-16_1042"
   },
   {
     "name": "svc-pts-log-decrypt",
-    "selected_version": "master@18c13afce2d583571bbf8717cd2409ef0a7827d5"
+    "selected_version": "master@18f2def393af24d66c09ac691e5fee4cf82887c5"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -253,7 +253,7 @@
   },
   {
     "name": "unittest-cpp-qc8017_32",
-    "selected_version": "Release/bose-master/2.0.0-20+8575b87"
+    "selected_version": "Release/bose-master/2.0.0-21+1990647"
   },
   {
     "name": "Webkit",
