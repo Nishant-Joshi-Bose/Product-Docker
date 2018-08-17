@@ -72,8 +72,7 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
       m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) ),
       m_FrontDoorClientIF( frontDoorClient ),
-      m_lpmConnected( false ),
-      m_timer( APTimer::Create( productController.GetTask( ), "AccessoryPairingTimer" ) )
+      m_lpmConnected( false )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", "SpeakerPairingManager" );
 
@@ -247,8 +246,8 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
 /// @param resp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                                   const Callback<FrontDoor::Error>& error )
+void SpeakerPairingManager::AccessoriesGetHandler( Callback<ProductPb::AccessorySpeakerState> resp,
+                                                   Callback<FrontDoor::Error> error )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
@@ -259,14 +258,14 @@ void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::Acc
 ///
 /// @brief SpeakerPairingManager::AccessoriesPutHandler
 ///
-/// @param const ProductPb::AccessorySpeakerState& req
+/// @param ProductPb::AccessorySpeakerState req
 ///
-/// @param const Callback<ProductPb::AccessorySpeakerState>& resp
+/// @param Callback<ProductPb::AccessorySpeakerState> resp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpeakerState& req,
-                                                   const Callback<ProductPb::AccessorySpeakerState>& resp,
-                                                   const Callback<FrontDoor::Error>& error )
+void SpeakerPairingManager::AccessoriesPutHandler( ProductPb::AccessorySpeakerState req,
+                                                   Callback<ProductPb::AccessorySpeakerState> resp,
+                                                   Callback<FrontDoor::Error> error )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
@@ -567,17 +566,6 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief SpeakerPairingManager::HandleTimeOut
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::HandleTimeOut()
-{
-    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s", __FUNCTION__ );
-    StopPairing( );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief SpeakerPairingManager::PairingCallback
 ///
 /// @param LpmServiceMessages::IpcSpeakerPairingMode_t pair
@@ -587,18 +575,9 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s with pair mode %d", __FUNCTION__, pair.pairingenabled( ) );
 
-    if( pair.pairingenabled( ) && m_accessorySpeakerState.pairing() )
+    if( pair.pairingenabled( ) && !m_accessorySpeakerState.pairing() )
     {
-        m_timer->SetTimeouts( PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START,
-                              PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY );
-
-        m_timer->Start( std::bind( &SpeakerPairingManager::HandleTimeOut,
-                                   this ) );
         m_accessoryListReceived = false;
-    }
-    else
-    {
-        m_timer->Stop( );
     }
 
     m_accessorySpeakerState.set_pairing( pair.pairingenabled( ) );

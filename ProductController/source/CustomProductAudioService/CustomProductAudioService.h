@@ -73,7 +73,7 @@ private:
     void SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb );
     void InternalMuteCallback( bool mute );
     void SendMainStreamAudioSettingsEvent();
-    void ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data );
+    void ThermalDataReceivedCb( IpcSystemTemperatureData_t data );
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to prepare m_MainStreamAudioSettings for APProduct to use

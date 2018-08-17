@@ -171,9 +171,9 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent );
-    void HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid );
-    void HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
-    void HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
+    void HandleRawEDIDResponse( A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid );
+    void HandlePhyAddrResponse( A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
+    void HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlayingStatus );
     void HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource );
     void HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying& response );
     void HandlePlaybackRequestError( const FrontDoor::Error& error );
