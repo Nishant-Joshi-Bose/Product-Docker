@@ -349,12 +349,12 @@ void ProductDspHelper::AudioFormatGetDspStatusCallback( const Callback<ProductPb
 ///
 /// @brief ProductDspHelper::AudioFormatFrontDoorGetHandler
 ///
-/// @param const Callback<ProductPb::AccessorySpeakerState>& resp
-/// @param const Callback<FrontDoor::Error>& error
+/// @param Callback<ProductPb::AccessorySpeakerState> resp
+/// @param Callback<FrontDoor::Error> error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductDspHelper::AudioFormatFrontDoorGetHandler( const Callback<ProductPb::AudioFormat>& resp,
-                                                       const Callback<FrontDoor::Error>& error )
+void ProductDspHelper::AudioFormatFrontDoorGetHandler( Callback<ProductPb::AudioFormat> resp,
+                                                       Callback<FrontDoor::Error> error )
 {
     BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
     Callback< LpmServiceMessages::IpcDspStatus_t >
