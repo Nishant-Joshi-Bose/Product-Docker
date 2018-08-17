@@ -65,7 +65,7 @@ private:
 
     /*! \brief Callback function invoked when new thermal data is received in ThermalMonitorTask.
      */
-    void ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data );
+    void ThermalDataReceivedCb( IpcSystemTemperatureData_t data );
 
     /*! \brief Converts a string for "mode" into an enum value.
      * \param modeName String to convert.
@@ -90,7 +90,7 @@ private:
     std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>      m_audioCenterSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_audioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>      m_audioTrebleSetting;
-    std::shared_ptr< DataCollectionClientIF >                       m_dataCollectionClient;
+    DataCollectionClientIF::DataCollectionClientPtr                 m_dataCollectionClient;
 
 };
 
