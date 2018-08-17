@@ -153,8 +153,9 @@ bool ProductCecHelper::Run( )
             PowerOff();
         }
     };
-    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl );
-    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl, {} );
+    AsyncCallback< SystemPowerPb::SystemPowerControl > powerCb( handleSystemPowerControl, m_ProductTask );
+    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
+    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
 
     return true;
 }
