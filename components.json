@@ -9,11 +9,11 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/1.5.1-153+d97239a"
+    "selected_version": "Continuous/master/2.1.0-157+676b234"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-14_1446"
+    "selected_version": "Continuous/Castle-Fork/2018-08-16_1042"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-9+70396ed"
+    "selected_version": "Continuous/master/1.0.0-15+27fe590"
   },
   {
     "name": "bose-opkg-utils",
@@ -85,7 +85,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/1.5.0-77+f641608"
+    "selected_version": "Release/master/2.1.0-102+9997dc9"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-999+8079006"
+    "selected_version": "Continuous/master/2.0.0-1006+53126a7"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -213,11 +213,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-14_1446"
+    "selected_version": "Continuous/Castle-Fork/2018-08-16_1042"
   },
   {
     "name": "svc-pts-log-decrypt",
-    "selected_version": "master@18c13afce2d583571bbf8717cd2409ef0a7827d5"
+    "selected_version": "master@18f2def393af24d66c09ac691e5fee4cf82887c5"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@4cbad16dc98b1bcb19c389dce7bea287c0b3039b"
+    "selected_version": "master@4e14690fc4fec4044078e570fec32b3a894ecb75"
   },
   {
     "name": "Webkit",
