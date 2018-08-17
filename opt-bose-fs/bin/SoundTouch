@@ -63,9 +63,7 @@ lowpower=(
     Shepherd-AudioPath.xml
     Shepherd-NetManager.xml
     Shepherd-avs.xml
-    Shepherd-BTStackAdapter.xml
-    Shepherd-BTSTSSink.xml
-    Shepherd-BLESetup.xml
+    Shepherd-Bluetooth.xml
     Shepherd-BLEToFrontDoorService.xml
 )
 
