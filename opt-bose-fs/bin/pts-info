@@ -44,8 +44,10 @@ tap-command product settings all
 tap-command product software_update_status
 tap-command product state
 tap-command product timer_status
+tap-command network status
+tap-command network wifi profiles info
+tap-command network wifi status
 tap-command galapagos status
 tap-command galapagos discovery response
-tap-command network status
 tap-command softwareupdate state
 tap-command softwareupdate status
