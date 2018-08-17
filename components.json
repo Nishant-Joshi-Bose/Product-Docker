@@ -9,7 +9,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-157+676b234"
+    "selected_version": "Continuous/master/2.1.0-161+bdb9d7c"
   },
   {
     "name": "AVS-qc8017_32",
@@ -77,7 +77,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/2.1.0-102+3e07b8d"
+    "selected_version": "Continuous/master/2.1.1-108+ca98756"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Release/master/2.1.0-108+cc22bfb"
+    "selected_version": "Continuous/master/2.1.0-119+c3e1a33"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/2.1.1-114+43817d8"
+    "selected_version": "Continuous/master/2.1.1-121+cb1a84e"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.5.1-117+c00dcd8"
+    "selected_version": "Continuous/master/2.1.0-126+071d648"
   },
   {
     "name": "LightBarController-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/2.1.0-15+eb28561"
+    "selected_version": "Continuous/master/2.0.0-1005+cdffa3d"
   },
   {
     "name": "ProductControllerCommon",
@@ -205,7 +205,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/2.1.0-109+32ba500"
+    "selected_version": "Continuous/master/2.1.0-112+2e886d1"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/1.5.4-34+8178648"
+    "selected_version": "Continuous/master/2.1.0-50+e910fee"
   },
   {
     "name": "TestUtils",
