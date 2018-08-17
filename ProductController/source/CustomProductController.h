@@ -68,6 +68,7 @@ class CustomProductLpmHardwareInterface;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
+class CommonProductCommandLine;
 class CustomProductKeyInputManager;
 class ProductAdaptIQManager;
 class ProductBLERemoteManager;
@@ -85,6 +86,7 @@ class ProductBLERemoteManager;
 class CustomProductController : public ProductController
 {
     friend class ProductCommandLine;
+    friend class CommonProductCommandLine;
 
 public:
 
@@ -307,6 +309,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
+    std::shared_ptr< CommonProductCommandLine          > m_CommonProductCommandLine;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductFrontDoorKeyInjectIF       > m_ProductFrontDoorKeyInjectIF;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
@@ -392,7 +395,7 @@ private:
     /// @brief The following declaration is for handling the /audio/volume frontdoor endpoint
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume );
+    void HandleAudioVolumeNotification( SoundTouchInterface::volume volume );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -433,9 +436,9 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleChimeResponse( ChimesControllerPb::ChimesStatus status ) override;
     bool HandleAccessoriesPlayTonesResponse( ChimesControllerPb::ChimesStatus status );
-    void AccessoriesPlayTonesPutHandler( const ProductPb::AccessoriesPlayTonesRequest &req,
-                                         const Callback<ProductPb::AccessoriesPlayTonesRequest> &resp,
-                                         const Callback<FrontDoor::Error>& error );
+    void AccessoriesPlayTonesPutHandler( ProductPb::AccessoriesPlayTonesRequest req,
+                                         Callback<ProductPb::AccessoriesPlayTonesRequest> resp,
+                                         Callback<FrontDoor::Error> error );
     void AccessoriesPlayTones( bool subs, bool rears );
     bool m_queueRearAccessoryTone = false;
     bool m_speakerPairingIsFromLAN = false;

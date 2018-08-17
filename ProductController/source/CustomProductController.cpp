@@ -34,6 +34,7 @@
 #include "CustomAudioSettingsManager.h"
 #include "CustomProductKeyInputManager.h"
 #include "ProductCommandLine.h"
+#include "CommonProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
@@ -157,6 +158,7 @@ CustomProductController::CustomProductController( ) :
     ///
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductCommandLine( nullptr ),
+    m_CommonProductCommandLine( ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductFrontDoorKeyInjectIF( nullptr ),
     m_ProductCecHelper( nullptr ),
@@ -181,7 +183,7 @@ CustomProductController::CustomProductController( ) :
     /// Intent Handler Initialization
     ///
     m_IntentHandler( *GetTask(),
-                     m_CliClientMT,
+                     GetCommonCliClientMT(),
                      m_FrontDoorClientIF,
                      *this ),
 
@@ -707,6 +709,7 @@ void CustomProductController::Run( )
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_CommonProductCommandLine    = std::make_shared< CommonProductCommandLine          >( );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
                                     m_ProductKeyInputManager,
@@ -724,6 +727,7 @@ void CustomProductController::Run( )
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
+        m_CommonProductCommandLine    == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
         m_ProductFrontDoorKeyInjectIF == nullptr ||
         m_ProductCecHelper            == nullptr ||
@@ -1241,7 +1245,7 @@ void CustomProductController::KillUiProcess()
 /// @param const SoundTouchInterface::volume& volume
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume )
+void CustomProductController::HandleAudioVolumeNotification( SoundTouchInterface::volume volume )
 {
     BOSE_INFO( s_logger, "%s received: %s", __func__, ProtoToMarkup::ToJson( volume ).c_str() );
 
@@ -2190,20 +2194,20 @@ bool CustomProductController::HandleAccessoriesPlayTonesResponse( ChimesControll
 ///
 /// @param const ProductPb::AccessoriesPlayTonesRequest& req
 ///
-/// @param const Callback<ProductPb::AccessoriesPlayTonesRequest>& resp
+/// @param Callback<ProductPb::AccessoriesPlayTonesRequest> resp
 ///
-/// @param const Callback<FrontDoor::Error>& error
+/// @param Callback<FrontDoor::Error> error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::AccessoriesPlayTonesPutHandler( const ProductPb::AccessoriesPlayTonesRequest &req,
-                                                              const Callback<ProductPb::AccessoriesPlayTonesRequest>& resp,
-                                                              const Callback<FrontDoor::Error>& error )
+void CustomProductController::AccessoriesPlayTonesPutHandler( ProductPb::AccessoriesPlayTonesRequest req,
+                                                              Callback<ProductPb::AccessoriesPlayTonesRequest> resp,
+                                                              Callback<FrontDoor::Error> error )
 {
     BOSE_INFO( s_logger, "%s::%s received %s", CLASS_NAME, __FUNCTION__, req.DebugString( ).c_str( ) );
 
     if( req.has_subs( ) || req.has_rears( ) )
     {
-        AccessoriesPlayTones( req.has_subs( ), req.has_rears( ) );
+        AccessoriesPlayTones( req.subs( ), req.rears( ) );
     }
     else
     {

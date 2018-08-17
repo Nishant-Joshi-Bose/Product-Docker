@@ -107,8 +107,8 @@ bool ProductCecHelper::Run( )
         callback );
 
 
-    auto getFunc = [ this ]( const Callback< const CecModeResponse>& resp,
-                             const Callback<FrontDoor::Error>& errorRsp )
+    auto getFunc = [ this ]( Callback< const CecModeResponse>   resp,
+                             Callback<FrontDoor::Error>         errorRsp )
     {
         CecModeHandleGet( resp, errorRsp );
     };
@@ -122,9 +122,9 @@ bool ProductCecHelper::Run( )
                                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
-    auto putFunc = [ this ]( const CecUpdateRequest                   cecReq,
-                             const Callback< const CecModeResponse >& cecResp,
-                             const Callback< FrontDoor::Error >&      errorRsp )
+    auto putFunc = [ this ]( CecUpdateRequest                   cecReq,
+                             Callback< const CecModeResponse >  cecResp,
+                             Callback< FrontDoor::Error >       errorRsp )
     {
         CecModeHandlePut( cecReq, cecResp, errorRsp );
     };
@@ -153,8 +153,9 @@ bool ProductCecHelper::Run( )
             PowerOff();
         }
     };
-    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl );
-    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, handleSystemPowerControl, {} );
+    AsyncCallback< SystemPowerPb::SystemPowerControl > powerCb( handleSystemPowerControl, m_ProductTask );
+    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
+    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
 
     return true;
 }
@@ -458,10 +459,10 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
 ///
 /// @brief ProductCecHelper::HandleRawEDIDResponse
 ///
-/// @param const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid
+/// @param A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
+void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
 {
     BOSE_DEBUG( s_logger, "ProductCecHelper::SendEdidDataCollection" );
 
@@ -525,11 +526,10 @@ void ProductCecHelper::Stop( )
 ///
 /// @brief ProductCecHelper::HandleNowPlaying
 ///
-/// @param SoundTouchInterface::NowPlaying& nowPlayingStatus
+/// @param SoundTouchInterface::NowPlaying nowPlayingStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
-                                         nowPlayingStatus )
+void ProductCecHelper::HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlayingStatus )
 {
     using namespace ProductSTS;
 

@@ -156,7 +156,8 @@ def send_mail_from_files():
     """
     files = [CONFIG["Memory_Consumption"]["FILE_NAME"]]
     subject = "Trunk Nightly Build Memory Report"
-    body = "Please find attached Memory Report for Professor"
+    body = "Please find the attached memory report for Professor\n\nView the Grafana board for this test here:\n" \
+           "http://ssg-dashboard.bose.com/d/SiehovKik/memory-cpu-disk-io-usage-overview-professor?orgId=1&from=now-3d&to=now"
     emailSupport.send_email(sender=CONFIG["Device_Param"]["SEND_FROM"],
                             to=CONFIG["Device_Param"]["SEND_TO"],
                             subject=subject,

@@ -21,7 +21,7 @@ Before running the memory tests in this directory, the following must be done fi
 
 #### Test Setup
 
-Fields in conf_memoryConsumption.py with "SET ME" need to be specified before running the tests.
+Fields in conf_memoryConsumption.py need to be changed before running the tests.
 
 __'Device_Param': 'SEND_TO'__ - Put in an email to send memory results to
 
@@ -30,17 +30,22 @@ __'Gigya_Account': 'Email'__ - Email for the Madird/Gigya account the Professor 
 __'Gigya_Account': 'Password'__ - Password for the Madird/Gigya account
 
 __'Source_Data': 'sourceAccount'__ - Do the following:
-1. Run the commands:
+1. Clone the bose-web-test-page repository to /scratch
+```
+cd /scratch
+git clone git@github.com:BoseCorp/bose-web-test-page.git
+```
+2. Run the commands:
 ```
 adb shell ifconfig # Take note of the IP address of your Professor
-google-chrome --ignore-certificate-errors --disable-b-security --user-data-dir # You will Google Chrome to run this
+google-chrome --ignore-certificate-errors --disable-web-security --user-data-dir # You will need Google Chrome to run this
 ```
-2. Copy/Paste this URL into Chrome and plug in your Professor's IP address: file:///scratch/bose-web-test-page/index.html?<IP Address>
-3. Press __ACCOUNT LOGIN__ and log into your Madrid account
-4. Press __CONNECT__
-5. Select __Method__ as __GET__
-6. Type _/system/sources_ into the __Path__ and press __SEND__
-7. Find the entry for iHEART Radio (It should list __IHEART__ as __sourceName__) and copy/paste the contents for the __accountId__ found for that entry 
+3. Copy/Paste this URL into Chrome and plug in your Professor's IP address: _file:///scratch/bose-web-test-page/index.html?IP Address_
+4. Press __ACCOUNT LOGIN__ and log into your Madrid account
+5. Press __CONNECT__
+6. Select __Method__ as __GET__
+7. Type _/system/sources_ into the __Path__ and press __SEND__
+8. Find the entry for iHEART Radio (It should list __IHEART__ as __sourceName__) and copy/paste the contents for the __accountId__ found for that entry 
 into the config file field.
 
 **To run the Memory Consumption Test:**
