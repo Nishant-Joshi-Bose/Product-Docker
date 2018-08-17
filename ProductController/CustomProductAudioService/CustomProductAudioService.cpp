@@ -38,7 +38,7 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& p
                          frontDoorClient ),
     m_audioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
     m_thermalTask( lpmClient, productController.GetTask( ),
-                   AsyncCallback<const IpcSystemTemperatureData_t&>(
+                   AsyncCallback<IpcSystemTemperatureData_t>(
                        std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ), productController.GetTask( ) ) ),
     m_dataCollectionClient( productController.GetDataCollectionClient() )
 {
@@ -256,7 +256,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 
 /*!
  */
-void CustomProductAudioService::ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data )
+void CustomProductAudioService::ThermalDataReceivedCb( IpcSystemTemperatureData_t data )
 {
     int16_t ampTemp = INT16_MAX;
     IpcThermalType_t thermalValueType;
