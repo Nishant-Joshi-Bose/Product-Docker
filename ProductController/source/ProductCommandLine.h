@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "ProductMessage.pb.h"
+#include "CLICmdsKeys.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -48,6 +49,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductLpmHardwareInterface;
 class CustomProductController;
+class CommonProductCommandLine;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -59,6 +61,8 @@ class CustomProductController;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductCommandLine
 {
+    friend class CommonProductCommandLine;
+
 public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,8 +80,7 @@ public:
     ///         ProductCommandLine class, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Run( );
-    void Stop( );
+    void Initialize( );
 
 private:
 
@@ -99,13 +102,63 @@ private:
     ///        interface.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    std::unique_ptr< CLIClient > m_CommandLineInterface;
+    void RegisterCliCmds();
 
-    std::vector< CommandPointer > GetCommandsList( );
+    void HandleCliCmd( uint16_t cmdKey,
+                       const std::list<std::string> & argList,
+                       AsyncCallback<std::string, int32_t> rspAndRspCmplt,
+                       int32_t transact_id );
 
-    int  HandleCommand( const std::string&              command,
-                        const std::list< std::string >& arguments,
-                        std::string&                    response ) const;
+    void HandleAutowake( const std::list<std::string> & argList,
+                         std::string& response );
+
+    void HandleKey( const std::list<std::string> & argList,
+                    std::string& response );
+
+    void HandleMute( const std::list<std::string> & argList,
+                     std::string& response );
+
+    void HandleSource( const std::list<std::string> & argList,
+                       std::string& response );
+
+    void HandleTestAp( const std::list<std::string> & argList,
+                       std::string& response );
+
+    void HandleTestBootup( const std::list<std::string> & argList,
+                           std::string& response );
+
+    void HandleBootStatus( const std::list<std::string> & argList,
+                           std::string& response );
+
+    void HandleTestCaps( const std::list<std::string> & argList,
+                         std::string& response );
+
+    void HandleTestFreq( const std::list<std::string> & argList,
+                         std::string& response );
+
+    void HandleTestLpm( const std::list<std::string> & argList,
+                        std::string& response );
+    void HandleTestNowplaying( const std::list<std::string> & argList,
+                               std::string& response );
+
+    void HandleTestPairing( const std::list<std::string> & argList,
+                            std::string& response );
+
+    void HandleTestPower( const std::list<std::string> & argList,
+                          std::string& response );
+
+    void HandleTestSts( const std::list<std::string> & argList,
+                        std::string& response );
+
+    void HandleTestVoice( const std::list<std::string> & argList,
+                          std::string& response );
+
+    void HandleVolume( const std::list<std::string> & argList,
+                       std::string& response );
+
+    void HandleTestAccessoryUpdate( const std::list<std::string> & argList,
+                                    std::string& response );
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

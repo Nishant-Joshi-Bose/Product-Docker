@@ -769,7 +769,6 @@ void CustomProductController::Run( )
     ///
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
-    m_ProductCommandLine         ->Run( );
     m_ProductKeyInputManager     ->Run( );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
@@ -1643,7 +1642,6 @@ void CustomProductController::Wait( )
     /// Stop all the submodules.
     ///
     m_ProductLpmHardwareInterface->Stop( );
-    m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductFrontDoorKeyInjectIF->Stop( );
     m_ProductCecHelper           ->Stop( );
