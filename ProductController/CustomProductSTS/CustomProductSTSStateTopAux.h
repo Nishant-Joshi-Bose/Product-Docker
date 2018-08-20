@@ -105,23 +105,23 @@ private:
     void AuxStopPlaying( bool isStop );
     inline void SetUserPlayStatus( bool isPlay )
     {
-        m_CurrentState.state.userPlayStatus = isPlay;
+        m_NextState.state.userPlayStatus = isPlay;
     }
     inline bool GetUserPlayStatus() const
     {
-        return m_CurrentState.state.userPlayStatus;
+        return m_NextState.state.userPlayStatus;
     }
     inline void SetAuxInertedStatus( bool isInserted )
     {
-        m_CurrentState.state.auxInserted = isInserted;
+        m_NextState.state.auxInserted = isInserted;
     }
     inline bool GetAuxInsertedStatus() const
     {
-        return m_CurrentState.state.auxInserted;
+        return m_NextState.state.auxInserted;
     }
     void Init();
     void ProcessAuxAggregateStatus();
-    AuxSourceState_U m_CurrentState;//current aggregate status
+    AuxSourceState_U m_NextState;//Next state
     std::unordered_map<uint32_t, Callback<>> m_AuxStateActionMap;
-    AuxSourceState_U m_prevState;//used as cache
+    AuxSourceState_U m_CurrentState;// Current State
 };
