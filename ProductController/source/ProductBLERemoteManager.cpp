@@ -169,6 +169,7 @@ void ProductBLERemoteManager::Run( )
     {
         BOSE_INFO( s_logger, "%s %s", __PRETTY_FUNCTION__, allowed ? "true" : "false" );
         m_sourceSelectAllowed = allowed;
+        UpdateBacklight();
     }, m_ProductTask );
     m_ProductController.RegisterAllowSourceSelectListener( sourceSelectAllowedCb );
 }
