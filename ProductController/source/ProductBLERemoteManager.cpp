@@ -360,17 +360,17 @@ void ProductBLERemoteManager::UpdateBacklight( )
         case LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE:
             if( !sourceChangeProhibited )
             {
-                leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            }
-            else
-            {
                 leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
                 leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
                 leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
                 leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
                 leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
                 leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            }
+            else
+            {
+                leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             }
             leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             break;
@@ -396,7 +396,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::GetSourceLED(
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& sourceChangeProhibited )
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& sourceChangeProhibited ) const
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
