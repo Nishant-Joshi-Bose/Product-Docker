@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOS/2.0.4.43521.2960091"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.5.43524.2960293"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -125,7 +125,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-191+3484421"
+    "selected_version": "Release/SOS/2.0.0-192+1e1e004"
   },
   {
     "name": "LpmMfgTool",
@@ -157,7 +157,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@45fe7d5c54f3a696fe9569fc7d94d4c8666a1eb1"
+    "selected_version": "SOS@4bba75a293c4aec7be449f81a31d595d4b542944"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-236+90006cd"
+    "selected_version": "Release/SOS/2.0.1-237+ab0ea94"
   },
   {
     "name": "RivieraLpmTools",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOS/2.0.4.43521.2960091"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.5.43524.2960293"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -225,11 +225,11 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-47+111e741"
+    "selected_version": "Release/SOS/2.0.1-49+4a216d9"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@610f48fd2f06094a250e03cca1a156cfa7cc93ec"
+    "selected_version": "master@ce9eec86926dd8dbcd4506e421c27fb53fb0d4fe"
   },
   {
     "name": "Webkit",
