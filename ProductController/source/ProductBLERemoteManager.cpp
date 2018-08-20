@@ -102,7 +102,6 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
     AsyncCallback< SystemPowerPb::SystemPowerControl > powerCb( handleSystemPowerControl, m_ProductTask );
     m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
     m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,6 +164,13 @@ void ProductBLERemoteManager::Run( )
         m_RCSClient->Pairing_GetStatus( cb );
     } );
 
+    AsyncCallback< bool > sourceSelectAllowedCb(
+        [ this ]( bool allowed )
+    {
+        BOSE_INFO( s_logger, "%s %s", __PRETTY_FUNCTION__, allowed ? "true" : "false" );
+        m_sourceSelectAllowed = allowed;
+    }, m_ProductTask );
+    m_ProductController.RegisterAllowSourceSelectListener( sourceSelectAllowedCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,8 +312,8 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // set the active source and associated zones
     A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
-    bool available, sourceChangeProhibited;
-    bool valid = GetSourceLED( sourceLED, available, sourceChangeProhibited );
+    bool available;
+    bool valid = GetSourceLED( sourceLED, available );
     if( valid )
     {
         // zone selection here is from section 6.5.4 ("Zone Assignments per Device")
@@ -358,7 +364,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
             GetZoneLEDs( leds );
             break;
         case LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE:
-            if( !sourceChangeProhibited )
+            if( m_sourceSelectAllowed )
             {
                 leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
                 leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
@@ -396,13 +402,12 @@ void ProductBLERemoteManager::UpdateBacklight( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::GetSourceLED(
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available, bool& sourceChangeProhibited ) const
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available ) const
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
 
     available = false;
-    sourceChangeProhibited = false;
 
     if( !m_nowSelection.has_contentitem() )
     {
@@ -426,7 +431,6 @@ bool ProductBLERemoteManager::GetSourceLED(
         {
             BOSE_INFO( s_logger, "update nowSelection ADAPTIQ/PAIRING" );
             sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-            sourceChangeProhibited = true;
         }
         else if( sourceAccountName.compare( SetupSourceSlot_Name( SETUP ) ) == 0 )
         {
