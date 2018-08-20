@@ -112,6 +112,16 @@ if method != "GET":
     http_err()
 
 # ----------------------------------------------------------------------------
+# A way to download Spotify audio data dump files
+if path == "/audio.tar" and is_development():
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    # When the system is in development mode Spotify outputs the OGG Vorbis
+    # audio data files /tmp/spotify-<url id>-<timestamp>.ogg
+    # This can also be enabled with the tap command "spotify debug out"
+    os.execl("/bin/sh", "sh", "-c", "/bin/tar -c /tmp/spotify*.ogg")
+
+# ----------------------------------------------------------------------------
 # Diagnostics pages.
 
 http_redirect(path, "/diag", "/diag/")
