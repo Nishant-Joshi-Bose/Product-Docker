@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-16_1042"
+    "selected_version": "Continuous/Castle-Fork/2018-08-17_1716"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -21,7 +21,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-74+27f2771"
+    "selected_version": "Continuous/master/2.1.0-81+da2dfb2"
   },
   {
     "name": "Bluetooth-qc8017_32",
@@ -61,7 +61,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-95+b2f8d56"
+    "selected_version": "Continuous/master/2.1.0-102+c3732cb"
   },
   {
     "name": "CastleLibs-native",
@@ -105,7 +105,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-119+c3e1a33"
+    "selected_version": "Continuous/master/2.1.0-120+aab3d31"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -149,11 +149,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-1006+53126a7"
+    "selected_version": "Continuous/master/2.0.0-1010+357a394"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-1005+cdffa3d"
+    "selected_version": "Continuous/master/2.0.0-1006+357a394"
   },
   {
     "name": "ProductControllerCommon",
@@ -213,11 +213,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-16_1042"
+    "selected_version": "Continuous/Castle-Fork/2018-08-17_1716"
   },
   {
     "name": "svc-pts-log-decrypt",
-    "selected_version": "master@18f2def393af24d66c09ac691e5fee4cf82887c5"
+    "selected_version": "master@12e8bd2762b5e5a78c743280deb43cfb097fa05c"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@4e14690fc4fec4044078e570fec32b3a894ecb75"
+    "selected_version": "master@ce9eec86926dd8dbcd4506e421c27fb53fb0d4fe"
   },
   {
     "name": "Webkit",
