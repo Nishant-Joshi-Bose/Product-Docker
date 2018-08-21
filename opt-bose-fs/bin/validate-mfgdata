@@ -110,13 +110,11 @@ if not pt: # allow any non-empty string
     warn("Invalid productType:", pt)
     fixes.append("set productType eddie")
 
-
-#Validates that wlan0 and wlan1 and Bt each  have a unique mac address			 
-macList  = [get("snMacWlan0"),get("snMacWlan1"),get("snMacBt"),get("snMacUSB")]
-macList = [x for x in macList if x is not None]
-if len(macList) != len(set(macList)):
+# Check for duplicate MAC addresses.
+addrs = [get("snMacWlan0"), get("snMacWlan1"), get("snMacBt"), get("snMacUSB")]
+addrs = [x for x in addrs if x is not None]
+if len(addrs) != len(set(addrs)):
     sys.exit("{}: Duplicate MAC addresses".format(this_script))
-
 
 # Match floating point values.
 fpv = r'\s*[-+]?(\d+\.?\d*|\.\d+)\s*'
