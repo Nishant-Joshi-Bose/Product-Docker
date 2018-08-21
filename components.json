@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.7-585+11c4ce2"
+    "selected_version": "Release/SOS/2.0.9-623+360203c"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/SOS/2.0.7-585+11c4ce2"
+    "selected_version": "Release/SOS/2.0.9-623+360203c"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,15 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-20_1727"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.5.43547.2964626"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-191+6c243f5"
+    "selected_version": "Release/SOS/2.0.2-193+e78b90b"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-78+ae56d05"
+    "selected_version": "Release/SOS/2.0.2-82+cdeabb8"
   },
   {
     "name": "bose-opkg-utils",
@@ -57,11 +57,11 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-223+a975e71"
+    "selected_version": "Release/SOS/2.0.2-231+81340dc"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-101+c1191d7"
+    "selected_version": "Release/SOS/2.0.2-103+96401ee"
   },
   {
     "name": "CastleLibs-native",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-134+95988e1"
+    "selected_version": "Release/SOS/2.0.0-135+96a19ee"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -161,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-107+4bba75a"
+    "selected_version": "Release/SOS/2.0.0-113+41cdb5b"
   },
   {
     "name": "ProductUIAssets",
@@ -201,7 +201,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-582+c1bf4d6"
+    "selected_version": "Release/SOS/2.0.0-607+4f648dc"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-08-20_1727"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.5.43547.2964626"
   },
   {
     "name": "svc-pts-log-decrypt",
