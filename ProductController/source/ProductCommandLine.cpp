@@ -60,18 +60,16 @@ ProductCommandLine::ProductCommandLine( CustomProductController& ProductControll
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
 {
     BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
-
-    Initialize( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductCommandLine::Initialize
+/// @name   ProductCommandLine::Run
 ///
 /// @brief  This method initializes CliClientMT and calls to register commands.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::Initialize( )
+void ProductCommandLine::Run( )
 {
     BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
 
@@ -129,20 +127,6 @@ void ProductCommandLine::RegisterCliCmds( )
                                                                           callbackForCommands,
                                                                           static_cast<int>( CLICmdsKeys::SOURCE ) );
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_ap",
-                                                                          "This command tests setting the audio path to an on or off state.",
-                                                                          "product test_ap [on | off]",
-                                                                          m_ProductController.GetTask(),
-                                                                          callbackForCommands,
-                                                                          static_cast<int>( CLICmdsKeys::TEST_AP ) );
-
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_bootup",
-                                                                          "This command tests setting the device in a boot up state.",
-                                                                          "product test_bootup",
-                                                                          m_ProductController.GetTask(),
-                                                                          callbackForCommands,
-                                                                          static_cast<int>( CLICmdsKeys::TEST_BOOTUP ) );
-
     m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product boot_status",
                                                                           "This command outputs the status of the boot up state.",
                                                                           "product boot_status",
@@ -150,33 +134,12 @@ void ProductCommandLine::RegisterCliCmds( )
                                                                           callbackForCommands,
                                                                           static_cast<int>( CLICmdsKeys::BOOT_STATUS ) );
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_caps",
-                                                                          "This command tests setting CAPS to an on or off state.",
-                                                                          "product test_caps [on | off]",
-                                                                          m_ProductController.GetTask(),
-                                                                          callbackForCommands,
-                                                                          static_cast<int>( CLICmdsKeys::TEST_CAPS ) );
-
     m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_freq",
                                                                           "This command tests setting the wifi frequency in kHz.",
                                                                           "product test_freq [int from 0 to 10M]",
                                                                           m_ProductController.GetTask(),
                                                                           callbackForCommands,
                                                                           static_cast<int>( CLICmdsKeys::TEST_FREQ ) );
-
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_lpm",
-                                                                          "This command tests setting the LPM state.",
-                                                                          "product test_lpm [on | off]",
-                                                                          m_ProductController.GetTask(),
-                                                                          callbackForCommands,
-                                                                          static_cast<int>( CLICmdsKeys::TEST_LPM ) );
-
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_nowplaying",
-                                                                          "This command tests sending a now playing active or inactive status.",
-                                                                          "product test_nowplaying [act | inact]",
-                                                                          m_ProductController.GetTask(),
-                                                                          callbackForCommands,
-                                                                          static_cast<int>( CLICmdsKeys::TEST_NOWPLAYING ) );
 
     m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_pairing",
                                                                           "This command tests pairing the device with another speaker.",
@@ -191,13 +154,6 @@ void ProductCommandLine::RegisterCliCmds( )
                                                                           m_ProductController.GetTask(),
                                                                           callbackForCommands,
                                                                           static_cast<int>( CLICmdsKeys::TEST_POWER ) );
-
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_sts",
-                                                                          "This command tests setting STS intialization to complete.",
-                                                                          "product test_sts",
-                                                                          m_ProductController.GetTask(),
-                                                                          callbackForCommands,
-                                                                          static_cast<int>( CLICmdsKeys::TEST_STS ) );
 
     m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_voice",
                                                                           "This command tests setting the voice VPA to an on or off configured state.",
@@ -260,32 +216,12 @@ void ProductCommandLine::HandleCliCmd( uint16_t                              cmd
         HandleSource( argList, response );
         break;
 
-    case CLICmdsKeys::TEST_AP:
-        HandleTestAp( argList, response );
-        break;
-
-    case CLICmdsKeys::TEST_BOOTUP:
-        HandleTestBootup( argList, response );
-        break;
-
     case CLICmdsKeys::BOOT_STATUS:
         HandleBootStatus( argList, response );
         break;
 
-    case CLICmdsKeys::TEST_CAPS:
-        HandleTestCaps( argList, response );
-        break;
-
     case CLICmdsKeys::TEST_FREQ:
         HandleTestFreq( argList, response );
-        break;
-
-    case CLICmdsKeys::TEST_LPM:
-        HandleTestLpm( argList, response );
-        break;
-
-    case CLICmdsKeys::TEST_NOWPLAYING:
-        HandleTestNowplaying( argList, response );
         break;
 
     case CLICmdsKeys::TEST_PAIRING:
@@ -294,10 +230,6 @@ void ProductCommandLine::HandleCliCmd( uint16_t                              cmd
 
     case CLICmdsKeys::TEST_POWER:
         HandleTestPower( argList, response );
-        break;
-
-    case CLICmdsKeys::TEST_STS:
-        HandleTestSts( argList, response );
         break;
 
     case CLICmdsKeys::TEST_VOICE:
@@ -439,7 +371,7 @@ void ProductCommandLine::HandleMute( const std::list<std::string>& argList,
                 response = "The mute will be turned off. \r\n";
                 muteStateValue = false;
             }
-            auto errFunc = []( const FrontDoor::Error & error )
+            auto errFunc = []( FrontDoor::Error error )
             {
                 BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor mute request.",
                             error.code(),
@@ -451,7 +383,6 @@ void ProductCommandLine::HandleMute( const std::list<std::string>& argList,
                 BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value( ), v.muted( ) );
             };
 
-            AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
             AsyncCallback<FrontDoor::Error> errCb( errFunc, m_ProductTask );
 
             SoundTouchInterface::volume pbVolume;
@@ -519,87 +450,6 @@ void ProductCommandLine::HandleSource( const std::list<std::string>& argList,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductCommandLine::HandleTestAp
-///
-/// @brief  This command tests setting the Audio Path to an on or off state and sending it to
-///         the product controller state machine. Its actual state is not effected.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::HandleTestAp( const std::list<std::string>& argList,
-                                       std::string& response )
-{
-    if( argList.size( ) != 1 )
-    {
-        response = "Incorrect Usage: product test_ap [on | off]";
-    }
-    else
-    {
-
-        const std::string& argumentString = argList.front( );
-
-        ProductMessage productMessage;
-
-        if( argumentString == "on" )
-        {
-            response  = "An audio path connected on state test will now be made.";
-
-            productMessage.mutable_audiopathstatus( )->set_connected( true );
-        }
-        else if( argumentString == "off" )
-        {
-            response  = "An audio path connected off state test will now be made.";
-
-            productMessage.mutable_audiopathstatus( )->set_connected( false );
-        }
-        else
-        {
-            response = "Incorrect Usage: product test_ap [on | off]";
-        }
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleTestBootup
-///
-/// @brief  This command tests setting the device to a boot up state.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::HandleTestBootup( const std::list<std::string>& argList,
-                                           std::string& response )
-{
-    {
-        ProductMessage productMessage;
-        productMessage.mutable_lpmstatus( )->set_connected( true );
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-    {
-        ProductMessage productMessage;
-        productMessage.mutable_capsstatus( )->set_initialized( true );
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-    {
-        ProductMessage productMessage;
-        productMessage.mutable_audiopathstatus( )->set_connected( true );
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-    {
-        ProductMessage productMessage;
-        productMessage.mutable_stsinterfacestatus( )->set_initialized( true );
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-
-    response  = "Requests to set the device in a boot up state have been made.";
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductCommandLine::HandleBootStatus
 ///
 /// @brief  This command outputs the boot up status of the device.
@@ -661,54 +511,9 @@ void ProductCommandLine::HandleBootStatus( const std::list<std::string>& argList
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductCommandLine::HandleTestCaps
-///
-/// @brief  This command tests setting the Content Audio Playback Service or CAPS to an on or off
-///         state and sending it to the product controller state machine. Its actual state is not
-///         effected.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::HandleTestCaps( const std::list<std::string>& argList,
-                                         std::string& response )
-{
-    if( argList.size( ) != 1 )
-    {
-        response = "Incorrect Usage: product test_caps [on | off]";
-    }
-    else
-    {
-
-        const std::string& argumentString = argList.front( );
-
-        ProductMessage productMessage;
-
-        if( argumentString == "on" )
-        {
-            response  = "A CAPS on state test will now be made.";
-
-            productMessage.mutable_capsstatus( )->set_initialized( true );
-        }
-        else if( argumentString == "off" )
-        {
-            response  = "A CAPS off state test will now be made.";
-
-            productMessage.mutable_capsstatus( )->set_initialized( false );
-        }
-        else
-        {
-            response = "Incorrect Usage: product test_caps [on | off]";
-        }
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductCommandLine::HandleTestFreq
 ///
-/// @brief  This command to tests setting the Content Audio Playback Service to an on or off state and
-///         sending it to the product controller state machine. Its actual state is not effected.
+/// @brief  This command tests the system response to delivery of the wireless radio frequency.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::HandleTestFreq( const std::list<std::string>& argList,
@@ -745,91 +550,6 @@ void ProductCommandLine::HandleTestFreq( const std::list<std::string>& argList,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductCommandLine::HandleTestLpm
-///
-/// @brief  This command to tests setting the Content Audio Playback Service to an on or off state and
-///         sending it to the product controller state machine. Its actual state is not effected.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::HandleTestLpm( const std::list<std::string>& argList,
-                                        std::string& response )
-{
-    if( argList.size( ) != 1 )
-    {
-        response = "Incorrect Usage: product test_lpm [on | off] \r\n";
-    }
-    else
-    {
-
-        const std::string& argumentString = argList.front( );
-
-        ProductMessage productMessage;
-
-        if( argumentString == "on" )
-        {
-            response  = "An LPM on state test will now be made.";
-
-            productMessage.mutable_lpmstatus( )->set_connected( true );
-        }
-        else if( argumentString == "off" )
-        {
-            response  = "An LPM off state test will now be made.";
-
-            productMessage.mutable_lpmstatus( )->set_connected( false );
-        }
-        else
-        {
-            response = "Incorrect Usage: product test_lpm [on | off] \r\n";
-        }
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleTestNowplaying
-///
-/// @brief  This command tests sending a playback request to the product controller state machine.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::HandleTestNowplaying( const std::list<std::string>& argList,
-                                               std::string& response )
-{
-    if( argList.size( ) != 1 )
-    {
-        response = "Incorrect Usage: product test_nowplaying [act | inact]";
-    }
-    else
-    {
-
-        const std::string& argumentString = argList.front( );
-
-        ProductMessage productMessage;
-
-        if( argumentString == "act" )
-        {
-            response  = "A now playback active status test will now be made.";
-
-            productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Active );
-        }
-        else if( argumentString == "inact" )
-        {
-            response  = "A now playback inactive status test will now be made.";
-
-            productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Inactive );
-        }
-        else
-        {
-            response = "Incorrect Usage: product test_nowplaying [act | inact]";
-        }
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductCommandLine::HandleTestPairing
 ///
 /// @brief  This command tests pairing the device with another speaker.
@@ -860,24 +580,6 @@ void ProductCommandLine::HandleTestPower( const std::list<std::string>& argList,
     productMessage.set_action( static_cast< uint32_t >( Action::POWER_TOGGLE ) );
 
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleTestSts
-///
-/// @brief  This command tests setting STS initialization to completed.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::HandleTestSts( const std::list<std::string>& argList,
-                                        std::string& response )
-{
-    ProductMessage productMessage;
-    productMessage.mutable_stsinterfacestatus( )->set_initialized( true );
-
-    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-
-    response  = "A test setting the STS initialization to complete has been made.";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -949,7 +651,7 @@ void ProductCommandLine::HandleVolume( const std::list<std::string>& argList,
             response +=  volumeLevelString;
             response += ". \r\n";
 
-            auto errFunc = []( const FrontDoor::Error & error )
+            auto errFunc = []( FrontDoor::Error error )
             {
                 BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor volume request.",
                             error.code(),

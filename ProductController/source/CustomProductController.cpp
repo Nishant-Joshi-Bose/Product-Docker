@@ -769,6 +769,7 @@ void CustomProductController::Run( )
     ///
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
+    m_ProductCommandLine         ->Run( );
     m_ProductKeyInputManager     ->Run( );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );

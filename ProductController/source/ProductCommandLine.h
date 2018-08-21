@@ -61,7 +61,6 @@ class CommonProductCommandLine;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductCommandLine
 {
-    friend class CommonProductCommandLine;
 
 public:
 
@@ -80,9 +79,10 @@ public:
     ///         ProductCommandLine class, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Initialize( );
+    void Run( );
 
 private:
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -121,34 +121,17 @@ private:
     void HandleSource( const std::list<std::string> & argList,
                        std::string& response );
 
-    void HandleTestAp( const std::list<std::string> & argList,
-                       std::string& response );
-
-    void HandleTestBootup( const std::list<std::string> & argList,
-                           std::string& response );
-
     void HandleBootStatus( const std::list<std::string> & argList,
                            std::string& response );
 
-    void HandleTestCaps( const std::list<std::string> & argList,
-                         std::string& response );
-
     void HandleTestFreq( const std::list<std::string> & argList,
                          std::string& response );
-
-    void HandleTestLpm( const std::list<std::string> & argList,
-                        std::string& response );
-    void HandleTestNowplaying( const std::list<std::string> & argList,
-                               std::string& response );
 
     void HandleTestPairing( const std::list<std::string> & argList,
                             std::string& response );
 
     void HandleTestPower( const std::list<std::string> & argList,
                           std::string& response );
-
-    void HandleTestSts( const std::list<std::string> & argList,
-                        std::string& response );
 
     void HandleTestVoice( const std::list<std::string> & argList,
                           std::string& response );
