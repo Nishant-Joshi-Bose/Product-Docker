@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-17_1716"
+    "selected_version": "Continuous/Castle-Fork/2018-08-21_0106"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-15+27fe590"
+    "selected_version": "Continuous/master/1.0.0-16+aafd277"
   },
   {
     "name": "bose-opkg-utils",
@@ -77,7 +77,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Continuous/master/2.1.1-108+ca98756"
+    "selected_version": "Continuous/master/2.1.1-111+7325d56"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -149,11 +149,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-1010+357a394"
+    "selected_version": "Continuous/master/2.0.0-1016+b642d85"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-1006+357a394"
+    "selected_version": "Continuous/master/2.0.0-1009+b642d85"
   },
   {
     "name": "ProductControllerCommon",
@@ -181,7 +181,7 @@
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/4.0"
+    "selected_version": "Release/master/4.1"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-17_1716"
+    "selected_version": "Continuous/Castle-Fork/2018-08-21_0106"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@ce9eec86926dd8dbcd4506e421c27fb53fb0d4fe"
+    "selected_version": "master@c343b29e4d53b8bf223ce617c075899609420e8b"
   },
   {
     "name": "Webkit",
