@@ -193,11 +193,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/sos/3.10.5"
+    "selected_version": "Release/master/4.1"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/4.0"
+    "selected_version": "Release/master/4.1"
   },
   {
     "name": "RivieraLPM",
