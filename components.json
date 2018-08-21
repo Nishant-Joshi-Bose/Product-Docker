@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/SOS/2.0.7-537+a0226cf"
+    "selected_version": "Continuous/SOS/2.0.7-585+11c4ce2"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/SOS/2.0.7-537+a0226cf"
+    "selected_version": "Continuous/SOS/2.0.7-585+11c4ce2"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -85,11 +85,11 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-99+541b14a"
+    "selected_version": "Release/SOS/2.0.1-104+448c0d9"
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-133+a5be814"
+    "selected_version": "Continuous/SOS/2.0.0-134+95988e1"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -149,11 +149,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-1004+e888e93"
+    "selected_version": "Release/SOS/2.0.1-1021+388c7cb"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-1003+f9ef2e2"
+    "selected_version": "Release/SOS/2.0.1-1010+388c7cb"
   },
   {
     "name": "ProductControllerCommon",
@@ -197,7 +197,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-17+1f47e46"
+    "selected_version": "Release/SOS/2.0.1-18+3103d62"
   },
   {
     "name": "SASS-qc8017_32",
@@ -209,7 +209,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-841+1b9634d"
+    "selected_version": "Release/SOS/2.0.3-847+d3c711a"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-49+4a216d9"
+    "selected_version": "Release/SOS/2.0.2-51+11f73de"
   },
   {
     "name": "TestUtils",
