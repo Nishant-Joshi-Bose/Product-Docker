@@ -367,21 +367,28 @@ void ProductBLERemoteManager::UpdateBacklight( )
         case LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE:
             if( m_sourceSelectAllowed )
             {
-                leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-                leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-                leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-                leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-                leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-                leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-            }
-            else
-            {
+                // m_sourceSelectAllowed is a bit misused/overloaded here;  we know it's
+                // set in AiQ and speaker pairing, and in those modes zones 4 and 7 are
+                // supposed to be off (see PGC-2673)
                 leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             }
             leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             break;
         }
+
+        // if source selection is disabled, override the state of the source keys and
+        // turn them off
+        if( ! m_sourceSelectAllowed )
+        {
+            leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+        }
+
         m_RCSClient->Led_Set(
             leds.sound_touch(), leds.tv(), leds.bluetooth(), leds.game(), leds.clapboard(), leds.set_top_box(),
             leds.zone_01(), leds.zone_02(), leds.zone_03(), leds.zone_04(), leds.zone_05(),
@@ -426,22 +433,8 @@ bool ProductBLERemoteManager::GetSourceLED(
 
     if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
     {
-        if(
-            sourceAccountName.compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 or
-            sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection ADAPTIQ/PAIRING" );
-            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-        }
-        else if( sourceAccountName.compare( SetupSourceSlot_Name( SETUP ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection SETUP" );
-            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "%s SETUP source with missing source or account name", __func__ );
-        }
+        BOSE_INFO( s_logger, "update nowSelection SETUP (%s)", sourceAccountName.c_str( ) );
+        sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
 
         return true;
     }
