@@ -20,7 +20,7 @@ INCLUDE_DIRECTORIES(
   CustomProductAudioService
   CustomProductKeyInputManager
   CustomProductLpmHardwareInterface
-  CustomStateMachine
+  CustomHsm
   IntentHandler
 )
 
@@ -48,22 +48,22 @@ ADD_EXECUTABLE(Professor
   CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
   CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
-  CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
-  CustomStateMachine/CustomProductControllerStateAccessoryPairingCancelling.cpp
-  CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
-  CustomStateMachine/CustomProductControllerStateAdaptIQCancelling.cpp
-  CustomStateMachine/CustomProductControllerStateBooting.cpp
-  CustomStateMachine/CustomProductControllerStateFirstBootGreetingTransition.cpp
-  CustomStateMachine/CustomProductControllerStateIdle.cpp
-  CustomStateMachine/CustomProductControllerState.cpp
-  CustomStateMachine/CustomProductControllerStateOn.cpp
-  CustomStateMachine/CustomProductControllerStateLowPowerResume.cpp
-  CustomStateMachine/CustomProductControllerStatePlayable.cpp
-  CustomStateMachine/CustomProductControllerStatePlaying.cpp
-  CustomStateMachine/CustomProductControllerStatePlayingDeselected.cpp
-  CustomStateMachine/CustomProductControllerStatePlayingSelected.cpp
-  CustomStateMachine/CustomProductControllerStatePlayingSelectedSetup.cpp
-  CustomStateMachine/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
+  CustomHsm/CustomProductControllerStateAccessoryPairing.cpp
+  CustomHsm/CustomProductControllerStateAccessoryPairingCancelling.cpp
+  CustomHsm/CustomProductControllerStateAdaptIQ.cpp
+  CustomHsm/CustomProductControllerStateAdaptIQCancelling.cpp
+  CustomHsm/CustomProductControllerStateBooting.cpp
+  CustomHsm/CustomProductControllerStateFirstBootGreetingTransition.cpp
+  CustomHsm/CustomProductControllerStateIdle.cpp
+  CustomHsm/CustomProductControllerState.cpp
+  CustomHsm/CustomProductControllerStateOn.cpp
+  CustomHsm/CustomProductControllerStateLowPowerResume.cpp
+  CustomHsm/CustomProductControllerStatePlayable.cpp
+  CustomHsm/CustomProductControllerStatePlaying.cpp
+  CustomHsm/CustomProductControllerStatePlayingDeselected.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelected.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/SpeakerPairingManager.cpp
