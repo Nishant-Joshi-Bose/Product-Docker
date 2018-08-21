@@ -73,7 +73,9 @@ void ProductCommandLine::Run( )
 {
     BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
 
-    m_ProductController.GetCommonCliClientMT().Initialize( m_ProductController.GetTask() );
+
+
+    //m_ProductController.GetCommonCliClientMT().Initialize( m_ProductController.GetTask() );
 
     RegisterCliCmds();
 }
