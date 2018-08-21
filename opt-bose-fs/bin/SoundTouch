@@ -42,9 +42,7 @@ lowpower=(
     Shepherd-NetManager.xml
     Shepherd-avs.xml
     Shepherd-vfe.xml
-    Shepherd-BTStackAdapter.xml
-    Shepherd-BTSTSSink.xml
-    Shepherd-BLESetup.xml
+    Shepherd-Bluetooth.xml
     Shepherd-BLEToFrontDoorService.xml
 )
 
@@ -62,6 +60,10 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     set-default-time
 
     log info "* Starting SoundTouch *"
+
+    log info "Re-launching syslogd with a bigger buffer"
+    killwait syslogd
+    syslogd -C$(( 3 * 1024 )) # units are 1024 bytes (KiB)
 
     # By default we launch shepherdd into the background (as expected by
     # /etc/init.d).  With --wait we instead invoke sheppherd and wait for it
@@ -124,6 +126,11 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
             # Enable access to the LPM CLI.
             ln -s /opt/Bose/etc/Shepherd-LPMService.xml "$rundir" || exit
             ln -s /opt/Bose/etc/Shepherd-CLIServer.xml "$rundir" || exit
+
+            # Enable the PTS server and the rndis interface to facilitate
+            # investigation of the manufacturing data.
+            ln -s /opt/Bose/etc/Shepherd-pts.xml "$rundir" || exit
+            set-usb-mode p2p
         else
             ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
         fi
