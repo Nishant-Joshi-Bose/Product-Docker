@@ -8,6 +8,7 @@ export PATH=/opt/Bose/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin
 
 CONF_FILE=/tmp/udhcpd_usb.conf
 
+tag=${0##*/}-$$
 function log {
     local pri="$1"; shift
 

@@ -15,6 +15,8 @@ date
 uptime
 cat /opt/Bose/etc/BoseVersion.json
 cat /persist/mfg_data.json
+cat /etc/riviera-version
+cat /opt/Bose/monaco/version.txt
 free -m
 df -h
 ifconfig -a
@@ -29,4 +31,23 @@ printenv
 cat /mnt/nv/update/updateStates.txt
 cat /mnt/nv/update/updateStatus.txt
 jq . /mnt/nv/update/telemetry.json
-jq . /mnt/nv/updateSwUpdateCompStatus.json
+jq . /mnt/nv/updateSwUpComponentStatus.dat
+ls -lHt /opt/Bose/.swUpdateCache/ipks
+ls -lHt /opt/Bose/.swUpdateCache/localupdate
+tap-command 'lpm pt "lb history"'
+tap-command 'lpm pt "vr"'
+tap-command getpdo system
+tap-command product boot_status
+tap-command product chimes history
+tap-command product get_clock
+tap-command product settings all
+tap-command product software_update_status
+tap-command product state
+tap-command product timer_status
+tap-command network status
+tap-command network wifi profiles info
+tap-command network wifi status
+tap-command galapagos status
+tap-command galapagos discovery response
+tap-command softwareupdate state
+tap-command softwareupdate status
