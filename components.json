@@ -1,15 +1,15 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-596+bcf57ae"
+    "selected_version": "Continuous/master/2.1.0-625+1d41ac3"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-596+bcf57ae"
+    "selected_version": "Continuous/master/2.1.0-625+1d41ac3"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-139+7328bbf"
+    "selected_version": "Continuous/master/2.1.0-142+1af47d9"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-21_0106"
+    "selected_version": "Continuous/Castle-Fork/2018-08-22_0746"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -217,7 +217,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-21_0106"
+    "selected_version": "Continuous/Castle-Fork/2018-08-22_0746"
   },
   {
     "name": "svc-pts-log-decrypt",
