@@ -141,23 +141,23 @@
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Release/bose-master/1.8.3-17-g016bc77"
+    "selected_version": "Release/bose-master/1.8.3-20-g688b6af"
   },
   {
     "name": "opensource-libwebsockets-qc8017_32",
-    "selected_version": "Release/bose-v2.4-stable/2.4.1-35+g6107c43"
+    "selected_version": "Release/bose-v2.4-stable/2.4.1-37+g30d85f6"
   },
   {
     "name": "opensource-zlib-qc8017_32",
-    "selected_version": "Release/bose-master/v1.2.11-4-g324f6d0"
+    "selected_version": "Release/bose-master/v1.2.11-6-gdae00b7"
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-1016+b642d85"
+    "selected_version": "Release/master/2.0.0-1024+a8dc703"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-1009+b642d85"
+    "selected_version": "Release/master/2.0.0-1012+43fc428"
   },
   {
     "name": "ProductControllerCommon",
