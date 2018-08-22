@@ -77,7 +77,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
                 codes.add_cicode( source.details().cicode() );
             }
         }
-        if( codes.cicode_size() and ( codes.SerializeAsString() != lastCodes.SerializeAsString() ) )
+        if( ( codes.SerializeAsString() != lastCodes.SerializeAsString() ) )
         {
             BOSE_INFO( s_logger, "notify cicodes : %s", ProtoToMarkup::ToJson( codes ).c_str() );
             m_QSSClient->NotifySourceCiCodes( codes );

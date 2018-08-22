@@ -218,7 +218,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response +=  volumeLevelString;
             response += ". \r\n";
 
-            auto errFunc = []( const FrontDoor::Error & error )
+            auto errFunc = []( FrontDoor::Error error )
             {
                 BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor volume request.",
                             error.code(),
@@ -281,7 +281,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        auto errFunc = []( const FrontDoor::Error & error )
+        auto errFunc = []( FrontDoor::Error error )
         {
             BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor mute request.",
                         error.code(),

@@ -143,20 +143,6 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The pairing timeout callback
-    ///
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleTimeOut();
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The timer to make sure pairing does not go beyond desired time
-    ///
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
     /// @brief The following methods are used to register for events.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,11 +193,11 @@ private:
     /// @brief The following methods are used as Front Door callbacks.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    void AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                const Callback<FrontDoor::Error>& error );
-    void AccessoriesPutHandler( const ProductPb::AccessorySpeakerState &req,
-                                const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                const Callback<FrontDoor::Error>& error );
+    void AccessoriesGetHandler( Callback<ProductPb::AccessorySpeakerState> resp,
+                                Callback<FrontDoor::Error> error );
+    void AccessoriesPutHandler( ProductPb::AccessorySpeakerState req,
+                                Callback<ProductPb::AccessorySpeakerState> resp,
+                                Callback<FrontDoor::Error> error );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///

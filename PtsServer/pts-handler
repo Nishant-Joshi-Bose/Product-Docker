@@ -112,6 +112,16 @@ if method != "GET":
     http_err()
 
 # ----------------------------------------------------------------------------
+# A way to download Spotify audio data dump files
+if path == "/audio.tar" and is_development():
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    # When the system is in development mode Spotify outputs the OGG Vorbis
+    # audio data files /tmp/spotify-<url id>-<timestamp>.ogg
+    # This can also be enabled with the tap command "spotify debug out"
+    os.execl("/bin/sh", "sh", "-c", "/bin/tar -c /tmp/spotify*.ogg")
+
+# ----------------------------------------------------------------------------
 # Diagnostics pages.
 
 http_redirect(path, "/diag", "/diag/")
@@ -139,17 +149,17 @@ if path.startswith("/diag/"):
 if path == "/logread.txt" and is_development():
     http_ok()
     sys.stdout.flush()
-    os.execl("/sbin/logread", "logread")
+    os.execlp("pts-logs", "pts-logs")
 
 if path == "/logread.txt.gz" and is_development(): # same but compressed
     http_ok("application/x-gzip")
     sys.stdout.flush()
-    os.execl("/bin/sh", "sh", "-c", "logread | gzip")
+    os.execl("/bin/sh", "sh", "-c", "pts-logs | gzip")
 
 if path == "/logread.dat":      # same but encrypted
     http_ok("application/octet-stream")
     sys.stdout.flush()
-    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs logread | gzip")
+    os.execl("/bin/sh", "sh", "-c", "encrypt-logs pts-logs | gzip")
 
 http_redirect(path, "/logread", "/logread.dat")
 
