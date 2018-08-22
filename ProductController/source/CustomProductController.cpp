@@ -1643,6 +1643,7 @@ void CustomProductController::Wait( )
     /// Stop all the submodules.
     ///
     m_ProductLpmHardwareInterface->Stop( );
+    m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductFrontDoorKeyInjectIF->Stop( );
     m_ProductCecHelper           ->Stop( );
