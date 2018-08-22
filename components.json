@@ -9,7 +9,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-148+f39aa05"
+    "selected_version": "Continuous/master/2.1.0-150+0e84f5a"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -125,7 +125,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-126+071d648"
+    "selected_version": "Release/master/2.1.0-127+1501b1e"
   },
   {
     "name": "LightBarController-qc8017_32",
