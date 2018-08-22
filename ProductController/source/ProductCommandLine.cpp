@@ -73,8 +73,6 @@ void ProductCommandLine::Run( )
 {
     BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
 
-    m_ProductController.GetCommonCliClientMT().Initialize( m_ProductController.GetTask() );
-
     RegisterCliCmds();
 }
 
@@ -390,10 +388,6 @@ void ProductCommandLine::HandleMute( const std::list<std::string>& argList,
                             error.subcode(),
                             error.message().c_str() );
             };
-            auto respFunc = [ this ]( SoundTouchInterface::volume v )
-            {
-                BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value( ), v.muted( ) );
-            };
 
             AsyncCallback<FrontDoor::Error> errCb( errFunc, m_ProductTask );
 
@@ -402,7 +396,7 @@ void ProductCommandLine::HandleMute( const std::list<std::string>& argList,
 
             BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted( ) );
             m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-                FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respFunc, errCb );
+                FRONTDOOR_AUDIO_VOLUME_API, pbVolume, {}, errCb );
         }
         else
         {
@@ -670,12 +664,7 @@ void ProductCommandLine::HandleVolume( const std::list<std::string>& argList,
                             error.subcode(),
                             error.message().c_str() );
             };
-            auto respFunc = [ this ]( SoundTouchInterface::volume v )
-            {
-                BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value( ), v.muted( ) );
-            };
 
-            AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
             AsyncCallback<FrontDoor::Error> errCb( errFunc, m_ProductTask );
 
             SoundTouchInterface::volume pbVolume;
@@ -683,7 +672,7 @@ void ProductCommandLine::HandleVolume( const std::list<std::string>& argList,
 
             BOSE_VERBOSE( s_logger, "Setting FrontDoor volume to %d", pbVolume.value( ) );
             m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-                FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respFunc, errCb );
+                FRONTDOOR_AUDIO_VOLUME_API, pbVolume, {}, errCb );
         }
         else
         {
