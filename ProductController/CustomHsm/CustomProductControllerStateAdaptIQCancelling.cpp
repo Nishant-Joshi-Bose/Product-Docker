@@ -93,8 +93,6 @@ void CustomProductControllerStateAdaptIQCancelling::HandleStateExit( )
 
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQCancelling is being exited." );
 
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
-
     GetProductController( ).SendStopPlaybackMessage( );
 
 }
@@ -114,12 +112,22 @@ bool CustomProductControllerStateAdaptIQCancelling::HandleAdaptIQStatus( const P
     ProductAdaptIQStatus& status = const_cast<ProductAdaptIQStatus&>( aiqStatus );
     if( status.mutable_status()->smstate() == LpmServiceMessages::IpcAiqState_t::AIQ_STATE_NOT_RUNNING )
     {
-        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
+        HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
     }
 
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateAdaptIQCancelling::HandleDspBooted
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQCancelling::HandleDspBooted( const LpmServiceMessages::IpcDeviceBoot_t& dspBooted )
+{
+    ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
+    return true;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

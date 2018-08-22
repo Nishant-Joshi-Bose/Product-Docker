@@ -1245,7 +1245,7 @@ void CustomProductController::KillUiProcess()
 /// @param const SoundTouchInterface::volume& volume
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume )
+void CustomProductController::HandleAudioVolumeNotification( SoundTouchInterface::volume volume )
 {
     BOSE_INFO( s_logger, "%s received: %s", __func__, ProtoToMarkup::ToJson( volume ).c_str() );
 
@@ -1612,6 +1612,13 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_accessoriesplaytones() )
     {
         AccessoriesPlayTones( message.accessoriesplaytones( ).subs( ), message.accessoriesplaytones( ).rears( ) );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// dspbooted messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_dspbooted() )
+    {
+        GetHsm( ).Handle< const LpmServiceMessages::IpcDeviceBoot_t& >( &CustomProductControllerState::HandleDspBooted, message.dspbooted() );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
@@ -2194,14 +2201,14 @@ bool CustomProductController::HandleAccessoriesPlayTonesResponse( ChimesControll
 ///
 /// @param const ProductPb::AccessoriesPlayTonesRequest& req
 ///
-/// @param const Callback<ProductPb::AccessoriesPlayTonesRequest>& resp
+/// @param Callback<ProductPb::AccessoriesPlayTonesRequest> resp
 ///
-/// @param const Callback<FrontDoor::Error>& error
+/// @param Callback<FrontDoor::Error> error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::AccessoriesPlayTonesPutHandler( const ProductPb::AccessoriesPlayTonesRequest &req,
-                                                              const Callback<ProductPb::AccessoriesPlayTonesRequest>& resp,
-                                                              const Callback<FrontDoor::Error>& error )
+void CustomProductController::AccessoriesPlayTonesPutHandler( ProductPb::AccessoriesPlayTonesRequest req,
+                                                              Callback<ProductPb::AccessoriesPlayTonesRequest> resp,
+                                                              Callback<FrontDoor::Error> error )
 {
     BOSE_INFO( s_logger, "%s::%s received %s", CLASS_NAME, __FUNCTION__, req.DebugString( ).c_str( ) );
 

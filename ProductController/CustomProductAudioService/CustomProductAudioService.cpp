@@ -48,7 +48,7 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
     m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
     m_ThermalTask( std::unique_ptr<ThermalMonitorTask>(
                        new ThermalMonitorTask( lpmClient, ProductController.GetTask( ),
-                                               AsyncCallback<const IpcSystemTemperatureData_t&>(
+                                               AsyncCallback<IpcSystemTemperatureData_t>(
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
                                                    ProductController.GetTask( ) ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
@@ -83,6 +83,13 @@ void CustomProductAudioService::RegisterAudioPathEvents()
             m_StreamConfigResponseCb = {};
         }
         m_DspIsRebooting = false;
+
+        ProductMessage bootedMsg;
+        *bootedMsg.mutable_dspbooted( ) = image;
+        IL::BreakThread( [ this, bootedMsg ]( )
+        {
+            m_ProductNotify( bootedMsg );
+        }, m_ProductTask );
     };
 
     auto lpmConnectCb = [ this, bootedFunc ]( bool connected )
@@ -363,12 +370,12 @@ void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
 ///
 /// @name   CustomProductAudioService::ThermalDataReceivedCb
 ///
-/// @param  const IpcSystemTemperatureData_t& data
+/// @param  IpcSystemTemperatureData_t data
 ///
 /// @brief  Callback function, when thermal task receives thermal data from LPM
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data )
+void CustomProductAudioService::ThermalDataReceivedCb( IpcSystemTemperatureData_t data )
 {
     BOSE_VERBOSE( s_logger, __func__ );
     m_MainStreamAudioSettings.mutable_temperaturedata()->CopyFrom( data );
