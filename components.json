@@ -73,7 +73,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/SOS/2.0.5-467+332f823"
+    "selected_version": "Release/SOS/2.0.6-469+fda4ced"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-120+aab3d31"
+    "selected_version": "Release/master/2.1.0-122+c75b77e"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -249,7 +249,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-50+e910fee"
+    "selected_version": "Release/master/2.1.0-52+2b21d02"
   },
   {
     "name": "TestUtils",
@@ -257,7 +257,7 @@
   },
   {
     "name": "unittest-cpp-qc8017_32",
-    "selected_version": "Release/bose-master/2.0.0-21+1990647"
+    "selected_version": "Release/bose-master/2.0.0-27+dcba3ec"
   },
   {
     "name": "VPAController-qc8017_32",
@@ -265,6 +265,6 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/1.5.0-85+0a3cf09"
+    "selected_version": "Release/master/2.1.0-95+daccd18"
   }
 ]
