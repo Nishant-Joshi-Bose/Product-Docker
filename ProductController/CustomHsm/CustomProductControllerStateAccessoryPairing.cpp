@@ -189,7 +189,7 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
     if( !GetCustomProductController( ).GetSpeakerPairingIsFromLAN( ) )
     {
         // When accessory pairing (not from LAN) is done, play the pairing complete chime
-        // Sub chime should be played, if there's SUB(s) in the accessoryList, and all of them are valid
+        // Sub chime should be played, if there's subwoofer(s) in the accessoryList, and all of them are valid
         bool isSubValid = pairingStatus.subs_size() > 0;
         if( isSubValid )
         {
