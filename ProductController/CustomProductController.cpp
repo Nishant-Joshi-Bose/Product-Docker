@@ -1614,6 +1614,13 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         AccessoriesPlayTones( message.accessoriesplaytones( ).subs( ), message.accessoriesplaytones( ).rears( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// dspbooted messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_dspbooted() )
+    {
+        GetHsm( ).Handle< const LpmServiceMessages::IpcDeviceBoot_t& >( &CustomProductControllerState::HandleDspBooted, message.dspbooted() );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
     /// type is unknown.
     ///////////////////////////////////////////////////////////////////////////////////////////////
