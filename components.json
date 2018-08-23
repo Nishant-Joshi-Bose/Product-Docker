@@ -21,7 +21,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-161+bdb9d7c"
+    "selected_version": "Release/master/2.1.0-162+6859dfb"
   },
   {
     "name": "AVS-qc8017_32",
@@ -41,7 +41,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-15+27fe590"
+    "selected_version": "Continuous/master/1.0.0-16+aafd277"
   },
   {
     "name": "bose-opkg-utils",
@@ -73,7 +73,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/SOS/2.0.5-467+332f823"
+    "selected_version": "Release/SOS/2.0.6-469+fda4ced"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -93,7 +93,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Continuous/master/2.1.1-111+7325d56"
+    "selected_version": "Release/master/2.1.1-114+69dbc72"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-120+aab3d31"
+    "selected_version": "Release/master/2.1.0-122+c75b77e"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -137,7 +137,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-126+071d648"
+    "selected_version": "Release/master/2.1.0-127+1501b1e"
   },
   {
     "name": "LightBarController-qc8017_32",
@@ -165,15 +165,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.0.0-1010+357a394"
+    "selected_version": "Release/master/2.0.0-1024+a8dc703"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/2.1.0-15+eb28561"
+    "selected_version": "Release/master/2.0.0-1012+43fc428"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@c6635f1574ac486c966f4970fb449e3f8d63457e"
+    "selected_version": "master@9d010ab3d4f0a1c0cca9fb88611f7a2e2c11dcb7"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-112+2e886d1"
+    "selected_version": "Release/master/2.1.0-114+9e3e230"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -245,7 +245,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-50+e910fee"
+    "selected_version": "Release/master/2.1.0-52+2b21d02"
   },
   {
     "name": "TestUtils",
@@ -257,6 +257,6 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/1.5.0-85+0a3cf09"
+    "selected_version": "Release/master/2.1.0-95+daccd18"
   }
 ]
