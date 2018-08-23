@@ -157,7 +157,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@4bba75a293c4aec7be449f81a31d595d4b542944"
+    "selected_version": "SOS@41cdb5b9abce3b35c54bdb304bd391aed8f0b85f"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@ce9eec86926dd8dbcd4506e421c27fb53fb0d4fe"
+    "selected_version": "master@d63a2c0cdb5433f637e33391e9c847117a6e0613"
   },
   {
     "name": "Webkit",
