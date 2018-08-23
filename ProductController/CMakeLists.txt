@@ -17,13 +17,11 @@ INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   ${AUDIOSOURCE_DIR}/include
   .
-  include
-  source
-  source/CustomProductAudioService
-  source/CustomProductKeyInputManager
-  source/CustomProductLpmHardwareInterface
-  source/CustomStateMachine
-  source/IntentHandler
+  CustomProductAudioService
+  CustomProductKeyInputManager
+  CustomProductLpmHardwareInterface
+  CustomHsm
+  IntentHandler
 )
 
 # -----------------------------------------------------------------------------
@@ -45,40 +43,40 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
-  source/AccessorySoftwareInstallManager.cpp
-  source/CustomProductAudioService/CustomAudioSettingsManager.cpp
-  source/CustomProductAudioService/CustomProductAudioService.cpp
-  source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
-  source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
-  source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
-  source/CustomStateMachine/CustomProductControllerStateAccessoryPairingCancelling.cpp
-  source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
-  source/CustomStateMachine/CustomProductControllerStateAdaptIQCancelling.cpp
-  source/CustomStateMachine/CustomProductControllerStateBooting.cpp
-  source/CustomStateMachine/CustomProductControllerStateFirstBootGreetingTransition.cpp
-  source/CustomStateMachine/CustomProductControllerStateIdle.cpp
-  source/CustomStateMachine/CustomProductControllerState.cpp
-  source/CustomStateMachine/CustomProductControllerStateOn.cpp
-  source/CustomStateMachine/CustomProductControllerStateLowPowerResume.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingDeselected.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingSelected.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSetup.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
-  source/IntentHandler/IntentHandler.cpp
-  source/IntentHandler/PlaybackRequestManager.cpp
-  source/IntentHandler/SpeakerPairingManager.cpp
-  source/IntentHandler/MuteManager.cpp
-  source/ProductAdaptIQManager.cpp
-  source/ProductBLERemoteManager.cpp
-  source/ProductCecHelper.cpp
-  source/ProductCommandLine.cpp
-  source/ProductDspHelper.cpp
-  source/ProductStart.cpp
-  source/ProductSTSStateTopAiQ.cpp
+  AccessorySoftwareInstallManager.cpp
+  CustomProductAudioService/CustomAudioSettingsManager.cpp
+  CustomProductAudioService/CustomProductAudioService.cpp
+  CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
+  CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
+  CustomHsm/CustomProductControllerStateAccessoryPairing.cpp
+  CustomHsm/CustomProductControllerStateAccessoryPairingCancelling.cpp
+  CustomHsm/CustomProductControllerStateAdaptIQ.cpp
+  CustomHsm/CustomProductControllerStateAdaptIQCancelling.cpp
+  CustomHsm/CustomProductControllerStateBooting.cpp
+  CustomHsm/CustomProductControllerStateFirstBootGreetingTransition.cpp
+  CustomHsm/CustomProductControllerStateIdle.cpp
+  CustomHsm/CustomProductControllerState.cpp
+  CustomHsm/CustomProductControllerStateOn.cpp
+  CustomHsm/CustomProductControllerStateLowPowerResume.cpp
+  CustomHsm/CustomProductControllerStatePlayable.cpp
+  CustomHsm/CustomProductControllerStatePlaying.cpp
+  CustomHsm/CustomProductControllerStatePlayingDeselected.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelected.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
+  IntentHandler/IntentHandler.cpp
+  IntentHandler/PlaybackRequestManager.cpp
+  IntentHandler/SpeakerPairingManager.cpp
+  IntentHandler/MuteManager.cpp
+  ProductAdaptIQManager.cpp
+  ProductBLERemoteManager.cpp
+  ProductCecHelper.cpp
+  ProductCommandLine.cpp
+  ProductDspHelper.cpp
+  ProductStart.cpp
+  ProductSTSStateTopAiQ.cpp
 
-  source/CustomProductController.cpp
+  CustomProductController.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor
