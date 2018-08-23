@@ -107,6 +107,7 @@ message ProductMessage
         optional bool                                       softwareupdatestatus        = 25;
         optional bool                                       accessoriesareknown         = 26;
         optional ProductPb.AccessoriesPlayTonesRequest      accessoriesplaytones        = 27;
+        optional LpmServiceMessages.IpcDeviceBoot_t         dspBooted                   = 28;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

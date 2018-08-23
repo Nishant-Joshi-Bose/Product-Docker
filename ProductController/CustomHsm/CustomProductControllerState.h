@@ -462,6 +462,11 @@ public:
         return false;
     }
 
+    virtual bool HandleDspBooted( const LpmServiceMessages::IpcDeviceBoot_t& dspBooted )
+    {
+        return false;
+    }
+
 protected:
     ///
     /// The custom version of this function returns the custom ProductController.
