@@ -177,9 +177,9 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerOff( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )
 {
-    BOSE_INFO( s_logger, "The %s state has received an %s pairing status.",
+    BOSE_INFO( s_logger, "The %s state has received pairing status: %s.",
                GetName( ).c_str( ),
-               pairingStatus.pairing( ) ? "pairing active" : "pairing inactive" );
+               pairingStatus.DebugString().c_str() );
 
     if( pairingStatus.pairing( ) )
     {
@@ -189,9 +189,9 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
     if( !GetCustomProductController( ).GetSpeakerPairingIsFromLAN( ) )
     {
         // When accessory pairing (not from LAN) is done, play the pairing complete chime
-        // Add subwoofer pairing complete chime to queue, if all subs are valid
-        bool isSubValid = true;
-        if( pairingStatus.subs_size() > 0 )
+        // Sub chime should be played, if there's subwoofer(s) in the accessoryList, and all of them are valid
+        bool isSubValid = pairingStatus.subs_size() > 0;
+        if( isSubValid )
         {
             for( int i = 0; i < pairingStatus.subs_size(); i++ )
             {
@@ -202,9 +202,9 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
                 }
             }
         }
-        // Add rear surround speakers pairing complete chime to queue, if all rears are valid
-        bool isRearValid = true;
-        if( pairingStatus.rears_size() > 0 )
+        // Rear chime should be played, if there're rear speakers in the accessoryList, and all of them are valid
+        bool isRearValid = pairingStatus.rears_size() > 0 ;
+        if( isRearValid )
         {
             for( int i = 0; i < pairingStatus.rears_size(); i++ )
             {
