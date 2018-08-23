@@ -30,7 +30,6 @@ function reset_timezone_to_default {
     fi
 }
 
-
 cd /opt/Bose/bin || exit
 
 # get productType for vfe linking on the fly
@@ -141,6 +140,11 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
             # Enable access to the LPM CLI.
             ln -s /opt/Bose/etc/Shepherd-LPMService.xml "$rundir" || exit
             ln -s /opt/Bose/etc/Shepherd-CLIServer.xml "$rundir" || exit
+
+            # Enable the PTS server and the rndis interface to facilitate
+            # investigation of the manufacturing data.
+            ln -s /opt/Bose/etc/Shepherd-pts.xml "$rundir" || exit
+            set-usb-mode p2p
         else
             ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
 

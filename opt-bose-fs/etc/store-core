@@ -4,7 +4,10 @@
 # core_pattern is set in `/opt/Bose/bin/SoundTouch`.
 PATH=/opt/Bose/bin:/bin:/usr/bin
 
-core=/mnt/nv/BoseLog/core-$1.gz
+commit=$(jq -r .abbrev_commit /opt/Bose/etc/BoseVersion.json) ||
+    commit=unknown
+
+core=/mnt/nv/BoseLog/core-$commit-$1.gz
 
 warn () {
     logger -s -t "store-core[$$]" -p warning "$*"

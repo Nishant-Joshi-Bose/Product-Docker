@@ -83,6 +83,13 @@ void CustomProductAudioService::RegisterAudioPathEvents()
             m_StreamConfigResponseCb = {};
         }
         m_DspIsRebooting = false;
+
+        ProductMessage bootedMsg;
+        *bootedMsg.mutable_dspbooted( ) = image;
+        IL::BreakThread( [ this, bootedMsg ]( )
+        {
+            m_ProductNotify( bootedMsg );
+        }, m_ProductTask );
     };
 
     auto lpmConnectCb = [ this, bootedFunc ]( bool connected )
