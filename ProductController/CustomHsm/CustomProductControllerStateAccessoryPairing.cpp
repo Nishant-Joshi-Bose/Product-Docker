@@ -177,7 +177,7 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerOff( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )
 {
-    BOSE_INFO( s_logger, "The %s state has received an pairing status: %s.",
+    BOSE_INFO( s_logger, "The %s state has received pairing status: %s.",
                GetName( ).c_str( ),
                pairingStatus.DebugString().c_str() );
 
