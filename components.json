@@ -5,19 +5,19 @@
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/2.1.0-14+1407fec"
+    "selected_version": "Release/master/2.1.1-20+7fd7945"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/master/2.1.0-21+fd7bdef"
+    "selected_version": "Release/master/2.1.1-25+7e20a99"
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/upgrade-components-22/2.1.0-656+221eb54"
+    "selected_version": "Continuous/upgrade-components-22/2.1.0-690+40bd95e"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/upgrade-components-22/2.1.0-656+221eb54"
+    "selected_version": "Continuous/upgrade-components-22/2.1.0-690+40bd95e"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-23_0946"
+    "selected_version": "Continuous/Castle-Fork/2018-08-23_1816"
   },
   {
     "name": "BLERemoteXCVR",
@@ -173,7 +173,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@3787cc3c06942534e68ce40a6315603d7cd80d86"
+    "selected_version": "master@9d010ab3d4f0a1c0cca9fb88611f7a2e2c11dcb7"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -229,11 +229,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.1.1-854+53f5adb"
+    "selected_version": "Continuous/master/2.1.1-855+ed4871d"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-23_0946"
+    "selected_version": "Continuous/Castle-Fork/2018-08-23_1816"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -249,11 +249,11 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@cab04e3b9a7c63428f52b38958bd21b6a2125bd9"
+    "selected_version": "master@0b13d86858e5ae7b6aae25177a24b65992786e77"
   },
   {
     "name": "unittest-cpp-qc8017_32",
-    "selected_version": "Release/bose-master/2.0.0-21+1990647"
+    "selected_version": "Release/bose-master/2.0.0-27+dcba3ec"
   },
   {
     "name": "Webkit",
