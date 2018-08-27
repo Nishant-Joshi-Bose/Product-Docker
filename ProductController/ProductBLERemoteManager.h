@@ -126,7 +126,6 @@ private:
     /// @brief The following subclass instance is used to communicate with the FrontDoor.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<FrontDoorClientIF>                                      m_FrontDoorClient;
     SoundTouchInterface::NowSelectionInfo                                   m_nowSelection;
     SoundTouchInterface::Sources                                            m_sources;
     A4VRemoteCommunication::A4VRemoteCommClientIF::A4VRemoteCommClientPtr   m_RCSClient;

@@ -65,7 +65,8 @@ ProductCecHelper::ProductCecHelper( CustomProductController& ProductController )
       m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
       m_connected( false ),
       m_CustomProductController( static_cast< CustomProductController & >( ProductController ) ),
-      m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) )
+      m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) ),
+      m_FrontDoorClient( ProductController.GetFrontDoorClient( ) )
 {
 
 }
@@ -91,7 +92,6 @@ bool ProductCecHelper::Run( )
 
     m_CecHelper->Connect( ConnectedCallback );
 
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductCecHelper" );
     ///
     /// Registration as a client for getting notification of changes in the now playing state from
     /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
