@@ -81,7 +81,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-138+6fc751f"
+    "selected_version": "Release/SOS/2.0.2-139+6fc751f"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -221,7 +221,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-85+0459451"
+    "selected_version": "Release/SOS/2.0.0-86+0459451"
   },
   {
     "name": "Telemetry-qc8017_32",
