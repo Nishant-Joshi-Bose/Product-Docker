@@ -52,6 +52,10 @@ fields = """
   BMAPVariantID
   productColor
   country_code
+  regionCode
+  rfMask24GHz
+  rfMask52GHz
+  rfMask58GHz
   mic_gain
   snSystem
 """.split()
@@ -60,6 +64,10 @@ field_notes = {
   "BMAPVariantID":	"1 (black), 2 (white), 3 (silver)",
   "productColor":	"Same as BMAPVariantID",
   "country_code":	"US, JP, CN, NZ, ...",
+  "regionCode":	    "US, JP, CN, NZ, ...",
+  "rfMask24GHz":	"DARR 2.4GHz region setting",
+  "rfMask52GHz":	"DARR 5.2GHz region setting",
+  "rfMask58GHz":	"DARR 5.8GHz region setting",
   "mic_gain":		"8 microphone gain values",
   "snSystem":		"17-character serial number",
 }

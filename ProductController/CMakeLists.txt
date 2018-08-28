@@ -1,5 +1,4 @@
 INCLUDE_DIRECTORIES(
-  ${A4VQUICKSET_DIR}/source/Client
   ${CASTLECLI_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
@@ -9,6 +8,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSoftwareInstallScheduler
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${DATACOLLECTIONCLIENT_DIR}
   ${KEYHANDLER_DIR}/include
@@ -17,13 +17,11 @@ INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   ${AUDIOSOURCE_DIR}/include
   .
-  include
-  source
-  source/CustomProductAudioService
-  source/CustomProductKeyInputManager
-  source/CustomProductLpmHardwareInterface
-  source/CustomStateMachine
-  source/IntentHandler
+  CustomProductAudioService
+  CustomProductKeyInputManager
+  CustomProductLpmHardwareInterface
+  CustomHsm
+  IntentHandler
 )
 
 # -----------------------------------------------------------------------------
@@ -33,7 +31,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/AudioFormat.pb.cc
-  ${PROTO_CC_DEST}/BlasterConfig.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
   ${PROTO_CC_DEST}/HdmiEdid.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
@@ -44,39 +41,42 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
-  source/CustomProductAudioService/CustomAudioSettingsManager.cpp
-  source/CustomProductAudioService/CustomProductAudioService.cpp
-  source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
-  source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
-  source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
-  source/CustomStateMachine/CustomProductControllerStateAccessoryPairingCancelling.cpp
-  source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
-  source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
-  source/CustomStateMachine/CustomProductControllerStateBooting.cpp
-  source/CustomStateMachine/CustomProductControllerStateFirstBootGreetingTransition.cpp
-  source/CustomStateMachine/CustomProductControllerStateIdle.cpp
-  source/CustomStateMachine/CustomProductControllerState.cpp
-  source/CustomStateMachine/CustomProductControllerStateOn.cpp
-  source/CustomStateMachine/CustomProductControllerStateLowPowerResume.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingDeselected.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingSelected.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSetup.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
-  source/IntentHandler/IntentHandler.cpp
-  source/IntentHandler/PlaybackRequestManager.cpp
-  source/IntentHandler/SpeakerPairingManager.cpp
-  source/IntentHandler/MuteManager.cpp
-  source/ProductAdaptIQManager.cpp
-  source/ProductBLERemoteManager.cpp
-  source/ProductCecHelper.cpp
-  source/ProductCommandLine.cpp
-  source/ProductDspHelper.cpp
-  source/ProductStart.cpp
-  source/ProductSTSStateTopAiQ.cpp
+  ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
+  ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
+  AccessorySoftwareInstallManager.cpp
+  CustomProductAudioService/CustomAudioSettingsManager.cpp
+  CustomProductAudioService/CustomProductAudioService.cpp
+  CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
+  CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
+  CustomHsm/CustomProductControllerStateAccessoryPairing.cpp
+  CustomHsm/CustomProductControllerStateAccessoryPairingCancelling.cpp
+  CustomHsm/CustomProductControllerStateAdaptIQ.cpp
+  CustomHsm/CustomProductControllerStateAdaptIQCancelling.cpp
+  CustomHsm/CustomProductControllerStateBooting.cpp
+  CustomHsm/CustomProductControllerStateFirstBootGreetingTransition.cpp
+  CustomHsm/CustomProductControllerStateIdle.cpp
+  CustomHsm/CustomProductControllerState.cpp
+  CustomHsm/CustomProductControllerStateOn.cpp
+  CustomHsm/CustomProductControllerStateLowPowerResume.cpp
+  CustomHsm/CustomProductControllerStatePlayable.cpp
+  CustomHsm/CustomProductControllerStatePlaying.cpp
+  CustomHsm/CustomProductControllerStatePlayingDeselected.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelected.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
+  IntentHandler/IntentHandler.cpp
+  IntentHandler/PlaybackRequestManager.cpp
+  IntentHandler/SpeakerPairingManager.cpp
+  IntentHandler/MuteManager.cpp
+  ProductAdaptIQManager.cpp
+  ProductBLERemoteManager.cpp
+  ProductCecHelper.cpp
+  ProductCommandLine.cpp
+  ProductDspHelper.cpp
+  ProductStart.cpp
+  ProductSTSStateTopAiQ.cpp
 
-  source/ProfessorProductController.cpp
+  CustomProductController.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor
@@ -104,18 +104,23 @@ TARGET_LINK_LIBRARIES(Professor
   CommonTypes
   STSProtoBufs
   SoundTouch_SDK_Protobuf_static
+  CapsUtils
   SystemEventService
+  A4VRemoteCommClient
+  A4VVideoManagerClient
+  A4VQuickSetServiceClient
   BoseLibs
   jsoncpp
   protobuf
-  TinyXml
+  libwebsockets.a
+  libssl.a
+  libcrypto.a
+  libTinyXml.a
+  libz.a
   pthread
   rt
   cap
   dl
-  A4VRemoteCommClient
-  A4VVideoManagerClient
-  A4VQuickSetServiceClient
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})

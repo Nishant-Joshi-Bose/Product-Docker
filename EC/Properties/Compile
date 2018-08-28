@@ -17,9 +17,10 @@ export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 hw_var=Alpha deploy || exit
 
 if [ "$[BuildType]" = "Release" ]; then
-    for env in alpha latest integration; do
-        python2.7 scripts/update_product_profile --p professor       --v $[Version] --e $env
-        python2.7 scripts/update_product_profile --p ginger-cheevers --v $[Version] --e $env
+    git clone git@github.com:BoseCorp/iot-profile-creator
+    for env in alpha latest integration stage; do
+        python2.7 iot-profile-creator/update_product_profile.py --p professor       --v $[Version] --e $env --s $(ectool getFullCredential IoT-Profile-Password --value password)
+        python2.7 iot-profile-creator/update_product_profile.py --p ginger-cheevers --v $[Version] --e $env --s $(ectool getFullCredential IoT-Profile-Password --value password)
     done
 fi
 

@@ -37,8 +37,6 @@ endif
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
-A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
-A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
 RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
 RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon installed_location)
@@ -51,8 +49,6 @@ PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommo
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
-	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@
-	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
 	touch builds/__init__.py
 
@@ -65,7 +61,7 @@ endif
 USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
 KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
 LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
-INTENT_DEFS=$(PWD)/ProductController/source/IntentHandler/Intents.h
+INTENT_DEFS=$(PWD)/ProductController/IntentHandler/Intents.h
 KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
 
 .PHONY: keyconfig
@@ -150,7 +146,7 @@ softwareupdate-ipk: cmake_build
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
-	./scripts/create-hsp-ipk $(cfg)
+	./scripts/create-hsp-sos-special-ipk $(cfg)
 
 .PHONY: lpm-bos
 lpm-bos:

@@ -79,17 +79,16 @@ webkit_dir=$(components get Webkit installed_location) || exit
 productuiassets_dir=$(components get ProductUIAssets installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
-qss_dir=$(components get A4VQuickSetService installed_location) || exit
-rcs_dir=$(components get A4VRemoteCommunicationService installed_location) || exit
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
-vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
-btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location) || exit
-btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
-blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
-btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
+bluetooth_dir=$(components get Bluetooth-qc8017_32 installed_location) || exit
+bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
+svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
+qss_dir=$(components get A4VQuickSetService-qc8017_32 installed_location) || exit
+rcs_dir=$(components get A4VRemoteCommunicationService-qc8017_32 installed_location) || exit
+vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -105,9 +104,6 @@ opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' --exclude='isNetworkConfigured' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
-rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
-rsync -a --exclude='*~' --exclude='*-README.txt' "$rcs_dir/opt-bose-fs/." "$opt_dir/." || exit
-rsync -a --exclude='*~' --exclude='*-README.txt' "$vm_dir/opt-bose-fs/." "$opt_dir/." || exit
 
 components record "$stage" || exit
 
@@ -128,8 +124,15 @@ cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BMX "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Spotify "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Upnp "$opt_dir/bin" || exit
+#cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
@@ -139,7 +142,6 @@ cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
-cp -a "$qss_dir/UEI/arch/${arch}/lib" "$opt_dir" || exit
 cp "$lpmmfgtool_dir/LpmMfgTool" "$opt_dir/bin" || exit
 
 t=$(date +%s)
@@ -151,7 +153,7 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS for development key. EC will take care of generation for Production
+# Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
 if [ -e "$secure_dir" ]; then
     chmod -R 755 "$secure_dir" || exit
@@ -222,13 +224,14 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
-"$btstackadapter_dir/stage" "$opt_dir" || exit
-"$btsource_dir/stage" "$opt_dir" || exit
-"$blesetup_dir/stage" "$opt_dir" || exit
-"$btstssink_dir/stage" "$opt_dir" || exit
+"$bluetooth_dir/stage" "$opt_dir" || exit
+"$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
+"$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
 "$vm_dir/stage" "$opt_dir" || exit
+"$rcs_dir/stage" "$opt_dir" || exit
+"$qss_dir/stage" "$opt_dir" || exit
 
 # remove Shepherd-vfe.xml
 if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
@@ -293,6 +296,7 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "SoundTouch postrm"
+exit 0
 EOF
 
 riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
@@ -320,6 +324,7 @@ EOF
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "SoundTouch prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------
