@@ -8,10 +8,6 @@
     "selected_version": "Continuous/master/2.1.0-625+1d41ac3"
   },
   {
-    "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-150+0e84f5a"
-  },
-  {
     "name": "AudioSource-qc8017_32",
     "selected_version": "Release/master/2.1.0-162+6859dfb"
   },
@@ -84,6 +80,10 @@
     "selected_version": "Release/master/2.1.1-114+69dbc72"
   },
   {
+    "name": "CloudControlClient-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-29+d2b5384"
+  },
+  {
     "name": "DataCollectionClient-qc8017_32",
     "selected_version": "Release/master/2.1.1-130+35a067c"
   },
@@ -114,6 +114,10 @@
   {
     "name": "GalapagosClient-qc8017_32",
     "selected_version": "Release/master/1.5.3-210+f18958d"
+  },
+  {
+    "name": "GoogleVoiceAssistant-qc8017_64",
+    "selected_version": "Continuous/master/2.1.0-155+eb284fb"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -237,14 +241,10 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-133+a5f4a19"
+    "selected_version": "Continuous/master/2.1.0-137+4c779f6"
   },
   {
     "name": "Webkit",
     "selected_version": "Release/master/2.1.0-95+daccd18"
-  },
-  {
-    "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-29+d2b5384"
   }
 ]
