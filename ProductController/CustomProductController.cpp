@@ -27,6 +27,8 @@
 #include "CustomProductSTSStateTopAux.h"
 #include "ProductSTS.pb.h"
 #include "SystemUtils.h"
+#include "ProductCommandLine.h"
+#include "CommonProductCommandLine.h"
 
 static DPrint s_logger( "CustomProductController" );
 
@@ -81,7 +83,9 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicated( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED ),
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
-    m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
+    m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
+    m_CommonProductCommandLine( ),
+    m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_ProductSTSController( *this )
 {
@@ -301,8 +305,7 @@ void CustomProductController::InitializeAction()
     ///Instantiate and run the hardware interface.
     m_LpmInterface->Run( );
 
-    m_productCliClient.Initialize( GetTask() );
-    RegisterCliClientCmds();
+    m_ProductCommandLine -> Run();
     RegisterCommonEndPoints();
     SendInitialRequests();
 
@@ -542,8 +545,8 @@ NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationa
 void CustomProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "Translated Intent %d", intent );
-    m_CliClientMT.SendAsyncResponse( "Translated intent = " + \
-                                     std::to_string( intent ) );
+    GetCommonCliClientMT().SendAsyncResponse( "Translated intent = " + \
+                                              std::to_string( intent ) );
 
     if( HandleCommonIntents( intent ) )
     {
@@ -589,103 +592,6 @@ void CustomProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil
 
     GetHsm().Handle<> ( &CustomProductControllerState::HandleNetworkStandbyIntent );
     return;
-}
-
-void CustomProductController::RegisterCliClientCmds()
-{
-    BOSE_INFO( s_logger, __func__ );
-    auto cb = [this]( uint16_t cmdKey, const std::list<std::string> & argList, AsyncCallback<std::string, int32_t> respCb, int32_t transact_id )
-    {
-        HandleCliCmd( cmdKey, argList, respCb, transact_id );
-    };
-
-    m_CliClientMT.RegisterCLIServerCommands( "product boot_status",
-                                             "command to output the status of the boot up state.",
-                                             "\t product boot_status \t\t\t",
-                                             GetTask(),
-                                             cb,
-                                             static_cast<int>( CLICmdKeys::GET_BOOT_STATUS ) );
-}
-
-void CustomProductController::HandleCliCmd( uint16_t cmdKey,
-                                            const std::list<std::string> & argList,
-                                            AsyncCallback<std::string, int32_t> respCb,
-                                            int32_t transact_id )
-{
-    std::string response( "Success" );
-
-    BOSE_INFO( s_logger, "%s - cmd: %d", __func__, cmdKey );
-    switch( static_cast<CLICmdKeys>( cmdKey ) )
-    {
-    case CLICmdKeys::GET_BOOT_STATUS:
-    {
-        HandleGetBootStatus( argList, response );
-        break;
-    }
-    default:
-        response = "Command not found";
-        break;
-    }
-    respCb( response, transact_id );
-}
-
-void CustomProductController::HandleGetBootStatus( const std::list<std::string>& argList, std::string& response )
-{
-    std::string CapsInitialized( IsCAPSReady( )                 ? "true" : "false" );
-    std::string LpmConnected( IsLpmReady( )                     ? "true" : "false" );
-    std::string audioPathConnected( IsAudioPathReady( )         ? "true" : "false" );
-    std::string networkModuleReady( IsNetworkModuleReady( )     ? "true" : "false" );
-
-    std::string StsInitialized( IsSTSReady( )                   ? "true" : "false" );
-    std::string bluetoothInitialized( IsBluetoothModuleReady( ) ? "true" : "false" );
-    std::string UiConnected( IsUiConnected( )                   ? "true" : "false" );
-
-    std::string SassInitialized( IsSassReady( )                 ? "true" : "false" );
-    std::string SoftwareUpdateReady( IsSoftwareUpdateReady( )   ? "true" : "false" );
-    std::string VoiceInitialized( IsVoiceModuleReady( )         ? "true" : "false" );
-
-    response  = "------------- Product Controller Booting Status -------------\n";
-    response += "\n";
-    response += "CAPS Initialized      : ";
-    response += CapsInitialized;
-    response += "\n";
-    response += "LPM Connected         : ";
-    response += LpmConnected;
-    response += "\n";
-    response += "Audio Path Connected  : ";
-    response += audioPathConnected;
-    response += "\n";
-    response += "Network Module Ready  : ";
-    response += networkModuleReady;
-    response += "\n";
-    response += "STS Initialized       : ";
-    response += StsInitialized;
-    response += "\n";
-    response += "Bluetooth Initialized : ";
-    response += bluetoothInitialized;
-    response += "\n";
-    response += "UI Connected          : ";
-    response += UiConnected;
-    response += "\n";
-    response += "Software Update Ready : ";
-    response += SoftwareUpdateReady;
-    response += "\n";
-    response += "SASS Initialized      : ";
-    response += SassInitialized;
-    response += "\n";
-    response += "Voice Initialized     : ";
-    response += VoiceInitialized;
-    response += "\n";
-    response += "\n";
-
-    if( IsBooted( ) )
-    {
-        response += "The device has been successfully booted.";
-    }
-    else
-    {
-        response += "The device has not yet been booted.";
-    }
 }
 
 void CustomProductController::UpdateUiConnectedStatus( bool status )

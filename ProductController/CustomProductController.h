@@ -66,7 +66,6 @@
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
-#include "ProductCliClient.h"
 #include "KeyHandler.h"
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
@@ -79,9 +78,14 @@ namespace ProductApp
 
 class CustomProductAudioService;
 class CustomProductKeyInputManager;
+class ProductCommandLine;
+class CommonProductCommandLine;
 
 class CustomProductController : public ProductController
 {
+    friend class ProductCommandLine;
+    friend class CommonProductCommandLine;
+
 public:
     CustomProductController();
     virtual ~CustomProductController();
@@ -125,12 +129,6 @@ private:
     void InitializeHsm( );
     void InitializeAction( );
     void RegisterLpmEvents();
-    void HandleCliCmd( uint16_t cmdKey,
-                       const std::list<std::string> & argList,
-                       AsyncCallback<std::string, int32_t> rspAndRspCmplt,
-                       int32_t transact_id );
-    void RegisterCliClientCmds();
-
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
@@ -355,18 +353,19 @@ private:
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
 
     /// ProductAudioService
-    std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
+    std::shared_ptr<CustomProductAudioService>                      m_ProductAudioService;
 
     /// ProductKeyInputManager
-    std::shared_ptr< CustomProductKeyInputManager> m_ProductKeyInputManager;
+    std::shared_ptr<CustomProductKeyInputManager>                   m_ProductKeyInputManager;
 
-    ProductCliClient m_productCliClient;
+    std::shared_ptr<ProductCommandLine>                             m_ProductCommandLine;
+    std::shared_ptr<CommonProductCommandLine>                       m_CommonProductCommandLine;
 
-    std::unique_ptr<LightBar::LightBarController>  m_lightbarController;
-    std::shared_ptr<DisplayController>             m_displayController;
-    IntentHandler                                  m_IntentHandler;
-    bool                                           m_isBLEModuleReady  = false;
-    bool                                           m_isUiConnected = false;
+    std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
+    std::shared_ptr<DisplayController>                              m_displayController;
+    IntentHandler                                                   m_IntentHandler;
+    bool                                                            m_isBLEModuleReady  = false;
+    bool                                                            m_isUiConnected = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -374,13 +373,13 @@ private:
     ///       between the Product Controller and the STS source proxies.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool                                        m_isSTSReady = false;
+    bool                                                            m_isSTSReady = false;
     bool m_IsAudioPathReady = true;
 
     /// Shared Pointer to the LPM Custom Hardware Interface
-    std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
+    std::shared_ptr< CustomProductLpmHardwareInterface >            m_LpmInterface;
 
-    ProductSTSController                                 m_ProductSTSController;
+    ProductSTSController                                            m_ProductSTSController;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {

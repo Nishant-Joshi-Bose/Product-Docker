@@ -42,10 +42,7 @@ lowpower=(
     Shepherd-NetManager.xml
     Shepherd-avs.xml
     Shepherd-vfe.xml
-    Shepherd-BTStackAdapter.xml
-    Shepherd-BTSTSSink.xml
-    Shepherd-BTSource.xml
-    Shepherd-BLESetup.xml
+    Shepherd-Bluetooth.xml
     Shepherd-BLEToFrontDoorService.xml
 )
 
@@ -64,6 +61,10 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 
     log info "* Starting SoundTouch *"
 
+    log info "Re-launching syslogd with a bigger buffer"
+    killwait syslogd
+    syslogd -C$(( 3 * 1024 )) # units are 1024 bytes (KiB)
+
     # By default we launch shepherdd into the background (as expected by
     # /etc/init.d).  With --wait we instead invoke sheppherd and wait for it
     # to exit (preferred by systemd).
@@ -73,7 +74,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         wait=true
     fi
 
-    if pid=$(cat "$pidfile") && [ -e "/proc/$pid" ]; then
+    if pid=$(cat "$pidfile" 2>/dev/null) && [ -e "/proc/$pid" ]; then
         log warning "shepherdd is already running, PID $pid"
         kill -HUP "$pid" # ask shepherdd to re-examine $rundir
         exit 1
@@ -125,6 +126,11 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
             # Enable access to the LPM CLI.
             ln -s /opt/Bose/etc/Shepherd-LPMService.xml "$rundir" || exit
             ln -s /opt/Bose/etc/Shepherd-CLIServer.xml "$rundir" || exit
+
+            # Enable the PTS server and the rndis interface to facilitate
+            # investigation of the manufacturing data.
+            ln -s /opt/Bose/etc/Shepherd-pts.xml "$rundir" || exit
+            set-usb-mode p2p
         else
             ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
         fi
@@ -156,7 +162,7 @@ EOF
 fi
 
 if (( $# == 1 )) && [ "$1" = stop ]; then
-    if ! pid=$(cat "$pidfile"); then
+    if ! pid=$(cat "$pidfile" 2>/dev/null); then
         log warning "shepherdd was not running"
         exit 1
     fi
@@ -180,7 +186,7 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
 
     log info "Clearing product persistence"
     rm -rfv /mnt/nv/product-persistence/*
-    
+
     if ! [ -e /mnt/nv/update/install-status.dat ]; then
         # Clear pending update status and packages- if any
         # Checking for install-status.dat protect against clearing partial install
@@ -190,7 +196,7 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
     else
         log warning "Partially installed Software Update found. Will not clear Update during Factory Default"
     fi
-    
+
     reset_timezone_to_default force
     sync
 
