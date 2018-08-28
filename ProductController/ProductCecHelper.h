@@ -177,7 +177,6 @@ private:
     void HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource );
     void HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying& response );
     void HandlePlaybackRequestError( const FrontDoor::Error& error );
-    std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
     void CecModeHandleGet( const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );
     void CecModeHandlePut( const ProductPb::CecUpdateRequest req, const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );
     void PerhapsSetCecSource( );
@@ -193,6 +192,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     CallbackConnection      m_PutConnection;
     CallbackConnection      m_GetConnection;
+    FrontDoorClientIF_t     m_FrontDoorClient;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This holds the last-received CEC state from the LPM
