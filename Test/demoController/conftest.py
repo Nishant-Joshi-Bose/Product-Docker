@@ -70,9 +70,8 @@ def resetDemo(request, frontdoor_wlan, demoUtils, device_id):
     """
     def teardown():
         if 'factorydefault' in request.keywords:
-            print "factory default"
+            logger.info("Factory default. So no need to set demoMode False")
         else:
-            print "no factory default"
-            logger.info("set demoMode False towards the end of every test")
+            logger.info("Set demoMode False towards the end of every test")
             setDemo(request, frontdoor_wlan, demoUtils, device_id)
     request.addfinalizer(teardown)

@@ -124,8 +124,8 @@ class TestDemo():
         demoUtils.verifyDemoKeyConfig(frontdoor_wlan, "Error Reading configuration file")
         demoUtils.stopPlayback(frontdoor_wlan)
 
-    @pytest.mark.usefixtures("demoUtils", "device_id", "device_ip", "request", "get_config", "frontdoor_wlan")
-    def test_demoKeyControlNotWork(self, demoUtils, device_ip, request, get_config, device_id, frontdoor_wlan):
+    @pytest.mark.usefixtures("demoUtils", "device_id", "request", "get_config", "frontdoor_wlan")
+    def test_demoKeyControlNotWork(self, demoUtils, device_id, request, get_config, frontdoor_wlan):
         """
         This test verifies with demo set to True. Demo keyControl(volume) works when keyConfig is present
         Test steps:
@@ -144,6 +144,6 @@ class TestDemo():
         demoUtils.setDemoMode(True, device_id, frontdoor_wlan, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(20, frontdoor_wlan)
         demoUtils.verifyDemoKeyConfig(frontdoor_wlan)
-        demoUtils.select_aux_source(device_id, device_ip)
+        demoUtils.select_aux_source(device_id)
         demoUtils.deleteKeyConfig(frontdoor_wlan)
         demoUtils.verifyDemoKeyConfig(frontdoor_wlan, "Error Reading configuration file")
