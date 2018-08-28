@@ -57,7 +57,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/2.1.1-585+244eaf8"
+    "selected_version": "Continuous/master/2.1.1-600+3cb3475"
   },
   {
     "name": "BoseOPKG-native",
@@ -177,7 +177,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@9d010ab3d4f0a1c0cca9fb88611f7a2e2c11dcb7"
+    "selected_version": "master@cf6c5851c84e2dcf09276bd487d6c7587d787cfc"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
