@@ -16,6 +16,7 @@
 #include "KeyHandler.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductMessage.pb.h"
 #include "SystemEventMessage.pb.h"
 #include "InactivityTimers.h"
@@ -23,7 +24,7 @@
 
 namespace ProductApp
 {
-class EddieProductController;
+class CustomProductController;
 class ProductController;
 class ProductControllerHsm;
 
@@ -178,6 +179,11 @@ public:
         return false;
     }
 
+    virtual bool HandleVoiceModuleReadiness( )
+    {
+        return false;
+    }
+
     virtual bool HandleBluetoothPairedList( )
     {
         return false;
@@ -208,7 +214,7 @@ public:
         return false;
     }
 
-    virtual bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state )
+    virtual bool HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlaying )
     {
         return false;
     }
@@ -238,7 +244,7 @@ public:
         return false;
     }
 
-    virtual bool HandleSoftwareUpdateStart( uint32_t delay )
+    virtual bool HandleSoftwareUpdateInstall( )
     {
         return false;
     }
@@ -370,9 +376,14 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOff( )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
-    static EddieProductController& GetCustomProductController();
+    static CustomProductController& GetCustomProductController();
 
     static ProductController* s_productController;
 

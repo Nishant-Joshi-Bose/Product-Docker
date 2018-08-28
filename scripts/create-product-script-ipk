@@ -62,7 +62,9 @@ output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" || exit
 # copy minimal image tar to /opt/Bose
-cp "$wspace/opt-bose-fs/etc/product"  "$opt_dir/etc/product-updated" || exit
+cp "$wspace/opt-bose-fs/etc/product"  "$opt_dir/etc/product" || exit
+cp "$wspace/opt-bose-fs/.bash_profile" "$opt_dir/.bash_profile" || exit
+cp "$wspace/opt-bose-fs/.bashrc" "$opt_dir/.bashrc" || exit
 
 PackageName=product-script
 
@@ -88,12 +90,6 @@ EOF
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "Product script postinst"
-
-# TODO: check md5 sum of existing product vs. new
-# move product-updated to product - Danger danger
-sync
-mv /opt/Bose/etc/product-updated /opt/Bose/etc/product
-sync
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
 
@@ -103,6 +99,7 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "Product script postrm"
+exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
@@ -110,11 +107,13 @@ put_script "$stage/preinst" <<EOF
 echo "Product script preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
+exit 0
 EOF
 
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "Product script prerm"
+exit 0
 EOF
 
 # -----------------------------------------------------------------------------

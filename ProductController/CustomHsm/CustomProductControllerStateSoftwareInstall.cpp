@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductControllerStateSoftwareInstall.cpp
-/// @brief  The SoftwareInstall in Eddie Product.
+/// @brief  The SoftwareInstall in the product controller.
 ///
 /// Copyright 2018 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CustomProductControllerStateSoftwareInstall.h"
 #include "ProductControllerHsm.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "CustomProductControllerStateSoftwareInstall" );
@@ -27,7 +27,8 @@ void CustomProductControllerStateSoftwareInstall::HandleStateStart()
 {
     ///Turn OFF LCD display controller
     BOSE_INFO( s_logger, "Turn LCD display OFF in %s.", __func__ );
-    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( false );
+    AsyncCallback<void> emptyCb( [] {}, nullptr );
+    GetCustomProductController().GetDisplayController()->RequestTurnDisplayOnOff( false, emptyCb );
 
     ProductControllerStateSoftwareInstall::HandleStateStart();
 }

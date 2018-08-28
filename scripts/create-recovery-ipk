@@ -55,7 +55,7 @@ here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
-swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+rivierarecovery_dir=$(components get RivieraSwUpRecovery-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -72,15 +72,14 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" || exit
 components record "$stage" || exit
 
 # copy minimal image tar to /opt/Bose
-# Todo: CASTLE-15220: This is removed for now - to reduce size of overall package
 minimal_image="Bose_minimal.tar.gz"
-#cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
+cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
 
 # copy network configured script which will be required in restore operation
 cp "$wspace/misc/isNetworkConfigured" "$opt_dir/bin/" || exit
 
-# copy recovery images from Software Update
-"$swup_dir/stage_recovery" "$opt_dir" || exit
+# copy recovery images from RivieraSwUpRecovery
+"$rivierarecovery_dir/stage" "$opt_dir" || exit
 
 PackageName=SoundTouchRecovery
 
@@ -115,7 +114,7 @@ fi
 
 # To increase the cache partition size, reflash it
 # Todo: Remove this block of code as soon as new HSP with 
-#   proper /cache partition size is released
+#   proper /cache partition size is released (remove after SOS)
 ##########################################################
 
 if [ "\$(df | awk '\$6 == "/cache" {print \$2}')" -le 58888 ]; then
@@ -136,18 +135,15 @@ fi
 rm -f /cache/recovery/last_log.*
 rm -f /cache/recovery/last_kmsg.*
 
-# move minimal rpoduct image to cache partition
-# Todo: CASTLE-15220: This is removed for now - to reduce size of overall package
-#mv /opt/Bose/Bose_minimal.tar.gz /cache/
+# move minimal product image to cache partition
+mv /opt/Bose/Bose_minimal.tar.gz /cache/ || exit
 
 # move RecoveryMain binary to /cache partition
-mv /opt/Bose/bin/RecoveryMain /cache/
-
-# todo: once HSP team changes path replace cp with mv
-cp /opt/Bose/etc/RecoveryMgr /cache/
+mv /opt/Bose/bin/RecoveryMain /cache/ || exit
+mv /opt/Bose/etc/RecoveryMgr /cache/ || exit
 
 # move network check script to /cache
-cp /opt/Bose/bin/isNetworkConfigured /cache/ 
+cp /opt/Bose/bin/isNetworkConfigured /cache/ || exit 
 
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
@@ -158,6 +154,7 @@ EOF
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
 echo "SoundTouch recovery postrm"
+exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
@@ -165,12 +162,13 @@ put_script "$stage/preinst" <<EOF
 echo "SoundTouch recovery preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
-
+exit 0
 EOF
 
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "SoundTouch recovery prerm"
+exit 0
 EOF
 
 # Our standard CentOS configuration has

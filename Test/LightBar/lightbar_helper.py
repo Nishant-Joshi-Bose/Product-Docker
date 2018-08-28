@@ -14,9 +14,13 @@ Automated Tests for LightBar Animations for Eddie
 """
 import os
 import re
+import time
 
 from CastleTestUtils.SupportUtils.FileUtils.CsvFileSupport import read_rows_as_dictionary_list_from_csv_file
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+from CastleTestUtils.OAuthUtils.OAuthUtils import UserAccount
+from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
+from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 
 
 ANIMATION_NAME = 'Animation Name'
@@ -120,3 +124,54 @@ def animation_in_notification(front_door_queue, expected_animation_value):
         except KeyError:
             LOGGER.debug("Notification not found in %s.", notification_value)
             continue
+
+
+def get_lightbar_animations(device_id, ip_address, environment):
+    """
+    Get the list of supported animations
+
+    Steps:--
+    1.. Create a passport user
+    2.. Add product to the user
+    3.. Get the supported lightbar animations
+    4.. Delete the passport user and close the FrontDoor connection.
+
+    :param device_id: Device id
+    :param ip_address: Device ip address
+    :param environment: Galapagos environment
+    :return animations: Supported animations
+    """
+    # create the user to get the supported animations values
+    LOGGER.info("passport_user_details")
+    fname = "lightbar"
+    lname = "automation"
+    _dname = str(time.time() * 1000)
+    LOGGER.debug("_dname is: %s", _dname)
+    email = "LightBar_Automation" + _dname + "@bose.com"
+    password = "bose901"
+    LOGGER.debug("email is: %s", email)
+    gigya_url = "https://ingress-platform.live-aws-useast1.bose.io/dev/svc-id-gen-pub/" + \
+        environment + "/id-user-accounts-core/userAccounts/"
+
+    LOGGER.info("Creating passport user for lightbar response")
+    user_account = UserAccount(url=gigya_url, logger=LOGGER)
+    user_account.create_user_account(email, password, lname, fname)
+
+    riviera_utils = RivieraUtils('ADB', device=device_id)
+    response = riviera_utils.link_product(environment=environment, ip_address=ip_address,
+                                          email=email, password=password)
+    LOGGER.info("Response is %s", response)
+    assert riviera_utils.wait_for_galapagos_activation(timeout=180), "Galapagos status error"
+    LOGGER.info("frontDoorQueue")
+    front_door = FrontDoorQueue(ip_address, email=email, password=password)
+
+    # get the supported lightbar animations
+    lightbar_response = front_door.getActiveAnimation()
+    animation_values = lightbar_response["properties"]["supportedValues"]
+    front_door.close()
+
+    # delete the user account
+    LOGGER.info("Deleting User-Account")
+    user_account.delete_user_account(email, password)
+
+    return animation_values

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file   EddieProductController.h
-/// @brief  Eddie Product controller class.
+/// @file   CustomProductController.h
+/// @brief  Product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
@@ -38,6 +38,8 @@
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
@@ -64,27 +66,29 @@
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
-#include "ProductCliClient.h"
 #include "KeyHandler.h"
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "DisplayController.h"
-#include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
-#include "BoseVersion.h"
 
 namespace ProductApp
 {
 
 class CustomProductAudioService;
 class CustomProductKeyInputManager;
+class ProductCommandLine;
+class CommonProductCommandLine;
 
-class EddieProductController : public ProductController
+class CustomProductController : public ProductController
 {
+    friend class ProductCommandLine;
+    friend class CommonProductCommandLine;
+
 public:
-    EddieProductController();
-    virtual ~EddieProductController();
+    CustomProductController();
+    virtual ~CustomProductController();
 
     void Initialize();
     void InitializeKeyIdToKeyNameMap() override;
@@ -95,10 +99,7 @@ public:
     {
         return {};
     }
-    std::string GetProductVersionNumber() const override
-    {
-        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
-    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
     /// @brief The following methods are used by the state machine to determine the status of the
@@ -119,8 +120,8 @@ public:
 
 private:
     /// Disable copies
-    EddieProductController( const EddieProductController& ) = delete;
-    EddieProductController& operator=( const EddieProductController& ) = delete;
+    CustomProductController( const CustomProductController& ) = delete;
+    CustomProductController& operator=( const CustomProductController& ) = delete;
 
 private:
     ///Register with LPM for events notifications
@@ -128,12 +129,6 @@ private:
     void InitializeHsm( );
     void InitializeAction( );
     void RegisterLpmEvents();
-    void HandleCliCmd( uint16_t cmdKey,
-                       const std::list<std::string> & argList,
-                       AsyncCallback<std::string, int32_t> rspAndRspCmplt,
-                       int32_t transact_id );
-    void RegisterCliClientCmds();
-
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
@@ -213,6 +208,7 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsLanguageSet();
+    void SendInitialCapsData() override;
     void SendActivateAccessPointCmd();
     void SendDeActivateAccessPointCmd();
 
@@ -282,10 +278,10 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Interfaces to the ProductSTSController, which implements the interactions
-///       between the Eddie Product Controller and the STS source proxies.
+///       between the Product Controller and the STS source proxies.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-    void SetupProductSTSController( void );
+    void SetupProductSTSController( void ) override;
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
     void HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response );
@@ -333,6 +329,8 @@ private:
     ProductControllerStatePlayingDeselected                         m_ProductControllerStatePlayingDeselected;
     ProductControllerStatePlayingSelected                           m_ProductControllerStatePlayingSelected;
     ProductControllerStatePlayingSelectedSilent                     m_ProductControllerStatePlayingSelectedSilent;
+    ProductControllerStatePlayingSelectedSilentSourceInvalid        m_ProductControllerStatePlayingSelectedSilentSourceInvalid;
+    ProductControllerStatePlayingSelectedSilentSourceValid          m_ProductControllerStatePlayingSelectedSilentSourceValid;
     ProductControllerStatePlayingSelectedNotSilent                  m_ProductControllerStatePlayingSelectedNotSilent;
     ProductControllerStatePlayingSelectedSetup                      m_ProductControllerStatePlayingSelectedSetup;
     ProductControllerStatePlayingSelectedSetupNetwork               m_ProductControllerStatePlayingSelectedSetupNetwork;
@@ -355,34 +353,33 @@ private:
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
 
     /// ProductAudioService
-    std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
+    std::shared_ptr<CustomProductAudioService>                      m_ProductAudioService;
 
     /// ProductKeyInputManager
-    std::shared_ptr< CustomProductKeyInputManager> m_ProductKeyInputManager;
+    std::shared_ptr<CustomProductKeyInputManager>                   m_ProductKeyInputManager;
 
-    ProductCliClient m_productCliClient;
+    std::shared_ptr<ProductCommandLine>                             m_ProductCommandLine;
+    std::shared_ptr<CommonProductCommandLine>                       m_CommonProductCommandLine;
 
-    std::unique_ptr<LightBar::LightBarController>  m_lightbarController;
-    std::shared_ptr<DisplayController>             m_displayController;
-    IntentHandler                                  m_IntentHandler;
-    bool                                           m_isBLEModuleReady  = false;
-    bool                                           m_isUiConnected = false;
+    std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
+    std::shared_ptr<DisplayController>                              m_displayController;
+    IntentHandler                                                   m_IntentHandler;
+    bool                                                            m_isBLEModuleReady  = false;
+    bool                                                            m_isUiConnected = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
-    ///       between the Eddie Product Controller and the STS source proxies.
+    ///       between the Product Controller and the STS source proxies.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool                                        m_isSTSReady = false;
+    bool                                                            m_isSTSReady = false;
     bool m_IsAudioPathReady = true;
 
     /// Shared Pointer to the LPM Custom Hardware Interface
-    std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
+    std::shared_ptr< CustomProductLpmHardwareInterface >            m_LpmInterface;
 
-    //DataCollectionClientInterface
-    DataCollectionClientInterface                        m_dataCollectionClientInterface;
-    ProductSTSController                                 m_ProductSTSController;
+    ProductSTSController                                            m_ProductSTSController;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {

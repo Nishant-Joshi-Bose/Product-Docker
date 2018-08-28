@@ -4,7 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CustomProductSTSStateTopAux.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 
 static DPrint s_logger( "CustomProductSTSStateTopAux" );
 static constexpr uint32_t LOW_LATENCY_DELAYED_START_MS = 25;
@@ -66,22 +66,22 @@ void CustomProductSTSStateTopAux::Init()
     // 4) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - STOP
     m_AuxStateActionMap[GenerateKey( false, true )] = AuxStopCallback;
 
-    BOSE_INFO( m_logger, "%s: m_prevState=0x%x, Aux is %sinserted,User Play status:%s", __func__,
-               m_prevState.key, GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
+    BOSE_INFO( m_logger, "%s: m_CurrentState=0x%x, Aux is %sinserted,User Play status:%s", __func__,
+               m_CurrentState.key, GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
 
 }
 
 void CustomProductSTSStateTopAux::ProcessAuxAggregateStatus()
 {
-    BOSE_DEBUG( m_logger, "%s: AUX is %sactive,prevKey=0x%x,CurrentKey=0x%x, Aux is %sinserted,"
+    BOSE_DEBUG( m_logger, "%s: AUX is %sactive,CurrentKey=0x%x,NextKey=0x%x, Aux is %sinserted,"
                 "User Play status:%s", __func__,
-                m_active ? "" : "NOT ", m_prevState.key, m_CurrentState.key,
+                m_active ? "" : "NOT ", m_CurrentState.key, m_NextState.key,
                 GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
-    if( m_active && ( m_prevState != m_CurrentState ) )
+    if( m_active && ( m_CurrentState != m_NextState ) )
     {
         BOSE_INFO( m_logger, "%s: Changing Play status ", __func__ );
-        m_AuxStateActionMap[m_CurrentState.key]();
-        m_prevState = m_CurrentState;
+        m_AuxStateActionMap[m_NextState.key]();
+        m_CurrentState = m_NextState;
     }
     return ;
 }
@@ -134,7 +134,7 @@ bool CustomProductSTSStateTopAux::HandleDeactivateRequest( const STS::Deactivate
 {
     BOSE_INFO( m_logger, "Custom-HandleDeactivateRequest( %s )", m_account.GetSourceName().c_str() );
     SetUserPlayStatus( false );
-    m_prevState.Reset();
+    m_CurrentState.Reset();
     ProductSTSStateTop::HandleDeactivateRequest( req, seq );
     return true;
 }
@@ -147,6 +147,9 @@ bool CustomProductSTSStateTopAux::HandleActivateRequest( const STS::Void &req, u
     m_np.set_canstop( true );
     //update the canPause field
     m_np.set_canpause( true );
+    // Activate would start PLAYing, so set the current state
+    // to PLAYing.
+    m_CurrentState.SetPlaying();
     ProductSTSStateTop::HandleActivateRequest( req, seq );
     return true;
 }
@@ -178,7 +181,7 @@ void CustomProductSTSStateTopAux::RegisterAuxPlugStatusCallbacks()
 
     AsyncCallback<LpmServiceMessages::IpcAuxState_t> cb( func, m_account.s_ProductSTSController->GetTask() );
 
-    ( static_cast<ProductApp::EddieProductController*>( &( m_account.s_ProductSTSController->GetProductController() ) ) )->RegisterAuxEvents( cb );
+    ( static_cast<ProductApp::CustomProductController*>( &( m_account.s_ProductSTSController->GetProductController() ) ) )->RegisterAuxEvents( cb );
     return;
 }
 void CustomProductSTSStateTopAux::AuxPlay()

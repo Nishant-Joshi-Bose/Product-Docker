@@ -2,9 +2,11 @@
 Conftest.py for DemoController
 """
 import pytest
+
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
 from ..commonData import keyConfig
+
 logger = get_logger(__name__)
 
 @pytest.fixture(scope='class', autouse=True)
@@ -17,13 +19,15 @@ def resetDemo(request, frontDoor, demoUtils, device_id):
         setDemo(request, frontDoor, demoUtils, device_id)
     request.addfinalizer(teardown)
 
+
 @pytest.fixture(scope='class')
 def demoUtils(frontDoor, adb):
     """
     Get DemoUtils instance.
     """
     logger.info("demoUtils")
-    return DemoUtils(frontDoor, adb, logger)
+    return DemoUtils(adb, logger)
+
 
 @pytest.fixture(scope='function', autouse=True)
 def setDemoOff(request, frontDoor, demoUtils, device_id):
@@ -35,6 +39,7 @@ def setDemoOff(request, frontDoor, demoUtils, device_id):
     demoUtils.deleteKeyConfig()
     demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
 
+
 def setDemo(request, frontDoor, demoUtils, device_id):
     """
     Set demoMode False if True
@@ -45,6 +50,7 @@ def setDemo(request, frontDoor, demoUtils, device_id):
         demoUtils.setDemoMode(False, device_id, True, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode(False)
 
+
 @pytest.fixture(scope='session')
 def get_config():
     """
@@ -53,4 +59,3 @@ def get_config():
     """
     data = keyConfig
     return data
-

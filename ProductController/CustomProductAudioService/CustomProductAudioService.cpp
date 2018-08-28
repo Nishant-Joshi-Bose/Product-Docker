@@ -1,7 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.cpp
-/// @brief   This file contains source code for Eddie specific behavior for
-///         communicating with APProduct Server and APProduct related FrontDoor interaction
+/// @brief  This file contains source code for product specific behavior for
+///         communicating with APProduct Server and APProduct related FrontDoor
+///         interaction
+///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +11,7 @@
 #include "APProductFactory.h"
 #include "DPrint.h"
 #include "FrontDoorClient.h"
-#include "EddieProductController.h"
+#include "CustomProductController.h"
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
@@ -31,14 +33,16 @@ namespace ProductApp
 {
 /*!
  */
-CustomProductAudioService::CustomProductAudioService( EddieProductController& productController,
+CustomProductAudioService::CustomProductAudioService( CustomProductController& productController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( productController.GetTask( ),
                          productController.GetMessageHandler() ,
                          frontDoorClient ),
     m_audioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
-    m_thermalTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ) ),
+    m_thermalTask( lpmClient, productController.GetTask( ),
+                   AsyncCallback<IpcSystemTemperatureData_t>(
+                       std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ), productController.GetTask( ) ) ),
     m_dataCollectionClient( productController.GetDataCollectionClient() )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -264,7 +268,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 
 /*!
  */
-void CustomProductAudioService::ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data )
+void CustomProductAudioService::ThermalDataReceivedCb( IpcSystemTemperatureData_t data )
 {
     int16_t ampTemp = INT16_MAX;
     IpcThermalType_t thermalValueType;
@@ -312,15 +316,15 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
  */
 EddieAudioSettings_t_AudioMode CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    if( modeName == "dialog" )
+    if( modeName == "DIALOG" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
-    else if( modeName == "direct" )
+    else if( modeName == "DIRECT" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIRECT;
     }
-    else if( modeName == "night" )
+    else if( modeName == "NIGHT" )
     {
         return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_NIGHT;
     }

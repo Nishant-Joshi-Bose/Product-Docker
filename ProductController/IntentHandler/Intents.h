@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   Intents.h
-///// @brief  Eddie specific IntentHandler class for Riviera based product
+///// @brief  Product specific IntentHandler class
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -13,7 +13,7 @@ namespace ProductApp
 enum class Action
 {
     INVALID = 0,
-    //+ MULTIBUTTON ACTIONS for Eddie
+    //+ MULTIBUTTON ACTIONS
     PLAY_PAUSE = ActionCommon_t::PLAY_PAUSE,
     NEXT_TRACK = ActionCommon_t::NEXT_TRACK,
     PREV_TRACK = ActionCommon_t::PREV_TRACK,
@@ -22,7 +22,7 @@ enum class Action
     MANUAL_UPDATE = ActionCommon_t::MANUAL_UPDATE,
     FACTORY_DEFAULT = ActionCommon_t::FACTORY_DEFAULT,
     TOGGLE_WIFI_RADIO = ActionCommon_t::TOGGLE_WIFI_RADIO,
-    //- MULTIBUTTON ACTIONS for Eddie
+    //- MULTIBUTTON ACTIONS
 
     //+ Bluetooth Button
     CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST = ActionCommon_t::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST,

@@ -15,19 +15,23 @@ test_diagnostics_mfgdata.py file checks the Eddie diagnostics on the webpage and
 import logging
 import pytest
 
+from pytest_testrail.plugin import pytestrail
 from diagnostics_mfgdata_page import DiagnosticsPage
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from conf_diagnostics import CONFIG
+
 
 logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.DEBUG, fileLoglevel=logging.DEBUG)
 expected_software_header = CONFIG["expected_text"]["software_version_text"]
 expected_hash_text = CONFIG["expected_text"]["expected_hash_text"]
 
-@pytest.mark.usefixtures('driver', 'device_id', 'device_ip', 'force_rndis')
+@pytestrail.case('C1280890')
+@pytest.mark.usefixtures('save_speaker_log', 'driver', 'device_id', 'device_ip', 'force_rndis')
 def test_diagnostics_mfgdata(driver, device_id, device_ip, riviera, request):
     """
     Navigates to DUT's diagnostics page and verfies the
     Device's information (e.g. Software Version, Manufacturing Data, Display Tests)
+    param save_speaker_log: fixture to capture speaker logs
     param driver: Selenium Webdriver
     param device_id - Fixture to get device id from command line
     param device_ip: Fixture to get device_ip

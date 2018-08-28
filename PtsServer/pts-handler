@@ -103,10 +103,23 @@ def redirect_stderr():
     os.dup2(sys.stdout.fileno(), sys.stderr.fileno())
     sys.stdout.flush()
 
+def is_development():
+    return 0 == subprocess.call(["is-development"])
+
 # ----------------------------------------------------------------------------
 
 if method != "GET":
     http_err()
+
+# ----------------------------------------------------------------------------
+# A way to download Spotify audio data dump files
+if path == "/audio.tar" and is_development():
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    # When the system is in development mode Spotify outputs the OGG Vorbis
+    # audio data files /tmp/spotify-<url id>-<timestamp>.ogg
+    # This can also be enabled with the tap command "spotify debug out"
+    os.execl("/bin/sh", "sh", "-c", "/bin/tar -c /tmp/spotify*.ogg")
 
 # ----------------------------------------------------------------------------
 # Diagnostics pages.
@@ -133,50 +146,37 @@ if path.startswith("/diag/"):
 # ----------------------------------------------------------------------------
 # View the log message buffer.
 
-if path == "/logread.txt":
-    only_for_usb()
-
+if path == "/logread.txt" and is_development():
     http_ok()
     sys.stdout.flush()
-    os.execl("/sbin/logread", "logread")
+    os.execlp("pts-logs", "pts-logs")
 
-# ----------------------------------------------------------------------------
-# View the log message buffer (compressed).
-
-if path == "/logread.txt.gz":
-    only_for_usb()
-
+if path == "/logread.txt.gz" and is_development(): # same but compressed
     http_ok("application/x-gzip")
     sys.stdout.flush()
-    os.execl("/bin/sh", "sh", "-c", "logread | gzip")
+    os.execl("/bin/sh", "sh", "-c", "pts-logs | gzip")
+
+if path == "/logread.dat":      # same but encrypted
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execl("/bin/sh", "sh", "-c", "encrypt-logs pts-logs | gzip")
+
+http_redirect(path, "/logread", "/logread.dat")
 
 # ----------------------------------------------------------------------------
 # View miscellaneous system status information.
 
-if path == "/pts.txt":
-    only_for_usb()
-
-    def call(*args):
-        print ">", " ".join(args)
-        sys.stdout.flush()
-        subprocess.call(args)
-
+if path == "/pts.txt" and is_development():
     http_ok()
-    redirect_stderr()
-    call("date")
-    call("uptime")
-    call("cat", "/opt/Bose/etc/BoseVersion.json")
-    call("cat", "/persist/mfg_data.json")
-    call("free", "-m")
-    call("ifconfig", "-a")
-    call("ip", "route", "list")
-    call("wpa_cli", "status")
-    call("wpa_cli", "scan_results")
-    call("sh", "-c", "head -20 /mnt/nv/product-persistence/*")
-    call("ls", "-lHt", "/mnt/nv/BoseLog")
-    call("ps")
-    call("ReadLpmVersion")
-    sys.exit()
+    sys.stdout.flush()
+    os.execlp("pts-info", "pts-info")
+
+if path == "/pts.dat":          # same but encrypted
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs pts-info | gzip")
+
+http_redirect(path, "/pts", "/pts.dat")
 
 # ----------------------------------------------------------------------------
 # Force the system into reflash mode (QFIL).
@@ -257,6 +257,25 @@ if path == "/controller-version":
     sys.exit()
 
 # ----------------------------------------------------------------------------
+# Clear the "first greeting" flag.
+
+if path == "/clear-first-greeting":
+    only_for_usb()
+
+    http_ok()
+    try:
+        os.remove("/mnt/nv/product-persistence/FirstBootGreetingDone")
+        print "Cleared first greeting."
+        subprocess.call(["sync"])
+    except OSError, e:
+        if e.strerror == "No such file or directory":
+            print "The first greeting was already cleared."
+        else:
+            print "Unable to clear first greeting:", e.strerror
+
+    sys.exit()
+
+# ----------------------------------------------------------------------------
 # Open source license documents.
 # The customer end-user documentation references this URL path.
 
@@ -269,6 +288,159 @@ http_redirect(path.lower(), "/opensource/", "/licenses.txt")
 if path == "/service" or path.startswith("/service?"):
     prog = "/opt/Bose/etc/service"
     os.execv(prog, [prog, path[len("/service?"):]])
+
+# ----------------------------------------------------------------------------
+# Development links.
+
+if path == "/dev" and is_development():
+    http_ok("text/html")
+    print """\
+<html>
+<head>
+<title>Development Links</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+ td {
+   padding: 3px;
+ }
+ tr.even {
+   background-color: lightgrey;
+ }
+ span.error {
+   color: red;
+ }
+ td.iface {
+   text-align: center;
+ }
+</style>
+
+<script>
+
+function set_address() {
+  var ain = document.getElementById("address");
+  var address = ain.value.trim();
+  var err = "";
+  if (address.match(/^[-\w.]+$/)) {
+    var anchors = document.getElementsByTagName("a");
+    for (var i = anchors.length; --i >= 0;) {
+      a = anchors[i];
+      a.href = "http://" + address + a.text;
+    }
+  }
+  else {
+    err = "(malformed)";
+  }
+  document.getElementById("error").textContent = err;
+  ain.setSelectionRange(0, ain.value.length);
+}
+
+</script>
+</head>
+<body onload="set_address()">
+<h1>Development Links</h1>
+"""
+
+    print """\
+<p>
+Address:
+<input type="text" id="address" value="{local_address}" onchange="set_address()">
+<span class="error" id="error"/>
+""".format(local_address=os.environ.get("LOCAL_ADDRESS", ""))
+
+    print """\
+<p>
+<table>
+  <tr>
+    <th>Interface</th>
+    <th>Endpoint</th>
+    <th>Description</th>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/diag</a></td>
+    <td>Quality Audit</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/logread.txt</a></td>
+    <td>A snapshot of the system log ring buffer*</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">any</td>
+    <td><a>/logread.txt.gz</a></td>
+    <td>Same as /logread.txt but compressed*</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/pts.txt</a></td>
+    <td>Various Linux and system status information (e.g., ifconfig)*</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">any</td>
+    <td><a>/pts.dat</a></td>
+    <td>Same as /pts.txt but encrypted</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/logread.dat</a></td>
+    <td>Same as /logread.txt but encrypted</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/reflash</a></td>
+    <td>Force the unit into reflash mode (QFIL)</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">usb</td>
+    <td><a>/bose-version</a></td>
+    <td>/opt/Bose/etc/BoseVersion.json</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/kernel-version</a></td>
+    <td>/etc/riviera-version</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">usb</td>
+    <td><a>/validate-mfgdata</a></td>
+    <td>Check the manufacturing data</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/controller-version</a></td>
+    <td>The LPM version strings</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">usb</td>
+    <td><a>/clear-first-greeting</a></td>
+    <td>Clear the flag indicating the unit's first boot</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">any</td>
+    <td><a>/opensource</a></td>
+    <td>The licenses of open source software used in the system</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/service</a></td>
+    <td>Remanufacturing. Only in service mode</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb, wlan1</td>
+    <td><a>/</a>, <a>/index.html</a></td>
+    <td>Wi-Fi setup</td>
+  </tr>
+</table>
+
+<p>
+* Only in development mode.
+
+</body>
+</html>
+"""
+    sys.exit()
 
 # ----------------------------------------------------------------------------
 # Serve static content.
