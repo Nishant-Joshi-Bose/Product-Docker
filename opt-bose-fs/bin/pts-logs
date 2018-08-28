@@ -12,3 +12,5 @@ fi
 logread
 printf "\n\f\n> dmesg\n"
 dmesg
+printf "\n\f\n"
+pts-info
