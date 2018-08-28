@@ -16,7 +16,7 @@ export DONT_UPDATE_CASTLETOOLS=1
 export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 deploy || exit
 
-if [ "$[BuildType]" = "Release" ]; then
+if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then
     git clone git@github.com:BoseCorp/iot-profile-creator
     for env in alpha latest integration stage; do
         python2.7 iot-profile-creator/update_product_profile.py --p eddie --v $[Version] --e $env --s $(ectool getFullCredential IoT-Profile-Password --value password)
