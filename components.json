@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/upgrade-components-22/2.1.0-690+40bd95e"
+    "selected_version": "Continuous/upgrade-components-22/2.1.0-698+de3968f"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/upgrade-components-22/2.1.0-690+40bd95e"
+    "selected_version": "Continuous/upgrade-components-22/2.1.0-698+de3968f"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-23_1816"
+    "selected_version": "Continuous/Castle-Fork/2018-08-29_0306"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -21,7 +21,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-84+4911ec4"
+    "selected_version": "Continuous/master/2.1.0-87+3f1dccb"
   },
   {
     "name": "Bluetooth-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/2.1.1-544+8a715ee"
+    "selected_version": "Release/master/2.1.2-563+5a1af67"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "opensource-libwebsockets-qc8017_32",
-    "selected_version": "Release/bose-v2.4-stable/2.4.1-37+g30d85f6"
+    "selected_version": "Release/bose-v2.4-stable/2.4.1-41+gad9e345"
   },
   {
     "name": "opensource-zlib-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-115+9d010ab"
+    "selected_version": "Continuous/master/2.1.0-118+cf6c585"
   },
   {
     "name": "ProductUIAssets",
@@ -209,11 +209,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.1.1-855+ed4871d"
+    "selected_version": "Continuous/master/2.1.1-863+f1e2885"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-23_1816"
+    "selected_version": "Continuous/Castle-Fork/2018-08-29_0306"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@0b13d86858e5ae7b6aae25177a24b65992786e77"
+    "selected_version": "master@29af0e06c0cd92ceeec862610725ed029d46d963"
   },
   {
     "name": "Webkit",
