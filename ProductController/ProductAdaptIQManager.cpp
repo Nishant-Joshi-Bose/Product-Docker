@@ -66,7 +66,8 @@ ProductAdaptIQManager::ProductAdaptIQManager( CustomProductController& ProductCo
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
-    m_ProductAudioService( ProductController.GetProductAudioServiceInstance( ) )
+    m_ProductAudioService( ProductController.GetProductAudioServiceInstance( ) ),
+    m_FrontDoorClient( ProductController.GetFrontDoorClient( ) )
 {
     m_status.set_smstate( "AIQ_STATE_NOT_RUNNING" );
     m_status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
@@ -89,8 +90,6 @@ ProductAdaptIQManager::ProductAdaptIQManager( CustomProductController& ProductCo
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::Run( )
 {
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductAdaptIQManager" );
-
     auto lpmFunc = [ this ]( bool connected )
     {
         SetLpmConnectionState( connected );

@@ -61,7 +61,7 @@ endif
 USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
 KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
 LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
-INTENT_DEFS=$(PWD)/ProductController/source/IntentHandler/Intents.h
+INTENT_DEFS=$(PWD)/ProductController/IntentHandler/Intents.h
 KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
 
 .PHONY: keyconfig

@@ -75,7 +75,7 @@ ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& Produ
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::InitializeFrontDoor( )
 {
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductBLERemoteManager" );
+    auto frontDoorClient = m_ProductController.GetFrontDoorClient();
 
     auto handleNowSelection = [ this ]( const SoundTouchInterface::NowSelectionInfo & nowSelection )
     {
@@ -83,8 +83,8 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
     };
 
     AsyncCallback< SoundTouchInterface::NowSelectionInfo > nowSelCb( handleNowSelection, m_ProductTask );
-    m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb );
-    m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb, {} );
+    frontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb );
+    frontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb, {} );
 
     //System power control notification registration and callback handling
     auto handleSystemPowerControl = [this]( SystemPowerPb::SystemPowerControl systemPowerControlState )
@@ -100,8 +100,8 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
     };
     //System power control get registration
     AsyncCallback< SystemPowerPb::SystemPowerControl > powerCb( handleSystemPowerControl, m_ProductTask );
-    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
-    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
+    frontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
+    frontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

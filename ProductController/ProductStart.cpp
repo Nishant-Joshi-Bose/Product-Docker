@@ -52,33 +52,6 @@ DPrint& GetProductLogger()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProcessShutDown
-///
-/// @brief  This function is called whenever a termination signal by the system or by the user
-///         (typically through a Ctrl+c key press) is received. Any actions that need to be taken
-///         when the product controller shuts down should be handled from this function.
-///
-/// @param  int signal This integer argument stores the type of Linux signal sent.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProcessShutDown( int signal )
-{
-    if( signal == SIGTERM )
-    {
-        exit( EXIT_SUCCESS );
-    }
-    else if( signal == SIGINT )
-    {
-        exit( EXIT_SUCCESS );
-    }
-    else
-    {
-        exit( EXIT_FAILURE );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ShowBacktrace
 ///
 /// @brief  This function attempts to print out the stack after a memory violation segmentation
@@ -136,8 +109,6 @@ int main( int argumentCount, char** argumentValue )
 {
     try
     {
-        signal( SIGTERM, ProcessShutDown );
-        signal( SIGINT,  ProcessShutDown );
         signal( SIGSEGV, ShowBacktrace );
         signal( SIGPIPE, SIG_IGN );
 
