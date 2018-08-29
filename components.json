@@ -21,7 +21,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-91+56d78f5"
+    "selected_version": "Release/SOS/2.0.2-92+38c5a69"
   },
   {
     "name": "bose-opkg-utils",
@@ -157,11 +157,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@0a96eba39da73a404a80223e11b9b2708b2a228f"
+    "selected_version": "SOS@c98e4c4fbd0f9e062158563934703345dec0791e"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-122+0a96eba"
+    "selected_version": "Release/SOS/2.0.0-123+c98e4c4"
   },
   {
     "name": "ProductUIAssets",
