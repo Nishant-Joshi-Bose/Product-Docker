@@ -608,7 +608,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create Product tarball for QFIL / full system flash via product_flash.')
     parser.add_argument('-n', '--name', 
                          default = "",
-                         help="Product Name e.g. Eddie")       
+                         help="Product code name")
     parser.add_argument('-w', '--workspace', 
                          metavar="DIR",                         
                          required=False, 
