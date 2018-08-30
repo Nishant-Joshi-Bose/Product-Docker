@@ -13,7 +13,7 @@
   <speakerType>5</speakerType>
   <swUpdateDeviceId>0x0939</swUpdateDeviceId>
   <swUpdateXmlFilePath>/opt/Bose/etc/SCM_Update.xml</swUpdateXmlFilePath>
-  <variantName>eddie</variantName>
+  <variantName>taylor</variantName>
   <volume thresholdLow="10"
           thresholdHigh="70"
           defaultValue="50"/>
