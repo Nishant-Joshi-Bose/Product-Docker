@@ -103,7 +103,7 @@ if ai is None or not re.match(r'^\d+$', ai): # allow any integer
 pn = get("productName")
 if not pn: # allow any non-empty string
     warn("Invalid productName:", pn)
-    fixes.append("set productName 'Bose Home Speaker 500'")
+    fixes.append("set productName 'Bose Home Speaker TBD'")
 
 pt = get("productType")
 if not pt: # allow any non-empty string

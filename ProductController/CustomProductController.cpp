@@ -346,7 +346,7 @@ std::string CustomProductController::GetDefaultProductName() const
     std::string productName;
     if( !IsDevelopmentMode() )
     {
-        productName = "Bose Home Speaker 500";
+        productName = "Bose Home Speaker TBD";
     }
     else
     {
