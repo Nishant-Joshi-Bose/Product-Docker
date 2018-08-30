@@ -232,9 +232,12 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::RebroadcastLatencyCallback( uint32_t latency )
 {
-    BOSE_DEBUG( s_logger, __func__ );
-    m_MainStreamAudioSettings.set_networklatencyms( latency );
-    SendMainStreamAudioSettingsEvent();
+    BOSE_DEBUG( s_logger, "%s: latency = %d", __func__, latency );
+    if( latency != m_MainStreamAudioSettings.networklatencyms() )
+    {
+        m_MainStreamAudioSettings.set_networklatencyms( latency );
+        SendMainStreamAudioSettingsEvent();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
