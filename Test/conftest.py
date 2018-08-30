@@ -23,6 +23,7 @@ import time
 import pytest
 import pexpect
 
+from pytest_testrail.plugin import pytestrail
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
@@ -39,6 +40,8 @@ from bootsequencing.stateutils import network_checker, UNKNOWN
 from services import SERVICES
 from ProductControllerAPI import eddie_helper
 
+
+from Test.testrail import retrieve_test_cases
 
 LOGGER = get_logger(__name__)
 
@@ -102,6 +105,18 @@ def pytest_addoption(parser):
                      default="integration",
                      help="Pass the Galapagos environment for frontdoor api object")
 
+@pytest.hookimpl
+def pytest_collection_modifyitems(items):
+    """
+    Python hook function - https://docs.pytest.org/en/latest/writing_plugins.html
+    items - The list of collected test items
+    """
+    tests = retrieve_test_cases()
+    for item in items:
+        for test in tests:
+            for testid, testname in test.iteritems():
+                if item.name == testname:
+                    item.add_marker(pytestrail.case(testid))
 
 def ping(ip):
     """ Pings a given IP Address """
