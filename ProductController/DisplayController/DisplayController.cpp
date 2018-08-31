@@ -29,7 +29,7 @@
 #include "MonotonicClock.h"
 
 static DPrint s_logger( "DisplayController" );
-using namespace ::DisplayController::Protobuf;
+using namespace ::DisplayControllerPb;
 
 namespace ProductApp
 {
