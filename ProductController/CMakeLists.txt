@@ -86,6 +86,7 @@ TARGET_LINK_LIBRARIES(Professor
   LpmClient
   HttpInterface
   FrontDoorClient
+  NetworkServiceUtils
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
