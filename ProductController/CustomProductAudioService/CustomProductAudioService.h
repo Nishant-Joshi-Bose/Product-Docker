@@ -72,6 +72,7 @@ private:
     void GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb );
     void SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb );
     void InternalMuteCallback( bool mute );
+    void RebroadcastLatencyCallback( uint32_t latency );
     void SendMainStreamAudioSettingsEvent();
     void ThermalDataReceivedCb( IpcSystemTemperatureData_t data );
 
