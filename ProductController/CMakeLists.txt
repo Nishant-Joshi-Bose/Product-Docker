@@ -67,6 +67,7 @@ TARGET_LINK_LIBRARIES(ProductController
   LpmClient
   HttpInterface
   FrontDoorClient
+  NetworkServiceUtils
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
