@@ -13,11 +13,11 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-04_1529"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-04_1842"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-204+396ae59"
+    "selected_version": "Release/SOS/2.0.2-205+6883aaa"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
@@ -57,11 +57,11 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-257+13f5874"
+    "selected_version": "Release/SOS/2.0.2-260+1c288e1"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-115+d4845b5"
+    "selected_version": "Release/SOS/2.0.2-117+42d07dd"
   },
   {
     "name": "CastleLibs-native",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-145+7816718"
+    "selected_version": "Release/SOS/2.0.0-146+96c277c"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -201,7 +201,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-673+6a4fe1c"
+    "selected_version": "Release/SOS/2.0.0-675+32d8b7d"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-04_1529"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-04_1842"
   },
   {
     "name": "svc-pts-log-decrypt",
