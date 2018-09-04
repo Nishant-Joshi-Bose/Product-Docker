@@ -1,6 +1,7 @@
 <ShepherdConfig>
 
-  <daemon name="ProductController"/>
+  <daemon name="ProductController"
+          recovery="reboot"/>
 
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
