@@ -117,7 +117,7 @@ riviera_version = ""
     For this simple script, relative path variables are not taken as input 
     e.g. $workspace/builds/Release has builds/Release hardcoded 
 '''
-def create_stage(name, workspace):
+def create_stage(workspace):
     global riviera_hsp_images_dir
     global riviera_tools_dir
     global riviera_version
@@ -703,9 +703,6 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
             
     parser = argparse.ArgumentParser(description='Create Product tarball for QFIL / full system flash via product_flash.')
-    parser.add_argument('-n', '--name', 
-                         default = "",
-                         help="Product Name e.g. Eddie")       
     parser.add_argument('-w', '--workspace', 
                          metavar="DIR",                         
                          required=False, 
@@ -728,15 +725,11 @@ if __name__ == '__main__':
                          
     args = parser.parse_args()
     del parser
-    name = args.name
     ''' set path of <this script dir>/../ as workspace '''
     workspace = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     is_without_lpm = args.without_lpm
     is_development = args.development
     ipksList = args.ipks
-    if len(name):
-        logging.error("Name needs to have 1 or more characters")
-        sys.exit(-1)
         
     if not os.path.exists(workspace):
         logging.error("workspace [%s] does not exist" %(workspace))
