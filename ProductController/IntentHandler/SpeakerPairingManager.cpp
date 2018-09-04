@@ -495,6 +495,9 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     m_accessoryListReceived = true;
 
+    LpmServiceMessages::IpcAccessoryList_t oldAccessorySpeakerState;
+    oldAccessorySpeakerState.CopyFrom( m_accessorySpeakerState );
+
     m_accessorySpeakerState.clear_rears( );
     m_accessorySpeakerState.clear_subs( );
 
@@ -553,11 +556,15 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     }
 
     SendAccessoryPairingStateToProduct();
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
 
-    GetProductController().GetDataCollectionClient()->SendData(
-        std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
-        DATA_COLLECTION_ACCESSORIES );
+    if( oldAccessorySpeakerState.SerializeAsString() != m_accessorySpeakerState.SerializeAsString() )
+    {
+        m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
+
+        GetProductController().GetDataCollectionClient()->SendData(
+            std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
+            DATA_COLLECTION_ACCESSORIES );
+    }
 
     ProductMessage productMessage;
     productMessage.set_accessoriesareknown( true );
@@ -760,7 +767,17 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
     }
 
     // If it is expected it went missing so need to show it isn't availible
-    spkrInfo->set_available( accDesc.status( ) != LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED );
+    switch( accDesc.status() )
+    {
+    case LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED:
+    case LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS:
+    case LpmServiceMessages::ACCESSORY_CONNECTION_WIRED:
+        spkrInfo->set_available( true );
+        break;
+    default:
+        spkrInfo->set_available( false );
+        break;
+    }
 
     if( accDesc.has_status( ) && ( ( accDesc.status( ) == LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS ) ||
                                    ( accDesc.status( ) == LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED ) ) )
