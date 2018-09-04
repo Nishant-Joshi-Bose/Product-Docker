@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.13-885+c890b12"
+    "selected_version": "Release/SOS/2.0.14-908+93b25b6"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/SOS/2.0.13-885+c890b12"
+    "selected_version": "Release/SOS/2.0.14-908+93b25b6"
   },
   {
     "name": "AudioSource-qc8017_32",
