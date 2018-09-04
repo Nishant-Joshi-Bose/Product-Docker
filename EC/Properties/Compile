@@ -16,6 +16,7 @@ export DONT_UPDATE_CASTLETOOLS=1
 export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 hw_var=Alpha deploy || exit
 
+set +x
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then
     git clone git@github.com:BoseCorp/iot-profile-creator
     for env in alpha latest integration stage; do
