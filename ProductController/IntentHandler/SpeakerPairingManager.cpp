@@ -557,10 +557,10 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     SendAccessoryPairingStateToProduct();
 
-    if( oldAccessorySpeakerState.SerializeAsString() != m_accessorySpeakerState.SerializeAsString() )
-    {
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
 
+    if( oldAccessorySpeakerState.SerializeAsString() != m_accessorySpeakerState.SerializeAsString() )
+    {
         GetProductController().GetDataCollectionClient()->SendData(
             std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
             DATA_COLLECTION_ACCESSORIES );
