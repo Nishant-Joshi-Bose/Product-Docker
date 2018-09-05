@@ -198,7 +198,8 @@ CustomProductController::CustomProductController( ) :
                                        GetProductSoftwareInstallManager( ),
                                        GetProductSoftwareInstallScheduler( ) )
 {
-
+    m_radioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
+    m_radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1436,23 +1437,25 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
             message.wirelessstatus( ).frequencykhz( ) >= 0 )
         {
             IpcRadioStatus_t radioStatus;
-            radioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
-            radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+            radioStatus.set_status( m_radioStatus.status() );
+            radioStatus.set_band( m_radioStatus.band( ) );
 
-            if( message.wirelessstatus( ).frequencykhz( ) > 0 and
-                message.wirelessstatus().frequencykhz( ) < 2500000 )
+            BOSE_INFO( s_logger, "Got freq %d with m_radioStatus %s.", message.wirelessstatus( ).frequencykhz( ), m_radioStatus.ShortDebugString().c_str() );
+
+            if( message.wirelessstatus( ).frequencykhz( ) > 2300000 and
+                message.wirelessstatus().frequencykhz( ) < 2600000 )
             {
                 radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
                 radioStatus.set_band( IPC_SOC_RADIO_BAND_24 );
             }
-            else if( message.wirelessstatus( ).frequencykhz( ) >= 5100000 and
-                     message.wirelessstatus( ).frequencykhz( ) >= 5200000 )
+            else if( message.wirelessstatus( ).frequencykhz( ) >= 5000000 and
+                     message.wirelessstatus( ).frequencykhz( ) <= 5300000 )
             {
                 radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
                 radioStatus.set_band( IPC_SOC_RADIO_BAND_52 );
             }
-            else if( message.wirelessstatus( ).frequencykhz( ) >= 5700000 and
-                     message.wirelessstatus( ).frequencykhz( ) >= 5800000 )
+            else if( message.wirelessstatus( ).frequencykhz( ) >= 5600000 and
+                     message.wirelessstatus( ).frequencykhz( ) <= 5900000 )
             {
                 radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
                 radioStatus.set_band( IPC_SOC_RADIO_BAND_58 );
@@ -1474,15 +1477,32 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Handle network operationalmode at this point
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.networkstatus().has_wifiapstate() )
+    else if( message.has_networkstatus() )
     {
-        if( message.networkstatus().wifiapstate() )
+        if( message.networkstatus().has_wifiapstate() )
         {
-            GetLpmHardwareInterface()->SetAmp( true, true );
+            if( message.networkstatus().wifiapstate() )
+            {
+                GetLpmHardwareInterface()->SetAmp( true, true );
+            }
+            else
+            {
+                GetLpmHardwareInterface()->SetAmp( true, false );
+            }
         }
-        else
+
+        // if wired we need to update lpm
+        if( GetNetworkServiceUtil().IsNetworkWired() )
         {
-            GetLpmHardwareInterface()->SetAmp( true, false );
+            m_radioStatus.set_status( IPC_SOC_NETWORKSTATUS_ETHERNET );
+            m_radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+            m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
+        }
+        else if( not GetNetworkServiceUtil().IsNetworkConnected() )
+        {
+            m_radioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
+            m_radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+            m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
         }
 
         ( void ) HandleCommonProductMessage( message );
