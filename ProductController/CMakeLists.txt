@@ -40,7 +40,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
-  ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
   AccessorySoftwareInstallManager.cpp
@@ -86,6 +85,7 @@ TARGET_LINK_LIBRARIES(Professor
   LpmClient
   HttpInterface
   FrontDoorClient
+  NetworkServiceUtils
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto

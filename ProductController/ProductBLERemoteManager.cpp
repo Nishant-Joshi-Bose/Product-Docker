@@ -146,21 +146,25 @@ void ProductBLERemoteManager::Run( )
         UpdateAvailableSources( sources );
     } );
 
-    // TODO this is a hack for the fact that RCS doesn't provide a status notification, and
-    // callers of IsConnected probably want to know right away (i.e. no callback), so we poll
-    // for now; this will be replaced when a status notification is available
     m_statusTimer->SetTimeouts( 1000, 1000 );
     m_statusTimer->Start( [ = ]( )
     {
-        auto cb = [ = ]( RCS_PB_MSG::PairingNotify n )
+        AsyncCallback<RCS_PB_MSG::PairingNotify> cb(
+            [ = ]( RCS_PB_MSG::PairingNotify n )
         {
+            auto wasRemoteConnected = m_remoteConnected;
             m_remoteConnected = n.has_status() && ( n.status() == RemoteStatus::PSTATE_BONDED );
+            if( m_remoteConnected && !wasRemoteConnected )
+            {
+                UpdateBacklight( );
+            }
+
             if( n.has_status() )
             {
                 m_remoteStatus = n.status();
                 CheckPairing( );
             }
-        };
+        }, m_ProductTask );
         m_RCSClient->Pairing_GetStatus( cb );
     } );
 
