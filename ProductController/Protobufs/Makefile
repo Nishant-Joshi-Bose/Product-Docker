@@ -12,7 +12,6 @@ PROTO_SOURCES = \
   LightBarController.proto  \
   ProductMessage.proto      \
   KeyActions.proto          \
-  DisplayController.proto   \
   Treble.proto              \
   AudioSettings.proto       \
   KeyNames.proto            \
