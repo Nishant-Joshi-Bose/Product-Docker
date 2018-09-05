@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-04_1842"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.9.43658.2985386"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -21,7 +21,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-97+11dee8f"
+    "selected_version": "Release/SOS/2.0.2-98+5bc8d85"
   },
   {
     "name": "bose-opkg-utils",
@@ -157,11 +157,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@7ec6da69d45b5f2cad5fe491c58f8c6cf79b0f40"
+    "selected_version": "SOS@bffb087c3e29c8d701e6d94114a7542cba7b20e5"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-132+61d38ac"
+    "selected_version": "Release/SOS/2.0.0-133+bffb087"
   },
   {
     "name": "ProductUIAssets",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-04_1842"
+    "selected_version": "Release/Castle-Fork-SOS/2.0.9.43658.2985386"
   },
   {
     "name": "svc-pts-log-decrypt",
