@@ -20,7 +20,6 @@ PROTO_SOURCES = ProductMessage.proto          \
                 HdmiEdid.proto                \
                 SystemPowerProduct.proto      \
                 KeyNames.proto                \
-                DisplayController.proto       \
                 SystemPowerMacro.proto        \
                 DataCollectionCecState.proto  \
 
