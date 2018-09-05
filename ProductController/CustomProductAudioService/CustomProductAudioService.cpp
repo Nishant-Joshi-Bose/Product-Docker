@@ -64,9 +64,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 
     {
         Callback< std::string, Callback< std::string, std::string > > callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
-                                                                                this,
-                                                                                std::placeholders::_1,
-                                                                                std::placeholders::_2 ) );
+                                                                                this, _1, _2 ) );
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
     ConnectToAudioPath();
