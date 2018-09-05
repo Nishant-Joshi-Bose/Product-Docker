@@ -436,8 +436,8 @@ void SpeakerPairingManager::SetSpeakersEnabledCallback( const Callback<ProductPb
     frontDoorCB( m_accessorySpeakerState );
 
     GetProductController().GetDataCollectionClient()->SendData(
-            std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
-            DATA_COLLECTION_ACCESSORIES );
+        std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
+        DATA_COLLECTION_ACCESSORIES );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -561,7 +561,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     SendAccessoryPairingStateToProduct();
 
-        m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
 
     if( oldAccessorySpeakerState.SerializeAsString() != m_accessorySpeakerState.SerializeAsString() )
     {
@@ -775,10 +775,12 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
     {
     case LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS:
     case LpmServiceMessages::ACCESSORY_CONNECTION_WIRED:
+    case LpmServiceMessages::ACCESSORY_CONNECTION_BOTH:
         spkrInfo->set_available( true );
         break;
     case LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED:
-    default:
+    case LpmServiceMessages::ACCESSORY_CONNECTION_LEGACY_PAIRING:
+    case LpmServiceMessages::ACCESSORY_CONNECTION_NONE:
         spkrInfo->set_available( false );
         break;
     }
