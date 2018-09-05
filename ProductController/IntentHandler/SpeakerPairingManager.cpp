@@ -773,11 +773,11 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
     // If it is expected it went missing so need to show it isn't availible
     switch( accDesc.status() )
     {
-    case LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED:
     case LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS:
     case LpmServiceMessages::ACCESSORY_CONNECTION_WIRED:
         spkrInfo->set_available( true );
         break;
+    case LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED:
     default:
         spkrInfo->set_available( false );
         break;
