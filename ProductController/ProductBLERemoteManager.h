@@ -93,33 +93,22 @@ public:
         m_poweredOn = false;
         UpdateBacklight( );
     }
-    void EnterSetup( )
-    {
-        m_inSetup = true;
-        UpdateBacklight( );
-    }
-    void ExitSetup( )
-    {
-        m_inSetup = false;
-        UpdateBacklight( );
-    }
-
 
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
     /// is passed by the ProductController instance.../CastleProductControllerCommon/ProductController.cpp:
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*             m_ProductTask       = nullptr;
-    Callback< ProductMessage >      m_ProductNotify     = nullptr;
+    NotifyTargetTaskIF*             m_ProductTask           = nullptr;
+    Callback< ProductMessage >      m_ProductNotify         = nullptr;
     CustomProductController&        m_ProductController;
     APTimerPtr                      m_statusTimer;
-    bool                            m_remoteConnected   = false;
-    bool                            m_pairingPending    = false;
-    RemoteStatus::PairingStatus     m_remoteStatus      = RemoteStatus::PSTATE_UNKNOWN;
-    const int                       m_PairingTimeout    = 7200;
-    bool                            m_poweredOn         = false;
-    bool                            m_inSetup           = false;
+    bool                            m_remoteConnected       = false;
+    bool                            m_pairingPending        = false;
+    RemoteStatus::PairingStatus     m_remoteStatus          = RemoteStatus::PSTATE_UNKNOWN;
+    const int                       m_PairingTimeout        = 7200;
+    bool                            m_poweredOn             = false;
+    bool                            m_sourceSelectAllowed   = true;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -135,7 +124,7 @@ private:
     void InitializeRCS();
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
     void UpdateBacklight( );
-    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available );
+    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available ) const;
     void CheckPairing( void );
     void GetZoneLEDs( RCS_PB_MSG::LedsRawMsg_t& leds );
 };
