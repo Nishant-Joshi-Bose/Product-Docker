@@ -31,8 +31,7 @@ constexpr char kTrebleEndPoint          [] = "/audio/treble";
 
 namespace ProductApp
 {
-/*!
- */
+
 CustomProductAudioService::CustomProductAudioService( CustomProductController& productController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
@@ -48,15 +47,10 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& p
     BOSE_DEBUG( s_logger, __func__ );
 }
 
-/*!
- */
 CustomProductAudioService::~CustomProductAudioService()
 {
-
 }
 
-/*!
- */
 void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -78,8 +72,6 @@ void CustomProductAudioService::RegisterAudioPathEvents()
     ConnectToAudioPath();
 }
 
-/*!
- */
 void CustomProductAudioService::RegisterFrontDoorEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -207,8 +199,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                              FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
 }
 
-/*!
- */
 void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem, const Callback<std::string, std::string> cb )
 {
     //BOSE_DEBUG( s_logger, __func__ );
@@ -246,8 +236,6 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     cb.Send( mainStreamAudioSettings, "" );
 }
 
-/*!
- */
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, true );
@@ -256,8 +244,6 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
     BOSE_INSANE( s_logger, "SendMainStreamAudioSettingsEvent %s", mainStreamAudioSettings.c_str() );
 }
 
-/*!
- */
 void CustomProductAudioService::FetchLatestAudioSettings( )
 {
     m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
@@ -266,8 +252,6 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
     m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
 }
 
-/*!
- */
 void CustomProductAudioService::ThermalDataReceivedCb( IpcSystemTemperatureData_t data )
 {
     int16_t ampTemp = INT16_MAX;
@@ -298,8 +282,6 @@ void CustomProductAudioService::ThermalDataReceivedCb( IpcSystemTemperatureData_
     }
 }
 
-/*!
- */
 void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 {
     if( enabled )
@@ -312,8 +294,6 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     }
 }
 
-/*!
- */
 EddieAudioSettings_t_AudioMode CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
     if( modeName == "DIALOG" )
