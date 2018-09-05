@@ -434,6 +434,10 @@ void SpeakerPairingManager::SetSpeakersEnabledCallback( const Callback<ProductPb
     }
 
     frontDoorCB( m_accessorySpeakerState );
+
+    GetProductController().GetDataCollectionClient()->SendData(
+            std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
+            DATA_COLLECTION_ACCESSORIES );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
