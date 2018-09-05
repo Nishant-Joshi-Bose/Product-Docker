@@ -227,7 +227,7 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | Interface | Endpoint | Description |
 | -------- | -------- | ----------- |
 | usb | /diag | Quality Audit |
-| any | /logread.txt | A snapshot of the system log ring buffer * |
+| any | /logread.txt | A snapshot of the system log ring buffer, dmesg and pts.txt * |
 | any | /logread.txt.gz | Same as /logread.txt but compressed * |
 | any | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
 | any | /pts.dat | Same as /pts.txt but encrypted ** |
