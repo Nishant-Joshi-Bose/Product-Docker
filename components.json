@@ -169,11 +169,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/2.0.0-1024+a8dc703"
+    "selected_version": "Release/master/2.1.0-1058+8c07f90"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/2.0.0-1012+43fc428"
+    "selected_version": "Release/master/2.1.0-1021+8c07f90"
   },
   {
     "name": "ProductControllerCommon",

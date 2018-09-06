@@ -68,7 +68,6 @@ void CustomProductControllerStatePlayingSelectedSetup::HandleStateEnter()
     ProductControllerStatePlayingSelectedSetup::HandleStateEnter();
 
     GetCustomProductController().PossiblyPairBLERemote();
-    GetCustomProductController( ).GetBLERemoteManager( )->EnterSetup( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +82,6 @@ void CustomProductControllerStatePlayingSelectedSetup::HandleStateExit()
     GetCustomProductController().StopPairingBLERemote();
 
     ProductControllerStatePlayingSelectedSetup::HandleStateExit();
-    GetCustomProductController( ).GetBLERemoteManager( )->ExitSetup( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
