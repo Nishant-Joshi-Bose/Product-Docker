@@ -435,9 +435,8 @@ void SpeakerPairingManager::SetSpeakersEnabledCallback( const Callback<ProductPb
 
     frontDoorCB( m_accessorySpeakerState );
 
-    GetProductController().GetDataCollectionClient()->SendData(
-        std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
-        DATA_COLLECTION_ACCESSORIES );
+    GetProductController().GetDataCollectionClient()->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ), 
+                                                                DATA_COLLECTION_ACCESSORIES );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -565,9 +564,8 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     if( oldAccessorySpeakerState.SerializeAsString() != m_accessorySpeakerState.SerializeAsString() )
     {
-        GetProductController().GetDataCollectionClient()->SendData(
-            std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
-            DATA_COLLECTION_ACCESSORIES );
+        GetProductController().GetDataCollectionClient()->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ), 
+                                                                    DATA_COLLECTION_ACCESSORIES );
     }
 
     ProductMessage productMessage;
@@ -770,7 +768,7 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
         spkrInfo->set_type( AccessoryTypeToString( accDesc.type( ) ) );
     }
 
-    // If it is expected it went missing so need to show it isn't availible
+
     switch( accDesc.status() )
     {
     case LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS:
@@ -778,9 +776,9 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
     case LpmServiceMessages::ACCESSORY_CONNECTION_BOTH:
         spkrInfo->set_available( true );
         break;
-    case LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED:
-    case LpmServiceMessages::ACCESSORY_CONNECTION_LEGACY_PAIRING:
-    case LpmServiceMessages::ACCESSORY_CONNECTION_NONE:
+    case LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED:       // Expected accessory but haven't heard from it
+    case LpmServiceMessages::ACCESSORY_CONNECTION_LEGACY_PAIRING: // This is a half paired state used for very old accessories
+    case LpmServiceMessages::ACCESSORY_CONNECTION_NONE:           // Not connected at all
         spkrInfo->set_available( false );
         break;
     }
