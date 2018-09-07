@@ -1434,13 +1434,11 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         /// interference between the WiFi and in-room radio.
         ///
         if( message.wirelessstatus( ).has_frequencykhz( ) and
-            message.wirelessstatus( ).frequencykhz( ) >= 0 )
+            message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
             IpcRadioStatus_t radioStatus;
             radioStatus.set_status( m_radioStatus.status() );
             radioStatus.set_band( m_radioStatus.band( ) );
-
-            BOSE_INFO( s_logger, "Got freq %d with m_radioStatus %s.", message.wirelessstatus( ).frequencykhz( ), m_radioStatus.ShortDebugString().c_str() );
 
             if( message.wirelessstatus( ).frequencykhz( ) > 2300000 and
                 message.wirelessstatus().frequencykhz( ) < 2600000 )
@@ -1481,14 +1479,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     {
         if( message.networkstatus().has_wifiapstate() )
         {
-            if( message.networkstatus().wifiapstate() )
-            {
-                GetLpmHardwareInterface()->SetAmp( true, true );
-            }
-            else
-            {
-                GetLpmHardwareInterface()->SetAmp( true, false );
-            }
+            GetLpmHardwareInterface( )->SetAmp( true, message.networkstatus( ).wifiapstate( ) );
         }
 
         // if wired we need to update lpm
