@@ -100,12 +100,18 @@ ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mo
     BOSE_DEBUG( s_logger, __func__ );
     if( !mode.has_value() )
     {
+        BOSE_INFO( s_logger, "Mode doesn't contain any value (%s)", mode.DebugString().c_str() );
         return ResultCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( mode.value(),
-                         m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"] ) )
+                         m_audioSettings["audioSettingValues"][kModeName][kProperties]["supportedValues"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
+    }
+    // /audio/mode's persistence level is default to "CONTENT_ITEM"
+    if( !mode.has_persistence() )
+    {
+        mode.set_persistence( kPersistContentItem );
     }
     return SetAudioProperties( mode, kModeName, m_currentMode );
 }
