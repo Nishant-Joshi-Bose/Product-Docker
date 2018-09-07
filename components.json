@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-07_0936"
+    "selected_version": "Continuous/Castle-Fork/2018-09-07_1007"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -77,7 +77,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/2.1.1-114+69dbc72"
+    "selected_version": "Continuous/master/2.2.0-119+51cc80e"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/2.1.1-123+fc85ade"
+    "selected_version": "Continuous/master/2.2.0-128+1cf048e"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -205,7 +205,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/2.1.0-114+9e3e230"
+    "selected_version": "Continuous/master/2.2.0-122+26ba242"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-07_0936"
+    "selected_version": "Continuous/Castle-Fork/2018-09-07_1007"
   },
   {
     "name": "svc-pts-log-decrypt",
