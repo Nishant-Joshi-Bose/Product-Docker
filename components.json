@@ -9,7 +9,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-170+e4b8261"
+    "selected_version": "Continuous/master/2.2.0-171+7fc95a8"
   },
   {
     "name": "AVS-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-147+9ee21fd"
+    "selected_version": "Release/master/2.2.0-148+9ee21fd"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -101,11 +101,11 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-343+58db6f9"
+    "selected_version": "Continuous/master/2.2.0-344+fa66949"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-136+2c25b37"
+    "selected_version": "Release/master/2.2.0-138+58db6f9"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-128+1cf048e"
+    "selected_version": "Release/master/2.2.0-129+1cf048e"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-134+60cc059"
+    "selected_version": "Release/master/2.2.0-135+60cc059"
   },
   {
     "name": "LightBarController-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-1067+963bf2b"
+    "selected_version": "Continuous/master/2.2.0-1068+8e4669a"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -205,7 +205,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-122+26ba242"
+    "selected_version": "Release/master/2.2.0-123+26ba242"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -221,11 +221,11 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-97+258fa08"
+    "selected_version": "Release/master/2.2.0-98+258fa08"
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-58+45670da"
+    "selected_version": "Continuous/master/2.2.0-59+01187ac"
   },
   {
     "name": "TestUtils",
