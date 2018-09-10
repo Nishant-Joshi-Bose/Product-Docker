@@ -37,11 +37,19 @@ fi
 if $installPending; then
     if [ -e /opt/Bose/.swUpdateCache/backup/install ]; then
         echo "Executing install from backup location"
-        exec /opt/Bose/.swUpdateCache/backup/install "$@"
+        if [ -e /opt/Bose/.swUpdateCache/backup/unshare ]; then
+            exec /opt/Bose/.swUpdateCache/backup/unshare -m /opt/Bose/.swUpdateCache/backup/install "$@"
+        else
+            exec /opt/Bose/.swUpdateCache/backup/install "$@"
+        fi
     fi
     if [ -e /opt/Bose/bin/install ]; then
     	echo "Executing install from normal location"
-        exec /opt/Bose/bin/install "$@"
+        if [ -e /opt/Bose/update/bin/unshare ]; then
+            exec /opt/Bose/update/bin/unshare -m /opt/Bose/bin/install "$@"
+        else
+            exec /opt/Bose/bin/install "$@"
+        fi
     fi
     echo "Install is pending but running SoundTouch"
     exec /opt/Bose/bin/SoundTouch "$@"
@@ -49,7 +57,11 @@ else
     echo "Install is not pending"
     if [ -e /opt/Bose/bin/install ]; then
         /opt/Bose/bin/SoundTouch "$@" &
-        exec /opt/Bose/bin/install "$@" 
+        if [ -e /opt/Bose/update/bin/unshare ]; then
+            exec /opt/Bose/update/bin/unshare -m /opt/Bose/bin/install "$@" 
+        else
+            exec /opt/Bose/bin/install "$@" 
+        fi
     else
        exec /opt/Bose/bin/SoundTouch "$@" 
     fi

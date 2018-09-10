@@ -185,7 +185,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/sos/3.10.5"
+    "selected_version": "Release/master/4.1"
   },
   {
     "name": "Riviera-Toolchain",
@@ -217,11 +217,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.1.1-870+361af31"
+    "selected_version": "Release/master/2.2.0-893+2f70491"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-08-31_0956"
+    "selected_version": "Continuous/Castle-Fork/2018-09-05_1741"
   },
   {
     "name": "svc-pts-log-decrypt",
