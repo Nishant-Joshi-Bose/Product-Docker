@@ -67,10 +67,11 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/.swUpdateCache" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/update/bin/" || exit
 # run stage for SoftwareUpdate
 "$softwareupdate_dir/stage" "$opt_dir" "$toolchain_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
+cp "$toolchain_dir/sdk/sysroots/aarch64-oe-linux/usr/bin/unshare" "$opt_dir/update/bin/" || exit
 
 InstallFileContent=$(<"$opt_dir/bin/install")
 InstallFileContent=${InstallFileContent//\/Bose\/etc\//\/Bose\/.swUpdateCache\/backup\/}
@@ -120,6 +121,7 @@ mkdir -p /opt/Bose/.swUpdateCache/backup
 cp /opt/Bose/bin/SoftwareUpdateService /opt/Bose/.swUpdateCache/backup/
 cp /opt/Bose/bin/ResetUtil /opt/Bose/.swUpdateCache/backup/ 
 cp /opt/Bose/bin/ProgressReport /opt/Bose/.swUpdateCache/backup/ 
+cp /opt/Bose/update/bin/unshare /opt/Bose/.swUpdateCache/backup/ 
 cp /opt/Bose/etc/SoftwareUpdate*.xml /opt/Bose/.swUpdateCache/backup/ 
 cp -fpr /opt/Bose/etc/secure /opt/Bose/.swUpdateCache/backup/
 cp -fpr /opt/Bose/update/opkg /opt/Bose/.swUpdateCache/backup/ 
@@ -140,7 +142,6 @@ EOF
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "SoftwareUpdate prerm"
-exit 0
 EOF
 
 # -----------------------------------------------------------------------------
