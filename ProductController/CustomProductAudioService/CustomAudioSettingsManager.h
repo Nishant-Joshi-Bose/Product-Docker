@@ -24,7 +24,7 @@ public:
 
     ResultCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
     const ProductPb::AudioCenterLevel& GetCenter() const;
-    ResultCode_t SetMode( const ProductPb::AudioMode& mode );
+    ResultCode_t SetMode( ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
     ResultCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;

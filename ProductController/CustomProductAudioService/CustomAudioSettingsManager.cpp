@@ -95,7 +95,7 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Mode setting setter/getter
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
+ResultCode_t CustomAudioSettingsManager::SetMode( ProductPb::AudioMode& mode )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !mode.has_value() )
@@ -104,7 +104,7 @@ ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mo
         return ResultCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( mode.value(),
-                         m_audioSettings["audioSettingValues"][kModeName][kProperties]["supportedValues"] ) )
+                         m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
