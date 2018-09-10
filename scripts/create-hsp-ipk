@@ -77,6 +77,7 @@ mkdir -p "$opt_dir/hsp" || exit
 
 echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
 echo "Package version \"$riviera_hsp_ver\""
+"$wspace"/scripts/validate-version "$riviera_hsp_ver" || exit
 cp "$riviera_hsp_images_dir"/update_ext4.zip "$opt_dir/hsp/" || exit
 
 PackageName=hsp
