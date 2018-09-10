@@ -79,6 +79,7 @@ InstallFileContent=${InstallFileContent//\/Bose\/bin\//\/Bose\/.swUpdateCache\/b
 InstallFileContent=${InstallFileContent//$/\\$}
 
 echo "Package version \"$package_version\""
+"$wspace"/scripts/validate-version "$package_version" || exit
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName

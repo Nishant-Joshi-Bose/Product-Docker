@@ -71,6 +71,7 @@ PackageName=product-script
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
+"$wspace"/scripts/validate-version "$package_version" || exit
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName
