@@ -85,7 +85,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-115+d615f0b"
+    "selected_version": "Release/master/2.2.0-117+21010bb"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-243+ef42235"
+    "selected_version": "Release/master/2.2.0-245+a1d8863"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-593+b64ba1e"
+    "selected_version": "Release/master/2.2.0-596+4f5b6e4"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
