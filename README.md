@@ -146,6 +146,18 @@ To update the software, along with HSP, use product_update.zip file. To update
 the software, without HSP update (recommended only if HSP version you are
 updating to, is same as one on device), use product_update_no_hsp.zip.
 
+##### Special instructions to downgrade MR4 / MR1 to SOS Release
+SOP, SOS and MR4 have following HSP versios.
+* SOP: HSP 3.10.3
+* SOS: HSP 3.10.5
+* MR4: HSP 4.1 (or higher)
+
+To optimize Out of Box update opeation to smallest time possible, SOP to SOS HSP performs only "kernel" update. Other file system space and partitions remain same between 3.10.3 to 3.10.5. This works as intended, though has side effect for those who wants to downgrade from higher HSP versions to SOS e.g. from MR4 to SOS - for development / testing purposes.
+
+To downgrade to SOS release, one need to use update package specially made for downgrade operation at *\\solid\softlib\verisoft\Eddie\Release\SOS\<Release 2.0.5-5531+d50e0d4 or higher>\forDowngrade\product_update_for_downgrade.zip.*
+
+**If builds higher then SOS (i.e. builds with HSP 4.x or higher) are downgraded using \\solid\softlib\verisoft\Eddie\Release\SOS\<Release>\product_update.zip, device will potetially be bricked and will enter in QFIL mode. Please see instructions below about QFIL / VIP to recover such device.**
+
 #### QFIL / VIP
 
 If you suspect your system is not in correct state that Bonjour update can
