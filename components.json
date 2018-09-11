@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Release/master/2.1.3-39+215c526"
+    "selected_version": "Continuous/master/2.2.0-58+58d6d42"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -21,7 +21,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-170+e4b8261"
+    "selected_version": "Continuous/master/2.2.0-171+7fc95a8"
   },
   {
     "name": "AVS-qc8017_32",
@@ -97,11 +97,11 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-147+9ee21fd"
+    "selected_version": "Release/master/2.2.0-148+9ee21fd"
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-115+d615f0b"
+    "selected_version": "Release/master/2.2.0-117+21010bb"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -117,19 +117,19 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-343+58db6f9"
+    "selected_version": "Continuous/master/2.2.0-344+fa66949"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-136+2c25b37"
+    "selected_version": "Release/master/2.2.0-138+58db6f9"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-243+ef42235"
+    "selected_version": "Release/master/2.2.0-245+a1d8863"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-128+1cf048e"
+    "selected_version": "Release/master/2.2.0-129+1cf048e"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -137,7 +137,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-134+60cc059"
+    "selected_version": "Release/master/2.2.0-135+60cc059"
   },
   {
     "name": "LightBarController-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-593+b64ba1e"
+    "selected_version": "Continuous/upgrading-master/2.1.1-594+f1e3139"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-1067+963bf2b"
+    "selected_version": "Continuous/master/2.2.0-1068+8e4669a"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -173,7 +173,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@c6445e22bf5887a6cd4dbcad469ffc8e094a9424"
+    "selected_version": "asoltan_revert_ns@9bf192ae4fb13ba295f6931fac6188a784c96e70"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-122+26ba242"
+    "selected_version": "Release/master/2.2.0-123+26ba242"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -241,11 +241,11 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-97+258fa08"
+    "selected_version": "Release/master/2.2.0-98+258fa08"
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-58+45670da"
+    "selected_version": "Continuous/master/2.2.0-59+01187ac"
   },
   {
     "name": "TestUtils",
