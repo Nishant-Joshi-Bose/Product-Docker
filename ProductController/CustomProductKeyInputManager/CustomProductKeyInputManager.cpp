@@ -43,7 +43,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),
                               ProductController.GetLpmHardwareInterface( ),
-                              ProductController.GetCommandLineInterface( ),
+                              ProductController.GetCommonCliClientMT( ),
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController )

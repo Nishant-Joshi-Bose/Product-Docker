@@ -16,7 +16,7 @@
 #include "LpmClientIF.h"
 #include "NotifyTargetTaskIF.h"
 
-using namespace ::DisplayController::Protobuf;
+using namespace ::DisplayControllerPb;
 
 namespace ProductApp
 {
@@ -130,7 +130,7 @@ private:
                                   const Callback<Display>& resp );
     /*!
      */
-    void HandleGetDisplayRequest( const Callback<Display>& resp );
+    void HandleGetDisplayRequest( Callback<Display> resp );
 
     /*!
      */
@@ -160,15 +160,15 @@ private:
      * \param req Incoming Brightness settings to apply.
      * \param resp Callback into which will be written current LCD brightess as a Brightness protobuf.
      */
-    void HandlePutLcdBrightnessRequest( const Brightness &req, const Callback<Brightness>& resp );
+    void HandlePutLcdBrightnessRequest( Brightness req, const Callback<Brightness> resp );
 
     /*! \brief Callback for LPMClient SetLightSensorParams response handling.
      */
-    void HandleLpmSetLightSensorParams( const IpcLpmGenericResponse_t& response );
+    void HandleLpmSetLightSensorParams( IpcLpmGenericResponse_t response );
 
     /*! \brief Callback for LPMClient GetUIBrightness response handling.
      */
-    void HandleLpmGetUIBrightness( const IpcUIBrightness_t& response );
+    void HandleLpmGetUIBrightness( IpcUIBrightness_t response );
 
     /*!
      */

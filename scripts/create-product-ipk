@@ -81,10 +81,8 @@ frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) ||
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
-btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location) || exit
-blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
+bluetooth_dir=$(components get Bluetooth-qc8017_32 installed_location) || exit
 bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
-btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
@@ -99,7 +97,7 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" "$opt_dir/bin/ptp" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
@@ -120,6 +118,9 @@ cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/bin/ptp/daemon_cl "$opt_dir/bin/ptp/daemon_cl" || exit
+cp "$stfs"/opt/Bose/bin/ptp/aptp_cfg.ini "$opt_dir/bin/ptp/aptp_cfg.ini" || exit
 cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BMX "$opt_dir/bin" || exit
@@ -198,10 +199,8 @@ rm "$opt_dir/etc/product"
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
-"$btstackadapter_dir/stage" "$opt_dir" || exit
-"$blesetup_dir/stage" "$opt_dir" || exit
+"$bluetooth_dir/stage" "$opt_dir" || exit
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
-"$btstssink_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
 "$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
@@ -215,6 +214,7 @@ PackageName=SoundTouch
 
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
+"$wspace"/scripts/validate-version "$package_version" || exit
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName

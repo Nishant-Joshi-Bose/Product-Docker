@@ -34,7 +34,7 @@ ADD_EXECUTABLE(ProductController
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandby.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandbyTransition.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
-  ProductCliClient.cpp
+  ProductCommandLine.cpp
   CustomProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
@@ -43,6 +43,10 @@ ADD_EXECUTABLE(ProductController
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/Treble.pb.cc
+  ${PROTO_CC_DEST}/Bass.pb.cc
+  ${PROTO_CC_DEST}/Center.pb.cc
+  ${PROTO_CC_DEST}/Mode.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   IntentHandler/CountDownManager.cpp
@@ -63,6 +67,7 @@ TARGET_LINK_LIBRARIES(ProductController
   LpmClient
   HttpInterface
   FrontDoorClient
+  NetworkServiceUtils
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto

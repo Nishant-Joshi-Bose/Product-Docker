@@ -29,7 +29,7 @@
 #include "MonotonicClock.h"
 
 static DPrint s_logger( "DisplayController" );
-using namespace ::DisplayController::Protobuf;
+using namespace ::DisplayControllerPb;
 
 namespace ProductApp
 {
@@ -431,7 +431,7 @@ void DisplayController::PushDefaultsToLPM()
     //
 
     Callback<IpcLpmGenericResponse_t> setParamsCb( std::bind( &DisplayController::HandleLpmSetLightSensorParams, this, std::placeholders::_1 ) );
-    AsyncCallback<const IpcLpmGenericResponse_t&> setParamsAsync( setParamsCb, m_task );
+    AsyncCallback<const IpcLpmGenericResponse_t> setParamsAsync( setParamsCb, m_task );
 
     auto f = [this, defaults, setParamsAsync]()
     {
@@ -783,7 +783,7 @@ void DisplayController::HandlePutDisplayRequest( const Display &req,
 
 /*!
  */
-void DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp )
+void DisplayController::HandleGetDisplayRequest( Callback<Display> resp )
 {
     resp.Send( GetDisplay() );
 }
@@ -795,7 +795,7 @@ void DisplayController::PullUIBrightnessFromLpm( IpcUIBrightnessDevice_t deviceT
     BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
 
     Callback<IpcUIBrightness_t> cb( std::bind( &DisplayController::HandleLpmGetUIBrightness, this, std::placeholders::_1 ) );
-    AsyncCallback<const IpcUIBrightness_t&> cbAsync( cb, m_task );
+    AsyncCallback<const IpcUIBrightness_t> cbAsync( cb, m_task );
 
     auto f = [this, deviceType, cbAsync]()
     {
@@ -908,7 +908,7 @@ void DisplayController::HandleGetLcdBrightnessRequest( const Callback<Brightness
 
 /*!
  */
-void DisplayController::HandleLpmSetLightSensorParams( const IpcLpmGenericResponse_t& response )
+void DisplayController::HandleLpmSetLightSensorParams( IpcLpmGenericResponse_t response )
 {
     if( response.code() == IPC_TRANSITION_COMPLETE )
     {
@@ -920,7 +920,7 @@ void DisplayController::HandleLpmSetLightSensorParams( const IpcLpmGenericRespon
 
 /*!
  */
-void DisplayController::HandleLpmGetUIBrightness( const IpcUIBrightness_t& response )
+void DisplayController::HandleLpmGetUIBrightness( IpcUIBrightness_t response )
 {
     m_lcdBrightness.set_mode( BrightnessIpcEnumToProtoEnum( ( IpcUIBrightnessMode_t ) response.mode() ) );
     m_lcdBrightness.set_value( response.value() );
@@ -965,7 +965,7 @@ bool DisplayController::IsFrontdoorBrightnessDataValid( const Brightness& incomi
 
 /*! \brief Frontdoor POST request handler for /ui/lcd/brightness.
  */
-void DisplayController::HandlePutLcdBrightnessRequest( const Brightness& req, const Callback<Brightness>& resp )
+void DisplayController::HandlePutLcdBrightnessRequest( Brightness req, const Callback<Brightness> resp )
 {
     BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
 
