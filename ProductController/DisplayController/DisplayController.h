@@ -16,7 +16,7 @@
 #include "LpmClientIF.h"
 #include "NotifyTargetTaskIF.h"
 
-using namespace ::DisplayController::Protobuf;
+using namespace ::DisplayControllerPb;
 
 namespace ProductApp
 {

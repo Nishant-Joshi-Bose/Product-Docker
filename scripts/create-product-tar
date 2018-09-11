@@ -87,7 +87,7 @@ riviera_version = ""
     For this simple script, relative path variables are not taken as input 
     e.g. $workspace/builds/Release has builds/Release hardcoded 
 '''
-def create_stage(name, workspace):
+def create_stage(workspace):
     global riviera_hsp_images_dir
     global riviera_tools_dir
     global riviera_version
@@ -573,8 +573,8 @@ def cleanup():
     
     return 0, ""
     
-def create_package(name, workspace, ipksList, is_without_lpm, development):
-    retVal, retStr = create_stage(name, workspace)
+def create_package(workspace, ipksList, is_without_lpm, development):
+    retVal, retStr = create_stage(workspace)
     if retVal != 0:
         return retVal, retStr
     if not os.path.exists(riviera_hsp_images_dir):
@@ -591,7 +591,7 @@ def create_package(name, workspace, ipksList, is_without_lpm, development):
     retVal, retStr = copy_signing_tools_to_stage()
     if retVal != 0:
         return retVal, retStr
-    retVal, retStr = create_output(name, workspace, ipksList)
+    retVal, retStr = create_output(is_without_lpm, development, ipksList)
     if retVal != 0:
         return retVal, retStr
     logging.info("Output Directory [%s]" %(output_dir))
@@ -606,9 +606,6 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
             
     parser = argparse.ArgumentParser(description='Create Product tarball for QFIL / full system flash via product_flash.')
-    parser.add_argument('-n', '--name', 
-                         default = "",
-                         help="Product code name")
     parser.add_argument('-w', '--workspace', 
                          metavar="DIR",                         
                          required=False, 
@@ -631,21 +628,17 @@ if __name__ == '__main__':
                          
     args = parser.parse_args()
     del parser
-    name = args.name
     ''' set path of <this script dir>/../ as workspace '''
     workspace = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     is_without_lpm = args.without_lpm
     is_development = args.development
     ipksList = args.ipks
-    if len(name):
-        logging.error("Name needs to have 1 or more characters")
-        sys.exit(-1)
         
     if not os.path.exists(workspace):
         logging.error("workspace [%s] does not exist" %(workspace))
         sys.exit(-1)
 
-    retVal, retStr = create_package(name, workspace, ipksList, is_without_lpm, is_development)
+    retVal, retStr = create_package(workspace, ipksList, is_without_lpm, is_development)
     if retVal == 0:
         logging.info("Success")
         sys.exit(0) 

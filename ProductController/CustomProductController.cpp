@@ -21,7 +21,6 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "MfgData.h"
 #include "BLESetupEndpoints.h"
-#include "ButtonPress.pb.h"
 #include "ProductSTSStateFactory.h"
 #include "ProductSTSStateTopSilent.h"
 #include "CustomProductSTSStateTopAux.h"
