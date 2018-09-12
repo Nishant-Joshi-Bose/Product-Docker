@@ -15,7 +15,7 @@ this_file=$0
 version=$1
 shift
 
-if [[ "$version" =~ ^[0-9]+(\.[0-9]+){1,2}([.-]{1}[0-9]{1,4}){0,1}(\+[0-9a-zA-Z]{7}){0,1}$ ]]; then 
+if [[ "$version" =~ ^[0-9]+(\.[0-9]+){1,2}([.-]{1}[0-9]{1,4}){0,1}(\+[0-9a-zA-Z]{7,}){0,1}$ ]]; then 
     echo "$0: version validation successful"
     exit 0
 fi
