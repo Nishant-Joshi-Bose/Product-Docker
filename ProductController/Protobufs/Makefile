@@ -12,9 +12,12 @@ PROTO_SOURCES = \
   LightBarController.proto  \
   ProductMessage.proto      \
   KeyActions.proto          \
-  DisplayController.proto   \
+  Treble.proto              \
   AudioSettings.proto       \
   KeyNames.proto            \
+  Bass.proto                \
+  Center.proto              \
+  Mode.proto                \
   ProductSTS.proto
 
 # Where to search for imported *.proto files.

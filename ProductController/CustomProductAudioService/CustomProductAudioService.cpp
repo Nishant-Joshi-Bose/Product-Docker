@@ -16,6 +16,9 @@
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "Bass.pb.h"
+#include "Treble.pb.h"
+#include "Center.pb.h"
+#include "Mode.pb.h"
 
 using namespace std::placeholders;
 
@@ -28,8 +31,7 @@ constexpr char kTrebleEndPoint          [] = "/audio/treble";
 
 namespace ProductApp
 {
-/*!
- */
+
 CustomProductAudioService::CustomProductAudioService( CustomProductController& productController,
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
@@ -45,15 +47,10 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& p
     BOSE_DEBUG( s_logger, __func__ );
 }
 
-/*!
- */
 CustomProductAudioService::~CustomProductAudioService()
 {
-
 }
 
-/*!
- */
 void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -67,16 +64,12 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 
     {
         Callback< std::string, Callback< std::string, std::string > > callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
-                                                                                this,
-                                                                                std::placeholders::_1,
-                                                                                std::placeholders::_2 ) );
+                                                                                this, _1, _2 ) );
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
     ConnectToAudioPath();
 }
 
-/*!
- */
 void CustomProductAudioService::RegisterFrontDoorEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -95,9 +88,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
-            auto dbaPb = std::make_shared<DataCollection::Bass>();
-            dbaPb->set_bass( m_audioSettingsMgr->GetBass( ).value() );
-            m_dataCollectionClient->SendData( dbaPb, "bass-changed" );
+            auto bdcPb = std::make_shared<DataCollectionPb::Bass>();
+            bdcPb->set_bass( m_audioSettingsMgr->GetBass( ).value() );
+            m_dataCollectionClient->SendData( bdcPb, "bass-changed" );
         }
         return error;
     };
@@ -126,6 +119,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             {
                 m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
                 SendMainStreamAudioSettingsEvent();
+                auto cdcPb = std::make_shared<DataCollectionPb::Center>();
+                cdcPb->set_center( m_audioSettingsMgr->GetCenter( ).value() );
+                m_dataCollectionClient->SendData( cdcPb, "center-level-changed" );
             }
             return error;
         };
@@ -155,6 +151,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             {
                 m_mainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
                 SendMainStreamAudioSettingsEvent();
+                auto mdcPb = std::make_shared<DataCollectionPb::Mode>();
+                mdcPb->set_mode( m_audioSettingsMgr->GetMode( ).value() );
+                m_dataCollectionClient->SendData( mdcPb, "mode-changed" );
             }
             return error;
         };
@@ -182,6 +181,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
+            auto tdcPb = std::make_shared<DataCollectionPb::Treble>();
+            tdcPb->set_treble( m_audioSettingsMgr->GetTreble( ).value() );
+            m_dataCollectionClient->SendData( tdcPb, "treble-changed" );
         }
         return error;
     };
@@ -195,8 +197,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                              FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
 }
 
-/*!
- */
 void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem, const Callback<std::string, std::string> cb )
 {
     //BOSE_DEBUG( s_logger, __func__ );
@@ -234,8 +234,6 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     cb.Send( mainStreamAudioSettings, "" );
 }
 
-/*!
- */
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, true );
@@ -244,8 +242,6 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
     BOSE_INSANE( s_logger, "SendMainStreamAudioSettingsEvent %s", mainStreamAudioSettings.c_str() );
 }
 
-/*!
- */
 void CustomProductAudioService::FetchLatestAudioSettings( )
 {
     m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
@@ -254,8 +250,6 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
     m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
 }
 
-/*!
- */
 void CustomProductAudioService::ThermalDataReceivedCb( IpcSystemTemperatureData_t data )
 {
     int16_t ampTemp = INT16_MAX;
@@ -286,8 +280,6 @@ void CustomProductAudioService::ThermalDataReceivedCb( IpcSystemTemperatureData_
     }
 }
 
-/*!
- */
 void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 {
     if( enabled )
@@ -300,8 +292,6 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     }
 }
 
-/*!
- */
 EddieAudioSettings_t_AudioMode CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
     if( modeName == "DIALOG" )

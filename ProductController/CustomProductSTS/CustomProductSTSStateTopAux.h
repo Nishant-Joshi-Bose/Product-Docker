@@ -40,11 +40,12 @@ union AuxSourceState_U
     {
         return ( t.key != key );
     }
-    void operator = ( const AuxSourceState_U& t )
+    AuxSourceState_U& operator= ( const AuxSourceState_U& t )
     {
         key = t.key;
+        return *this;
     }
-} ;
+};
 
 class CustomProductSTSStateTopAux : public ProductSTSStateTop
 {
