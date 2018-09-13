@@ -10,15 +10,18 @@
 #               1.1.1-1234+abcd123, 122.12.12-12+abcd123 [Major.Minor.Patch-BuildNumber+CommitSHA]
 #               1.1.1+abcd123, 122.12.12+abcd123 [Major.Minor.Patch+CommitSHA]
 
+this=${0##*/}
 
-this_file=$0
-version=$1
-shift
+if (( $# != 1 )); then
+    echo >&2 "usage: $this version-string"
+    exit 1
+fi
+version=$1; shift
 
-if [[ "$version" =~ ^[0-9]+(\.[0-9]+){1,2}([.-]{1}[0-9]{1,4}){0,1}(\+[0-9a-zA-Z]{7}){0,1}$ ]]; then 
-    echo "$0: version validation successful"
+if [[ "$version" =~ ^[0-9]+(\.[0-9]+){1,2}([.-][0-9]+)?(\+[0-9a-f]{7,})?$ ]]; then
+    echo "Version string is valid"
     exit 0
 fi
 
-echo "$0: version validation failed, version : \"$version\""
+echo >&2 "$this: Version string is not valid: \"$version\""
 exit 1
