@@ -21,35 +21,33 @@ def resetDemo(request, frontDoor, demoUtils, device_id):
 
 
 @pytest.fixture(scope='class')
-def demoUtils(frontDoor, adb):
+def demoUtils(adb):
     """
     Get DemoUtils instance.
     """
     logger.info("demoUtils")
     return DemoUtils(adb, logger)
 
-
 @pytest.fixture(scope='function', autouse=True)
-def setDemoOff(request, frontDoor, demoUtils, device_id):
+def setDemoOff(request, frontdoor_wlan, demoUtils, device_id):
     """
     Set demoMode off and delete keyConfig
     """
     logger.info("setDemoOff")
-    setDemo(request, frontDoor, demoUtils, device_id)
-    demoUtils.deleteKeyConfig()
-    demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
+    setDemo(request, frontdoor_wlan, demoUtils, device_id)
+    demoUtils.deleteKeyConfig(frontdoor_wlan)
+    demoUtils.verifyDemoKeyConfig(frontdoor_wlan, "Error Reading configuration file")
 
-
-def setDemo(request, frontDoor, demoUtils, device_id):
+def setDemo(request, frontdoor_wlan, demoUtils, device_id):
     """
     Set demoMode False if True
     """
-    demoResponse = frontDoor.getDemoMode()
+    demoResponse = frontdoor_wlan.getDemoMode()
     logger.info("demoResponse " + str(demoResponse))
     if demoResponse == True:
-        demoUtils.setDemoMode(False, device_id, True, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoMode(False)
-
+        demoUtils.setDemoMode(False, device_id, frontdoor_wlan, True, 3,
+                              request.config.getoption("--network-iface"))
+        demoUtils.verifyDemoMode(False, frontdoor_wlan)
 
 @pytest.fixture(scope='session')
 def get_config():
@@ -59,3 +57,21 @@ def get_config():
     """
     data = keyConfig
     return data
+
+@pytest.fixture(scope='function', autouse=True)
+def resetDemo(request, frontdoor_wlan, demoUtils, device_id):
+    """
+    reset demoMode False if True
+    :param request:
+    :param frontdoor_wlan:
+    :param demoUtils:
+    :param device_id:
+    :return:
+    """
+    def teardown():
+        if 'factorydefault' in request.keywords:
+            logger.info("Factory default. So no need to set demoMode False")
+        else:
+            logger.info("Set demoMode False towards the end of every test")
+            setDemo(request, frontdoor_wlan, demoUtils, device_id)
+    request.addfinalizer(teardown)
