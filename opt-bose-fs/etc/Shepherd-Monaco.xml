@@ -9,7 +9,7 @@
     <arg>--single-buffer</arg>
     <arg>--scale=1.0</arg>
     <!-- Log web console messages to STDOUT -->
-    <arg>--log-console</arg>
+    <!-- <arg>--log-console</arg> -->
   </daemon>
 
 </ShepherdConfig>
