@@ -1458,6 +1458,10 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
                 radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
                 radioStatus.set_band( IPC_SOC_RADIO_BAND_58 );
             }
+            else
+            {
+              BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
+            }
 
 
             if( radioStatus.status() != m_radioStatus.status() ||
