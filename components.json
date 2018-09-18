@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-1128+928d9a5"
+    "selected_version": "Continuous/master/2.1.0-1163+313ca6c"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-1128+928d9a5"
+    "selected_version": "Continuous/master/2.1.0-1163+313ca6c"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-17_1157"
+    "selected_version": "Continuous/Castle-Fork/2018-09-18_0952"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-151+48313ca"
+    "selected_version": "Continuous/master/2.2.0-152+f1f2b47"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -201,7 +201,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-704+34a0a5f"
+    "selected_version": "Continuous/master/2.2.0-707+300fcc0"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-17_1157"
+    "selected_version": "Continuous/Castle-Fork/2018-09-18_0952"
   },
   {
     "name": "svc-pts-log-decrypt",
