@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-1128+928d9a5"
+    "selected_version": "Continuous/master/2.1.0-1163+313ca6c"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-1128+928d9a5"
+    "selected_version": "Continuous/master/2.1.0-1163+313ca6c"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-190+bed07a1"
+    "selected_version": "Continuous/master/2.2.0-195+3c291de"
   },
   {
     "name": "Webkit",
