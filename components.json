@@ -9,7 +9,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-172+6111f67"
+    "selected_version": "Continuous/master/2.2.0-174+b64563d"
   },
   {
     "name": "AVS-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-56+48fc2da"
+    "selected_version": "Continuous/master/2.2.0-58+9efd601"
   },
   {
     "name": "bose-opkg-utils",
@@ -61,7 +61,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-192+3e1fdbc"
+    "selected_version": "Continuous/master/2.2.0-194+c3390f3"
   },
   {
     "name": "CastleLibs-native",
