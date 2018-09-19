@@ -1,0 +1,118 @@
+#!/usr/bin/python2.7
+#
+# Copy files from your workspace product staging area to the target system.
+#
+#   make product-ipk && scripts/upstage
+#
+# or just:
+#
+#   scripts/upstage -b
+#
+
+import sys
+import os
+import subprocess
+import pipes
+import argparse
+
+stage_dir = "builds/Release/product-ipk-stage/Bose"
+
+# ----------------------------------------------------------------------------
+
+this_script = os.path.basename(sys.argv[0])
+
+parser = argparse.ArgumentParser(description="""
+
+For all files in /opt/Bose, if any of those files is different from what's
+in our workspace staging area, push the file.
+
+""")
+parser.add_argument("--build", "-b", action="store_true",
+                    help="Run make first")
+parser.add_argument("--verbose", "-v", action="store_true",
+                    help="Verbose logging")
+opts = parser.parse_args()
+del parser
+
+# ----------------------------------------------------------------------------
+
+def check_call(cmd):
+    if opts.verbose:
+        print cmd
+    subprocess.check_call(cmd)
+
+def call(cmd):
+    if opts.verbose:
+        print cmd
+    subprocess.call(cmd)
+
+if opts.build:
+    check_call("make product-ipk".split())
+
+os.chdir(stage_dir)
+
+stage = {}
+target = {}
+
+cmd = ["adb", "shell", "cd /opt/Bose && find -type f -print0 | xargs -0 md5sum"]
+ph = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+for line in iter(ph.stdout.readline, ""):
+    line = line.rstrip("\r\n")
+    #  .123456789.123456789.123456789.123456
+    # "6b5c0e8dd274f120cd967262f8fe4ef7  ./foo"
+    if line[32:36] != "  ./":
+        raise Exception("oops '{}'".format(line))
+    sig = line[0:32]
+    name = line[36:]
+    target[name] = sig
+
+cmd = ["sh", "-c", "find -type f -print0 | xargs -0 md5sum"]
+ph = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+for line in iter(ph.stdout.readline, ""):
+    line = line.rstrip("\r\n")
+    if line[32:36] != "  ./":
+        raise Exception("oops '{}'".format(line))
+    sig = line[0:32]
+    name = line[36:]
+    stage[name] = sig
+
+updates = set()
+
+# See what's on the target that's different from what's in stage.
+for name, sig in target.iteritems():
+    if name not in stage:
+        if opts.verbose:
+            print "Not in stage:", name
+        continue
+    if target[name] == stage[name]:
+        if opts.verbose:
+            print "Unchanged:", name
+        continue
+    updates.add(name)
+
+# See what's in stage that's not on the target.
+for name, sig in stage.iteritems():
+    if name in target:
+        continue
+    if opts.verbose:
+        print "Not on target:", name
+    updates.add(name)
+
+if not updates:
+    print "No updates needed."
+    sys.exit()
+
+updates = list(updates)
+updates.sort()
+
+# Copy files from stage to target.
+check_call("adb shell mount -oremount,rw /opt/Bose".split())
+call(["adb", "shell", "cd /opt/Bose && rm"] + map(pipes.quote, updates))
+
+trouble = False
+for name in updates:
+    print "push", name
+    if call(["adb", "push", name, "/opt/Bose/" + name]):
+        trouble = True
+if trouble:
+    sys.exit(1)
