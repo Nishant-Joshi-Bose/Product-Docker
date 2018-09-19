@@ -107,7 +107,7 @@ updates.sort()
 
 # Copy files from stage to target.
 check_call("adb shell mount -oremount,rw /opt/Bose".split())
-call("adb shell cd /opt/Bose \&\& rm".split() + map(pipes.quote, updates))
+call(["adb", "shell", "cd /opt/Bose && rm"] + map(pipes.quote, updates))
 
 trouble = False
 for name in updates:
