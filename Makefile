@@ -89,20 +89,12 @@ PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp wpe mon
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-.PHONY: package-with-SOS-downgrade-hsp
-package-with-SOS-downgrade-hsp: packages-gz-with-SOS-downgrade-hsp
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_for_downgrade.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
-
 .PHONY: packages-gz
 packages-gz: product-ipk wpe-ipk softwareupdate-ipk monaco-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
 packages-gz-with-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
-
-.PHONY: packages-gz-with-SOS-downgrade-hsp
-packages-gz-with-SOS-downgrade-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-SOS-downgrade-ipk lpmupdater-ipk recovery-ipk product-script-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -115,10 +107,6 @@ softwareupdate-ipk: cmake_build
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
-	./scripts/create-hsp-sos-special-ipk $(cfg)
-
-.PHONY: hsp-SOS-downgrade-ipk
-hsp-SOS-downgrade-ipk: cmake_build
 	./scripts/create-hsp-ipk $(cfg)
 
 .PHONY: lpm-bos
@@ -153,7 +141,7 @@ product-script-ipk:
 
 
 .PHONY: all-packages
-all-packages: package-no-hsp package-with-hsp package-with-SOS-downgrade-hsp graph
+all-packages: package-no-hsp package-with-hsp graph
 	./scripts/create-product-tar -i $(IPKS_HSP)
 
 .PHONY: clean

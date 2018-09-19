@@ -10,11 +10,9 @@ if (( $# != 2 )); then
 fi
 builds_dir=$1; shift
 deploy_dir=$1; shift
-downgrade_zip_dir="$deploy_dir/forDowngrade"
 
 rm -rf "$deploy_dir"
 mkdir -p "$deploy_dir" || exit
-mkdir -p "$downgrade_zip_dir" || exit
 
 files=(
     "$builds_dir/product-unstripped.tar.gz"
@@ -31,4 +29,3 @@ files=(
 )
 
 cp "${files[@]}" "$deploy_dir" || exit
-cp "$builds_dir/product_update_for_downgrade.zip" "$downgrade_zip_dir" || exit
