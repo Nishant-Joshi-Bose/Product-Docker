@@ -121,7 +121,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.1-155+d3596fc"
+    "selected_version": "Release/SOS/2.0.1-156+d3596fc"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -201,7 +201,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.1-34+0d0fde1"
+    "selected_version": "Release/SOS/2.0.1-35+0d0fde1"
   },
   {
     "name": "SASS-qc8017_32",
