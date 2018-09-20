@@ -74,7 +74,10 @@ mkdir -p "$opt_dir/hsp" || exit
 echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
 echo "Package version \"$riviera_hsp_ver\""
 "$wspace"/scripts/validate-version "$riviera_hsp_ver" || exit
-cp "$riviera_hsp_images_dir"/update_ext4.zip "$opt_dir/hsp/" || exit
+# update_ext4.zip is HSP update file with update using CP / mv commands
+# update_block.zip is HSP update with using "dd" or blocked update
+# update_block_kernel.zip is HSP update with only kernel update. - THIS SHOULDN'T BE USED except SOS.
+cp "$riviera_hsp_images_dir"/update_block.zip "$opt_dir/hsp/update_ext4.zip" || exit
 
 PackageName=hsp
 
@@ -135,10 +138,11 @@ if [ -e /opt/Bose/hsp/RecoveryMgr ]; then
     chmod +x /cache/RecoveryMgr || exiterror
 fi
 
-if [ -e /etc/initscripts/recovery-updater.sh ]; then
-    echo "Updating RecoveryFS"
-    /etc/initscripts/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
-fi
+echo "Updating RecoveryFS - Start"
+/opt/Bose/update/bin/unzip -p /opt/Bose/hsp/update_ext4.zip recovery-updater.sh > /tmp/recovery-updater.sh || exiterror
+chmod a+x /tmp/recovery-updater.sh || exiterror
+/tmp/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
+echo "Updating RecoveryFS - Done"
 
 if ! grep -q /cache /proc/mounts; then
     echo "Mounting Cache"
