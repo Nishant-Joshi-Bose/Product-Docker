@@ -7,6 +7,7 @@ ADD_EXECUTABLE(PlatformReset
 TARGET_LINK_LIBRARIES(PlatformReset
   LpmClient
   BoseLibs
+  ProtoToMarkup
   jsoncpp
   protobuf
   pthread
@@ -24,6 +25,7 @@ ADD_EXECUTABLE(PlatformResetIntoQfil
 TARGET_LINK_LIBRARIES(PlatformResetIntoQfil
   LpmClient
   BoseLibs
+  ProtoToMarkup
   jsoncpp
   protobuf
   pthread
@@ -41,6 +43,7 @@ ADD_EXECUTABLE(ReadLpmVersion
 TARGET_LINK_LIBRARIES(ReadLpmVersion
   LpmClient
   BoseLibs
+  ProtoToMarkup
   jsoncpp
   protobuf
   pthread
