@@ -110,6 +110,11 @@ TARGET_LINK_LIBRARIES(Professor
   A4VVideoManagerClient
   A4VQuickSetServiceClient
   BoseLibs
+  PassportLan
+  SASSClient
+  StsAmazon
+  VoiceService
+  ProtoToMarkup
   jsoncpp
   protobuf
   libwebsockets.a
