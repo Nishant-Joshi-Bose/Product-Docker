@@ -46,6 +46,9 @@ def call(cmd):
         print cmd
     subprocess.call(cmd)
 
+wspace_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+os.chdir(wspace_dir)
+
 if opts.build:
     check_call("make product-ipk".split())
 
