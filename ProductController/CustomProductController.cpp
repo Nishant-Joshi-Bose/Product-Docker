@@ -112,6 +112,7 @@
 #include "SystemUtils.h"
 #include "SystemPowerMacro.pb.h"
 #include "CustomChimeEvents.h"
+#include "LpmClientLiteIF.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -754,10 +755,11 @@ void CustomProductController::Run( )
     ///
     /// Set up LightBarController
     ///
+    LpmClientLiteIF::LpmClientLitePtr lpmLitePtr( std::static_pointer_cast<LpmClientLiteIF>( m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
     m_lightbarController = std::unique_ptr< LightBar::LightBarController >(
                                new LightBar::LightBarController( GetTask( ),
                                                                  m_FrontDoorClientIF,
-                                                                 m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
+                                                                 lpmLitePtr ) );
 
     //
     // Setup UI recovery timer
