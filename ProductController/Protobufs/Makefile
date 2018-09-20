@@ -13,6 +13,10 @@ PROTO_SOURCES = \
   ProductMessage.proto      \
   KeyActions.proto          \
   DisplayController.proto   \
+  Treble.proto              \
+  Bass.proto                \
+  Center.proto              \
+  Mode.proto                \
   AudioSettings.proto       \
   KeyNames.proto            \
   ProductSTS.proto
