@@ -90,6 +90,11 @@ TARGET_LINK_LIBRARIES(ProductController
   CapsUtils
   SystemEventService
   BoseLibs
+  PassportLan
+  SASSClient
+  StsAmazon
+  VoiceService
+  ProtoToMarkup
   jsoncpp
   protobuf
   libwebsockets.a
