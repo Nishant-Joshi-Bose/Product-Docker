@@ -1460,7 +1460,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
             }
             else
             {
-              BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
+            	BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
             }
 
 
