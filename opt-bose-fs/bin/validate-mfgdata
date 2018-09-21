@@ -93,22 +93,22 @@ if pc != vi:
 pi = get("BMAPProductID")
 if pi is None or not re.match(r'^0[xX][0-9a-fA-F]{4}$', pi): # allow hex value (2-bytes)
     warn("Invalid BMAPProductID:", pi)
-    fixes.append("set BMAPProductID 0x4026 # Eddie")
+    fixes.append("set BMAPProductID 0x0000 # Taylor - TBD")
 
 ai = get("BMAPBleProductID")
 if ai is None or not re.match(r'^\d+$', ai): # allow any integer
     warn("Invalid BMAPBleProductID:", ai)
-    fixes.append("set BMAPBleProductID 16 # Eddie")
+    fixes.append("set BMAPBleProductID 0 # Taylor - TBD")
 
 pn = get("productName")
 if not pn: # allow any non-empty string
     warn("Invalid productName:", pn)
-    fixes.append("set productName 'Bose Home Speaker 500'")
+    fixes.append("set productName 'Bose Home Speaker TBD'")
 
 pt = get("productType")
 if not pt: # allow any non-empty string
     warn("Invalid productType:", pt)
-    fixes.append("set productType eddie")
+    fixes.append("set productType taylor")
 
 # Check for duplicate MAC addresses.
 addrs = [get("snMacWlan0"), get("snMacWlan1"), get("snMacBt"), get("snMacUSB")]
