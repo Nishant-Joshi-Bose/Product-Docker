@@ -147,7 +147,7 @@ if stage_links:
 stage_files = {}
 target_files = {}
 
-for line in capture(["adb", "shell", "cd /opt/Bose && find -type f -print0 | xargs -0 md5sum"]):
+for line in capture(["adb", "shell", "cd /opt/Bose && find -type f -print0 | xargs -r0 md5sum"]):
     #  .123456789.123456789.123456789.123456
     # "6b5c0e8dd274f120cd967262f8fe4ef7  ./foo"
     if line[32:36] != "  ./":
@@ -156,7 +156,7 @@ for line in capture(["adb", "shell", "cd /opt/Bose && find -type f -print0 | xar
     name = line[36:]
     target_files[name] = sig
 
-for line in capture(["sh", "-c", "find -type f -print0 | xargs -0 md5sum"]):
+for line in capture(["sh", "-c", "find -type f -print0 | xargs -r0 md5sum"]):
     if line[32:36] != "  ./":
         raise Exception("oops '{}'".format(line))
     sig = line[0:32]
@@ -189,9 +189,21 @@ if updates:
     updates = list(updates)
     updates.sort()
 
-    # Copy files from stage to target.
     make_writeable()
-    call(["adb", "shell", "cd /opt/Bose && rm"] + shell_quote(updates))
+
+    # Remove the files we're going to be updating.  This is impotant for
+    # executables in particular because if a process is running as that
+    # executable, Linux won't let us modify it ("text file busy").
+    # Also, avoid trying to send a command that's too long or else
+    # adb will fail ("bad service name length").
+    max_per_command = 20
+    remove = [name for name in updates if name in target_files]
+    while remove:
+        args = remove[:max_per_command]
+        remove = remove[max_per_command:]
+        call(["adb", "shell", "cd /opt/Bose && rm -f --"] + shell_quote(args))
+
+    # Copy files from stage to target.
     for name in updates:
         print "push", name
-        check_call(["adb", "push", name, "/opt/Bose/" + name])
+        check_call(["adb", "push", name] + shell_quote(["/opt/Bose/" + name]))
