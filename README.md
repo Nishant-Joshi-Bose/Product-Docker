@@ -158,10 +158,8 @@ On the Taylor unit:
 ```shell session
 # [ -e /persist/mfg_data.json ] || mfgdata clear
 # mfgdata set development true
-# mfgdata set guid $(cat /proc/sys/kernel/random/uuid)
-# jq . /persist/mfg_data.json
 # validate-mfgdata
-...make the corrections suggested by validate-mfgdata...
+...make the corrections suggested by validate-mfgdata (including running sadi)...
 # validate-mfgdata && echo good to go || echo needs more work
 ```
 
