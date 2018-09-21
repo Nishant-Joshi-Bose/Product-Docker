@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-1230+a292257"
+    "selected_version": "Continuous/master/2.1.0-1276+93b34e1"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-1230+a292257"
+    "selected_version": "Continuous/master/2.1.0-1276+93b34e1"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-19_2126"
+    "selected_version": "Continuous/Castle-Fork/2018-09-21_1022"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-58+9efd601"
+    "selected_version": "Continuous/master/2.2.0-63+d93db0c"
   },
   {
     "name": "bose-opkg-utils",
@@ -81,7 +81,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-150+64d661c"
+    "selected_version": "Release/master/2.2.1-152+70e2340"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-262+a2c5466"
+    "selected_version": "Continuous/master/2.2.0-265+0c40ac7"
   },
   {
     "name": "RivieraLpmTools",
@@ -201,7 +201,7 @@
   },
   {
     "name": "SADI-qc8017_32",
-    "selected_version": "Release/master/1.1.2-27+86a615f"
+    "selected_version": "Release/master/1.2.0-31+bdaebf9"
   },
   {
     "name": "SASS-qc8017_32",
@@ -213,11 +213,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-929+8a3a53c"
+    "selected_version": "Continuous/master/2.2.1-932+f6e1bc9"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-19_2126"
+    "selected_version": "Continuous/Castle-Fork/2018-09-21_1022"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,7 +233,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@45884f80a5e2cbdfbfd27b104a104f193d6325b2"
+    "selected_version": "master@e3060425a066f96cc7eb1c031b741dd845024875"
   },
   {
     "name": "Webkit",
