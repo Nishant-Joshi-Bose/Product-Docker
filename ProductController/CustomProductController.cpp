@@ -1371,6 +1371,18 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
+    {
+        //audio zone callback for notifications
+        AsyncCallback< SoundTouchInterface::zone >
+        nowPlayingCb( std::bind( &CustomProductController::HandleCapsAudioZone,
+                                 this,
+                                 std::placeholders::_1 ),
+                      GetTask( ) );
+
+        //audio zone notification registration
+        m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::zone >(
+            FRONTDOOR_AUDIO_ZONE_API, nowPlayingCb );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2437,6 +2449,38 @@ bool CustomProductController::IsSwUpdateForeground( ) const
 
     // We are likely en-route to accessory update, it's always in background
     return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::HandleCapsAudioZone
+///
+/// @brief  This method is called when a Norification arrives for the /audio/zone endpoint
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleCapsAudioZone( SoundTouchInterface::zone zoneInfo )
+{
+    BOSE_INFO( s_logger, "%s::%s,zone- (%s)", CLASS_NAME, __func__,  ProtoToMarkup::ToJson( zoneInfo, false ).c_str() );
+
+    bool zoneMember = false;
+    for( int i = 0; i < zoneInfo.members_size( ); ++i )
+    {
+        if( zoneInfo.members( i ).guid( ) == GetProductGuid( ) )
+        {
+            zoneMember = true;
+            break;
+        }
+    }
+    if( zoneMember != m_IsZoneMember )
+    {
+        BOSE_INFO( s_logger, "%s::%s now %sa zone member", CLASS_NAME, __func__,  zoneMember ? "" : "not " );
+        m_IsZoneMember = zoneMember;
+        if( m_IsZoneMember )
+        {
+            // nowSelection is never applicable to zone members
+            ClearNowSelectionInfo( );
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

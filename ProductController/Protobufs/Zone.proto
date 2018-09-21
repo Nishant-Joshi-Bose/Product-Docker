@@ -1,0 +1,45 @@
+
+////////////////////////////////////////////////////////////////////////
+/// This file was automatically generated.
+///
+/// Copyright 2018 Bose Corporation
+////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+
+package SoundTouchInterface;
+enum Role
+{
+     NORMAL = 0;
+     LEFT = 1;
+     RIGHT = 2;
+     INVALID_ROLE = 3;
+     
+}
+
+message Member
+{
+    option (ignore_unexpected_markup) = true;
+    optional string ip = 1;
+   optional string guid = 2;
+   optional Role role = 3;
+   
+}
+
+message zone
+{
+    option (ignore_unexpected_markup) = true;
+    optional string name = 1;
+   optional string type = 2;
+   optional Member master = 3;
+   repeated Member members = 4;
+                optional string senderIPAddress = 5;
+   optional bool senderIsMaster = 6;
+   
+}
+
+message Void
+{
+    option (ignore_unexpected_markup) = true;
+    
+}
