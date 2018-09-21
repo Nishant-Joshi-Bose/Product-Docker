@@ -200,6 +200,10 @@
     "selected_version": "Continuous/master/2.2.0-37+1910d09"
   },
   {
+    "name": "SADI-qc8017_32",
+    "selected_version": "Release/master/1.1.2-27+86a615f"
+  },
+  {
     "name": "SASS-qc8017_32",
     "selected_version": "Continuous/master/2.2.0-729+1fc47fd"
   },
