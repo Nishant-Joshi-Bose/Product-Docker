@@ -17,6 +17,7 @@ Repo admins:
 
 ##### Table of Contents
 [Getting Started](#start)  
+[Initial Install](#initial-install)  
 [Software Updates](#updates)  
 [Building different LPM BLOBs](#lpmblobs)  
 [PTS Server Links](#pts)  
@@ -44,6 +45,15 @@ List of devices attached
 
 $
 ```
+
+If you have multiple Android devices, you can set the ANDROID_SERIAL environment
+variable to select a specific device:
+
+```
+export ANDROID_SERIAL=5166240
+```
+
+(Some scripts will not work correctly if you don't do that.)
 
 Access the APQ console via the tap cable.
 
@@ -126,6 +136,36 @@ $ cd CastleTestUtils
 $ pip2.7 install -r requirements.txt
 $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
 ```
+
+<a name="initial-install"/>
+
+### Initial Installation on Development Units
+
+In your Taylor workspace:
+
+```shell session
+$ cd /scratch/Taylor
+$ adb shell /opt/Bose/bin/rw
+$ adb push opt-bose-fs/.bashrc /opt/Bose
+$ adb push opt-bose-fs/.bash_profile /opt/Bose
+$ adb push opt-bose-fs/etc/product /opt/Bose/etc
+$ make product-ipk
+$ ./scripts/upstage
+```
+
+On the Taylor unit:
+
+```shell session
+# [ -e /persist/mfg_data.json ] || mfgdata clear
+# mfgdata set development true
+# mfgdata set guid $(cat /proc/sys/kernel/random/uuid)
+# jq . /persist/mfg_data.json
+# validate-mfgdata
+...make the corrections suggested by validate-mfgdata...
+# validate-mfgdata && echo good to go || echo needs more work
+```
+
+Now reboot and you should see the usual daemons start.
 
 <a name="updates"/>
 
