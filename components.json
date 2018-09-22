@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-1276+93b34e1"
+    "selected_version": "Continuous/master/2.1.0-1306+02e4086"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-1276+93b34e1"
+    "selected_version": "Continuous/master/2.1.0-1306+02e4086"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-21_1022"
+    "selected_version": "Continuous/Castle-Fork/2018-09-21_1712"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -85,7 +85,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-121+7a8fefd"
+    "selected_version": "Continuous/master/2.2.0-122+ca37503"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -101,11 +101,11 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-349+f08fd11"
+    "selected_version": "Continuous/master/2.2.0-357+77581d7"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-143+f08fd11"
+    "selected_version": "Continuous/master/2.2.0-145+77581d7"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -117,7 +117,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-157+0959111"
+    "selected_version": "Continuous/master/2.2.0-158+056c68c"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -205,7 +205,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-729+1fc47fd"
+    "selected_version": "Continuous/master/2.2.0-733+1fc47fd"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -217,7 +217,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-21_1022"
+    "selected_version": "Continuous/Castle-Fork/2018-09-21_1712"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,7 +233,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@e3060425a066f96cc7eb1c031b741dd845024875"
+    "selected_version": "master@aa0310f376a8e9f719722a1c4d3cc1835b5de35a"
   },
   {
     "name": "Webkit",
