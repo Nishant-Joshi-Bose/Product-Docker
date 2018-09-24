@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-24_0909"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-24_1623"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -21,11 +21,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.2-118+89d3fe7"
+    "selected_version": "Continuous/SOS/2.0.2-119+9b87e1c"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/SOS/2.3.0-66+207d9fc"
+    "selected_version": "Continuous/SOS/2.3.0-69+8c063d3"
   },
   {
     "name": "bose-opkg-utils",
@@ -93,7 +93,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-154+b7a33ff"
+    "selected_version": "Continuous/SOS/2.0.0-159+e6a0a28"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -129,7 +129,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-212+29d6a85"
+    "selected_version": "Release/SOS/2.0.0-235+192a34a"
   },
   {
     "name": "LpmMfgTool",
@@ -161,11 +161,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@ab897a34c2a03e64e214ce5b261df79481e332c5"
+    "selected_version": "SOS@d77c01fb7a19d7fedad64bd0502ef37c6de3fa23"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-155+ab897a3"
+    "selected_version": "Continuous/SOS/2.0.0-157+d77c01f"
   },
   {
     "name": "ProductUIAssets",
@@ -189,7 +189,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-252+ad3e185"
+    "selected_version": "Release/SOS/2.0.2-268+62af484"
   },
   {
     "name": "RivieraLpmTools",
@@ -201,7 +201,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-38+115b0b3"
+    "selected_version": "Continuous/SOS/2.0.1-42+13a35fe"
   },
   {
     "name": "SASS-qc8017_32",
@@ -213,11 +213,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.1.1-933+0f2538e"
+    "selected_version": "Continuous/SOS/2.1.1-937+22c4684"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-24_0909"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-24_1623"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,7 +233,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@aa0310f376a8e9f719722a1c4d3cc1835b5de35a"
+    "selected_version": "master@e83394c3903138254518cdc5dc880859a2a76c49"
   },
   {
     "name": "Webkit",
