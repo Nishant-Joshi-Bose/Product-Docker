@@ -32,7 +32,10 @@ if [ "${PS1-}" ]; then # interactive shells
         esac
         [ "$i" ] && echo -n "<$i>"
     }
-    PS1='$(ps1)\$ '
+    unitlabel=$(jq -r </persist/mfg_data.json 2>/dev/null \
+      '"\(.productType)-\(.snMacEth [9:] | split(":") | join(""))"'
+    )
+    PS1='$(ps1)$unitlabel\$ '
     set -o notify
     bind "set show-all-if-ambiguous on"
     bind "set completion-ignore-case on"
