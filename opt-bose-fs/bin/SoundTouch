@@ -81,6 +81,10 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 
     log info "* Starting SoundTouch *"
 
+    log info "Re-launching syslogd with a bigger buffer"
+    killwait syslogd
+    syslogd -C$(( 3 * 1024 )) # units are 1024 bytes (KiB)
+
     # By default we launch shepherdd into the background (as expected by
     # /etc/init.d).  With --wait we instead invoke sheppherd and wait for it
     # to exit (preferred by systemd).
@@ -165,6 +169,13 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 </ShepherdConfig>
 EOF
         fi
+    fi
+
+    # For testing, shepherdargs can contain additional arguments to pass to
+    # shepherdd.  For example, to enable recovery for unexpected daemon death
+    # (even in development mode): echo --recovery >/mnt/nv/shepherdargs
+    if [ -e /mnt/nv/shepherdargs ]; then
+        set -- "$@" $(cat /mnt/nv/shepherdargs)
     fi
 
     set -- ./shepherdd "$@" "$rundir"

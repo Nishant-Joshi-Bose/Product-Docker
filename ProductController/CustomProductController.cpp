@@ -112,6 +112,7 @@
 #include "SystemUtils.h"
 #include "SystemPowerMacro.pb.h"
 #include "CustomChimeEvents.h"
+#include "LpmClientLiteIF.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -198,7 +199,8 @@ CustomProductController::CustomProductController( ) :
                                        GetProductSoftwareInstallManager( ),
                                        GetProductSoftwareInstallScheduler( ) )
 {
-
+    m_radioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
+    m_radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -753,10 +755,11 @@ void CustomProductController::Run( )
     ///
     /// Set up LightBarController
     ///
+    LpmClientLiteIF::LpmClientLitePtr lpmLitePtr( std::static_pointer_cast<LpmClientLiteIF>( m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
     m_lightbarController = std::unique_ptr< LightBar::LightBarController >(
                                new LightBar::LightBarController( GetTask( ),
                                                                  m_FrontDoorClientIF,
-                                                                 m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
+                                                                 lpmLitePtr ) );
 
     //
     // Setup UI recovery timer
@@ -1433,29 +1436,33 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         /// interference between the WiFi and in-room radio.
         ///
         if( message.wirelessstatus( ).has_frequencykhz( ) and
-            message.wirelessstatus( ).frequencykhz( ) >= 0 )
+            message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
             IpcRadioStatus_t radioStatus;
-            radioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
-            radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+            radioStatus.set_status( m_radioStatus.status() );
+            radioStatus.set_band( m_radioStatus.band( ) );
 
-            if( message.wirelessstatus( ).frequencykhz( ) > 0 and
-                message.wirelessstatus().frequencykhz( ) < 2500000 )
+            if( message.wirelessstatus( ).frequencykhz( ) > 2300000 and
+                message.wirelessstatus().frequencykhz( ) < 2600000 )
             {
                 radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
                 radioStatus.set_band( IPC_SOC_RADIO_BAND_24 );
             }
-            else if( message.wirelessstatus( ).frequencykhz( ) >= 5100000 and
-                     message.wirelessstatus( ).frequencykhz( ) >= 5200000 )
+            else if( message.wirelessstatus( ).frequencykhz( ) >= 5000000 and
+                     message.wirelessstatus( ).frequencykhz( ) <= 5300000 )
             {
                 radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
                 radioStatus.set_band( IPC_SOC_RADIO_BAND_52 );
             }
-            else if( message.wirelessstatus( ).frequencykhz( ) >= 5700000 and
-                     message.wirelessstatus( ).frequencykhz( ) >= 5800000 )
+            else if( message.wirelessstatus( ).frequencykhz( ) >= 5600000 and
+                     message.wirelessstatus( ).frequencykhz( ) <= 5900000 )
             {
                 radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
                 radioStatus.set_band( IPC_SOC_RADIO_BAND_58 );
+            }
+            else
+            {
+                BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
             }
 
 
@@ -1474,15 +1481,25 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Handle network operationalmode at this point
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.networkstatus().has_wifiapstate() )
+    else if( message.has_networkstatus() )
     {
-        if( message.networkstatus().wifiapstate() )
+        if( message.networkstatus().has_wifiapstate() )
         {
-            GetLpmHardwareInterface()->SetAmp( true, true );
+            GetLpmHardwareInterface( )->SetAmp( true, message.networkstatus( ).wifiapstate( ) );
         }
-        else
+
+        // if wired we need to update lpm
+        if( GetNetworkServiceUtil().IsNetworkWired() )
         {
-            GetLpmHardwareInterface()->SetAmp( true, false );
+            m_radioStatus.set_status( IPC_SOC_NETWORKSTATUS_ETHERNET );
+            m_radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+            m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
+        }
+        else if( not GetNetworkServiceUtil().IsNetworkConnected() )
+        {
+            m_radioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
+            m_radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+            m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
         }
 
         ( void ) HandleCommonProductMessage( message );
@@ -1612,6 +1629,13 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_accessoriesplaytones() )
     {
         AccessoriesPlayTones( message.accessoriesplaytones( ).subs( ), message.accessoriesplaytones( ).rears( ) );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// dspbooted messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_dspbooted() )
+    {
+        GetHsm( ).Handle< const LpmServiceMessages::IpcDeviceBoot_t& >( &CustomProductControllerState::HandleDspBooted, message.dspbooted() );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message

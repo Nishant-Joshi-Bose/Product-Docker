@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      MuteManager.h
+/// @file      ProductCommandLine.h
 ///
-/// @brief     This header file declares an intent manager class for implementing volume and mute
-///            control based on product specific key actions
+/// @brief     This header file declares a ProductCommandLine class that is used to set up a command
+///            line interface.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -18,7 +18,8 @@
 ///            whatsoever without the written permission of Bose Corporation.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following compiler directive prevents this header file from being included more than once,
 /// which may cause multiple declaration compiler errors.
@@ -32,8 +33,8 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "FrontDoorClientIF.h"
 #include "ProductMessage.pb.h"
+#include "CLICmdsKeys.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -46,100 +47,101 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+class CustomProductLpmHardwareInterface;
 class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class MuteManager
+/// @class ProductCommandLine
 ///
-/// @brief This class provides functionality to implement audio volume management.
+/// @brief This class is used to set up a command line interface through a product controller
+///        class instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class MuteManager : public IntentManager
+class ProductCommandLine
 {
+
 public:
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief Constructor for the MuteManager Class
+    /// @name   ProductCommandLine Constructor
     ///
-    /// @param NotifyTargetTaskIF&         task
+    /// @param  CustomProductController& ProductController
     ///
-    /// @param const CliClientMT&          commandLineClient
-    ///
-    /// @param const FrontDoorClientIF_t&  frontDoorClient
-    ///
-    /// @param CustomProductController& productController
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    MuteManager( NotifyTargetTaskIF&        task,
-                 const CliClientMT&         commandLineClient,
-                 const FrontDoorClientIF_t& frontDoorClient,
-                 ProductController&         productController );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductCommandLine( CustomProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following methods is used to handle volume and mute actions.
+    /// @brief  The following public methods are used to run and stop instances of the
+    ///         ProductCommandLine class, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool Handle( KeyHandlerUtil::ActionType_t& action ) override;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief  The following methods is used to stop instances of the MuteManager
-    ///         class.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    void Run( );
     void Stop( );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following methods allow for manipulation of system mute
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    void ToggleMute( );
 
 private:
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following member variable stores the custom product controller instance.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    CustomProductController& m_CustomProductController;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// These declarations store the main task for processing LPM hardware events and requests. It
-    /// is passed by the ProductController instance.
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*        m_ProductTask    = nullptr;
-    Callback< ProductMessage > m_ProductNotify  = nullptr;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method provides for one-time initialization after the constructor
-    ///        has completed
+    /// @brief The following declarations are used to interface with the product controller and
+    ///        the lower level LPM hardware.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Initialize( );
+    CustomProductController&                             m_ProductController;
+    NotifyTargetTaskIF*                                  m_ProductTask;
+    Callback< ProductMessage >                           m_ProductNotify;
+    std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following methods communicate with the FrontDoor to set and receive volume
+    /// @brief The following declarations and methods are used to create a command line interface,
+    ///        as well as assemble product controller related commands into a list for the
+    ///        interface.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void UpdateFrontDoorVolume( int32_t volume );
-    void ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume );
+    void RegisterCliCmds();
 
-    std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
-    CallbackConnection                      m_NotifierCallback;
+    void HandleCliCmd( uint16_t cmdKey,
+                       const std::list<std::string> & argList,
+                       AsyncCallback<std::string, int32_t> rspAndRspCmplt,
+                       int32_t transact_id );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following member tracks mute status
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_muted = false;
+    void HandleAutowake( const std::list<std::string> & argList,
+                         std::string& response );
+
+    void HandleKey( const std::list<std::string> & argList,
+                    std::string& response );
+
+    void HandleMute( const std::list<std::string> & argList,
+                     std::string& response );
+
+    void HandleSource( const std::list<std::string> & argList,
+                       std::string& response );
+
+    void HandleBootStatus( const std::list<std::string> & argList,
+                           std::string& response );
+
+    void HandleTestFreq( const std::list<std::string> & argList,
+                         std::string& response );
+
+    void HandleTestPairing( const std::list<std::string> & argList,
+                            std::string& response );
+
+    void HandleTestPower( const std::list<std::string> & argList,
+                          std::string& response );
+
+    void HandleTestVoice( const std::list<std::string> & argList,
+                          std::string& response );
+
+    void HandleVolume( const std::list<std::string> & argList,
+                       std::string& response );
+
+    void HandleTestAccessoryUpdate( const std::list<std::string> & argList,
+                                    std::string& response );
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

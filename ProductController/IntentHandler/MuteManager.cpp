@@ -57,7 +57,8 @@ MuteManager::MuteManager( NotifyTargetTaskIF&        task,
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
       m_CustomProductController( static_cast< CustomProductController & >( productController ) ),
       m_ProductTask( m_CustomProductController.GetTask( ) ),
-      m_ProductNotify( m_CustomProductController.GetMessageHandler( ) )
+      m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
+      m_FrontDoorClient( frontDoorClient )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", "MuteManager" );
 
@@ -73,8 +74,6 @@ MuteManager::MuteManager( NotifyTargetTaskIF&        task,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void MuteManager::Initialize( )
 {
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "MuteManager" );
-
     auto fNotify = [ this ]( SoundTouchInterface::volume v )
     {
         ReceiveFrontDoorVolume( v );

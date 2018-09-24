@@ -75,7 +75,7 @@ ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& Produ
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::InitializeFrontDoor( )
 {
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductBLERemoteManager" );
+    auto frontDoorClient = m_ProductController.GetFrontDoorClient();
 
     auto handleNowSelection = [ this ]( const SoundTouchInterface::NowSelectionInfo & nowSelection )
     {
@@ -83,8 +83,8 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
     };
 
     AsyncCallback< SoundTouchInterface::NowSelectionInfo > nowSelCb( handleNowSelection, m_ProductTask );
-    m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb );
-    m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb, {} );
+    frontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb );
+    frontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb, {} );
 
     //System power control notification registration and callback handling
     auto handleSystemPowerControl = [this]( SystemPowerPb::SystemPowerControl systemPowerControlState )
@@ -100,9 +100,8 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
     };
     //System power control get registration
     AsyncCallback< SystemPowerPb::SystemPowerControl > powerCb( handleSystemPowerControl, m_ProductTask );
-    m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
-    m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
-
+    frontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
+    frontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,24 +146,36 @@ void ProductBLERemoteManager::Run( )
         UpdateAvailableSources( sources );
     } );
 
-    // TODO this is a hack for the fact that RCS doesn't provide a status notification, and
-    // callers of IsConnected probably want to know right away (i.e. no callback), so we poll
-    // for now; this will be replaced when a status notification is available
     m_statusTimer->SetTimeouts( 1000, 1000 );
     m_statusTimer->Start( [ = ]( )
     {
-        auto cb = [ = ]( RCS_PB_MSG::PairingNotify n )
+        AsyncCallback<RCS_PB_MSG::PairingNotify> cb(
+            [ = ]( RCS_PB_MSG::PairingNotify n )
         {
+            auto wasRemoteConnected = m_remoteConnected;
             m_remoteConnected = n.has_status() && ( n.status() == RemoteStatus::PSTATE_BONDED );
+            if( m_remoteConnected && !wasRemoteConnected )
+            {
+                UpdateBacklight( );
+            }
+
             if( n.has_status() )
             {
                 m_remoteStatus = n.status();
                 CheckPairing( );
             }
-        };
+        }, m_ProductTask );
         m_RCSClient->Pairing_GetStatus( cb );
     } );
 
+    AsyncCallback< bool > sourceSelectAllowedCb(
+        [ this ]( bool allowed )
+    {
+        BOSE_INFO( s_logger, "%s %s", __PRETTY_FUNCTION__, allowed ? "true" : "false" );
+        m_sourceSelectAllowed = allowed;
+        UpdateBacklight();
+    }, m_ProductTask );
+    m_ProductController.RegisterAllowSourceSelectListener( sourceSelectAllowedCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,6 +234,9 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 /// @param  void This method does not take any arguments.
 ///
 /// @return This method does not return anything.
+///
+///
+/// TODO: This function is probably long-overdue for refactoring
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -355,11 +369,30 @@ void ProductBLERemoteManager::UpdateBacklight( )
             GetZoneLEDs( leds );
             break;
         case LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE:
-            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            if( m_sourceSelectAllowed )
+            {
+                // m_sourceSelectAllowed is a bit misused/overloaded here;  we know it's
+                // set in AiQ and speaker pairing, and in those modes zones 4 and 7 are
+                // supposed to be off (see PGC-2673)
+                leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            }
             leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             break;
         }
+
+        // if source selection is disabled, override the state of the source keys and
+        // turn them off
+        if( ! m_sourceSelectAllowed )
+        {
+            leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+            leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+        }
+
         m_RCSClient->Led_Set(
             leds.sound_touch(), leds.tv(), leds.bluetooth(), leds.game(), leds.clapboard(), leds.set_top_box(),
             leds.zone_01(), leds.zone_02(), leds.zone_03(), leds.zone_04(), leds.zone_05(),
@@ -381,18 +414,12 @@ void ProductBLERemoteManager::UpdateBacklight( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::GetSourceLED(
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available )
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available ) const
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
 
     available = false;
-
-    if( m_inSetup )
-    {
-        sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-        return true;
-    }
 
     if( !m_nowSelection.has_contentitem() )
     {
@@ -407,6 +434,14 @@ bool ProductBLERemoteManager::GetSourceLED(
 
     const auto& sourceName = sourceItem->sourcename();
     const auto& sourceAccountName = sourceItem->sourceaccountname();
+
+    if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
+    {
+        BOSE_INFO( s_logger, "update nowSelection SETUP (%s)", sourceAccountName.c_str( ) );
+        sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
+
+        return true;
+    }
 
     available = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
     if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
@@ -442,22 +477,6 @@ bool ProductBLERemoteManager::GetSourceLED(
         else
         {
             BOSE_ERROR( s_logger, "%s PRODUCT source with missing details/devicetype", __func__ );
-        }
-    }
-    else if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
-    {
-        if( sourceAccountName.compare( SetupSourceSlot_Name( SETUP ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection SETUP" );
-            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-        }
-        else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
-        {
-            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "%s SETUP source with missing details/devicetype", __func__ );
         }
     }
     else if( sourceName.compare( SHELBY_SOURCE::BLUETOOTH ) == 0 )

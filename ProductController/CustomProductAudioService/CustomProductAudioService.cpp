@@ -83,6 +83,13 @@ void CustomProductAudioService::RegisterAudioPathEvents()
             m_StreamConfigResponseCb = {};
         }
         m_DspIsRebooting = false;
+
+        ProductMessage bootedMsg;
+        *bootedMsg.mutable_dspbooted( ) = image;
+        IL::BreakThread( [ this, bootedMsg ]( )
+        {
+            m_ProductNotify( bootedMsg );
+        }, m_ProductTask );
     };
 
     auto lpmConnectCb = [ this, bootedFunc ]( bool connected )
@@ -145,6 +152,12 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 
         m_APPointer->RegisterForInternalMute( callback );
     }
+    {
+        Callback< uint32_t > callback( std::bind( &CustomProductAudioService::RebroadcastLatencyCallback,
+                                                  this,
+                                                  std::placeholders::_1 ) );
+        m_APPointer->RegisterForRebroadcastLatency( callback );
+    }
     ConnectToAudioPath();
 }
 
@@ -205,6 +218,26 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
     std::string inputRoute = std::to_string( m_InputRoute );
     cb.Send( mainStreamAudioSettings, inputRoute );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::RebroadcastLatencyCallback
+///
+/// @param  uint32_t latency
+///
+/// @brief  Callback function, when AudioPath wants to notify ProductController about the
+///         rebroadcastLatency value
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::RebroadcastLatencyCallback( uint32_t latency )
+{
+    BOSE_DEBUG( s_logger, "%s: latency = %d", __func__, latency );
+    if( latency != m_MainStreamAudioSettings.networklatencyms() )
+    {
+        m_MainStreamAudioSettings.set_networklatencyms( latency );
+        SendMainStreamAudioSettingsEvent();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

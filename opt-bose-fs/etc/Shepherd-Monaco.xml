@@ -3,7 +3,7 @@
   <daemon name="Monaco"
           exe="run_dinghy">
     <arg>MONACO</arg>
-    <arg>--log-console</arg>
+    <!-- <arg>--log-console</arg> -->
     <env>WPE_FBDEV=/dev/fb1</env>
   </daemon>
 

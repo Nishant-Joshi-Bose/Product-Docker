@@ -73,6 +73,7 @@ public:
     void HandleStateExit( )  override;
     bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
+    bool HandleDspBooted( const LpmServiceMessages::IpcDeviceBoot_t& dspBooted ) override;
 
 private:
 
