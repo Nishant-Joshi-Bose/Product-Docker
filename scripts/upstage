@@ -138,6 +138,7 @@ for name, target_link in target_links.iteritems():
 if stage_links:
     make_writeable()
     for name, link in stage_links.iteritems():
+        print "symlink", name, "->", link
         check_call(["adb", "shell", "ln -nsf"] +
                    shell_quote([link, "/opt/Bose/" + name]))
 
