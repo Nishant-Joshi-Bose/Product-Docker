@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/master/2.1.0-1306+02e4086"
+    "selected_version": "Continuous/master/2.1.0-1319+b6d58fb"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/master/2.1.0-1306+02e4086"
+    "selected_version": "Continuous/master/2.1.0-1319+b6d58fb"
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-175+597e69f"
+    "selected_version": "Release/master/2.2.0-177+cbb4885"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-21_1712"
+    "selected_version": "Continuous/Castle-Fork/2018-09-24_1022"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -61,7 +61,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-197+a3cff1c"
+    "selected_version": "Continuous/master/2.2.0-200+507a72e"
   },
   {
     "name": "CastleLibs-native",
@@ -77,7 +77,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-122+8a67026"
+    "selected_version": "Release/master/2.2.0-123+8a67026"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -85,7 +85,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-122+ca37503"
+    "selected_version": "Release/master/2.2.0-124+b3cec68"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -101,31 +101,31 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-357+77581d7"
+    "selected_version": "Release/master/2.2.0-359+288ba73"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-145+77581d7"
+    "selected_version": "Release/master/2.2.0-146+77581d7"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-249+ef18859"
+    "selected_version": "Release/master/2.2.0-251+0dc2dc7"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-133+85ccce0"
+    "selected_version": "Release/master/2.2.0-134+85ccce0"
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-158+056c68c"
+    "selected_version": "Release/master/2.2.0-160+961903f"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-136+7db4b82"
+    "selected_version": "Release/master/2.2.0-138+8590bff"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-230+c1fdb11"
+    "selected_version": "Release/master/2.2.0-232+4975af6"
   },
   {
     "name": "LpmMfgTool",
@@ -133,7 +133,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/master-stable/2.1.2-621+37acca1"
+    "selected_version": "Release/master-stable/2.1.2-624+ebbd9a3"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-1082+deeee14"
+    "selected_version": "Release/master/2.2.0-1123+09648fb"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-265+0c40ac7"
+    "selected_version": "Release/master/2.2.0-267+3fa7a5f"
   },
   {
     "name": "RivieraLpmTools",
@@ -209,15 +209,15 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-124+93e55f4"
+    "selected_version": "Release/master/2.2.0-125+93e55f4"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-932+f6e1bc9"
+    "selected_version": "Release/master/2.2.1-936+f805696"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-21_1712"
+    "selected_version": "Continuous/Castle-Fork/2018-09-24_1022"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -225,11 +225,11 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-100+cbd1b3e"
+    "selected_version": "Release/master/2.2.0-102+353c673"
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-65+c13f81d"
+    "selected_version": "Release/master/2.2.0-67+ea31c19"
   },
   {
     "name": "TestUtils",
