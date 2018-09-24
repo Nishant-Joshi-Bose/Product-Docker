@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOS/2.0.10.43752.3006373"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-24_0909"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -21,11 +21,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-117+eb867e3"
+    "selected_version": "Continuous/SOS/2.0.2-118+89d3fe7"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/SOS/2.3.0-60+d44e220"
+    "selected_version": "Continuous/SOS/2.3.0-66+207d9fc"
   },
   {
     "name": "bose-opkg-utils",
@@ -161,11 +161,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@7f03088d4e589d04cbce897b488ccaf1db638161"
+    "selected_version": "SOS@ab897a34c2a03e64e214ce5b261df79481e332c5"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-153+b132336"
+    "selected_version": "Continuous/SOS/2.0.0-155+ab897a3"
   },
   {
     "name": "ProductUIAssets",
@@ -201,7 +201,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-35+0d0fde1"
+    "selected_version": "Release/SOS/2.0.1-38+115b0b3"
   },
   {
     "name": "SASS-qc8017_32",
@@ -213,11 +213,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.1.0-927+a7b6d6d"
+    "selected_version": "Release/SOS/2.1.1-933+0f2538e"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOS/2.0.10.43752.3006373"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-09-24_0909"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,7 +233,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@45884f80a5e2cbdfbfd27b104a104f193d6325b2"
+    "selected_version": "master@aa0310f376a8e9f719722a1c4d3cc1835b5de35a"
   },
   {
     "name": "Webkit",
