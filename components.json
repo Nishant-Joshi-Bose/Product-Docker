@@ -13,19 +13,19 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-24_2221"
+    "selected_version": "Release/Castle-Fork/2.2.0.43802.3014606"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/2.2.0-236+89c8efd"
+    "selected_version": "Release/master/2.2.0-238+cec4676"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-116+221a8b4"
+    "selected_version": "Release/master/2.2.0-122+6d75c34"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-63+d93db0c"
+    "selected_version": "Release/master/2.2.0-73+3c49f68"
   },
   {
     "name": "bose-opkg-utils",
@@ -85,7 +85,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/2.2.0-124+b3cec68"
+    "selected_version": "Release/master/2.2.0-126+e982c4b"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/2.2.0-251+0dc2dc7"
+    "selected_version": "Release/master/2.2.0-253+dc69d40"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
@@ -121,7 +121,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/2.2.0-160+961903f"
+    "selected_version": "Release/master/2.2.0-163+b1d4a70"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -161,11 +161,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@1eb800175572886223a8277f0ddd6e84f456b168"
+    "selected_version": "master@935c89de79488675ea96403f3501a453da13481e"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/1.0.2-67+7bd77f7"
+    "selected_version": "Release/master/2.2.0-162+935c89d"
   },
   {
     "name": "ProductUIAssets",
@@ -201,7 +201,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/master/2.2.0-40+91b804e"
+    "selected_version": "Release/master/2.2.0-46+1aa33d7"
   },
   {
     "name": "SASS-qc8017_32",
@@ -213,11 +213,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/2.2.1-936+f805696"
+    "selected_version": "Release/master/2.2.1-941+5d7ae3a"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-24_2221"
+    "selected_version": "Release/Castle-Fork/2.2.0.43802.3014606"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,7 +233,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@aa0310f376a8e9f719722a1c4d3cc1835b5de35a"
+    "selected_version": "master@e83394c3903138254518cdc5dc880859a2a76c49"
   },
   {
     "name": "VPAController-qc8017_32",
