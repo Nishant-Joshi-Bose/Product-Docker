@@ -145,7 +145,7 @@ In your Taylor workspace:
 
 ```shell session
 $ cd /scratch/Taylor
-$ adb shell /opt/Bose/bin/rw
+$ adb shell mount -oremount,rw /opt/Bose
 $ adb push opt-bose-fs/.bashrc /opt/Bose
 $ adb push opt-bose-fs/.bash_profile /opt/Bose
 $ adb push opt-bose-fs/etc/product /opt/Bose/etc
