@@ -113,7 +113,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.0-306+2cff795"
+    "selected_version": "Release/master/2.2.0-307+2cff795"
   },
   {
     "name": "HTTPInterface-qc8017_32",
