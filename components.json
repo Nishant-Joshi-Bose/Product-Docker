@@ -80,6 +80,10 @@
     "selected_version": "Release/master/2.2.0-123+8a67026"
   },
   {
+    "name": "CloudControlClient-qc8017_32",
+    "selected_version": "Release/master/0.0.1-40+6d02127"
+  },
+  {
     "name": "DataCollectionClient-qc8017_32",
     "selected_version": "Release/master/2.2.1-152+70e2340"
   },
