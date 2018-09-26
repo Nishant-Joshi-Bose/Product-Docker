@@ -31,10 +31,8 @@
 #include "ProductEndpointDefines.h"
 #include "PGCErrorCodes.h"
 #include "DataCollectionClientFactory.h"
-#include "HdmiEdid.pb.h"
 #include "ProductDataCollectionDefines.h"
 #include "ProductSTS.pb.h"
-#include "DataCollectionCecState.pb.h"
 
 using namespace ProductPb;
 constexpr char cecModePersistPath[] = "CecMode.json";
@@ -67,6 +65,8 @@ ProductCecHelper::ProductCecHelper( CustomProductController& ProductController )
       m_CustomProductController( static_cast< CustomProductController & >( ProductController ) ),
       m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) ),
       m_FrontDoorClient( ProductController.GetFrontDoorClient( ) )
+      m_eedid( std::make_shared< DataCollection::HdmiEdid >() ),
+      m_cecStateCache( std::make_shared< DataCollectionPb::CecState >() )
 {
 
 }
@@ -156,6 +156,17 @@ bool ProductCecHelper::Run( )
     AsyncCallback< SystemPowerPb::SystemPowerControl > powerCb( handleSystemPowerControl, m_ProductTask );
     m_FrontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
     m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
+
+    //Register for notification from DataCollection service indicating it's connected/disconnected to network
+    auto func = [this]( bool enabled )
+    {
+        if( enabled )
+        {
+            m_DataCollectionClient->SendData( m_eedid, DATA_COLLECTION_EEDID );
+            m_DataCollectionClient->SendData( m_cecStateCache, DATA_COLLECTION_CEC_STATE );
+        }
+    };
+    m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
 
     return true;
 }
@@ -466,8 +477,6 @@ void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::ED
 {
     BOSE_DEBUG( s_logger, "ProductCecHelper::SendEdidDataCollection" );
 
-    auto eedid = std::make_shared< DataCollection::HdmiEdid >( );
-
     //convert protobuf byte buffer to string
     std::stringstream stringEdid;
     const char *bytesBuf = rawEdid.edid().c_str();
@@ -477,9 +486,9 @@ void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::ED
         stringEdid << ( int )bytesBuf[i];
     }
 
-    eedid->set_ediddata( stringEdid.str() );
+    m_eedid->set_ediddata( stringEdid.str() );
 
-    m_DataCollectionClient->SendData( eedid, DATA_COLLECTION_EEDID );
+    m_DataCollectionClient->SendData( m_eedid, DATA_COLLECTION_EEDID );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -642,17 +651,15 @@ void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
 
     BOSE_DEBUG( s_logger, "%s - %s", __PRETTY_FUNCTION__, ProtoToMarkup::ToJson( state ).c_str( ) );
 
-    auto cecState = std::make_shared< DataCollectionPb::CecState >( );
-
-    cecState->set_physicaladdress( state.physicaladdress( ) );
-    cecState->set_logicaladdress( state.logicaladdress( ) );
-    cecState->set_activesource( state.actsrc( ) );
-    cecState->set_strmpath( state.strmpath( ) );
+    m_cecStateCache->set_physicaladdress( state.physicaladdress( ) );
+    m_cecStateCache->set_logicaladdress( state.logicaladdress( ) );
+    m_cecStateCache->set_activesource( state.actsrc( ) );
+    m_cecStateCache->set_strmpath( state.strmpath( ) );
 
     for( auto i = 0; i < state.cec_devices_size( ); i++ )
     {
         const auto& idev = state.cec_devices( i );
-        auto odev = cecState->add_cecdevices( );
+        auto odev = m_cecStateCache->add_cecdevices( );
 
         // TODO: do we need to filter this list based on LA (i.e. does the list
         // have a bunch of entries w/LA == CEC_UNREG_BCAST, and if so should we filter
@@ -669,7 +676,7 @@ void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
         }
     }
 
-    m_DataCollectionClient->SendData( cecState, DATA_COLLECTION_CEC_STATE );
+    m_DataCollectionClient->SendData( m_cecStateCache, DATA_COLLECTION_CEC_STATE );
     m_cecState = state;
 }
 
