@@ -1,11 +1,27 @@
 [
   {
-    "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/stable_sos/2.0.15-1243+d54453c"
+    "name": "AudioPathClient-qc8017_32",
+    "selected_version": "Continuous/CastleAudioPath_NewComponents/2.1.0-1268+4ec09a0"
   },
   {
-    "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/stable_sos/2.0.15-1243+d54453c"
+    "name": "AudioPathClient-qc8017_64",
+    "selected_version": "Continuous/CastleAudioPath_NewComponents/2.1.0-1268+4ec09a0"
+  },
+  {
+    "name": "AudioPathProducts-qc8017_32",
+    "selected_version": "Continuous/CastleAudioPath_NewComponents/2.1.0-1268+4ec09a0"
+  },
+  {
+    "name": "AudioPathProducts-qc8017_64",
+    "selected_version": "Continuous/CastleAudioPath_NewComponents/2.1.0-1268+4ec09a0"
+  },
+  {
+    "name": "AudioPathService-qc8017_32",
+    "selected_version": "Continuous/CastleAudioPath_NewComponents/2.1.0-1268+4ec09a0"
+  },
+  {
+    "name": "AudioPathService-qc8017_64",
+    "selected_version": "Continuous/CastleAudioPath_NewComponents/2.1.0-1268+4ec09a0"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -61,7 +77,7 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/SOS/2.3.0-351+c13f2b6"
+    "selected_version": "Continuous/CastleAudioPath_NewComponents_SOS/2.3.0-352+163db97"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -205,7 +221,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/SOS/2.1.0-731+ed3f3cf"
+    "selected_version": "Continuous/CastleAudioPath_NewComponents_SOS/2.1.0-730+010cd38"
   },
   {
     "name": "Shepherd-qc8017_32",
