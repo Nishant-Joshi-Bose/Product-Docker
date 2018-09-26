@@ -29,8 +29,8 @@
                 "libs": ""
             },
             "NetManager": {
-                "bins": "NetManager, wifimgr-ndc, wifimgr-throttle-info",
-                "conf": "wpa_supplicant.conf, Shepherd-NetManager.xml",
+                "bins": "NetManager, BoseFirewall, wifimgr-ndc, wifimgr-throttle-info, update_iptables",
+                "conf": "wpa_supplicant.conf, Shepherd-NetManager.xml, Shepherd-BoseFirewall.xml, exclude.conf, update_iptables.conf",
                 "libs": ""
             },
             "SoftwareUpdate": {
