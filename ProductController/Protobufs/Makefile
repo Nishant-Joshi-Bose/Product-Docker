@@ -22,7 +22,6 @@ PROTO_SOURCES = ProductMessage.proto          \
                 KeyNames.proto                \
                 SystemPowerMacro.proto        \
                 DataCollectionCecState.proto  \
-                Zone.proto                    \
 
 #
 # The following alias is used to search for imported Protocol Buffer files.

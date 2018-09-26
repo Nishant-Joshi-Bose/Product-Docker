@@ -45,7 +45,7 @@
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "SoundTouchInterface/AudioService.pb.h"
-#include "Zone.pb.h"
+#include "SoundTouchInterface/Zone.pb.h"
 #include "MacAddressInfo.h"
 #include "LightBarController.h"
 #include "SystemPowerProduct.pb.h"
