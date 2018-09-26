@@ -159,8 +159,8 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< DataCollectionClientIF > m_DataCollectionClient;
 
-    std::shared_ptr< DataCollection::HdmiEdid > m_eedid;
-    std::shared_ptr< DataCollectionPb::CecState > m_cecStateCache;
+    DataCollectionPb::HdmiEdid m_eedid;
+    DataCollectionPb::CecState m_cecStateCache;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

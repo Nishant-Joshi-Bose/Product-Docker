@@ -58,9 +58,11 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
 
     auto func = [this]( bool enabled )
     {
+        BOSE_INFO( s_logger, "!!!! DataCollection service connection update" );
+
         if( enabled )
         {
-            SendToDataCollection();
+            SendAudioSettingsToDataCollection();
         }
     };
     m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
@@ -209,7 +211,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         if( isChanged )
         {
             FetchLatestAudioSettings();
-            SendToDataCollection();
+            SendAudioSettingsToDataCollection();
         }
         // Update input route
         if( contentItemProto.source() == SHELBY_SOURCE::PRODUCT )
@@ -279,15 +281,14 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductAudioService::SendToDataCollection
+/// @name   CustomProductAudioService::SendAudioSettingsToDataCollection
 ///
 /// @brief  Send all AudioSettings to DataCollectionService
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::SendToDataCollection( )
+void CustomProductAudioService::SendAudioSettingsToDataCollection( ) const
 {
     BOSE_DEBUG( s_logger, __func__ );
-    // Connection to DataCollection server established, send current AudioSettings.
     m_DataCollectionClient->SendData(
         std::make_shared< AudioBassLevel >( m_AudioSettingsMgr->GetBass( ) ),
         DATA_COLLECTION_BASS );
