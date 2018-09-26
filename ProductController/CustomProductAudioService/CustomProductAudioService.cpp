@@ -58,8 +58,6 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
 
     auto func = [this]( bool enabled )
     {
-        BOSE_INFO( s_logger, "!!!! DataCollection service connection update" );
-
         if( enabled )
         {
             SendAudioSettingsToDataCollection();
