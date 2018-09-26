@@ -158,7 +158,6 @@ bool ProductCecHelper::Run( )
     m_FrontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
 
     //Register for notification from DataCollection service indicating it's connected/disconnected to network
-    m_eedid.set_ediddata( "" );
     auto func = [this]( bool enabled )
     {
         if( enabled )

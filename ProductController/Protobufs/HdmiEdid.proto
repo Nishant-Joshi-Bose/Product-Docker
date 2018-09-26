@@ -8,5 +8,5 @@ package DataCollectionPb;
 
 message HdmiEdid
 {
-  required string edidData = 1;
+  optional string edidData = 1;
 }
