@@ -33,7 +33,7 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/SOS/2.3.0-232+69bcaec"
+    "selected_version": "Release/SOS/2.3.0-239+268e36a"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
@@ -41,7 +41,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/SOS/2.3.0-69+8c063d3"
+    "selected_version": "Release/SOS/2.3.0-75+5376dbd"
   },
   {
     "name": "bose-opkg-utils",
@@ -81,7 +81,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/SOS/2.3.0-211+7233937"
+    "selected_version": "Release/SOS/2.3.0-215+4dcf5ea"
   },
   {
     "name": "CastleLibs-native",
@@ -109,7 +109,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.0-159+e6a0a28"
+    "selected_version": "Release/SOS/2.0.0-160+7abd446"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -217,7 +217,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Continuous/SOS/2.0.1-42+13a35fe"
+    "selected_version": "Release/SOS/2.0.1-47+6144e79"
   },
   {
     "name": "SASS-qc8017_32",
@@ -229,7 +229,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/SOS/2.1.1-937+22c4684"
+    "selected_version": "Release/SOS/2.1.1-943+22c4684"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
