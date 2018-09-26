@@ -15,10 +15,7 @@
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
-#include "Bass.pb.h"
-#include "Treble.pb.h"
-#include "Center.pb.h"
-#include "Mode.pb.h"
+#include "DataCollectionEvent.pb.h"
 
 using namespace std::placeholders;
 
