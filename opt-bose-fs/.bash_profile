@@ -17,22 +17,7 @@ if [ "${PS1-}" ]; then # interactive shells
     fi
 
     source ~/.bashrc
-
-    date
-    (
-        name=$(xmllint --xpath '//SystemConfiguration/DeviceName/text()' \
-               /mnt/nv/product-persistence/SystemConfigurationDB.xml)
-        if [ "$name" ]; then
-            echo "Device name: \"$name\""
-        fi
-        jq -r '"Product version: \(.long)"' /opt/Bose/etc/BoseVersion.json
-    ) 2>/dev/null
-    awk '$1 == "HSP" {$1="Riviera-HSP:"; print}' /etc/riviera-version
-
-    echo Secure boot: \
-        $(awk '$NF == "0" {print "disabled"}
-               $NF == "1" {print "enabled"}' /sys/kernel/hsp/qfprom_secboot)
-
+    info
     validate-mfgdata
 fi
 
