@@ -149,6 +149,13 @@ EOF
         fi
     fi
 
+    # For testing, shepherdargs can contain additional arguments to pass to
+    # shepherdd.  For example, to enable recovery for unexpected daemon death
+    # (even in development mode): echo --recovery >/mnt/nv/shepherdargs
+    if [ -e /mnt/nv/shepherdargs ]; then
+        set -- "$@" $(cat /mnt/nv/shepherdargs)
+    fi
+
     set -- ./shepherdd "$@" "$rundir"
     log info "Starting $*"
 

@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/upgrade-components-22/2.1.0-833+7db225e"
+    "selected_version": "Release/stable/2.2.1-1331+116d21c"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/upgrade-components-22/2.1.0-833+7db225e"
+    "selected_version": "Release/stable/2.2.1-1331+116d21c"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,19 +13,19 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-26_1553"
+    "selected_version": "Release/Castle-Fork/2.2.0.43802.3014606"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-241+e98eb22"
+    "selected_version": "Release/master/2.2.0-238+cec4676"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-129+4219cdc"
+    "selected_version": "Release/master/2.2.0-122+6d75c34"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-72+3c49f68"
+    "selected_version": "Release/master/2.2.0-73+3c49f68"
   },
   {
     "name": "bose-opkg-utils",
@@ -57,11 +57,11 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/SOS/2.1.3-501+b0d89a1"
+    "selected_version": "Release/master/2.1.3-500+b0d89a1"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-217+85e6479"
+    "selected_version": "Release/master/2.2.0-209+cf41b94"
   },
   {
     "name": "CastleLibs-native",
@@ -85,11 +85,11 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-127+cddd149"
+    "selected_version": "Release/master/2.2.0-126+e982c4b"
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-157+8c8d94e"
+    "selected_version": "Release/master/2.2.0-158+8c8d94e"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -109,7 +109,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-252+dc69d40"
+    "selected_version": "Release/master/2.2.0-253+dc69d40"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -117,7 +117,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-162+b1d4a70"
+    "selected_version": "Release/master/2.2.0-163+b1d4a70"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -161,11 +161,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@d56d4f39d2df3a9585a0cb4331bb2e0288c23f69"
+    "selected_version": "master@935c89de79488675ea96403f3501a453da13481e"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-164+d56d4f3"
+    "selected_version": "Release/master/2.2.0-162+935c89d"
   },
   {
     "name": "ProductUIAssets",
@@ -181,7 +181,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/sos/3.10.5"
+    "selected_version": "Release/master/4.1"
   },
   {
     "name": "Riviera-Toolchain",
@@ -201,11 +201,11 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-45+1aa33d7"
+    "selected_version": "Release/master/2.2.0-46+1aa33d7"
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-749+cee3ea8"
+    "selected_version": "Release/master/2.2.0-740+826012f"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -213,11 +213,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-944+4ca5c32"
+    "selected_version": "Release/master/2.2.1-941+5d7ae3a"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-09-26_1553"
+    "selected_version": "Release/Castle-Fork/2.2.0.43802.3014606"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -233,7 +233,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@f03939fb99d8744a06314b10dd11624f0e55113c"
+    "selected_version": "master@e83394c3903138254518cdc5dc880859a2a76c49"
   },
   {
     "name": "Webkit",

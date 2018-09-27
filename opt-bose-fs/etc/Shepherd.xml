@@ -1,6 +1,7 @@
 <ShepherdConfig>
 
-  <daemon name="ProductController"/>
+  <daemon name="ProductController"
+          recovery="reboot"/>
 
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
@@ -12,6 +13,7 @@
     <arg>-c/opt/Bose/etc/CAPS.xml</arg>
   </daemon>
 
+  <daemon name="AirPlay2"/>
   <daemon name="Amazon"/>
   <daemon name="AudioNotification"/>
   <daemon name="BMX"/>

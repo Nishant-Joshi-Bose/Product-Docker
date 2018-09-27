@@ -44,6 +44,7 @@ tap-command product settings all
 tap-command product software_update_status
 tap-command product state
 tap-command product timer_status
+tap-command product trace_hsm
 tap-command network status
 tap-command network wifi profiles info
 tap-command network wifi status

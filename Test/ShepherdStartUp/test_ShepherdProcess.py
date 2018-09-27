@@ -13,7 +13,7 @@ This file is to test Shephed Processes
 import time
 import logging
 import ConfigParser
-
+import sys, errno
 import pytest
 import pytest_dependency
 
@@ -26,8 +26,9 @@ logger = get_logger(__name__, "ShepherdProcess.log", level=logging.INFO, fileLog
 cfg = ConfigParser.SafeConfigParser()
 cfg.read("conf_Shepherd.ini")
 
+@pytest.mark.usefixtures('passport_user_with_device', 'user_details', 'environment', 'save_speaker_log')
 @pytest.mark.dependency()
-def test_bonjour_update(request):
+def test_bonjour_update(request, passport_user_with_device, user_details, environment, save_speaker_log):
     """
     This to perform Bonjour update twice to validate it install continuos build
     """
@@ -42,12 +43,12 @@ def test_bonjour_update(request):
     BonjourCnt = 0
     while BonjourCnt < int(bonjour_update_loop):
         BonjourCnt = BonjourCnt + 1
-        result = PerformBonjourUpdate(adb, zip_file, device)
+        result = PerformBonjourUpdate(adb, zip_file, device, user_details["email"], user_details["password"], environment)
         assert result, "Bonjour Update Failed. Please see logs for more details"
         time.sleep(60)
 
 @pytest.mark.dependency(depends=["test_bonjour_update"])
-def test_shepherd_process(request):
+def test_shepherd_process(request, save_speaker_log):
     """
     This is to validate all processes running after Bonjour Update
     We are continuously validating each process for 5 minutes
@@ -72,8 +73,14 @@ def test_shepherd_process(request):
                     process_died_list.append(process)
         time.sleep(2)
     assert process_died_list == [], "The following processes died after installation: {}".format(process_died_list)
+    
+    #Added Product boot status
+    res = riviera.communication.executeCommand('echo product boot_status | nc 0 17000')
+    logger.info("Product boot_status : %s", res)
+    if 'false' in res:
+        assert False, "Device is in booting state"
 
-def PerformBonjourUpdate(adb, zip_file, device):
+def PerformBonjourUpdate(adb, zip_file, device, email, password, environment):
     """
     Perform Bonjour Update twice on same build to validate software update
     """
@@ -88,11 +95,20 @@ def PerformBonjourUpdate(adb, zip_file, device):
             except Exception as error:
                 logger.info("Getting IP Address.... " + str(error))
                 continue
-        bonjour_util = BonjourUpdateUtils(device=device)
+        bonjour_util = BonjourUpdateUtils(device=device, email=email, password=password, environment=environment)
         try:
             bonjour_util.upload_zipfile(zip_file, device_ip_address)
         except SystemExit as error:
             logger.info("System Exit Exception in Bonjour Update .... " + str(error))
+            if str(error) == str(errno.ETIMEDOUT):
+                logger.info("System Exit Exception in Bonjour Update for TimeOut ...")
+                return False
+            elif str(error) == str(errno.ENOPKG):
+                logger.info("Exception in Bonjour Update and Device is in critical error state ...")
+                return False
+            elif str(error) == str(errno.EBADF):
+                logger.info("Exception in Bonjour Update and Unexpected State - Exiting Bonjour Update ...")
+                return False
             return True
     except Exception as error:
         logger.info("Exception in Bonjour Update .... " + str(error))

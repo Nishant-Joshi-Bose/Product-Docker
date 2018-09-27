@@ -23,6 +23,7 @@ import time
 import pytest
 import pexpect
 
+from pytest_testrail.plugin import pytestrail
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
@@ -39,6 +40,8 @@ from bootsequencing.stateutils import network_checker, UNKNOWN
 from services import SERVICES
 from ProductControllerAPI import eddie_helper
 
+
+from Test.testrail import retrieve_test_cases
 
 LOGGER = get_logger(__name__)
 
@@ -102,6 +105,18 @@ def pytest_addoption(parser):
                      default="integration",
                      help="Pass the Galapagos environment for frontdoor api object")
 
+@pytest.hookimpl
+def pytest_collection_modifyitems(items):
+    """
+    Python hook function - https://docs.pytest.org/en/latest/writing_plugins.html
+    items - The list of collected test items
+    """
+    tests = retrieve_test_cases()
+    for item in items:
+        for test in tests:
+            for testid, testname in test.iteritems():
+                if item.name == testname:
+                    item.add_marker(pytestrail.case(testid))
 
 def ping(ip):
     """ Pings a given IP Address """
@@ -185,7 +200,6 @@ def device_guid(riviera):
 def environment(request):
     """
     Galapagos/Passport Environment for the test session.
-
     :param request: PyTest command line request option
     :return: Environment string
     """
@@ -196,7 +210,6 @@ def environment(request):
 def frontDoor_without_user(ip_address_wlan, user_details):
     """
     Get the frontDoor Instance
-
     :param ip_address_wlan: Fixture returning ip address
     :param passport_user_details: Fixture returnng passport user credential
     :param front_door: Instance of FronDoorAPI
@@ -386,7 +399,6 @@ def adb(device_id):
 def device_id(request):
     """
     Acquires the Command line Device ID.
-
     :param request: PyTest command line request options
     :return: String Device ID used when starting the test
     """
@@ -398,10 +410,8 @@ def wifi_config():
     """
     Generates a ConfigParser object of locally stored wireless base
     station profiles.
-
     See ./Configs/conf_wifiProiles.ini for details and configuration
     setups.
-
     :return: ConfigParser object of Wireless configs
     """
     LOGGER.info("wifi_config")
@@ -419,7 +429,6 @@ def wifi_config():
 def ip_address_wlan(request, device_id, wifi_config):
     """
     IP address of the device connected to WLAN.
-
     Removes any configuration on the Device if not connected.
     :param request: PyTest command line request option
     :param device_id: The ADB Device ID of the device under test
@@ -576,7 +585,6 @@ def rebooted_device(adb):
     """
     This will put the device into a rebooted state and yield information about
         how long it took.
-
     :param adb: ADB Communication Object
     :return: None
     """
@@ -598,7 +606,6 @@ def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
     """
     This will put the device into a rebooted state with network up and yield
         information about how long it took.
-
     :param request: PyTest command line request options
     :return: Rebooted Information
     """
@@ -680,7 +687,6 @@ def set_no_audio_timeout(device_id):
     3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     4. At the end of test case revert "NoAudioTimeout" to 20 minutes.
     5. Reboot and wait for CLI-Server to start and device state get out of Booting.
-
     :param device_id: ADB Device ID of the device under test
     """
     riviera_comm = rivieraCommunication.getCommunicationType('ADB')
@@ -726,7 +732,6 @@ def set_lps_timeout(device_id):
     3. At the end of test case revert "NoAudioTimeout" to 20 minutes and
        "NoNetworkConfiguredTimeout" to 120 minutes.
     4. Reboot and wait for CLI-Server to start and device state get out of Booting.
-
     :param device_id: ADB Device ID of the device under test
     """
     riviera_comm = rivieraCommunication.getCommunicationType('ADB')
@@ -828,7 +833,6 @@ def remove_oob_setup_state_and_reboot_device(device_id, adb):
 def factory_defaulted_device(riviera):
     """
     Performs factory default on device
-
     :param riviera: Riviera connection throught ADB
     """
     LOGGER.info("Perform factory default")
@@ -843,7 +847,6 @@ def factory_defaulted_device(riviera):
 def lpm_serial_client(request):
     """
     Generates an LPM Serial Client using the supplied port.
-
     :param request: PyTest command line request object
     :yield: LPM Serial Client connection
     """
@@ -886,7 +889,6 @@ def clear_wifi_profiles(device_id):
 def reboot_device_at_end(request, device_id):
     """
     Reboots the device at the end.
-
     :param request: PyTest command line request object
     :param device_id: ADB Device ID of the device under test
     :param adb: Get adb instance
