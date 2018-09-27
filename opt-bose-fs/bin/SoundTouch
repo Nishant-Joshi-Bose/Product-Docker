@@ -46,6 +46,20 @@ lowpower=(
     Shepherd-BLEToFrontDoorService.xml
 )
 
+function validate {
+    if ! validate-mfgdata; then
+        log warning "Missing or invalid manufacturing data"
+        return 1
+    fi
+    # If the lowpower list is wrong, we don't tend to notice until we try to
+    # come out of low power mode.  So, validate the list now.
+    if ! ( cd /opt/Bose/etc && ls "${lowpower[@]}" >/dev/null ); then
+        log critical "lowpower list is not valid"
+        return 1
+    fi
+    return 0
+}
+
 # For testing, make it easy to override what shepherd config files we use.
 if [ -d /mnt/nv/shepherd ]; then
     rundir=/mnt/nv/shepherd
@@ -121,8 +135,8 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         mkdir -p "$rundir" || exit
         rm -f "$rundir"/*.xml
 
-        if ! validate-mfgdata; then
-            log warning "Missing or invalid manufacturing data, won't start SoundTouch"
+        if ! validate; then
+            log warning "Won't start SoundTouch"
             # Enable access to the LPM CLI.
             ln -s /opt/Bose/etc/Shepherd-LPMService.xml "$rundir" || exit
             ln -s /opt/Bose/etc/Shepherd-CLIServer.xml "$rundir" || exit
