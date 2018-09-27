@@ -3,8 +3,6 @@
 # Create the Avahi daemon's configuration file and then launch the daemon.
 #
 
-PATH=/sbin:/bin:/usr/sbin:/usr/bin
-
 if [ $# != 0 ]; then
     echo >&2 "$0: unexpected argument '$1'"
     exit 1
@@ -18,7 +16,8 @@ if ! [ "$hostname" ]; then
     hostname="$(hostname)-$(date +%s)"
 fi
 
-cat <<EOF > "$conf" || exit
+# Make the general config file in a writable location
+cat <<\EOF > "$conf" || exit
 [server]
 host-name=$hostname
 use-ipv4=yes
@@ -44,4 +43,4 @@ rlimit-stack=4194304
 rlimit-nproc=3
 EOF
 
-exec avahi-daemon --no-drop-root --syslog -f "$conf"
+exec /opt/Bose/bin/avahi-daemon --no-drop-root --syslog -f "$conf"

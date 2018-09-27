@@ -13,6 +13,7 @@
     <arg>-c/opt/Bose/etc/CAPS.xml</arg>
   </daemon>
 
+  <daemon name="AirPlay2"/>
   <daemon name="Amazon"/>
   <daemon name="AudioNotification"/>
   <daemon name="BMX"/>
