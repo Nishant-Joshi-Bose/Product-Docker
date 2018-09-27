@@ -498,7 +498,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     m_accessoryListReceived = true;
 
-    LpmServiceMessages::IpcAccessoryList_t oldAccessorySpeakerState;
+    ProductPb::AccessorySpeakerState oldAccessorySpeakerState;
     oldAccessorySpeakerState.CopyFrom( m_accessorySpeakerState );
 
     m_accessorySpeakerState.clear_rears( );
