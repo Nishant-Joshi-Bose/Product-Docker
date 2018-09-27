@@ -78,6 +78,7 @@ TARGET_LINK_LIBRARIES(ProductController
   SoftwareUpdateAPI
   STS
   STSClient
+  uuid
   ShelbyUtils
   CommonTypes
   STSProtoBufs
