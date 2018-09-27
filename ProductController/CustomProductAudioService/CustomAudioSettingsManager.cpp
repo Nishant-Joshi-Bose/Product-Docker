@@ -301,10 +301,10 @@ ResultCode_t CustomAudioSettingsManager::SetMode( AudioMode& mode )
     {
         return ResultCode_t::INVALID_VALUE;
     }
-    // /audio/mode's persistence level is default to "SESSION"
+    // /audio/mode's persistence level is default to "CONTENT_ITEM"
     if( !mode.has_persistence() )
     {
-        mode.set_persistence( kPersistSession );
+        mode.set_persistence( kPersistContentItem );
     }
     return SetAudioProperties( mode, kModeName, m_currentMode );
 }
