@@ -1,0 +1,27 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @DataCollectionEvent.proto
+///
+/// Copyright 2018 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+package DataCollectionPb;
+
+message Bass
+{
+  required int32 bass = 1;
+}
+
+message Treble
+{
+  required int32 treble = 1;
+}
+
+message Center
+{
+  required int32 center = 1;
+}
+
+message Mode
+{
+  required string mode = 1;
+}

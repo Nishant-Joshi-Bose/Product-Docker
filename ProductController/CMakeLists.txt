@@ -44,6 +44,7 @@ ADD_EXECUTABLE(ProductController
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
+  ${PROTO_CC_DEST}/DataCollectionEvent.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   IntentHandler/CountDownManager.cpp
   IntentHandler/IntentHandler.cpp

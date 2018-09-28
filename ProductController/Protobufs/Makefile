@@ -13,6 +13,7 @@ PROTO_SOURCES = \
   ProductMessage.proto      \
   KeyActions.proto          \
   DisplayController.proto   \
+  DataCollectionEvent.proto \
   AudioSettings.proto       \
   KeyNames.proto            \
   ProductSTS.proto
