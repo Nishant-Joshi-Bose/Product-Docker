@@ -36,15 +36,18 @@ del parser
 
 # ----------------------------------------------------------------------------
 
-def check_call(cmd):
-    if opts.verbose:
-        print cmd
-    subprocess.check_call(cmd)
+def shell_quote(args):
+    return map(pipes.quote, args)
 
-def call(cmd):
+def check_call(cmd, **kwargs):
     if opts.verbose:
-        print cmd
-    subprocess.call(cmd)
+        print " ".join(shell_quote(cmd))
+    subprocess.check_call(cmd, **kwargs)
+
+def call(cmd, **kwargs):
+    if opts.verbose:
+        print " ".join(shell_quote(cmd))
+    return subprocess.call(cmd, **kwargs)
 
 wspace_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 os.chdir(wspace_dir)
@@ -54,68 +57,157 @@ if opts.build:
 
 os.chdir(stage_dir)
 
-stage = {}
-target = {}
+made_writeable = False
 
-cmd = ["adb", "shell", "cd /opt/Bose && find -type f -print0 | xargs -0 md5sum"]
-ph = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-for line in iter(ph.stdout.readline, ""):
-    line = line.rstrip("\r\n")
+def make_writeable():
+    global made_writeable
+    if made_writeable:
+        return
+    check_call("adb shell mount -oremount,rw /opt/Bose".split())
+    made_writeable = True
+
+def capture(cmd):
+    ph = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    lines = []
+    for line in iter(ph.stdout.readline, ""):
+        lines.append(line.rstrip("\r\n"))
+    if ph.wait():
+        raise Exception("command failed: " + " ".join(cmd))
+    return lines
+
+# ----------------------------------------------------------------------------
+# Directories
+
+stage_dirs = set()
+target_dirs = set()
+
+for line in capture(["adb", "shell", "cd /opt/Bose && find -type d"]):
+    if line == ".":
+        continue
+    if line[:2] != "./":
+        raise Exception("oops '{}'".format(line))
+    name = line[2:]
+    target_dirs.add(name)
+
+for line in capture("find -type d".split()):
+    if line == ".":
+        continue
+    if line[:2] != "./":
+        raise Exception("oops '{}'".format(line))
+    name = line[2:]
+    stage_dirs.add(name)
+
+updates = stage_dirs - target_dirs
+if updates:
+    make_writeable()
+    check_call(["adb", "shell", "cd /opt/Bose && mkdir -p"] +
+               shell_quote(sorted(updates)))
+
+# ----------------------------------------------------------------------------
+# Symlinks.
+
+stage_links = {}
+target_links = {}
+
+lines = capture(["adb", "shell", "cd /opt/Bose && " +
+                 "find -type l -print -exec readlink {} \;"])
+while lines:
+    name = lines.pop(0)
+    link = lines.pop(0)
+    if name[:2] != "./":
+        raise Exception("oops '{}'".format(name))
+    name = name[2:]
+    target_links[name] = link
+
+lines = capture("find -type l -print -exec readlink {} ;".split())
+while lines:
+    name = lines.pop(0)
+    link = lines.pop(0)
+    if name[:2] != "./":
+        raise Exception("oops '{}'".format(name))
+    name = name[2:]
+    stage_links[name] = link
+
+for name, target_link in target_links.iteritems():
+    stage_link = stage_links.get(name)
+    if name is None:
+        stage_links[name] = target_link
+    elif stage_link == target_link:
+        stage_links.pop(name)
+
+if stage_links:
+    make_writeable()
+    for name, link in stage_links.iteritems():
+        print "symlink", name, "->", link
+        check_call(["adb", "shell", "ln -nsf"] +
+                   shell_quote([link, "/opt/Bose/" + name]))
+
+# ----------------------------------------------------------------------------
+# Ordinary files.
+
+stage_files = {}
+target_files = {}
+
+for line in capture(["adb", "shell", "cd /opt/Bose && find -type f -print0 | xargs -r0 md5sum"]):
     #  .123456789.123456789.123456789.123456
     # "6b5c0e8dd274f120cd967262f8fe4ef7  ./foo"
     if line[32:36] != "  ./":
         raise Exception("oops '{}'".format(line))
     sig = line[0:32]
     name = line[36:]
-    target[name] = sig
+    target_files[name] = sig
 
-cmd = ["sh", "-c", "find -type f -print0 | xargs -0 md5sum"]
-ph = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-for line in iter(ph.stdout.readline, ""):
-    line = line.rstrip("\r\n")
+for line in capture(["sh", "-c", "find -type f -print0 | xargs -r0 md5sum"]):
     if line[32:36] != "  ./":
         raise Exception("oops '{}'".format(line))
     sig = line[0:32]
     name = line[36:]
-    stage[name] = sig
+    stage_files[name] = sig
 
 updates = set()
 
 # See what's on the target that's different from what's in stage.
-for name, sig in target.iteritems():
-    if name not in stage:
+for name, sig in target_files.iteritems():
+    if name not in stage_files:
         if opts.verbose:
             print "Not in stage:", name
         continue
-    if target[name] == stage[name]:
+    if target_files[name] == stage_files[name]:
         if opts.verbose:
             print "Unchanged:", name
         continue
     updates.add(name)
 
 # See what's in stage that's not on the target.
-for name, sig in stage.iteritems():
-    if name in target:
+for name, sig in stage_files.iteritems():
+    if name in target_files:
         continue
     if opts.verbose:
         print "Not on target:", name
     updates.add(name)
 
-if not updates:
+if updates:
+    updates = list(updates)
+    updates.sort()
+
+    make_writeable()
+
+    # Remove the files we're going to be updating.  This is impotant for
+    # executables in particular because if a process is running as that
+    # executable, Linux won't let us modify it ("text file busy").
+    # Also, avoid trying to send a command that's too long or else
+    # adb will fail ("bad service name length").
+    max_per_command = 20
+    remove = [name for name in updates if name in target_files]
+    while remove:
+        args = remove[:max_per_command]
+        remove = remove[max_per_command:]
+        call(["adb", "shell", "cd /opt/Bose && rm -f --"] + shell_quote(args))
+
+    # Copy files from stage to target.
+    for name in updates:
+        print "push", name
+        check_call(["adb", "push", name] + shell_quote(["/opt/Bose/" + name]))
+
+if not made_writeable:
     print "No updates needed."
-    sys.exit()
-
-updates = list(updates)
-updates.sort()
-
-# Copy files from stage to target.
-check_call("adb shell mount -oremount,rw /opt/Bose".split())
-call(["adb", "shell", "cd /opt/Bose && rm"] + map(pipes.quote, updates))
-
-trouble = False
-for name in updates:
-    print "push", name
-    if call(["adb", "push", name, "/opt/Bose/" + name]):
-        trouble = True
-if trouble:
-    sys.exit(1)
