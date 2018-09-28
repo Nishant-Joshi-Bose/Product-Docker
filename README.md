@@ -74,8 +74,7 @@ $ minicom -w -C minicom.cap usb0
 
 Use `dmesg` to see if your tap cable is actually USB0.
 
-If you use `adb shell` to login, you won't have the usual environment by
-default.  To setup the usual environment:
+You can use `adb shell` to login.
 
 ```shell session
 $ adb shell
