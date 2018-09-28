@@ -97,7 +97,7 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" "$opt_dir/bin/ptp" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
@@ -113,11 +113,16 @@ cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 # Legacy SoundTouch-SDK stuff.  This will all go away soon.
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 stfs=$soundtouch_sdk/fs
-cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
+mkdir -p "$opt_dir/etc/multistring" || exit
+cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/etc/multistring" || exit
 cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/bin/avahi-daemon "$opt_dir/bin/avahi-daemon" || exit
+cp "$stfs"/opt/Bose/bin/ptp/daemon_cl "$opt_dir/bin/ptp/daemon_cl" || exit
+cp "$stfs"/opt/Bose/bin/ptp/aptp_cfg.ini "$opt_dir/bin/ptp/aptp_cfg.ini" || exit
 cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BMX "$opt_dir/bin" || exit
@@ -126,7 +131,6 @@ cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Spotify "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Upnp "$opt_dir/bin" || exit
-#cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
@@ -196,7 +200,7 @@ rm "$opt_dir/etc/product"
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
-"$bluetooth_dir/stage" "$opt_dir" || exit
+"$bluetooth_dir/stage" --product=eddie "$opt_dir" || exit
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
@@ -211,6 +215,7 @@ PackageName=SoundTouch
 
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
+"$wspace"/scripts/validate-version "$package_version" || exit
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName

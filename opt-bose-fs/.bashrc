@@ -11,6 +11,7 @@ if [ "${PS1-}" ]; then # interactive shells
     alias lf="ls -F"
     alias j=jobs
     alias d3="dmesg -n3" # reduce logging to console
+    alias bs="tap-command product boot_status"
     function h { history "$@" | less; }
     function resize { eval $(command resize -u); }
     function ll { ls -la "$@" | less -ME; }
@@ -32,7 +33,10 @@ if [ "${PS1-}" ]; then # interactive shells
         esac
         [ "$i" ] && echo -n "<$i>"
     }
-    PS1='$(ps1)\$ '
+    unitlabel=$(jq -r </persist/mfg_data.json 2>/dev/null \
+      '"\(.productType)-\(.snMacEth [9:] | split(":") | join(""))"'
+    )
+    PS1='$(ps1)$unitlabel\$ '
     set -o notify
     bind "set show-all-if-ambiguous on"
     bind "set completion-ignore-case on"

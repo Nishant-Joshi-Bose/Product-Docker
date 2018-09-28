@@ -1,7 +1,7 @@
 Eddie
 =====
 <a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Eddie'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Eddie/latest release/blue'></a>
-[Eddie Continuous build Testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing/'><img src='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing/badge/icon'></a> [Eddie Nightly build testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/Pipelines/job/Castle-Pipeline/'><img src='http://jnkwebhook.ngrok.io/job/Pipelines/job/Castle-Pipeline/badge/icon'></a>
+[MASTER Eddie Continuous build Testing] <a title='Jenkins build status for Eddie MASTER' href='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/'><img src='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/badge/icon'></a> 
 
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
@@ -66,8 +66,7 @@ $ minicom -w -C minicom.cap usb0
 
 Use `dmesg` to see if your tap cable is actually USB0.
 
-If you use `adb shell` to login, you won't have the usual environment by
-default.  To setup the usual environment:
+You can use `adb shell` to login.
 
 ```shell session
 $ adb shell
@@ -145,6 +144,18 @@ For a simpler-way; see ./pushup script.
 To update the software, along with HSP, use product_update.zip file. To update
 the software, without HSP update (recommended only if HSP version you are
 updating to, is same as one on device), use product_update_no_hsp.zip.
+
+##### Special instructions to downgrade MR4 / MR1 to SOS Release
+SOP, SOS and MR4 have following HSP versios.
+* SOP: HSP 3.10.3
+* SOS: HSP 3.10.5
+* MR4: HSP 4.1 (or higher)
+
+To optimize Out of Box update opeation to smallest time possible, SOP to SOS HSP performs only "kernel" update. Other file system space and partitions remain same between 3.10.3 to 3.10.5. This works as intended, though has side effect for those who wants to downgrade from higher HSP versions to SOS e.g. from MR4 to SOS - for development / testing purposes.
+
+To downgrade to SOS release, one need to use update package specially made for downgrade operation at *\\solid\softlib\verisoft\Eddie\Release\SOS\<Release 2.0.5-5531+d50e0d4 or higher>\forDowngrade\product_update_for_downgrade.zip.*
+
+**If builds higher then SOS (i.e. builds with HSP 4.x or higher) are downgraded using \\solid\softlib\verisoft\Eddie\Release\SOS\<Release>\product_update.zip, device will potetially be bricked and will enter in QFIL mode. Please see instructions below about QFIL / VIP to recover such device.**
 
 #### QFIL / VIP
 
