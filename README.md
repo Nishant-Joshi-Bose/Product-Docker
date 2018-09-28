@@ -147,9 +147,6 @@ In your Taylor workspace:
 $ cd /scratch/Taylor
 $ make
 $ adb shell mount -oremount,rw /opt/Bose
-$ adb push opt-bose-fs/.bashrc /opt/Bose
-$ adb push opt-bose-fs/.bash_profile /opt/Bose
-$ adb push opt-bose-fs/etc/product /opt/Bose/etc
 $ ./scripts/upstage
 $ adb push builds/Release/lpm_updater.ipk /tmp/lpm_updater.ipk
 $ adb push builds/Release/software-update.ipk /tmp/software-update.ipk
