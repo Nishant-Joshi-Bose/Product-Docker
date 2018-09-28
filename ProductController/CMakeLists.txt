@@ -108,7 +108,7 @@ TARGET_LINK_LIBRARIES(Professor
   SystemEventService
   A4VRemoteCommClient
   A4VVideoManagerClient
-  A4VQuickSetServiceClient
+  DeviceControllerClient
   BoseLibs
   PassportLan
   SASSClient
