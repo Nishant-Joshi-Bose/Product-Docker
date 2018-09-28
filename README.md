@@ -145,25 +145,33 @@ In your Taylor workspace:
 
 ```shell session
 $ cd /scratch/Taylor
+$ make
 $ adb shell mount -oremount,rw /opt/Bose
 $ adb push opt-bose-fs/.bashrc /opt/Bose
 $ adb push opt-bose-fs/.bash_profile /opt/Bose
 $ adb push opt-bose-fs/etc/product /opt/Bose/etc
-$ make product-ipk
 $ ./scripts/upstage
+$ adb push builds/Release/lpm_updater.ipk /tmp/lpm_updater.ipk
+$ adb push builds/Release/software-update.ipk /tmp/software-update.ipk
+$ adb push builds/Release/product-script.ipk /tmp/product-script.ipk
 ```
 
 On the Taylor unit:
 
 ```shell session
+# rw
 # [ -e /persist/mfg_data.json ] || mfgdata clear
 # mfgdata set development true
 # validate-mfgdata
 ...make the corrections suggested by validate-mfgdata (including running sadi)...
 # validate-mfgdata && echo good to go || echo needs more work
+# opkg install -d bose --force-reinstall /tmp/lpm_updater.ipk
+# opkg install -d bose --force-reinstall /tmp/software-update.ipk
+# opkg install -d bose --force-reinstall /tmp/product-script.ipk
+# reboot
 ```
 
-Now reboot and you should see the usual daemons start.
+Now you should see the usual daemons start.
 
 <a name="updates"/>
 
