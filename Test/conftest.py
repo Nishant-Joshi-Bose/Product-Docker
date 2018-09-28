@@ -111,12 +111,12 @@ def pytest_collection_modifyitems(items):
     Python hook function - https://docs.pytest.org/en/latest/writing_plugins.html
     items - The list of collected test items
     """
-    tests = retrieve_test_cases()
-    for item in items:
-        for test in tests:
-            for testid, testname in test.iteritems():
-                if item.name == testname:
-                    item.add_marker(pytestrail.case(testid))
+    #tests = retrieve_test_cases()
+    #for item in items:
+    #    for test in tests:
+    #        for testid, testname in test.iteritems():
+    #            if item.name == testname:
+    #                item.add_marker(pytestrail.case(testid))
 
 def ping(ip):
     """ Pings a given IP Address """
