@@ -8,7 +8,10 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-date
+set -- $(uptime)
+shift # discard current time
+echo $(date), $*
+
 (
     name=$(xmllint --xpath '//SystemConfiguration/DeviceName/text()' \
                    /mnt/nv/product-persistence/SystemConfigurationDB.xml)
