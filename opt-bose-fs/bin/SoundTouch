@@ -170,6 +170,8 @@ EOF
         set -- "$@" $(cat /mnt/nv/shepherdargs)
     fi
 
+    export BOSE_MULTISTRING_DIR=/opt/Bose/etc/multistring
+
     set -- ./shepherdd "$@" "$rundir"
     log info "Starting $*"
 
