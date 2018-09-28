@@ -133,7 +133,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/2.2.0-627+5ddb89a"
+    "selected_version": "Continuous/master/2.2.0-636+5ca82ea"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -157,7 +157,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@935c89de79488675ea96403f3501a453da13481e"
+    "selected_version": "master@03b0f412ce0456d30529ebfcf2439a5fbddb0c0e"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
