@@ -45,7 +45,6 @@
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "SoundTouchInterface/AudioService.pb.h"
-#include "SoundTouchInterface/Zone.pb.h"
 #include "MacAddressInfo.h"
 #include "LightBarController.h"
 #include "SystemPowerProduct.pb.h"
@@ -319,9 +318,15 @@ private:
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
     std::shared_ptr< ProductBLERemoteManager           > m_ProductBLERemoteManager;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member variables are used to determined whether certain required
+    ///        processes or connections are ready for setting the various Product Controller state
+    ///        machine states.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     bool m_IsAutoWakeEnabled;
     bool m_Running;
-    bool m_IsZoneMember = false;
 
     NetManager::Protobuf::OperationalMode m_networkOperationalMode;
 
@@ -489,7 +494,6 @@ private:
     void HandleGetPowerMacro( const Callback<ProductPb::PowerMacro> & respCb,
                               const Callback<FrontDoor::Error> & errorCb ) const;
     void LoadPowerMacroFromPersistance( );
-    void HandleCapsAudioZone( SoundTouchInterface::zone );
 
 };
 
