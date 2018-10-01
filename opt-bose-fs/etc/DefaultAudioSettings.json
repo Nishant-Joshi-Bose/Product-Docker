@@ -210,9 +210,9 @@
                 "persistenceSession": true
 			},
 			"values": {
-				"GLOBAL": "BOTH"
+                "GLOBAL": "LEFT"
 			},
-			"defaultValue":"BOTH",
+            "defaultValue":"LEFT",
 			"properties": {
                 "supportedValues": ["LEFT", "RIGHT", "BOTH"]
             }
