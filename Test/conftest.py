@@ -106,17 +106,19 @@ def pytest_addoption(parser):
                      help="Pass the Galapagos environment for frontdoor api object")
 
 @pytest.hookimpl
-def pytest_collection_modifyitems(items):
+def pytest_collection_modifyitems(config, items):
     """
     Python hook function - https://docs.pytest.org/en/latest/writing_plugins.html
+    config - The command line arguments
     items - The list of collected test items
     """
-    #tests = retrieve_test_cases()
-    #for item in items:
-    #    for test in tests:
-    #        for testid, testname in test.iteritems():
-    #            if item.name == testname:
-    #                item.add_marker(pytestrail.case(testid))
+    if config.getoption('--testrail'):
+        tests = retrieve_test_cases()
+        for item in items:
+            for test in tests:
+                for testid, testname in test.iteritems():
+                    if item.name == testname:
+                        item.add_marker(pytestrail.case(testid))
 
 def ping(ip):
     """ Pings a given IP Address """
