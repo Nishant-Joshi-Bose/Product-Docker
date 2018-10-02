@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-10-01_1336"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-10-02_1107"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-120+89e0914"
+    "selected_version": "Continuous/SOS/2.0.1-129+3fc0154"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -129,7 +129,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-248+769d4cf"
+    "selected_version": "Continuous/SOS/2.0.0-255+cae429b"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -137,7 +137,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-156+d3596fc"
+    "selected_version": "Continuous/SOS/2.0.1-165+043b71b"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -217,7 +217,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/SOS/2.0.1-47+6144e79"
+    "selected_version": "Continuous/SOS/2.0.1-49+2ee90e8"
   },
   {
     "name": "SASS-qc8017_32",
@@ -229,11 +229,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOS/2.1.1-943+22c4684"
+    "selected_version": "Continuous/SOS/2.1.1-956+f2bc2ec"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-SOS/2018-10-01_1336"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-10-02_1107"
   },
   {
     "name": "svc-pts-log-decrypt",
