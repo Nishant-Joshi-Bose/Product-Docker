@@ -15,6 +15,7 @@ rm -rf "$deploy_dir"
 mkdir -p "$deploy_dir" || exit
 
 files=(
+    "$builds_dir/auth_util.py"
     "$builds_dir/product-unstripped.tar.gz"
     "$builds_dir/product-ipk-stage/component-info.gz"
     "$builds_dir/components.svgz"
