@@ -61,7 +61,7 @@ override=false
 lowpower=(
     Shepherd-AudioPath.xml
     Shepherd-NetManager.xml
-    Shepherd-avs.xml
+    Shepherd-avs.xml.DISABLED
     Shepherd-Bluetooth.xml
     Shepherd-BLEToFrontDoorService.xml
 )
