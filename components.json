@@ -85,7 +85,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-128+a8a3291"
+    "selected_version": "Continuous/master/2.2.0-131+7eca31b"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-254+15409fb"
+    "selected_version": "Continuous/master/2.2.0-257+1eb6d7a"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -209,7 +209,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-965+0a26fad"
+    "selected_version": "Continuous/master/2.2.1-966+99b8843"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-69+85dc7ff"
+    "selected_version": "Continuous/master/2.2.0-71+d712a20"
   },
   {
     "name": "TestUtils",
