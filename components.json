@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-10-02_1522"
+    "selected_version": "Continuous/Castle-Fork/2018-10-03_1202"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-644+59dadd1"
+    "selected_version": "Continuous/master/2.2.0-648+4e65e3b"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -157,11 +157,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@d903a177b856cd6b2f4a05c3954a4bd217a6cffb"
+    "selected_version": "master@084e6eef56a796c48b911d5c3d9496f8b0f600cd"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-172+d903a17"
+    "selected_version": "Continuous/master/2.2.0-175+084e6ee"
   },
   {
     "name": "ProductUIAssets",
@@ -209,11 +209,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-958+75ae924"
+    "selected_version": "Continuous/master/2.2.1-965+0a26fad"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-10-02_1522"
+    "selected_version": "Continuous/Castle-Fork/2018-10-03_1202"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -229,7 +229,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@59bb1a398c3266aa148449169ad2b48453db6328"
+    "selected_version": "master@120c114492725585cc107c2f4eecf0a78a0c7557"
   },
   {
     "name": "Webkit",
