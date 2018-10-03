@@ -157,11 +157,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@084e6eef56a796c48b911d5c3d9496f8b0f600cd"
+    "selected_version": "master@9fc661f90b69ef10e0f9b9553bb47c2dd74b997e"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-175+084e6ee"
+    "selected_version": "Continuous/master/2.2.0-176+9fc661f"
   },
   {
     "name": "ProductUIAssets",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-10-03_1202"
+    "selected_version": "Continuous/Castle-Fork/2018-10-03_1607"
   },
   {
     "name": "svc-pts-log-decrypt",
