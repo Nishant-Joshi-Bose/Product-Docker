@@ -17,15 +17,15 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/2.2.0-238+cec4676"
+    "selected_version": "Continuous/master/2.2.0-272+80ec578"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.0-122+6d75c34"
+    "selected_version": "Continuous/master/2.2.0-140+3f8420b"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/master/2.2.0-73+3c49f68"
+    "selected_version": "Continuous/master/2.2.0-118+ed5c0f2"
   },
   {
     "name": "bose-opkg-utils",
@@ -61,7 +61,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/2.2.0-209+cf41b94"
+    "selected_version": "Continuous/master/2.2.0-256+f274b13"
   },
   {
     "name": "CastleLibs-native",
