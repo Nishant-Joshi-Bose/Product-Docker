@@ -61,6 +61,7 @@ ADD_EXECUTABLE(ProductController
 )
 
 TARGET_LINK_LIBRARIES(ProductController
+  VoiceService
   CastleProductControllerCommon
   ProductControllerCommonProto
   DataCollectionClient
@@ -94,7 +95,6 @@ TARGET_LINK_LIBRARIES(ProductController
   PassportLan
   SASSClient
   StsAmazon
-  VoiceService
   ProtoToMarkup
   jsoncpp
   protobuf

@@ -211,3 +211,6 @@ if updates:
     for name in updates:
         print "push", name
         check_call(["adb", "push", name] + shell_quote(["/opt/Bose/" + name]))
+
+if not made_writeable:
+    print "No updates needed."
