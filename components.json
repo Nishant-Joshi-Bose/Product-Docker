@@ -133,7 +133,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-168+75acacc"
+    "selected_version": "Release/master/2.2.0-169+75acacc"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-1216+b879eb8"
+    "selected_version": "Release/master/2.2.0-1230+b879eb8"
   },
   {
     "name": "PassportClient-qc8017_32",
