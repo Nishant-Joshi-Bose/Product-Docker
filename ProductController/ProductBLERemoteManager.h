@@ -35,6 +35,7 @@
 #include "NotifyTargetTaskIF.h"
 #include "FrontDoorClient.h"
 #include "ContentSelectionService.pb.h"
+#include "Zone.pb.h"
 #include "A4V_RemoteCommunicationService.pb.h"
 #include "A4V_RemoteCommClientFactory.h"
 #include "A4V_RemoteCommClient.h"
@@ -109,12 +110,8 @@ private:
     const int                       m_PairingTimeout        = 7200;
     bool                            m_poweredOn             = false;
     bool                            m_sourceSelectAllowed   = true;
+    bool                            m_IsZoneMember      = false;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following subclass instance is used to communicate with the FrontDoor.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
     SoundTouchInterface::NowSelectionInfo                                   m_nowSelection;
     SoundTouchInterface::Sources                                            m_sources;
     A4VRemoteCommunication::A4VRemoteCommClientIF::A4VRemoteCommClientPtr   m_RCSClient;
@@ -123,6 +120,7 @@ private:
     void InitializeFrontDoor();
     void InitializeRCS();
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
+    void UpdateCapsAudioZone( const SoundTouchInterface::zone& zoneInfo );
     void UpdateBacklight( );
     bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available ) const;
     void CheckPairing( void );

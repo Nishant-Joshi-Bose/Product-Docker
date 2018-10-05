@@ -29,6 +29,7 @@
 #include "SharedProto.pb.h"
 #include "ProtoToMarkup.h"
 #include "EndPointsDefines.h"
+#include "ProductEndpointDefines.h"
 #include "ProductSTS.pb.h"
 #include "SystemSourcesProperties.pb.h"
 #include "SHELBY_SOURCE.h"
@@ -102,6 +103,18 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
     AsyncCallback< SystemPowerPb::SystemPowerControl > powerCb( handleSystemPowerControl, m_ProductTask );
     frontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
     frontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
+    {
+        //audio zone callback for notifications
+        AsyncCallback< SoundTouchInterface::zone >
+        nowPlayingCb( std::bind( &ProductBLERemoteManager::UpdateCapsAudioZone,
+                                 this,
+                                 std::placeholders::_1 ),
+                      m_ProductTask );
+
+        //audio zone notification registration
+        frontDoorClient->RegisterNotification< SoundTouchInterface::zone >(
+            FRONTDOOR_AUDIO_ZONE_API, nowPlayingCb );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,6 +242,37 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProductBLERemoteManager::UpdateCapsAudioZone
+///
+/// @param  SoundTouchInterface::zone zoneInfo
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::UpdateCapsAudioZone( const SoundTouchInterface::zone& zoneInfo )
+{
+    BOSE_INFO( s_logger, "%s, zone- (%s)", __func__,  ProtoToMarkup::ToJson( zoneInfo, false ).c_str() );
+
+    bool zoneMember = false;
+    for( int i = 0; i < zoneInfo.members_size( ); ++i )
+    {
+        if( zoneInfo.members( i ).guid( ) == m_ProductController.GetProductGuid( ) )
+        {
+            zoneMember = true;
+            break;
+        }
+    }
+    if( zoneMember != m_IsZoneMember )
+    {
+        BOSE_INFO( s_logger, "%s now %sa zone member", __func__,  zoneMember ? "" : "not " );
+        m_IsZoneMember = zoneMember;
+        UpdateBacklight();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief ProductBLERemoteManager::UpdateBacklight
 ///
 /// @param  void This method does not take any arguments.
@@ -255,27 +299,9 @@ void ProductBLERemoteManager::UpdateBacklight( )
     leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
     leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
     leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-    leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-
-    // default all zones to off
-    leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
 
     leds.set_backlight_enable( true );
     leds.set_demo_mode( false );
-
-    if( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED )
-    {
-        leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
-    }
 
     for( auto i = 0; i < m_sources.sources_size(); i++ )
     {
@@ -301,6 +327,44 @@ void ProductBLERemoteManager::UpdateBacklight( )
             leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
     }
+
+    if( m_IsZoneMember )
+    {
+        // Special behavior for zone members: always show the SoundTouch source active and the SoundTouch zones
+        leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
+        leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+        leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+        leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+        leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+        leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+        leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        m_RCSClient->Led_Set(
+            leds.sound_touch(), leds.tv(), leds.bluetooth(), leds.game(), leds.clapboard(), leds.set_top_box(),
+            leds.zone_01(), leds.zone_02(), leds.zone_03(), leds.zone_04(), leds.zone_05(),
+            leds.zone_06(), leds.zone_07(), leds.zone_08(), leds.zone_09(), leds.zone_10(),
+            leds.backlight_enable(), leds.demo_mode()
+        );
+        return;
+    }
+
+    // default all zones to off
+    leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+
+    leds.set_sound_touch( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED ?
+                          RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON : RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
 
     if( !m_poweredOn )
     {
