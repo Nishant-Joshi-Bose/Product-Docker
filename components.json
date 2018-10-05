@@ -12,12 +12,28 @@
     "selected_version": "Release/master/2.2.1-33+451d300"
   },
   {
-    "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/stable/2.2.1-1331+116d21c"
+    "name": "AudioPathService-qc8017_32",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
   },
   {
-    "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/stable/2.2.1-1331+116d21c"
+    "name": "AudioPathService-qc8017_64",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
+  },
+  {
+    "name": "AudioPathClient-qc8017_32",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
+  },
+  {
+    "name": "AudioPathClient-qc8017_64",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
+  },
+  {
+    "name": "AudioPathProducts-qc8017_32",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
+  },
+  {
+    "name": "AudioPathProducts-qc8017_64",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
   },
   {
     "name": "AudioSource-qc8017_32",
