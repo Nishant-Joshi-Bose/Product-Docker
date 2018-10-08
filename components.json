@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/AVS-VPA/2018-10-04_1517"
+    "selected_version": "Continuous/AVS-VPA/2018-10-08_0535"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.0-393+5ea9a2a"
+    "selected_version": "Continuous/master/2.2.0-407+0f2dfb2"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -201,11 +201,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/4.1"
+    "selected_version": "Release/master/4.2"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/4.1"
+    "selected_version": "Release/master/4.2"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -257,7 +257,7 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-263+6e07a0f"
+    "selected_version": "Continuous/master/2.2.0-275+462c250"
   },
   {
     "name": "Webkit",
