@@ -9,7 +9,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/2.2.0-177+cbb4885"
+    "selected_version": "Continuous/uuid/2.2.0-185+0155fbc"
   },
   {
     "name": "AVS-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-162+935c89d"
+    "selected_version": "Continuous/uuid/2.2.0-185+60655a1"
   },
   {
     "name": "ProductUIAssets",
@@ -217,7 +217,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.43802.3014606"
+    "selected_version": "Continuous/Castle-Fork-CAPS-UUID/2018-10-09_1359"
   },
   {
     "name": "svc-pts-log-decrypt",
