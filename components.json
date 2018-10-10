@@ -1,27 +1,27 @@
 [
   {
     "name": "AudioPathService-qc8017_32",
-    "selected_version": "Release/stable/2.2.3-1498+2105009"
+    "selected_version": "Release/stable/2.2.4-1660+0b5e2e8"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/2.2.3-1498+2105009"
+    "selected_version": "Release/stable/2.2.4-1660+0b5e2e8"
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/2.2.3-1498+2105009"
+    "selected_version": "Release/stable/2.2.4-1660+0b5e2e8"
   },
   {
     "name": "AudioPathClient-qc8017_64",
-    "selected_version": "Release/stable/2.2.3-1498+2105009"
+    "selected_version": "Release/stable/2.2.4-1660+0b5e2e8"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/2.2.3-1498+2105009"
+    "selected_version": "Release/stable/2.2.4-1660+0b5e2e8"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/2.2.3-1498+2105009"
+    "selected_version": "Release/stable/2.2.4-1660+0b5e2e8"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.0-407+0f2dfb2"
+    "selected_version": "Continuous/master/2.2.1-422+7a09e12"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -257,7 +257,7 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-275+462c250"
+    "selected_version": "Continuous/master/2.2.0-277+13dc340"
   },
   {
     "name": "Webkit",
