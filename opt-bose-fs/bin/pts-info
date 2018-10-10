@@ -52,4 +52,3 @@ tap-command galapagos status
 tap-command galapagos discovery response
 tap-command softwareupdate state
 tap-command softwareupdate status
-nslookup www.bose.com
