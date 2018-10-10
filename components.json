@@ -33,15 +33,15 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-293+d9d6470"
+    "selected_version": "Continuous/master/2.2.1-302+e8992ef"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-146+61e6871"
+    "selected_version": "Continuous/master/2.2.1-155+7254cdc"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-129+d264bf9"
+    "selected_version": "Continuous/master/2.2.1-142+1431900"
   },
   {
     "name": "bose-opkg-utils",
@@ -77,7 +77,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-278+a9c8b82"
+    "selected_version": "Continuous/master/2.2.1-285+e780632"
   },
   {
     "name": "CastleLibs-native",
@@ -181,7 +181,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@40b6ef5bc1ae56c995a9cefb44977962c25e05ed"
+    "selected_version": "master@550651791c87b1eaf098fd812a5eab85d5eac40d"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -233,11 +233,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-973+4968b5a"
+    "selected_version": "Continuous/master/2.2.1-996+b265a8d"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-10-04_1307"
+    "selected_version": "Continuous/Castle-Fork/2018-10-10_1041"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -253,7 +253,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@120c114492725585cc107c2f4eecf0a78a0c7557"
+    "selected_version": "master@8b36b9bc92031988c46577c95edfaeac15cb2ce5"
   },
   {
     "name": "VPAController-qc8017_32",
