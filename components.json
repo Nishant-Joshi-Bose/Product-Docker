@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.0-29+cd7c84c"
+    "selected_version": "Continuous/master/0.2.0-40+3d0c53b"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -9,15 +9,31 @@
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/master/2.2.1-33+451d300"
+    "selected_version": "Release/master/2.2.2-37+d69137a"
   },
   {
-    "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/stable/2.2.1-1331+116d21c"
+    "name": "AudioPathService-qc8017_32",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
   },
   {
-    "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/stable/2.2.1-1331+116d21c"
+    "name": "AudioPathService-qc8017_64",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
+  },
+  {
+    "name": "AudioPathClient-qc8017_32",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
+  },
+  {
+    "name": "AudioPathClient-qc8017_64",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
+  },
+  {
+    "name": "AudioPathProducts-qc8017_32",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
+  },
+  {
+    "name": "AudioPathProducts-qc8017_64",
+    "selected_version": "Release/stable/2.2.3-1498+2105009"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -57,7 +73,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/2.2.0-661+9cfc869"
+    "selected_version": "Release/master/2.2.1-681+c3af1af"
   },
   {
     "name": "BoseOPKG-native",
@@ -165,11 +181,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/2.2.0-1123+09648fb"
+    "selected_version": "Release/master/2.2.0-1249+686b906"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/2.2.0-1040+deeee14"
+    "selected_version": "Release/master/2.2.0-1068+b2ab164"
   },
   {
     "name": "ProductControllerCommon",
