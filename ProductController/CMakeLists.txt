@@ -98,6 +98,7 @@ TARGET_LINK_LIBRARIES(Professor
   GalapagosClient
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
+  DeviceControllerClient
   STS
   STSClient
   ShelbyUtils
@@ -108,7 +109,6 @@ TARGET_LINK_LIBRARIES(Professor
   SystemEventService
   A4VRemoteCommClient
   A4VVideoManagerClient
-  DeviceControllerClient
   BoseLibs
   PassportLan
   SASSClient
