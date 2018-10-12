@@ -73,7 +73,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/2.2.1-681+c3af1af"
+    "selected_version": "Release/master/2.2.0-661+9cfc869"
   },
   {
     "name": "BoseOPKG-native",
@@ -129,7 +129,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/2.2.0-508+f08fd11"
+    "selected_version": "Release/master/2.2.0-520+071a514"
   },
   {
     "name": "FrontDoorService-qc8017_32",
@@ -181,11 +181,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/2.2.0-1249+686b906"
+    "selected_version": "Release/master/2.2.0-1123+09648fb"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/2.2.0-1068+b2ab164"
+    "selected_version": "Release/master/2.2.0-1040+deeee14"
   },
   {
     "name": "ProductControllerCommon",
