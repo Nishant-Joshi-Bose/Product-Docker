@@ -71,12 +71,20 @@ function validate {
         log warning "Missing or invalid manufacturing data"
         return 1
     fi
-    # If the lowpower list is wrong, we don't tend to notice until we try to
-    # come out of low power mode.  So, validate the list now.
-    if ! ( cd /opt/Bose/etc && ls "${lowpower[@]}" >/dev/null ); then
-        log critical "lowpower list is not valid"
-        return 1
+
+    # If device is in restore mode skip checking for low power mode services
+    # as voice related services like VFE and AVS will not be available in
+    # restore mode.
+    if ! [ -e /cache/restore_in_progress ]; then
+
+        # If the lowpower list is wrong, we don't tend to notice until we try
+        # to come out of low power mode.  So, validate the list now.
+        if ! ( cd /opt/Bose/etc && ls "${lowpower[@]}" >/dev/null ); then
+            log critical "lowpower list is not valid"
+            return 1
+        fi
     fi
+
     return 0
 }
 

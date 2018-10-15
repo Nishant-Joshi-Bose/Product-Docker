@@ -67,8 +67,10 @@ protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
-audiopath_dir=$(components get AudioPath-qc8017_32 installed_location) || exit
-audiopath64_dir=$(components get AudioPath-qc8017_64 installed_location) || exit
+audiopath_dir=$(components get AudioPathService-qc8017_32 installed_location) || exit
+audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
+audiopathproduct_dir=$(components get AudioPathProducts-qc8017_32 installed_location) || exit
+audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlesass_dir=$(components get SASS-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
@@ -190,7 +192,7 @@ rm "$opt_dir/etc/product"
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-mv "$opt_dir"/etc/Shepherd-avs.xml "$opt_dir"/etc/Shepherd-avs.xml.DISABLED || exit
+
 "$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
 
@@ -198,18 +200,22 @@ mv "$opt_dir"/etc/Shepherd-avs.xml "$opt_dir"/etc/Shepherd-avs.xml.DISABLED || e
 mkdir -p "$audiopath_dir/professor/lib"
 mkdir -p "$audiopath_dir/ginger-cheevers/lib"
 "$audiopath_dir/stage" --product=professor "$opt_dir" || exit
-
+"$audiopathproduct_dir/stage" --product=professor "$opt_dir" || exit
 
 #copy Vfe binary only
 "$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --product=professor || exit
+"$audiopathproduct64_dir/stage" "$opt_dir" --only-vfe --product=professor || exit
 
 mkdir -p "$opt_dir/bin/professor" || exit
 mkdir -p "$opt_dir/etc/professor" || exit
 "$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=professor || exit
+"$audiopathproduct64_dir/stage" "$opt_dir" --stage-vfe --product=professor || exit
+
 
 mkdir -p "$opt_dir/bin/ginger-cheevers" || exit
 mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=ginger-cheevers || exit
+"$audiopathproduct64_dir/stage" "$opt_dir" --stage-vfe --product=ginger-cheevers || exit
 
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
