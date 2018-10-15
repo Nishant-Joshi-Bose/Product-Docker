@@ -136,6 +136,7 @@ else:
         <li>Microphone Values [dBF]
         <iframe id="values" src="/diag/microphone/all"></iframe>   <!-- inline frame loads the microphone data, mic selection changes src of iframe -->
         <hr>
+        <button onclick="location.href='/diag'">Done</button>
     </body>
 </html>
 """
