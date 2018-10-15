@@ -163,6 +163,14 @@ if path == "/logread.dat":      # same but encrypted
 
 http_redirect(path, "/logread", "/logread.dat")
 
+#-----------------------------------------------------------------------------
+# View a constant stream of LPM logging messages.
+
+if path == "/lpmlogread.txt" and is_development:
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("pts-lpmlogs", "pts-lpmlogs")
+
 # ----------------------------------------------------------------------------
 # View miscellaneous system status information.
 
