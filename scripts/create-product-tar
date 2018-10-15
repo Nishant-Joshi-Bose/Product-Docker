@@ -271,15 +271,15 @@ def create_ext4_partition(input_ext4, partition_name, partition_size):
 def install_ipk(ipks_dir, ipk_name, offline_dir):
     try:
         ipk_to_install = os.path.join(ipks_dir, ipk_name)
-        boseopkg_dir = execute_cmd_on_host("components get BoseOPKG-native installed_location").rstrip()
+        boseopkg_dir = execute_cmd_on_host("components get opensource-opkg-native installed_location").rstrip()
         if os_arch() == '64': 
-            boseopkg_dir = execute_cmd_on_host("components get BoseOPKG-x86 installed_location").rstrip()
-        opkg_config_dir = os.path.join(boseopkg_dir, 'opkg')
-        if not os.path.exists(opkg_config_dir):
+            boseopkg_dir = execute_cmd_on_host("components get opensource-opkg-x86 installed_location").rstrip()
+        opkg_lib_dir = os.path.join(boseopkg_dir, 'lib')
+        if not os.path.exists(opkg_lib_dir):
             return 91, "Cannot find OPKG directory"
-        opkg_bin = os.path.join(boseopkg_dir, "opkg/opkg")
-        opkg_conf = os.path.join(boseopkg_dir, "opkg/opkg.conf")
-        os.environ['LD_LIBRARY_PATH'] = opkg_config_dir
+        opkg_bin = os.path.join(boseopkg_dir, "bin/opkg")
+        opkg_conf = os.path.join(boseopkg_dir, "conf/opkg.conf")
+        os.environ['LD_LIBRARY_PATH'] = opkg_lib_dir
         #opkg_cmd = (' fakeroot ' + opkg_bin
         opkg_cmd = (opkg_bin  
                     + ' -f ' + opkg_conf 
