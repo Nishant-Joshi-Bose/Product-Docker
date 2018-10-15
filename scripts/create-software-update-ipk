@@ -55,7 +55,7 @@ here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
-boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
+boseopkg_dir=$(components get opensource-opkg-qc8017_32 installed_location) || exit
 swupdate_ver=$(components get SoftwareUpdate-qc8017_32 selected_version) || exit
 toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 package_version=${swupdate_ver##*/}
