@@ -1,13 +1,5 @@
 [
   {
-    "name": "AudioPathService-qc8017_32",
-    "selected_version": "Release/stable/2.2.6-1774+fa4d500"
-  },
-  {
-    "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/2.2.6-1774+fa4d500"
-  },
-  {
     "name": "AudioPathClient-qc8017_32",
     "selected_version": "Release/stable/2.2.6-1774+fa4d500"
   },
@@ -24,12 +16,20 @@
     "selected_version": "Release/stable/2.2.6-1774+fa4d500"
   },
   {
+    "name": "AudioPathService-qc8017_32",
+    "selected_version": "Release/stable/2.2.6-1774+fa4d500"
+  },
+  {
+    "name": "AudioPathService-qc8017_64",
+    "selected_version": "Release/stable/2.2.6-1774+fa4d500"
+  },
+  {
     "name": "AudioSource-qc8017_32",
     "selected_version": "Release/master/2.2.0-189+4679f91"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.43967.3043287"
+    "selected_version": "Release/AVS-VPA/2.2.0.43974.3043579"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -58,18 +58,6 @@
   {
     "name": "BoseLibs-qc8017_32",
     "selected_version": "Release/master/2.2.2-715+1e5d68a"
-  },
-  {
-    "name": "opensource-opkg-native",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
-  },
-  {
-    "name": "opensource-opkg-qc8017_32",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
-  },
-  {
-    "name": "opensource-opkg-x86",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
     "name": "BoseWebMonaco",
@@ -160,6 +148,18 @@
     "selected_version": "Release/bose-v2.4-stable/2.4.1-51+g3a63621"
   },
   {
+    "name": "opensource-opkg-native",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "opensource-opkg-qc8017_32",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "opensource-opkg-x86",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
     "name": "opensource-zlib-qc8017_32",
     "selected_version": "Release/bose-master/v1.2.11-7-gc6066f5"
   },
@@ -246,6 +246,10 @@
   {
     "name": "TestUtils",
     "selected_version": "master@4b6ba1dd988b108dcb751cf07b23e7c08a81f503"
+  },
+  {
+    "name": "VPAController-qc8017_32",
+    "selected_version": "Release/master/2.2.1-303+1d466d5"
   },
   {
     "name": "Webkit",

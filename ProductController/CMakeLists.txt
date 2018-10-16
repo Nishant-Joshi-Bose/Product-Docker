@@ -75,6 +75,7 @@ TARGET_LINK_LIBRARIES(ProductController
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
+  VPAControllerClient
   CliClient
   AudioLibs
   EddieAudioSettings
