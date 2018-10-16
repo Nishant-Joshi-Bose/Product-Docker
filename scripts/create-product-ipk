@@ -287,14 +287,6 @@ if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
 fi
 
-# Not failing product-ipk for this copy failure
-if ! grep -q /cache /proc/mounts; then
-    echo "Mounting Cache"
-    mount /dev/mmcblk0p26 /cache
-fi
-cp -f /opt/Bose/etc/RecoveryMgr /cache/
-cp -f /opt/Bose/bin/RecoveryMain /cache/
-
 # make sure the public key file has read only permission
 find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
 find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
