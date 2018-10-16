@@ -234,6 +234,8 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | any | /logread.txt.gz | Same as /logread.txt but compressed * |
 | any | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
 | any | /pts.dat | Same as /pts.txt but encrypted ** |
+| any | /network.txt | Various network and WAN information * |
+| any | /network.dat | Same as /network.txt but encrypted ** |
 | any | /logread.dat | Same as /logread.txt but encrypted ** |
 | usb | /reflash | Force the unit into reflash mode (QFIL) |
 | usb | /bose-version | /opt/Bose/etc/BoseVersion.json |

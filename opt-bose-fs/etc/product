@@ -15,12 +15,9 @@
 # create swUpdateCache if not already exists
 swUpCache=/opt/Bose/.swUpdateCache
 if [ ! -d "$swUpCache" ]; then
-    /opt/Bose/bin/pre_install
+    mount -oremount,rw /opt/Bose
     mkdir -p $swUpCache
-    /opt/Bose/bin/post_install
-
-    mount --bind /opt/Bose/.swUpdateCache /opt/Bose/.swUpdateCache 
-    mount -o remount -w /opt/Bose/.swUpdateCache /opt/Bose/.swUpdateCache 
+    mount -oremount,ro /opt/Bose
 fi
 
 installPending=false
@@ -35,12 +32,12 @@ else
     fi
 fi
 if $installPending; then
-    if [ -e /opt/Bose/.swUpdateCache/backup/install ]; then
+    if [ -e /opt/Bose/update/backup/install ]; then
         echo "Executing install from backup location"
-        if [ -e /opt/Bose/.swUpdateCache/backup/unshare ]; then
-            exec /opt/Bose/.swUpdateCache/backup/unshare -m /opt/Bose/.swUpdateCache/backup/install "$@"
+        if [ -e /opt/Bose/update/backup/unshare ]; then
+            exec /opt/Bose/update/backup/unshare -m /opt/Bose/update/backup/install "$@"
         else
-            exec /opt/Bose/.swUpdateCache/backup/install "$@"
+            exec /opt/Bose/update/backup/install "$@"
         fi
     fi
     if [ -e /opt/Bose/bin/install ]; then
