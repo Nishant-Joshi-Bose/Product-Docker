@@ -81,6 +81,7 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
+    m_Clock( m_FrontDoorClientIF, GetTask(), GetProductGuid() ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_ProductSTSController( *this )
 {
@@ -275,6 +276,7 @@ void CustomProductController::InitializeAction()
     InitializeHsm( );
     CommonInitialize( );
 
+    m_Clock.Initialize( );
     AsyncCallback<bool> uiConnectedCb( std::bind( &CustomProductController::UpdateUiConnectedStatus,
                                                   this, std::placeholders::_1 ), GetTask() ) ;
 
@@ -604,6 +606,8 @@ void CustomProductController::RegisterCliClientCmds()
                                              GetTask(),
                                              cb,
                                              static_cast<int>( CLICmdKeys::GET_BOOT_STATUS ) );
+
+   m_Clock.RegisterCliCmds( m_CliClientMT ) ;
 }
 
 void CustomProductController::HandleCliCmd( uint16_t cmdKey,
