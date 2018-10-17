@@ -70,7 +70,7 @@ Refresh: 1\r
 
     if selected is not None:
         print "<tr>"
-        print "<td>Offset Values (min {})</td>".format(max_offset)
+        print "<td>Offset Values (< {})</td>".format(max_offset)
         for i in range(0, len(values)):
             value = values[i] - values[selected]
             if i == selected:
@@ -82,7 +82,7 @@ Refresh: 1\r
         print "</tr>"
 
     print "<tr>"
-    print "<td>Real Values in dBF (min {})</td>".format(min_real)
+    print "<td>Real Values in dBF (> {})</td>".format(min_real)
     for i in range(0, len(values)):
         value = values[i]
         if i != selected:
