@@ -9,15 +9,15 @@ import json
 import datetime
 import subprocess
 
-min_real, min_offset = -12, -12 # dbFs (Eddie)
+min_real, max_offset = -12, -12 # dbFs (Eddie)
 
 # TODO: Here's the code for Professor, Ginger-Cheevers:
 #with open("/persist/mg_data.json") as fh:
 #    mfgdata = json.load(fh)
 #if mfgdata["productType"] == "professor":
-#    min_real, min_offset = -30, -8 # dbFs (Professor)
+#    min_real, max_offset = -30, -8 # dbFs (Professor)
 #else:
-#    min_real, min_offset = -30, -5 # dbFs (Ginger-Cheevers)
+#    min_real, max_offset = -30, -5 # dbFs (Ginger-Cheevers)
 
 # Output the table of microphone values, with the optional selected microphone highlighted and used to calculate offset values.
 def outputTable( values, selected = None ):
@@ -43,8 +43,13 @@ Refresh: 1\r
         width: 8em;
         text-align: center;
     }
-    .warn {
-        background: red;
+    .pass {
+        background: green;
+    }
+    .fail {
+        color: darkred;
+        font-weight: bold;
+        background: pink;
     }
     .hilite {
         background: yellow;
@@ -65,22 +70,27 @@ Refresh: 1\r
 
     if selected is not None:
         print "<tr>"
-        print "<td>Offset Values (min {})</td>".format(min_offset)
+        print "<td>Offset Values (min {})</td>".format(max_offset)
         for i in range(0, len(values)):
             value = values[i] - values[selected]
-            if value < min_offset:
-                print "<td class='warn'>{}<br>(LOW)</td>".format(value)
-            else:
+            if i == selected:
                 print "<td>{}</td>".format(value)
+            elif value < max_offset:
+                print "<td class='pass'>{}<br>PASS</td>".format(value)
+            else:
+                print "<td class='fail'>{}<br>FAIL</td>".format(value)
         print "</tr>"
 
     print "<tr>"
     print "<td>Real Values in dBF (min {})</td>".format(min_real)
-    for value in values:
-        if value < min_real:
-            print "<td class='warn'>{}<br>(LOW)</td>".format(value)
-        else:
+    for i in range(0, len(values)):
+        value = values[i]
+        if i != selected:
             print "<td>{}</td>".format(value)
+        elif value >= min_real:
+            print "<td class='pass'>{}<br>PASS</td>".format(value)
+        else:
+            print "<td class='fail'>{}<br>FAIL</td>".format(value)
     print "</tr>"
 
     print """
