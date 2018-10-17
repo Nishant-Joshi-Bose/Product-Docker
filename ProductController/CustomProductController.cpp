@@ -1928,8 +1928,7 @@ void CustomProductController::HandlePutOpticalAutoWake(
         IL::BreakThread( std::bind( GetMessageHandler( ),
                                     message ),
                          GetTask( ) );
-
-        HandleGetOpticalAutoWake( respCb, errorCb );
+        respCb( req );
     }
     else
     {
