@@ -365,6 +365,15 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterFrontDoorEndPoints( );
 
+
+
+    void HandleGetTimeouts( Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
+                            Callback<FrontDoor::Error> errorCb );
+    void HandlePutTimeouts( SystemPowerPb::SystemPowerTimeouts req,
+                            Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
+                            Callback<FrontDoor::Error> errorCb );
+    void SendErrorResponse( const Callback<FrontDoor::Error> & errorCb, int code, const char* message );
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declaration is for handling the /ui/alive frontdoor endpoint
