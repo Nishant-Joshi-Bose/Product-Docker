@@ -11,14 +11,6 @@ import subprocess
 
 min_real, max_offset = -12, -12 # dbFs (Eddie)
 
-# TODO: Here's the code for Professor, Ginger-Cheevers:
-#with open("/persist/mg_data.json") as fh:
-#    mfgdata = json.load(fh)
-#if mfgdata["productType"] == "professor":
-#    min_real, max_offset = -30, -8 # dbFs (Professor)
-#else:
-#    min_real, max_offset = -30, -5 # dbFs (Ginger-Cheevers)
-
 # Output the table of microphone values, with the optional selected microphone highlighted and used to calculate offset values.
 def outputTable( values, selected = None ):
 
