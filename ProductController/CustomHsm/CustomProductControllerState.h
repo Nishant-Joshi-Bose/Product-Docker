@@ -411,6 +411,16 @@ public:
         return false;
     }
 
+    virtual bool HandleThumbsUp( )
+    {
+        return false;
+    }
+
+    virtual bool HandleThumbsDown( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This handler is used to respond to the LPM detecting an amp fault.
