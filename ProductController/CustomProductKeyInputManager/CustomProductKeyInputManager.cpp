@@ -242,11 +242,11 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     return true;
 }
 
-void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro )
+void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, bool on )
 {
     if( pwrMacro.enabled() )
     {
-        BOSE_INFO( s_logger, "Executing power macro : %s", pwrMacro.ShortDebugString().c_str() );
+        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( on ? "on" : "off" ), pwrMacro.ShortDebugString().c_str() );
         if( pwrMacro.powerontv() )
         {
             const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
@@ -254,8 +254,9 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
             {
                 QSSMSG::BoseKeyReqMessage_t request;
                 request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( BOSE_ASSERT_ON );
+                request.set_keyval( ( on ? LpmServiceMessages::BOSE_ASSERT_ON : LpmServiceMessages::BOSE_ASSERT_OFF ) );
                 request.set_codeset( tvSource->details( ).cicode( ) );
+                m_QSSClient->SendKey( request );
             }
         }
         if( pwrMacro.has_powerondevice() )
@@ -265,8 +266,9 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
             {
                 QSSMSG::BoseKeyReqMessage_t request;
                 request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( BOSE_ASSERT_ON );
+                request.set_keyval( ( on ? LpmServiceMessages::BOSE_ASSERT_ON : LpmServiceMessages::BOSE_ASSERT_OFF ) );
                 request.set_codeset( macroSrc->details( ).cicode( ) );
+                m_QSSClient->SendKey( request );
             }
         }
     }

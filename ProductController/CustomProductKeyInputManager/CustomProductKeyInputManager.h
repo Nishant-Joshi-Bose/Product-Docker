@@ -52,7 +52,7 @@ public:
     explicit CustomProductKeyInputManager( CustomProductController& ProductController,
                                            const FrontDoorClientIF_t& frontDoorClient );
 
-    void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro );
+    void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, bool on );
 
     explicit CustomProductKeyInputManager( CustomProductController& ProductController );
 

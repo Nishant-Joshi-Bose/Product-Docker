@@ -2085,7 +2085,7 @@ void CustomProductController::AttemptToStartPlayback()
         pwrMacroContentItem.set_sourceaccount( ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
 
         SendPlaybackRequestFromContentItem( pwrMacroContentItem );
-        m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro );
+        m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro, true );
 
         BOSE_INFO( s_logger, "An attempt to play the power macro content item %s has been made.",
                    pwrMacroContentItem.DebugString().c_str( ) );
@@ -2093,6 +2093,19 @@ void CustomProductController::AttemptToStartPlayback()
     else
     {
         ProductController::AttemptToStartPlayback();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::PowerMacroOff
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::PowerMacroOff()
+{
+    if( m_powerMacro.enabled() )
+    {
+        m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro, false );
     }
 }
 
