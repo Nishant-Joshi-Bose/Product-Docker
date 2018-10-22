@@ -242,11 +242,18 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     return true;
 }
 
-void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, bool on )
+void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key )
 {
+    if( key != LpmServiceMessages::BOSE_ASSERT_ON && key != LpmServiceMessages::BOSE_ASSERT_OFF )
+    {
+        return;
+    }
+
     if( pwrMacro.enabled() )
     {
-        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( on ? "on" : "off" ), pwrMacro.ShortDebugString().c_str() );
+        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
+                   pwrMacro.ShortDebugString().c_str() );
+
         if( pwrMacro.powerontv() )
         {
             const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
@@ -254,7 +261,7 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
             {
                 QSSMSG::BoseKeyReqMessage_t request;
                 request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( ( on ? LpmServiceMessages::BOSE_ASSERT_ON : LpmServiceMessages::BOSE_ASSERT_OFF ) );
+                request.set_keyval( key );
                 request.set_codeset( tvSource->details( ).cicode( ) );
                 m_QSSClient->SendKey( request );
             }
@@ -266,7 +273,7 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
             {
                 QSSMSG::BoseKeyReqMessage_t request;
                 request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( ( on ? LpmServiceMessages::BOSE_ASSERT_ON : LpmServiceMessages::BOSE_ASSERT_OFF ) );
+                request.set_keyval( key );
                 request.set_codeset( macroSrc->details( ).cicode( ) );
                 m_QSSClient->SendKey( request );
             }
