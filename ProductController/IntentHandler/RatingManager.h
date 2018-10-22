@@ -35,6 +35,7 @@
 #include "IntentManager.h"
 #include "FrontDoorClientIF.h"
 #include "STSRating.pb.h"
+#include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
