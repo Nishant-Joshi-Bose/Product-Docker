@@ -57,11 +57,11 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/2.2.2-715+1e5d68a"
+    "selected_version": "Release/master/2.2.2-727+ccfa9e6"
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/MR1_2019/3.0.2-541+57a8ff6"
+    "selected_version": "Release/MR1_2019/3.0.4-548+637650b"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -173,11 +173,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@6b8d2b89a50e7e9e944681a6c5e03a9e42203f3e"
+    "selected_version": "master@f24d3f412382abcb6ee09868b98eb88fef542440"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-194+c5d9319"
+    "selected_version": "Continuous/master/2.2.0-200+f24d3f4"
   },
   {
     "name": "ProductUIAssets",
@@ -225,11 +225,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/MR1_2019/3.0.0-1008+457262a"
+    "selected_version": "Continuous/master/3.0.0-1043+7be50ba"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.43967.3043287"
+    "selected_version": "Continuous/Castle-Fork/2018-10-18_1302"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -245,7 +245,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@4b6ba1dd988b108dcb751cf07b23e7c08a81f503"
+    "selected_version": "master@721c3bd55efe9eeca87e4107859b210cf076b414"
   },
   {
     "name": "VPAController-qc8017_32",
