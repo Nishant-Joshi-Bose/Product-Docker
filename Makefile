@@ -99,7 +99,7 @@ packages-gz-with-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk 
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
+	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build
@@ -115,8 +115,8 @@ lpm-bos:
 ifeq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
 	$(error BUILD_TYPE must equal Release, Nightly or Continuous)
 endif
-	rm -f ./builds/$(cfg)/eddie_package*.bos
-	rm -f ./builds/$(cfg)/lpm_eddie*.hex
+	rm -f ./builds/$(cfg)/$(product)_package*.bos
+	rm -f ./builds/$(cfg)/lpm_$(product)*.hex
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: recovery-ipk
@@ -125,7 +125,7 @@ recovery-ipk: cmake_build minimal-product-tar
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos
-	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ eddie
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ $(product)
 
 .PHONY: monaco-ipk
 monaco-ipk:
@@ -152,4 +152,3 @@ clean:
 .PHONY: distclean
 distclean:
 	git clean -fdX
-
