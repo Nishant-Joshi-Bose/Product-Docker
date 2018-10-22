@@ -110,8 +110,6 @@
 #include "ProtoPersistenceFactory.h"
 #include "PGCErrorCodes.h"
 #include "SystemUtils.h"
-#include "SystemPowerMacro.pb.h"
-#include "SystemPower.pb.h"
 #include "CustomChimeEvents.h"
 #include "LpmClientLiteIF.h"
 
@@ -1410,6 +1408,8 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
 void CustomProductController::HandleGetTimeouts( Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
                                                  Callback<FrontDoor::Error> errorCb )
 {
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
+
     SystemPowerPb::SystemPowerTimeouts timeouts;
     timeouts.set_noaudio( GetInactivityTimers().IsTimerEnabled( InactivityTimerType::NO_AUDIO_TIMER ) );
     timeouts.set_novideo( GetInactivityTimers().IsTimerEnabled( InactivityTimerType::NO_VIDEO_TIMER ) );
@@ -1420,7 +1420,7 @@ void CustomProductController::HandlePutTimeouts( SystemPowerPb::SystemPowerTimeo
                                                  Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
                                                  Callback<FrontDoor::Error> errorCb )
 {
-    BOSE_INFO( s_logger, "Handling PUT for %s", FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API );
+    BOSE_INFO( s_logger, "%s::%s: req = %s", CLASS_NAME, __func__, req.DebugString().c_str() );
 
     if( !req.has_noaudio( ) && !req.has_novideo( ) )
     {
@@ -1993,6 +1993,8 @@ void CustomProductController::HandlePutOpticalAutoWake(
     const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
     const Callback<FrontDoor::Error> & errorCb )
 {
+    BOSE_INFO( s_logger, "%s::%s - req = %s", CLASS_NAME, __func__, req.DebugString().c_str() );
+
     if( req.has_enabled( ) )
     {
         ProductMessage message;

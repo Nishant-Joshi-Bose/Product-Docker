@@ -49,6 +49,7 @@
 #include "LightBarController.h"
 #include "SystemPowerProduct.pb.h"
 #include "DisplayController.pb.h"
+#include "SystemPower.pb.h"
 #include "SystemPowerMacro.pb.h"
 #include "ProductFrontDoorKeyInjectIF.h"
 #include "AccessorySoftwareInstallManager.h"
