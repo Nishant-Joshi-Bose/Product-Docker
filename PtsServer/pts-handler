@@ -163,6 +163,14 @@ if path == "/logread.dat":      # same but encrypted
 
 http_redirect(path, "/logread", "/logread.dat")
 
+#-----------------------------------------------------------------------------
+# View a constant stream of LPM logging messages.
+
+if path == "/lpmlogread.txt" and is_development:
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("pts-lpmlogs", "pts-lpmlogs")
+
 # ----------------------------------------------------------------------------
 # View miscellaneous system status information.
 
@@ -177,6 +185,21 @@ if path == "/pts.dat":          # same but encrypted
     os.execlp("/bin/sh", "sh", "-c", "encrypt-logs pts-info | gzip")
 
 http_redirect(path, "/pts", "/pts.dat")
+
+# ----------------------------------------------------------------------------
+# View network status information.
+
+if path == "/network.txt" and is_development():
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("network-info", "network-info")
+
+if path == "/network.dat":
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs network-info | gzip")
+
+http_redirect(path, "/network", "/network.dat")
 
 # ----------------------------------------------------------------------------
 # Force the system into reflash mode (QFIL).

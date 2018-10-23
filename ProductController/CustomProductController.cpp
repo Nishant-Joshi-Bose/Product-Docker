@@ -38,9 +38,9 @@
 #include "ProductAdaptIQManager.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
-#include "ProductSTSStateFactory.h"
-#include "ProductSTSStateTop.h"
-#include "ProductSTSStateTopSilent.h"
+#include "ControlIntegrationSTSStateFactory.h"
+#include "ControlIntegrationSTSStateTop.h"
+#include "ControlIntegrationSTSStateTopSilent.h"
 #include "ProductSTSStateTopAiQ.h"
 #include "SystemSourcesProperties.pb.h"
 #include "ProductControllerHsm.h"
@@ -178,7 +178,7 @@ CustomProductController::CustomProductController( ) :
     ///
     /// Initialization of STS contorller.
     ///
-    m_ProductSTSController( *this ),
+    m_ControlIntegrationSTSController( ),
 
     ///
     /// Intent Handler Initialization
@@ -1084,7 +1084,7 @@ std::pair<bool, int32_t> CustomProductController::GetDesiredPlayingVolume( ) con
 ///
 /// @name   CustomProductController::SetupProductSTSController
 ///
-/// @brief  This method is called to perform the needed initialization of the ProductSTSController,
+/// @brief  This method is called to perform the needed initialization of the ControlIntegrationSTSController,
 ///         specifically, provide the set of sources to be created initially.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1092,23 +1092,23 @@ void CustomProductController::SetupProductSTSController( )
 {
     using namespace ProductSTS;
 
-    std::vector< ProductSTSController::SourceDescriptor > sources;
+    std::vector< ControlIntegrationSTSController::SourceDescriptor > sources;
 
-    ProductSTSStateFactory<ProductSTSStateTop>          commonStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopAiQ>       aiqStateFactory;
+    ControlIntegrationSTSStateFactory<ControlIntegrationSTSStateTop>          commonStateFactory;
+    ControlIntegrationSTSStateFactory<ControlIntegrationSTSStateTopSilent>    silentStateFactory;
+    ControlIntegrationSTSStateFactory<ProductSTSStateTopAiQ>                  aiqStateFactory;
 
     ///
     /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
     /// will always be available. SLOT sources need to be set-up before they become available.
     ///
-    ProductSTSController::SourceDescriptor descriptor_Setup   { SETUP,   SetupSourceSlot_Name( SETUP ),   false, silentStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
-    ProductSTSController::SourceDescriptor descriptor_Pairing { PAIRING, SetupSourceSlot_Name( PAIRING ), false, silentStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, commonStateFactory, true };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, commonStateFactory, true };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, commonStateFactory, true };
+    ControlIntegrationSTSController::SourceDescriptor descriptor_Setup   { SETUP,   SetupSourceSlot_Name( SETUP ),   false, silentStateFactory };
+    ControlIntegrationSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  commonStateFactory };
+    ControlIntegrationSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
+    ControlIntegrationSTSController::SourceDescriptor descriptor_Pairing { PAIRING, SetupSourceSlot_Name( PAIRING ), false, silentStateFactory };
+    ControlIntegrationSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, commonStateFactory, true };
+    ControlIntegrationSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, commonStateFactory, true };
+    ControlIntegrationSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, commonStateFactory, true };
 
     sources.push_back( descriptor_Setup );
     sources.push_back( descriptor_TV );
@@ -1123,29 +1123,29 @@ void CustomProductController::SetupProductSTSController( )
                                        this ) );
 
 
-    Callback< ProductSTSAccount::ProductSourceSlot >
+    Callback< ControlIntegrationSTSAccount::ProductSourceSlot >
     CallbackToHandleSelectSourceSlot( std::bind( &CustomProductController::HandleSelectSourceSlot,
                                                  this,
                                                  std::placeholders::_1 ) );
 
-    m_ProductSTSController.Initialize( sources,
-                                       CallbackForSTSComplete,
-                                       CallbackToHandleSelectSourceSlot );
+    m_ControlIntegrationSTSController.Initialize( sources,
+                                                  CallbackForSTSComplete,
+                                                  CallbackToHandleSelectSourceSlot );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::HandleSelectSourceSlot
 ///
-/// @brief  This method is called from the ProductSTSController, when one of our sources is
+/// @brief  This method is called from the ControlIntegrationSTSController, when one of our sources is
 ///         activated by CAPS via STS.
 ///
-/// @note   This method is called on the ProductSTSController task.
+/// @note   This method is called on the ControlIntegrationSTSController task.
 ///
-/// @param  ProductSTSAccount::ProductSourceSlot sourceSlot This identifies the activated slot.
+/// @param  ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot This identifies the activated slot.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot )
+void CustomProductController::HandleSelectSourceSlot( ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot )
 {
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );
@@ -1928,8 +1928,7 @@ void CustomProductController::HandlePutOpticalAutoWake(
         IL::BreakThread( std::bind( GetMessageHandler( ),
                                     message ),
                          GetTask( ) );
-
-        HandleGetOpticalAutoWake( respCb, errorCb );
+        respCb( req );
     }
     else
     {

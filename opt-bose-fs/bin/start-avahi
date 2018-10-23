@@ -17,7 +17,7 @@ if ! [ "$hostname" ]; then
 fi
 
 # Make the general config file in a writable location
-cat <<\EOF > "$conf" || exit
+cat <<EOF > "$conf" || exit
 [server]
 host-name=$hostname
 use-ipv4=yes

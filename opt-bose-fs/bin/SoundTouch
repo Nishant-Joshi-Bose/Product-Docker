@@ -53,6 +53,7 @@ echo "LD_LIBRARY_PATH set to $LD_LIBRARY_PATH"
 rundir=/var/run/shepherd
 pidfile=$rundir/pid
 override=false
+restore=false
 
 # The list of daemons to stop while in low power mode.  These daemons are
 # typically the ones that don't know how to handle the low power events
@@ -65,6 +66,31 @@ lowpower=(
     Shepherd-Bluetooth.xml
     Shepherd-BLEToFrontDoorService.xml
 )
+
+function validate {
+    if ! validate-mfgdata; then
+        log warning "Missing or invalid manufacturing data"
+        return 1
+    fi
+
+    # If device is in restore mode skip checking for low power mode services
+    # as voice related services like VFE and AVS will not be available in
+    # restore mode.
+    if [ -e /cache/restore_in_progress ]; then
+        restore=true
+        log warning "Entering restore mode from minimal image"
+        return 0
+    fi
+
+    # If the lowpower list is wrong, we don't tend to notice until we try
+    # to come out of low power mode.  So, validate the list now.
+    if ! ( cd /opt/Bose/etc && ls "${lowpower[@]}" >/dev/null ); then
+         log critical "lowpower list is not valid"
+         return 1
+    fi
+
+    return 0
+}
 
 # For testing, make it easy to override what shepherd config files we use.
 if [ -d /mnt/nv/shepherd ]; then
@@ -139,8 +165,8 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         mkdir -p "$rundir" || exit
         rm -f "$rundir"/*.xml
 
-        if ! validate-mfgdata; then
-            log warning "Missing or invalid manufacturing data, won't start SoundTouch"
+        if ! validate; then
+            log warning "Won't start SoundTouch"
             # Enable access to the LPM CLI.
             ln -s /opt/Bose/etc/Shepherd-LPMService.xml "$rundir" || exit
             ln -s /opt/Bose/etc/Shepherd-CLIServer.xml "$rundir" || exit
@@ -151,10 +177,11 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
             set-usb-mode p2p
         else
             ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
-
-            # vfe only launching
-            ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
-
+            # If in restore mode only start Shepherd processes that are loaded in the minimal image
+            if ! $restore; then
+                # vfe only launching
+                ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
+            fi
         fi
 
         if is-development; then
@@ -177,6 +204,8 @@ EOF
     if [ -e /mnt/nv/shepherdargs ]; then
         set -- "$@" $(cat /mnt/nv/shepherdargs)
     fi
+
+    export BOSE_MULTISTRING_DIR=/opt/Bose/etc/multistring
 
     set -- ./shepherdd "$@" "$rundir"
     log info "Starting $*"
