@@ -58,6 +58,7 @@
 #define FRONTDOOR_CEC_API                               "/cec"
 #define FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API "/system/power/mode/opticalAutoWake"
 #define FRONTDOOR_SYSTEM_POWER_MACRO_API                "/system/power/macro"
+#define FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API             "/system/power/timeouts"
 #define FRONTDOOR_UI_ALIVE                              "/ui/alive"
 
 
