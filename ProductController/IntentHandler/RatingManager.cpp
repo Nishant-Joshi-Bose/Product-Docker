@@ -25,10 +25,13 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "FrontDoorClient.h"
-#include "CustomProductController.h"
 #include "RatingManager.h"
+#include "CustomProductController.h"
+#include "Intents.h"
 #include "ProductEndpointDefines.h"
+#include "ProductSTS.pb.h"
+
+using namespace ProductPb;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
@@ -55,39 +58,19 @@ RatingManager::RatingManager( NotifyTargetTaskIF&        task,
                               ProductController&         productController )
 
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
-      m_CustomProductController( static_cast< CustomProductController & >( productController ) ),
-      m_ProductTask( m_CustomProductController.GetTask( ) ),
-      m_NotifierCallback( m_CustomProductController.GetMessageHandler( ) ),
-      m_FrontDoorClient( frontDoorClient )
+      m_ProductController( productController )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", "RatingManager" );
 
-    Initialize( );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   RatingManager::Initialize
-///
-/// @brief  This method registers for rating notifications from the Front Door.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void RatingManager::Initialize( )
-{
-    auto fNotify = [ this ]( STS::Rating::CurrentRating r )
-    {
-        ReceiveFrontDoorRating( r );
-    };
-
-    m_NotifierCallback = m_FrontDoorClient->RegisterNotification< STS::Rating::CurrentRating >
-                         ( FRONTDOOR_RATING_API, AsyncCallback< STS::Rating::CurrentRating > ( fNotify, m_ProductTask ) );
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  RatingManager::Handle
 ///
-/// @brief  This method is used to process rating specific key actions.
+/// @brief  This method is used to build and send Front Door messages to rate a source
+///         if it is selected.
 ///
 /// @param  KeyHandlerUtil::ActionType_t& action
 ///
@@ -96,104 +79,48 @@ void RatingManager::Initialize( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool RatingManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
-    BOSE_INFO( s_logger, "%s is in %s handling the action %u.", "RatingManager",
-               __func__, action );
+    BOSE_INFO( s_logger, "%s in %s", "RatingManager", __func__ );
 
-    if( action == ( uint16_t )Action::ACTION_THUMB_DOWN )
+    using namespace ProductSTS;
+
+    auto ratingMangerResponseCallback = [ this ]( const SoundTouchInterface::RatingTrack & response )
     {
-        ChangeRating( DOWN );
-        return true;
-    }
+        BOSE_DEBUG( s_logger, "A response to the rating was received: %s",
+                    ProtoToMarkup::ToJson( response, false ).c_str( ) );
+    };
 
-    if( action == ( uint16_t )Action::ACTION_THUMB_UP )
+    auto ratingMangerErrorCallback = [ this ]( const FrontDoor::Error & error )
     {
-        ChangeRating( UP );
-        return true;
-    }
-
-    BOSE_ERROR( s_logger, "%s is in %s handling the unexpected action %u.", "RatingManager",
-                __func__, action );
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief RatingManager::Stop
-///
-/// @todo  Resources, memory, or any client server connections that may need to be released by
-///        this module when stopped will need to be determined.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void RatingManager::Stop( )
-{
-    m_NotifierCallback.Disconnect( );
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief RatingManager::ReceiveFrontDoorRating
-///
-/// @param  volume Object containing volume received from the FrontDoor
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void RatingManager::ReceiveFrontDoorRating( STS::Rating::Enum& rating )
-{
-    BOSE_VERBOSE( s_logger, "rating received by %s is %s", __func__, ProtoToMarkup::ToJson( rating, false ).c_str() );
-    ///
-    /// Update rating status
-    ///
-    if ( rating == STS::Rating::Enum:UP )
-    {
-        m_rating = UP;
-    }
-
-    if ( rating == STS::Rating::Enum::DOWN )
-    {
-        m_rating = DOWN;
-    }
-
-    if ( rating == STS::Rating::Enum::NONE )
-    {
-        m_rating = NONE;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name RatingManager::ChangeRating
-///
-/// @brief Changes the content rating to the given value
-///
-/// @param rating : one of { DOWN, NONE, UP } as defined in the RatingType enum
-///                 and the STS::Rating::Enum protocol buffer
-///
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void RatingManager::ChangeRating( RatingType rating )
-{
-    auto errFunc = []( FrontDoor::Error error )
-    {
-        BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a frontdoor rating request.",
+        BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a rating request.",
                     error.code(),
                     error.subcode(),
                     error.message().c_str() );
     };
-    auto respFunc = [ this ]( STS::Rating::Enum& r )
+
+    SoundTouchInterface::RatingTrack ratingData;
+
+    if( action == ( uint16_t )Action::ACTION_THUMB_UP )
     {
-        ReceiveFrontDoorRating( r );
-    };
+        ratingData.set_rating( SoundTouchInterface::Rating::RatingEnum::UP );
+    }
 
-    AsyncCallback<STS::Rating::Enum&> respCb( respFunc, m_ProductTask );
-    AsyncCallback<FrontDoor::Error> errCb( errFunc, m_ProductTask );
+    if( action == ( uint16_t )Action::ACTION_THUMB_DOWN )
+    {
+        ratingData.set_rating( SoundTouchInterface::Rating::RatingEnum::DOWN );
+    }
 
-    //STS::Rating::Enum& pbRating = ReceiveFrontDoorRating;
-    //pbRating.set_rating( m_rating );
+    GetFrontDoorClient( )->SendPost<SoundTouchInterface::RatingTrack, FrontDoor::Error>( FRONTDOOR_RATING_API,
+            ratingData,
+            ratingMangerResponseCallback,
+            ratingMangerErrorCallback );
 
-    BOSE_VERBOSE( s_logger, "Changing FrontDoor rating" );
-    m_FrontDoorClient->SendPut<STS::Rating::Enum, FrontDoor::Error>(
-        FRONTDOOR_RATING_API, pbRating, respCb, errCb );
-};
+    return true;
+}
+
+//CustomProductController& RatingManager::GetCustomProductController( )
+//{
+//    return static_cast<CustomProductController&>( m_ProductController );
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///

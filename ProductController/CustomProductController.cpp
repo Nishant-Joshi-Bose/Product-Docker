@@ -1569,12 +1569,12 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         }
         else if( GetIntentHandler( ).IsIntentThumbUp( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleThumbsUp,
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentThumbsUp,
                                                               message.action( ) );
         }
-        else if( GetIntentHandler( ).IsIntentThumbDown( message.act( ) ) )
+        else if( GetIntentHandler( ).IsIntentThumbDown( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleThumbsDown,
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentThumbsDown,
                                                               message.action( ) );
         }
         else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )

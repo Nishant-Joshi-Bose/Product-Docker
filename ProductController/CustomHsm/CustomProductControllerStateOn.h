@@ -76,6 +76,8 @@ public:
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )      override;
     bool HandleIntentSetupBLERemote()                                           override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
+    bool HandleIntentThumbsUp( KeyHandlerUtil::ActionType_t intent )            override;
+    bool HandleIntentThumbsDown( KeyHandlerUtil::ActionType_t intent )          override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
