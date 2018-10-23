@@ -230,7 +230,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
 /// @brief  Send frontdoor notification for all the audio settings endpoints
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::SendAudioSettingsFrontDoorNotification()
+void CustomProductAudioService::SendAudioSettingsFrontDoorNotification() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_BASS_API, m_AudioSettingsMgr->GetBass( ) );
