@@ -175,8 +175,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb )
 {
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
+    BOSE_DEBUG( s_logger, "%s - contentItem = %s", __func__, contentItem.c_str() );
 
     // Parse contentItem string received from APProduct
     bool error = false;
@@ -196,8 +195,12 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         // Update audio settings
         BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback, source = %s, sourecAccount = %s", contentItemProto.source().c_str(), contentItemProto.sourceaccount().c_str() );
 
-        m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
-        FetchLatestAudioSettings();
+        bool isChanged = m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
+        if( isChanged )
+        {
+            FetchLatestAudioSettings();
+            SendAudioSettingsFrontDoorNotification();
+        }
         // Update input route
         if( contentItemProto.source() == SHELBY_SOURCE::PRODUCT )
         {
@@ -218,6 +221,31 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
     std::string inputRoute = std::to_string( m_InputRoute );
     cb.Send( mainStreamAudioSettings, inputRoute );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SendAudioSettingsFrontDoorNotification
+///
+/// @brief  Send frontdoor notification for all the audio settings endpoints
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SendAudioSettingsFrontDoorNotification()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_BASS_API, m_AudioSettingsMgr->GetBass( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_TREBLE_API, m_AudioSettingsMgr->GetTreble( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_CENTER_API, m_AudioSettingsMgr->GetCenter( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SURROUND_API, m_AudioSettingsMgr->GetSurround( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SURROUNDDELAY_API, m_AudioSettingsMgr->GetSurroundDelay( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_GAINOFFSET_API, m_AudioSettingsMgr->GetGainOffset( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_AVSYNC_API, m_AudioSettingsMgr->GetAvSync( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SUBWOOFERGAIN_API, m_AudioSettingsMgr->GetSubwooferGain( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_MODE_API, m_AudioSettingsMgr->GetMode( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_CONTENTTYPE_API, m_AudioSettingsMgr->GetContentType( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_DUALMONOSELECT_API, m_AudioSettingsMgr->GetDualMonoSelect( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API, m_AudioSettingsMgr->GetSubwooferPolarity( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
