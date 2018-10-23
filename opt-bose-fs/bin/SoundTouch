@@ -51,12 +51,20 @@ function validate {
         log warning "Missing or invalid manufacturing data"
         return 1
     fi
-    # If the lowpower list is wrong, we don't tend to notice until we try to
-    # come out of low power mode.  So, validate the list now.
-    if ! ( cd /opt/Bose/etc && ls "${lowpower[@]}" >/dev/null ); then
-        log critical "lowpower list is not valid"
-        return 1
+
+    # If device is in restore mode skip checking for low power mode services
+    # as voice related services like VFE and AVS will not be available in
+    # restore mode.
+    if ! [ -e /cache/restore_in_progress ]; then
+
+        # If the lowpower list is wrong, we don't tend to notice until we try
+        # to come out of low power mode.  So, validate the list now.
+        if ! ( cd /opt/Bose/etc && ls "${lowpower[@]}" >/dev/null ); then
+            log critical "lowpower list is not valid"
+            return 1
+        fi
     fi
+
     return 0
 }
 
@@ -210,15 +218,7 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
     log info "Clearing product persistence"
     rm -rfv /mnt/nv/product-persistence/*
 
-    if ! [ -e /mnt/nv/update/install-status.dat ]; then
-        # Clear pending update status and packages- if any
-        # Checking for install-status.dat protect against clearing partial install
-        rm -rfv /mnt/nv/update*.dat
-        rm -rfv /opt/Bose/.swUpdateCache/ipks/*
-        rm -rfv /opt/Bose/.swUpdateCache/localupdate/*
-    else
-        log warning "Partially installed Software Update found. Will not clear Update during Factory Default"
-    fi
+    swup-factory-reset
 
     reset_timezone_to_default force
     sync
