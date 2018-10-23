@@ -65,8 +65,6 @@ ProductCecHelper::ProductCecHelper( CustomProductController& ProductController )
       m_CustomProductController( static_cast< CustomProductController & >( ProductController ) ),
       m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) ),
       m_FrontDoorClient( ProductController.GetFrontDoorClient( ) )
-      m_eedid( std::make_shared< DataCollection::HdmiEdid >() ),
-      m_cecStateCache( std::make_shared< DataCollectionPb::CecState >() )
 {
 
 }
