@@ -110,7 +110,6 @@
 #include "ProtoPersistenceFactory.h"
 #include "PGCErrorCodes.h"
 #include "SystemUtils.h"
-#include "SystemPowerMacro.pb.h"
 #include "CustomChimeEvents.h"
 #include "LpmClientLiteIF.h"
 
@@ -1371,6 +1370,80 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
+    {
+        AsyncCallback< Callback< SystemPowerPb::SystemPowerTimeouts >,
+                       Callback< FrontDoor::Error > >
+                       getSystemPowerCb( std::bind( &CustomProductController::HandleGetTimeouts,
+                                                    this,
+                                                    std::placeholders::_1,
+                                                    std::placeholders::_2 ),
+                                         GetTask( ) );
+
+        m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API,
+                                          getSystemPowerCb,
+                                          FrontDoor::PUBLIC,
+                                          FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                          FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
+    {
+        AsyncCallback< SystemPowerPb::SystemPowerTimeouts,
+                       Callback<SystemPowerPb::SystemPowerTimeouts>,
+                       Callback<FrontDoor::Error> >
+                       putSystemPowerCb( std::bind( &CustomProductController::HandlePutTimeouts,
+                                                    this,
+                                                    std::placeholders::_1,
+                                                    std::placeholders::_2,
+                                                    std::placeholders::_3 ),
+                                         GetTask( ) );
+
+        m_FrontDoorClientIF->RegisterPut< SystemPowerPb::SystemPowerTimeouts >(
+            FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API,
+            putSystemPowerCb,
+            FrontDoor::PUBLIC,
+            FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
+}
+
+void CustomProductController::HandleGetTimeouts( Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
+                                                 Callback<FrontDoor::Error> errorCb )
+{
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
+
+    SystemPowerPb::SystemPowerTimeouts timeouts;
+    timeouts.set_noaudio( GetInactivityTimers().IsTimerEnabled( InactivityTimerType::NO_AUDIO_TIMER ) );
+    timeouts.set_novideo( GetInactivityTimers().IsTimerEnabled( InactivityTimerType::NO_VIDEO_TIMER ) );
+    respCb( timeouts );
+}
+
+void CustomProductController::HandlePutTimeouts( SystemPowerPb::SystemPowerTimeouts req,
+                                                 Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
+                                                 Callback<FrontDoor::Error> errorCb )
+{
+    BOSE_INFO( s_logger, "%s::%s: req = %s", CLASS_NAME, __func__, req.DebugString().c_str() );
+
+    if( !req.has_noaudio( ) && !req.has_novideo( ) )
+    {
+        FrontDoor::Error errorMessage;
+        errorMessage.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        errorMessage.set_subcode( PGCErrorCodes::ERROR_SUBCODE_INACTIVITY_TIMERS );
+        errorMessage.set_message( "noaudio and novideo arguments not found." );
+        errorCb( errorMessage );
+        return;
+    }
+
+    if( req.has_noaudio( ) )
+    {
+        GetInactivityTimers().EnableTimer( InactivityTimerType::NO_AUDIO_TIMER, req.noaudio( ) );
+    }
+    if( req.has_novideo( ) )
+    {
+        GetInactivityTimers().EnableTimer( InactivityTimerType::NO_VIDEO_TIMER, req.novideo( ) );
+    }
+
+    HandleGetTimeouts( respCb, errorCb );
+
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API, req );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1920,6 +1993,8 @@ void CustomProductController::HandlePutOpticalAutoWake(
     const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
     const Callback<FrontDoor::Error> & errorCb )
 {
+    BOSE_INFO( s_logger, "%s::%s - req = %s", CLASS_NAME, __func__, req.DebugString().c_str() );
+
     if( req.has_enabled( ) )
     {
         ProductMessage message;
