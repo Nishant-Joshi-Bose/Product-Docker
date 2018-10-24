@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOS/2.0.10.44008.3047542"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-10-23_1207"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -37,7 +37,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/SOS/2.0.2-165+2b2f830"
+    "selected_version": "Continuous/SOS/2.0.2-173+203334a"
   },
   {
     "name": "Bluetooth-qc8017_32",
@@ -177,11 +177,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "SOS@e3d9933a96c7535a56dea7475aca131eeaa4043b"
+    "selected_version": "SOS@722b81c915d39544716d77fa0f6de11b76cef21c"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/SOS/2.0.0-199+e3d9933"
+    "selected_version": "Continuous/SOS/2.0.0-202+722b81c"
   },
   {
     "name": "ProductUIAssets",
@@ -233,7 +233,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOS/2.0.10.44008.3047542"
+    "selected_version": "Continuous/Castle-Fork-SOS/2018-10-23_1207"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -249,7 +249,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@12259dd5acaafccc2ee798c0912205f05ab53d20"
+    "selected_version": "master@44b63a6a5bbe517bef91a420d0a8195a23aa7d50"
   },
   {
     "name": "Webkit",
