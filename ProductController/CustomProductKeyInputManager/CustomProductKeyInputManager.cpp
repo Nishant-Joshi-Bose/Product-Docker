@@ -246,37 +246,35 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
 {
     if( key != LpmServiceMessages::BOSE_ASSERT_ON && key != LpmServiceMessages::BOSE_ASSERT_OFF )
     {
+        BOSE_INFO( s_logger, "Unexpected key value %d", key );
         return;
     }
 
-    if( pwrMacro.enabled() )
-    {
-        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
-                   pwrMacro.ShortDebugString().c_str() );
+    BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
+               pwrMacro.ShortDebugString().c_str() );
 
-        if( pwrMacro.powerontv() )
+    if( pwrMacro.powerontv() )
+    {
+        const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
         {
-            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
-            {
-                QSSMSG::BoseKeyReqMessage_t request;
-                request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( key );
-                request.set_codeset( tvSource->details( ).cicode( ) );
-                m_QSSClient->SendKey( request );
-            }
+            QSSMSG::BoseKeyReqMessage_t request;
+            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+            request.set_keyval( key );
+            request.set_codeset( tvSource->details( ).cicode( ) );
+            m_QSSClient->SendKey( request );
         }
-        if( pwrMacro.has_powerondevice() )
+    }
+    if( pwrMacro.has_powerondevice() )
+    {
+        const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
+        if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
         {
-            const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
-            if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
-            {
-                QSSMSG::BoseKeyReqMessage_t request;
-                request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( key );
-                request.set_codeset( macroSrc->details( ).cicode( ) );
-                m_QSSClient->SendKey( request );
-            }
+            QSSMSG::BoseKeyReqMessage_t request;
+            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+            request.set_keyval( key );
+            request.set_codeset( macroSrc->details( ).cicode( ) );
+            m_QSSClient->SendKey( request );
         }
     }
 }
