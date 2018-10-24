@@ -38,6 +38,7 @@
 #include "ProductSpeakerManager.pb.h"
 #include "ProductMessage.pb.h"
 #include "SharedProto.pb.h"
+#include "DataCollectionClientIF.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -125,6 +126,8 @@ private:
     Callback< ProductMessage >                           m_ProductNotify;
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr<FrontDoorClientIF>                   m_FrontDoorClientIF;
+    std::shared_ptr< DataCollectionClientIF >            m_DataCollectionClient;
+
     ProductPb::AccessorySpeakerState                     m_accessorySpeakerState;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
