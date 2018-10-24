@@ -117,11 +117,6 @@ bool RatingManager::Handle( KeyHandlerUtil::ActionType_t& action )
     return true;
 }
 
-//CustomProductController& RatingManager::GetCustomProductController( )
-//{
-//    return static_cast<CustomProductController&>( m_ProductController );
-//}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
