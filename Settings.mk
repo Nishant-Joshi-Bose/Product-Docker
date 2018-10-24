@@ -1,3 +1,7 @@
+product = taylor
+PRODUCT = TAYLOR
+Product = Taylor
+
 ifndef BOSE_WORKSPACE
   $(error No BOSE_WORKSPACE)
 endif
