@@ -58,6 +58,26 @@ def movetree(src, dst):
         d = os.path.join(dst, item)
         shutil.move(s, d)
 
+def move_files_from_tree(src, dst):
+    '''
+    Moves all files from src and it's subdirectories to destination directory. [files only and not directory structure]
+    :param src: Source directory
+    :param dst: Destination directory
+    :return: None
+    '''
+    logging.debug("\t\tsrc [%s]" % (src))
+    logging.debug("\t\tdest [%s]" % (dst))
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+    for file_name in os.listdir(src):
+        full_file_name = os.path.join(src, file_name)
+        if os.path.isfile(full_file_name):
+            shutil.move(full_file_name, dst)
+        elif os.path.isdir(full_file_name):
+            move_files_from_tree(full_file_name, dst)
+        else:
+            logging.warning("file[%s] not moved to destination" % (full_file_name))
+
 def os_arch():
     os_arch = '32'
     if "Windows" in system():
@@ -353,6 +373,11 @@ def create_bose_partition(is_without_lpm, development, ipks_to_install):
         ''' remove hsp output as it should not be part of FS '''        
         if os.path.exists(os.path.join(temp_dir, "opt/Bose/hsp/update_ext4.zip")):
             os.remove(os.path.join(temp_dir, "opt/Bose/hsp/update_ext4.zip"))
+
+        ''' remove bose minimal tar as we are copying it to cache partition from cache.ext4 '''
+        if os.path.exists(os.path.join(temp_dir, "opt/Bose/Bose_minimal.tar.gz")):
+            os.remove(os.path.join(temp_dir, "opt/Bose/Bose_minimal.tar.gz"))
+
         ''' move installed files to EXT4 directory '''
         movetree(os.path.join(temp_dir, "opt/Bose/"), extract_dir)
         ''' sed -i -- 's/Status: install user unpacked/Status: install user installed/g' $bose_partition"/.swUpdateCache/status '''        
@@ -402,6 +427,63 @@ def create_bose_partition(is_without_lpm, development, ipks_to_install):
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return 83, "Unknown error while creating Bose partition"
+    return retVal, retStr
+
+def create_cache_partition(ipks_to_install):
+    '''
+    Put all contents of provided ipks in to /cache partition
+    Currently we manage all recovery and restore related files in /cache partition
+    :param ipks_to_install: list of ipks, contents of which needs to be installed in /cache
+    :return: retVal : return value, 0 is success
+    :return: retStr : Error message in case of error, empty otherwise
+    '''
+    retVal = 0
+    retStr = ""
+    try:
+        ''' ------------ extract partition ------------ '''
+        logging.info("Work on Cache Partition --- ")
+        logging.info("\tExtract")
+        partition_size, retStr = extract_ext4_partition("apq8017-cache.ext4", "cache", "orig_apq8017-cache.ext4")
+        if partition_size < 0:
+            return partition_size, retStr
+
+        ''' ------------ install given ipks ------------ '''
+        logging.info("\tFill IPKs")
+        extract_dir = os.path.join(stage_package_dir, "cache")
+        ''' install all IPKs in Bose partition '''
+        temp_dir = os.path.join(stage_package_dir, "temp")
+        if os.path.exists(temp_dir):
+            shutil.rmtree(temp_dir)
+        os.makedirs(temp_dir)
+        if not os.path.exists(temp_dir):
+            return 82, "Not able to create temporary IPK installation space"
+
+        for ipk in ipks_to_install:
+            logging.info("\t\tInstalling IPK: [%s]" %(ipk))
+            retVal, retStr = install_ipk(ipks_dir, ipk, temp_dir)
+            if retVal != 0:
+                return retVal, retStr
+
+        ''' remove opkg offline installation files '''
+        shutil.rmtree(os.path.join(temp_dir, "opt/Bose/.swUpdateCache"))
+
+        ''' move installed files to EXT4 directory '''
+        move_files_from_tree(os.path.join(temp_dir, "opt/Bose/"), extract_dir)
+
+        ''' remove offline installation directory '''
+        shutil.rmtree(temp_dir)
+
+        ''' ------------ Make new partition ------------ '''
+        logging.info("\tRecreate")
+        retVal, retStr = create_ext4_partition("apq8017-cache.ext4", "cache", partition_size)
+        if retVal != 0:
+            return retVal, retStr
+
+        ''' cleanup extracted directory '''
+        shutil.rmtree(extract_dir)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return 83, "Unknown error while creating Cache partition"
     return retVal, retStr
     
 def create_bose_persist_partition(is_without_lpm, development):
@@ -531,6 +613,15 @@ def create_output(is_without_lpm, development, ipksList):
             ['product.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk', 'recovery.ipk', 'product-script.ipk', 'software-update.ipk', 'wpe.ipk'])        
         '''
         retVal, retStr = create_bose_partition(is_without_lpm, development, ipksList)
+        if retVal != 0:
+            return retVal, retStr
+
+        ''' create cache partition
+            ['recovery.ipk'])
+            Recovery IPK contains files which are critical for restore operation. and hence those files needs to be installed in cache partition 
+            at the time of VIP process itself.        
+        '''
+        retVal, retStr = create_cache_partition(['recovery.ipk'])
         if retVal != 0:
             return retVal, retStr
 
