@@ -55,6 +55,15 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
     m_currentMinimumLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN )
 {
     BOSE_DEBUG( s_logger, __func__ );
+
+    auto func = [this]( bool enabled )
+    {
+        if( enabled )
+        {
+            SendAudioSettingsToDataCollection();
+        }
+    };
+    m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -200,6 +209,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         {
             FetchLatestAudioSettings();
             SendAudioSettingsFrontDoorNotification();
+            SendAudioSettingsToDataCollection();
         }
         // Update input route
         if( contentItemProto.source() == SHELBY_SOURCE::PRODUCT )
@@ -246,6 +256,57 @@ void CustomProductAudioService::SendAudioSettingsFrontDoorNotification() const
     m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_DUALMONOSELECT_API, m_AudioSettingsMgr->GetDualMonoSelect( ) );
     m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
     m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API, m_AudioSettingsMgr->GetSubwooferPolarity( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SendAudioSettingsToDataCollection
+///
+/// @brief  Send all AudioSettings to DataCollectionService
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SendAudioSettingsToDataCollection( ) const
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioBassLevel >( m_AudioSettingsMgr->GetBass( ) ),
+        DATA_COLLECTION_BASS );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioTrebleLevel >( m_AudioSettingsMgr->GetTreble( ) ),
+        DATA_COLLECTION_TREBLE );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioCenterLevel >( m_AudioSettingsMgr->GetCenter( ) ),
+        DATA_COLLECTION_CENTER );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioSurroundLevel >( m_AudioSettingsMgr->GetSurround( ) ),
+        DATA_COLLECTION_SURROUND );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioSurroundDelay >( m_AudioSettingsMgr->GetSurroundDelay( ) ),
+        DATA_COLLECTION_SURROUND_DELAY );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioGainOffset >( m_AudioSettingsMgr->GetGainOffset( ) ),
+        DATA_COLLECTION_GAIN_OFFSET );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioAvSync >( m_AudioSettingsMgr->GetAvSync( ) ),
+        DATA_COLLECTION_AVSYNC );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioSubwooferGain >( m_AudioSettingsMgr->GetSubwooferGain( ) ),
+        DATA_COLLECTION_SUBWOOFER_GAIN );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioMode >( m_AudioSettingsMgr->GetMode( ) ),
+        DATA_COLLECTION_MODE );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioContentType >( m_AudioSettingsMgr->GetContentType( ) ),
+        DATA_COLLECTION_CONTENT_TYPE );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioDualMonoSelect >( m_AudioSettingsMgr->GetDualMonoSelect( ) ),
+        DATA_COLLECTION_DUALMONO_SELECT );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioEqSelect >( m_AudioSettingsMgr->GetEqSelect( ) ),
+        DATA_COLLECTION_EQSELECT );
+    m_DataCollectionClient->SendData(
+        std::make_shared< AudioSubwooferPolarity >( m_AudioSettingsMgr->GetSubwooferPolarity( ) ),
+        DATA_COLLECTION_SUBWOOFER_POLARITY );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
