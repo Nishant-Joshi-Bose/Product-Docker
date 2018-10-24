@@ -116,6 +116,18 @@ bool ProductDspHelper::Run( )
                                                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 
+    //Register for notification from DataCollection service indicating it's connected/disconnected to network
+    auto func = [this]( bool enabled )
+    {
+        if( enabled )
+        {
+            m_ProductController.GetDataCollectionClient()->SendData(
+                std::make_shared< LpmServiceMessages::DspDataCollection >( m_DspDataCollection ),
+                DATA_COLLECTION_DSP_AIQ );
+        }
+    };
+    m_ProductController.GetDataCollectionClient()->RegisterForEnabledNotifications( Callback<bool>( func ) );
+
     return true;
 }
 
@@ -377,6 +389,7 @@ void ProductDspHelper::ReceiveDspDataCollection( const LpmServiceMessages::DspDa
     m_ProductController.GetDataCollectionClient()->SendData(
         std::make_shared< LpmServiceMessages::DspDataCollection >( data ),
         DATA_COLLECTION_DSP_AIQ );
+    m_DspDataCollection.CopyFrom( data );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
