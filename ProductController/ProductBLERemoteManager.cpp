@@ -329,6 +329,57 @@ void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProductBLERemoteManager::SetZone
+///
+/// @param  leds - Raw LED message to set zone in
+///         zone - Number of zone to set
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone )
+{
+    switch( zone )
+    {
+    case 1:
+        leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 2:
+        leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 3:
+        leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 4:
+        leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 5:
+        leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 6:
+        leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 7:
+        leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 8:
+        leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 9:
+        leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    case 10:
+        leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        break;
+    default:
+        BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", zone );
+        break;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name ProductBLERemoteManager::DetermineKeplerConfig
 ///
 /// @brief This function determines (mostly) the illumination state of the Kepler remote using
@@ -529,7 +580,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     // Set initial state of LEDs
     InitLedsMsg( leds );
 
-    // Set source key backlights based on sources are available
+    // Set source key backlights based on sources that are available
     if( m_sourceSelectAllowed )
     {
         GetSourceKeysBacklight( leds );
@@ -583,42 +634,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     // first process unconditional zones
     for( const auto& z : itBL->zones() )
     {
-        switch( z )
-        {
-        case 1:
-            leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 2:
-            leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 3:
-            leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 4:
-            leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 5:
-            leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 6:
-            leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 7:
-            leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 8:
-            leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 9:
-            leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 10:
-            leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        default:
-            BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", z );
-            break;
-        }
+        SetZone( leds, z );
     }
 
     // now add in zones that are lit only if the source is configured
@@ -626,42 +642,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         for( const auto& z : itBL->zonesconfigured() )
         {
-            switch( z )
-            {
-            case 1:
-                leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 2:
-                leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 3:
-                leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 4:
-                leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 5:
-                leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 6:
-                leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 7:
-                leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 8:
-                leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 9:
-                leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            case 10:
-                leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-                break;
-            default:
-                BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", z );
-                break;
-            }
+            SetZone( leds, z );
         }
     }
 
