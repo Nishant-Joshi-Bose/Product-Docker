@@ -1,5 +1,8 @@
 #!/usr/bin/python2.7
-#
+# ################# NOTICE ###################
+# This script is deprecated and will not work as expected.
+# Please contact CastleSoftwareUpdate team know in case you need to use this functionality.
+# ################# ###### ###################
 # This script is intended to push locally built files to target without performing software update
 # It uses ADB interface to push files and pushes only if the file has been updated
 #
