@@ -1,4 +1,5 @@
 {
+"KeplerConfig" : {
     "backlightConfig": [
         {
             "source":           "SOUNDTOUCH",
@@ -22,11 +23,11 @@
             "zones":            [2, 4, 7, 9, 10]
         },
         {
-            "source":           "CBL_SAT",
+            "source":           "BD_DVD",
             "zones":            [1, 2, 4, 7, 9, 10]
         },
         {
-            "source":           "BD_DVD",
+            "source":           "CBL_SAT",
             "zones":            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         },
         {
@@ -50,5 +51,6 @@
             "zones":            [9, 10]
         }
     ]
+}
 }
 
