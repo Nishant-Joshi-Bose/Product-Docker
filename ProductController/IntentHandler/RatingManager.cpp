@@ -44,12 +44,6 @@ bool RatingManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
     BOSE_INFO( s_logger, "%s in %s", "RatingManager", __func__ );
 
-    auto ratingMangerResponseCallback = [ this ]( const SoundTouchInterface::RatingTrack & response )
-    {
-        BOSE_DEBUG( s_logger, "A response to the rating was received: %s",
-                    ProtoToMarkup::ToJson( response, false ).c_str( ) );
-    };
-
     auto ratingMangerErrorCallback = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a rating request.",
@@ -76,7 +70,7 @@ bool RatingManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     GetFrontDoorClient( )->SendPost<SoundTouchInterface::RatingTrack, FrontDoor::Error>( FRONTDOOR_RATING_API,
             ratingData,
-            ratingMangerResponseCallback,
+            {},
             ratingMangerErrorCallback );
 
     return true;
