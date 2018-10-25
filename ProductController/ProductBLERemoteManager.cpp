@@ -320,20 +320,27 @@ void ProductBLERemoteManager::InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds )
     leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
     leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
     leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+
+    leds.set_backlight_enable( true );
+    leds.set_demo_mode( false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductBLERemoteManager::DetermineKeplerConfig
+/// @name ProductBLERemoteManager::DetermineKeplerConfig
 ///
-/// @param
+/// @brief This function determines (mostly) the illumination state of the Kepler remote using
+///        various pieces of information about the rest of the system.
 ///
-/// @return This method returns a pair of values. The first value indicates which backlight
-///         configuration to apply.  The second value indicates which source key to illuminate.
+/// @param None
+///
+/// @return This method returns a pair.
+///     * The first value indicates which backlight configuration to apply
+///     * The second value indicates which source key to illuminate
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::pair<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t> ProductBLERemoteManager::DetermineKeplerConfig( )
+std::pair<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t> ProductBLERemoteManager::DetermineKeplerState( )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
@@ -466,27 +473,27 @@ void ProductBLERemoteManager::UpdateBacklight( )
     using namespace SystemSourcesProperties;
 
     RCS_PB_MSG::LedsRawMsg_t leds;
+
+    // Set initial state of LEDs
     InitLedsMsg( leds );
 
-    // BlueTooth and TV are always available for now
+    // Set source key backlights based on sources are available
+
+    // TV and Bluetooth sources are always available
     leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
     leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
 
-    // default the others to off
-    leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-    leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
-    leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    // SoundTouch is based on Passport account status
+    leds.set_sound_touch( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED ?
+                          RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON : RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
 
-    leds.set_backlight_enable( true );
-    leds.set_demo_mode( false );
-
-    for( auto i = 0; i < m_sources.sources_size(); i++ )
+    // SLOT_ sources are based on the status field
+    // We also verify that the source has a "details" field (a configured SLOT_ source without a details field
+    // would indicate a malformed source database)
+    for( const auto& source : m_sources.sources( ) )
     {
-        const auto& source = m_sources.sources( i );
-
         if( ( not m_ProductController.GetSourceInfo().IsSourceAvailable( source ) ) or ( not source.has_details() ) )
         {
-            // source isn't configured, don't light it
             continue;
         }
 
@@ -505,43 +512,8 @@ void ProductBLERemoteManager::UpdateBacklight( )
         }
     }
 
-    if( m_IsZoneMember )
-    {
-        // Special behavior for zone members: always show the SoundTouch source active and the SoundTouch zones
-        leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
-        leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-        leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-        leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-        leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-        leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-        leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-        leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-        leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-        leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-        leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-        m_RCSClient->Led_Set(
-            leds.sound_touch(), leds.tv(), leds.bluetooth(), leds.game(), leds.clapboard(), leds.set_top_box(),
-            leds.zone_01(), leds.zone_02(), leds.zone_03(), leds.zone_04(), leds.zone_05(),
-            leds.zone_06(), leds.zone_07(), leds.zone_08(), leds.zone_09(), leds.zone_10(),
-            leds.backlight_enable(), leds.demo_mode()
-        );
-        return;
-    }
-
-    // default all zones to off
-    leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-
-    leds.set_sound_touch( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED ?
-                          RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON : RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    // Determine backlight and active source key
+//    auto config = DetermineKeplerState( );
 
     if( !m_poweredOn )
     {

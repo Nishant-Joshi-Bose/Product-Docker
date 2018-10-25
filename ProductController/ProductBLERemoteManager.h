@@ -129,7 +129,7 @@ private:
     void CheckPairing( void );
     void GetZoneLEDs( RCS_PB_MSG::LedsRawMsg_t& leds );
     void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
-    std::pair<KeplerPb::KeplerConfig::Source, A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t> DetermineKeplerConfig( );
+    std::pair<KeplerPb::KeplerConfig::Source, A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t> DetermineKeplerState( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
