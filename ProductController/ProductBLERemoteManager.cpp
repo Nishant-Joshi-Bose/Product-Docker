@@ -22,6 +22,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
+#include <algorithm>
 #include "Utilities.h"
 #include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
@@ -335,9 +336,10 @@ void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 ///
 /// @param None
 ///
-/// @return This method returns a pair.
-///     * The first value indicates which backlight configuration to apply
+/// @return This method returns a tuple.
+///     * The first value indicates which zone backlight configuration to apply
 ///     * The second value indicates which source key to illuminate
+///     * The third value indicates if the currently-selected source is configured
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -519,7 +521,7 @@ void ProductBLERemoteManager::GetSourceKeysBacklight( LedsRawMsg_t& leds )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::UpdateBacklight( )
 {
-    LedsRawMsg_t leds;
+    LedsRawMsg_t    leds;
 
     // Set initial state of LEDs
     InitLedsMsg( leds );
@@ -533,6 +535,129 @@ void ProductBLERemoteManager::UpdateBacklight( )
     // Determine backlight and active source key
     auto config = DetermineKeplerState( );
 
+    // Light the selected source key
+    switch( std::get<1>( config ) )
+    {
+    case LedsSourceTypeMsg_t::SOUND_TOUCH:
+        leds.set_sound_touch( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+        break;
+    case LedsSourceTypeMsg_t::TV:
+        leds.set_tv( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+        break;
+    case LedsSourceTypeMsg_t::BLUETOOTH:
+        leds.set_bluetooth( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+        break;
+    case LedsSourceTypeMsg_t::GAME:
+        leds.set_game( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+        break;
+    case LedsSourceTypeMsg_t::DVD:
+        leds.set_clapboard( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+        break;
+    case LedsSourceTypeMsg_t::SET_TOP_BOX:
+        leds.set_set_top_box( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+        break;
+    default:
+        break;
+    }
+
+    // Apply zone backlighting
+    auto zoneBL         = std::get<0>( config );
+    const auto& blCfg   = m_keplerConfig.backlightconfig( );
+
+    auto cmpBlCfg = [ zoneBL ]( const KeplerConfig::BacklightEntry & bl )
+    {
+        return ( bl.source() == zoneBL );
+    };
+
+    auto itBL = std::find_if( blCfg.begin(), blCfg.end(), cmpBlCfg );
+    if( itBL == blCfg.end() )
+    {
+        // Don't light anything on a broken configuration; hopefully this will make it more obvious that something is broken
+        BOSE_ERROR( s_logger, "No config found for backlight source %s",  KeplerConfig_Source_Name( zoneBL ).c_str() );;
+        return;
+    }
+
+    // first process unconditional zones
+    for( const auto& z : itBL->zones() )
+    {
+        switch( z )
+        {
+        case 1:
+            leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 2:
+            leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 3:
+            leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 4:
+            leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 5:
+            leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 6:
+            leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 7:
+            leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 8:
+            leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 9:
+            leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 10:
+            leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        default:
+            BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", z );
+            break;
+        }
+    }
+
+    // now add in zones that are lit only if the source is configured
+    for( const auto& z : itBL->zonesConfigured() )
+    {
+        switch( z )
+        {
+        case 1:
+            leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 2:
+            leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 3:
+            leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 4:
+            leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 5:
+            leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 6:
+            leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 7:
+            leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 8:
+            leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 9:
+            leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case 10:
+            leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        default:
+            BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", z );
+            break;
+        }
+    }
 
     m_RCSClient->Led_Set(
         leds.sound_touch(), leds.tv(), leds.bluetooth(), leds.game(), leds.clapboard(), leds.set_top_box(),
