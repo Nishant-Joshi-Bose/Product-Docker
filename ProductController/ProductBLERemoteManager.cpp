@@ -34,6 +34,7 @@
 #include "SystemSourcesProperties.pb.h"
 #include "SHELBY_SOURCE.h"
 #include "CustomProductKeyInputManager.h"
+#include "SystemUtils.h"
 
 using namespace ProductPb;
 using namespace A4V_RemoteCommunicationServiceMessages;
@@ -44,6 +45,8 @@ using namespace A4VRemoteCommunication;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
+const char* ProductBLERemoteManager::m_configFile = "/opt/Bose/etc/KeplerConfig.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -60,6 +63,22 @@ ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& Produ
     m_ProductController( ProductController ),
     m_statusTimer( APTimer::Create( ProductController.GetTask( ), "BLERemoteManager" ) )
 {
+    BOptional<std::string> config = SystemUtils::ReadFile( m_configFile );
+    if( config )
+    {
+        try
+        {
+            ProtoToMarkup::FromJson( *config, &m_keplerConfig );
+        }
+        catch( const ProtoToMarkup::MarkupError & e )
+        {
+            BOSE_ERROR( s_logger, "KeplerConfig markup error - %s", e.what( ) );
+        }
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "%s failed to lod config %s", __PRETTY_FUNCTION__, m_configFile );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

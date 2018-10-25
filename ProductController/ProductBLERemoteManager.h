@@ -41,6 +41,7 @@
 #include "A4V_RemoteCommClient.h"
 #include "A4V_RemoteCommClientIF.h"
 #include "APTimer.h"
+#include "Kepler.pb.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +111,9 @@ private:
     const int                       m_PairingTimeout        = 7200;
     bool                            m_poweredOn             = false;
     bool                            m_sourceSelectAllowed   = true;
-    bool                            m_IsZoneMember      = false;
+    bool                            m_IsZoneMember          = false;
+    static const char*              m_configFile;
+    KeplerPb::KeplerConfig          m_keplerConfig;
 
     SoundTouchInterface::NowSelectionInfo                                   m_nowSelection;
     SoundTouchInterface::Sources                                            m_sources;
