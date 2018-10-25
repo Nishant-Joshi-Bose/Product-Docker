@@ -130,14 +130,10 @@ public:
         return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_SETUP_BLE_REMOTE );
     }
 
-    static bool IsIntentThumbUp( KeyHandlerUtil::ActionType_t argument )
+    static bool IsIntentRating( KeyHandlerUtil::ActionType_t argument )
     {
-        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_UP );
-    }
-
-    static bool IsIntentThumbDown( KeyHandlerUtil::ActionType_t argument )
-    {
-        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_DOWN );
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_UP ) ||
+               ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_DOWN );
     }
 };
 

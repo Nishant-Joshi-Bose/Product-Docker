@@ -411,12 +411,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentThumbsUp( KeyHandlerUtil::ActionType_t intent )
-    {
-        return false;
-    }
-
-    virtual bool HandleIntentThumbsDown( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentRating( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
