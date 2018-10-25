@@ -277,9 +277,9 @@ void ProductBLERemoteManager::UpdateCapsAudioZone( const SoundTouchInterface::zo
     BOSE_INFO( s_logger, "%s, zone- (%s)", __func__,  ProtoToMarkup::ToJson( zoneInfo, false ).c_str() );
 
     bool zoneMember = false;
-    for( int i = 0; i < zoneInfo.members_size( ); ++i )
+    for( const auto& m : zoneInfo.members( ) )
     {
-        if( zoneInfo.members( i ).guid( ) == m_ProductController.GetProductGuid( ) )
+        if( m.guid( ) == m_ProductController.GetProductGuid( ) )
         {
             zoneMember = true;
             break;
