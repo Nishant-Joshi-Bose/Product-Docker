@@ -125,11 +125,10 @@ private:
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
     void UpdateCapsAudioZone( const SoundTouchInterface::zone& zoneInfo );
     void UpdateBacklight( );
-    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& available ) const;
     void CheckPairing( void );
-    void GetZoneLEDs( RCS_PB_MSG::LedsRawMsg_t& leds );
     void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
     std::pair<KeplerPb::KeplerConfig::Source, A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t> DetermineKeplerState( );
+    void GetSourceKeysBacklight( RCS_PB_MSG::LedsRawMsg_t& leds );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
