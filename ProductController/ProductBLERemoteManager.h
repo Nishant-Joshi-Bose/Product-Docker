@@ -131,8 +131,8 @@ private:
     void GetSourceKeysBacklight( RCS_PB_MSG::LedsRawMsg_t& leds );
     void SetZone( RCS_PB_MSG::LedsRawMsg_t& leds, int zone, RCS_PB_MSG::LedsRawMsg_t::eLedZoneBits_t state );
 
-    const int                       ZONE_FIRST  = 1;
-    const int                       ZONE_LAST   = 10;
+    static constexpr int            ZONE_FIRST  = 1;
+    static constexpr int            ZONE_LAST   = 10;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
