@@ -56,6 +56,7 @@
 #define FRONTDOOR_AUDIO_VOLUME_API                      "/audio/volume"
 #define FRONTDOOR_AUDIO_ZONE_API                        "/audio/zone"
 #define FRONTDOOR_CEC_API                               "/cec"
+#define FRONTDOOR_RATING_API                            "/content/nowPlaying/rating"
 #define FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API "/system/power/mode/opticalAutoWake"
 #define FRONTDOOR_SYSTEM_POWER_MACRO_API                "/system/power/macro"
 #define FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API             "/system/power/timeouts"
