@@ -25,12 +25,12 @@
             wildcard to match characters. If either of these methods match more than one
             file, the program will exit with an error.
 
-            --><header master_version="0.1.2" name="taylor_package.bos" />
+            --><header master_version="0.1.7" name="taylor_package.bos" />
     <manifest_entries>
 
-        <entry chip="lpm_taylor" combine="True" name="taylor_mfg.bin" path="/home/softlib/verisoft/TaylorLPM-Diags/Continuous/trunk/2018-10-12_1226/TAYLORDP0_L4/lpm_*.bin" version="filename" />
-        <entry chip="lpm_taylor" combine="True" name="taylor_bl.bin" path="/home/softlib/verisoft/TaylorLPM-BL/Release/trunk/0.1.1.3484/TaylorDP0_L4/lpm_bootloader*.bin" version="filename" />
-        <entry name="taylor.bin" path="/home/softlib/verisoft/TaylorLPM-Diags/Continuous/trunk/2018-10-12_1226/TAYLORDP0_L4/lpm_*.bin" version="filename" />
+        <entry chip="lpm_taylor" combine="True" name="taylor_mfg.bin" path="/home/softlib/verisoft/TaylorLPM-Diags/Continuous/trunk/2018-10-25_1341/TAYLORDP1/lpm_*.bin" version="filename" />
+        <entry chip="lpm_taylor" combine="True" name="taylor_bl.bin" path="/home/softlib/verisoft/TaylorLPM-BL/Release/trunk/0.1.5.3597/TaylorDP1/lpm_bootloader*.bin" version="filename" />
+        <entry name="taylor.bin" path="/home/softlib/verisoft/TaylorLPM-Diags/Continuous/user-software/2018-10-25_1629/TAYLORDP1/lpm_*.bin" version="filename" />
         <entry name="taylor_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/SOS/2.2-106+825a33c/HomeSpeaker/Animations.bin" version="dynamic" />
     </manifest_entries>
 </blob>
