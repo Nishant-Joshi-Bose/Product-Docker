@@ -67,6 +67,7 @@ ADD_EXECUTABLE(Professor
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/SpeakerPairingManager.cpp
   IntentHandler/MuteManager.cpp
+  IntentHandler/RatingManager.cpp
   ProductAdaptIQManager.cpp
   ProductBLERemoteManager.cpp
   ProductCecHelper.cpp
@@ -92,6 +93,7 @@ TARGET_LINK_LIBRARIES(Professor
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
+  VPAControllerClient
   CliClient
   AudioLibs
   PassportClient
