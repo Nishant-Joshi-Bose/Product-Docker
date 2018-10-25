@@ -343,7 +343,7 @@ void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::pair<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t> ProductBLERemoteManager::DetermineKeplerState( )
+std::tuple<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t, bool> ProductBLERemoteManager::DetermineKeplerState( )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
@@ -351,23 +351,23 @@ std::pair<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t> ProductB
     // Power and zone membership have priority over everything else
     if( !m_poweredOn )
     {
-        return std::make_pair( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
     }
     else if( m_IsZoneMember )
     {
-        return std::make_pair( KeplerConfig::ZONE, LedsSourceTypeMsg_t::SOUND_TOUCH );
+        return std::make_tuple( KeplerConfig::ZONE, LedsSourceTypeMsg_t::SOUND_TOUCH, true );
     }
 
     // For the rest we determine the source by what's currently playing
     if( !m_nowSelection.has_contentitem() )
     {
-        return std::make_pair( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
     }
 
     auto sourceItem = m_ProductController.GetSourceInfo().FindSource( m_nowSelection.contentitem() );
     if( !sourceItem )
     {
-        return std::make_pair( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
     }
 
     const auto& sourceName = sourceItem->sourcename();
@@ -376,7 +376,7 @@ std::pair<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t> ProductB
     // No use going any farther if we have invalid source here
     if( sourceName.compare( SHELBY_SOURCE::INVALID_SOURCE ) == 0 )
     {
-        return std::make_pair( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
     }
 
     // Product sources can be setup ...
@@ -384,21 +384,23 @@ std::pair<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t> ProductB
     {
         if( sourceAccountName.compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
         {
-            return std::make_pair( KeplerConfig::ADAPTIQ, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+            return std::make_tuple( KeplerConfig::ADAPTIQ, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
         }
         else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
         {
-            return std::make_pair( KeplerConfig::ACCESSORY_PAIRING, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+            return std::make_tuple( KeplerConfig::ACCESSORY_PAIRING, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
         }
-        return std::make_pair( KeplerConfig::OOB, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+        return std::make_tuple( KeplerConfig::OOB, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
     }
 
     if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
     {
+        auto configured = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
+
         // .... TV, or SLOT_n
         if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
         {
-            return std::make_pair( KeplerConfig::TV, LedsSourceTypeMsg_t::TV );
+            return std::make_tuple( KeplerConfig::TV, LedsSourceTypeMsg_t::TV, configured );
         }
 
         auto keplerSource   = KeplerConfig::OFF;
@@ -444,15 +446,16 @@ std::pair<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t> ProductB
             BOSE_ERROR( s_logger, "%s unhandled device type %s", __func__, sourceDetailsDeviceType.c_str() );
         }
 
-        return std::make_pair( keplerSource, ledsSource );
+        return std::make_tuple( keplerSource, ledsSource, configured );
     }
     else if( sourceName.compare( SHELBY_SOURCE::BLUETOOTH ) == 0 )
     {
-        return std::make_pair( KeplerConfig::BLUETOOTH, LedsSourceTypeMsg_t::BLUETOOTH );
+        return std::make_tuple( KeplerConfig::BLUETOOTH, LedsSourceTypeMsg_t::BLUETOOTH, true );
     }
 
     // Everthing else is SoundTouch
-    return std::make_pair( KeplerConfig::SOUNDTOUCH, LedsSourceTypeMsg_t::SOUND_TOUCH );
+    return std::make_tuple( KeplerConfig::SOUNDTOUCH, LedsSourceTypeMsg_t::SOUND_TOUCH,
+                            m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -619,43 +622,46 @@ void ProductBLERemoteManager::UpdateBacklight( )
     }
 
     // now add in zones that are lit only if the source is configured
-    for( const auto& z : itBL->zonesConfigured() )
+    if( std::get<2>( config ) )
     {
-        switch( z )
+        for( const auto& z : itBL->zonesconfigured() )
         {
-        case 1:
-            leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 2:
-            leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 3:
-            leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 4:
-            leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 5:
-            leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 6:
-            leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 7:
-            leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 8:
-            leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 9:
-            leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        case 10:
-            leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            break;
-        default:
-            BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", z );
-            break;
+            switch( z )
+            {
+            case 1:
+                leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 2:
+                leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 3:
+                leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 4:
+                leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 5:
+                leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 6:
+                leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 7:
+                leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 8:
+                leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 9:
+                leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            case 10:
+                leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                break;
+            default:
+                BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", z );
+                break;
+            }
         }
     }
 

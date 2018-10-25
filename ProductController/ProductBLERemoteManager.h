@@ -127,7 +127,7 @@ private:
     void UpdateBacklight( );
     void CheckPairing( void );
     void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
-    std::pair<KeplerPb::KeplerConfig::Source, A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t> DetermineKeplerState( );
+    std::tuple<KeplerPb::KeplerConfig::Source, A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t, bool> DetermineKeplerState( );
     void GetSourceKeysBacklight( RCS_PB_MSG::LedsRawMsg_t& leds );
 };
 
