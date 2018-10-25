@@ -46,6 +46,7 @@
 #include "MuteManager.h"
 #include "SpeakerPairingManager.h"
 #include "PlaybackRequestManager.h"
+#include "RatingManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -111,6 +112,12 @@ void IntentHandler::Initialize( )
                                                   GetFrontDoorClient( ),
                                                   GetProductController( ) );
 
+    IntentManagerPtr_t ratingManager = std::make_shared< RatingManager >
+                                       ( GetTask( ),
+                                         GetCli( ),
+                                         GetFrontDoorClient( ),
+                                         GetProductController( ) );
+
     ///
     /// A map is created to associate the custom volume and mute control intent manager with volume
     /// and mute key actions. Note that these actions are product specific,
@@ -136,6 +143,14 @@ void IntentHandler::Initialize( )
     m_IntentManagerMap[( uint16_t )Action::ACTION_GAME ]            = playbackRequestManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_DVD ]             = playbackRequestManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_CABLESAT ]        = playbackRequestManager;
+
+    ///
+    /// A map is created to associate the custom rating intent manager with product specific
+    /// rating key actions - i.e. a "thumbs up" or "thumbs down" key found on various universal
+    /// remotes.
+    ///
+    m_IntentManagerMap[( uint16_t )Action::ACTION_THUMB_UP ]    = ratingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_THUMB_DOWN ]  = ratingManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
