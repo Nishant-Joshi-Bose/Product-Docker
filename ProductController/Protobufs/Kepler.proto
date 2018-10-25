@@ -21,6 +21,8 @@ package KeplerPb;
 
 message KeplerConfig
 {
+    // "Source" is a value synthesized from various pieces of information
+    // about the system state
     enum Source
     {
         // "fixed" product sources
@@ -38,6 +40,8 @@ message KeplerConfig
         OOB                 = 10;
         // we are a zone member
         ZONE                = 11;
+        // we are powered off
+        OFF                 = 12;
     }
 
     message BacklightEntry

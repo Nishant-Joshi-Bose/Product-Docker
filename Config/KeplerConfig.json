@@ -44,6 +44,10 @@
         {
             "source":           "ZONE",
             "zones":            [4, 5, 7, 9, 10]
+        },
+        {
+            "source":           "OFF",
+            "zones":            [9, 10]
         }
     ]
 }

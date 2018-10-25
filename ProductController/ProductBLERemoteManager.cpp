@@ -37,6 +37,7 @@
 #include "SystemUtils.h"
 
 using namespace ProductPb;
+using namespace KeplerPb;
 using namespace A4V_RemoteCommunicationServiceMessages;
 using namespace A4VRemoteCommunication;
 
@@ -292,6 +293,162 @@ void ProductBLERemoteManager::UpdateCapsAudioZone( const SoundTouchInterface::zo
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProductBLERemoteManager::InitLedsMsg
+///
+/// @param  leds Raw LED message to initialize
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds )
+{
+    leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+
+    leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::DetermineKeplerConfig
+///
+/// @param
+///
+/// @return This method returns a pair of values. The first value indicates which backlight
+///         configuration to apply.  The second value indicates which source key to illuminate.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::pair<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t> ProductBLERemoteManager::DetermineKeplerConfig( )
+{
+    using namespace ProductSTS;
+    using namespace SystemSourcesProperties;
+
+    // Power and zone membership have priority over everything else
+    if( !m_poweredOn )
+    {
+        return std::make_pair( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+    }
+    else if( m_IsZoneMember )
+    {
+        return std::make_pair( KeplerConfig::ZONE, LedsSourceTypeMsg_t::SOUND_TOUCH );
+    }
+
+    // For the rest we determine the source by what's currently playing
+    if( !m_nowSelection.has_contentitem() )
+    {
+        return std::make_pair( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+    }
+
+    auto sourceItem = m_ProductController.GetSourceInfo().FindSource( m_nowSelection.contentitem() );
+    if( !sourceItem )
+    {
+        return std::make_pair( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+    }
+
+    const auto& sourceName = sourceItem->sourcename();
+    const auto& sourceAccountName = sourceItem->sourceaccountname();
+
+    // No use going any farther if we have invalid source here
+    if( sourceName.compare( SHELBY_SOURCE::INVALID_SOURCE ) == 0 )
+    {
+        return std::make_pair( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+    }
+
+    // Product sources can be setup ...
+    if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
+    {
+        if( sourceAccountName.compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
+        {
+            return std::make_pair( KeplerConfig::ADAPTIQ, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+        }
+        else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
+        {
+            return std::make_pair( KeplerConfig::ACCESSORY_PAIRING, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+        }
+        return std::make_pair( KeplerConfig::OOB, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
+    }
+
+    if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
+    {
+        // .... TV, or SLOT_n
+        if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
+        {
+            return std::make_pair( KeplerConfig::TV, LedsSourceTypeMsg_t::TV );
+        }
+
+        auto keplerSource   = KeplerConfig::OFF;
+        auto ledsSource     = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
+
+        // For slot sources, illuminated source key is independent of backlight configuration
+        // (backlight configuration is determined by the type of device a source key is configured for)
+        const auto& sourceDetailsActivationKey = sourceItem->details().activationkey();
+        if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
+        {
+            ledsSource = LedsSourceTypeMsg_t::GAME;
+        }
+        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) ) == 0 )
+        {
+            ledsSource = LedsSourceTypeMsg_t::SET_TOP_BOX;
+        }
+        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) ) == 0 )
+        {
+            ledsSource = LedsSourceTypeMsg_t::DVD;
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "%s unhandled activation key %s", __func__, sourceDetailsActivationKey.c_str() );
+        }
+
+        const auto& sourceDetailsDeviceType = sourceItem->details().devicetype();
+        if(
+            ( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_GAME ) ) == 0 ) or
+            ( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_STREAMING ) ) == 0 ) )
+        {
+            keplerSource = KeplerConfig::GAME;
+        }
+        else if( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_BD_DVD ) ) == 0 )
+        {
+            keplerSource = KeplerConfig::BD_DVD;
+        }
+        else if( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_CBL_SAT ) ) == 0 )
+        {
+            keplerSource = KeplerConfig::CBL_SAT;
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "%s unhandled device type %s", __func__, sourceDetailsDeviceType.c_str() );
+        }
+
+        return std::make_pair( keplerSource, ledsSource );
+    }
+    else if( sourceName.compare( SHELBY_SOURCE::BLUETOOTH ) == 0 )
+    {
+        return std::make_pair( KeplerConfig::BLUETOOTH, LedsSourceTypeMsg_t::BLUETOOTH );
+    }
+
+    // Everthing else is SoundTouch
+    return std::make_pair( KeplerConfig::SOUNDTOUCH, LedsSourceTypeMsg_t::SOUND_TOUCH );
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief ProductBLERemoteManager::UpdateBacklight
 ///
 /// @param  void This method does not take any arguments.
@@ -309,6 +466,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     using namespace SystemSourcesProperties;
 
     RCS_PB_MSG::LedsRawMsg_t leds;
+    InitLedsMsg( leds );
 
     // BlueTooth and TV are always available for now
     leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
