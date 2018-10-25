@@ -225,11 +225,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/3.0.0-1043+7be50ba"
+    "selected_version": "Continuous/master/3.0.0-1047+be8500c"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-10-18_1302"
+    "selected_version": "Continuous/Castle-Fork/2018-10-23_1237"
   },
   {
     "name": "svc-pts-log-decrypt",
