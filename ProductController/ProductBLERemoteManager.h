@@ -129,7 +129,10 @@ private:
     void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
     std::tuple<KeplerPb::KeplerConfig::Source, A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t, bool> DetermineKeplerState( );
     void GetSourceKeysBacklight( RCS_PB_MSG::LedsRawMsg_t& leds );
-    void SetZone( RCS_PB_MSG::LedsRawMsg_t& leds, int zone );
+    void SetZone( RCS_PB_MSG::LedsRawMsg_t& leds, int zone, RCS_PB_MSG::LedsRawMsg_t::eLedZoneBits_t state );
+
+    const int                       ZONE_FIRST  = 1;
+    const int                       ZONE_LAST   = 10;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

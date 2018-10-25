@@ -305,16 +305,10 @@ void ProductBLERemoteManager::UpdateCapsAudioZone( const SoundTouchInterface::zo
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 {
-    leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
-    leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    for( auto i = ZONE_FIRST; i <= ZONE_LAST; i++ )
+    {
+        SetZone( leds, i, LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    }
 
     leds.set_sound_touch( LedsRawMsg_t::SOURCE_LED_OFF );
     leds.set_tv( LedsRawMsg_t::SOURCE_LED_OFF );
@@ -338,39 +332,39 @@ void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone )
+void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_t::eLedZoneBits_t state )
 {
     switch( zone )
     {
     case 1:
-        leds.set_zone_01( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_01( state );
         break;
     case 2:
-        leds.set_zone_02( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_02( state );
         break;
     case 3:
-        leds.set_zone_03( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_03( state );
         break;
     case 4:
-        leds.set_zone_04( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_04( state );
         break;
     case 5:
-        leds.set_zone_05( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_05( state );
         break;
     case 6:
-        leds.set_zone_06( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_06( state );
         break;
     case 7:
-        leds.set_zone_07( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_07( state );
         break;
     case 8:
-        leds.set_zone_08( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_08( state );
         break;
     case 9:
-        leds.set_zone_09( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_09( state );
         break;
     case 10:
-        leds.set_zone_10( LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_10( state );
         break;
     default:
         BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", zone );
@@ -634,7 +628,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     // first process unconditional zones
     for( const auto& z : itBL->zones() )
     {
-        SetZone( leds, z );
+        SetZone( leds, z, LedsRawMsg_t::ZONE_BACKLIGHT_ON );
     }
 
     // now add in zones that are lit only if the source is configured
@@ -642,7 +636,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         for( const auto& z : itBL->zonesconfigured() )
         {
-            SetZone( leds, z );
+            SetZone( leds, z, LedsRawMsg_t::ZONE_BACKLIGHT_ON );
         }
     }
 
