@@ -447,11 +447,11 @@ std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool> ProductBLERemoteMana
     const auto& accountName = sourceItem->sourceaccountname();
     const auto& activationKey = sourceItem->details().activationkey();
 
-    auto matchSource = [ sourceName, accountName, activationKey ]( const KeplerConfig::StateEntry & s )
+    auto matchState = [ sourceName, accountName, activationKey ]( const KeplerConfig::StateEntry & s )
     {
         if( s.has_activationkey() )
         {
-            return ( ( s.sourcename() == sourceName ) && ( s.activationkey() == activationKey ) );
+            return ( ( s.sourcename() == sourceName ) && ( ACTIVATION_KEY__Name( s.activationkey() ) == activationKey ) );
         }
         else
         {
@@ -462,9 +462,9 @@ std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool> ProductBLERemoteMana
     const auto& states = m_keplerConfig.states( );
     auto itState = std::find_if( states.begin(), states.end(), matchState );
 
-    if( itState )
+    if( itState != states.end() )
     {
-        configured = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
+        bool configured = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
         return std::make_tuple( *itState, configured );
     }
 
@@ -553,26 +553,27 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // Determine backlight and active source key
     auto config = DetermineKeplerState( );
+    auto state = std::get<0>( config );
 
     // Light the selected source key
-    switch( std::get<1>( config ) )
+    switch( state.sourcekey() )
     {
-    case LedsSourceTypeMsg_t::SOUND_TOUCH:
+    case KeplerConfig::KEY_SOUNDTOUCH:
         leds.set_sound_touch( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::TV:
+    case KeplerConfig::KEY_TV:
         leds.set_tv( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::BLUETOOTH:
+    case KeplerConfig::KEY_BLUETOOTH:
         leds.set_bluetooth( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::GAME:
+    case KeplerConfig::KEY_GAME:
         leds.set_game( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::DVD:
+    case KeplerConfig::KEY_BD_DVD:
         leds.set_clapboard( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::SET_TOP_BOX:
+    case KeplerConfig::KEY_CBL_SAT:
         leds.set_set_top_box( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
     default:

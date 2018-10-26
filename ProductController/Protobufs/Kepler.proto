@@ -29,7 +29,7 @@ message KeplerConfig
         STATE_SOUNDTOUCH            = 1;
         STATE_TV                    = 2;
         STATE_BLUETOOTH             = 3;
-        // configurable (SLOT) sources (type determined from activation key)
+        // configurable (SLOT) sources 
         STATE_GAME                  = 4;
         STATE_CBL_SAT               = 5;
         STATE_BD_DVD                = 6;
@@ -45,12 +45,13 @@ message KeplerConfig
     
     enum SourceKey
     {
-        KEY_SOUNDTOUCH              = 1;
-        KEY_TV                      = 2;
-        KEY_BLUETOOTH               = 3;
-        KEY_GAME                    = 4;
-        KEY_CBL_SAT                 = 5;
-        KEY_BD_DVD                  = 6;
+        KEY_NONE                    = 1;
+        KEY_SOUNDTOUCH              = 2;
+        KEY_TV                      = 3;
+        KEY_BLUETOOTH               = 4;
+        KEY_GAME                    = 5;
+        KEY_CBL_SAT                 = 6;
+        KEY_BD_DVD                  = 7;
     }
 
     message ZoneConfiguration
