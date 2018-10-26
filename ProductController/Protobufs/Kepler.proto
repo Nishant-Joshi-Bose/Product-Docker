@@ -17,6 +17,9 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+import "ProductSTS.proto";
+import "SystemSourcesProperties.proto";
+
 package KeplerPb;
 
 message KeplerConfig
@@ -43,16 +46,32 @@ message KeplerConfig
         // we are powered off
         OFF                 = 12;
     }
+    
+    enum SourceKey
+    {
+        SOUNDTOUCH_KEY      = 1;
+        TV_KEY              = 2;
+        BLUETOOTH_KEY       = 3;
+        GAME_KEY            = 4;
+        CBL_SAT_KEY         = 5;
+        BD_DVD_KEY          = 6;
+    }
 
     message BacklightEntry
     {
         // zones are lit unconditionally
         // zonesUnconfigured are lit when the source is configured
         // zonesConfigured are lit when the source is not configured
-        optional Source     source                      = 1;         
-        repeated uint32     zones                       = 2;
-        repeated uint32     zonesUnconfigured           = 3;
-        repeated uint32     zonesConfigured             = 4;
+        optional Source                                     source              = 1;         
+        repeated uint32                                     zones               = 2;
+        repeated uint32                                     zonesUnconfigured   = 3;
+        repeated uint32                                     zonesConfigured     = 4;
+
+        // The following are used to match this entry to a CAPS source
+        // deviceType is only used for SLOT sources
+        optional string                                     sourceName          = 5;
+        optional string                                     sourceAccountName   = 6;
+        optional SystemSourcesProperties.DEVICE_TYPE_       deviceType          = 7;        
     }
 
     repeated BacklightEntry backlightConfig             = 1;

@@ -3,32 +3,40 @@
     "backlightConfig": [
         {
             "source":           "SOUNDTOUCH",
-            "zones":            [4, 5, 7, 9, 10]
+            "zones":            [4, 5, 7, 9, 10],
+            "sourceKey":        "SOUNDTOUCH",
+            "sourceName":       "
         },
         {
             "source":           "TV",
             "zones":            [7, 9],
-            "zonesConfigured":  [1, 2, 3, 4, 5, 6, 8, 10]
+            "zonesConfigured":  [1, 2, 3, 4, 5, 6, 8, 10],
+            "sourceKey":        "TV"
         },
         {
             "source":           "BLUETOOTH",
-            "zones":            [4, 7, 9, 10]
+            "zones":            [4, 7, 9, 10],
+            "sourceKey":        "BLUETOOTH"
         },
         {
             "source":           "GAME",
-            "zones":            [2, 4, 7, 9, 10]
+            "zones":            [2, 4, 7, 9, 10],
+            "sourceKey":        "GAME"
         },
         {
             "source":           "STREAMING",
-            "zones":            [2, 4, 7, 9, 10]
+            "zones":            [2, 4, 7, 9, 10],
+            "sourceKey":        "GAME"
         },
         {
             "source":           "BD_DVD",
-            "zones":            [1, 2, 4, 7, 9, 10]
+            "zones":            [1, 2, 4, 7, 9, 10],
+            "sourceKey":        "BD_DVD"
         },
         {
             "source":           "CBL_SAT",
-            "zones":            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            "zones":            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "sourceKey":        "CBL_SAT"
         },
         {
             "source":           "ADAPTIQ",
@@ -44,7 +52,8 @@
         },
         {
             "source":           "ZONE",
-            "zones":            [4, 5, 7, 9, 10]
+            "zones":            [4, 5, 7, 9, 10],
+            "sourceKey":        "SOUNDTOUCH"
         },
         {
             "source":           "OFF",

@@ -424,6 +424,13 @@ std::tuple<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t, bool> P
         return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
     }
 
+
+    auto cmpBlCfg = [ zoneBL ]( const KeplerConfig::BacklightEntry & bl )
+    {
+        return ( bl.source() == zoneBL );
+    };
+    auto itBL = std::find_if( blCfg.begin(), blCfg.end(), cmpBlCfg );
+
     // Product sources can be setup ...
     if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
     {
