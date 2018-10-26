@@ -1,63 +1,125 @@
 {
 "KeplerConfig" : {
-    "backlightConfig": [
+
+    "states": [
         {
-            "source":           "SOUNDTOUCH",
-            "zones":            [4, 5, 7, 9, 10],
-            "sourceKey":        "SOUNDTOUCH",
-            "sourceName":       "
+            "state": "STATE_SOUNDTOUCH",
+            "sourceKey": "KEY_SOUNDTOUCH",
+            "zoneConfig": {
+                "zones": [4, 5, 7, 9, 10]
+            }
+
         },
         {
-            "source":           "TV",
-            "zones":            [7, 9],
-            "zonesConfigured":  [1, 2, 3, 4, 5, 6, 8, 10],
-            "sourceKey":        "TV"
+            "state": "STATE_TV",
+            "sourceKey": "KEY_TV",
+            "sourceName": "PRODUCT",
+            "sourceAccountName": "TV",
+            "zoneConfig": {
+                "zones": [7, 9],
+                "zonesConfigured": [1, 2, 3, 4, 5, 6, 8, 10]
+            }
         },
         {
-            "source":           "BLUETOOTH",
-            "zones":            [4, 7, 9, 10],
-            "sourceKey":        "BLUETOOTH"
+            "state": "STATE_BLUETOOTH",
+            "sourceKey": "KEY_BLUETOOTH",
+            "sourceName": "BLUETOOTH",
+            "sourceAccountName": "",
+            "zoneConfig": {
+                "zones": [4, 7, 9, 10]
+            }
         },
         {
-            "source":           "GAME",
-            "zones":            [2, 4, 7, 9, 10],
-            "sourceKey":        "GAME"
+            "state": "STATE_GAME",
+            "sourceKey": "KEY_GAME",
+            "sourceName": "PRODUCT",
+            "activationKey": "ACTIVATION_KEY_GAME"
         },
         {
-            "source":           "STREAMING",
-            "zones":            [2, 4, 7, 9, 10],
-            "sourceKey":        "GAME"
+            "state": "STATE_CBL_SAT",
+            "sourceKey": "KEY_CBL_SAT",
+            "sourceName": "PRODUCT",
+            "activationKey": "ACTIVATION_KEY_CBL_SAT"
         },
         {
-            "source":           "BD_DVD",
-            "zones":            [1, 2, 4, 7, 9, 10],
-            "sourceKey":        "BD_DVD"
+            "state": "STATE_BD_DVD",
+            "sourceKey": "KEY_BD_DVD",
+            "sourceName": "PRODUCT",
+            "activationKey": "ACTIVATION_KEY_BD_DVD"
         },
         {
-            "source":           "CBL_SAT",
-            "zones":            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "sourceKey":        "CBL_SAT"
+            "state": "STATE_ADAPTIQ",
+            "sourceName": "SETUP",
+            "sourceAccountName": "ADAPTIQ",
+            "zones": [4, 7, 9]
         },
         {
-            "source":           "ADAPTIQ",
-            "zones":            [4, 7, 9]
+            "state": "STATE_ACCESSORY_PAIRING",
+            "sourceName": "SETUP",
+            "sourceAccountName": "PAIRING",
+            "zones": [4, 7, 9]
         },
         {
-            "source":           "ACCESSORY_PAIRING",
-            "zones":            [4, 7, 9]
+            "state": "STATE_OOB",
+            "sourceName": "SETUP",
+            "sourceAccountName": "SETUP",
+            "zoneConfig": {
+                "zones": [9]
+            }
         },
         {
-            "source":           "OOB",
-            "zones":            [9]
+            "state": "STATE_ZONE",
+            "sourceKey": "KEY_SOUNDTOUCH",
+            "zoneConfig": {
+                "zones": [4, 5, 7, 9, 10]
+            }
         },
         {
-            "source":           "ZONE",
-            "zones":            [4, 5, 7, 9, 10],
-            "sourceKey":        "SOUNDTOUCH"
+            "state": "STATE_OFF",
+            "sourceName": "INVALID_SOURCE",
+            "sourceAccountName": "",
+            "zoneConfig": {
+                "zones": [9, 10]
+            }
+        }
+    ],
+
+    "devices": [
+        {
+            "deviceType": "DEVICE_TYPE_GAME",
+            "zoneConfig": {
+                "zones": [2, 4, 7, 9, 10]
+            }
         },
         {
-            "source":           "OFF",
-            "zones":            [9, 10]
+            "deviceType": "DEVICE_TYPE_STREAMING",
+            "zoneConfig": {
+                "zones": [2, 4, 7, 9, 10]
+            }
+        },
+        {
+            "deviceType": "DEVICE_TYPE_CBL_SAT",
+            "zoneConfig": {
+                "zones": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            }
+        },
+        {
+            "deviceType": "DEVICE_TYPE_TV",
+            "zoneConfig": {
+                "zones": [1, 2, 3, 4, 5, 6, 8, 10]
+            }
+        },
+        {
+            "deviceType": "DEVICE_TYPE_SMART_TV",
+            "zoneConfig": {
+                "zones": [1, 2, 3, 4, 5, 6, 8, 10]
+            }
+        },
+        {
+            "deviceType": "DEVICE_TYPE_BD_DVD",
+            "zoneConfig": {
+                "zones": [1, 2, 4, 7, 9, 10]
+            }
         }
     ]
 }

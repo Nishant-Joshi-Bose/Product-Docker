@@ -24,57 +24,72 @@ package KeplerPb;
 
 message KeplerConfig
 {
-    // "Source" is a value synthesized from various pieces of information
-    // about the system state
-    enum Source
+    enum State
     {
-        // "fixed" product sources
-        SOUNDTOUCH          = 1;
-        TV                  = 2;
-        BLUETOOTH           = 3;
+        STATE_SOUNDTOUCH            = 1;
+        STATE_TV                    = 2;
+        STATE_BLUETOOTH             = 3;
         // configurable (SLOT) sources (type determined from activation key)
-        GAME                = 4;
-        STREAMING           = 5;
-        CBL_SAT             = 6;
-        BD_DVD              = 7;
+        STATE_GAME                  = 4;
+        STATE_CBL_SAT               = 5;
+        STATE_BD_DVD                = 6;
         // setup sources
-        ADAPTIQ             = 8;
-        ACCESSORY_PAIRING   = 9;
-        OOB                 = 10;
+        STATE_ADAPTIQ               = 7;
+        STATE_ACCESSORY_PAIRING     = 8;
+        STATE_OOB                   = 9;
         // we are a zone member
-        ZONE                = 11;
+        STATE_ZONE                  = 11;
         // we are powered off
-        OFF                 = 12;
+        STATE_OFF                   = 12;
     }
     
     enum SourceKey
     {
-        SOUNDTOUCH_KEY      = 1;
-        TV_KEY              = 2;
-        BLUETOOTH_KEY       = 3;
-        GAME_KEY            = 4;
-        CBL_SAT_KEY         = 5;
-        BD_DVD_KEY          = 6;
+        KEY_SOUNDTOUCH              = 1;
+        KEY_TV                      = 2;
+        KEY_BLUETOOTH               = 3;
+        KEY_GAME                    = 4;
+        KEY_CBL_SAT                 = 5;
+        KEY_BD_DVD                  = 6;
     }
 
-    message BacklightEntry
+    message ZoneConfiguration
     {
-        // zones are lit unconditionally
-        // zonesUnconfigured are lit when the source is configured
-        // zonesConfigured are lit when the source is not configured
-        optional Source                                     source              = 1;         
-        repeated uint32                                     zones               = 2;
-        repeated uint32                                     zonesUnconfigured   = 3;
-        repeated uint32                                     zonesConfigured     = 4;
-
-        // The following are used to match this entry to a CAPS source
-        // deviceType is only used for SLOT sources
-        optional string                                     sourceName          = 5;
-        optional string                                     sourceAccountName   = 6;
-        optional SystemSourcesProperties.DEVICE_TYPE_       deviceType          = 7;        
+        // "zones" are lit unconditionally
+        // "zonesUnconfigured" are lit if the source isn't configured
+        // "zonesConfigured" are lit if the source is configured
+        repeated uint32                                     zones               = 1;
+        repeated uint32                                     zonesUnconfigured   = 2;
+        repeated uint32                                     zonesConfigured     = 3;
     }
 
-    repeated BacklightEntry backlightConfig             = 1;
+    message StateEntry 
+    {
+        optional Source                                     state               = 1;         
+        optional ZoneConfiguration                          zoneConfig          = 2;
+
+        // sourceKey is lit as the active key if it is present
+        optional SourceKey                                  sourceKey           = 3;
+ 
+        // The following are used to match this entry to a CAPS source.
+        // Entries will match against sourceName and either sourceAccountName 
+        // or activationKey.  activationKey takes priority
+        // (SLOT sources should have an activationKey)
+        optional string                                     sourceName          = 4;
+        optional string                                     sourceAccountName   = 5;
+        optional SystemSourcesProperties.ACTIVATION_KEY_    activationKey       = 6;        
+    }
+
+    // A DeviceEntry specifies zone configuration for a device type 
+    // (used for SLOT_n sources)
+    message DeviceEntry
+    {
+        optional SystemSourcesProperties.DEVICE_TYPE_       deviceType          = 1;
+        optional ZoneConfiguration                          zoneConfig          = 2;
+    }
+
+    repeated StateEntry                                     states              = 1;
+    repeated DeviceEntry                                    devices             = 2;
 
 }
 
