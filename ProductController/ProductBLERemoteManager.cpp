@@ -409,7 +409,7 @@ const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerC
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool> ProductBLERemoteManager::DetermineKeplerState( );
+std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool> ProductBLERemoteManager::DetermineKeplerState( )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
@@ -417,122 +417,61 @@ std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool> ProductBLERemoteMana
     // Power and zone membership have priority over everything else
     if( !m_poweredOn )
     {
-        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
+        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        return std::make_tuple( state, true );
     }
     else if( m_IsZoneMember )
     {
-        return std::make_tuple( KeplerConfig::ZONE, LedsSourceTypeMsg_t::SOUND_TOUCH, true );
+        auto state = GetKeplerState( KeplerConfig::STATE_ZONE );
+        return std::make_tuple( state, true );
     }
 
     // For the rest we determine the source by what's currently playing
     if( !m_nowSelection.has_contentitem() )
     {
-        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
+        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        return std::make_tuple( state, true );
     }
 
     auto sourceItem = m_ProductController.GetSourceInfo().FindSource( m_nowSelection.contentitem() );
     if( !sourceItem )
     {
-        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
+        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        return std::make_tuple( state, true );
     }
 
+    // sourceaccountname and details may possibly be empty
+    // this is okay, we'll still do the right thing (empty details will result in creation
+    // of details field, which in turn will have an empty activationkey)
     const auto& sourceName = sourceItem->sourcename();
-    const auto& sourceAccountName = sourceItem->sourceaccountname();
+    const auto& accountName = sourceItem->sourceaccountname();
+    const auto& activationKey = sourceItem->details().activationkey();
 
-    // No use going any farther if we have invalid source here
-    if( sourceName.compare( SHELBY_SOURCE::INVALID_SOURCE ) == 0 )
+    auto matchSource = [ sourceName, accountName, activationKey ]( const KeplerConfig::StateEntry & s )
     {
-        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
-    }
-
-
-    auto matchSource = [ sourceName, sourceAccountName ]( const KeplerConfig::BacklightEntry & bl )
-    {
-        if( source.
-            return ( ( sourceName == bl.sourceName() ) && ( sourceAccountName == bl.sourceAccountName() );
-                     bl.source() == zoneBL
-                   );
+        if( s.has_activationkey() )
+        {
+            return ( ( s.sourcename() == sourceName ) && ( s.activationkey() == activationKey ) );
+        }
+        else
+        {
+            return ( ( s.sourcename() == sourceName ) && ( s.sourceaccountname() == accountName ) );
+        }
     };
-const auto& blCfg = m_keplerConfig.backlightconfig( );
-    auto itBL = std::find_if( blCfg.begin(), blCfg.end(), matchSource );
 
-    // Product sources can be setup ...
-    if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
+    const auto& states = m_keplerConfig.states( );
+    auto itState = std::find_if( states.begin(), states.end(), matchState );
+
+    if( itState )
     {
-        if( sourceAccountName.compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
-        {
-            return std::make_tuple( KeplerConfig::ADAPTIQ, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
-        }
-        else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
-        {
-            return std::make_tuple( KeplerConfig::ACCESSORY_PAIRING, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
-        }
-        return std::make_tuple( KeplerConfig::OOB, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
-    }
-
-    if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
-    {
-        auto configured = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
-
-        // .... TV, or SLOT_n
-        if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
-        {
-            return std::make_tuple( KeplerConfig::TV, LedsSourceTypeMsg_t::TV, configured );
-        }
-
-        auto keplerSource   = KeplerConfig::OFF;
-        auto ledsSource     = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-
-        // For slot sources, illuminated source key is independent of backlight configuration
-        // (backlight configuration is determined by the type of device a source key is configured for)
-        const auto& sourceDetailsActivationKey = sourceItem->details().activationkey();
-        if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
-        {
-            ledsSource = LedsSourceTypeMsg_t::GAME;
-        }
-        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) ) == 0 )
-        {
-            ledsSource = LedsSourceTypeMsg_t::SET_TOP_BOX;
-        }
-        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) ) == 0 )
-        {
-            ledsSource = LedsSourceTypeMsg_t::DVD;
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "%s unhandled activation key %s", __func__, sourceDetailsActivationKey.c_str() );
-        }
-
-        const auto& sourceDetailsDeviceType = sourceItem->details().devicetype();
-        if(
-            ( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_GAME ) ) == 0 ) or
-            ( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_STREAMING ) ) == 0 ) )
-        {
-            keplerSource = KeplerConfig::GAME;
-        }
-        else if( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_BD_DVD ) ) == 0 )
-        {
-            keplerSource = KeplerConfig::BD_DVD;
-        }
-        else if( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_CBL_SAT ) ) == 0 )
-        {
-            keplerSource = KeplerConfig::CBL_SAT;
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "%s unhandled device type %s", __func__, sourceDetailsDeviceType.c_str() );
-        }
-
-        return std::make_tuple( keplerSource, ledsSource, configured );
-    }
-    else if( sourceName.compare( SHELBY_SOURCE::BLUETOOTH ) == 0 )
-    {
-        return std::make_tuple( KeplerConfig::BLUETOOTH, LedsSourceTypeMsg_t::BLUETOOTH, true );
+        configured = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
+        return std::make_tuple( *itState, configured );
     }
 
     // Everthing else is SoundTouch
-    return std::make_tuple( KeplerConfig::SOUNDTOUCH, LedsSourceTypeMsg_t::SOUND_TOUCH,
-                            m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED );
+    auto state = GetKeplerState( KeplerConfig::STATE_SOUNDTOUCH );
+    bool configured = ( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED );
+    return std::make_tuple( state, configured );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
