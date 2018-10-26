@@ -89,6 +89,15 @@ bool CustomProductControllerStateOn::HandleIntentPlayProductSource( KeyHandlerUt
     return true;
 }
 
+bool CustomProductControllerStateOn::HandleIntentRating( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
+
+    return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  CustomProductControllerStateOn::HandleAdaptIQControl

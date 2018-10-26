@@ -38,6 +38,8 @@
 #include "SoundTouchInterface/AudioService.pb.h"
 #include "ProductMessage.pb.h"
 #include "CecMode.pb.h"
+#include "DataCollectionCecState.pb.h"
+#include "HdmiEdid.pb.h"
 #include "DataCollectionClientIF.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProtoPersistenceFactory.h"
@@ -156,6 +158,9 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< DataCollectionClientIF > m_DataCollectionClient;
+
+    DataCollectionPb::HdmiEdid m_eedid;
+    DataCollectionPb::CecState m_cecStateCache;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
