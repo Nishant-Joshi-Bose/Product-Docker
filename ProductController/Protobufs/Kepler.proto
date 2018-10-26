@@ -65,7 +65,7 @@ message KeplerConfig
 
     message StateEntry 
     {
-        optional Source                                     state               = 1;         
+        optional State                                      state               = 1;         
         optional ZoneConfiguration                          zoneConfig          = 2;
 
         // sourceKey is lit as the active key if it is present

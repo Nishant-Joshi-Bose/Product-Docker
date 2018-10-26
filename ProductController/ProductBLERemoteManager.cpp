@@ -374,21 +374,42 @@ void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name ProductBLERemoteManager::DetermineKeplerConfig
+/// @name ProductBLERemoteManager::GetKeplerState
 ///
-/// @brief This function determines (mostly) the illumination state of the Kepler remote using
-///        various pieces of information about the rest of the system.
+/// @param state - Kepler state ID
+///
+/// @return This method returns a reference to a StateEntry object corresponding to the
+///         supplied state ID
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerConfig::State state )
+{
+    auto matchState = [ state ]( const KeplerConfig::StateEntry & s )
+    {
+        return ( s.state() == state );
+    };
+    const auto& states = m_keplerConfig.states( );
+    auto it = std::find_if( states.begin(), states.end(), matchState );
+
+    return *it;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProductBLERemoteManager::DetermineKeplerState
+///
+/// @brief This function uses various pieces of information about the system state to determine
+///        the corresponding Kepler state.
 ///
 /// @param None
 ///
 /// @return This method returns a tuple.
-///     * The first value indicates which zone backlight configuration to apply
-///     * The second value indicates which source key to illuminate
-///     * The third value indicates if the currently-selected source is configured
+///     * The first value is a reference to the state
+///     * The second value indicates whether the corresponding source is configured
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::tuple<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t, bool> ProductBLERemoteManager::DetermineKeplerState( )
+std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool> ProductBLERemoteManager::DetermineKeplerState( );
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
