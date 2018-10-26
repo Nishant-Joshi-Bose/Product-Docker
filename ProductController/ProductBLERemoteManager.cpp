@@ -390,7 +390,7 @@ const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerC
         return ( s.state() == state );
     };
     const auto& states = m_keplerConfig.states( );
-    auto it = std::find_if( states.begin(), states.end(), matchState );
+    const auto& it = std::find_if( states.begin(), states.end(), matchState );
 
     return *it;
 }
@@ -461,7 +461,7 @@ std::tuple<const KeplerConfig::StateEntry&, bool, KeplerConfig::ZoneConfiguratio
     };
 
     const auto& states = m_keplerConfig.states( );
-    auto itState = std::find_if( states.begin(), states.end(), matchState );
+    const auto& itState = std::find_if( states.begin(), states.end(), matchState );
 
     if( itState != states.end() )
     {
@@ -479,7 +479,7 @@ std::tuple<const KeplerConfig::StateEntry&, bool, KeplerConfig::ZoneConfiguratio
             return ( devType == DEVICE_TYPE__Name( d.devicetype() ) );
         };
         const auto& devs = m_keplerConfig.devices( );
-        auto itDev = std::find_if( devs.begin(), devs.end(), matchDev );
+        const auto& itDev = std::find_if( devs.begin(), devs.end(), matchDev );
         return std::make_tuple( *itState, configured, itDev->zoneconfig() );
     }
 
@@ -568,7 +568,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // Determine backlight and active source key
     auto config = DetermineKeplerState( );
-    auto state = std::get<0>( config );
+    const auto& state = std::get<0>( config );
 
     // Light the selected source key
     switch( state.sourcekey() )
