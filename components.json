@@ -213,7 +213,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/MR1_2019/3.0.0-61+e78ef06"
+    "selected_version": "Continuous/master/2.2.0-72+590f399"
   },
   {
     "name": "SASS-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/3.0.0-1047+be8500c"
+    "selected_version": "Continuous/master/3.0.0-1062+4790adb"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
