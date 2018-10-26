@@ -59,7 +59,6 @@ message KeplerConfig
         // "zones" are lit unconditionally
         // "zonesUnconfigured" are lit if the source isn't configured
         // "zonesConfigured" are lit if the source is configured
-        repeated uint32                                     zones               = 1;
         repeated uint32                                     zonesUnconfigured   = 2;
         repeated uint32                                     zonesConfigured     = 3;
     }

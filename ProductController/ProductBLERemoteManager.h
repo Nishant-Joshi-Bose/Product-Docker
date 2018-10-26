@@ -127,7 +127,7 @@ private:
     void UpdateBacklight( );
     void CheckPairing( void );
     void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
-    std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool> DetermineKeplerState( );
+    std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool, KeplerPb::KeplerConfig::ZoneConfiguration> DetermineKeplerState( );
     void GetSourceKeysBacklight( RCS_PB_MSG::LedsRawMsg_t& leds );
     void SetZone( RCS_PB_MSG::LedsRawMsg_t& leds, int zone, RCS_PB_MSG::LedsRawMsg_t::eLedZoneBits_t state );
     const KeplerPb::KeplerConfig::StateEntry& GetKeplerState( KeplerPb::KeplerConfig::State state );
