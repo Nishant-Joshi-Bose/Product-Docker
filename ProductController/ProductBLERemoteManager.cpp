@@ -335,6 +335,8 @@ void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_t::eLedZoneBits_t state )
 {
+    static const std::map<> = void ( LedsRawMsg_t::*set_zone )( LedsRawMsg_t::eLedZoneBits_t ) = &LedsRawMsg_t::set_zone_01;
+
     switch( zone )
     {
     case 1:
