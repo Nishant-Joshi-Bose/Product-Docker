@@ -24,3 +24,6 @@ nslookup www.bose.com 208.67.222.222
 nslookup www.bose.com 8.8.8.8
 wget -s -T 5 www.google.com
 curl http://ifconfig.me/ -v --connect-timeout 30
+guid=$(jq -r .guid /persist/mfg_data.json)
+curl https://services.api.bose.io/discovery/discover/product/$guid -v --connect-timeout 30
+curl http://iot-product-state-core/state/$guid -x localhost:8888 -v --connect-timeout 30
