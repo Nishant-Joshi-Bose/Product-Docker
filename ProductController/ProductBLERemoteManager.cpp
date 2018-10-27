@@ -335,44 +335,24 @@ void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_t::eLedZoneBits_t state )
 {
-    static const std::map<> = void ( LedsRawMsg_t::*set_zone )( LedsRawMsg_t::eLedZoneBits_t ) = &LedsRawMsg_t::set_zone_01;
-
-    switch( zone )
+    if( ( zone < ZONE_FIRST ) || ( zone > ZONE_LAST ) )
     {
-    case 1:
-        leds.set_zone_01( state );
-        break;
-    case 2:
-        leds.set_zone_02( state );
-        break;
-    case 3:
-        leds.set_zone_03( state );
-        break;
-    case 4:
-        leds.set_zone_04( state );
-        break;
-    case 5:
-        leds.set_zone_05( state );
-        break;
-    case 6:
-        leds.set_zone_06( state );
-        break;
-    case 7:
-        leds.set_zone_07( state );
-        break;
-    case 8:
-        leds.set_zone_08( state );
-        break;
-    case 9:
-        leds.set_zone_09( state );
-        break;
-    case 10:
-        leds.set_zone_10( state );
-        break;
-    default:
-        BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", zone );
-        break;
+        return;
     }
+    static void ( LedsRawMsg_t::*setZone[] )( LedsRawMsg_t::eLedZoneBits_t ) =
+    {
+        &LedsRawMsg_t::set_zone_01,
+        &LedsRawMsg_t::set_zone_02,
+        &LedsRawMsg_t::set_zone_03,
+        &LedsRawMsg_t::set_zone_04,
+        &LedsRawMsg_t::set_zone_05,
+        &LedsRawMsg_t::set_zone_06,
+        &LedsRawMsg_t::set_zone_07,
+        &LedsRawMsg_t::set_zone_08,
+        &LedsRawMsg_t::set_zone_09,
+        &LedsRawMsg_t::set_zone_10,
+    };
+    ( leds.*setZone[zone] )( state );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
