@@ -352,7 +352,7 @@ void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_
         &LedsRawMsg_t::set_zone_09,
         &LedsRawMsg_t::set_zone_10,
     };
-    ( leds.*setZone[zone] )( state );
+    ( leds.*setZone[zone - ZONE_FIRST] )( state );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
