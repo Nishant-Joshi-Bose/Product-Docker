@@ -581,8 +581,6 @@ void ProductBLERemoteManager::UpdateBacklight( )
     auto configured = std::get<1>( config );
     const auto& zoneBL = std::get<2>( config );
     const auto& zones = configured ? zoneBL.zonesconfigured() : zoneBL.zonesunconfigured();
-
-    // first process unconditional zones
     for( const auto& z : zones )
     {
         SetZone( leds, z, LedsRawMsg_t::ZONE_BACKLIGHT_ON );
