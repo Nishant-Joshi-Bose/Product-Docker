@@ -72,15 +72,16 @@ ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& Produ
         try
         {
             ProtoToMarkup::FromJson( *config, &m_keplerConfig );
+            BOSE_INFO( s_logger, "%s %s loaded", __PRETTY_FUNCTION__, m_configFile );
         }
         catch( const ProtoToMarkup::MarkupError & e )
         {
-            BOSE_ERROR( s_logger, "KeplerConfig markup error - %s", e.what( ) );
+            BOSE_ERROR( s_logger, "%s KeplerConfig markup error - %s", __PRETTY_FUNCTION__, e.what( ) );
         }
     }
     else
     {
-        BOSE_ERROR( s_logger, "%s failed to lod config %s", __PRETTY_FUNCTION__, m_configFile );
+        BOSE_ERROR( s_logger, "%s failed to load config %s", __PRETTY_FUNCTION__, m_configFile );
     }
 }
 
@@ -334,61 +335,64 @@ void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_t::eLedZoneBits_t state )
 {
-    switch( zone )
+    if( ( zone < ZONE_FIRST ) || ( zone > ZONE_LAST ) )
     {
-    case 1:
-        leds.set_zone_01( state );
-        break;
-    case 2:
-        leds.set_zone_02( state );
-        break;
-    case 3:
-        leds.set_zone_03( state );
-        break;
-    case 4:
-        leds.set_zone_04( state );
-        break;
-    case 5:
-        leds.set_zone_05( state );
-        break;
-    case 6:
-        leds.set_zone_06( state );
-        break;
-    case 7:
-        leds.set_zone_07( state );
-        break;
-    case 8:
-        leds.set_zone_08( state );
-        break;
-    case 9:
-        leds.set_zone_09( state );
-        break;
-    case 10:
-        leds.set_zone_10( state );
-        break;
-    default:
-        BOSE_ERROR( s_logger, "Unsupported zone %d in backlight config", zone );
-        break;
+        return;
     }
+    static void ( LedsRawMsg_t::*setZone[] )( LedsRawMsg_t::eLedZoneBits_t ) =
+    {
+        &LedsRawMsg_t::set_zone_01,
+        &LedsRawMsg_t::set_zone_02,
+        &LedsRawMsg_t::set_zone_03,
+        &LedsRawMsg_t::set_zone_04,
+        &LedsRawMsg_t::set_zone_05,
+        &LedsRawMsg_t::set_zone_06,
+        &LedsRawMsg_t::set_zone_07,
+        &LedsRawMsg_t::set_zone_08,
+        &LedsRawMsg_t::set_zone_09,
+        &LedsRawMsg_t::set_zone_10,
+    };
+    ( leds.*setZone[zone - ZONE_FIRST] )( state );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name ProductBLERemoteManager::DetermineKeplerConfig
+/// @name ProductBLERemoteManager::GetKeplerState
 ///
-/// @brief This function determines (mostly) the illumination state of the Kepler remote using
-///        various pieces of information about the rest of the system.
+/// @param state - Kepler state ID
+///
+/// @return This method returns a reference to a StateEntry object corresponding to the
+///         supplied state ID
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerConfig::State state )
+{
+    auto matchState = [ state ]( const KeplerConfig::StateEntry & s )
+    {
+        return ( s.state() == state );
+    };
+    const auto& states = m_keplerConfig.states( );
+    const auto& it = std::find_if( states.begin(), states.end(), matchState );
+
+    return *it;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProductBLERemoteManager::DetermineKeplerState
+///
+/// @brief This function uses various pieces of information about the system state to determine
+///        the corresponding Kepler state.
 ///
 /// @param None
 ///
 /// @return This method returns a tuple.
-///     * The first value indicates which zone backlight configuration to apply
-///     * The second value indicates which source key to illuminate
-///     * The third value indicates if the currently-selected source is configured
+///     * The first value is a reference to the state
+///     * The second value indicates which zones should be lit
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::tuple<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t, bool> ProductBLERemoteManager::DetermineKeplerState( )
+std::tuple<const KeplerConfig::StateEntry&, bool, KeplerConfig::ZoneConfiguration> ProductBLERemoteManager::DetermineKeplerState( )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
@@ -396,111 +400,75 @@ std::tuple<KeplerConfig::Source, A4VRemoteCommClientIF::ledSourceType_t, bool> P
     // Power and zone membership have priority over everything else
     if( !m_poweredOn )
     {
-        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
+        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        return std::make_tuple( state, true, state.zoneconfig() );
     }
     else if( m_IsZoneMember )
     {
-        return std::make_tuple( KeplerConfig::ZONE, LedsSourceTypeMsg_t::SOUND_TOUCH, true );
+        auto state = GetKeplerState( KeplerConfig::STATE_ZONE );
+        return std::make_tuple( state, true, state.zoneconfig() );
     }
 
     // For the rest we determine the source by what's currently playing
     if( !m_nowSelection.has_contentitem() )
     {
-        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
+        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        return std::make_tuple( state, true, state.zoneconfig() );
     }
 
     auto sourceItem = m_ProductController.GetSourceInfo().FindSource( m_nowSelection.contentitem() );
     if( !sourceItem )
     {
-        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
+        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        return std::make_tuple( state, true, state.zoneconfig() );
     }
 
+    // sourceaccountname and details may possibly be empty
+    // this is okay, we'll still do the right thing (empty details will result in creation
+    // of details field, which in turn will have an empty activationkey)
     const auto& sourceName = sourceItem->sourcename();
-    const auto& sourceAccountName = sourceItem->sourceaccountname();
+    const auto& accountName = sourceItem->sourceaccountname();
+    const auto& activationKey = sourceItem->details().activationkey();
 
-    // No use going any farther if we have invalid source here
-    if( sourceName.compare( SHELBY_SOURCE::INVALID_SOURCE ) == 0 )
+    auto matchState = [ sourceName, accountName, activationKey ]( const KeplerConfig::StateEntry & s )
     {
-        return std::make_tuple( KeplerConfig::OFF, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
-    }
-
-    // Product sources can be setup ...
-    if( sourceName.compare( SHELBY_SOURCE::SETUP ) == 0 )
-    {
-        if( sourceAccountName.compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
+        if( s.has_activationkey() )
         {
-            return std::make_tuple( KeplerConfig::ADAPTIQ, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
-        }
-        else if( sourceAccountName.compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
-        {
-            return std::make_tuple( KeplerConfig::ACCESSORY_PAIRING, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
-        }
-        return std::make_tuple( KeplerConfig::OOB, LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE, true );
-    }
-
-    if( sourceName.compare( SHELBY_SOURCE::PRODUCT ) == 0 )
-    {
-        auto configured = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
-
-        // .... TV, or SLOT_n
-        if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
-        {
-            return std::make_tuple( KeplerConfig::TV, LedsSourceTypeMsg_t::TV, configured );
-        }
-
-        auto keplerSource   = KeplerConfig::OFF;
-        auto ledsSource     = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
-
-        // For slot sources, illuminated source key is independent of backlight configuration
-        // (backlight configuration is determined by the type of device a source key is configured for)
-        const auto& sourceDetailsActivationKey = sourceItem->details().activationkey();
-        if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
-        {
-            ledsSource = LedsSourceTypeMsg_t::GAME;
-        }
-        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) ) == 0 )
-        {
-            ledsSource = LedsSourceTypeMsg_t::SET_TOP_BOX;
-        }
-        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) ) == 0 )
-        {
-            ledsSource = LedsSourceTypeMsg_t::DVD;
+            return ( ( s.sourcename() == sourceName ) && ( ACTIVATION_KEY__Name( s.activationkey() ) == activationKey ) );
         }
         else
         {
-            BOSE_ERROR( s_logger, "%s unhandled activation key %s", __func__, sourceDetailsActivationKey.c_str() );
+            return ( ( s.sourcename() == sourceName ) && ( s.sourceaccountname() == accountName ) );
         }
+    };
 
-        const auto& sourceDetailsDeviceType = sourceItem->details().devicetype();
-        if(
-            ( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_GAME ) ) == 0 ) or
-            ( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_STREAMING ) ) == 0 ) )
-        {
-            keplerSource = KeplerConfig::GAME;
-        }
-        else if( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_BD_DVD ) ) == 0 )
-        {
-            keplerSource = KeplerConfig::BD_DVD;
-        }
-        else if( sourceDetailsDeviceType.compare( DEVICE_TYPE__Name( DEVICE_TYPE_CBL_SAT ) ) == 0 )
-        {
-            keplerSource = KeplerConfig::CBL_SAT;
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "%s unhandled device type %s", __func__, sourceDetailsDeviceType.c_str() );
-        }
+    const auto& states = m_keplerConfig.states( );
+    const auto& itState = std::find_if( states.begin(), states.end(), matchState );
 
-        return std::make_tuple( keplerSource, ledsSource, configured );
-    }
-    else if( sourceName.compare( SHELBY_SOURCE::BLUETOOTH ) == 0 )
+    if( itState != states.end() )
     {
-        return std::make_tuple( KeplerConfig::BLUETOOTH, LedsSourceTypeMsg_t::BLUETOOTH, true );
+        bool configured = m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem );
+
+        if( !itState->has_activationkey() )
+        {
+            return std::make_tuple( *itState, configured, itState->zoneconfig() );
+        }
+
+        // this is a SLOT source, we need to look up the zone configuration based on device type
+        const auto& devType = sourceItem->details().devicetype();
+        auto matchDev = [ devType ]( const KeplerConfig::DeviceEntry & d )
+        {
+            return ( devType == DEVICE_TYPE__Name( d.devicetype() ) );
+        };
+        const auto& devs = m_keplerConfig.devices( );
+        const auto& itDev = std::find_if( devs.begin(), devs.end(), matchDev );
+        return std::make_tuple( *itState, configured, itDev->zoneconfig() );
     }
 
     // Everthing else is SoundTouch
-    return std::make_tuple( KeplerConfig::SOUNDTOUCH, LedsSourceTypeMsg_t::SOUND_TOUCH,
-                            m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED );
+    auto state = GetKeplerState( KeplerConfig::STATE_SOUNDTOUCH );
+    bool configured = ( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED );
+    return std::make_tuple( state, configured, state.zoneconfig() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -582,26 +550,27 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // Determine backlight and active source key
     auto config = DetermineKeplerState( );
+    const auto& state = std::get<0>( config );
 
     // Light the selected source key
-    switch( std::get<1>( config ) )
+    switch( state.sourcekey() )
     {
-    case LedsSourceTypeMsg_t::SOUND_TOUCH:
+    case KeplerConfig::KEY_SOUNDTOUCH:
         leds.set_sound_touch( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::TV:
+    case KeplerConfig::KEY_TV:
         leds.set_tv( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::BLUETOOTH:
+    case KeplerConfig::KEY_BLUETOOTH:
         leds.set_bluetooth( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::GAME:
+    case KeplerConfig::KEY_GAME:
         leds.set_game( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::DVD:
+    case KeplerConfig::KEY_BD_DVD:
         leds.set_clapboard( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
-    case LedsSourceTypeMsg_t::SET_TOP_BOX:
+    case KeplerConfig::KEY_CBL_SAT:
         leds.set_set_top_box( LedsRawMsg_t::SOURCE_LED_ACTIVE );
         break;
     default:
@@ -609,35 +578,14 @@ void ProductBLERemoteManager::UpdateBacklight( )
     }
 
     // Apply zone backlighting
-    auto zoneBL         = std::get<0>( config );
-    const auto& blCfg   = m_keplerConfig.backlightconfig( );
-
-    auto cmpBlCfg = [ zoneBL ]( const KeplerConfig::BacklightEntry & bl )
-    {
-        return ( bl.source() == zoneBL );
-    };
-
-    auto itBL = std::find_if( blCfg.begin(), blCfg.end(), cmpBlCfg );
-    if( itBL == blCfg.end() )
-    {
-        // Don't light anything on a broken configuration; hopefully this will make it more obvious that something is broken
-        BOSE_ERROR( s_logger, "No config found for backlight source %s",  KeplerConfig_Source_Name( zoneBL ).c_str() );;
-        return;
-    }
+    auto configured = std::get<1>( config );
+    const auto& zoneBL = std::get<2>( config );
+    const auto& zones = configured ? zoneBL.zonesconfigured() : zoneBL.zonesunconfigured();
 
     // first process unconditional zones
-    for( const auto& z : itBL->zones() )
+    for( const auto& z : zones )
     {
         SetZone( leds, z, LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-    }
-
-    // now add in zones that are lit only if the source is configured
-    if( std::get<2>( config ) )
-    {
-        for( const auto& z : itBL->zonesconfigured() )
-        {
-            SetZone( leds, z, LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-        }
     }
 
     m_RCSClient->Led_Set(
