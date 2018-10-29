@@ -7,6 +7,7 @@
 
 #pragma once
 #include "ProductAudioService.h"
+#include "AudioSetting.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
@@ -76,11 +77,12 @@ private:
     void SendMainStreamAudioSettingsEvent();
     void ThermalDataReceivedCb( IpcSystemTemperatureData_t data );
 
+    void SendAudioSettingsToDataCollection() const;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to prepare m_MainStreamAudioSettings for APProduct to use
     /////////////////////////////////////////////////////////////////////////////////////////////////
     void FetchLatestAudioSettings();
-    void SendAudioSettingsToDataCollection() const;
     LpmServiceMessages::AudioSettingsAudioMode_t ModeNameToEnum( const std::string& modeName );
     LpmServiceMessages::AudioSettingsContent_t ContentTypeNameToEnum( const std::string& contentTypeName );
     LpmServiceMessages::AudioSettingsDualMonoMode_t DualMonoSelectNameToEnum( const std::string& dualMonoSelectName );
