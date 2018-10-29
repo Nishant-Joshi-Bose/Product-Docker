@@ -470,6 +470,11 @@ std::tuple<const KeplerConfig::StateEntry&, bool, KeplerConfig::ZoneConfiguratio
         };
         const auto& devs = m_keplerConfig.devices( );
         const auto& itDev = std::find_if( devs.begin(), devs.end(), matchDev );
+        if( itDev == devs.end() )
+        {
+            BOSE_ERROR( s_logger, "%s couldn't find dev entry %s (malformed config file?)", __PRETTY_FUNCTION__, devType.c_str() );
+            return std::make_tuple( *itState, configured, m_defaultZoneConfig );
+        }
         return std::make_tuple( *itState, configured, itDev->zoneconfig() );
     }
 
