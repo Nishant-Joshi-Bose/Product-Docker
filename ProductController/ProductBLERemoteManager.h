@@ -40,7 +40,6 @@
 #include "A4V_RemoteCommClientFactory.h"
 #include "A4V_RemoteCommClient.h"
 #include "A4V_RemoteCommClientIF.h"
-#include "APTimer.h"
 #include "Kepler.pb.h"
 
 
@@ -104,7 +103,6 @@ private:
     NotifyTargetTaskIF*                                 m_ProductTask           = nullptr;
     Callback< ProductMessage >                          m_ProductNotify         = nullptr;
     CustomProductController&                            m_ProductController;
-    APTimerPtr                                          m_statusTimer;
     bool                                                m_remoteConnected       = false;
     bool                                                m_pairingPending        = false;
     RemoteStatus::PairingStatus                         m_remoteStatus          = RemoteStatus::PSTATE_UNKNOWN;

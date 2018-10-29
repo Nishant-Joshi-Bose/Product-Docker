@@ -67,8 +67,7 @@ namespace ProductApp
 ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
-    m_ProductController( ProductController ),
-    m_statusTimer( APTimer::Create( ProductController.GetTask( ), "BLERemoteManager" ) )
+    m_ProductController( ProductController )
 {
     BOptional<std::string> config = SystemUtils::ReadFile( s_configFile );
     if( config )
@@ -186,27 +185,24 @@ void ProductBLERemoteManager::Run( )
         UpdateAvailableSources( sources );
     } );
 
-    m_statusTimer->SetTimeouts( 1000, 1000 );
-    m_statusTimer->Start( [ = ]( )
+    auto pairingNotify = [ this ]( PairingNotify n )
     {
-        AsyncCallback<PairingNotify> cb(
-            [ = ]( PairingNotify n )
+        auto wasRemoteConnected = m_remoteConnected;
+        m_remoteConnected = n.has_status() && ( n.status() == RemoteStatus::PSTATE_BONDED );
+        if( m_remoteConnected && !wasRemoteConnected )
         {
-            auto wasRemoteConnected = m_remoteConnected;
-            m_remoteConnected = n.has_status() && ( n.status() == RemoteStatus::PSTATE_BONDED );
-            if( m_remoteConnected && !wasRemoteConnected )
-            {
-                UpdateBacklight( );
-            }
+            UpdateBacklight( );
+        }
 
-            if( n.has_status() )
-            {
-                m_remoteStatus = n.status();
-                CheckPairing( );
-            }
-        }, m_ProductTask );
-        m_RCSClient->Pairing_GetStatus( cb );
-    } );
+        if( n.has_status() )
+        {
+            m_remoteStatus = n.status();
+            CheckPairing( );
+        }
+    };
+    AsyncCallback< PairingNotify > pairingCb( pairingNotify, m_ProductTask );
+    m_RCSClient->setupPairingNotify( pairingCb );
+
 
     AsyncCallback< bool > sourceSelectAllowedCb(
         [ this ]( bool allowed )
