@@ -4,9 +4,9 @@
 /// Copyright 2018 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 
-package DataCollection;
+package DataCollectionPb;
 
 message HdmiEdid
 {
-  required string edidData = 1;
+  optional string edidData = 1;
 }

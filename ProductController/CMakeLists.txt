@@ -67,6 +67,7 @@ ADD_EXECUTABLE(Professor
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/SpeakerPairingManager.cpp
   IntentHandler/MuteManager.cpp
+  IntentHandler/RatingManager.cpp
   ProductAdaptIQManager.cpp
   ProductBLERemoteManager.cpp
   ProductCecHelper.cpp
