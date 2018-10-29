@@ -204,13 +204,30 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         // Update audio settings
         BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback, source = %s, sourecAccount = %s", contentItemProto.source().c_str(), contentItemProto.sourceaccount().c_str() );
 
-        bool isChanged = m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
+        /// UpdateContentItem will re-populate the AudioSetting value and persistence level caused by content item change
+        /// in m_AudioSetting Json and m_currentXX proto,
+        /// and if value is changed, it will also send new values to frontdoor(notification) and data collection service
+        bool isChanged = false;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto,   kBassName,              m_AudioBassSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kTrebleName,            m_AudioTrebleSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kCenterName,            m_AudioCenterSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundName,          m_AudioSurroundSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundDelayName,     m_AudioSurroundDelaySetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kGainOffsetName,        m_AudioGainOffsetSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kAvSyncName,            m_AudioAvSyncSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferGainName,     m_AudioSubwooferGainSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kModeName,              m_AudioModeSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kContentTypeName,       m_AudioContentTypeSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kDualMonoSelectName,    m_DualMonoSelectSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kEqSelectName,          m_EqSelectSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferPolarityName, m_SubwooferPolaritySetting ) ) ? true : isChanged;
+
         if( isChanged )
         {
             FetchLatestAudioSettings();
-            SendAudioSettingsFrontDoorNotification();
-            SendAudioSettingsToDataCollection();
+            m_AudioSettingsMgr->PersistAudioSettings();
         }
+
         // Update input route
         if( contentItemProto.source() == SHELBY_SOURCE::PRODUCT )
         {
@@ -231,31 +248,6 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
     std::string inputRoute = std::to_string( m_InputRoute );
     cb.Send( mainStreamAudioSettings, inputRoute );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   CustomProductAudioService::SendAudioSettingsFrontDoorNotification
-///
-/// @brief  Send frontdoor notification for all the audio settings endpoints
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::SendAudioSettingsFrontDoorNotification() const
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_BASS_API, m_AudioSettingsMgr->GetBass( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_TREBLE_API, m_AudioSettingsMgr->GetTreble( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_CENTER_API, m_AudioSettingsMgr->GetCenter( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SURROUND_API, m_AudioSettingsMgr->GetSurround( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SURROUNDDELAY_API, m_AudioSettingsMgr->GetSurroundDelay( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_GAINOFFSET_API, m_AudioSettingsMgr->GetGainOffset( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_AVSYNC_API, m_AudioSettingsMgr->GetAvSync( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SUBWOOFERGAIN_API, m_AudioSettingsMgr->GetSubwooferGain( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_MODE_API, m_AudioSettingsMgr->GetMode( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_CONTENTTYPE_API, m_AudioSettingsMgr->GetContentType( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_DUALMONOSELECT_API, m_AudioSettingsMgr->GetDualMonoSelect( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
-    m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API, m_AudioSettingsMgr->GetSubwooferPolarity( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -639,22 +631,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioBassLevel >( m_AudioSettingsMgr->GetBass( ) ),
-                DATA_COLLECTION_BASS );
         }
         return error;
     };
-
+    auto refreshBassAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshBass( );
+    };
     m_AudioBassSetting = std::unique_ptr< AudioSetting< AudioBassLevel > >
                          ( new AudioSetting< AudioBassLevel >
                            ( FRONTDOOR_AUDIO_BASS_API,
                              getBassAction,
                              setBassAction,
+                             refreshBassAction,
                              m_FrontDoorClientIF,
                              m_ProductTask,
                              FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                             DATA_COLLECTION_BASS,
+                             m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/treble - register handlers for POST/PUT/GET requests
@@ -671,21 +666,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioTrebleLevel >( m_AudioSettingsMgr->GetTreble( ) ),
-                DATA_COLLECTION_TREBLE );
         }
         return error;
+    };
+    auto refreshTrebleAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshTreble( );
     };
     m_AudioTrebleSetting = std::unique_ptr< AudioSetting< AudioTrebleLevel > >
                            ( new AudioSetting< AudioTrebleLevel >
                              ( FRONTDOOR_AUDIO_TREBLE_API,
                                getTrebleAction,
                                setTrebleAction,
+                               refreshTrebleAction,
                                m_FrontDoorClientIF,
                                m_ProductTask,
                                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                               FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                               FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                               DATA_COLLECTION_TREBLE,
+                               m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/center - register handlers for POST/PUT/GET requests
@@ -702,21 +701,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioCenterLevel >( m_AudioSettingsMgr->GetCenter( ) ),
-                DATA_COLLECTION_CENTER );
         }
         return error;
+    };
+    auto refreshCenterAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshCenter( );
     };
     m_AudioCenterSetting = std::unique_ptr< AudioSetting< AudioCenterLevel > >
                            ( new AudioSetting<AudioCenterLevel>
                              ( FRONTDOOR_AUDIO_CENTER_API,
                                getCenterAction,
                                setCenterAction,
+                               refreshCenterAction,
                                m_FrontDoorClientIF,
                                m_ProductTask,
                                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                               FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                               FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                               DATA_COLLECTION_CENTER,
+                               m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surround - register handlers for POST/PUT/GET requests
@@ -733,21 +736,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioSurroundLevel >( m_AudioSettingsMgr->GetSurround( ) ),
-                DATA_COLLECTION_SURROUND );
         }
         return error;
+    };
+    auto refreshSurroundAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshSurround( );
     };
     m_AudioSurroundSetting = std::unique_ptr< AudioSetting< AudioSurroundLevel > >
                              ( new AudioSetting< AudioSurroundLevel >
                                ( FRONTDOOR_AUDIO_SURROUND_API,
                                  getSurroundAction,
                                  setSurroundAction,
+                                 refreshSurroundAction,
                                  m_FrontDoorClientIF,
                                  m_ProductTask,
                                  FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                 FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                 FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                 DATA_COLLECTION_SURROUND,
+                                 m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surroundDelay - register handlers for POST/PUT/GET requests
@@ -763,21 +770,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_MainStreamAudioSettings.set_surrounddelay( m_AudioSettingsMgr->GetSurroundDelay( ).value() );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioSurroundDelay >( m_AudioSettingsMgr->GetSurroundDelay( ) ),
-                DATA_COLLECTION_SURROUND_DELAY );
         }
         return error;
+    };
+    auto refreshSurroundDelayAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshSurroundDelay( );
     };
     m_AudioSurroundDelaySetting = std::unique_ptr< AudioSetting< AudioSurroundDelay > >
                                   ( new AudioSetting< AudioSurroundDelay >
                                     ( FRONTDOOR_AUDIO_SURROUNDDELAY_API,
                                       getSurroundDelayAction,
                                       setSurroundDelayAction,
+                                      refreshSurroundDelayAction,
                                       m_FrontDoorClientIF,
                                       m_ProductTask,
                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                      DATA_COLLECTION_SURROUND_DELAY,
+                                      m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/gainOffset - register handlers for POST/PUT/GET requests
@@ -794,21 +805,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioGainOffset >( m_AudioSettingsMgr->GetGainOffset( ) ),
-                DATA_COLLECTION_GAIN_OFFSET );
         }
         return error;
+    };
+    auto refreshGainOffsetAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshGainOffset( );
     };
     m_AudioGainOffsetSetting =  std::unique_ptr< AudioSetting< AudioGainOffset > >
                                 ( new AudioSetting< AudioGainOffset >
                                   ( FRONTDOOR_AUDIO_GAINOFFSET_API,
                                     getGainOffsetAction,
                                     setGainOffsetAction,
+                                    refreshGainOffsetAction,
                                     m_FrontDoorClientIF,
                                     m_ProductTask,
                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                    FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                    FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                    DATA_COLLECTION_GAIN_OFFSET,
+                                    m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/avSync - register handlers for POST/PUT/GET requests
@@ -825,21 +840,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioAvSync >( m_AudioSettingsMgr->GetAvSync( ) ),
-                DATA_COLLECTION_AVSYNC );
         }
         return error;
+    };
+    auto refreshAvSyncAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshAvSync( );
     };
     m_AudioAvSyncSetting = std::unique_ptr< AudioSetting< AudioAvSync > >
                            ( new AudioSetting< AudioAvSync >
                              ( FRONTDOOR_AUDIO_AVSYNC_API,
                                getAvSyncAction,
                                setAvSyncAction,
+                               refreshAvSyncAction,
                                m_FrontDoorClientIF,
                                m_ProductTask,
                                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                               FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                               FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                               DATA_COLLECTION_AVSYNC,
+                               m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/subWooferGain - register handlers for POST/PUT/GET requests
@@ -858,21 +877,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                 m_AudioSettingsMgr->GetSubwooferGain( ).value() );
 
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioSubwooferGain >( m_AudioSettingsMgr->GetSubwooferGain( ) ),
-                DATA_COLLECTION_SUBWOOFER_GAIN );
         }
         return error;
+    };
+    auto refreshSubwooferGainAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshSubwooferGain( );
     };
     m_AudioSubwooferGainSetting = std::unique_ptr< AudioSetting<AudioSubwooferGain > >
                                   ( new AudioSetting< AudioSubwooferGain >
                                     ( FRONTDOOR_AUDIO_SUBWOOFERGAIN_API,
                                       getSubwooferGainAction,
                                       setSubwooferGainAction,
+                                      refreshSubwooferGainAction,
                                       m_FrontDoorClientIF,
                                       m_ProductTask,
                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                      DATA_COLLECTION_SUBWOOFER_GAIN,
+                                      m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/mode - register handlers for POST/PUT/GET requests
@@ -890,21 +913,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_audiomode(
                 ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioMode >( m_AudioSettingsMgr->GetMode( ) ),
-                DATA_COLLECTION_MODE );
         }
         return error;
+    };
+    auto refreshModeAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshMode( );
     };
     m_AudioModeSetting = std::unique_ptr< AudioSetting<AudioMode > >
                          ( new AudioSetting< AudioMode >
                            ( FRONTDOOR_AUDIO_MODE_API,
                              getModeAction,
                              setModeAction,
+                             refreshModeAction,
                              m_FrontDoorClientIF,
                              m_ProductTask,
                              FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                             DATA_COLLECTION_MODE,
+                             m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/contentType - register handlers for POST/PUT/GET requests
@@ -922,21 +949,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum(
                                                            m_AudioSettingsMgr->GetContentType( ).value() ) );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioContentType >( m_AudioSettingsMgr->GetContentType( ) ),
-                DATA_COLLECTION_CONTENT_TYPE );
         }
         return error;
+    };
+    auto refreshContentTypeAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshContentType( );
     };
     m_AudioContentTypeSetting = std::unique_ptr< AudioSetting<AudioContentType > >
                                 ( new AudioSetting< AudioContentType >
                                   ( FRONTDOOR_AUDIO_CONTENTTYPE_API,
                                     getContentTypeAction,
                                     setContentTypeAction,
+                                    refreshContentTypeAction,
                                     m_FrontDoorClientIF,
                                     m_ProductTask,
                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                    FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                    FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                    DATA_COLLECTION_CONTENT_TYPE,
+                                    m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/dualMonoSelect - register handlers for POST/PUT/GET requests
@@ -954,21 +985,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum(
                                                               m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioDualMonoSelect >( m_AudioSettingsMgr->GetDualMonoSelect( ) ),
-                DATA_COLLECTION_DUALMONO_SELECT );
         }
         return error;
+    };
+    auto refreshDualMonoSelectAction = [this]( )
+    {
+        return m_AudioSettingsMgr->RefreshDualMonoSelect( );
     };
     m_DualMonoSelectSetting = std::unique_ptr< AudioSetting<AudioDualMonoSelect > >
                               ( new AudioSetting< AudioDualMonoSelect >
                                 ( FRONTDOOR_AUDIO_DUALMONOSELECT_API,
                                   getDualMonoSelectAction,
                                   setDualMonoSelectAction,
+                                  refreshDualMonoSelectAction,
                                   m_FrontDoorClientIF,
                                   m_ProductTask,
                                   FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                  FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                  FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                  DATA_COLLECTION_DUALMONO_SELECT,
+                                  m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/eqSelect - register handlers for POST/PUT/GET requests
@@ -986,21 +1021,22 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_deltaeqselect(
                 EqSelectNameToEnum( m_AudioSettingsMgr->GetEqSelect( ).mode() ) );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioEqSelect >( m_AudioSettingsMgr->GetEqSelect( ) ),
-                DATA_COLLECTION_EQSELECT );
         }
         return error;
     };
+    auto refreshEqSelectAction = []( ) {};
     m_EqSelectSetting = std::unique_ptr< AudioSetting< AudioEqSelect > >
                         ( new AudioSetting< AudioEqSelect >
                           ( FRONTDOOR_AUDIO_EQSELECT_API,
                             getEqSelectAction,
                             setEqSelectAction,
+                            refreshEqSelectAction,
                             m_FrontDoorClientIF,
                             m_ProductTask,
                             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                            DATA_COLLECTION_EQSELECT,
+                            m_DataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/SubwooferPolarity - register handlers for POST/PUT/GET requests
@@ -1017,21 +1053,22 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             m_MainStreamAudioSettings.set_subwooferpolarity(
                 SubwooferPolarityNameToEnum( m_AudioSettingsMgr->GetSubwooferPolarity( ).value() ) );
             SendMainStreamAudioSettingsEvent();
-            m_DataCollectionClient->SendData(
-                std::make_shared< AudioSubwooferPolarity >( m_AudioSettingsMgr->GetSubwooferPolarity( ) ),
-                DATA_COLLECTION_SUBWOOFER_POLARITY );
         }
         return error;
     };
+    auto refreshSubwooferPolarityAction = []( ) {};
     m_SubwooferPolaritySetting = std::unique_ptr< AudioSetting< AudioSubwooferPolarity > >
                                  ( new AudioSetting< AudioSubwooferPolarity >
                                    ( FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API,
                                      getSubwooferPolarityAction,
                                      setSubwooferPolarityAction,
+                                     refreshSubwooferPolarityAction,
                                      m_FrontDoorClientIF,
                                      m_ProductTask,
                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                     FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                     FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                     DATA_COLLECTION_SUBWOOFER_POLARITY,
+                                     m_DataCollectionClient ) );
 }
 
 }// namespace ProductApp

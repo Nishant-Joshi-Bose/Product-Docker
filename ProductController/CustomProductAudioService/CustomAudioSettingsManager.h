@@ -13,6 +13,20 @@
 namespace ProductApp
 {
 
+constexpr char kBassName                [] = "audioBassLevel";
+constexpr char kTrebleName              [] = "audioTrebleLevel";
+constexpr char kCenterName              [] = "audioCenterLevel";
+constexpr char kSurroundName            [] = "audioSurroundLevel";
+constexpr char kSurroundDelayName       [] = "audioSurroundDelay";
+constexpr char kGainOffsetName          [] = "audioGainOffset";
+constexpr char kAvSyncName              [] = "audioAvSync";
+constexpr char kSubwooferGainName       [] = "audioSubwooferGain";
+constexpr char kModeName                [] = "audioMode";
+constexpr char kContentTypeName         [] = "audioContentType";
+constexpr char kDualMonoSelectName      [] = "audioDualMonoSelect";
+constexpr char kEqSelectName            [] = "audioEqSelect";
+constexpr char kSubwooferPolarityName   [] = "audioSubwooferPolarity";
+
 using std::string;
 
 class CustomAudioSettingsManager: public AudioSettingsManager
@@ -21,31 +35,56 @@ public:
     CustomAudioSettingsManager();
     ResultCode_t SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
+    void RefreshBass();
+
     ResultCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
+    void RefreshTreble();
+
     ResultCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
     const ProductPb::AudioCenterLevel& GetCenter() const;
+    void RefreshCenter();
+
     ResultCode_t SetSurround( const ProductPb::AudioSurroundLevel& surround );
     const ProductPb::AudioSurroundLevel& GetSurround() const;
+    void RefreshSurround();
+
     ResultCode_t SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay );
     const ProductPb::AudioSurroundDelay& GetSurroundDelay() const;
+    void RefreshSurroundDelay();
+
     ResultCode_t SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
     const ProductPb::AudioGainOffset& GetGainOffset() const;
+    void RefreshGainOffset();
+
     ResultCode_t SetAvSync( const ProductPb::AudioAvSync& avSync );
     const ProductPb::AudioAvSync& GetAvSync() const;
+    void RefreshAvSync();
+
     ResultCode_t SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
     const ProductPb::AudioSubwooferGain& GetSubwooferGain() const;
+    void RefreshSubwooferGain();
+
     ResultCode_t SetMode( ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
+    void RefreshMode();
+
     ResultCode_t SetContentType( const ProductPb::AudioContentType& contentType );
     const ProductPb::AudioContentType& GetContentType() const;
+    void RefreshContentType();
+
     ResultCode_t SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
+    void RefreshDualMonoSelect();
+
     ResultCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
     const ProductPb::AudioEqSelect& GetEqSelect() const;
     ResultCode_t UpdateEqSelectSupportedMode( string mode, bool supported );
+
     ResultCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
     const ProductPb::AudioSubwooferPolarity& GetSubwooferPolarity() const;
+
+    void UpdateAllProtos() override;
 
 private:
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +107,6 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to set contentItem sensitive audio settings
     //////////////////////////////////////////////////////////////////////////////////////
-    void UpdateAllProtos() override;
     void InitializeAudioSettings();
 };
 }// namespace ProductApp
