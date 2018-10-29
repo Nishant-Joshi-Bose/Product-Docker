@@ -72,6 +72,7 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
       m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) ),
       m_FrontDoorClientIF( frontDoorClient ),
+      m_DataCollectionClient( productController.GetDataCollectionClient() ),
       m_lpmConnected( false )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", "SpeakerPairingManager" );
@@ -98,6 +99,17 @@ void SpeakerPairingManager::Initialize( )
 
     Callback<bool> cb( std::bind( &SpeakerPairingManager::SetLpmConnectionState, this, std::placeholders::_1 ) );
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( cb );
+
+    auto func = [this]( bool enabled )
+    {
+        if( enabled )
+        {
+            // Connection to DataCollection server established, send current accessories list.
+            m_DataCollectionClient->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
+                                              DATA_COLLECTION_ACCESSORIES );
+        }
+    };
+    m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -435,8 +447,8 @@ void SpeakerPairingManager::SetSpeakersEnabledCallback( const Callback<ProductPb
 
     frontDoorCB( m_accessorySpeakerState );
 
-    GetProductController().GetDataCollectionClient()->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
-                                                                DATA_COLLECTION_ACCESSORIES );
+    m_DataCollectionClient->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
+                                      DATA_COLLECTION_ACCESSORIES );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -564,8 +576,8 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     if( oldAccessorySpeakerState.SerializeAsString() != m_accessorySpeakerState.SerializeAsString() )
     {
-        GetProductController().GetDataCollectionClient()->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
-                                                                    DATA_COLLECTION_ACCESSORIES );
+        m_DataCollectionClient->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
+                                          DATA_COLLECTION_ACCESSORIES );
     }
 
     ProductMessage productMessage;

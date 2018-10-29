@@ -129,6 +129,12 @@ public:
     {
         return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_SETUP_BLE_REMOTE );
     }
+
+    static bool IsIntentRating( KeyHandlerUtil::ActionType_t argument )
+    {
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_UP ) ||
+               ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_DOWN );
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
