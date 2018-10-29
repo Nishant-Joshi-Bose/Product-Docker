@@ -374,6 +374,12 @@ const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerC
     const auto& states = m_keplerConfig.states( );
     const auto& it = std::find_if( states.begin(), states.end(), matchState );
 
+    if( it == states.end() )
+    {
+        BOSE_ERROR( s_logger, "%s couldn't find state %d (malformed config file?)", __PRETTY_FUNCTION__, state );
+        return m_defaultState;
+    }
+
     return *it;
 }
 
@@ -388,7 +394,8 @@ const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerC
 ///
 /// @return This method returns a tuple.
 ///     * The first value is a reference to the state
-///     * The second value indicates which zones should be lit
+///     * The second value indicates whether the source is configured/available
+///     * The third value indicates which zones should be lit
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

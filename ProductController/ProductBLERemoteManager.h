@@ -101,19 +101,20 @@ private:
     /// These declarations store the main task for processing LPM hardware events and requests. It
     /// is passed by the ProductController instance.../CastleProductControllerCommon/ProductController.cpp:
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*             m_ProductTask           = nullptr;
-    Callback< ProductMessage >      m_ProductNotify         = nullptr;
-    CustomProductController&        m_ProductController;
-    APTimerPtr                      m_statusTimer;
-    bool                            m_remoteConnected       = false;
-    bool                            m_pairingPending        = false;
-    RemoteStatus::PairingStatus     m_remoteStatus          = RemoteStatus::PSTATE_UNKNOWN;
-    const int                       m_PairingTimeout        = 7200;
-    bool                            m_poweredOn             = false;
-    bool                            m_sourceSelectAllowed   = true;
-    bool                            m_IsZoneMember          = false;
-    static const char*              m_configFile;
-    KeplerPb::KeplerConfig          m_keplerConfig;
+    NotifyTargetTaskIF*                 m_ProductTask           = nullptr;
+    Callback< ProductMessage >          m_ProductNotify         = nullptr;
+    CustomProductController&            m_ProductController;
+    APTimerPtr                          m_statusTimer;
+    bool                                m_remoteConnected       = false;
+    bool                                m_pairingPending        = false;
+    RemoteStatus::PairingStatus         m_remoteStatus          = RemoteStatus::PSTATE_UNKNOWN;
+    const int                           m_PairingTimeout        = 7200;
+    bool                                m_poweredOn             = false;
+    bool                                m_sourceSelectAllowed   = true;
+    bool                                m_IsZoneMember          = false;
+    static const char*                  m_configFile;
+    KeplerPb::KeplerConfig              m_keplerConfig;
+    KeplerPb::KeplerConfig::StateEntry  m_defaultState;
 
     SoundTouchInterface::NowSelectionInfo                                   m_nowSelection;
     SoundTouchInterface::Sources                                            m_sources;
