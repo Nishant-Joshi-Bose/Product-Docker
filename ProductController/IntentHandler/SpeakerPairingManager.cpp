@@ -216,7 +216,7 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
         getAccessoriesCb( std::bind( &SpeakerPairingManager::AccessoriesGetHandler,
                                      this,
                                      std::placeholders::_1,
-                                     std::placeholders::_2 ) ,
+                                     std::placeholders::_2 ),
                           m_ProductTask );
 
         m_registerGetAccessoriesCb =
@@ -232,7 +232,7 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
                                      this,
                                      std::placeholders::_1,
                                      std::placeholders::_2,
-                                     std::placeholders::_3 ) ,
+                                     std::placeholders::_3 ),
                           m_ProductTask );
 
         m_registerPutAccessoriesCb =
@@ -604,8 +604,9 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
     m_accessorySpeakerState.set_pairing( pair.pairingenabled( ) );
     SendAccessoryPairingStateToProduct();
     // Need to notify here only if pairing is being set. If pairing has finished and is set to false,
-    // will notify UI with full message from ReceiveAccessoryListCallback.
-    if( m_accessorySpeakerState.pairing( ) )
+    // will notify UI with full message from ReceiveAccessoryListCallback.  However, if accessory
+    // list has already been received we need to send the notification here too.
+    if( m_accessorySpeakerState.pairing( ) || m_accessoryListReceived )
     {
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
     }

@@ -94,6 +94,7 @@ TARGET_LINK_LIBRARIES(Professor
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
+  VPAControllerClient
   CliClient
   AudioLibs
   PassportClient
