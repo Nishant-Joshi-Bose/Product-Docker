@@ -42,6 +42,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
+  ${PROTO_CC_DEST}/Kepler.pb.cc
   AccessorySoftwareInstallManager.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
@@ -93,7 +94,6 @@ TARGET_LINK_LIBRARIES(Professor
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
-  VPAControllerClient
   CliClient
   AudioLibs
   PassportClient
