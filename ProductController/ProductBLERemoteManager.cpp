@@ -524,15 +524,15 @@ void ProductBLERemoteManager::GetSourceKeysBacklight( LedsRawMsg_t& leds )
         }
 
         const auto& sourceDetailsActivationKey = source.details().activationkey();
-        if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
+        if( sourceDetailsActivationKey == ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) )
         {
             leds.set_game( LedsRawMsg_t::SOURCE_LED_ON );
         }
-        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) ) == 0 )
+        else if( sourceDetailsActivationKey == ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) )
         {
             leds.set_set_top_box( LedsRawMsg_t::SOURCE_LED_ON );
         }
-        else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) ) == 0 )
+        else if( sourceDetailsActivationKey == ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) )
         {
             leds.set_clapboard( LedsRawMsg_t::SOURCE_LED_ON );
         }
