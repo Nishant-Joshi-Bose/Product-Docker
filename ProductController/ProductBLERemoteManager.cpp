@@ -337,6 +337,7 @@ void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_
 {
     if( ( zone < ZONE_FIRST ) || ( zone > ZONE_LAST ) )
     {
+        BOSE_ERROR( s_logger, "%s invalid zone %d specificed", __PRETTY_FUNCTION__, zone );
         return;
     }
     static void ( LedsRawMsg_t::*setZone[] )( LedsRawMsg_t::eLedZoneBits_t ) =
