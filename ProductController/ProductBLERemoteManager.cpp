@@ -517,6 +517,7 @@ void ProductBLERemoteManager::GetSourceKeysBacklight( LedsRawMsg_t& leds )
     // would indicate a malformed source database)
     for( const auto& source : m_sources.sources( ) )
     {
+        // TODO: has_details should really be incorporated in to IsSourceAvailable; this will require ProductControllerCommmon to change
         if( ( not m_ProductController.GetSourceInfo().IsSourceAvailable( source ) ) or ( not source.has_details() ) )
         {
             continue;
