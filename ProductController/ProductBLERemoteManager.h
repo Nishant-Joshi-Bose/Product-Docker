@@ -101,20 +101,20 @@ private:
     /// These declarations store the main task for processing LPM hardware events and requests. It
     /// is passed by the ProductController instance.../CastleProductControllerCommon/ProductController.cpp:
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*                         m_ProductTask           = nullptr;
-    Callback< ProductMessage >                  m_ProductNotify         = nullptr;
-    CustomProductController&                    m_ProductController;
-    APTimerPtr                                  m_statusTimer;
-    bool                                        m_remoteConnected       = false;
-    bool                                        m_pairingPending        = false;
-    RemoteStatus::PairingStatus                 m_remoteStatus          = RemoteStatus::PSTATE_UNKNOWN;
-    const int                                   m_PairingTimeout        = 7200;
-    bool                                        m_poweredOn             = false;
-    bool                                        m_sourceSelectAllowed   = true;
-    bool                                        m_IsZoneMember          = false;
-    KeplerPb::KeplerConfig                      m_keplerConfig;
-    KeplerPb::KeplerConfig::StateEntry          m_defaultState;
-    KeplerPb::KeplerConfig::ZoneConfiguration   m_defaultZoneConfig;
+    NotifyTargetTaskIF*                                 m_ProductTask           = nullptr;
+    Callback< ProductMessage >                          m_ProductNotify         = nullptr;
+    CustomProductController&                            m_ProductController;
+    APTimerPtr                                          m_statusTimer;
+    bool                                                m_remoteConnected       = false;
+    bool                                                m_pairingPending        = false;
+    RemoteStatus::PairingStatus                         m_remoteStatus          = RemoteStatus::PSTATE_UNKNOWN;
+    const int                                           m_PairingTimeout        = 7200;
+    bool                                                m_poweredOn             = false;
+    bool                                                m_sourceSelectAllowed   = true;
+    bool                                                m_IsZoneMember          = false;
+    KeplerPb::KeplerConfig                              m_keplerConfig;
+    const KeplerPb::KeplerConfig::StateEntry            m_defaultState;
+    const KeplerPb::KeplerConfig::ZoneConfiguration     m_defaultZoneConfig;
 
     SoundTouchInterface::NowSelectionInfo                                   m_nowSelection;
     SoundTouchInterface::Sources                                            m_sources;
@@ -127,11 +127,11 @@ private:
     void UpdateCapsAudioZone( const SoundTouchInterface::zone& zoneInfo );
     void UpdateBacklight( );
     void CheckPairing( );
-    void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
-    std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool, KeplerPb::KeplerConfig::ZoneConfiguration> DetermineKeplerState( );
-    void GetSourceKeysBacklight( RCS_PB_MSG::LedsRawMsg_t& leds );
-    void SetZone( RCS_PB_MSG::LedsRawMsg_t& leds, int zone, RCS_PB_MSG::LedsRawMsg_t::eLedZoneBits_t state );
-    const KeplerPb::KeplerConfig::StateEntry& GetKeplerState( KeplerPb::KeplerConfig::State state );
+    static void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
+    const std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool, const KeplerPb::KeplerConfig::ZoneConfiguration> DetermineKeplerState( ) const;
+    void GetSourceKeysBacklight( RCS_PB_MSG::LedsRawMsg_t& leds ) const;
+    static void SetZone( RCS_PB_MSG::LedsRawMsg_t& leds, int zone, RCS_PB_MSG::LedsRawMsg_t::eLedZoneBits_t state );
+    const KeplerPb::KeplerConfig::StateEntry& GetKeplerState( KeplerPb::KeplerConfig::State state ) const;
 
     static constexpr int            ZONE_FIRST  = 1;
     static constexpr int            ZONE_LAST   = 10;

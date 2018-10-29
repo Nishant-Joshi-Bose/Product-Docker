@@ -26,21 +26,21 @@ message KeplerConfig
 {
     enum State
     {
-        STATE_SOUNDTOUCH            = 1;
-        STATE_TV                    = 2;
-        STATE_BLUETOOTH             = 3;
+        // we are powered off
+        STATE_OFF                   = 1;
+        STATE_SOUNDTOUCH            = 2;
+        STATE_TV                    = 3;
+        STATE_BLUETOOTH             = 4;
         // configurable (SLOT) sources 
-        STATE_GAME                  = 4;
-        STATE_CBL_SAT               = 5;
-        STATE_BD_DVD                = 6;
+        STATE_GAME                  = 5;
+        STATE_CBL_SAT               = 6;
+        STATE_BD_DVD                = 7;
         // setup sources
-        STATE_ADAPTIQ               = 7;
-        STATE_ACCESSORY_PAIRING     = 8;
-        STATE_OOB                   = 9;
+        STATE_ADAPTIQ               = 8;
+        STATE_ACCESSORY_PAIRING     = 9;
+        STATE_OOB                   = 10;
         // we are a zone member
         STATE_ZONE                  = 11;
-        // we are powered off
-        STATE_OFF                   = 12;
     }
     
     enum SourceKey

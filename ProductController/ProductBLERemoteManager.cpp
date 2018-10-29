@@ -370,7 +370,7 @@ void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_
 ///         supplied state ID
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerConfig::State state )
+const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerConfig::State state ) const
 {
     auto matchState = [ state ]( const KeplerConfig::StateEntry & s )
     {
@@ -404,7 +404,7 @@ const KeplerConfig::StateEntry& ProductBLERemoteManager::GetKeplerState( KeplerC
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::tuple<const KeplerConfig::StateEntry&, bool, KeplerConfig::ZoneConfiguration> ProductBLERemoteManager::DetermineKeplerState( )
+const std::tuple<const KeplerConfig::StateEntry&, bool, const KeplerConfig::ZoneConfiguration> ProductBLERemoteManager::DetermineKeplerState( ) const
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
@@ -412,26 +412,26 @@ std::tuple<const KeplerConfig::StateEntry&, bool, KeplerConfig::ZoneConfiguratio
     // Power and zone membership have priority over everything else
     if( !m_poweredOn )
     {
-        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        const auto& state = GetKeplerState( KeplerConfig::STATE_OFF );
         return std::make_tuple( state, true, state.zoneconfig() );
     }
     else if( m_IsZoneMember )
     {
-        auto state = GetKeplerState( KeplerConfig::STATE_ZONE );
+        const auto& state = GetKeplerState( KeplerConfig::STATE_ZONE );
         return std::make_tuple( state, true, state.zoneconfig() );
     }
 
     // For the rest we determine the source by what's currently playing
     if( !m_nowSelection.has_contentitem() )
     {
-        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        const auto& state = GetKeplerState( KeplerConfig::STATE_OFF );
         return std::make_tuple( state, true, state.zoneconfig() );
     }
 
     auto sourceItem = m_ProductController.GetSourceInfo().FindSource( m_nowSelection.contentitem() );
     if( !sourceItem )
     {
-        auto state = GetKeplerState( KeplerConfig::STATE_OFF );
+        const auto& state = GetKeplerState( KeplerConfig::STATE_OFF );
         return std::make_tuple( state, true, state.zoneconfig() );
     }
 
@@ -483,7 +483,7 @@ std::tuple<const KeplerConfig::StateEntry&, bool, KeplerConfig::ZoneConfiguratio
     }
 
     // Everthing else is SoundTouch
-    auto state = GetKeplerState( KeplerConfig::STATE_SOUNDTOUCH );
+    const auto& state = GetKeplerState( KeplerConfig::STATE_SOUNDTOUCH );
     bool configured = ( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED );
     return std::make_tuple( state, configured, state.zoneconfig() );
 }
@@ -497,7 +497,7 @@ std::tuple<const KeplerConfig::StateEntry&, bool, KeplerConfig::ZoneConfiguratio
 /// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::GetSourceKeysBacklight( LedsRawMsg_t& leds )
+void ProductBLERemoteManager::GetSourceKeysBacklight( LedsRawMsg_t& leds ) const
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
