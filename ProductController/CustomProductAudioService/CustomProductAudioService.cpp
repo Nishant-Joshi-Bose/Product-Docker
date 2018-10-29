@@ -208,19 +208,19 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         /// in m_AudioSetting Json and m_currentXX proto,
         /// and if value is changed, it will also send new values to frontdoor(notification) and data collection service
         bool isChanged = false;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kBassName,              m_AudioBassSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kTrebleName,            m_AudioTrebleSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kCenterName,            m_AudioCenterSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundName,          m_AudioSurroundSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundDelayName,     m_AudioSurroundDelaySetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kGainOffsetName,        m_AudioGainOffsetSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kAvSyncName,            m_AudioAvSyncSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferGainName,     m_AudioSubwooferGainSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kModeName,              m_AudioModeSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kContentTypeName,       m_AudioContentTypeSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kDualMonoSelectName,    m_DualMonoSelectSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kEqSelectName,          m_EqSelectSetting, false ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferPolarityName, m_SubwooferPolaritySetting, true ) ) ? true : isChanged; //finally update m_currentContentItem
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kBassName,              m_AudioBassSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kTrebleName,            m_AudioTrebleSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kCenterName,            m_AudioCenterSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundName,          m_AudioSurroundSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundDelayName,     m_AudioSurroundDelaySetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kGainOffsetName,        m_AudioGainOffsetSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kAvSyncName,            m_AudioAvSyncSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferGainName,     m_AudioSubwooferGainSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kModeName,              m_AudioModeSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kContentTypeName,       m_AudioContentTypeSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kDualMonoSelectName,    m_DualMonoSelectSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kEqSelectName,          m_EqSelectSetting ) ) ? true : isChanged;
+        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferPolarityName, m_SubwooferPolaritySetting ) ) ? true : isChanged;
 
         if( isChanged )
         {
