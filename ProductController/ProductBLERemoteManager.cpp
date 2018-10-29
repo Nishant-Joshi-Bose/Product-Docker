@@ -43,13 +43,17 @@ using namespace A4V_RemoteCommunicationServiceMessages;
 using namespace A4VRemoteCommunication;
 using namespace RCS_PB_MSG;
 
+namespace
+{
+constexpr char s_configFile[] = "/opt/Bose/etc/KeplerConfig.json";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
 
-const char* ProductBLERemoteManager::m_configFile = "/opt/Bose/etc/KeplerConfig.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,13 +70,13 @@ ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& Produ
     m_ProductController( ProductController ),
     m_statusTimer( APTimer::Create( ProductController.GetTask( ), "BLERemoteManager" ) )
 {
-    BOptional<std::string> config = SystemUtils::ReadFile( m_configFile );
+    BOptional<std::string> config = SystemUtils::ReadFile( s_configFile );
     if( config )
     {
         try
         {
             ProtoToMarkup::FromJson( *config, &m_keplerConfig );
-            BOSE_INFO( s_logger, "%s %s loaded", __PRETTY_FUNCTION__, m_configFile );
+            BOSE_INFO( s_logger, "%s %s loaded", __PRETTY_FUNCTION__, s_configFile );
         }
         catch( const ProtoToMarkup::MarkupError & e )
         {
@@ -81,7 +85,7 @@ ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& Produ
     }
     else
     {
-        BOSE_ERROR( s_logger, "%s failed to load config %s", __PRETTY_FUNCTION__, m_configFile );
+        BOSE_ERROR( s_logger, "%s failed to load config %s", __PRETTY_FUNCTION__, s_configFile );
     }
 }
 
@@ -91,7 +95,7 @@ ProductBLERemoteManager::ProductBLERemoteManager( CustomProductController& Produ
 ///
 /// @brief
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
@@ -146,7 +150,7 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
 ///
 /// @brief
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
@@ -166,7 +170,7 @@ void ProductBLERemoteManager::InitializeRCS( )
 ///
 /// @brief  This method starts the main task for the ProductBLERemoteManager class.
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
@@ -218,12 +222,12 @@ void ProductBLERemoteManager::Run( )
 ///
 /// @brief ProductBLERemoteManager::Stop
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::Stop( void )
+void ProductBLERemoteManager::Stop( )
 {
 }
 
@@ -298,7 +302,7 @@ void ProductBLERemoteManager::UpdateCapsAudioZone( const SoundTouchInterface::zo
 ///
 /// @brief ProductBLERemoteManager::InitLedsMsg
 ///
-/// @param  leds Raw LED message to initialize
+/// @param  LedsRawMsg_t Raw LED message to initialize
 ///
 /// @return This method does not return anything.
 ///
@@ -498,7 +502,7 @@ void ProductBLERemoteManager::GetSourceKeysBacklight( LedsRawMsg_t& leds )
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
 
-    // Set source key backlights based on sources are available
+    // Set source key backlights based on which sources are available
 
     // TV and Bluetooth sources are always available
     leds.set_tv( LedsRawMsg_t::SOURCE_LED_ON );
@@ -539,13 +543,9 @@ void ProductBLERemoteManager::GetSourceKeysBacklight( LedsRawMsg_t& leds )
 ///
 /// @brief ProductBLERemoteManager::UpdateBacklight
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
-///
-///
-/// TODO: This function is probably long-overdue for refactoring
-///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::UpdateBacklight( )
@@ -627,13 +627,13 @@ void ProductBLERemoteManager::Pairing_Start( uint32_t timeout )
 ///
 /// @brief ProductBLERemoteManager::Pairing_Cancel
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::Pairing_Cancel( void )
+void ProductBLERemoteManager::Pairing_Cancel( )
 {
     m_pairingPending = false;
     m_RCSClient->Pairing_Cancel( );
@@ -643,13 +643,13 @@ void ProductBLERemoteManager::Pairing_Cancel( void )
 ///
 /// @brief ProductBLERemoteManager::Unpairing_Start
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::Unpairing_Start( void )
+void ProductBLERemoteManager::Unpairing_Start( )
 {
     m_RCSClient->Unpairing_Start( {} );
 }
@@ -658,13 +658,13 @@ void ProductBLERemoteManager::Unpairing_Start( void )
 ///
 /// @brief ProductBLERemoteManager::Unpairing_Cancel
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::Unpairing_Cancel( void )
+void ProductBLERemoteManager::Unpairing_Cancel( )
 {
     m_RCSClient->Unpairing_Cancel( );
 }
@@ -673,13 +673,13 @@ void ProductBLERemoteManager::Unpairing_Cancel( void )
 ///
 /// @brief ProductBLERemoteManager::IsConnected
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductBLERemoteManager::IsConnected( void )
+bool ProductBLERemoteManager::IsConnected( )
 {
     return m_remoteConnected;
 }
@@ -688,13 +688,13 @@ bool ProductBLERemoteManager::IsConnected( void )
 ///
 /// @brief ProductBLERemoteManager::PossiblyPair
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::PossiblyPair( void )
+void ProductBLERemoteManager::PossiblyPair( )
 {
     m_pairingPending = true;
     CheckPairing();
@@ -704,13 +704,13 @@ void ProductBLERemoteManager::PossiblyPair( void )
 ///
 /// @brief ProductBLERemoteManager::CheckPairing
 ///
-/// @param  void This method does not take any arguments.
+/// @param  This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::CheckPairing( void )
+void ProductBLERemoteManager::CheckPairing( )
 {
     // Some of these cases might not do anything; don't remove them, they're here for
     // documentation

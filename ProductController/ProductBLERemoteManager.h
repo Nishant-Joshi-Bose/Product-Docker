@@ -76,15 +76,15 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Run( void );
-    void Stop( void );
+    void Run( );
+    void Stop( );
 
     void Pairing_Start( uint32_t timeout );
-    void Pairing_Cancel( void );
-    void Unpairing_Start( void );
-    void Unpairing_Cancel( void );
-    bool IsConnected( void );
-    void PossiblyPair( void );
+    void Pairing_Cancel( );
+    void Unpairing_Start( );
+    void Unpairing_Cancel( );
+    bool IsConnected( );
+    void PossiblyPair( );
     void PowerOn( )
     {
         m_poweredOn = true;
@@ -112,7 +112,6 @@ private:
     bool                                        m_poweredOn             = false;
     bool                                        m_sourceSelectAllowed   = true;
     bool                                        m_IsZoneMember          = false;
-    static const char*                          m_configFile;
     KeplerPb::KeplerConfig                      m_keplerConfig;
     KeplerPb::KeplerConfig::StateEntry          m_defaultState;
     KeplerPb::KeplerConfig::ZoneConfiguration   m_defaultZoneConfig;
@@ -127,7 +126,7 @@ private:
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
     void UpdateCapsAudioZone( const SoundTouchInterface::zone& zoneInfo );
     void UpdateBacklight( );
-    void CheckPairing( void );
+    void CheckPairing( );
     void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
     std::tuple<const KeplerPb::KeplerConfig::StateEntry&, bool, KeplerPb::KeplerConfig::ZoneConfiguration> DetermineKeplerState( );
     void GetSourceKeysBacklight( RCS_PB_MSG::LedsRawMsg_t& leds );
