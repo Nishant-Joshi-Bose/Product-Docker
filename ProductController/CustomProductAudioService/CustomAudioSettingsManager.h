@@ -11,6 +11,12 @@
 
 namespace ProductApp
 {
+
+constexpr char kBassName                [] = "audioBassLevel";
+constexpr char kCenterName              [] = "audioCenterLevel";
+constexpr char kModeName                [] = "audioMode";
+constexpr char kTrebleName              [] = "audioTrebleLevel";
+
 using std::string;
 
 class CustomAudioSettingsManager: public AudioSettingsManager
@@ -21,13 +27,19 @@ public:
 
     ResultCode_t SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
+    void RefreshBass();
 
     ResultCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
     const ProductPb::AudioCenterLevel& GetCenter() const;
+    void RefreshCenter();
+
     ResultCode_t SetMode( const ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
+    void RefreshMode();
+
     ResultCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
+    void RefreshTreble();
 
     /*! \brief Returns state of testing flag for "center level" feature.
      */

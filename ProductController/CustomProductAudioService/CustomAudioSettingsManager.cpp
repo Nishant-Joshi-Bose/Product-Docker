@@ -17,11 +17,6 @@ constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json"
 constexpr uint32_t kConfigVersionMajor = 3;
 constexpr uint32_t kConfigVersionMinor = 0;
 
-constexpr char kBassName                [] = "audioBassLevel";
-constexpr char kCenterName              [] = "audioCenterLevel";
-constexpr char kModeName                [] = "audioMode";
-constexpr char kTrebleName              [] = "audioTrebleLevel";
-
 // Some flags used to enable on configure testing features.
 constexpr char kTestOptionsName         [] = "testOptions";
 constexpr char kTestCenterEnabledName   [] = "centerEnabled";
@@ -41,7 +36,7 @@ CustomAudioSettingsManager::CustomAudioSettingsManager() :
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-/// Bass setting setter/getter
+/// Bass setting setter/getter/refresh function
 /////////////////////////////////////////////////////////////////////////////////////////
 ResultCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
 {
@@ -66,8 +61,14 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
     return m_currentBass;
 }
 
+void CustomAudioSettingsManager::RefreshBass()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kBassName, m_currentBass );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
-/// Center setting setter/getter
+/// Center setting setter/getter/refresh function
 ///////////////////////////////////////////////////////////////////////////////////////
 ResultCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
 {
@@ -92,8 +93,14 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
     return m_currentCenter;
 }
 
+void CustomAudioSettingsManager::RefreshCenter()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kCenterName,        m_currentCenter );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
-/// Mode setting setter/getter
+/// Mode setting setter/getter/refresh function
 //////////////////////////////////////////////////////////////////////////////////////
 ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
 {
@@ -116,8 +123,14 @@ const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode() const
     return m_currentMode;
 }
 
+void CustomAudioSettingsManager::RefreshMode()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kModeName,          m_currentMode );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
-/// Treble setting setter/getter
+/// Treble setting setter/getter/refresh function
 ///////////////////////////////////////////////////////////////////////////////////////
 ResultCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
 {
@@ -142,15 +155,21 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
     return m_currentTreble;
 }
 
+void CustomAudioSettingsManager::RefreshTreble()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kTrebleName,        m_currentTreble );
+}
+
 void CustomAudioSettingsManager::UpdateAllProtos()
 {
     BOSE_DEBUG( s_logger, __func__ );
 
     // Default functionality using super class functionality.
-    UpdateCurrentProto( kBassName, m_currentBass );
-    UpdateCurrentProto( kCenterName, m_currentCenter );
-    UpdateCurrentProto( kModeName, m_currentMode );
-    UpdateCurrentProto( kTrebleName, m_currentTreble );
+    RefreshBass();
+    RefreshTreble();
+    RefreshCenter();
+    RefreshMode();
 }
 
 /*!

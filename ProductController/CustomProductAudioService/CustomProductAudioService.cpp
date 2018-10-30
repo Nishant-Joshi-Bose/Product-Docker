@@ -15,10 +15,6 @@
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
-#include "Bass.pb.h"
-#include "Treble.pb.h"
-#include "Center.pb.h"
-#include "Mode.pb.h"
 
 using namespace std::placeholders;
 
@@ -88,20 +84,24 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
-            auto bdcPb = std::make_shared<DataCollectionPb::Bass>();
-            bdcPb->set_bass( m_audioSettingsMgr->GetBass( ).value() );
-            m_dataCollectionClient->SendData( bdcPb, "bass-changed" );
         }
         return error;
+    };
+    auto refreshBassAction = [this]( )
+    {
+        return m_audioSettingsMgr->RefreshBass( );
     };
     m_audioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
                                                                                    ( kBassEndPoint,
                                                                                            getBassAction,
                                                                                            setBassAction,
+                                                                                           refreshBassAction,
                                                                                            m_FrontDoorClientIF,
                                                                                            m_ProductTask,
                                                                                            FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                                                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                                                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                                                                           "bass-changed",
+                                                                                           m_dataCollectionClient ) );
 
     //
     // Endpoint /audio/center - register ProductController as handler for POST/PUT/GET requests
@@ -119,20 +119,24 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             {
                 m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
                 SendMainStreamAudioSettingsEvent();
-                auto cdcPb = std::make_shared<DataCollectionPb::Center>();
-                cdcPb->set_center( m_audioSettingsMgr->GetCenter( ).value() );
-                m_dataCollectionClient->SendData( cdcPb, "center-level-changed" );
             }
             return error;
+        };
+        auto refreshCenterAction = [this]( )
+        {
+            return m_audioSettingsMgr->RefreshCenter( );
         };
         m_audioCenterSetting = std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>( new AudioSetting<ProductPb::AudioCenterLevel>
                                ( kCenterEndPoint,
                                  getCenterAction,
                                  setCenterAction,
+                                 refreshCenterAction,
                                  m_FrontDoorClientIF,
                                  m_ProductTask,
                                  FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                 FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                 FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                 "center-level-changed",
+                                 m_dataCollectionClient ) );
     }
 
     //
@@ -151,20 +155,24 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             {
                 m_mainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
                 SendMainStreamAudioSettingsEvent();
-                auto mdcPb = std::make_shared<DataCollectionPb::Mode>();
-                mdcPb->set_mode( m_audioSettingsMgr->GetMode( ).value() );
-                m_dataCollectionClient->SendData( mdcPb, "mode-changed" );
             }
             return error;
+        };
+        auto refreshModeAction = [this]( )
+        {
+            return m_audioSettingsMgr->RefreshMode( );
         };
         m_audioModeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioMode>>( new AudioSetting<ProductPb::AudioMode>
                                                                                   ( kModeEndPoint,
                                                                                     getModeAction,
                                                                                     setModeAction,
+                                                                                    refreshModeAction,
                                                                                     m_FrontDoorClientIF,
                                                                                     m_ProductTask,
                                                                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                                                                    FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                                                                                    FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                                                                                    "mode-changed",
+                                                                                    m_dataCollectionClient ) );
     }
 
     //
@@ -181,26 +189,29 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
-            auto tdcPb = std::make_shared<DataCollectionPb::Treble>();
-            tdcPb->set_treble( m_audioSettingsMgr->GetTreble( ).value() );
-            m_dataCollectionClient->SendData( tdcPb, "treble-changed" );
         }
         return error;
+    };
+    auto refreshTrebleAction = [this]( )
+    {
+        return m_audioSettingsMgr->RefreshTreble( );
     };
     m_audioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
                            ( kTrebleEndPoint,
                              getTrebleAction,
                              setTrebleAction,
+                             refreshTrebleAction,
                              m_FrontDoorClientIF,
                              m_ProductTask,
                              FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
+                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
+                             "treble-changed",
+                             m_dataCollectionClient ) );
 }
 
 void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem, const Callback<std::string, std::string> cb )
 {
-    //BOSE_DEBUG( s_logger, __func__ );
-    //BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
+    BOSE_DEBUG( s_logger, "%s - contentItem = %s", __func__, contentItem.c_str() );
 
     // Parse contentItem string received from APProduct
     bool error = false;
@@ -220,9 +231,20 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     {
         // Update audio settings
         BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback, source = %s, sourecAccount = %s", contentItemProto.source().c_str(), contentItemProto.sourceaccount().c_str() );
+        /// UpdateContentItem will re-populate the AudioSetting value and persistence level caused by content item change
+        /// in m_AudioSetting Json and m_currentXX proto,
+        /// and if value is changed, it will also send new values to frontdoor(notification) and data collection service
+        bool isChanged = false;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kBassName,   m_audioBassSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kTrebleName, m_audioTrebleSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kCenterName, m_audioCenterSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kModeName,   m_audioCenterSetting ) ) ? true : isChanged;
 
-        m_audioSettingsMgr->UpdateContentItem( contentItemProto );
-        FetchLatestAudioSettings();
+        if( isChanged )
+        {
+            FetchLatestAudioSettings();
+            m_audioSettingsMgr->PersistAudioSettings();
+        }
     }
     else
     {

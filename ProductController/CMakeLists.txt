@@ -44,10 +44,6 @@ ADD_EXECUTABLE(ProductController
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
-  ${PROTO_CC_DEST}/Treble.pb.cc
-  ${PROTO_CC_DEST}/Bass.pb.cc
-  ${PROTO_CC_DEST}/Center.pb.cc
-  ${PROTO_CC_DEST}/Mode.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   IntentHandler/CountDownManager.cpp
