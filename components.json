@@ -193,7 +193,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-194+c5d9319"
+    "selected_version": "Continuous/master/2.2.0-211+aab1b7a"
   },
   {
     "name": "ProductUIAssets",
@@ -249,7 +249,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.43967.3043287"
+    "selected_version": "Release/Castle-Fork/2.2.0.44091.3063771"
   },
   {
     "name": "svc-pts-log-decrypt",
