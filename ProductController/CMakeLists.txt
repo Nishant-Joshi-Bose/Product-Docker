@@ -61,7 +61,7 @@ ADD_EXECUTABLE(ProductController
 )
 
 TARGET_LINK_LIBRARIES(ProductController
-  VoiceService
+  #VoiceService
   CastleProductControllerCommon
   ProductControllerCommonProto
   DataCollectionClient
@@ -75,7 +75,7 @@ TARGET_LINK_LIBRARIES(ProductController
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
-  VPAControllerClient
+  #VPAControllerClient
   CliClient
   AudioLibs
   EddieAudioSettings
