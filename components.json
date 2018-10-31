@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-10-31_0907"
+    "selected_version": "Release/Castle-Fork/2.2.0.44108.3066708"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -37,7 +37,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.1-179+62f725b"
+    "selected_version": "Release/master/2.2.1-181+5ee0fd5"
   },
   {
     "name": "Bluetooth-qc8017_32",
@@ -173,11 +173,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@c4dfc5159385dd948e7fd5d1a439aa0795974d90"
+    "selected_version": "master@c80d55557e3f6abab11d15aec2545a48c426ee6b"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-212+c4dfc51"
+    "selected_version": "Release/master/2.2.0-214+c80d555"
   },
   {
     "name": "ProductUIAssets",
@@ -213,7 +213,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/master/2.2.0-77+2732a52"
+    "selected_version": "Release/master/2.2.0-79+5e02f2f"
   },
   {
     "name": "SASS-qc8017_32",
@@ -225,11 +225,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/3.0.1-1083+ffd30b4"
+    "selected_version": "Release/master/3.0.1-1084+ffd30b4"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-10-31_0907"
+    "selected_version": "Release/Castle-Fork/2.2.0.44108.3066708"
   },
   {
     "name": "svc-pts-log-decrypt",
