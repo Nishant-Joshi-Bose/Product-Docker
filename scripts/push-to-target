@@ -15,5 +15,4 @@
 
 import sys
 
-print("ERROR: Deprecated, see /scripts/upstage")
-sys.exit(1)
+sys.exit("push-to-target: This script has been replaced by scripts/upstage")
