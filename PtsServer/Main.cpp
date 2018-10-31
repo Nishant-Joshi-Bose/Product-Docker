@@ -12,8 +12,12 @@
 */
 
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 #include <memory>
+#include <unordered_map>
+#include <vector>
+#include <string>
 #include <string.h>
 #include <errno.h>
 #include <arpa/inet.h>
@@ -22,6 +26,8 @@
 #include <unistd.h>
 #include <signal.h>
 #include <ifaddrs.h>
+#include <fcntl.h>
+#include <sys/sendfile.h>
 
 namespace
 {
@@ -232,6 +238,132 @@ std::string get_iface_name( int sockfd, std::string& local_address )
     return get_iface_name( addr, len );
 }
 
+// Map of URL prefix to local file system.
+struct static_item
+{
+    std::string file_name;
+    std::string mime_type;
+};
+std::unordered_map<std::string, static_item> static_items;
+
+using strings = std::vector<std::string>;
+
+strings split( std::string const& line )
+{
+    strings fields;
+    size_t i = 0;
+    for( ;; )
+    {
+        i = line.find_first_not_of( " \t", i );
+        if( i == std::string::npos )
+            break;
+        size_t j = line.find_first_of( " \t", i );
+        if( j == std::string::npos )
+        {
+            fields.emplace_back( line.substr( i ) );
+            break;
+        }
+        fields.emplace_back( line.substr( i, j - i ) );
+        i = j;
+    }
+    return fields;
+}
+
+void read_static_content_map( char const* file_name )
+{
+    /*
+      Each line of the file is:
+
+      url_path file_name mime_type
+    */
+    std::ifstream ifs{ file_name };
+    if( !ifs )
+    {
+        LOG( "open " << file_name << ": " << err() );
+        return;
+    }
+    std::string line;
+    int line_number = 0;
+    while( getline( ifs, line ) )
+    {
+        ++line_number;
+        strings fields = split( line );
+        if( fields.empty() )
+            continue;
+
+        if( fields.size() != 3 )
+        {
+            LOG( "Malformed map at " << file_name << " line " << line_number );
+            continue;
+        }
+        auto const& url_path = fields[0];
+        auto const& file_name = fields[1];
+        auto const& mime_type = fields[2];
+
+        auto r = static_items.emplace( url_path, static_item{ file_name, mime_type } );
+        if( !r.second )
+            LOG( "Duplicate entry for " << url_path
+                 << " at " << file_name << " line " << line_number );
+    }
+}
+
+void write_all( int fd, char const* data, size_t len )
+{
+    while( len != 0 )
+    {
+        ssize_t r = write( fd, data, len );
+        if( r == -1 )
+        {
+            LOG( "write: " << err() );
+            break;
+        }
+        if( r == 0 || size_t( r ) > len )
+        {
+            LOG( "strange write: " << r << ' ' << len );
+            break;
+        }
+        data += r;
+        len -= r;
+    }
+}
+
+/* If url_path refers to static content, serve it and return true.
+   Otherwise return false. */
+bool send_static_content( std::string url_path )
+{
+    auto it = static_items.find( url_path );
+    if( it == static_items.end() )
+        return false;
+    auto const& file_name = it->second.file_name;
+    auto const& mime_type = it->second.mime_type;
+    LOG( "Serve static " << url_path << " as " << file_name << ' ' << mime_type );
+
+    // Send the HTTP response header
+    constexpr char part0[] = "HTTP/1.1 200 OK\r\nContent-Type: ";
+    constexpr char part2[] = "\r\nCache-Control: no-cache\r\n\r\n";
+    std::string rsp;
+    rsp.reserve( sizeof( part0 ) - 1 +
+                 mime_type.size() +
+                 sizeof( part2 ) - 1 );
+    rsp.append( part0, sizeof( part0 ) - 1 );
+    rsp.append( mime_type );
+    rsp.append( part2, sizeof( part2 ) - 1 );
+    write_all( STDOUT_FILENO, rsp.data(), rsp.size() );
+
+    // Send the whole file as the HTTP payload.
+    int in_fd = open( file_name.c_str(), O_RDONLY );
+    if( in_fd == -1 )
+    {
+        LOG( "open " << file_name << ": " << err() );
+        return true;
+    }
+    ssize_t r = sendfile( STDOUT_FILENO, in_fd, nullptr, SIZE_MAX );
+    close( in_fd );
+    if( r == -1 )
+        LOG( "sendfile: " << err() );
+    return true;
+}
+
 void handle_connection( int sockfd, std::string const& remote_address,
                         std::string const& local_address,
                         std::string const& iface )
@@ -243,39 +375,133 @@ void handle_connection( int sockfd, std::string const& remote_address,
         return;
     }
 
-    if( kid == 0 )
+    if( kid != 0 )
     {
-        // In the child.
-        if( dup2( sockfd, STDIN_FILENO ) == -1 )
-            LOG( "dup2: " << err() );
-        if( dup2( sockfd, STDOUT_FILENO ) == -1 )
-            LOG( "dup2: " << err() );
+        // In the parent process.
         close( sockfd );
-
-        alarm( max_connection_seconds );
-
-        signal( SIGCHLD, SIG_DFL );
-
-        /* putenv keeps a pointer to these temporary std::string objects.
-           This code assumes we execl and the temporary objects never actually
-           get destroyed. */
-
-        auto env1 = "REMOTE_ADDRESS=" + remote_address;
-        if( putenv( const_cast< char* >( env1.c_str() ) ) != 0 )
-            LOG( "putenv: " << err() );
-
-        auto env2 = "LOCAL_ADDRESS=" + local_address;
-        if( putenv( const_cast< char* >( env2.c_str() ) ) != 0 )
-            LOG( "putenv: " << err() );
-
-        auto env3 = "IFACE=" + iface;
-        if( putenv( const_cast< char* >( env3.c_str() ) ) != 0 )
-            LOG( "putenv: " << err() );
-
-        execl( handler_program, handler_program, nullptr );
-        DIE( "execl " << handler_program << ": " << err() );
+        return;
     }
+
+    // In the child process.
+    alarm( max_connection_seconds );
+    signal( SIGCHLD, SIG_DFL );
+
+    if( dup2( sockfd, STDIN_FILENO ) == -1 )
+        LOG( "dup2: " << err() );
+    if( dup2( sockfd, STDOUT_FILENO ) == -1 )
+        LOG( "dup2: " << err() );
     close( sockfd );
+
+    /* Read the HTTP headers.
+
+       The first line is like: "GET /foo/bar HTTP/1.1\r\n" where "GET" is the
+       HTTP method and "/foo/bar" is the path component of the URL.
+
+       Next are zero or more non-blank lines containing the headers like
+       "Host: www.example.com\r\n".
+
+       Finally, there is a blank line "\r\n".
+
+       There may be more data after the blank line.  We do not remove that
+       data from the input stream but instead leave it for use by the
+       pts-handler script (e.g., for POST methods).
+    */
+    std::string h;
+    bool at_line_start = true;
+    for( ;; )
+    {
+        char c;
+        ssize_t r = read( STDIN_FILENO, &c, 1 );
+        if( r == -1 )
+            DIE( "handle_connection: read: " << err() );
+        if( r == 0 )
+            DIE( "handle_connection: EOF" );
+        if( c == '\n' )
+        {
+            // Discard carriage returns to simplify parsing.
+            if( !h.empty() && h.back() == '\r' )
+                h.pop_back();
+            if( at_line_start )
+                break;
+            at_line_start = true;
+        }
+        else if( c != '\r' )
+            at_line_start = false;
+        h.push_back( c );
+    }
+
+    /* Modifying this std::string object is undefined behavior, but in
+       practice it's fine here. */
+    auto p = const_cast<char*>( h.c_str() );
+    auto field = [&]()
+    {
+        char* start = p;
+        while( *p )
+        {
+            if( *p == ' ' )
+            {
+                *p = '\0';
+                do
+                    ++p;
+                while( *p == ' ' );
+                break;
+            }
+            ++p;
+        }
+        return start;
+    };
+    char* headers = strchr( p, '\n' );
+    if( headers )
+        *headers++ = '\0';
+    else
+        headers = const_cast<char*>( "" );
+
+    char const* method = field();
+    char const* path = field();
+    char const* version = field();
+
+    //LOG( "HTTP |" << method << '|' << path << '|' << version << '|' << strlen( headers ) );
+
+    if( strcmp( method, "GET" ) == 0 )
+    {
+        /*
+          Ignore any query parameters from paths like
+          "/index.html?deeplink=com.bose.myApp&ssid=myNetwork&context=ApSetup".
+          See https://github.com/BoseCorp/bose-web-riviera-ap-page/
+        */
+        if( auto q = strchr( path, '?' ) )
+        {
+            size_t len = q - path;
+            if( send_static_content( std::string{ path, len } ) )
+                _exit( EXIT_SUCCESS );
+        }
+        else
+        {
+            if( send_static_content( path ) )
+                _exit( EXIT_SUCCESS );
+        }
+    }
+
+    /* putenv keeps a pointer to these temporary std::string objects.
+       This code assumes we execl and the temporary objects never actually
+       get destroyed. */
+
+    auto env1 = "REMOTE_ADDRESS=" + remote_address;
+    if( putenv( const_cast< char* >( env1.c_str() ) ) != 0 )
+        LOG( "putenv: " << err() );
+
+    auto env2 = "LOCAL_ADDRESS=" + local_address;
+    if( putenv( const_cast< char* >( env2.c_str() ) ) != 0 )
+        LOG( "putenv: " << err() );
+
+    auto env3 = "IFACE=" + iface;
+    if( putenv( const_cast< char* >( env3.c_str() ) ) != 0 )
+        LOG( "putenv: " << err() );
+
+    execl( handler_program, handler_program,
+           method, path, version, headers,
+           nullptr );
+    DIE( "execl " << handler_program << ": " << err() );
 }
 
 void listener( int listenfd )
@@ -301,6 +527,18 @@ void listener( int listenfd )
     }
 }
 
+/* If the beginning of the string `target` equals the string `match` then
+   advance the pointer `target` by the length of `match` and return true.
+   Otherwise return false. */
+bool skip_past( char* &target, char const* match )
+{
+    auto match_len = strlen( match );
+    if( strncmp( target, match, match_len ) != 0 )
+        return false;
+    target += match_len;
+    return true;
+}
+
 } // namespace
 
 int main( int argc, char** argv )
@@ -314,7 +552,14 @@ try
 
     while( --argc > 0 )
     {
-        auto arg = *++argv;
+        char* arg = *++argv;
+
+        // --static=FILE  Read the given file into the static content map.
+        if( skip_past( arg, "--static=" ) )
+        {
+            read_static_content_map( arg );
+            continue;
+        }
 
         if( handler_program == nullptr )
         {
