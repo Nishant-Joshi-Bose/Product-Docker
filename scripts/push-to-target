@@ -1,8 +1,17 @@
 #!/usr/bin/python2.7
 # ################# NOTICE ###################
 # This script is deprecated and will not work as expected.
-# Please contact CastleSoftwareUpdate team know in case you need to use this functionality.
-# ################# ###### ###################
+#
+# Alternatively you may use scripts/upstage.
+# Copy files from your workspace product staging area to the target system.
+#
+#   make product-ipk && scripts/upstage
+#
+# or just:
+#
+#   scripts/upstage -b
+#
+# ############################################
 # This script is intended to push locally built files to target without performing software update
 # It uses ADB interface to push files and pushes only if the file has been updated
 #
