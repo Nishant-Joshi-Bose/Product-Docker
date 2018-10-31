@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 #
 # Invoked by PtsServer for each HTTP client connection.
-# HTTP request headers and payload are to be read from stdin.
+# HTTP payload is to be read from stdin.
 # HTTP response headers and payload are to be written to stdout.
 #
 import os
@@ -13,42 +13,9 @@ debug = False
 def log(*args):
     print >>sys.stderr, "pts-handler:", " ".join(map(lambda a: str(a), args))
 
-if len(sys.argv) != 1:
-    raise Exception("wrong usage " + str(sys.argv))
-
-# ----------------------------------------------------------------------------
-
-line = sys.stdin.readline()
-if not line:
-    if debug:
-        log("No header")
-    sys.exit()
-
-# `line` is like: "GET /hello/world.zip HTTP/1.1\r\n"
-line = line.rstrip("\r\n")
-fields = line.split(" ")
-if len(fields) != 3:
-    log("Malformed first header line", repr(fields))
-    sys.exit()
-method, path, version = fields
-
+_, method, path, version, headers = sys.argv
 if debug:
     log("method '{}', path '{}', version '{}'".format(method, path, version))
-
-# ----------------------------------------------------------------------------
-
-# Read the HTTP headers
-while True:
-    line = sys.stdin.readline()
-    if not line:
-        if debug:
-            log("EOF")
-        sys.exit()
-    line = line.rstrip("\r\n")
-    if line == "":
-        break
-    if debug:
-        log("header '{}'".format(line))
 
 # ----------------------------------------------------------------------------
 
@@ -106,6 +73,16 @@ def redirect_stderr():
 def is_development():
     return 0 == subprocess.call(["is-development"])
 
+def send_static_content(file_name, content_type):
+    with open(file_name) as fh:
+        http_ok(content_type)
+        while True:
+            buf = fh.read(4096)
+            if not buf:
+                break
+            sys.stdout.write(buf)
+    log("Sent {} ({})".format(file_name, content_type))
+
 # ----------------------------------------------------------------------------
 
 if method != "GET":
@@ -113,6 +90,7 @@ if method != "GET":
 
 # ----------------------------------------------------------------------------
 # A way to download Spotify audio data dump files
+
 if path == "/audio.tar" and is_development():
     http_ok("application/octet-stream")
     sys.stdout.flush()
@@ -466,54 +444,20 @@ Address:
     sys.exit()
 
 # ----------------------------------------------------------------------------
-# Serve static content.
+# Serve static content (files not served directly by PtsHandler via sendfile).
 
-# Discard any query parameters from paths like
+# Ignore any query parameters from paths like
 # "/index.html?deeplink=com.bose.myApp&ssid=myNetwork&context=ApSetup".
 # See https://github.com/BoseCorp/bose-web-riviera-ap-page/
-i = path.find("?")
-if i != -1:
-    path = path[:i]
 
-if path == "/":
-    path = "/index.html"
-
-if path == "/index.html":
+if path == "/index.html" or path == "/" or \
+   path.startswith("/index.html?") or path.startswith("/?"):
     # Wi-Fi setup page access is restricted to certain interfaces
     only_for_ifaces(["wlan1"] + usb_ifaces)
-
-file_name = "/opt/Bose/html" + path
-
-# Avoid possible security issues with paths like ../../etc/passwd and symlinks.
-if file_name != os.path.realpath(file_name):
-    http_err()
+    send_static_content("/opt/Bose/html/index.html", "text/html")
     sys.exit()
 
-content_types = {
-    ".html": "text/html",
-    ".jpg": "image/jpeg",
-    ".pdf": "application/pdf",
-    ".svg": "image/svg+xml",
-}
-content_type = "text/plain"
-for ext, ctype in content_types.iteritems():
-    if file_name.endswith(ext):
-        content_type = ctype
-        break
-
-try:
-    with open(file_name) as fh:
-        http_ok(content_type)
-
-        while True:
-            buf = fh.read(4096)
-            if not buf:
-                break
-            sys.stdout.write(buf)
-    log("Sent {} ({})".format(file_name, content_type))
-except IOError, exc:
-    log("open " + file_name + ": " + exc.strerror)
-    http_err()
-sys.exit()
-
 # ----------------------------------------------------------------------------
+
+http_err()
+sys.exit()
