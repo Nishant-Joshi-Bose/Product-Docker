@@ -42,7 +42,7 @@ mime_types = {                  # See `file -i`
     ".html": "text/html",
     ".ico": "image/x-icon",
     ".jpg": "image/jpeg",
-    ".js": "text/plain",
+    ".js": "application/javascript",
     ".pdf": "application/pdf",
     ".png": "image/png",
     ".svg": "image/svg+xml",
