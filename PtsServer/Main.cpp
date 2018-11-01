@@ -238,7 +238,7 @@ std::string get_iface_name( int sockfd, std::string& local_address )
     return get_iface_name( addr, len );
 }
 
-// Map of URL prefix to local file system.
+// Map of URL path to local file system.
 struct static_item
 {
     std::string file_name;
