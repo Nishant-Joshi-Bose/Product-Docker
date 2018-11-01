@@ -19,10 +19,12 @@ eval $KWINJECT make jobs=8 hw_var=Alpha deploy || exit
 set +x
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then
     git clone git@github.com:BoseCorp/iot-profile-creator
-    for env in alpha latest integration stage prod; do
-        python2.7 iot-profile-creator/update_product_profile.py --p professor       --v $[Version] --e $env --s $(ectool getFullCredential IoT-Profile-Password --value password)
-        python2.7 iot-profile-creator/update_product_profile.py --p ginger-cheevers --v $[Version] --e $env --s $(ectool getFullCredential IoT-Profile-Password --value password)
-    done
+    set +x
+    iot-profile-creator/update_all_environments.sh $(echo $[ProjectName] | tr '[A-Z]' '[a-z]') $[Version] $(ectool getFullCredential IoT-Profile-Password --value password)
+    if [ "$[ProjectName]" = "Professor" ]; then
+        # Need to create an additional entry for Ginger-Cheevers
+        iot-profile-creator/update_all_environments.sh ginger-cheevers $[Version] $(ectool getFullCredential IoT-Profile-Password --value password)
+    fi
 fi
 
 : success
