@@ -22,7 +22,7 @@
 #include "MfgData.h"
 #include "BLESetupEndpoints.h"
 #include "ProductSTSStateFactory.h"
-#include "ProductSTSStateTopSilent.h"
+#include "ProductSTSStateTopSetup.h"
 #include "CustomProductSTSStateTopAux.h"
 #include "ProductSTS.pb.h"
 #include "SystemUtils.h"
@@ -659,7 +659,7 @@ void CustomProductController::SetupProductSTSController( void )
     using namespace ProductSTS;
 
     ProductSTSStateFactory<CustomProductSTSStateTopAux> auxStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSetup>    silentStateFactory;
 
     // 'AUX' is a product defined source used for the auxilary port.
     std::vector<ProductSTSController::SourceDescriptor> sources;

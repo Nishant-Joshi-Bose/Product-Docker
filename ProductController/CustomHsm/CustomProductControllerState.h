@@ -381,6 +381,11 @@ public:
         return false;
     }
 
+    virtual bool HandleSetupDeactivated()
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static CustomProductController& GetCustomProductController();
