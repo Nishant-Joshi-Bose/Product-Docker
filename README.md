@@ -316,7 +316,11 @@ happens when development mode is enabled.
 ### Useful Links
 
 [Professor/Ginger-Cheevers Slack channel](https://profgc.slack.com/)
+
 [Professor Wiki](https://wiki.bose.com/display/A4V/Professor)
+
 [How-to & Board Setups](https://wiki.bose.com/pages/viewpage.action?pageId=33361043)
+
 [How to recover Professor with VIP](https://wiki.bose.com/display/A4V/How+to+recover+Professor+with+VIP)
+
 [How to tapload Professor / Ginger-Cheevers](https://wiki.bose.com/pages/viewpage.action?pageId=42180408)
