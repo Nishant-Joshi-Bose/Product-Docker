@@ -246,7 +246,7 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
 {
     if( key != LpmServiceMessages::BOSE_ASSERT_ON && key != LpmServiceMessages::BOSE_ASSERT_OFF )
     {
-        BOSE_INFO( s_logger, "Unexpected key value %d", key );
+        BOSE_ERROR( s_logger, "Unexpected key value %d", key );
         return;
     }
 
