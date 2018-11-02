@@ -440,8 +440,8 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 void CustomProductAudioService::SetAiqInstalled( bool installed )
 {
     BOSE_DEBUG( s_logger, "%s: installed = %s", __func__, installed ? "true" : "false" );
-    ResultCode_t ret = m_AudioSettingsMgr->UpdateEqSelectSupportedMode( AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ), installed );
-    if( ret == ResultCode_t::NO_ERROR )
+    AudioSettingResultCode::ResultCode_t ret = m_AudioSettingsMgr->UpdateEqSelectSupportedMode( AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ), installed );
+    if( ret == AudioSettingResultCode::ResultCode_t::NO_ERROR )
     {
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
     }
@@ -544,9 +544,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setBassAction = [this]( AudioBassLevel val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetBass( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetBass( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
@@ -576,9 +576,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setTrebleAction = [ this ]( AudioTrebleLevel val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetTreble( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetTreble( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
@@ -607,9 +607,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setCenterAction = [ this ]( AudioCenterLevel val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetCenter( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetCenter( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
             SendMainStreamAudioSettingsEvent();
@@ -638,9 +638,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setSurroundAction = [ this ]( AudioSurroundLevel val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetSurround( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetSurround( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
             SendMainStreamAudioSettingsEvent();
@@ -669,8 +669,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setSurroundDelayAction = [ this ]( AudioSurroundDelay val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetSurroundDelay( val );
-        if( error == ResultCode_t::NO_ERROR )
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetSurroundDelay( val );
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_surrounddelay( m_AudioSettingsMgr->GetSurroundDelay( ).value() );
             SendMainStreamAudioSettingsEvent();
@@ -699,9 +699,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setGainOffsetAction = [ this ]( AudioGainOffset val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetGainOffset( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetGainOffset( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
             SendMainStreamAudioSettingsEvent();
@@ -730,9 +730,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setAvSyncAction = [ this ]( AudioAvSync val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetAvSync( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetAvSync( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
             SendMainStreamAudioSettingsEvent();
@@ -761,9 +761,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setSubwooferGainAction = [ this ]( AudioSubwooferGain val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetSubwooferGain( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetSubwooferGain( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_subwooferlevel(
                 m_AudioSettingsMgr->GetSubwooferGain( ).value() );
@@ -794,9 +794,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setModeAction = [ this ]( AudioMode val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetMode( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetMode( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_audiomode(
                 ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
@@ -826,9 +826,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setContentTypeAction = [ this ]( AudioContentType val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetContentType( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetContentType( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum(
                                                            m_AudioSettingsMgr->GetContentType( ).value() ) );
@@ -858,9 +858,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setDualMonoSelectAction = [ this ]( AudioDualMonoSelect val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetDualMonoSelect( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetDualMonoSelect( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum(
                                                               m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
@@ -890,9 +890,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setEqSelectAction = [ this ]( AudioEqSelect val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetEqSelect( val );
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetEqSelect( val );
 
-        if( error == ResultCode_t::NO_ERROR )
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_deltaeqselect(
                 EqSelectNameToEnum( m_AudioSettingsMgr->GetEqSelect( ).mode() ) );
@@ -922,8 +922,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setSubwooferPolarityAction = [ this ]( AudioSubwooferPolarity val )
     {
-        ResultCode_t error = m_AudioSettingsMgr->SetSubwooferPolarity( val );
-        if( error == ResultCode_t::NO_ERROR )
+        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetSubwooferPolarity( val );
+        if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
             m_MainStreamAudioSettings.set_subwooferpolarity(
                 SubwooferPolarityNameToEnum( m_AudioSettingsMgr->GetSubwooferPolarity( ).value() ) );

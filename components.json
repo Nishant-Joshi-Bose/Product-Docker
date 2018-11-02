@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.0-59+e845ac4"
+    "selected_version": "Continuous/master/0.2.1-90+663d575"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -189,11 +189,15 @@
   },
   {
     "name": "ProductControllerCommon",
+<<<<<<< Updated upstream
     "selected_version": "master@6b8d2b89a50e7e9e944681a6c5e03a9e42203f3e"
+=======
+    "selected_version": "master@8e267e684741cd38897ca26e9a5626de4083a409"
+>>>>>>> Stashed changes
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-194+c5d9319"
+    "selected_version": "Release/master/2.2.0-214+c80d555"
   },
   {
     "name": "ProductUIAssets",
@@ -249,7 +253,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.43967.3043287"
+    "selected_version": "Release/Castle-Fork/2.2.0.44091.3063771"
   },
   {
     "name": "svc-pts-log-decrypt",
