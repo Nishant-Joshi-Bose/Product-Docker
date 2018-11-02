@@ -33,55 +33,55 @@ class CustomAudioSettingsManager: public AudioSettingsManager
 {
 public:
     CustomAudioSettingsManager();
-    ResultCode_t SetBass( const ProductPb::AudioBassLevel& bass );
+    AudioSettingResultCode::ResultCode_t SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
     void RefreshBass();
 
-    ResultCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
+    AudioSettingResultCode::ResultCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
     void RefreshTreble();
 
-    ResultCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
+    AudioSettingResultCode::ResultCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
     const ProductPb::AudioCenterLevel& GetCenter() const;
     void RefreshCenter();
 
-    ResultCode_t SetSurround( const ProductPb::AudioSurroundLevel& surround );
+    AudioSettingResultCode::ResultCode_t SetSurround( const ProductPb::AudioSurroundLevel& surround );
     const ProductPb::AudioSurroundLevel& GetSurround() const;
     void RefreshSurround();
 
-    ResultCode_t SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay );
+    AudioSettingResultCode::ResultCode_t SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay );
     const ProductPb::AudioSurroundDelay& GetSurroundDelay() const;
     void RefreshSurroundDelay();
 
-    ResultCode_t SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
+    AudioSettingResultCode::ResultCode_t SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
     const ProductPb::AudioGainOffset& GetGainOffset() const;
     void RefreshGainOffset();
 
-    ResultCode_t SetAvSync( const ProductPb::AudioAvSync& avSync );
+    AudioSettingResultCode::ResultCode_t SetAvSync( const ProductPb::AudioAvSync& avSync );
     const ProductPb::AudioAvSync& GetAvSync() const;
     void RefreshAvSync();
 
-    ResultCode_t SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
+    AudioSettingResultCode::ResultCode_t SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
     const ProductPb::AudioSubwooferGain& GetSubwooferGain() const;
     void RefreshSubwooferGain();
 
-    ResultCode_t SetMode( ProductPb::AudioMode& mode );
+    AudioSettingResultCode::ResultCode_t SetMode( ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
     void RefreshMode();
 
-    ResultCode_t SetContentType( const ProductPb::AudioContentType& contentType );
+    AudioSettingResultCode::ResultCode_t SetContentType( const ProductPb::AudioContentType& contentType );
     const ProductPb::AudioContentType& GetContentType() const;
     void RefreshContentType();
 
-    ResultCode_t SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
+    AudioSettingResultCode::ResultCode_t SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
     void RefreshDualMonoSelect();
 
-    ResultCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
+    AudioSettingResultCode::ResultCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
     const ProductPb::AudioEqSelect& GetEqSelect() const;
-    ResultCode_t UpdateEqSelectSupportedMode( string mode, bool supported );
+    AudioSettingResultCode::ResultCode_t UpdateEqSelectSupportedMode( string mode, bool supported );
 
-    ResultCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
+    AudioSettingResultCode::ResultCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
     const ProductPb::AudioSubwooferPolarity& GetSubwooferPolarity() const;
 
     void UpdateAllProtos() override;
