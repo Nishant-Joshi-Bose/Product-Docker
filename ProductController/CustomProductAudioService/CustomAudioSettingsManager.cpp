@@ -95,7 +95,7 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Mode setting setter/getter
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetMode( ProductPb::AudioMode& mode )
+ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !mode.has_value() )
@@ -107,11 +107,6 @@ ResultCode_t CustomAudioSettingsManager::SetMode( ProductPb::AudioMode& mode )
                          m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
-    }
-    // /audio/mode's persistence level is default to "CONTENT_ITEM"
-    if( !mode.has_persistence() )
-    {
-        mode.set_persistence( kPersistContentItem );
     }
     return SetAudioProperties( mode, kModeName, m_currentMode );
 }
