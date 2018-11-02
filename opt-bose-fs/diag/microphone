@@ -43,6 +43,11 @@ Refresh: 1\r
         font-weight: bold;
         background: pink;
     }
+    .noaudio {
+        color: blue;
+        font-weight: bold;
+        background: yellow;
+    }
     .hilite {
         background: yellow;
     }
@@ -64,7 +69,11 @@ Refresh: 1\r
         print "<tr>"
         print "<td>Offset Values (< {})</td>".format(max_offset)
         for i in range(0, len(values)):
-            value = values[i] - values[selected]
+            value = values[i]
+            if value == -256:
+                print "<td class='noaudio'>No Audio</td>"
+                continue
+            value -= values[selected]
             if i == selected:
                 print "<td>{}</td>".format(value)
             elif value < max_offset:
@@ -77,7 +86,9 @@ Refresh: 1\r
     print "<td>Real Values in dBF (> {})</td>".format(min_real)
     for i in range(0, len(values)):
         value = values[i]
-        if i != selected:
+        if value == -256:
+            print "<td class='noaudio'>No Audio</td>"
+        elif i != selected:
             print "<td>{}</td>".format(value)
         elif value >= min_real:
             print "<td class='pass'>{}<br>PASS</td>".format(value)
