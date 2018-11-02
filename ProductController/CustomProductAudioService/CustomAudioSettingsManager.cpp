@@ -16,20 +16,6 @@ constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json"
 constexpr uint32_t kConfigVersionMajor = 4;
 constexpr uint32_t kConfigVersionMinor = 0;
 
-constexpr char kBassName                [] = "audioBassLevel";
-constexpr char kTrebleName              [] = "audioTrebleLevel";
-constexpr char kCenterName              [] = "audioCenterLevel";
-constexpr char kSurroundName            [] = "audioSurroundLevel";
-constexpr char kSurroundDelayName       [] = "audioSurroundDelay";
-constexpr char kGainOffsetName          [] = "audioGainOffset";
-constexpr char kAvSyncName              [] = "audioAvSync";
-constexpr char kSubwooferGainName       [] = "audioSubwooferGain";
-constexpr char kModeName                [] = "audioMode";
-constexpr char kContentTypeName         [] = "audioContentType";
-constexpr char kDualMonoSelectName      [] = "audioDualMonoSelect";
-constexpr char kEqSelectName            [] = "audioEqSelect";
-constexpr char kSubwooferPolarityName   [] = "audioSubwooferPolarity";
-
 constexpr char kAudioSettingValues      [] = "audioSettingValues";
 constexpr char kProperties              [] = "properties";
 
@@ -48,6 +34,7 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 /// Bass setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current bass value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 /////////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetBass( const AudioBassLevel& bass )
 {
@@ -74,10 +61,17 @@ const AudioBassLevel& CustomAudioSettingsManager::GetBass() const
     return m_currentBass;
 }
 
+void CustomAudioSettingsManager::RefreshBass()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kBassName, m_currentBass );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Treble setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current treble value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 ///////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetTreble( const AudioTrebleLevel& treble )
 {
@@ -104,10 +98,17 @@ const AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
     return m_currentTreble;
 }
 
+void CustomAudioSettingsManager::RefreshTreble()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kTrebleName,        m_currentTreble );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Center setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current center value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 ///////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetCenter( const AudioCenterLevel& center )
 {
@@ -134,10 +135,17 @@ const AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
     return m_currentCenter;
 }
 
+void CustomAudioSettingsManager::RefreshCenter()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kCenterName,        m_currentCenter );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Surround setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current surround value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 ///////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetSurround( const AudioSurroundLevel& surround )
 {
@@ -164,10 +172,17 @@ const AudioSurroundLevel& CustomAudioSettingsManager::GetSurround() const
     return m_currentSurround;
 }
 
+void CustomAudioSettingsManager::RefreshSurround()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kSurroundName,      m_currentSurround );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// SurroundDelay setting setter/getter
 ///     setter returns a boolean which indicates whether current surroundDelay value is changed by setter
 ///     getter returns a protobuf of current surroundDelay value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 ///////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetSurroundDelay( const AudioSurroundDelay& surroundDelay )
 {
@@ -193,10 +208,17 @@ const AudioSurroundDelay& CustomAudioSettingsManager::GetSurroundDelay() const
     return m_currentSurroundDelay;
 }
 
+void CustomAudioSettingsManager::RefreshSurroundDelay()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kSurroundDelayName, m_currentSurroundDelay );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// GainOffset setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current gainOffset value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 //////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetGainOffset( const AudioGainOffset& gainOffset )
 {
@@ -223,10 +245,17 @@ const AudioGainOffset& CustomAudioSettingsManager::GetGainOffset() const
     return m_currentGainOffset;
 }
 
+void CustomAudioSettingsManager::RefreshGainOffset()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kGainOffsetName,    m_currentGainOffset );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// AvSync setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current avSync value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 //////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetAvSync( const AudioAvSync& avSync )
 {
@@ -253,10 +282,17 @@ const AudioAvSync& CustomAudioSettingsManager::GetAvSync() const
     return m_currentAvSync;
 }
 
+void CustomAudioSettingsManager::RefreshAvSync()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kAvSyncName,        m_currentAvSync );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// SubwooferGain setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current subwooferGain value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 //////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetSubwooferGain( const AudioSubwooferGain& subwooferGain )
 {
@@ -283,10 +319,17 @@ const AudioSubwooferGain& CustomAudioSettingsManager::GetSubwooferGain() const
     return m_currentSubwooferGain;
 }
 
+void CustomAudioSettingsManager::RefreshSubwooferGain()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kSubwooferGainName, m_currentSubwooferGain );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Mode setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current mode value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 //////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetMode( AudioMode& mode )
 {
@@ -314,10 +357,17 @@ const AudioMode& CustomAudioSettingsManager::GetMode() const
     return m_currentMode;
 }
 
+void CustomAudioSettingsManager::RefreshMode()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kModeName,          m_currentMode );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// ContentType setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current contentType value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 //////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetContentType( const AudioContentType& contentType )
 {
@@ -340,10 +390,17 @@ const AudioContentType& CustomAudioSettingsManager::GetContentType() const
     return m_currentContentType;
 }
 
+void CustomAudioSettingsManager::RefreshContentType()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kContentTypeName,   m_currentContentType );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// DualMonoSelect setting setter/getter
 ///     setter returns a AudioSettingResultCode::ResultCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current dualMonoSelect value
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 //////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetDualMonoSelect( const AudioDualMonoSelect& dualMonoSelect )
 {
@@ -382,10 +439,33 @@ const AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSelect() const
     return m_currentDualMonoSelect;
 }
 
+void CustomAudioSettingsManager::RefreshDualMonoSelect()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    //dualMonoSelect proto has different format than above AudioSettings, has to be specially handled
+    string persistLevel;
+    const Json::Value& dualMonoSelect = m_audioSettings["audioSettingValues"][kDualMonoSelectName];
+    if( dualMonoSelect["persistenceLevel"]["persistenceSession"] == true )
+    {
+        persistLevel = kPersistSession;
+    }
+    else
+    {
+        persistLevel = dualMonoSelect["persistenceLevel"]["currentPersistenceLevel"].asString();
+    }
+    const Json::Value& currValue = GetCurrentSettingValue( kDualMonoSelectName, persistLevel );
+    if( m_currentDualMonoSelect.value() != JsonToProtoField( m_currentDualMonoSelect.value(), currValue ) )
+    {
+        m_currentDualMonoSelect.set_value( JsonToProtoField( m_currentDualMonoSelect.value(), currValue ) );
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// EqSelect setting setter/getter
 ///     setter returns a boolean which indicates whether current EqSelect value is changed by setter
 ///     getter returns a protobuf of current EqSelect value
+///     update function updates the supportedMode list
+///     refresh function update protobuf with latest m_AudioSetting Json structure
 //////////////////////////////////////////////////////////////////////////////////////
 AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetEqSelect( const AudioEqSelect& eqSelect )
 {
@@ -490,33 +570,17 @@ void CustomAudioSettingsManager::UpdateAllProtos()
     BOSE_DEBUG( s_logger, __func__ );
     // Only required for contentItem sensitive audio settings
     // contentItem non-sensitive audio settings will only be set through setters, no other ways
-    UpdateCurrentProto( kBassName,          m_currentBass );
-    UpdateCurrentProto( kTrebleName,        m_currentTreble );
-    UpdateCurrentProto( kCenterName,        m_currentCenter );
-    UpdateCurrentProto( kSurroundName,      m_currentSurround );
-    UpdateCurrentProto( kSurroundDelayName, m_currentSurroundDelay );
-    UpdateCurrentProto( kGainOffsetName,    m_currentGainOffset );
-    UpdateCurrentProto( kAvSyncName,        m_currentAvSync );
-    UpdateCurrentProto( kSubwooferGainName, m_currentSubwooferGain );
-    UpdateCurrentProto( kModeName,          m_currentMode );
-    UpdateCurrentProto( kContentTypeName,   m_currentContentType );
-
-    //dualMonoSelect proto has different format than above, has to be specially handled
-    string persistLevel;
-    const Json::Value& dualMonoSelect = m_audioSettings["audioSettingValues"][kDualMonoSelectName];
-    if( dualMonoSelect["persistenceLevel"]["persistenceSession"] == true )
-    {
-        persistLevel = kPersistSession;
-    }
-    else
-    {
-        persistLevel = dualMonoSelect["persistenceLevel"]["currentPersistenceLevel"].asString();
-    }
-    const Json::Value& currValue = GetCurrentSettingValue( kDualMonoSelectName, persistLevel );
-    if( m_currentDualMonoSelect.value() != JsonToProtoField( m_currentDualMonoSelect.value(), currValue ) )
-    {
-        m_currentDualMonoSelect.set_value( JsonToProtoField( m_currentDualMonoSelect.value(), currValue ) );
-    }
+    RefreshBass();
+    RefreshTreble();
+    RefreshCenter();
+    RefreshSurround();
+    RefreshSurroundDelay();
+    RefreshGainOffset();
+    RefreshAvSync();
+    RefreshSubwooferGain();
+    RefreshMode();
+    RefreshContentType();
+    RefreshDualMonoSelect();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

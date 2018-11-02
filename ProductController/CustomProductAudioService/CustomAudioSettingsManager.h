@@ -13,6 +13,20 @@
 namespace ProductApp
 {
 
+constexpr char kBassName                [] = "audioBassLevel";
+constexpr char kTrebleName              [] = "audioTrebleLevel";
+constexpr char kCenterName              [] = "audioCenterLevel";
+constexpr char kSurroundName            [] = "audioSurroundLevel";
+constexpr char kSurroundDelayName       [] = "audioSurroundDelay";
+constexpr char kGainOffsetName          [] = "audioGainOffset";
+constexpr char kAvSyncName              [] = "audioAvSync";
+constexpr char kSubwooferGainName       [] = "audioSubwooferGain";
+constexpr char kModeName                [] = "audioMode";
+constexpr char kContentTypeName         [] = "audioContentType";
+constexpr char kDualMonoSelectName      [] = "audioDualMonoSelect";
+constexpr char kEqSelectName            [] = "audioEqSelect";
+constexpr char kSubwooferPolarityName   [] = "audioSubwooferPolarity";
+
 using std::string;
 
 class CustomAudioSettingsManager: public AudioSettingsManager
@@ -21,7 +35,6 @@ public:
     CustomAudioSettingsManager();
     AudioSettingResultCode::ResultCode_t SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
-
     void RefreshBass();
 
     AudioSettingResultCode::ResultCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
@@ -71,6 +84,8 @@ public:
     AudioSettingResultCode::ResultCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
     const ProductPb::AudioSubwooferPolarity& GetSubwooferPolarity() const;
 
+    void UpdateAllProtos() override;
+
 private:
     ////////////////////////////////////////////////////////////////////////////////////////
     /// Protos containing current audio settings values
@@ -92,7 +107,6 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to set contentItem sensitive audio settings
     //////////////////////////////////////////////////////////////////////////////////////
-    void UpdateAllProtos() override;
     void InitializeAudioSettings();
 };
 }// namespace ProductApp

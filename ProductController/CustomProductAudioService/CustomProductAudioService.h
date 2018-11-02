@@ -7,6 +7,7 @@
 
 #pragma once
 #include "ProductAudioService.h"
+#include "AudioSetting.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
@@ -75,6 +76,8 @@ private:
     void RebroadcastLatencyCallback( uint32_t latency );
     void SendMainStreamAudioSettingsEvent();
     void ThermalDataReceivedCb( IpcSystemTemperatureData_t data );
+
+    void SendAudioSettingsToDataCollection() const;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to prepare m_MainStreamAudioSettings for APProduct to use

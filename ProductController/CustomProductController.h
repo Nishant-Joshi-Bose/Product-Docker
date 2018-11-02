@@ -49,6 +49,7 @@
 #include "LightBarController.h"
 #include "SystemPowerProduct.pb.h"
 #include "DisplayController.pb.h"
+#include "SystemPower.pb.h"
 #include "SystemPowerMacro.pb.h"
 #include "ProductFrontDoorKeyInjectIF.h"
 #include "AccessorySoftwareInstallManager.h"
@@ -366,6 +367,14 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterFrontDoorEndPoints( );
+
+
+
+    void HandleGetTimeouts( Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
+                            Callback<FrontDoor::Error> errorCb );
+    void HandlePutTimeouts( SystemPowerPb::SystemPowerTimeouts req,
+                            Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
+                            Callback<FrontDoor::Error> errorCb );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

@@ -89,7 +89,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/MR1_2019/3.0.2-541+57a8ff6"
+    "selected_version": "Release/MR1_2019/3.0.4-548+637650b"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -189,11 +189,7 @@
   },
   {
     "name": "ProductControllerCommon",
-<<<<<<< Updated upstream
-    "selected_version": "master@6b8d2b89a50e7e9e944681a6c5e03a9e42203f3e"
-=======
     "selected_version": "master@8e267e684741cd38897ca26e9a5626de4083a409"
->>>>>>> Stashed changes
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
