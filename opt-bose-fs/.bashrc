@@ -12,6 +12,7 @@ if [ "${PS1-}" ]; then # interactive shells
     alias j=jobs
     alias d3="dmesg -n3" # reduce logging to console
     alias bs="tap-command product boot_status"
+    alias wifi="frontdoorutil /network/wifi/status | jq .body"
     function h { history "$@" | less; }
     function resize { eval $(command resize -u); }
     function ll { ls -la "$@" | less -ME; }
