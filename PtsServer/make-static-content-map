@@ -1,0 +1,71 @@
+#!/usr/bin/python2.7
+import sys
+import os
+import argparse
+
+# ----------------------------------------------------------------------------
+
+this_script = os.path.basename(sys.argv[0])
+
+parser = argparse.ArgumentParser(description="""
+
+Generate a static content map configuration file from a list of file names
+like .html and .png.  This map is for the --static command-line option of
+PtsServer.
+
+""", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("url_path_prefix",
+                    help="""
+
+URL paths starting with this prefix will map to files in the target directory.
+
+""")
+parser.add_argument("target",
+                    help="""
+
+The directory on the target system where the files will be found.
+
+""")
+parser.add_argument("files", nargs="+",
+                    help="""
+
+Add these files to the map.
+
+""")
+opts = parser.parse_args()
+del parser
+
+# ----------------------------------------------------------------------------
+
+mime_types = {                  # See `file -i`
+    ".gif": "image/gif",
+    ".html": "text/html",
+    ".ico": "image/x-icon",
+    ".jpg": "image/jpeg",
+    ".js": "application/javascript",
+    ".pdf": "application/pdf",
+    ".png": "image/png",
+    ".svg": "image/svg+xml",
+    ".txt": "text/plain",
+}
+
+trouble = False
+for name in sorted(opts.files):
+    if name.startswith("./"):
+        name = name[2:]
+
+    url_path = os.path.join(opts.url_path_prefix, name)
+    file_name = os.path.join(opts.target, name)
+    for ext, mtype in mime_types.iteritems():
+        if name.endswith(ext):
+            mime_type = mtype
+            break
+    else:
+        trouble = True
+        print >>sys.stderr, "{}: Unknown MIME type: {}".format(this_script, name)
+        continue
+
+    print url_path, file_name, mime_type
+
+if trouble:
+    sys.exit(1)

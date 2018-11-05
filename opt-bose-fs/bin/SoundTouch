@@ -8,12 +8,10 @@ tag="${0##*/}[$$]"              # for log messages
 localtime_symlink=/mnt/nv/localtime
 default_timezone=/usr/share/zoneinfo/UTC
 
-
 function log {
     local pri="$1"; shift
     logger -s -t "$tag" -p "$pri" "$*"
 }
-
 
 function reset_timezone_to_default {
     # if localtime symlink does not exist,
@@ -218,15 +216,7 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
     log info "Clearing product persistence"
     rm -rfv /mnt/nv/product-persistence/*
 
-    if ! [ -e /mnt/nv/update/install-status.dat ]; then
-        # Clear pending update status and packages- if any
-        # Checking for install-status.dat protect against clearing partial install
-        rm -rfv /mnt/nv/update*.dat
-        rm -rfv /opt/Bose/.swUpdateCache/ipks/*
-        rm -rfv /opt/Bose/.swUpdateCache/localupdate/*
-    else
-        log warning "Partially installed Software Update found. Will not clear Update during Factory Default"
-    fi
+    swup-factory-reset
 
     reset_timezone_to_default force
     sync

@@ -73,7 +73,8 @@ static std::unordered_map < ProductApp::KeyActionMode_t, CountDownInfo> m_countd
     {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::statusOnly ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
     {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::autoSwitching ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
     {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::wifiSetup ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
-    {( std::make_pair( ProductApp::Action::SYSTEM_INFO_COUNTDOWN,     0 ) ), {ButtonEventName::SYSTEM_INFO, 5}},
+    {( std::make_pair( ProductApp::Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( false ) ) ), {ButtonEventName::ENTER_SYSTEM_INFO, 5}},
+    {( std::make_pair( ProductApp::Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( true ) ) ), {ButtonEventName::EXIT_SYSTEM_INFO, 5}},
     {( std::make_pair( ProductApp::Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN,     0 ) ), {ButtonEventName::BLUETOOTH_CLEAR_PAIRING, 5}}
 };
 
@@ -107,7 +108,8 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 
     auto getMode = [this]( ProductApp::Action action )
     {
-        return ( ( ( action == Action::TOGGLE_WIFI_RADIO_COUNTDOWN ) )  ? ( ( uint32_t ) GetProductController().GetWiFiOperationalMode() ) : 0 ) ;
+        return ( ( ( action == Action::TOGGLE_WIFI_RADIO_COUNTDOWN ) )  ? ( ( uint32_t ) GetProductController().GetWiFiOperationalMode() ) :
+                 ( ( action == Action::SYSTEM_INFO_COUNTDOWN ) ) ? ( ( uint32_t ) GetProductController().IsSystemInfoModeOn() ) : 0 ) ;
     };
 
     switch( intent )

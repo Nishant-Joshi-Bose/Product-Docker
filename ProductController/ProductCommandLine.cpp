@@ -131,6 +131,8 @@ void ProductCommandLine::RegisterCliCmds()
                                                                           m_ProductController.GetTask(),
                                                                           callback,
                                                                           static_cast<int>( CLICmdsKeys::LCD ) );
+
+    m_ProductController.m_Clock.RegisterCliCmds( m_ProductController.GetCommonCliClientMT() ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
