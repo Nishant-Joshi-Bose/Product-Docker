@@ -146,6 +146,11 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         };
         auto setModeAction = [ this ]( ProductPb::AudioMode val )
         {
+            // /audio/mode's persistence level is default to "CONTENT_ITEM"
+            if( !val.has_persistence() )
+            {
+                val.set_persistence( kPersistContentItem );
+            }
             ResultCode_t error = m_audioSettingsMgr->SetMode( val );
             if( error == ResultCode_t::NO_ERROR )
             {

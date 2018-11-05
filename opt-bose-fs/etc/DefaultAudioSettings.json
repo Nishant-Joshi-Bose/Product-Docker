@@ -49,7 +49,7 @@
 		},
 		"audioMode": {		
 			"persistenceLevel": {
-				"currentPersistenceLevel": "GLOBAL",
+				"currentPersistenceLevel": "CONTENT_ITEM",
 				"persistenceSession": false
 			},
 			"values": {
