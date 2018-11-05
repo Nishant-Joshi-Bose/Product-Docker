@@ -8,6 +8,7 @@
 import sys
 import os
 import argparse
+import re
 import subprocess
 import shutil
 import logging
@@ -77,6 +78,19 @@ def move_files_from_tree(src, dst):
             move_files_from_tree(full_file_name, dst)
         else:
             logging.warning("file[%s] not moved to destination" % (full_file_name))
+
+def remove_multiple_files(dst, pattern):
+    '''
+    Removes multiple files which matches provided pattern from specified directory
+    : param dst: Directory from which to delete files
+    : param pattern: regex pattern to remove files from specified directory
+    : return: None
+    '''
+
+    for root, dirs, files in os.walk(dst):
+        for file in filter(lambda x: re.match(pattern, x), files):
+            print os.path.join(root, file)
+            os.remove(os.path.join(root, file))
 
 def os_arch():
     os_arch = '32'
@@ -185,6 +199,8 @@ def copy_files_to_stage():
     src = os.path.join(riviera_hsp_images_dir, "")
     try:
         copytree(src, dest, symlinks=True)
+        # remove update_*.zip files from product stage
+        remove_multiple_files(dest, "^update_.+\.zip$")
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -21, "Cannot add HSP Images to stage"
