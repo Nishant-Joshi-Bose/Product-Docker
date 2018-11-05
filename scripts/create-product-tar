@@ -35,7 +35,14 @@ def execute_cmd_on_host(cmd):
     logging.debug("\t\t[%s]" %out)
     return out
 
-def copytree(src, dst, symlinks=False, ignore=None):
+def copytree(src, dst, ignore_file_pattern=None):
+    '''
+    Copy file tree from src to dst
+    :param src: source directory
+    :param dst: destination directory
+    :param ignore_file_pattern: regex pattern, ignore files which matches the pattern provided
+    :return: None
+    '''
     logging.debug("\t\tsrc [%s]" %(src))
     logging.debug("\t\tdest [%s]" %(dst))
     if not os.path.exists(dst):
@@ -44,10 +51,12 @@ def copytree(src, dst, symlinks=False, ignore=None):
         s = os.path.join(src, item)
         d = os.path.join(dst, item)
         if os.path.isdir(s):
-            copytree(s, d, symlinks, ignore)
+            copytree(s, d, ignore_file_pattern)
         else:
-            if not os.path.exists(d) or os.stat(s).st_mtime - os.stat(d).st_mtime > 1:
-                shutil.copy2(s, d)
+            # if ignore_file_pattern provided, ignore files which matches the pattern provided
+            if not ignore_file_pattern or (ignore_file_pattern and not re.match(ignore_file_pattern, item)):
+                if not os.path.exists(d) or os.stat(s).st_mtime - os.stat(d).st_mtime > 1:
+                    shutil.copy2(s, d)
 
 def movetree(src, dst):
     logging.debug("\t\tsrc [%s]" %(src))
@@ -78,19 +87,6 @@ def move_files_from_tree(src, dst):
             move_files_from_tree(full_file_name, dst)
         else:
             logging.warning("file[%s] not moved to destination" % (full_file_name))
-
-def remove_multiple_files(dst, pattern):
-    '''
-    Removes multiple files which matches provided pattern from specified directory
-    : param dst: Directory from which to delete files
-    : param pattern: regex pattern to remove files from specified directory
-    : return: None
-    '''
-
-    for root, dirs, files in os.walk(dst):
-        for file in filter(lambda x: re.match(pattern, x), files):
-            print os.path.join(root, file)
-            os.remove(os.path.join(root, file))
 
 def os_arch():
     os_arch = '32'
@@ -186,7 +182,7 @@ def copy_signing_tools_to_stage():
         os.makedirs(dest)
     try:
         logging.info("Copying [%s] [%s]" %(src, dest))
-        copytree(src, dest, symlinks=True)
+        copytree(src, dest)
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -29, "Cannot copy fh_loader to hsp_tools"
@@ -198,9 +194,7 @@ def copy_files_to_stage():
     dest = stage_package_dir
     src = os.path.join(riviera_hsp_images_dir, "")
     try:
-        copytree(src, dest, symlinks=True)
-        # remove update_*.zip files from product stage
-        remove_multiple_files(dest, "^update_.+\.zip$")
+        copytree(src, dest, ignore_file_pattern="^update_.+\.zip$")
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -21, "Cannot add HSP Images to stage"
@@ -210,17 +204,17 @@ def copy_files_to_stage():
         src = os.path.join(swupdate_dir, "tools/FlashTools/lin")
         dest = os.path.join(stage_package_dir, "lin")
         logging.debug("\tAdding [%s] to stage" %(src))
-        copytree(src, dest, symlinks=True)
+        copytree(src, dest)
 
         src = os.path.join(swupdate_dir, "tools/FlashTools/win")
         dest = os.path.join(stage_package_dir, "win")
         logging.debug("\tAdding [%s] to stage" %(src))
-        copytree(src, dest, symlinks=True)
+        copytree(src, dest)
 
         src = os.path.join(swupdate_dir, "tools/FlashTools/mac")
         dest = os.path.join(stage_package_dir, "mac")
         logging.debug("\tAdding [%s] to stage" %(src))
-        copytree(src, dest, symlinks=True)
+        copytree(src, dest)
 
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
