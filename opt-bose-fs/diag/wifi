@@ -1,44 +1,52 @@
 #!/usr/bin/python2.7
 #
-# Invoked via pts-handler to display pages related to wifi diagnostics.
+# Invoked via pts-handler to show Wi-Fi status.
 #
-import os
 import sys
 import json
 import datetime
 import subprocess
 
-def output_wifi_diagnostics(): 
-    output = subprocess.Popen(["frontdoorutil","/network/wifi/status"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-
-    # HTTP Refresh header used to continuously poll data from the endpoint. Ensure users see up-to-date info.
-    print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\nRefresh: 1\r\n\r"""
-    print datetime.datetime.now()
-
-    try:
-        data = json.loads(output[0])
-        body = data['body']
-
-	# When Wi-Fi is not connected, body will be empty.
-	if len(body) == 0:
-	    print "Wi-Fi not connected!"
-	else:
-            print "\"frequencyKhz\": "+json.dumps(body['frequencyKhz'],indent=4);
-            print "\"signalDbm\": "+json.dumps(body['signalDbm'],indent=4);
-            print "\"ssid\": "+json.dumps(body['ssid'],indent=4);
-            print "\"state\": "+json.dumps(body['state'],indent=4);
-
-    # Catch error Parsing JSON, output error messages from utility.
-    except ValueError:
-        print output[1]
-        sys.exit()
-
-    # Catch Error finding specific fields, output whatever message we did receive.
-    except KeyError:
-        print output[0]
-        sys.exit()
-
 if len(sys.argv) != 1:
     raise Exception("wrong usage " + str(sys.argv))
 
-output_wifi_diagnostics()
+def dump(obj):
+    return json.dumps(obj, indent=2)
+
+out, err = subprocess.Popen(["frontdoorutil", "/network/wifi/status"],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE).communicate()
+
+print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+Refresh: 1\r
+\r"""
+
+print datetime.datetime.now()
+
+try:
+    rsp = json.loads(out)
+
+    status = rsp["header"]["status"]
+    if status != 200:
+        print "Status:", status
+
+    error = rsp.get("error")
+    if error:
+        print "Error:", dump(error)
+
+    body = rsp.get("body")
+    if not body:
+        print "Wi-Fi not connected."
+    else:
+        print dump(body)
+
+except Exception, exc:
+    print "exception:", repr(exc)
+    print
+    print out
+
+if err:
+    print "error:", err
