@@ -61,6 +61,7 @@ audiopath_dir=$(components get AudioPathService-qc8017_32 installed_location) ||
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
 web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
+wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
@@ -151,11 +152,18 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
+"$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
+
+"$wspace"/PtsServer/make-static-content-map / /opt/Bose/html $(
+  # index.html has special handling in the pts-handler script, so don't
+  # include it in the static content map.
+  cd "$opt_dir"/html && find ! -name index.html ! -name '*~' -type f
+) > "$opt_dir"/etc/static-content-map.txt || exit
 
 for i in "$stage"/Bose/{lib,bin}/*; do
     type=$(file --brief "$i") || exit
