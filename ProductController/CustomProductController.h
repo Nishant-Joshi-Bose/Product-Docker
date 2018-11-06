@@ -47,7 +47,7 @@
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
-#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
+#include "ProductControllerStatePlayingSelectedSetupExitingNetwork.h"
 #include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
@@ -338,7 +338,7 @@ private:
     ProductControllerStatePlayingSelectedSetupNetworkTransition     m_ProductControllerStatePlayingSelectedSetupNetworkTransition;
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
-    ProductControllerStatePlayingSelectedSetupExitingAP             m_ProductControllerStatePlayingSelectedSetupExitingAP;
+    ProductControllerStatePlayingSelectedSetupExitingNetwork        m_ProductControllerStatePlayingSelectedSetupExitingNetwork;
     ProductControllerStatePlayingSelectedStoppingStreams            m_ProductControllerStatePlayingSelectedStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
@@ -365,7 +365,7 @@ private:
     std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
     std::shared_ptr<DisplayController>                              m_displayController;
     IntentHandler                                                   m_IntentHandler;
-    Clock 	                                                    m_Clock;
+    Clock                                                           m_Clock;
     bool                                                            m_isBLEModuleReady  = false;
     bool                                                            m_isUiConnected = false;
 
