@@ -217,6 +217,12 @@ rm "$opt_dir/etc/product"
 cd "$opt_dir"/lib || exit
 rm -f *.a
 
+"$wspace"/PtsServer/make-static-content-map / /opt/Bose/html $(
+  # index.html has special handling in the pts-handler script, so don't
+  # include it in the static content map.
+  cd "$opt_dir"/html && find ! -name index.html ! -name '*~' -type f
+) > "$opt_dir"/etc/static-content-map.txt || exit
+
 PackageName=SoundTouch
 
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
