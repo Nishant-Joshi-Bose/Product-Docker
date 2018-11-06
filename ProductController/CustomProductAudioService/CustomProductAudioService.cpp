@@ -155,7 +155,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             {
                 val.set_persistence( kPersistContentItem );
             }
-            ResultCode_t error = m_audioSettingsMgr->SetMode( val );
+            AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetMode( val );
             if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
             {
                 m_mainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
