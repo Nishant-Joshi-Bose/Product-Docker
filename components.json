@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44108.3066708"
+    "selected_version": "Continuous/Castle-Fork/2018-11-05_1612"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -49,11 +49,11 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@f42d1b298129a1792011fb3af72a831a2b17063e"
+    "selected_version": "master@3bdc2dc1e5cee745cfced370201352045cd57195"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "master@42d683a01409593fa09d7cf4dd3e3541856f9e92"
+    "selected_version": "master@24b0ffaad4d130ae5a2df0e470868846c7888392"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/master/2.2.0-79+5e02f2f"
+    "selected_version": "Release/master/3.0.0-82+22dd5e0"
   },
   {
     "name": "SASS-qc8017_32",
@@ -225,11 +225,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/3.0.1-1084+ffd30b4"
+    "selected_version": "Release/master/3.0.1-1093+24cfed8"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44108.3066708"
+    "selected_version": "Continuous/Castle-Fork/2018-11-05_1612"
   },
   {
     "name": "svc-pts-log-decrypt",

@@ -107,6 +107,7 @@ AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetMode( const 
     BOSE_DEBUG( s_logger, __func__ );
     if( !mode.has_value() )
     {
+        BOSE_INFO( s_logger, "Mode doesn't contain any value (%s)", mode.DebugString().c_str() );
         return AudioSettingResultCode::ResultCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( mode.value(),
