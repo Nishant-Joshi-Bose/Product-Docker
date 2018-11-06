@@ -8,12 +8,10 @@ tag="${0##*/}[$$]"              # for log messages
 localtime_symlink=/mnt/nv/localtime
 default_timezone=/usr/share/zoneinfo/UTC
 
-
 function log {
     local pri="$1"; shift
     logger -s -t "$tag" -p "$pri" "$*"
 }
-
 
 function reset_timezone_to_default {
     # if localtime symlink does not exist,
