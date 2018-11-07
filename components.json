@@ -65,11 +65,11 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@f42d1b298129a1792011fb3af72a831a2b17063e"
+    "selected_version": "master@3bdc2dc1e5cee745cfced370201352045cd57195"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "master@42d683a01409593fa09d7cf4dd3e3541856f9e92"
+    "selected_version": "master@24b0ffaad4d130ae5a2df0e470868846c7888392"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/MR1_2019/3.0.2-541+57a8ff6"
+    "selected_version": "Release/MR1_2019/3.0.4-548+637650b"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -193,11 +193,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@6b8d2b89a50e7e9e944681a6c5e03a9e42203f3e"
+    "selected_version": "master@8e267e684741cd38897ca26e9a5626de4083a409"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-194+c5d9319"
+    "selected_version": "Release/master/2.2.0-214+c80d555"
   },
   {
     "name": "ProductUIAssets",
@@ -253,7 +253,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.43967.3043287"
+    "selected_version": "Release/Castle-Fork/2.2.0.44091.3063771"
   },
   {
     "name": "svc-pts-log-decrypt",
