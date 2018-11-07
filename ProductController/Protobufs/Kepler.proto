@@ -1,0 +1,98 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      Kepler.proto
+///
+/// @brief     This header file describes the protocol buffer messages associated with 
+///            the Kepler remote configuration.
+///
+/// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import "ProductSTS.proto";
+import "SystemSourcesProperties.proto";
+
+package KeplerPb;
+
+message KeplerConfig
+{
+    enum State
+    {
+        // we are powered off
+        STATE_OFF                   = 1;
+        STATE_SOUNDTOUCH            = 2;
+        STATE_TV                    = 3;
+        STATE_BLUETOOTH             = 4;
+        // configurable (SLOT) sources 
+        STATE_GAME                  = 5;
+        STATE_CBL_SAT               = 6;
+        STATE_BD_DVD                = 7;
+        // setup sources
+        STATE_ADAPTIQ               = 8;
+        STATE_ACCESSORY_PAIRING     = 9;
+        STATE_OOB                   = 10;
+        // we are a zone member
+        STATE_ZONE                  = 11;
+    }
+    
+    enum SourceKey
+    {
+        KEY_NONE                    = 1;
+        KEY_SOUNDTOUCH              = 2;
+        KEY_TV                      = 3;
+        KEY_BLUETOOTH               = 4;
+        KEY_GAME                    = 5;
+        KEY_CBL_SAT                 = 6;
+        KEY_BD_DVD                  = 7;
+    }
+
+    message ZoneConfiguration
+    {
+        // "zones" are lit unconditionally
+        // "zonesUnconfigured" are lit if the source isn't configured
+        // "zonesConfigured" are lit if the source is configured
+        repeated uint32                                     zonesUnconfigured   = 2;
+        repeated uint32                                     zonesConfigured     = 3;
+    }
+
+    message StateEntry 
+    {
+        optional State                                      state               = 1;         
+        optional ZoneConfiguration                          zoneConfig          = 2;
+
+        // sourceKey is lit as the active key if it is present
+        optional SourceKey                                  sourceKey           = 3;
+ 
+        // The following are used to match this entry to a CAPS source.
+        // Entries will match against sourceName and either sourceAccountName 
+        // or activationKey.  activationKey takes priority
+        // (SLOT sources should have an activationKey)
+        optional string                                     sourceName          = 4;
+        optional string                                     sourceAccountName   = 5;
+        optional SystemSourcesProperties.ACTIVATION_KEY_    activationKey       = 6;        
+    }
+
+    // A DeviceEntry specifies zone configuration for a device type 
+    // (used for SLOT_n sources)
+    message DeviceEntry
+    {
+        optional SystemSourcesProperties.DEVICE_TYPE_       deviceType          = 1;
+        optional ZoneConfiguration                          zoneConfig          = 2;
+    }
+
+    repeated StateEntry                                     states              = 1;
+    repeated DeviceEntry                                    devices             = 2;
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////

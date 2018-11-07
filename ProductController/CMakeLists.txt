@@ -42,6 +42,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
+  ${PROTO_CC_DEST}/Kepler.pb.cc
   AccessorySoftwareInstallManager.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
@@ -67,6 +68,7 @@ ADD_EXECUTABLE(Professor
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/SpeakerPairingManager.cpp
   IntentHandler/MuteManager.cpp
+  IntentHandler/RatingManager.cpp
   ProductAdaptIQManager.cpp
   ProductBLERemoteManager.cpp
   ProductCecHelper.cpp
