@@ -7,7 +7,7 @@ Eddie
 
 This repo contains the source code and tools specific to the Eddie product.
 
-Repo admins:
+Repo contacts for eddie/... branches:
 * [Jonathan Cooper](mailto:Jonathan_cooper@bose.com)
 * [Michael Cook](mailto:Michael_Cook@bose.com)
 * [Santosh Ghondi](mailto:Santosh_Gondi@bose.com)
@@ -164,39 +164,22 @@ work or it no longer boots, please use QFIL / VIP programming. Follow the
 instructions found on the wiki: [Recoverying A Bricked
 Eddie](https://wiki.bose.com/display/WSSW/Recovering+A+Bricked+Eddie).
 
-#### push-to-target Script
+#### Quick updates: upstage
 
-In case if you do not want to perform full software update and just copy
-binaries/libraries related to your module you can use push-to-target script
-under scripts directory.  Example usage:
-
-1. Let say you want to push Software update module binaries to your device [same way you can use -l for libraries and -c for config files]
+If you do not want to take the time to perform a full software update,
+you can use `./scripts/upstage` to copy only the files
+from product IPK staging area that have changed.
 
 ```shell session
-    push-to-target -b SoftwareUpdateService [-i ADB_device_id] [-r reset_device]
+$ make product-ipk && scripts/upstage
 ```
 
-2. Let say you want to push Software Update components(libraries, binaries and configuration files) to your device
-
+Or simply:
 ```shell session
-    push-to-target -m SoftwareUpdate [-i ADB_device_id] [-r reset_device]
+$ scripts/upstage -b
 ```
 
-3. Let say you want to push Software Update as well as NetManager components to your device
-
-```shell session
-    push-to-target -m SoftwareUpdate NetManager [-i ADB_device_id] [-r reset_device]
-```
-
-4. You can copy all the binaries built in you local system using
-
-```shell session
-    push-to-target -a [-i ADB_device_id] [-r reset_device]
-```
-
-Please note that this script will stop all services in your device so you will
-need to restart all services after copy or you can just use -r option to reset
-device after push operation.
+See `upstage --help` for more information.
 
 <a name="lpmblobs"/>
 
