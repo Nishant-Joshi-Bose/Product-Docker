@@ -779,6 +779,16 @@ void CustomProductController::Run( )
     m_ProductAdaptIQManager      ->Run( );
     m_ProductBLERemoteManager    ->Run( );
 
+
+    ///
+    /// Register as listener for system sources update
+    ///
+    auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
+    {
+        UpdatePowerMacro( );
+    };
+    GetSourceInfo().RegisterSourceListener( sourceInfoCb );
+
     ///
     /// Register FrontDoor EndPoints
     ///
@@ -2157,7 +2167,7 @@ void CustomProductController::HandlePutPowerMacro(
         if( req.powerontv() )
         {
             const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( not( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) )
+            if( not( tvSource and tvSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )   // source status field has to be AVAILABLE in order to be controlled
             {
                 error.set_message( "TV is not configured but power on tv requested!" );
                 success = false;
@@ -2167,7 +2177,7 @@ void CustomProductController::HandlePutPowerMacro(
         {
             const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
 
-            if( not( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() ) )
+            if( not( reqSource and reqSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )
             {
                 error.set_message( "Requested source is not configured or available!" );
                 success = false;
@@ -2179,7 +2189,7 @@ void CustomProductController::HandlePutPowerMacro(
     if( success )
     {
         m_powerMacro.CopyFrom( req );
-        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+        auto persistence = ProtoPersistenceFactory::Create( "PowerMacrhas_detailso.json", GetProductPersistenceDir( ) );
         try
         {
             persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
@@ -2233,6 +2243,48 @@ void CustomProductController::LoadPowerMacroFromPersistance( )
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::UpdatePowerMacro
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::UpdatePowerMacro( )
+{
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
+    bool isChanged = false;
+    // if devices enabled in power macro is removed from Control Integration
+    // power macro should be updated, and turn control off automatically
+    if( m_powerMacro.powerontv() )  // if "powerOnTv" field is not there, it will evaluate as false
+    {
+        const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( not( tvSource && tvSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+        {
+            m_powerMacro.clear_powerontv();
+            isChanged = true;
+        }
+    }
+    if( m_powerMacro.has_powerondevice() )
+    {
+        const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
+
+        if( not( reqSource and reqSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+        {
+            m_powerMacro.clear_powerondevice();
+            isChanged = true;
+        }
+    }
+    if( m_powerMacro.has_enabled() &&
+        !m_powerMacro.has_powerontv() &&
+        !m_powerMacro.has_powerondevice() )
+    {
+        m_powerMacro.clear_enabled();
+        isChanged = true;
+    }
+    if( isChanged )
+    {
+        GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API, m_powerMacro );
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
