@@ -733,8 +733,6 @@ void ProductCommandLine::HandleTestTransition( const std::list<std::string>& arg
     {
         const std::string& argumentString = argList.front( );
 
-        ProductMessage productMessage;
-
         if( argumentString == "on" )
         {
             response  = "Will halt the system in the PLAYABLE_TRANSITION_STANDBY state";
@@ -762,8 +760,6 @@ void ProductCommandLine::HandleTestTransition( const std::list<std::string>& arg
         {
             response = "Incorrect Usage: product test_transition [on | off]";
         }
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
 }
 
