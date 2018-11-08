@@ -241,6 +241,22 @@
         "timeOutList": []
     },
     {
+        "action": "ACTION_ASSERT_MUTE",
+        "commment": "assert mute",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_MUTE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_ASSERT_UNMUTE",
+        "commment": "assert unmute",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_UNMUTE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
+        "timeOutList": []
+    },
+    {
         "action": "ACTION_SOUNDTOUCH",
         "commment": "select soundtouch",
         "keyEvent": "PRESS",

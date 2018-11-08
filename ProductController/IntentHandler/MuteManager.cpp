@@ -105,6 +105,24 @@ bool MuteManager::Handle( KeyHandlerUtil::ActionType_t& action )
         return true;
     }
 
+    if( action == ( uint16_t )Action::ACTION_ASSERT_MUTE )
+    {
+        if( !m_muted )
+        {
+            ToggleMute( );
+        }
+        return true;
+    }
+
+    if( action == ( uint16_t )Action::ACTION_ASSERT_UNMUTE )
+    {
+        if( m_muted )
+        {
+            ToggleMute( );
+        }
+        return true;
+    }
+
     BOSE_ERROR( s_logger, "%s is in %s handling the unexpected action %u.", "MuteManager",
                 __func__, action );
     return true;

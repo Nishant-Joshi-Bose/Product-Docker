@@ -124,6 +124,8 @@ void IntentHandler::Initialize( )
     /// typically based on remote key actions.
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ] = muteManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_ASSERT_MUTE ] = muteManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_ASSERT_UNMUTE ] = muteManager;
 
     ///
     /// A map is created to associate the custom speaker pairing intent manager with pair speaker key
