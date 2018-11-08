@@ -43,11 +43,13 @@
 #include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfig.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSetupExitingNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupAbortingNetwork.h"
 #include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
@@ -334,11 +336,13 @@ private:
     ProductControllerStatePlayingSelectedSilentSourceValid          m_ProductControllerStatePlayingSelectedSilentSourceValid;
     ProductControllerStatePlayingSelectedNotSilent                  m_ProductControllerStatePlayingSelectedNotSilent;
     ProductControllerStatePlayingSelectedSetup                      m_ProductControllerStatePlayingSelectedSetup;
+    ProductControllerStatePlayingSelectedSetupNetworkConfig         m_ProductControllerStatePlayingSelectedSetupNetworkConfig;
     ProductControllerStatePlayingSelectedSetupNetwork               m_ProductControllerStatePlayingSelectedSetupNetwork;
     ProductControllerStatePlayingSelectedSetupNetworkTransition     m_ProductControllerStatePlayingSelectedSetupNetworkTransition;
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
     ProductControllerStatePlayingSelectedSetupExitingNetwork        m_ProductControllerStatePlayingSelectedSetupExitingNetwork;
+    ProductControllerStatePlayingSelectedSetupAbortingNetwork       m_ProductControllerStatePlayingSelectedSetupAbortingNetwork;
     ProductControllerStatePlayingSelectedStoppingStreams            m_ProductControllerStatePlayingSelectedStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;

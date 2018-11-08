@@ -64,11 +64,13 @@ CustomProductController::CustomProductController():
     m_ProductControllerStatePlayingSelectedSilentSourceValid( GetHsm(), &m_ProductControllerStatePlayingSelectedSilent, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_VALID ),
     m_ProductControllerStatePlayingSelectedNotSilent( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT ),
     m_ProductControllerStatePlayingSelectedSetup( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP ),
-    m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK ),
-    m_ProductControllerStatePlayingSelectedSetupNetworkTransition( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION ),
+    m_ProductControllerStatePlayingSelectedSetupNetworkConfig( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG ),
+    m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK ),
+    m_ProductControllerStatePlayingSelectedSetupNetworkTransition( GetHsm(), &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION ),
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
-    m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
-    m_ProductControllerStatePlayingSelectedSetupExitingNetwork( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP ),
+    m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
+    m_ProductControllerStatePlayingSelectedSetupExitingNetwork( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_NETWORK ),
+    m_ProductControllerStatePlayingSelectedSetupAbortingNetwork( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_ABORTING_NETWORK ),
     m_ProductControllerStatePlayingSelectedStoppingStreams( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS ),
     m_ProductControllerStatePlayableTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
     m_ProductControllerStatePlayableTransitionInternal( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL ),
@@ -202,6 +204,10 @@ void CustomProductController::InitializeHsm()
 
     GetHsm().AddState( NotifiedNames::SELECTED,
                        SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedSetupNetworkConfig );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_ON,
                        &m_ProductControllerStatePlayingSelectedSetupNetwork );
 
     GetHsm().AddState( NotifiedNames::SELECTED,
@@ -219,6 +225,10 @@ void CustomProductController::InitializeHsm()
     GetHsm().AddState( NotifiedNames::SELECTED,
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStatePlayingSelectedSetupExitingNetwork );
+
+    GetHsm().AddState( NotifiedNames::SELECTED,
+                       SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedSetupAbortingNetwork );
 
     GetHsm().AddState( Device_State_Not_Notify,
                        SystemPowerControl_State_Not_Notify,
