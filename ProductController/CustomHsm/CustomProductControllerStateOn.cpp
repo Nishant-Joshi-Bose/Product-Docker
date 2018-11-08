@@ -196,6 +196,24 @@ bool CustomProductControllerStateOn::HandleIntentMuteControl( KeyHandlerUtil::Ac
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandleIntentAudioModeToggle
+///
+/// @param  action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the action.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleIntentAudioModeToggle( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, intent );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

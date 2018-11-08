@@ -383,6 +383,14 @@
         "keyList": ["BOSE_USB_NET_SVR"],
         "origin": ["IR", "TAP", "RF", "NETWORK"],
         "timeOutList": []
+    },
+    {
+        "action": "ACTION_AUDIO_MODE_TOGGLE",
+        "comment": "toggle audio mode",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_SYSTEM"],
+        "origin": ["IR", "TAP", "CECC", "RF", "NETWORK"],
+        "timeOutList": []
     }
     ],
     "blastTable": [
