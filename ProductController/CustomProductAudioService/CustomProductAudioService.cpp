@@ -242,9 +242,14 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         bool isChanged = false;
         isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kBassName,   m_audioBassSetting ) ) ? true : isChanged;
         isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kTrebleName, m_audioTrebleSetting ) ) ? true : isChanged;
-        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kCenterName, m_audioCenterSetting ) ) ? true : isChanged;
-        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kModeName,   m_audioCenterSetting ) ) ? true : isChanged;
-
+        if( m_audioSettingsMgr->IsCenterLevelTestEnabled() ) // Future feature. Disabled Frontdoor by default.
+        {
+            isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kCenterName, m_audioCenterSetting ) ) ? true : isChanged;
+        }
+        if( m_audioSettingsMgr->IsModeTestEnabled() ) // Future feature. Disabled Frontdoor by default.
+        {
+            isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kModeName,   m_audioModeSetting ) ) ? true : isChanged;
+        }
         if( isChanged )
         {
             FetchLatestAudioSettings();
