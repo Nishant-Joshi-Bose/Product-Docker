@@ -34,12 +34,10 @@ namespace ProductApp
 CustomProductControllerStatePlayableTransitionNetworkStandby::
 CustomProductControllerStatePlayableTransitionNetworkStandby( ProductControllerHsm& hsm,
                                                               CHsmState* pSuperState,
-                                                              CustomProductController& productController,
                                                               Hsm::STATE stateId,
                                                               const std::string& name )
 
-    : ProductControllerStatePlayableTransitionNetworkStandby( hsm, pSuperState, stateId, name ),
-      m_ProductController( productController )
+    : ProductControllerStatePlayableTransitionNetworkStandby( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
@@ -53,7 +51,7 @@ bool CustomProductControllerStatePlayableTransitionNetworkStandby::HandleLPMPowe
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    if( !m_ProductController.GetHaltInPlayableTransitionNetworkStandby( ) )
+    if( !GetCustomProductController( ).GetHaltInPlayableTransitionNetworkStandby( ) )
     {
         ChangeState( PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
     }

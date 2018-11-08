@@ -28,7 +28,6 @@ namespace ProductApp
 ///            Forward Class Declarations
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class CustomProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief The CustomProductControllerStatePlayableTransitionNetworkStandby Class
@@ -39,7 +38,6 @@ public:
 
     CustomProductControllerStatePlayableTransitionNetworkStandby( ProductControllerHsm& hsm,
                                                                   CHsmState* pSuperState,
-                                                                  CustomProductController&    productController,
                                                                   Hsm::STATE stateId,
                                                                   const std::string& name
                                                                   = "PlayableTransitionNetworkStandby" );
@@ -50,9 +48,6 @@ public:
     }
 
     bool HandleLPMPowerStatusNetworkStandby( ) override;
-
-private:
-    CustomProductController&    m_ProductController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
