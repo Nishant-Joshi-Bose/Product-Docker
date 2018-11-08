@@ -18,11 +18,18 @@ eval $KWINJECT make jobs=8 hw_var=Alpha deploy || exit
 
 set +x
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then
+    # Get the version number for the recovery partition
+    ar x builds/Release/recovery.ipk data.tar.gz
+    recoveryVersion=$(tar -Oxf data.tar.gz ./Bose_minimal.tar.gz | tar -Ozxf - Bose/etc/BoseVersion.json | jq -r '.short + "-" + .build_number + "+" + .abbrev_commit')
+    rm -f data.tar.gz
+
     git clone git@github.com:BoseCorp/iot-profile-creator
-    for env in alpha latest integration stage prod; do
-        python2.7 iot-profile-creator/update_product_profile.py --p professor       --v $[Version] --e $env --s $(ectool getFullCredential IoT-Profile-Password --value password)
-        python2.7 iot-profile-creator/update_product_profile.py --p ginger-cheevers --v $[Version] --e $env --s $(ectool getFullCredential IoT-Profile-Password --value password)
-    done
+    set +x
+    iot-profile-creator/update_all_environments.sh $(echo $[ProjectName] | tr '[A-Z]' '[a-z]') $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $recoveryVersion 
+    if [ "$[ProjectName]" = "Professor" ]; then
+        # Need to create an additional entry for Ginger-Cheevers
+        iot-profile-creator/update_all_environments.sh ginger-cheevers $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $recoveryVersion
+    fi
 fi
 
 : success

@@ -283,32 +283,39 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     return true;
 }
 
-void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro )
+void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key )
 {
-    if( pwrMacro.enabled() )
+    if( key != LpmServiceMessages::BOSE_ASSERT_ON && key != LpmServiceMessages::BOSE_ASSERT_OFF )
     {
-        BOSE_INFO( s_logger, "Executing power macro : %s", pwrMacro.ShortDebugString().c_str() );
-        if( pwrMacro.powerontv() )
+        BOSE_ERROR( s_logger, "Unexpected key value %d", key );
+        return;
+    }
+
+    BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
+               pwrMacro.ShortDebugString().c_str() );
+
+    if( pwrMacro.powerontv() )
+    {
+        const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
         {
-            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
-            {
-                DeviceControllerClientMessages::BoseKeyReqMessage_t request;
-                request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( BOSE_ASSERT_ON );
-                request.set_codeset( tvSource->details( ).cicode( ) );
-            }
+            DeviceControllerClientMessages::BoseKeyReqMessage_t request;
+            request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+            request.set_keyval( key );
+            request.set_codeset( tvSource->details( ).cicode( ) );
+            m_deviceControllerPtr->SendKey( request );
         }
-        if( pwrMacro.has_powerondevice() )
+    }
+    if( pwrMacro.has_powerondevice() )
+    {
+        const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
+        if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
         {
-            const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
-            if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
-            {
-                DeviceControllerClientMessages::BoseKeyReqMessage_t request;
-                request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( BOSE_ASSERT_ON );
-                request.set_codeset( macroSrc->details( ).cicode( ) );
-            }
+            DeviceControllerClientMessages::BoseKeyReqMessage_t request;
+            request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+            request.set_keyval( key );
+            request.set_codeset( macroSrc->details( ).cicode( ) );
+            m_deviceControllerPtr->SendKey( request );
         }
     }
 }

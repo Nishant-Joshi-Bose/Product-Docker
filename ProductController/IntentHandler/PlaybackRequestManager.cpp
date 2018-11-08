@@ -113,7 +113,9 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_GAME )
     {
-        if( m_gameSourcePlaybackRq.has_sourceaccount() )
+        auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( m_gameSourcePlaybackRq.source(), m_gameSourcePlaybackRq.sourceaccount() );
+        auto available = sourceItem ? m_ProductController.GetSourceInfo( ).IsSourceAvailable( *sourceItem ) : false;
+        if( available )
         {
             playbackRequestData.set_sourceaccount( m_gameSourcePlaybackRq.sourceaccount( ) );
             playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
@@ -126,7 +128,9 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_DVD )
     {
-        if( m_dvdSourcePlaybackRq.has_sourceaccount() )
+        auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( m_dvdSourcePlaybackRq.source(), m_dvdSourcePlaybackRq.sourceaccount() );
+        auto available = sourceItem ? m_ProductController.GetSourceInfo( ).IsSourceAvailable( *sourceItem ) : false;
+        if( available )
         {
             playbackRequestData.set_sourceaccount( m_dvdSourcePlaybackRq.sourceaccount( ) );
             playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
@@ -139,7 +143,9 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_CABLESAT )
     {
-        if( m_cablesatSourcePlaybackRq.has_sourceaccount() )
+        auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( m_cablesatSourcePlaybackRq.source(), m_cablesatSourcePlaybackRq.sourceaccount() );
+        auto available = sourceItem ? m_ProductController.GetSourceInfo( ).IsSourceAvailable( *sourceItem ) : false;
+        if( available )
         {
             playbackRequestData.set_sourceaccount( m_cablesatSourcePlaybackRq.sourceaccount( ) );
             playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
