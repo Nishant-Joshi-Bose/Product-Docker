@@ -2189,7 +2189,7 @@ void CustomProductController::HandlePutPowerMacro(
     if( success )
     {
         m_powerMacro.CopyFrom( req );
-        auto persistence = ProtoPersistenceFactory::Create( "PowerMacrhas_detailso.json", GetProductPersistenceDir( ) );
+        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
         try
         {
             persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
