@@ -1598,6 +1598,126 @@
             "origin": 2, 
             "keyEvent": 0, 
             "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 1, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 1, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
             "commment": "select soundtouch", 
             "action": 115, 
             "keyList": [
