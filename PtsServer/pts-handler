@@ -109,15 +109,11 @@ if re.search("/AirPlay2/\w+", path):
    if i != -1:
        iFile = iFile[:i]
    image = os.readlink("/var/run/AirPlay2/" + iFile)
-#   http_ok("image/jpeg")
+   # Only jpeg and png images are supported.
    if image.endswith('.jpg'):
         http_ok("image/jpeg")
-   elif image.endswith('.gif'):
-        http_ok("image/gif")
    elif image.endswith('.png'):
         http_ok("image/png")
-   elif image.endswith('.bmp'):
-        http_ok("image/bmp")
    else:
         http_err(code="404 Not Found")
         sys.exit()
