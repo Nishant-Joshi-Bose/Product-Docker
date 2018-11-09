@@ -95,7 +95,6 @@ TARGET_LINK_LIBRARIES(ProductController
   PassportLan
   SASSClient
   StsAmazon
-  VoiceService
   ProtoToMarkup
   jsoncpp
   protobuf
