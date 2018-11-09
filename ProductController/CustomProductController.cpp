@@ -86,7 +86,6 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
-#include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQCancelling.h"
@@ -103,6 +102,7 @@
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "CustomProductControllerStateTop.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
 #include "ProductBLERemoteManager.h"
@@ -239,8 +239,8 @@ void CustomProductController::Run( )
     ///
     /// Top State
     ///
-    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
-                                                    nullptr );
+    auto* stateTop = new CustomProductControllerStateTop( GetHsm( ),
+                                                          nullptr );
     ///
     /// Booting State and Various System Level States
     ///

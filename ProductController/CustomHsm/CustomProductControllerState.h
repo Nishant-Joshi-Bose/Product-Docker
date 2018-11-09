@@ -481,6 +481,8 @@ protected:
     static void FrontDoorErrorCallback( const FrontDoor::Error & error );
 
     static ProductController* s_productController;
+
+    static  KeyHandlerUtil::ActionType_t s_ActionPendingFromTansition;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
