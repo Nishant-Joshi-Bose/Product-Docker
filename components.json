@@ -133,7 +133,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.2-512+4c423f2"
+    "selected_version": "Continuous/master/2.2.2-533+d859b56"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -257,7 +257,7 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.2-355+93718ce"
+    "selected_version": "Continuous/master/2.2.2-361+bba295f"
   },
   {
     "name": "Webkit",

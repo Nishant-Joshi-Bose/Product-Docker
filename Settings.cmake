@@ -150,7 +150,8 @@ INCLUDE_DIRECTORIES(
   ${BLESETUP_DIR}/include
   ${BLUETOOTH_DIR}/include
   ${PRODUCTCONTROLLERCOMMONPROTO_DIR}/include
-  ${VPACONTROLLER_DIR}/include
+  ${VPACONTROLLER_DIR}/include/VoiceServiceClient
+  ${VPACONTROLLER_DIR}/include/VPAControllerClient
 )
 
 LINK_DIRECTORIES(
