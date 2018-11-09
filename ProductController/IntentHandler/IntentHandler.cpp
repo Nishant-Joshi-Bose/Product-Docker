@@ -162,8 +162,8 @@ void IntentHandler::Initialize( )
     m_IntentManagerMap[( uint16_t )Action::ACTION_THUMB_DOWN ]  = ratingManager;
 
     ///
-    /// A map is created to associate the custom audio mode intent manager with prooduct specific
-    /// audio settings key action, in this case a universal remote key toggling audio mode.
+    /// A map is created to associate the custom audio mode intent manager with a key action
+    /// which toggles the audio mode.
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_AUDIO_MODE_TOGGLE ] = audioModeManager;
 }

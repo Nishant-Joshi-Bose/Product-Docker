@@ -2370,6 +2370,16 @@
         }, 
         {
             "comment": "toggle audio mode", 
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
             "origin": 3, 
             "keyEvent": 0, 
             "timeOutList": [], 

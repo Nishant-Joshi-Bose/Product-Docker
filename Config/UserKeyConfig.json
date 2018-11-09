@@ -389,7 +389,7 @@
         "comment": "toggle audio mode",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_SYSTEM"],
-        "origin": ["IR", "TAP", "CECC", "RF", "NETWORK"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     }
     ],

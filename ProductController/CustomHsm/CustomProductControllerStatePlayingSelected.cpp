@@ -16,6 +16,7 @@
 #include "ProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "ProductSTS.pb.h"
+#include "CustomProductController.h"
 #include "SHELBY_SOURCE.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +83,19 @@ void CustomProductControllerStatePlayingSelected::GoToNextState( )
         }
     }
     ProductControllerStatePlayingSelected::GoToNextState( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Used for handling the Audio Mode Toggle intent - which will only be considered when the
+///         system is playing from a valid source.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingSelected::HandleIntentAudioModeToggle( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, intent );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
