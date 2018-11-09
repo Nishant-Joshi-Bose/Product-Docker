@@ -232,6 +232,7 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | usb | /diag | Quality Audit |
 | any | /logread.txt | A snapshot of the system log ring buffer * |
 | any | /logread.txt.gz | Same as /logread.txt but compressed * |
+| any | /lpmlogread.txt | Live feed of all LPM logs *** |
 | any | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
 | any | /pts.dat | Same as /pts.txt but encrypted ** |
 | any | /network.txt | Various network and WAN information * |
@@ -251,6 +252,8 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 \* Only if the unit is in development mode
 
 \** See [decrypt-logs](https://github.com/BoseCorp/CastleTools/blob/master/bin/decrypt-logs) to decrypt
+
+\*** See [Riviera LPM Logging](https://wiki.bose.com/display/BC/Riviera+LPM+Logging) for more information on retrieving LPM logs.
 
 The USB IP address is 203.0.113.1.
 For example: http://203.0.113.1/pts.txt
@@ -313,7 +316,11 @@ happens when development mode is enabled.
 ### Useful Links
 
 [Professor/Ginger-Cheevers Slack channel](https://profgc.slack.com/)
+
 [Professor Wiki](https://wiki.bose.com/display/A4V/Professor)
+
 [How-to & Board Setups](https://wiki.bose.com/pages/viewpage.action?pageId=33361043)
+
 [How to recover Professor with VIP](https://wiki.bose.com/display/A4V/How+to+recover+Professor+with+VIP)
+
 [How to tapload Professor / Ginger-Cheevers](https://wiki.bose.com/pages/viewpage.action?pageId=42180408)
