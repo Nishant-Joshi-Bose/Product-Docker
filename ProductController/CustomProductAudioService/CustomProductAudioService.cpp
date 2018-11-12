@@ -551,6 +551,10 @@ void CustomProductAudioService::ToggleAudioMode()
         mode.set_value( "DIALOG" );
         m_AudioSettingsMgr->SetMode( mode );
     }
+    else
+    {
+        BOSE_ERROR( s_logger, "Unexpected AudioMode received in %s", __func__ );
+    }
 
     m_AudioModeSetting->SendFrontDoorNotification();
     m_AudioModeSetting->SendToDataCollection();
