@@ -65,7 +65,6 @@
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
-#include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlaying.h"
 #include "ProductControllerStatePlayingSelected.h"
@@ -87,7 +86,6 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
-#include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQCancelling.h"
@@ -98,11 +96,13 @@
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
+#include "CustomProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingDeselected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "CustomProductControllerStateTop.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
 #include "ProductBLERemoteManager.h"
@@ -239,8 +239,8 @@ void CustomProductController::Run( )
     ///
     /// Top State
     ///
-    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
-                                                    nullptr );
+    auto* stateTop = new CustomProductControllerStateTop( GetHsm( ),
+                                                          nullptr );
     ///
     /// Booting State and Various System Level States
     ///
@@ -317,10 +317,10 @@ void CustomProductController::Run( )
       statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
 
-    auto* statePlayableTransitionNetworkStandby = new ProductControllerStatePlayableTransitionNetworkStandby
+    auto* statePlayableTransitionNetworkStandby = new CustomProductControllerStatePlayableTransitionNetworkStandby
     ( GetHsm( ),
       statePlayableTransitionInternal,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
 
     ///
     /// Top On State
