@@ -17,6 +17,14 @@
         "timeOutList": []
     },
     {
+        "action": "POWER_ON",
+        "comment": "power on",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_ON"],
+        "origin": ["TAP", "CEC"],
+        "timeOutList": []
+    },
+    {
         "action": "CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST",
         "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast",
         "keyEvent": "RELEASE",

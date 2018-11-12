@@ -71,6 +71,26 @@
             ]
         }, 
         {
+            "comment": "power on", 
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 10, 
+            "keyList": [
+                140
+            ]
+        }, 
+        {
+            "comment": "power on", 
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 10, 
+            "keyList": [
+                140
+            ]
+        }, 
+        {
             "origin": 2, 
             "keyEvent": 1, 
             "timeOutList": [

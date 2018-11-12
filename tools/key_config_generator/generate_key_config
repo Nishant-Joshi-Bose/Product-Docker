@@ -8,7 +8,7 @@ keygen_args="$@"
 # Enable the environment and install any python packages required.
 setup_python () {
 	mkdir -p $virtual_env_dir || exit
-	virtualenv-2.7 -p /usr/bin/python2.7 $virtual_env_dir || exit
+	virtualenv -p /usr/bin/python2.7 $virtual_env_dir || exit
 	source $virtual_env_dir/bin/activate || exit
 	pip install -r requirements.txt || exit
 }

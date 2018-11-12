@@ -24,6 +24,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "CustomProductControllerStatePlayable.h"
+#include "CustomProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -91,6 +92,12 @@ bool CustomProductControllerStatePlayable::HandleIntentMuteControl( KeyHandlerUt
     ///
     /// The intent is ignored in this custom state.
     ///
+    return true;
+}
+
+bool CustomProductControllerStatePlayable::HandleIntentPowerOn( )
+{
+    GetCustomProductController( ).AttemptToStartPlayback( );
     return true;
 }
 

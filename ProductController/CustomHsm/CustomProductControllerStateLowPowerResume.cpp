@@ -26,6 +26,7 @@
 #include "Intents.h"
 #include "IntentHandler.h"
 #include "CustomProductControllerStateLowPowerResume.h"
+#include "CustomProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -90,6 +91,12 @@ bool CustomProductControllerStateLowPowerResume::HandleIntentPlaySoundTouchSourc
 {
     BOSE_INFO( s_logger, "The %s state is caching play soundtouch source", GetName( ).c_str( ) );
     s_cachedAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );
+    return true;
+}
+
+bool CustomProductControllerStateLowPowerResume::HandleIntentPowerOn( )
+{
+    GetCustomProductController( ).AttemptToStartPlayback( );
     return true;
 }
 

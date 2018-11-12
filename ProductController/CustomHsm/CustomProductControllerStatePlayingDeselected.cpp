@@ -12,6 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "CustomProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStates.h"
+#include "CustomProductController.h"
 #include "Utilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +73,13 @@ bool CustomProductControllerStatePlayingDeselected::HandleIntentMuteControl( Key
     ///
     /// The intent is ignored in this custom state.
     ///
+    return true;
+}
+
+
+bool CustomProductControllerStatePlayingDeselected::HandleIntentPowerOn( )
+{
+    GetCustomProductController( ).AttemptToStartPlayback( );
     return true;
 }
 
