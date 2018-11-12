@@ -137,6 +137,11 @@ public:
         return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_UP ) ||
                ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_DOWN );
     }
+
+    static bool IsIntentAudioModeToggle( KeyHandlerUtil::ActionType_t argument )
+    {
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_AUDIO_MODE_TOGGLE );
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

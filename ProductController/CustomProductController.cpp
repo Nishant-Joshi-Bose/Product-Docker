@@ -1663,6 +1663,11 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentSetupBLERemote );
         }
+        else if( GetIntentHandler( ).IsIntentAudioModeToggle( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentAudioModeToggle,
+                                                              message.action( ) );
+        }
         else
         {
             BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", message.action( ) );
