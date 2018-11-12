@@ -553,7 +553,7 @@ void CustomProductAudioService::ToggleAudioMode()
     }
     else
     {
-        BOSE_ERROR( s_logger, "Unexpected AudioMode received in %s", __func__ );
+        BOSE_ERROR( s_logger, "Unexpected AudioMode %s found in %s", mode.value().c_str(), __func__ );
     }
 
     m_AudioModeSetting->SendFrontDoorNotification();
