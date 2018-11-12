@@ -202,15 +202,15 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_ON,
                        &m_ProductControllerStatePlayingSelectedSetup );
 
-    GetHsm().AddState( NotifiedNames::SELECTED,
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
                        SystemPowerControl_State_ON,
                        &m_ProductControllerStatePlayingSelectedSetupNetworkConfig );
 
-    GetHsm().AddState( NotifiedNames::SELECTED,
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
                        SystemPowerControl_State_ON,
                        &m_ProductControllerStatePlayingSelectedSetupNetwork );
 
-    GetHsm().AddState( NotifiedNames::SELECTED,
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStatePlayingSelectedSetupNetworkTransition );
 
@@ -222,11 +222,11 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStatePlayingSelectedSetupExiting );
 
-    GetHsm().AddState( NotifiedNames::SELECTED,
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStatePlayingSelectedSetupExitingNetwork );
 
-    GetHsm().AddState( NotifiedNames::SELECTED,
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
                        SystemPowerControl_State_ON,
                        &m_ProductControllerStatePlayingSelectedSetupAbortingNetwork );
 
