@@ -203,8 +203,7 @@ mkdir -p "$audiopath_dir/ginger-cheevers/lib"
 "$audiopathproduct_dir/stage" --product=professor "$opt_dir" || exit
 
 #copy Vfe binary only
-"$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --product=professor || exit
-"$audiopathproduct64_dir/stage" "$opt_dir" --only-vfe --product=professor || exit
+"$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary || exit
 
 mkdir -p "$opt_dir/bin/professor" || exit
 mkdir -p "$opt_dir/etc/professor" || exit

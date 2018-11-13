@@ -65,7 +65,6 @@
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
-#include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlaying.h"
 #include "ProductControllerStatePlayingSelected.h"
@@ -87,7 +86,6 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
-#include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQCancelling.h"
@@ -98,11 +96,13 @@
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
+#include "CustomProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingDeselected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "CustomProductControllerStateTop.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
 #include "ProductBLERemoteManager.h"
@@ -239,8 +239,8 @@ void CustomProductController::Run( )
     ///
     /// Top State
     ///
-    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
-                                                    nullptr );
+    auto* stateTop = new CustomProductControllerStateTop( GetHsm( ),
+                                                          nullptr );
     ///
     /// Booting State and Various System Level States
     ///
@@ -317,10 +317,10 @@ void CustomProductController::Run( )
       statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
 
-    auto* statePlayableTransitionNetworkStandby = new ProductControllerStatePlayableTransitionNetworkStandby
+    auto* statePlayableTransitionNetworkStandby = new CustomProductControllerStatePlayableTransitionNetworkStandby
     ( GetHsm( ),
       statePlayableTransitionInternal,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
 
     ///
     /// Top On State
@@ -778,6 +778,16 @@ void CustomProductController::Run( )
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
     m_ProductBLERemoteManager    ->Run( );
+
+
+    ///
+    /// Register as listener for system sources update
+    ///
+    auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
+    {
+        UpdatePowerMacro( );
+    };
+    GetSourceInfo().RegisterSourceListener( sourceInfoCb );
 
     ///
     /// Register FrontDoor EndPoints
@@ -1653,6 +1663,11 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentSetupBLERemote );
         }
+        else if( GetIntentHandler( ).IsIntentAudioModeToggle( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentAudioModeToggle,
+                                                              message.action( ) );
+        }
         else
         {
             BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", message.action( ) );
@@ -2090,7 +2105,7 @@ void CustomProductController::AttemptToStartPlayback()
         pwrMacroContentItem.set_sourceaccount( ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
 
         SendPlaybackRequestFromContentItem( pwrMacroContentItem );
-        m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro );
+        m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro, LpmServiceMessages::BOSE_ASSERT_ON );
 
         BOSE_INFO( s_logger, "An attempt to play the power macro content item %s has been made.",
                    pwrMacroContentItem.DebugString().c_str( ) );
@@ -2098,6 +2113,19 @@ void CustomProductController::AttemptToStartPlayback()
     else
     {
         ProductController::AttemptToStartPlayback();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::PowerMacroOff
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::PowerMacroOff()
+{
+    if( m_powerMacro.enabled() )
+    {
+        m_ProductKeyInputManager->ExecutePowerMacro( m_powerMacro, LpmServiceMessages::BOSE_ASSERT_OFF );
     }
 }
 
@@ -2144,7 +2172,7 @@ void CustomProductController::HandlePutPowerMacro(
         if( req.powerontv() )
         {
             const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( not( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) )
+            if( not( tvSource and tvSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )   // source status field has to be AVAILABLE in order to be controlled
             {
                 error.set_message( "TV is not configured but power on tv requested!" );
                 success = false;
@@ -2154,7 +2182,7 @@ void CustomProductController::HandlePutPowerMacro(
         {
             const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
 
-            if( not( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() ) )
+            if( not( reqSource and reqSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )
             {
                 error.set_message( "Requested source is not configured or available!" );
                 success = false;
@@ -2220,6 +2248,48 @@ void CustomProductController::LoadPowerMacroFromPersistance( )
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::UpdatePowerMacro
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::UpdatePowerMacro( )
+{
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
+    bool isChanged = false;
+    // if devices enabled in power macro is removed from Control Integration
+    // power macro should be updated, and turn control off automatically
+    if( m_powerMacro.powerontv() )  // if "powerOnTv" field is not there, it will evaluate as false
+    {
+        const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( not( tvSource && tvSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+        {
+            m_powerMacro.clear_powerontv();
+            isChanged = true;
+        }
+    }
+    if( m_powerMacro.has_powerondevice() )
+    {
+        const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
+
+        if( not( reqSource and reqSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+        {
+            m_powerMacro.clear_powerondevice();
+            isChanged = true;
+        }
+    }
+    if( m_powerMacro.has_enabled() &&
+        !m_powerMacro.has_powerontv() &&
+        !m_powerMacro.has_powerondevice() )
+    {
+        m_powerMacro.clear_enabled();
+        isChanged = true;
+    }
+    if( isChanged )
+    {
+        GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API, m_powerMacro );
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

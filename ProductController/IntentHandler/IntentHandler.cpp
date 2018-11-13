@@ -47,6 +47,7 @@
 #include "SpeakerPairingManager.h"
 #include "PlaybackRequestManager.h"
 #include "RatingManager.h"
+#include "AudioModeManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -118,12 +119,20 @@ void IntentHandler::Initialize( )
                                          GetFrontDoorClient( ),
                                          GetProductController( ) );
 
+    IntentManagerPtr_t audioModeManager = std::make_shared< AudioModeManager >
+                                          ( GetTask( ),
+                                            GetCli( ),
+                                            GetFrontDoorClient( ),
+                                            GetProductController( ) );
+
     ///
     /// A map is created to associate the custom volume and mute control intent manager with volume
     /// and mute key actions. Note that these actions are product specific,
     /// typically based on remote key actions.
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ] = muteManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_ASSERT_MUTE ] = muteManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_ASSERT_UNMUTE ] = muteManager;
 
     ///
     /// A map is created to associate the custom speaker pairing intent manager with pair speaker key
@@ -151,6 +160,12 @@ void IntentHandler::Initialize( )
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_THUMB_UP ]    = ratingManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_THUMB_DOWN ]  = ratingManager;
+
+    ///
+    /// A map is created to associate the custom audio mode intent manager with a key action
+    /// which toggles the audio mode.
+    ///
+    m_IntentManagerMap[( uint16_t )Action::ACTION_AUDIO_MODE_TOGGLE ] = audioModeManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

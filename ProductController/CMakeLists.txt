@@ -42,6 +42,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
+  ${PROTO_CC_DEST}/Kepler.pb.cc
   AccessorySoftwareInstallManager.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
@@ -58,16 +59,19 @@ ADD_EXECUTABLE(Professor
   CustomHsm/CustomProductControllerStateOn.cpp
   CustomHsm/CustomProductControllerStateLowPowerResume.cpp
   CustomHsm/CustomProductControllerStatePlayable.cpp
+  CustomHsm/CustomProductControllerStatePlayableTransitionNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlaying.cpp
   CustomHsm/CustomProductControllerStatePlayingDeselected.cpp
   CustomHsm/CustomProductControllerStatePlayingSelected.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
+  CustomHsm/CustomProductControllerStateTop.cpp
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/SpeakerPairingManager.cpp
   IntentHandler/MuteManager.cpp
   IntentHandler/RatingManager.cpp
+  IntentHandler/AudioModeManager.cpp
   ProductAdaptIQManager.cpp
   ProductBLERemoteManager.cpp
   ProductCecHelper.cpp

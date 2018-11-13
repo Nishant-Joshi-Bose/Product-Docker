@@ -100,6 +100,8 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
 
     // Limit the volume to threshold when exiting PLAYING, so UI can show the value expected when we resume playing
     SetVolumeToThresholdLimit( );
+
+    GetCustomProductController( ).PowerMacroOff();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
