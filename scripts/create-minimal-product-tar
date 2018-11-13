@@ -84,10 +84,18 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/et
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
 components record "$stage" || exit
+ 
+# Generate version files.
+version_files_dir=$wspace/builds/$cfg/qc8017_32
+
+# Add a ParentBoseVersion.json file that contains the version of the release
+# that includes this minimal image.
+echo "Creating ParentBoseVersion.json"
+gen-version-files $wspace/version.txt $opt_dir/etc
+mv $opt_dir/etc/BoseVersion.json $opt_dir/etc/ParentBoseVersion.json
 
 # Generate a version.txt file hardcoded to 0.1.0 to force
 # a system running minimal image to download of all components.
-version_files_dir=$wspace/builds/$cfg/qc8017_32
 echo "0.1.0" > $version_files_dir/version.txt
 gen-version-files $version_files_dir/version.txt $opt_dir/etc
 rm $version_files_dir/version.txt
