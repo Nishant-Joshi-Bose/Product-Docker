@@ -49,7 +49,8 @@ constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConf
 /// @param CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController )
+CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController,
+                                                            const A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr& QSSClient )
 
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),
@@ -58,6 +59,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController ),
+      m_QSSClient( QSSClient ),
       m_TimeOfChordRelease( 0 ),
       m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
@@ -95,15 +97,12 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductKeyInputManager::InitializeQuickSetService( )
 {
-    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "CustomProductKeyInputManager",
-                                                           m_ProductController.GetTask( ) );
-
-    if( not m_QSSClient )
+    bool loadResult = m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    if( not loadResult )
     {
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
 
-    m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
     m_QSSClient->Connect( [ ]( bool connected ) { } );
 }
 
