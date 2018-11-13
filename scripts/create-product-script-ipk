@@ -65,9 +65,7 @@ product_script_dir=$(components get ProductScript-qc8017_32 installed_location) 
 product_script_ver=$(components get ProductScript-qc8017_32 selected_version) || exit
 
 # copy minimal image tar to /opt/Bose
-"$product_script_dir/stage" "$opt_dir"
-cp "$product_script_dir/etc/product"  "$opt_dir/etc/product" || exit
-cp "$product_script_dir/version.txt"  "$opt_dir/etc/product-script-version.txt" || exit
+"$product_script_dir/stage" "$opt_dir" || exit
 
 PackageName=product-script
 package_version=${product_script_ver##*/}
