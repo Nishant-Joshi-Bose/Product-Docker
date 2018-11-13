@@ -556,7 +556,6 @@ void ProductBLERemoteManager::UpdateBacklight( )
     if( m_sourceSelectAllowed )
     {
         GetSourceKeysBacklight( leds );
-    }
 
     // Determine backlight and active source key
     auto config = DetermineKeplerState( );
@@ -594,6 +593,11 @@ void ProductBLERemoteManager::UpdateBacklight( )
     for( const auto& z : zones )
     {
         SetZone( leds, z, LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        }
+    }
+    else
+    {
+        leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
     }
 
     m_RCSClient->Led_Set(
