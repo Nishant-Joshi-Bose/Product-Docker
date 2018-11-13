@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/AVS-VPA/2018-11-09_1100"
+    "selected_version": "Continuous/AVS-VPA/2018-11-13_1608"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.2-545+35a04d5"
+    "selected_version": "Continuous/master/2.2.2-556+95e2e6e"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -257,7 +257,7 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.2-367+c28e140"
+    "selected_version": "Continuous/master/2.2.2-380+a5f3276"
   },
   {
     "name": "Webkit",
