@@ -27,13 +27,12 @@ Repo contacts for taylor/... branches:
 
 ### Getting Started
 
-Clone CastleTools.git and CastleProducts.git:
+Clone CastleTools and Taylor:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone git@github.com:BoseCorp/CastleProducts.git
-$ git checkout taylor/master
+$ git clone --branch eddie/master git@github.com:BoseCorp/CastleProducts.git Eddie
 ```
 
 Make sure your Taylor unit is accessible via adb.
@@ -266,6 +265,8 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | any | /logread.txt.gz | Same as /logread.txt but compressed * |
 | any | /pts.txt | Various Linux and system status information (e.g., ifconfig) * |
 | any | /pts.dat | Same as /pts.txt but encrypted ** |
+| any | /network.txt | Various network and WAN information * |
+| any | /network.dat | Same as /network.txt but encrypted ** |
 | any | /logread.dat | Same as /logread.txt but encrypted ** |
 | usb | /reflash | Force the unit into reflash mode (QFIL) |
 | usb | /bose-version | /opt/Bose/etc/BoseVersion.json |
