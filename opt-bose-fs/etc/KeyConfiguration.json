@@ -2377,6 +2377,56 @@
             "keyList": [
                 31
             ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
         }
     ]
 }

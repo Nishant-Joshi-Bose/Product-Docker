@@ -292,6 +292,11 @@ public:
 
     void PowerMacroOff();
 
+    bool GetHaltInPlayableTransitionNetworkStandby( ) const
+    {
+        return m_haltInPlayableTransitionNetworkStandby;
+    }
+
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -507,6 +512,7 @@ private:
     void UpdatePowerMacro( );
     void LoadPowerMacroFromPersistance( );
 
+    bool m_haltInPlayableTransitionNetworkStandby = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -528,6 +528,38 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductAudioService::ToggleAudioMode
+///
+/// @brief Toggles audio mode between DIALOG and NORMAL, updates FrontDoor and DataCollection accordingly.
+///
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::ToggleAudioMode()
+{
+    AudioMode mode = m_AudioSettingsMgr->GetMode();
+
+    if( mode.value() == "DIALOG" )
+    {
+        BOSE_INFO( s_logger, "Toggling AudioMode: Currently DIALOG" );
+        mode.set_value( "NORMAL" );
+        m_AudioSettingsMgr->SetMode( mode );
+    }
+    else if( mode.value() == "NORMAL" )
+    {
+        BOSE_INFO( s_logger, "Toggling AudioMode: Currently NORMAL" );
+        mode.set_value( "DIALOG" );
+        m_AudioSettingsMgr->SetMode( mode );
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Unexpected AudioMode %s found in %s", mode.value().c_str(), __func__ );
+    }
+
+    m_AudioModeSetting->SendFrontDoorNotification();
+    m_AudioModeSetting->SendToDataCollection();
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Helper functions to convert audio setting values from string format to enumuration
