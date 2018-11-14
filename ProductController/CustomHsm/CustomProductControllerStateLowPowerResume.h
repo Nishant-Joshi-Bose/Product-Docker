@@ -71,7 +71,6 @@ public:
 
     bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent ) override;
     bool HandleIntentPlaySoundTouchSource( )                                  override;
-    bool HandleIntentPowerOn( )                                               override;
 
 };
 
