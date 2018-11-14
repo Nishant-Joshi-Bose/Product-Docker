@@ -7,7 +7,7 @@ Taylor
 
 This repo contains the source code and tools specific to the Taylor product.
 
-Repo contacts for eddie/... branches:
+Repo contacts for taylor/... branches:
 * [Jonathan Cooper](mailto:Jonathan_cooper@bose.com)
 * [Michael Cook](mailto:Michael_Cook@bose.com)
 * [Alfred von Campe](mailto:Alfred_vonCampe@bose.com)
