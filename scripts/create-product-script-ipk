@@ -61,14 +61,14 @@ echo "Stage directory $stage"
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 
-product_script_dir=$(components get ProductScript-qc8017_32 installed_location) || exit
-product_script_ver=$(components get ProductScript-qc8017_32 selected_version) || exit
+product_script_dir=$(components get product-start-script installed_location) || exit
+version_file="$product_script_dir"/Riviera/Startup/version.txt
 
 # copy minimal image tar to /opt/Bose
-"$product_script_dir/stage" "$opt_dir" || exit
+"$product_script_dir"/Riviera/Startup/stage "$opt_dir" || exit
 
 PackageName=product-script
-package_version=${product_script_ver##*/}
+package_version=$(<"$version_file")
 echo "Package version \"$package_version\""
 "$wspace"/scripts/validate-version "$package_version" || exit
 
