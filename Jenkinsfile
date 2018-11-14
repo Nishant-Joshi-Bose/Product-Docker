@@ -9,68 +9,28 @@ import NodeVerification
 
 def buildJob(jobName)
 {
-    build job: jobName, parameters: [string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'EC_URL', value: "${EC_URL}"),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
+    build job: jobName, parameters: [string(name: 'TESTRAIL_RUNID', value: "${TESTRAIL_RUNID}"),string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'SW_VERSION', value: "${SW_VERSION}"), string(name: 'EC_URL', value: "${EC_URL}"),booleanParam(name: 'SW_UPDATE', value: Boolean.valueOf("${SW_UPDATE}")),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
 }
 
-def CAPS_Component = ["CAPS-Component/playbackRequest",
-                      "CAPS-Component/volumeAPIs"]
-
-def Castle_SW_Update = ["CastleSoftwareUpdate/Riviera_BonjourUpdate",
-			"CastleSoftwareUpdate/Riviera_BonjourUpdate_Corrupt_IPK_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_IPK_Fail_Install_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_IPK_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_Packages_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_Signature_IPKs",
-                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_Signature_Package_Files",
-                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_Signature_Sequence_File",
-		       	"CastleSoftwareUpdate/Riviera_OTA_Missing_Signature_IPKs",
-		       	"CastleSoftwareUpdate/Riviera_OTA_Missing_Signature_Packages",
-		       	"CastleSoftwareUpdate/Riviera_OTA_Missing_Signature_Sequence_File",
-		        "CastleSoftwareUpdate/Riviera_OTA_Same_IPK_Version",
-		       	"CastleSoftwareUpdate/Riviera_SoftwareUpdate"]
-
-def CastleTestUtils_Integrated = ["CastleTestUtils_Integrated/memoryConsumption"]
-
-def CastleTestUtils_Component = ["CastleTestUtils-Component/CastleTestUtils-tests"]
-
-def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
-                      "EddieProduct/Eddie-DemoController",
-		      "EddieProduct/Eddie-Factory-Default",
-		      "EddieProduct/Eddie-Key-Functionality",
-		      "EddieProduct/Eddie-LightBar",
-		      "EddieProduct/Eddie-LPM",
-		      "EddieProduct/Eddie-ProductController",
-                      "EddieProduct/Eddie-Preset",
-		      "EddieProduct/Eddie-LowPowerStandby",
-		      "EddieProduct/Eddie-Network-Disabled",
-		      "EddieProduct/Eddie-AUX"]
-
-def Galapagos_Client = ["GalapagosClient/Authentication",
-                        "GalapagosClient/GalapagosClient-Activation",
-                        "GalapagosClient/GalapagosClient-ServiceDiscovery"]
-
-def STS_Component = ["STS-Component/Deezer_Component_d",
-                     "STS-Component/Amazon_Component_d",
-                     "STS-Component/Spotify_Component_d"]
-
-def STS_Integrated = ["STS-Integrated/Amazon_Integrated",
-                      "STS-Integrated/Deezer_Integrated",
-                      "STS-Integrated/Spotify_Integrated",
-                      "STS-Integrated/TuneIn-Integrated"]
-
-def NetworkServices_Component = ["NetworkServices-Component/network-usb-client",
-				 "NetworkServices-Component/network-wifi-apmode",
-				 "NetworkServices-Component/network-wifi-profile",
-				 "NetworkServices-Component/network-wifi-sitescan",
-				 "NetworkServices-Component/network-wifi-status",
-				 "NetworkServices-Component/networkConnectivity"]
-
-def E2E = ["E2E/E2E_BonjourUpdate",
-	   "E2E/E2E_Eddie_Monaco",
-	   "E2E/E2E_setupAP",
-	   "E2E/E2E_MadridApp",
-	   "E2E/E2E_Eddie_Diagnostics_mfgdata"]
-
+/*def Eddie_Product  = ["Bluetooth/Bluetooth_Sink_Target_SOS",
+					"EddieProduct/Eddie_chimes_test"]*/
+def Eddie_Product  = 			["EddieProduct/Eddie-Bootup-Sequence-Timing",
+                      			//"EddieProduct/Eddie-DemoController",
+					//"EddieProduct/Eddie-Factory-Default",
+					//"EddieProduct/Eddie-Key-Functionality",
+					//"EddieProduct/Eddie-LightBar",
+					"EddieProduct/Eddie-LPM",
+					"EddieProduct/Eddie-ProductController",
+					"EddieProduct/Eddie-Preset",
+					//"EddieProduct/Eddie-LowPowerStandby",
+					//"EddieProduct/Eddie-NoCrashResumingLowPowerStandby",
+					"EddieProduct/Eddie-Network-Disabled",
+					//"EddieProduct/Eddie-AUX",
+					"EddieProduct/Eddie-Manufacturing",
+					"EddieProduct/Eddie-Language",
+					"EddieProduct/Eddie-Clock",
+					//"Bluetooth/Bluetooth_Sink_Target_SOS",
+					//"EddieProduct/Eddie_chimes_test"]
 
 failureList = [] 
 buildCount=0
@@ -85,7 +45,7 @@ def notifyBuild(String buildStatus = 'STARTED')
   def colorCode = '#FF0000'
   for (item in failureList)
    { 
-        def subject = "${buildStatus}: EDDIE PIPELINE UNSTABLE: Job '$item '"
+        def subject = "${buildStatus}: EDDIE PRODUCT PIPELINE UNSTABLE: Job '$item '"
         def summary = "${subject} ${item}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastFailedBuild/console"
         slackSend (color: colorCode, message: summary)
    }
@@ -98,7 +58,7 @@ def notifyBuild(String buildStatus = 'STARTED')
     }
   else if(buildStatus == 'SUCCESS')
     {
-        def subject = "${buildStatus}: EDDIE PIPELINE PASSED"
+        def subject = "${buildStatus}: EDDIE PRODUCT PIPELINE PASSED"
         def summary = "${subject}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastSuccessfulBuild/console"
 		color = 'GREEN'
         colorCode = '#00FF00'
@@ -149,7 +109,7 @@ def executeBuild(item){
 
 timeout(time: 8, unit: 'HOURS')
 {
-  node('master')
+  node('eco2-pipeline-container')
     {
       echo "EC_URL used: ${env.EC_URL}"
       echo "Branch Used used: ${env.SW_BRANCH}"
@@ -158,84 +118,8 @@ timeout(time: 8, unit: 'HOURS')
       echo "Git Branch used: ${env.Branch}"
      try
        {
-          parallel(
-               "stream 1 (CAPS_Component)" :{
+               
 
-					stage("CAPS_Component")
-                    {
-                        for (item in CAPS_Component)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-                },
-
-             "stream 2 (Castle_SW_Update)" :{
-					
-					stage("Castle_SW_Update")
-                    {
-                        for (item in Castle_SW_Update)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-               },
-			    "stream 3 (CastleTestUtils_Integrated)" :{
-					
-					stage("CastleTestUtils_Integrated")
-                    {
-                        for (item in CastleTestUtils_Integrated)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-               }, "stream 4 (CastleTestUtils_Component)" :{
-					
-					stage("CastleTestUtils_Component")
-                    {
-                        for (item in CastleTestUtils_Component)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-               }, "stream 5 (Eddie_Product)" :{
-					
 					stage("Eddie_Product")
                     {
                         for (item in Eddie_Product)
@@ -252,79 +136,7 @@ timeout(time: 8, unit: 'HOURS')
                            continue
                          }
                     }
-               }, "stream 6 (Galapagos_Client)" :{
-					
-					stage("Galapagos_Client")
-                    {
-                        for (item in Galapagos_Client)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-               }, "stream 7 (STS_Component)" :{
-					
-					stage("STS_Component")
-                    {
-                        for (item in STS_Component)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-               }, "stream 8 (STS_Integrated)" :{
-					
-					stage("STS_Integrated")
-                    {
-                        for (item in STS_Integrated)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-               }, "stream 9 (E2E)" :{
-					
-					stage("E2E")
-                    {
-                        for (item in E2E)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-               })
+                
         }
 
        catch (e)
@@ -347,5 +159,9 @@ timeout(time: 8, unit: 'HOURS')
 	// To Push Data of Failed Job and Total Job on Graphite
     println failureList.size()
     println buildCount
-    def GraphiteSocket = new GraphiteSocket(failureList.size(),buildCount,'Eddie_Nightly')  
+    graphite_table_name = 'Eddie-Product-Pipeline'
+    if ("${SW_BRANCH}" != 'SOS'){
+        graphite_table_name += "-${SW_BRANCH}"
+    }
+    def GraphiteSocket = new GraphiteSocket(failureList.size(),buildCount,graphite_table_name,Eddie_Product)  
 }
