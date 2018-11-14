@@ -26,7 +26,6 @@
 #include "Intents.h"
 #include "IntentHandler.h"
 #include "CustomProductControllerStateLowPowerResume.h"
-#include "CustomProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
