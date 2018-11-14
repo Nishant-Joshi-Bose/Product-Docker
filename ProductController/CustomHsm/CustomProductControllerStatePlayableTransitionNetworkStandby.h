@@ -1,19 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file      CustomProductControllerStatePlayingSelected.h
+/// @file      CustomProductControllerStatePlayableTransitionNetworkStandby.h
 ///
 /// @brief     This header file declares functionality to process events that occur during the
-///            playing selected state that are custom to product.
+///            product playable transition network standby state.
 ///
-/// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The following compiler directive prevents this header file from being included more than once,
+/// which may cause multiple declaration compiler errors.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma once
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///            Included Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma once
-#include <string>
-#include "ProductControllerState.h"
-#include "HsmState.h"
+#include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -27,32 +30,24 @@ namespace ProductApp
 class ProductControllerHsm;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief The CustomProductControllerStatePlayingSelected Class
+/// @brief The CustomProductControllerStatePlayableTransitionNetworkStandby Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayingSelected : public ProductControllerStatePlayingSelected
+class CustomProductControllerStatePlayableTransitionNetworkStandby : public ProductControllerStatePlayableTransitionNetworkStandby
 {
 public:
 
-    CustomProductControllerStatePlayingSelected( ProductControllerHsm& hsm,
-                                                 CHsmState*            pSuperState,
-                                                 Hsm::STATE            stateId,
-                                                 const std::string&    name = "CustomPlayingSelected" );
+    CustomProductControllerStatePlayableTransitionNetworkStandby( ProductControllerHsm& hsm,
+                                                                  CHsmState* pSuperState,
+                                                                  Hsm::STATE stateId,
+                                                                  const std::string& name
+                                                                  = "PlayableTransitionNetworkStandby" );
 
-    ~CustomProductControllerStatePlayingSelected( ) override
+    ~CustomProductControllerStatePlayableTransitionNetworkStandby( ) override
     {
 
     }
 
-    bool HandleIntentAudioModeToggle( KeyHandlerUtil::ActionType_t action );
-
-protected:
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// @brief This overridden method is used for product specific conditional checks and potential
-    ///        state changes to custom states based on the product. It returns a true Boolean value
-    ///        if a product specific state change takes place or false otherwise.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void GoToNextState( )   override;
+    bool HandleLPMPowerStatusNetworkStandby( ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
