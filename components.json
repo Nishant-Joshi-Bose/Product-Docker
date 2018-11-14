@@ -72,8 +72,8 @@
     "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
-    "name": "product-start-script",
-    "selected_version": "CASTLE-17138-productscript@efed92937823a408c29517f2bd796161c9fa54d2"
+    "name": "product-startup",
+    "selected_version": "CASTLE-17138-productscript@16f40996413fec2cb296c62558d0f91ff9b96268"
   },
   {
     "name": "BoseWebMonaco",
