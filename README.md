@@ -47,6 +47,15 @@ List of devices attached
 $
 ```
 
+If you have multiple Android devices, you can set the ANDROID_SERIAL environment
+variable to select a specific device:
+
+```
+export ANDROID_SERIAL=5166240
+```
+
+(Some scripts will not work correctly if you don't do that.)
+
 Access the APQ console via the tap cable.
 
 ```shell session
