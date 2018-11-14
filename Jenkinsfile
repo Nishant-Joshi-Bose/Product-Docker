@@ -14,23 +14,23 @@ def buildJob(jobName)
 
 /*def Eddie_Product  = ["Bluetooth/Bluetooth_Sink_Target_SOS",
 					"EddieProduct/Eddie_chimes_test"]*/
-def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
-                      //"EddieProduct/Eddie-DemoController",
-					"EddieProduct/Eddie-Factory-Default",
-					"EddieProduct/Eddie-Key-Functionality",
-					"EddieProduct/Eddie-LightBar",
+def Eddie_Product  = 			["EddieProduct/Eddie-Bootup-Sequence-Timing",
+                      			//"EddieProduct/Eddie-DemoController",
+					//"EddieProduct/Eddie-Factory-Default",
+					//"EddieProduct/Eddie-Key-Functionality",
+					//"EddieProduct/Eddie-LightBar",
 					"EddieProduct/Eddie-LPM",
 					"EddieProduct/Eddie-ProductController",
 					"EddieProduct/Eddie-Preset",
 					//"EddieProduct/Eddie-LowPowerStandby",
 					//"EddieProduct/Eddie-NoCrashResumingLowPowerStandby",
 					"EddieProduct/Eddie-Network-Disabled",
-					"EddieProduct/Eddie-AUX",
+					//"EddieProduct/Eddie-AUX",
 					"EddieProduct/Eddie-Manufacturing",
 					"EddieProduct/Eddie-Language",
 					"EddieProduct/Eddie-Clock",
-					"Bluetooth/Bluetooth_Sink_Target_SOS",
-					"EddieProduct/Eddie_chimes_test"]
+					//"Bluetooth/Bluetooth_Sink_Target_SOS",
+					//"EddieProduct/Eddie_chimes_test"]
 
 failureList = [] 
 buildCount=0
