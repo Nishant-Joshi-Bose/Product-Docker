@@ -96,7 +96,8 @@ bool CustomProductControllerStateLowPowerResume::HandleIntentPlaySoundTouchSourc
 
 bool CustomProductControllerStateLowPowerResume::HandleIntentPowerOn( )
 {
-    GetCustomProductController( ).AttemptToStartPlayback( );
+    BOSE_INFO( s_logger, "The %s state is caching power on intent", GetName( ).c_str( ) );
+    s_cachedAction = ActionCommon_t::POWER_ON;
     return true;
 }
 

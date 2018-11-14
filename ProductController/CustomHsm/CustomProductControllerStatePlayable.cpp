@@ -95,12 +95,6 @@ bool CustomProductControllerStatePlayable::HandleIntentMuteControl( KeyHandlerUt
     return true;
 }
 
-bool CustomProductControllerStatePlayable::HandleIntentPowerOn( )
-{
-    GetCustomProductController( ).AttemptToStartPlayback( );
-    return true;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

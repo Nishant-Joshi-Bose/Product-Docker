@@ -76,13 +76,6 @@ bool CustomProductControllerStatePlayingDeselected::HandleIntentMuteControl( Key
     return true;
 }
 
-
-bool CustomProductControllerStatePlayingDeselected::HandleIntentPowerOn( )
-{
-    GetCustomProductController( ).AttemptToStartPlayback( );
-    return true;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

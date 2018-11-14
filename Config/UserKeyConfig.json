@@ -21,7 +21,7 @@
         "comment": "power on",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ASSERT_ON"],
-        "origin": ["TAP", "CEC"],
+        "origin": ["TAP", "CEC", "IR"],
         "timeOutList": []
     },
     {
