@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/AVS-VPA/2018-11-13_1608"
+    "selected_version": "Release/AVS-VPA/2.2.0.44187.3086507"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.2-556+95e2e6e"
+    "selected_version": "Release/master/2.2.2-560+a8b401e"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -237,7 +237,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-11-13_1912"
+    "selected_version": "Release/Castle-Fork/2.2.0.44177.3079888"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -257,7 +257,7 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.2-380+a5f3276"
+    "selected_version": "Release/master/2.2.2-382+a5f3276"
   },
   {
     "name": "Webkit",
