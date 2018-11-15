@@ -557,42 +557,42 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         GetSourceKeysBacklight( leds );
 
-    // Determine backlight and active source key
-    auto config = DetermineKeplerState( );
-    const auto& state = std::get<0>( config );
+        // Determine backlight and active source key
+        auto config = DetermineKeplerState( );
+        const auto& state = std::get<0>( config );
 
-    // Light the selected source key
-    switch( state.sourcekey() )
-    {
-    case KeplerConfig::KEY_SOUNDTOUCH:
-        leds.set_sound_touch( LedsRawMsg_t::SOURCE_LED_ACTIVE );
-        break;
-    case KeplerConfig::KEY_TV:
-        leds.set_tv( LedsRawMsg_t::SOURCE_LED_ACTIVE );
-        break;
-    case KeplerConfig::KEY_BLUETOOTH:
-        leds.set_bluetooth( LedsRawMsg_t::SOURCE_LED_ACTIVE );
-        break;
-    case KeplerConfig::KEY_GAME:
-        leds.set_game( LedsRawMsg_t::SOURCE_LED_ACTIVE );
-        break;
-    case KeplerConfig::KEY_BD_DVD:
-        leds.set_clapboard( LedsRawMsg_t::SOURCE_LED_ACTIVE );
-        break;
-    case KeplerConfig::KEY_CBL_SAT:
-        leds.set_set_top_box( LedsRawMsg_t::SOURCE_LED_ACTIVE );
-        break;
-    default:
-        break;
-    }
+        // Light the selected source key
+        switch( state.sourcekey() )
+        {
+        case KeplerConfig::KEY_SOUNDTOUCH:
+            leds.set_sound_touch( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            break;
+        case KeplerConfig::KEY_TV:
+            leds.set_tv( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            break;
+        case KeplerConfig::KEY_BLUETOOTH:
+            leds.set_bluetooth( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            break;
+        case KeplerConfig::KEY_GAME:
+            leds.set_game( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            break;
+        case KeplerConfig::KEY_BD_DVD:
+            leds.set_clapboard( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            break;
+        case KeplerConfig::KEY_CBL_SAT:
+            leds.set_set_top_box( LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            break;
+        default:
+            break;
+        }
 
-    // Apply zone backlighting
-    auto configured = std::get<1>( config );
-    const auto& zoneBL = std::get<2>( config );
-    const auto& zones = configured ? zoneBL.zonesconfigured() : zoneBL.zonesunconfigured();
-    for( const auto& z : zones )
-    {
-        SetZone( leds, z, LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        // Apply zone backlighting
+        auto configured = std::get<1>( config );
+        const auto& zoneBL = std::get<2>( config );
+        const auto& zones = configured ? zoneBL.zonesconfigured() : zoneBL.zonesunconfigured();
+        for( const auto& z : zones )
+        {
+            SetZone( leds, z, LedsRawMsg_t::ZONE_BACKLIGHT_ON );
         }
     }
     else
