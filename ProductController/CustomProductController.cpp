@@ -41,7 +41,8 @@
 #include "ProductSTSStateFactory.h"
 #include "ProductSTSStateTop.h"
 #include "ProductSTSStateTopSilent.h"
-#include "ProductSTSStateTopAiQ.h"
+#include "CustomSTSController/ProductSTSStateTopAiQ.h"
+#include "CustomSTSController/ProductSTSStateDeviceControl.h"
 #include "SystemSourcesProperties.pb.h"
 #include "ProductControllerHsm.h"
 #include "CustomProductControllerStates.h"
@@ -138,10 +139,13 @@ constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
 constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
-}
+
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
 constexpr uint32_t UI_ALIVE_TIMEOUT = 60 * 1000;
+
+constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConfiguration.json";
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -760,6 +764,20 @@ void CustomProductController::Run( )
                                                                  m_FrontDoorClientIF,
                                                                  lpmLitePtr ) );
 
+    ///
+    /// Set up connection with DeviceController service
+    ///
+    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductController", GetTask( ) );
+
+    if( !m_deviceControllerPtr )
+    {
+        BOSE_DIE( "Failed loading key blaster configuration file." );
+    }
+
+    m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
+
+
     //
     // Setup UI recovery timer
     //
@@ -1103,21 +1121,22 @@ void CustomProductController::SetupProductSTSController( )
 
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
-    ProductSTSStateFactory<ProductSTSStateTop>          commonStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopAiQ>       aiqStateFactory;
+    //ProductSTSStateFactory<ProductSTSStateTop>              commonStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSilent>        silentStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopAiQ>           aiqStateFactory;
+    ProductSTSStateFactory<ProductSTSStateDeviceControl>    deviceControlStateFactory;
 
     ///
     /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
     /// will always be available. SLOT sources need to be set-up before they become available.
     ///
     ProductSTSController::SourceDescriptor descriptor_Setup   { SETUP,   SetupSourceSlot_Name( SETUP ),   false, silentStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  deviceControlStateFactory };
     ProductSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
     ProductSTSController::SourceDescriptor descriptor_Pairing { PAIRING, SetupSourceSlot_Name( PAIRING ), false, silentStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, commonStateFactory, true };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, commonStateFactory, true };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, commonStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, deviceControlStateFactory, true };
 
     sources.push_back( descriptor_Setup );
     sources.push_back( descriptor_TV );

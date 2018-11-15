@@ -176,6 +176,11 @@ public:
         return m_IntentHandler;
     }
 
+    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr GetDeviceControllerClient() override
+    {
+        return m_deviceControllerPtr;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following methods are used by the state machine to determine the status of the
@@ -325,6 +330,16 @@ private:
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
     std::shared_ptr< ProductBLERemoteManager           > m_ProductBLERemoteManager;
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following subclasses declarations are used to manage the lower level hardware and
+    ///        the device, as well as to interface with the user and higher level system
+    ///        applications and command line.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr       m_deviceControllerPtr;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

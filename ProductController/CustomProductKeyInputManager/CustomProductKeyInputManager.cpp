@@ -58,15 +58,16 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController ),
+      m_deviceControllerPtr( ProductController.GetDeviceControllerClient() ),
       m_TimeOfChordRelease( 0 ),
       m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
-    InitializeQuickSetService( );
+    //InitializeDeviceControllerClient( );
 
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
-        QSSMSG::SrcCiCodeMessage_t          codes;
-        static QSSMSG::SrcCiCodeMessage_t   lastCodes;
+        DeviceControllerClientMessages::SrcCiCodeMessage_t          codes;
+        static DeviceControllerClientMessages::SrcCiCodeMessage_t   lastCodes;
 
         for( auto i = 0 ; i < sources.sources_size(); i++ )
         {
@@ -80,7 +81,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
         if( ( codes.SerializeAsString() != lastCodes.SerializeAsString() ) )
         {
             BOSE_INFO( s_logger, "notify cicodes : %s", ProtoToMarkup::ToJson( codes ).c_str() );
-            m_QSSClient->NotifySourceCiCodes( codes );
+            m_deviceControllerPtr->NotifySourceCiCodes( codes );
             lastCodes = codes;
         }
     };
@@ -90,21 +91,21 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductKeyInputInterface::InitializeQuickSetService
+/// @name   ProductKeyInputInterface::InitializeDeviceControllerClient
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductKeyInputManager::InitializeQuickSetService( )
+void CustomProductKeyInputManager::InitializeDeviceControllerClient( )
 {
-    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "CustomProductKeyInputManager",
-                                                           m_ProductController.GetTask( ) );
+    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductKeyInputManager",
+                                                                   m_ProductController.GetTask( ) );
 
-    if( not m_QSSClient )
+    if( !m_deviceControllerPtr )
     {
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
 
-    m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
-    m_QSSClient->Connect( [ ]( bool connected ) { } );
+    m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,24 +124,24 @@ void CustomProductKeyInputManager::BlastKey(
     const std::string&          cicode
 )
 {
-    QSSMSG::BoseKeyReqMessage_t request;
+    DeviceControllerClientMessages::BoseKeyReqMessage_t request;
 
     request.set_keyval( keyEvent.keyid( ) );
     request.set_codeset( cicode );
 
     if( keyEvent.keystate( ) ==  KEY_PRESSED )
     {
-        request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_CONTINUOUS_PRESS );
+        request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_CONTINUOUS_PRESS );
     }
     else
     {
-        request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_END_PRESS );
+        request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_END_PRESS );
     }
 
     BOSE_INFO( s_logger, "Blasting 0x%08x/%s (%s)", request.keyval( ), request.codeset( ).c_str( ),
                ( keyEvent.keystate( ) ==  KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
 
-    m_QSSClient->SendKey( request );
+    m_deviceControllerPtr->SendKey( request );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,7 +214,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
         // In this case, we need to consume keys that normally would have been blasted
         if(
             ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
-            m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
+            m_deviceControllerPtr->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
             return true;
@@ -223,7 +224,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
-    if( not m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceItem->details( ).devicetype( ) ) )
+    if( not m_deviceControllerPtr->IsBlastedKey( keyEvent.keyid( ), sourceItem->details( ).devicetype( ) ) )
     {
         return false;
     }
@@ -250,11 +251,11 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
         return;
     }
 
-    if (pwrMacro.enabled() )
+    if( pwrMacro.enabled() )
     {
-        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ), 
+        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
                    pwrMacro.ShortDebugString().c_str() );
-  
+
         auto srcMacro = [ this, key, pwrMacro]()
         {
             if( pwrMacro.has_powerondevice() )
@@ -262,32 +263,32 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
                 const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
                 if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
                 {
-                    QSSMSG::BoseKeyReqMessage_t request;
-                    request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+                    DeviceControllerClientMessages::BoseKeyReqMessage_t request;
+                    request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
                     request.set_keyval( key );
                     request.set_codeset( macroSrc->details( ).cicode( ) );
-                    m_QSSClient->SendKey( request );
+                    m_deviceControllerPtr->SendKey( request );
                 }
             }
         };
 
-        auto cbFunc = [ this, key, pwrMacro, srcMacro]( QSSMSG::BoseKeyReqMessage_t resp )
+        auto cbFunc = [ this, key, pwrMacro, srcMacro]( DeviceControllerClientMessages::BoseKeyReqMessage_t resp )
         {
             srcMacro( );
         };
-        AsyncCallback<QSSMSG::BoseKeyReqMessage_t> respCb( cbFunc, m_ProductController.GetTask() );
+        AsyncCallback<DeviceControllerClientMessages::BoseKeyReqMessage_t> respCb( cbFunc, m_ProductController.GetTask() );
 
         if( pwrMacro.powerontv() )
         {
             const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
             if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
             {
-                QSSMSG::BoseKeyReqMessage_t request;
-                request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+                DeviceControllerClientMessages::BoseKeyReqMessage_t request;
+                request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
                 request.set_keyval( key );
                 request.set_codeset( tvSource->details( ).cicode( ) );
                 // Wait for the callback from qss before sending the next key
-                m_QSSClient->SendKey( request, respCb );
+                m_deviceControllerPtr->SendKey( request, respCb );
             }
             else
             {
@@ -297,7 +298,6 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
         else
         {
             srcMacro( );
-
         }
     }
 }

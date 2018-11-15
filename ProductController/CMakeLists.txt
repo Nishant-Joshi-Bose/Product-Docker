@@ -21,6 +21,7 @@ INCLUDE_DIRECTORIES(
   CustomProductKeyInputManager
   CustomProductLpmHardwareInterface
   CustomHsm
+  CustomProductSTSController
   IntentHandler
 )
 
@@ -78,8 +79,8 @@ ADD_EXECUTABLE(Professor
   ProductCommandLine.cpp
   ProductDspHelper.cpp
   ProductStart.cpp
-  ProductSTSStateTopAiQ.cpp
-
+  CustomSTSController/ProductSTSStateTopAiQ.cpp
+  CustomSTSController/ProductSTSStateDeviceControl.cpp
   CustomProductController.cpp
 )
 
@@ -103,6 +104,7 @@ TARGET_LINK_LIBRARIES(Professor
   GalapagosClient
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
+  DeviceControllerClient
   STS
   STSClient
   ShelbyUtils
@@ -113,7 +115,6 @@ TARGET_LINK_LIBRARIES(Professor
   SystemEventService
   A4VRemoteCommClient
   A4VVideoManagerClient
-  A4VQuickSetServiceClient
   BoseLibs
   PassportLan
   SASSClient

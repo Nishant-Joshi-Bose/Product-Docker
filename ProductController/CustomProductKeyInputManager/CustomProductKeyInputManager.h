@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include "ProductKeyInputManager.h"
-#include "A4VQuickSetServiceClientFactory.h"
+#include "DeviceControllerClientFactory.h"
 #include "SystemPowerMacro.pb.h"
 #include "FrontDoorClient.h"
 
@@ -65,6 +65,8 @@ public:
 
     }
 
+    void InitializeDeviceControllerClient();
+
 protected:
 
     ///
@@ -80,9 +82,9 @@ private:
     CustomProductController& m_ProductController;
 
     ///
-    /// Custom A4V Quick Set Service Client and Initialization
+    /// Custom A4V-DeviceController Service Client and Initialization
     ///
-    A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
+    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr       m_deviceControllerPtr;
 
     ///
     /// Data used by FilterIncompleteChord() to track history
@@ -90,7 +92,6 @@ private:
     int64_t m_TimeOfChordRelease;
     ::google::protobuf::uint32 m_KeyIdOfIncompleteChordRelease;
 
-    void InitializeQuickSetService( );
     bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
 
     void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
