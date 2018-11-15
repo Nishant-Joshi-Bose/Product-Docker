@@ -154,7 +154,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
-"$product_startup_dir/Riviera/Startup/stage" "$opt_dir" || exit
+"$product_startup_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
