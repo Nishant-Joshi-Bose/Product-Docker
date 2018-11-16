@@ -72,6 +72,10 @@
     "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
+    "name": "product-startup",
+    "selected_version": "Continuous/master/4.0.0-2+5f99fcc"
+  },
+  {
     "name": "BoseWebMonaco",
     "selected_version": "Release/MR1_2019/3.0.4-548+637650b"
   },
@@ -229,7 +233,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44177.3079888"
+    "selected_version": "Continuous/Castle-Fork/2018-11-15_1742"
   },
   {
     "name": "svc-pts-log-decrypt",

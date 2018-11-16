@@ -29,12 +29,12 @@ Repo contacts for eddie/... branches:
 
 ### Getting Started
 
-Clone CastleTools.git and Eddie.git:
+Clone CastleTools and Eddie:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone git@github.com:BoseCorp/Eddie.git
+$ git clone --branch eddie/master git@github.com:BoseCorp/CastleProducts.git Eddie
 ```
 
 Make sure your Eddie unit is accessible via adb.
@@ -46,6 +46,15 @@ List of devices attached
 
 $
 ```
+
+If you have multiple Android devices, you can set the ANDROID_SERIAL environment
+variable to select a specific device:
+
+```
+export ANDROID_SERIAL=5166240
+```
+
+(Some scripts will not work correctly if you don't do that.)
 
 Access the APQ console via the tap cable.
 
