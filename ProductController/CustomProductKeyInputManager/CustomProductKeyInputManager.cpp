@@ -49,7 +49,8 @@ constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConf
 /// @param CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController )
+CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController,
+                                                            const A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr& QSSClient )
 
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),
@@ -58,6 +59,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController ),
+      m_QSSClient( QSSClient ),
       m_TimeOfChordRelease( 0 ),
       m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
@@ -95,15 +97,12 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductKeyInputManager::InitializeQuickSetService( )
 {
-    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "CustomProductKeyInputManager",
-                                                           m_ProductController.GetTask( ) );
-
-    if( not m_QSSClient )
+    bool loadResult = m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    if( not loadResult )
     {
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
 
-    m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
     m_QSSClient->Connect( [ ]( bool connected ) { } );
 }
 
@@ -250,31 +249,54 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
         return;
     }
 
-    BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
-               pwrMacro.ShortDebugString().c_str() );
+    if (pwrMacro.enabled() )
+    {
+        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ), 
+                   pwrMacro.ShortDebugString().c_str() );
+  
+        auto srcMacro = [ this, key, pwrMacro]()
+        {
+            if( pwrMacro.has_powerondevice() )
+            {
+                const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
+                if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
+                {
+                    QSSMSG::BoseKeyReqMessage_t request;
+                    request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+                    request.set_keyval( key );
+                    request.set_codeset( macroSrc->details( ).cicode( ) );
+                    m_QSSClient->SendKey( request );
+                }
+            }
+        };
 
-    if( pwrMacro.powerontv() )
-    {
-        const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-        if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
+        auto cbFunc = [ this, key, pwrMacro, srcMacro]( QSSMSG::BoseKeyReqMessage_t resp )
         {
-            QSSMSG::BoseKeyReqMessage_t request;
-            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-            request.set_keyval( key );
-            request.set_codeset( tvSource->details( ).cicode( ) );
-            m_QSSClient->SendKey( request );
+            srcMacro( );
+        };
+        AsyncCallback<QSSMSG::BoseKeyReqMessage_t> respCb( cbFunc, m_ProductController.GetTask() );
+
+        if( pwrMacro.powerontv() )
+        {
+            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+            if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
+            {
+                QSSMSG::BoseKeyReqMessage_t request;
+                request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+                request.set_keyval( key );
+                request.set_codeset( tvSource->details( ).cicode( ) );
+                // Wait for the callback from qss before sending the next key
+                m_QSSClient->SendKey( request, respCb );
+            }
+            else
+            {
+                srcMacro();
+            }
         }
-    }
-    if( pwrMacro.has_powerondevice() )
-    {
-        const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
-        if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
+        else
         {
-            QSSMSG::BoseKeyReqMessage_t request;
-            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-            request.set_keyval( key );
-            request.set_codeset( macroSrc->details( ).cicode( ) );
-            m_QSSClient->SendKey( request );
+            srcMacro( );
+
         }
     }
 }
