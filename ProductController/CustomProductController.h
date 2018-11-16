@@ -176,7 +176,7 @@ public:
         return m_IntentHandler;
     }
 
-    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr GetDeviceControllerClient() override
+    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr& GetDeviceControllerClient() override
     {
         return m_deviceControllerPtr;
     }
