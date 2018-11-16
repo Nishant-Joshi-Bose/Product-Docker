@@ -57,6 +57,7 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+product_startup_dir=$(components get product-startup installed_location) || exit
 audiopath_dir=$(components get AudioPathService-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
@@ -153,6 +154,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
+"$product_startup_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
