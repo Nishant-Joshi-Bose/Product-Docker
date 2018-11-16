@@ -67,15 +67,16 @@ void CustomProductControllerStatePlayingSelected::GoToNextState( )
 
     if( GetProductController( ).GetNowSelection( ).has_contentitem( ) )
     {
-        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( SHELBY_SOURCE::SETUP ) == 0 )
+        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ) == SHELBY_SOURCE::SETUP )
         {
-            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
+            const auto& sourceAccount = GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( );
+            if( sourceAccount == SetupSourceSlot_Name( ADAPTIQ ) )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
                 return;
             }
 
-            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
+            if( sourceAccount == SetupSourceSlot_Name( PAIRING ) )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
                 return;
