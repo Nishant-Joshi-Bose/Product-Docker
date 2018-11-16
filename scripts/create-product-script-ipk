@@ -61,8 +61,8 @@ echo "Stage directory $stage"
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 
-product_script_dir=$(components get ProductScript-qc8017_32 installed_location) || exit
-product_script_ver=$(components get ProductScript-qc8017_32 selected_version) || exit
+product_script_dir=$(components get product-startup installed_location) || exit
+product_script_ver=$(components get product-startup selected_version) || exit
 
 # copy minimal image tar to /opt/Bose
 "$product_script_dir/stage" "$opt_dir" || exit
