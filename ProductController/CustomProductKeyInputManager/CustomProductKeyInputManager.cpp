@@ -62,6 +62,11 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
       m_TimeOfChordRelease( 0 ),
       m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
+}
+
+void CustomProductKeyInputManager::Run()
+{
+    ProductKeyInputManager::Run();
     //InitializeDeviceControllerClient( );
 
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
@@ -85,8 +90,16 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
             lastCodes = codes;
         }
     };
-    m_ProductController.GetSourceInfo().RegisterSourceListener( sourceInfoCb );
 
+    if( m_deviceControllerPtr == nullptr )
+    {
+        BOSE_INFO( s_logger, "%s, m_deviceControllerPtr is null", __func__ );
+    }
+    else
+    {
+        BOSE_INFO( s_logger, "%s, m_deviceControllerPtr is not null", __func__ );
+    }
+    m_ProductController.GetSourceInfo().RegisterSourceListener( sourceInfoCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

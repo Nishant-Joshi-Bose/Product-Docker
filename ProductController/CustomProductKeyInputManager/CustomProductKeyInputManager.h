@@ -65,6 +65,8 @@ public:
 
     }
 
+    void Run() override;
+
     void InitializeDeviceControllerClient();
 
 protected:

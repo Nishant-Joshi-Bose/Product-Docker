@@ -20,6 +20,14 @@ ProductSTSStateDeviceControl::ProductSTSStateDeviceControl( ProductSTSHsm& hsm,
 
 {
     //InitializeDeviceControllerClient();
+    if( m_deviceControllerPtr == nullptr )
+    {
+        BOSE_INFO( m_logger, "%s, m_deviceControllerPtr is null", __func__ );
+    }
+    else
+    {
+        BOSE_INFO( m_logger, "%s, m_deviceControllerPtr is not null", __func__ );
+    }
 }
 
 

@@ -704,6 +704,22 @@ void CustomProductController::Run( )
     ///
     CommonInitialize( );
 
+
+    ///
+    /// Set up connection with DeviceController service
+    ///
+    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductController", GetTask( ) );
+
+    if( !m_deviceControllerPtr )
+    {
+        BOSE_DIE( "Failed loading key blaster configuration file." );
+    }
+
+    m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
+
+
+
     ///
     /// Get instances of all the modules.
     ///
@@ -764,18 +780,6 @@ void CustomProductController::Run( )
                                                                  m_FrontDoorClientIF,
                                                                  lpmLitePtr ) );
 
-    ///
-    /// Set up connection with DeviceController service
-    ///
-    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductController", GetTask( ) );
-
-    if( !m_deviceControllerPtr )
-    {
-        BOSE_DIE( "Failed loading key blaster configuration file." );
-    }
-
-    m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
-    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
 
 
     //
