@@ -157,12 +157,12 @@ void CustomProductKeyInputManager::BlastKey(
 bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformation_t&
                                                           keyEvent )
 {
-    auto keyid = keyEvent.keyid( );
-
     if( FilterIncompleteChord( keyEvent ) )
     {
         return true;
     }
+
+    auto keyid = keyEvent.keyid( );
 
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
     if( keyid == BOSE_TV_INPUT )
@@ -234,7 +234,8 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
             (
                 ( keyid == BOSE_NUMBER_1 ) || ( keyid == BOSE_NUMBER_2 ) || ( keyid == BOSE_NUMBER_3 ) ||
                 ( keyid == BOSE_NUMBER_4 ) || ( keyid == BOSE_NUMBER_5 ) || ( keyid == BOSE_NUMBER_6 )
-            )
+            ) &&
+            ( keyEvent.keyorigin( ) == KEY_ORIGIN_RF )
         )
         {
             return true;
