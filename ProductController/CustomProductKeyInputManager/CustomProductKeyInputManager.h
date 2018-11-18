@@ -23,7 +23,6 @@
 #include "SystemPowerMacro.pb.h"
 #include "FrontDoorClient.h"
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,12 +48,9 @@ public:
     ///
     /// CustomProductKeyInputManager Constructor
     ///
-    explicit CustomProductKeyInputManager( CustomProductController& ProductController,
-                                           const FrontDoorClientIF_t& frontDoorClient );
+    explicit CustomProductKeyInputManager( CustomProductController& ProductController );
 
     void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key );
-
-    explicit CustomProductKeyInputManager( CustomProductController& ProductController );
 
 
     ///

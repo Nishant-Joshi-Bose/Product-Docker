@@ -111,13 +111,11 @@ void CustomProductKeyInputManager::InitializeDeviceControllerClient( )
 {
     m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductKeyInputManager",
                                                                    m_ProductController.GetTask( ) );
-
-    if( !m_deviceControllerPtr )
+    bool loadResult = m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    if( not loadResult )
     {
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
-
-    m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
     m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
 }
 

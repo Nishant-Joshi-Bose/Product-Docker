@@ -331,7 +331,6 @@ private:
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
     std::shared_ptr< ProductBLERemoteManager           > m_ProductBLERemoteManager;
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following subclasses declarations are used to manage the lower level hardware and
