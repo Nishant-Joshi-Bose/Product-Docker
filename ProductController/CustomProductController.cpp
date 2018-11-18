@@ -549,7 +549,7 @@ void CustomProductController::SendDeActivateAccessPointCmd()
     BOSE_INFO( s_logger, __func__ );
 }
 
-NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( )
+NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( ) const
 {
     return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }

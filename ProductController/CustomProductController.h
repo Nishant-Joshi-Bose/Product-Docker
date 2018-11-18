@@ -307,7 +307,7 @@ public:
 /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( );
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) const;
 
 private:
 
