@@ -13,7 +13,15 @@
         "commment": "power off",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ASSERT_OFF"],
-        "origin": ["TAP", "CEC"],
+        "origin": ["TAP", "CEC", "IR", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "POWER_ON",
+        "comment": "power on",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_ON"],
+        "origin": ["TAP", "CEC", "IR", "NETWORK"],
         "timeOutList": []
     },
     {

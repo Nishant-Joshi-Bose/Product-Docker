@@ -60,9 +60,9 @@ class CustomProductControllerStateLowPowerResume : public ProductControllerState
 public:
 
     CustomProductControllerStateLowPowerResume( ProductControllerHsm& hsm,
-                                                 CHsmState*            pSuperState,
-                                                 Hsm::STATE            stateId,
-                                                 const std::string&    name    = "CustomProductControllerStateLowPowerResume" );
+                                                CHsmState*            pSuperState,
+                                                Hsm::STATE            stateId,
+                                                const std::string&    name    = "CustomProductControllerStateLowPowerResume" );
 
     ~CustomProductControllerStateLowPowerResume( ) override
     {
