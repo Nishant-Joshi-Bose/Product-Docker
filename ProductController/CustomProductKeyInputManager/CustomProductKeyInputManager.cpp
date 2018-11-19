@@ -103,24 +103,6 @@ void CustomProductKeyInputManager::Run()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductKeyInputInterface::InitializeDeviceControllerClient
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductKeyInputManager::InitializeDeviceControllerClient( )
-{
-    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductKeyInputManager",
-                                                                   m_ProductController.GetTask( ) );
-    bool loadResult = m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
-    if( not loadResult )
-    {
-        BOSE_DIE( "Failed loading key blaster configuration file." );
-    }
-
-    m_deviceControllerPtr->Connect( []( bool connected ) {} );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   CustomProductKeyInputManager::IsSourceKey
 ///
 /// @param  const IpcKeyInformat_t& keyEvent
@@ -411,7 +393,6 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
     }
 
     BOSE_VERBOSE( s_logger, "%s( %s ) @ %lld returning %s", __func__, keyEvent.ShortDebugString().c_str( ), timeNow, retVal ? "true" : "false" );
-
     return retVal;
 }
 

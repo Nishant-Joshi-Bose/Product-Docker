@@ -19,7 +19,6 @@ ProductSTSStateDeviceControl::ProductSTSStateDeviceControl( ProductSTSHsm& hsm,
     m_deviceControllerPtr( account.GetProductSTSController()->GetProductController().GetDeviceControllerClient() )
 
 {
-    //InitializeDeviceControllerClient();
     if( m_deviceControllerPtr == nullptr )
     {
         BOSE_INFO( m_logger, "%s, m_deviceControllerPtr is null", __func__ );
@@ -28,17 +27,6 @@ ProductSTSStateDeviceControl::ProductSTSStateDeviceControl( ProductSTSHsm& hsm,
     {
         BOSE_INFO( m_logger, "%s, m_deviceControllerPtr is not null", __func__ );
     }
-}
-
-
-void ProductSTSStateDeviceControl::InitializeDeviceControllerClient()
-{
-    BOSE_INFO( m_logger, "%s", __func__ );
-
-    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "ProductSTSStateDeviceControl",
-                                                                   m_account.GetProductSTSController()->GetProductController().GetTask() );
-
-    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
 }
 
 // @TODO what is the proper value here? Is it product-specific? CASTLE-5047 https://jirapro.bose.com/browse/PAELLA-9910

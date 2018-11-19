@@ -18,8 +18,6 @@ public:
                                   ProductSTSAccount& account );
     ~ProductSTSStateDeviceControl() override {}
 
-    void InitializeDeviceControllerClient();
-
     ////////////////////////////////////////////////////////
     /// @brief Act on Activate request - send error response for wrong state
     /// @param ActivateRequest - Proto buf of Activate message (unused)

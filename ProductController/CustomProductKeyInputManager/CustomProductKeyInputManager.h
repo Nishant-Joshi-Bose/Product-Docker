@@ -88,8 +88,6 @@ private:
     int64_t m_TimeOfChordRelease;
     ::google::protobuf::uint32 m_KeyIdOfIncompleteChordRelease;
 
-
-    void InitializeDeviceControllerClient();
     bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
 
     bool IsSourceKey( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );

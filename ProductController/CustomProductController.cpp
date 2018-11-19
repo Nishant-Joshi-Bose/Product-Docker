@@ -704,21 +704,16 @@ void CustomProductController::Run( )
     ///
     CommonInitialize( );
 
-
     ///
     /// Set up connection with DeviceController service
     ///
     m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductController", GetTask( ) );
-
-    if( !m_deviceControllerPtr )
+    bool loadResult = m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    if( not loadResult )
     {
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
-
-    m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
     m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
-
-
 
     ///
     /// Get instances of all the modules.
@@ -779,8 +774,6 @@ void CustomProductController::Run( )
                                new LightBar::LightBarController( GetTask( ),
                                                                  m_FrontDoorClientIF,
                                                                  lpmLitePtr ) );
-
-
 
     //
     // Setup UI recovery timer
