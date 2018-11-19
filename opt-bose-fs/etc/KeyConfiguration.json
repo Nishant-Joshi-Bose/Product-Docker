@@ -101,6 +101,16 @@
             ]
         }, 
         {
+            "comment": "power on", 
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 10, 
+            "keyList": [
+                140
+            ]
+        }, 
+        {
             "origin": 2, 
             "keyEvent": 1, 
             "timeOutList": [
