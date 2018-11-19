@@ -43,6 +43,7 @@ namespace ProductApp
 constexpr const char KEY_CONFIGURATION_FILE_NAME[ ] = "/var/run/KeyConfiguration.json";
 constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConfiguration.json";
 constexpr const char USER_KEY_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/UserKeyConfig.json";
+constexpr const char WILDCARD[ ] = "*";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -119,7 +120,7 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
     const auto& filter = SystemUtils::ReadFile( USER_KEY_CONFIGURATION_FILE_NAME );
     if( !filter )
     {
-        BOSE_ERROR( s_logger, "%s: Failed loading key filter", __PRETTY_FUNCTION__ );
+        BOSE_DIE( "Failed loading key filter" );
         return;
     }
 
@@ -386,7 +387,7 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductKeyInputManager::FilterIncompleteChord
+/// @name   CustomProductKeyInputManager::KeyAllowedInCurrentSource
 ///
 /// @param  const IpcKeyInformation_t& keyEvent
 ///
@@ -394,13 +395,15 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
 ///         the key table indicates that it should be filtered for the current source.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInformation_t& keyEvent )
+bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInformation_t& keyEvent ) const
 {
     using namespace KeyFilter;
     using namespace LpmServiceMessages;
 
     ///
     /// First we check the key table to see if there's an entry matching this key
+    /// (this check is superfluous in the case where the key configuration file
+    /// covers all possible keys that could be generated)
     ///
     const KEY_VALUE keyid = static_cast<KEY_VALUE>( keyEvent.keyid() );
     if( ! KEY_VALUE_IsValid( keyid ) )
@@ -410,7 +413,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     const auto& keyName = KEY_VALUE_Name( keyid );
     auto matchKey = [ keyName ]( const KeyEntry & e )
     {
-        // Note that while keylist is actually an array of keys, this is just a consequence
+        // Note that while keylist is technically an array of keys, this is just a consequence
         // of the structure imposed by the keyhandler component (this is intended for when chord
         // keys are being handled by the keyhandler).  In PGC chords are processed in the remote
         // so keylist only has one entry.
@@ -420,7 +423,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     const auto& it = std::find_if( keys.begin(), keys.end(), matchKey );
     if( it == keys.end() )
     {
-        BOSE_INFO( s_logger, "%s No key entry for %s", __PRETTY_FUNCTION__, keyName.c_str() );
+        BOSE_WARNING( s_logger, "%s No key entry for %s", __PRETTY_FUNCTION__, keyName.c_str() );
         return false;
     }
 
@@ -440,7 +443,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     const auto& originName = KeyOrigin_t_Name( keyEvent.keyorigin() );
     auto matchOrigin = [ originName ]( const std::string & o )
     {
-        return originName == ( "KEY_ORIGIN_" + o );
+        return ( originName == ( "KEY_ORIGIN_" + o ) ) || ( originName == WILDCARD );
     };
     const auto& filter = it->filter();
     const auto& origins = filter.origins();
@@ -451,7 +454,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     }
 
     ///
-    /// At this point, they key+origin is possibly filtered, we just need to check if it's
+    /// At this point, the key+origin is possibly filtered, we just need to check if it's
     /// filtered for this source
     ///
     const auto& nowSelection = m_ProductController.GetNowSelection( );
@@ -467,7 +470,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     auto matchSource = [ sourceItem ]( const SourceEntry & s )
     {
         return ( sourceItem->sourcename() == s.sourcename() ) &&
-               ( sourceItem->sourceaccountname() == s.sourceaccountname() );
+               ( ( sourceItem->sourceaccountname() == s.sourceaccountname() ) || ( sourceItem->sourceaccountname() == WILDCARD ) );
     };
     const auto& sources = filter.sources();
     const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );

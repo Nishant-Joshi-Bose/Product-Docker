@@ -99,7 +99,7 @@ private:
     ///
     KeyFilter::KeyFilter        m_filterTable;
     void InitializeKeyFilter( );
-    bool KeyAllowedInCurrentSource( const IpcKeyInformation_t& keyEvent );
+    bool KeyAllowedInCurrentSource( const IpcKeyInformation_t& keyEvent ) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
