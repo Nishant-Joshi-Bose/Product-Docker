@@ -64,7 +64,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -78,7 +78,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -92,7 +92,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -106,7 +106,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -120,7 +120,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -134,7 +134,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [1000],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -148,7 +148,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -162,7 +162,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -176,7 +176,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -190,7 +190,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -204,7 +204,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
@@ -218,7 +218,7 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "origins": ["*"],
             "sources": [
                 { "sourceName": "PRODUCT", "*" }
             ]
