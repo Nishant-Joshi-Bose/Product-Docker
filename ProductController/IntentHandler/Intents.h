@@ -141,7 +141,10 @@ enum class Action
     ACTION_APAPTIQ_CANCEL           = 125,
     ACTION_GAME                     = 126,
     ACTION_DVD                      = 127,
-    ACTION_CABLESAT                 = 128
+    ACTION_CABLESAT                 = 128,
+    ACTION_ASSERT_MUTE              = 129,
+    ACTION_ASSERT_UNMUTE            = 130,
+    ACTION_AUDIO_MODE_TOGGLE        = 131
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

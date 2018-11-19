@@ -72,6 +72,20 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief CustomProductControllerStateOn::HandleStateEnter
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateOn::HandleStateEnter( )
+{
+    ProductControllerStateOn::HandleStateEnter( );
+
+    if( s_ActionPendingFromTansition != ( KeyHandlerUtil::ActionType_t )Action::INVALID )
+    {
+        GetCustomProductController( ).GetIntentHandler( ).Handle( s_ActionPendingFromTansition );
+    }
+    s_ActionPendingFromTansition = ( KeyHandlerUtil::ActionType_t )Action::INVALID;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  CustomProductControllerStateOn::HandleIntentPlayProductSource
 ///

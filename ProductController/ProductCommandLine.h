@@ -142,6 +142,9 @@ private:
     void HandleTestAccessoryUpdate( const std::list<std::string> & argList,
                                     std::string& response );
 
+    void HandleTestTransition( const std::list<std::string> & argList,
+                               std::string& response );
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

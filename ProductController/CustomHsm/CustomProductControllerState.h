@@ -416,6 +416,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentAudioModeToggle( KeyHandlerUtil::ActionType_t intent )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This handler is used to respond to the LPM detecting an amp fault.
@@ -481,6 +486,8 @@ protected:
     static void FrontDoorErrorCallback( const FrontDoor::Error & error );
 
     static ProductController* s_productController;
+
+    static  KeyHandlerUtil::ActionType_t s_ActionPendingFromTansition;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
