@@ -40,7 +40,7 @@
 #include "ProductCecHelper.h"
 #include "ProductDspHelper.h"
 #include "ProductController.h"
-#include "ControlIntegrationSTSController.h"
+#include "ProductSTSController.h"
 #include "FrontDoorClientIF.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
@@ -176,7 +176,7 @@ public:
         return m_IntentHandler;
     }
 
-    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr& GetDeviceControllerClient() override
+    const DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr& GetDeviceControllerClient() const override
     {
         return m_deviceControllerPtr;
     }
@@ -369,15 +369,15 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declarations are used as interfaces to the ControlIntegrationSTSController,
+    /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Custom Product Controller and the
     ///        STS source proxies.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ControlIntegrationSTSController m_ControlIntegrationSTSController;
+    ProductSTSController m_ProductSTSController;
 
     void SetupProductSTSController( ) override;
-    void HandleSelectSourceSlot( ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot );
+    void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

@@ -19,14 +19,6 @@ ProductSTSStateDeviceControl::ProductSTSStateDeviceControl( ProductSTSHsm& hsm,
     m_deviceControllerPtr( account.GetProductSTSController()->GetProductController().GetDeviceControllerClient() )
 
 {
-    if( m_deviceControllerPtr == nullptr )
-    {
-        BOSE_INFO( m_logger, "%s, m_deviceControllerPtr is null", __func__ );
-    }
-    else
-    {
-        BOSE_INFO( m_logger, "%s, m_deviceControllerPtr is not null", __func__ );
-    }
 }
 
 // @TODO what is the proper value here? Is it product-specific? CASTLE-5047 https://jirapro.bose.com/browse/PAELLA-9910
@@ -73,65 +65,6 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void &, uin
         m_active = true;
     }
     return true;
-}
-
-bool ProductSTSStateDeviceControl::HandleNowPlayingRequest( const STS::Void &, uint32_t seq )
-{
-    BOSE_INFO( m_logger, "%s( %s ) while %sactive", __func__, m_account.GetSourceName().c_str(),
-               m_active ? "" : "in" );
-    if( m_active )
-    {
-        STS::NowPlayingResponse npr;
-        *( npr.mutable_nowplaying() ) = m_np;
-        m_account.IPC().SendNowPlayingResponse( npr, seq );
-    }
-    else
-    {
-        STS::AsyncError e;
-        e.set_error( SoundTouchInterface::ErrorType::MUSIC_SERVICE_WRONG_STATE_NOW_PLAYING_REQUEST );
-        e.set_desc( m_account.GetSourceName() + "RcvdNowPlayingInWrongState" );
-        m_account.IPC().SendNowPlayingFailureResponse( e, seq );
-    }
-    return true;
-}
-
-bool ProductSTSStateDeviceControl::HandleSelectContentItem( const STS::ContentItem  &contentItem )
-{
-    BOSE_INFO( m_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
-    // Need to tell CAPS to proceed with the source selection
-    m_account.IPC().SendSourceSelectEvent();
-    *( m_np.mutable_contentitem() ) = contentItem;
-    m_np.mutable_contentitem()->set_ispresetable( false );
-    m_np.set_resumesupported( m_resumeSupported );
-    m_account.GetProductSTSController()->HandlePlaybackRequestSlot( m_account.GetSourceID() );
-    return true;
-}
-
-bool ProductSTSStateDeviceControl::HandleDeactivateRequest( const STS::DeactivateRequest &, uint32_t seq )
-{
-    BOSE_INFO( m_logger, "%s - HandleDeactivateRequest( %s )", __func__, m_account.GetSourceName().c_str() );
-    m_account.IPC().SendAudioStopEvent();
-    m_account.IPC().SendDeactivateResponse( seq );
-    m_np.set_playstatus( STS::PlayStatus::STOP );
-    m_active = false;
-    return true;
-}
-
-////////////////////////////////////////////////////////
-bool ProductSTSStateDeviceControl::HandleIntrospectRequest( const STS::Void&, uint32_t seq )
-{
-    m_account.IPC().SendIntrospectResponse( ProtoToMarkup::ToXML( m_account.Introspect() ) , seq );
-    return true;
-}
-
-////////////////////////////////////////////////////////
-///
-/// The base class version returns the PRODUCT source URL
-///
-////////////////////////////////////////////////////////
-const std::string& ProductSTSStateDeviceControl::GetURL( ) const
-{
-    return s_productAudioURL;
 }
 
 bool ProductSTSStateDeviceControl::HandlePlay( const STS::Void & )
