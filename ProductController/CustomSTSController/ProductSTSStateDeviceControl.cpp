@@ -75,7 +75,6 @@ bool ProductSTSStateDeviceControl::HandlePlay( const STS::Void & )
     request.set_request( DevicePlaybackControl::PLAYBACK_CTRL_PLAY );
 
     m_deviceControllerPtr->SendTransportControlRequest( request );
-    //m_account.GetProductSTSController()->GetProductController().GetDeviceControllerClient()->SendTransportControlRequest( request );
     return true;
 }
 
