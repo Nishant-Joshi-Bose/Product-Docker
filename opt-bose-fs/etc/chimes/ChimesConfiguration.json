@@ -65,6 +65,13 @@
             "tone":"T15_success.flac",
             "volume":38,
             "comment":"OOB Setup Completed"
+        },
+        {
+            "event_id":14,
+            "tone":"T9_failure.flac",
+            "volume":38,
+            "comment":"Failed to store preset"
         }
+
     ]
 }
