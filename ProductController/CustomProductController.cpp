@@ -181,7 +181,7 @@ CustomProductController::CustomProductController( ) :
     ///
     /// Initialization of STS contorller.
     ///
-    m_ProductSTSController( *this ),
+    m_ControlIntegrationSTSController( ),
 
     ///
     /// Intent Handler Initialization
@@ -1115,7 +1115,7 @@ std::pair<bool, int32_t> CustomProductController::GetDesiredPlayingVolume( ) con
 ///
 /// @name   CustomProductController::SetupProductSTSController
 ///
-/// @brief  This method is called to perform the needed initialization of the ProductSTSController,
+/// @brief  This method is called to perform the needed initialization of the ControlIntegrationSTSController,
 ///         specifically, provide the set of sources to be created initially.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1123,7 +1123,7 @@ void CustomProductController::SetupProductSTSController( )
 {
     using namespace ProductSTS;
 
-    std::vector< ProductSTSController::SourceDescriptor > sources;
+    std::vector< ControlIntegrationSTSController::SourceDescriptor > sources;
 
     //ProductSTSStateFactory<ProductSTSStateTop>              commonStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopSilent>        silentStateFactory;
@@ -1161,29 +1161,29 @@ void CustomProductController::SetupProductSTSController( )
                                        this ) );
 
 
-    Callback< ProductSTSAccount::ProductSourceSlot >
+    Callback< ControlIntegrationSTSAccount::ProductSourceSlot >
     CallbackToHandleSelectSourceSlot( std::bind( &CustomProductController::HandleSelectSourceSlot,
                                                  this,
                                                  std::placeholders::_1 ) );
 
-    m_ProductSTSController.Initialize( sources,
-                                       CallbackForSTSComplete,
-                                       CallbackToHandleSelectSourceSlot );
+    m_ControlIntegrationSTSController.Initialize( sources,
+                                                  CallbackForSTSComplete,
+                                                  CallbackToHandleSelectSourceSlot );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::HandleSelectSourceSlot
 ///
-/// @brief  This method is called from the ProductSTSController, when one of our sources is
+/// @brief  This method is called from the ControlIntegrationSTSController, when one of our sources is
 ///         activated by CAPS via STS.
 ///
-/// @note   This method is called on the ProductSTSController task.
+/// @note   This method is called on the ControlIntegrationSTSController task.
 ///
-/// @param  ProductSTSAccount::ProductSourceSlot sourceSlot This identifies the activated slot.
+/// @param  ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot This identifies the activated slot.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot )
+void CustomProductController::HandleSelectSourceSlot( ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot )
 {
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );

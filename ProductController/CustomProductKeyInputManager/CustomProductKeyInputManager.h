@@ -63,8 +63,6 @@ public:
 
     void Run() override;
 
-    void InitializeDeviceControllerClient();
-
 protected:
 
     ///
@@ -80,7 +78,7 @@ private:
     CustomProductController& m_ProductController;
 
     ///
-    /// Custom A4V-DeviceController Service Client and Initialization
+    /// Custom A4V-DeviceController Client and Initialization
     ///
     DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr       m_deviceControllerPtr;
 
@@ -90,7 +88,11 @@ private:
     int64_t m_TimeOfChordRelease;
     ::google::protobuf::uint32 m_KeyIdOfIncompleteChordRelease;
 
+
+    void InitializeDeviceControllerClient();
     bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
+
+    bool IsSourceKey( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );
 
     void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
 };

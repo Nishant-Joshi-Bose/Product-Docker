@@ -67,7 +67,6 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
 void CustomProductKeyInputManager::Run()
 {
     ProductKeyInputManager::Run();
-    //InitializeDeviceControllerClient( );
 
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
@@ -116,8 +115,40 @@ void CustomProductKeyInputManager::InitializeDeviceControllerClient( )
     {
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
-    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
+
+    m_deviceControllerPtr->Connect( []( bool connected ) {} );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductKeyInputManager::IsSourceKey
+///
+/// @param  const IpcKeyInformat_t& keyEvent
+///
+/// @return bool - true if it is a source key
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductKeyInputManager::IsSourceKey( const LpmServiceMessages::IpcKeyInformation_t& keyEvent )
+{
+
+    // ACTIVATION_KEY_GAME
+    // ACTIVATION_KEY_BD_DVD
+    // ACTIVATION_KEY_CBL_SAT
+
+    switch( keyEvent.keyid() )
+    {
+    case BOSE_GAME_SOURCE:
+    case BOSE_BD_DVD_SOURCE:
+    case BOSE_CBL_SAT_SOURCE:
+    case BOSE_TV_SOURCE:
+    case BOSE_321_AUX_SOURCE:
+    case BOSE_AUX_SOURCE:
+        return true;
+    default:
+        return false;
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -173,6 +204,16 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     if( FilterIncompleteChord( keyEvent ) )
     {
         return true;
+    }
+
+
+    if( IsSourceKey( keyEvent ) )
+    {
+
+        BlastKey( keyEvent, "SourceKeysAreABlast" );
+
+        // Still want this to be handled by ProductController key handler
+        return false;
     }
 
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected

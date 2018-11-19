@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file     ProductSTSStateTopAiQ.cpp
-/// @brief    ProductSTSStateTop for sourcces that do not play audio
+/// @brief    ProductSTSStateTop for sources that do not play audio
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ProductSTSStateTopAiQ.h"
@@ -8,10 +8,10 @@
 std::string ProductSTSStateTopAiQ::s_aiqAudioURL{ "adaptiq://" };
 
 //////////////////////////////////////////////////////////////
-ProductSTSStateTopAiQ::ProductSTSStateTopAiQ( ProductSTSHsm& hsm,
+ProductSTSStateTopAiQ::ProductSTSStateTopAiQ( ControlIntegrationSTSHsm& hsm,
                                               CHsmState *pSuperState,
-                                              ProductSTSAccount& account ) :
-    ProductSTSStateTop( hsm, pSuperState, account )
+                                              ControlIntegrationSTSAccount& account ) :
+    ControlIntegrationSTSStateTop( hsm, pSuperState, account )
 {
 }
 

@@ -40,7 +40,7 @@
 #include "ProductCecHelper.h"
 #include "ProductDspHelper.h"
 #include "ProductController.h"
-#include "ProductSTSController.h"
+#include "ControlIntegrationSTSController.h"
 #include "FrontDoorClientIF.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
@@ -369,15 +369,15 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declarations are used as interfaces to the ProductSTSController,
+    /// @brief The following declarations are used as interfaces to the ControlIntegrationSTSController,
     ///        which implements the interactions between the Custom Product Controller and the
     ///        STS source proxies.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductSTSController m_ProductSTSController;
+    ControlIntegrationSTSController m_ControlIntegrationSTSController;
 
     void SetupProductSTSController( ) override;
-    void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
+    void HandleSelectSourceSlot( ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
