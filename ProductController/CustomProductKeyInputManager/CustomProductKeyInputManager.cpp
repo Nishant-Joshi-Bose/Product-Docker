@@ -116,7 +116,7 @@ void CustomProductKeyInputManager::InitializeQuickSetService( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductKeyInputManager::InitializeKeyFilter( )
 {
-    auto filter = SystemUtils::ReadFile( USER_KEY_CONFIGURATION_FILE_NAME );
+    const auto& filter = SystemUtils::ReadFile( USER_KEY_CONFIGURATION_FILE_NAME );
     if( !filter )
     {
         BOSE_ERROR( s_logger, "%s: Failed loading key filter", __PRETTY_FUNCTION__ );

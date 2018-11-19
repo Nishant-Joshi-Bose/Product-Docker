@@ -58,7 +58,7 @@ ifndef DONT_RUN_ASTYLE
 	run-astyle
 endif
 
-USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
+USERKEYCONFIG=$(PWD)/opt-bose-fs/etc/UserKeyConfig.json
 KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
 LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
 INTENT_DEFS=$(PWD)/ProductController/IntentHandler/Intents.h
