@@ -22,6 +22,7 @@
 #include "A4VQuickSetServiceClientFactory.h"
 #include "SystemPowerMacro.pb.h"
 #include "FrontDoorClient.h"
+#include "KeyFilter.pb.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +93,13 @@ private:
     bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
 
     void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
+
+    ///
+    /// Filter subset of key table
+    ///
+    KeyFilter::KeyFilter        m_filterTable;
+    void InitializeKeyFilter( );
+    bool KeyAllowedInCurrentSource( const IpcKeyInformation_t& keyEvent );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -24,6 +24,7 @@
 #include "MonotonicClock.h"
 #include "AutoLpmServiceMessages.pb.h"
 #include "SystemSourcesProperties.pb.h"
+#include "SystemUtils.h"
 
 using namespace ProductSTS;
 using namespace SystemSourcesProperties;
@@ -65,6 +66,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
       m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
     InitializeQuickSetService( );
+    InitializeKeyFilter( );
 
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
@@ -106,6 +108,25 @@ void CustomProductKeyInputManager::InitializeQuickSetService( )
 
     m_QSSClient->Connect( [ ]( bool connected ) { } );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductKeyInputInterface::InitializeKeyFilter
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductKeyInputManager::InitializeKeyFilter( )
+{
+    auto filter = SystemUtils::ReadFile( USER_KEY_CONFIGURATION_FILE_NAME );
+    if( !filter )
+    {
+        BOSE_ERROR( s_logger, "%s: Failed loading key filter", __PRETTY_FUNCTION__ );
+        return;
+    }
+
+    ProtoToMarkup::FromJson( *filter, &m_filterTable, "KeyFilter" );
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -159,6 +180,11 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 {
 
     if( FilterIncompleteChord( keyEvent ) )
+    {
+        return true;
+    }
+
+    if( ! KeyAllowedInCurrentSource( keyEvent ) )
     {
         return true;
     }
@@ -361,6 +387,101 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
     BOSE_VERBOSE( s_logger, "%s( %s ) @ %lld returning %s", __func__, keyEvent.ShortDebugString().c_str( ), timeNow, retVal ? "true" : "false" );
 
     return retVal;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductKeyInputManager::FilterIncompleteChord
+///
+/// @param  const IpcKeyInformation_t& keyEvent
+///
+/// @return This method returns a true value if the key is to be ignored because
+///         the key table indicates that it should be filtered for the current source.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInformation_t& keyEvent )
+{
+    using namespace KeyFilter;
+    using namespace LpmServiceMessages;
+
+    ///
+    /// First we check the key table to see if there's an entry matching this key
+    ///
+    const KEY_VALUE keyid = static_cast<KEY_VALUE>( keyEvent.keyid() );
+    if( ! KEY_VALUE_IsValid( keyid ) )
+    {
+        return false;
+    }
+    const auto& keyName = KEY_VALUE_Name( keyid );
+    auto matchKey = [ keyName ]( const KeyEntry & e )
+    {
+        // Note that while keylist is actually an array of keys, this is just a consequence
+        // of the structure imposed by the keyhandler component (this is intended for when chord
+        // keys are being handled by the keyhandler).  In PGC chords are processed in the remote
+        // so keylist only has one entry.
+        return keyName == e.keylist( 0 );
+    };
+    const auto& keys = m_filterTable.keytable( );
+    const auto& it = std::find_if( keys.begin(), keys.end(), matchKey );
+    if( it == keys.end() )
+    {
+        BOSE_INFO( s_logger, "%s No key entry for %s", __PRETTY_FUNCTION__, keyName.c_str() );
+        return false;
+    }
+
+    // does this entry have a filter?
+    if( !it->has_filter( ) )
+    {
+        return false;
+    }
+
+    ///
+    /// Now that we have a filter, check if the origin for this key is in the filter
+    ///
+    if( ! KeyOrigin_t_IsValid( keyEvent.keyorigin() ) )
+    {
+        return false;
+    }
+    const auto& originName = KeyOrigin_t_Name( keyEvent.keyorigin() );
+    auto matchOrigin = [ originName ]( const std::string & o )
+    {
+        return originName == ( "KEY_ORIGIN_" + o );
+    };
+    const auto& filter = it->filter();
+    const auto& origins = filter.origins();
+    const auto& ito = std::find_if( origins.begin(), origins.end(), matchOrigin );
+    if( ito == origins.end() )
+    {
+        return false;
+    }
+
+    ///
+    /// At this point, they key+origin is possibly filtered, we just need to check if it's
+    /// filtered for this source
+    ///
+    const auto& nowSelection = m_ProductController.GetNowSelection( );
+    if( not nowSelection.has_contentitem( ) )
+    {
+        return false;
+    }
+    auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
+    if( not sourceItem )
+    {
+        return false;
+    }
+    auto matchSource = [ sourceItem ]( const SourceEntry & s )
+    {
+        return ( sourceItem->sourcename() == s.sourcename() ) &&
+               ( sourceItem->sourceaccountname() == s.sourceaccountname() );
+    };
+    const auto& sources = filter.sources();
+    const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
+    if( its != sources.end() )
+    {
+        return true;
+    }
+
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
