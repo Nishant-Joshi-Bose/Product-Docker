@@ -32,6 +32,7 @@ public:
         m_DspIsRebooting = true;
         m_ProductLpmHardwareInterface->BootDSPImage( image );
     }
+    void ToggleAudioMode();
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// m_MainStreamAudioSettings is the structure holding information that APProduct would like to know

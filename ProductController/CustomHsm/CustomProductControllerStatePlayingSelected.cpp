@@ -16,6 +16,7 @@
 #include "ProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "ProductSTS.pb.h"
+#include "CustomProductController.h"
 #include "SHELBY_SOURCE.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,15 +67,16 @@ void CustomProductControllerStatePlayingSelected::GoToNextState( )
 
     if( GetProductController( ).GetNowSelection( ).has_contentitem( ) )
     {
-        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( SHELBY_SOURCE::SETUP ) == 0 )
+        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ) == SHELBY_SOURCE::SETUP )
         {
-            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( SetupSourceSlot_Name( ADAPTIQ ) ) == 0 )
+            const auto& sourceAccount = GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( );
+            if( sourceAccount == SetupSourceSlot_Name( ADAPTIQ ) )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
                 return;
             }
 
-            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( SetupSourceSlot_Name( PAIRING ) ) == 0 )
+            if( sourceAccount == SetupSourceSlot_Name( PAIRING ) )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
                 return;
@@ -82,6 +84,15 @@ void CustomProductControllerStatePlayingSelected::GoToNextState( )
         }
     }
     ProductControllerStatePlayingSelected::GoToNextState( );
+}
+
+bool CustomProductControllerStatePlayingSelected::HandleIntentAudioModeToggle( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, intent );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -185,6 +185,13 @@ void ProductCommandLine::RegisterCliCmds( )
                                                                           m_ProductController.GetTask(),
                                                                           callbackForCommands,
                                                                           static_cast<int>( CLICmdsKeys::TEST_ACCESSORY_UPDATE ) );
+
+    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_transition",
+                                                                          "This command queries/sets/clears the flag to halt in the PLAYABLE_TRANSITION state.",
+                                                                          "product test_transition [on | off]",
+                                                                          m_ProductController.GetTask(),
+                                                                          callbackForCommands,
+                                                                          static_cast<int>( CLICmdsKeys::TEST_TRANSITION ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,6 +259,10 @@ void ProductCommandLine::HandleCliCmd( uint16_t                              cmd
 
     case CLICmdsKeys::TEST_ACCESSORY_UPDATE:
         HandleTestAccessoryUpdate( argList, response );
+        break;
+
+    case CLICmdsKeys::TEST_TRANSITION:
+        HandleTestTransition( argList, response );
         break;
 
     default:
@@ -697,6 +708,59 @@ void ProductCommandLine::HandleTestAccessoryUpdate( const std::list<std::string>
     m_ProductController.m_AccessorySoftwareInstallManager.ProceedWithSoftwareUpdate( );
 
     response  = "Accessory update triggered";
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductCommandLine::HandleTestTransition
+///
+/// @brief  This command sets or clears the flag to halt the product state machine in the PLAYABLE_TRANSITION
+///         state. This supports testing the system behavior when external interactions take place while the
+///         system is in the transition state
+///         Current implementation supports the PLAYABLE_TRANSITION_NETWORK_STANDBY state only.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCommandLine::HandleTestTransition( const std::list<std::string>& argList,
+                                               std::string& response )
+{
+    if( argList.size( ) != 1 )
+    {
+        response = "Currently ";
+        response += m_ProductController.GetHaltInPlayableTransitionNetworkStandby( ) ? "" : "not ";
+        response += "halting in PLAYABLE_TRANSITION_NETWORK_STANDBY";
+    }
+    else
+    {
+        const std::string& argumentString = argList.front( );
+
+        if( argumentString == "on" )
+        {
+            response  = "Will halt the system in the PLAYABLE_TRANSITION_STANDBY state";
+
+            m_ProductController.m_haltInPlayableTransitionNetworkStandby = true;
+        }
+        else if( argumentString == "off" )
+        {
+            m_ProductController.m_haltInPlayableTransitionNetworkStandby = false;
+            if( m_ProductController.GetHsm( ).GetCurrentStateId( ) == CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY )
+            {
+                ProductMessage productMessage;
+                productMessage.mutable_lpmstatus( )->set_systemstate( SYSTEM_STATE_STANDBY );
+                IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+                response  = "Releasing";
+            }
+            else
+            {
+                response  = "Will release";
+            }
+
+            response += " the system halt in the PLAYABLE_TRANSITION_STANDBY state";
+        }
+        else
+        {
+            response = "Incorrect Usage: product test_transition [on | off]";
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
