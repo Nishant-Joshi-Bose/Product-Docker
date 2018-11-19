@@ -50,11 +50,9 @@ public:
     /// CustomProductKeyInputManager Constructor
     ///
     explicit CustomProductKeyInputManager( CustomProductController& ProductController,
-                                           const FrontDoorClientIF_t& frontDoorClient );
+                                           const A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr& QSSClient );
 
     void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key );
-
-    explicit CustomProductKeyInputManager( CustomProductController& ProductController );
 
 
     ///

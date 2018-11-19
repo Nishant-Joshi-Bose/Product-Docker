@@ -1,2 +1,2 @@
 #!/bin/bash
-ec-run HEPD_Riviera BuildProfessor "$@"
+ec-run CED_Riviera BuildProfessor "$@"

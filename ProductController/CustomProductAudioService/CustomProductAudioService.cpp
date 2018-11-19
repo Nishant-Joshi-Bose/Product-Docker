@@ -235,6 +235,10 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
                            ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
                            ( 1 << AUDIO_INPUT_BIT_POSITION_EARC );
         }
+        else if( contentItemProto.source() == SHELBY_SOURCE::SETUP )
+        {
+            m_InputRoute = 0;
+        }
         else
         {
             m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
