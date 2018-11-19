@@ -184,11 +184,6 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
         return true;
     }
 
-    if( ! KeyAllowedInCurrentSource( keyEvent ) )
-    {
-        return true;
-    }
-
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
     if( keyEvent.keyid( ) == BOSE_TV_INPUT )
     {
@@ -245,13 +240,13 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
             return true;
         }
 
-        return false;
+        return KeyAllowedInCurrentSource( keyEvent );
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
     if( not m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceItem->details( ).devicetype( ) ) )
     {
-        return false;
+        return KeyAllowedInCurrentSource( keyEvent );
     }
 
     // If the device has been configured, blast the key (if it hasn't been configured but it's a key
@@ -478,6 +473,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
     if( its != sources.end() )
     {
+        // We found a matching source, this key event is to be filtered
         return true;
     }
 

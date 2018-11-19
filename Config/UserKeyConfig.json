@@ -54,7 +54,15 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000]
+        "timeOutList": [1000],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_STORE_2",
@@ -62,7 +70,15 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_2"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000]
+        "timeOutList": [1000],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_STORE_3",
@@ -70,7 +86,15 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_3"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000]
+        "timeOutList": [1000],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_STORE_4",
@@ -78,7 +102,15 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_4"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000]
+        "timeOutList": [1000],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_STORE_5",
@@ -86,7 +118,15 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_5"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000]
+        "timeOutList": [1000],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_STORE_6",
@@ -94,7 +134,15 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_6"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000]
+        "timeOutList": [1000],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_SELECT_1",
@@ -102,7 +150,15 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": []
+        "timeOutList": [],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_SELECT_2",
@@ -110,7 +166,15 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_2"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": []
+        "timeOutList": [],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_SELECT_3",
@@ -118,7 +182,15 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_3"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": []
+        "timeOutList": [],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_SELECT_4",
@@ -126,7 +198,15 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_4"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": []
+        "timeOutList": [],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_SELECT_5",
@@ -134,7 +214,15 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_5"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": []
+        "timeOutList": [],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "PRESET_SELECT_6",
@@ -142,7 +230,15 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_6"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": []
+        "timeOutList": [],
+        "filter": {
+            "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
+                { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_2" }
+            ]
+        }
     },
     {
         "action": "VOLUME_UP",
