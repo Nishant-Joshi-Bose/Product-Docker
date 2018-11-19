@@ -1,0 +1,57 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file KeyConfiguration.proto
+///
+/// @brief This file describes the KeyConfiguration json file
+///
+/// Copyright 2018 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+import "AutoLpmServiceMessages.proto";
+
+package KeyFilter;
+
+message KeyFilter
+{
+    option (ignore_unexpected_markup) = true;
+
+    repeated FilterTable keyTable = 1;
+}
+
+message SourceEntry
+{
+    optional string sourceName          = 1; 
+    optional string sourceAccountName   = 2; 
+}
+
+// A filter entry for a key contains a list of origins and corresponding sources
+// for which the key should be filtered (discarded)
+// For example, the entry to ignore keys from IR and RF origin in slot sources would look like this
+//
+// {
+//      origins : ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
+//      sources: [
+//          { sourceName: "PRODUCT", sourceAccountName: "SLOT_0" },
+//          { sourceName: "PRODUCT", sourceAccountName: "SLOT_1" },
+//          { sourceName: "PRODUCT", sourceAccountName: "SLOT_2" }
+//      ]
+// }
+//
+// Note that this is designed to overlap the entries in the keyTable array of UserKeyConfig.json such
+// that all information on key handling can be specified in one place.
+message FilterEntry
+{
+    option (ignore_unexpected_markup) = true;
+
+    repeated string                             keyList = 1; 
+    repeated LpmServiceMessages.KeyOrigin_t     origins = 2;
+    repeated SourceEntry                        sources = 3;
+}
+
+message FilterTable
+{
+    option (ignore_unexpected_markup) = true;
+    
+    repeated FilterEntry    keyTable = 1;
+}
+

@@ -43,6 +43,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
   ${PROTO_CC_DEST}/Kepler.pb.cc
+  ${PROTO_CC_DEST}/KeyFilter.pb.cc
   AccessorySoftwareInstallManager.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductAudioService/CustomProductAudioService.cpp

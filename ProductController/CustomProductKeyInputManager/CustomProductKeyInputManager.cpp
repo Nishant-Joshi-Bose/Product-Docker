@@ -41,6 +41,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr const char KEY_CONFIGURATION_FILE_NAME[ ] = "/var/run/KeyConfiguration.json";
 constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConfiguration.json";
+constexpr const char USER_KEY_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/UserKeyConfig.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -249,11 +250,11 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
         return;
     }
 
-    if (pwrMacro.enabled() )
+    if( pwrMacro.enabled() )
     {
-        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ), 
+        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
                    pwrMacro.ShortDebugString().c_str() );
-  
+
         auto srcMacro = [ this, key, pwrMacro]()
         {
             if( pwrMacro.has_powerondevice() )
