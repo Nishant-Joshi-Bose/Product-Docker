@@ -62,13 +62,7 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000],
-        "filter": {
-            "origins": ["*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
-            ]
-        }
+        "timeOutList": [1000]
     },
     {
         "action": "PRESET_STORE_2",
@@ -76,13 +70,7 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_2"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000],
-        "filter": {
-            "origins": ["*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
-            ]
-        }
+        "timeOutList": [1000]
     },
     {
         "action": "PRESET_STORE_3",
@@ -90,13 +78,7 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_3"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000],
-        "filter": {
-            "origins": ["*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
-            ]
-        }
+        "timeOutList": [1000]
     },
     {
         "action": "PRESET_STORE_4",
@@ -104,13 +86,7 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_4"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000],
-        "filter": {
-            "origins": ["*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
-            ]
-        }
+        "timeOutList": [1000]
     },
     {
         "action": "PRESET_STORE_5",
@@ -118,13 +94,7 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_5"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000],
-        "filter": {
-            "origins": ["*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
-            ]
-        }
+        "timeOutList": [1000]
     },
     {
         "action": "PRESET_STORE_6",
@@ -132,13 +102,7 @@
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_6"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [1000],
-        "filter": {
-            "origins": ["*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
-            ]
-        }
+        "timeOutList": [1000]
     },
     {
         "action": "PRESET_SELECT_1",
@@ -148,9 +112,9 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["*"],
+            "origins": [".*"],
             "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
             ]
         }
     },
@@ -162,9 +126,9 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["*"],
+            "origins": [".*"],
             "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
             ]
         }
     },
@@ -176,9 +140,9 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["*"],
+            "origins": [".*"],
             "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
             ]
         }
     },
@@ -190,9 +154,9 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["*"],
+            "origins": [".*"],
             "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
             ]
         }
     },
@@ -204,9 +168,9 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["*"],
+            "origins": [".*"],
             "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
             ]
         }
     },
@@ -218,9 +182,9 @@
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": [],
         "filter": {
-            "origins": ["*"],
+            "origins": [".*"],
             "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
             ]
         }
     },

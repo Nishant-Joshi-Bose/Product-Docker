@@ -25,6 +25,7 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "SystemSourcesProperties.pb.h"
 #include "SystemUtils.h"
+#include <regex>
 
 using namespace ProductSTS;
 using namespace SystemSourcesProperties;
@@ -43,7 +44,6 @@ namespace ProductApp
 constexpr const char KEY_CONFIGURATION_FILE_NAME[ ] = "/var/run/KeyConfiguration.json";
 constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConfiguration.json";
 constexpr const char USER_KEY_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/UserKeyConfig.json";
-constexpr const char WILDCARD[ ] = "*";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -440,10 +440,21 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     {
         return false;
     }
-    const auto& originName = KeyOrigin_t_Name( keyEvent.keyorigin() );
+    auto originName = KeyOrigin_t_Name( keyEvent.keyorigin() );
+    originName.erase( 0, sizeof( "KEY_ORIGIN_" ) - 1 );
     auto matchOrigin = [ originName ]( const std::string & o )
     {
-        return ( originName == ( "KEY_ORIGIN_" + o ) ) || ( o == WILDCARD );
+        BOSE_DEBUG( s_logger, "%s: check %s (%s)", __PRETTY_FUNCTION__, originName.c_str(), o.c_str() );
+        try
+        {
+            std::regex r( o );
+            return std::regex_match( originName, r );
+        }
+        catch( const std::regex_error& e )
+        {
+            BOSE_ERROR( s_logger, "%s: regex error %s (%d) (%s)", __PRETTY_FUNCTION__, e.what(), e.code(), o.c_str() );
+            return false;
+        }
     };
     const auto& filter = it->filter();
     const auto& origins = filter.origins();
@@ -469,8 +480,20 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     }
     auto matchSource = [ sourceItem ]( const SourceEntry & s )
     {
-        return ( sourceItem->sourcename() == s.sourcename() ) &&
-               ( ( sourceItem->sourceaccountname() == s.sourceaccountname() ) || ( s.sourceaccountname() == WILDCARD ) );
+        BOSE_DEBUG( s_logger, "%s: check %s %s (%s %s)", __PRETTY_FUNCTION__,  sourceItem->sourcename().c_str(), sourceItem->sourceaccountname().c_str(),
+                    s.sourcename().c_str(), s.sourceaccountname().c_str() );
+        try
+        {
+            std::regex regexSource( s.sourcename() );
+            std::regex regexAccount( s.sourceaccountname() );
+            return ( std::regex_match( sourceItem->sourcename(), regexSource ) && std::regex_match( sourceItem->sourceaccountname(), regexAccount ) );
+        }
+        catch( const std::regex_error& e )
+        {
+            BOSE_ERROR( s_logger, "%s: regex error %s (%d) (%s, %s)", __PRETTY_FUNCTION__, e.what(), e.code(),
+                        s.sourcename().c_str(), s.sourceaccountname().c_str() );
+            return false;
+        }
     };
     const auto& sources = filter.sources();
     const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
