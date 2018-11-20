@@ -443,7 +443,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     const auto& originName = KeyOrigin_t_Name( keyEvent.keyorigin() );
     auto matchOrigin = [ originName ]( const std::string & o )
     {
-        return ( originName == ( "KEY_ORIGIN_" + o ) ) || ( originName == WILDCARD );
+        return ( originName == ( "KEY_ORIGIN_" + o ) ) || ( o == WILDCARD );
     };
     const auto& filter = it->filter();
     const auto& origins = filter.origins();
@@ -470,7 +470,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     auto matchSource = [ sourceItem ]( const SourceEntry & s )
     {
         return ( sourceItem->sourcename() == s.sourcename() ) &&
-               ( ( sourceItem->sourceaccountname() == s.sourceaccountname() ) || ( sourceItem->sourceaccountname() == WILDCARD ) );
+               ( ( sourceItem->sourceaccountname() == s.sourceaccountname() ) || ( s.sourcename() == WILDCARD ) );
     };
     const auto& sources = filter.sources();
     const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
