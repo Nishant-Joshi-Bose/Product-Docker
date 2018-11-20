@@ -124,10 +124,15 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
         return;
     }
 
-    ProtoToMarkup::FromJson( *filter, &m_filterTable, "KeyFilter" );
+    try
+    {
+        ProtoToMarkup::FromJson( *filter, &m_filterTable, "KeyFilter" );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "%s: markup error - %s", __PRETTY_FUNCTION__, e.what( ) );
+    }
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -241,13 +246,13 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
             return true;
         }
 
-        return KeyAllowedInCurrentSource( keyEvent );
+        return KeyIgnoredInCurrentSource( keyEvent, sourceItem );
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
     if( not m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceItem->details( ).devicetype( ) ) )
     {
-        return KeyAllowedInCurrentSource( keyEvent );
+        return KeyIgnoredInCurrentSource( keyEvent, sourceItem );
     }
 
     // If the device has been configured, blast the key (if it hasn't been configured but it's a key
@@ -387,7 +392,7 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductKeyInputManager::KeyAllowedInCurrentSource
+/// @name   CustomProductKeyInputManager::KeyIgnoredInCurrentSource
 ///
 /// @param  const IpcKeyInformation_t& keyEvent
 ///
@@ -395,7 +400,8 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
 ///         the key table indicates that it should be filtered for the current source.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInformation_t& keyEvent ) const
+bool CustomProductKeyInputManager::KeyIgnoredInCurrentSource( const IpcKeyInformation_t& keyEvent,
+                                                              const SoundTouchInterface::Sources::SourceItem* sourceItem ) const
 {
     using namespace KeyFilter;
     using namespace LpmServiceMessages;
@@ -408,6 +414,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     const KEY_VALUE keyid = static_cast<KEY_VALUE>( keyEvent.keyid() );
     if( ! KEY_VALUE_IsValid( keyid ) )
     {
+        BOSE_WARNING( s_logger, "%s: received unknown key %d", __PRETTY_FUNCTION__, keyid );
         return false;
     }
     const auto& keyName = KEY_VALUE_Name( keyid );
@@ -438,6 +445,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     ///
     if( ! KeyOrigin_t_IsValid( keyEvent.keyorigin() ) )
     {
+        BOSE_WARNING( s_logger, "%s: received unknown key origin %d", __PRETTY_FUNCTION__, keyEvent.keyorigin() );
         return false;
     }
     auto originName = KeyOrigin_t_Name( keyEvent.keyorigin() );
@@ -464,20 +472,6 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
         return false;
     }
 
-    ///
-    /// At this point, the key+origin is possibly filtered, we just need to check if it's
-    /// filtered for this source
-    ///
-    const auto& nowSelection = m_ProductController.GetNowSelection( );
-    if( not nowSelection.has_contentitem( ) )
-    {
-        return false;
-    }
-    auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
-    if( not sourceItem )
-    {
-        return false;
-    }
     auto matchSource = [ sourceItem ]( const SourceEntry & s )
     {
         BOSE_DEBUG( s_logger, "%s: check %s %s (%s %s)", __PRETTY_FUNCTION__,  sourceItem->sourcename().c_str(), sourceItem->sourceaccountname().c_str(),

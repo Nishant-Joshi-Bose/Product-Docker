@@ -99,7 +99,7 @@ private:
     ///
     KeyFilter::KeyFilter        m_filterTable;
     void InitializeKeyFilter( );
-    bool KeyAllowedInCurrentSource( const IpcKeyInformation_t& keyEvent ) const;
+    bool KeyIgnoredInCurrentSource( const IpcKeyInformation_t& keyEvent, const SoundTouchInterface::Sources::SourceItem* sourceItem ) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
