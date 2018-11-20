@@ -176,7 +176,7 @@ void CustomProductKeyInputManager::BlastKey(
 ///
 /// @param  const IpcKeyInformation_t& keyEvent
 ///
-/// @return This method returns a true value if the key is to be blasted so that no further
+/// @return This method returns a true value if the key was consumed so that no further
 ///         processing of the key event in the base ProductKeyInputManager class takes place;
 ///         otherwise, it returns false to allow further processing.
 ///
@@ -184,14 +184,15 @@ void CustomProductKeyInputManager::BlastKey(
 bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformation_t&
                                                           keyEvent )
 {
-
     if( FilterIncompleteChord( keyEvent ) )
     {
         return true;
     }
 
+    auto keyid = keyEvent.keyid( );
+
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
-    if( keyEvent.keyid( ) == BOSE_TV_INPUT )
+    if( keyid == BOSE_TV_INPUT )
     {
         const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSourceSlot_Name( TV ) );
 
@@ -240,7 +241,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
         // In this case, we need to consume keys that normally would have been blasted
         if(
             ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
-            m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
+            m_QSSClient->IsBlastedKey( keyid, DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
             return true;
@@ -250,7 +251,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
-    if( not m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceItem->details( ).devicetype( ) ) )
+    if( not m_QSSClient->IsBlastedKey( keyid, sourceItem->details( ).devicetype( ) ) )
     {
         return KeyIgnoredInCurrentSource( keyEvent, sourceItem );
     }
