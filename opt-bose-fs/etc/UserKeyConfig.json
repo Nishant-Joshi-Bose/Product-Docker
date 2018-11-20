@@ -66,7 +66,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -80,7 +80,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -94,7 +94,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -108,7 +108,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -122,7 +122,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -136,7 +136,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -150,7 +150,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -164,7 +164,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -178,7 +178,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -192,7 +192,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -206,7 +206,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
@@ -220,7 +220,7 @@
         "filter": {
             "origins": ["*"],
             "sources": [
-                { "sourceName": "PRODUCT", "*" }
+                { "sourceName": "PRODUCT", "sourceAccountName": "*" }
             ]
         }
     },
