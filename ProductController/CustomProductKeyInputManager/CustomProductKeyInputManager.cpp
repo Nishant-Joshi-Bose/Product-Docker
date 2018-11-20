@@ -470,7 +470,7 @@ bool CustomProductKeyInputManager::KeyAllowedInCurrentSource( const IpcKeyInform
     auto matchSource = [ sourceItem ]( const SourceEntry & s )
     {
         return ( sourceItem->sourcename() == s.sourcename() ) &&
-               ( ( sourceItem->sourceaccountname() == s.sourceaccountname() ) || ( s.sourcename() == WILDCARD ) );
+               ( ( sourceItem->sourceaccountname() == s.sourceaccountname() ) || ( s.sourceaccountname() == WILDCARD ) );
     };
     const auto& sources = filter.sources();
     const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
