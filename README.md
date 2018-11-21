@@ -1,8 +1,8 @@
 Eddie
 =====
 <a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Eddie'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Eddie/latest release/blue'></a>
-[MASTER Eddie Continuous build Testing] <a title='Jenkins build status for Eddie MASTER' href='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/'><img src='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/badge/icon'></a>
-
+[MASTER Eddie Continuous build Testing]
+[![Build Status](http://jnkwebhook.ngrok.io/buildStatus/icon?job=Continous_Build_Testing/Eddie_Continuous_Build_Testing_Master)](http://eco2jenkins.bose.com:8080/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/)
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
 This repo contains the source code and tools specific to the Eddie product.
