@@ -3,7 +3,7 @@
 import JenkinsJobCleanup
 /*
   Description: Jenkinsfile is a container for the pipeline script.
-               Runs tests against a given branch in CastleProducts repostiory
+               Runs tests against a given branch in CastleProducts repo
 */
 
 /*
@@ -26,7 +26,7 @@ def buildQCJob(jobName, SDKValue)
 Below are the jobs list to run against each PR.
 */
 
-def EddiePRTest   = ["Continous_Build_Testing/CastleProduct_Continuous_Build_Testing_Master_PR"]
+def EddiePRTest   = ["Continuous_Build_Testing/CastleProduct_Continuous_Build_Testing_Master_PR"]
 
 
 failureList = []
