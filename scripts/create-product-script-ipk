@@ -60,16 +60,15 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" || exit
+
+product_script_dir=$(components get product-startup installed_location) || exit
+product_script_ver=$(components get product-startup selected_version) || exit
+
 # copy minimal image tar to /opt/Bose
-cp "$wspace/opt-bose-fs/etc/product"  "$opt_dir/etc/product" || exit
-cp "$wspace/opt-bose-fs/.bash_profile" "$opt_dir/.bash_profile" || exit
-cp "$wspace/opt-bose-fs/.bashrc" "$opt_dir/.bashrc" || exit
+"$product_script_dir/stage" "$opt_dir" || exit
 
 PackageName=product-script
-
-version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
-package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
+package_version=${product_script_ver##*/}
 echo "Package version \"$package_version\""
 "$wspace"/scripts/validate-version "$package_version" || exit
 

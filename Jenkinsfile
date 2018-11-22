@@ -27,10 +27,11 @@ def Eddie_Product  = 			["EddieProduct/Eddie-Bootup-Sequence-Timing",
 					"EddieProduct/Eddie-Network-Disabled",
 					//"EddieProduct/Eddie-AUX",
 					"EddieProduct/Eddie-Manufacturing",
-					"EddieProduct/Eddie-Language",
-					"EddieProduct/Eddie-Clock",
+					"EddieProduct/Eddie-Language"
+					//"EddieProduct/Eddie-Clock"
 					//"Bluetooth/Bluetooth_Sink_Target_SOS",
-					//"EddieProduct/Eddie_chimes_test"]
+					//"EddieProduct/Eddie_chimes_test"
+					]
 
 failureList = [] 
 buildCount=0
