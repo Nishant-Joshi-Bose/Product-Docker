@@ -36,6 +36,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "APTimer.h"
+#include "A4V_QuickSetMessageIDs.pb.h"
 #include "IntentHandler.h"
 #include "ProductCecHelper.h"
 #include "ProductDspHelper.h"
@@ -53,6 +54,7 @@
 #include "SystemPowerMacro.pb.h"
 #include "ProductFrontDoorKeyInjectIF.h"
 #include "AccessorySoftwareInstallManager.h"
+#include "A4VQuickSetServiceClientFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -292,6 +294,11 @@ public:
 
     void PowerMacroOff();
 
+    bool GetHaltInPlayableTransitionNetworkStandby( ) const
+    {
+        return m_haltInPlayableTransitionNetworkStandby;
+    }
+
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,6 +327,8 @@ private:
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
     std::shared_ptr< ProductBLERemoteManager           > m_ProductBLERemoteManager;
+
+    A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -504,8 +513,10 @@ private:
                               const Callback<FrontDoor::Error> & errorCb );
     void HandleGetPowerMacro( const Callback<ProductPb::PowerMacro> & respCb,
                               const Callback<FrontDoor::Error> & errorCb ) const;
+    void UpdatePowerMacro( );
     void LoadPowerMacroFromPersistance( );
 
+    bool m_haltInPlayableTransitionNetworkStandby = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

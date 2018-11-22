@@ -13,7 +13,15 @@
         "commment": "power off",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ASSERT_OFF"],
-        "origin": ["TAP", "CEC"],
+        "origin": ["TAP", "CEC", "IR", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "POWER_ON",
+        "comment": "power on",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_ON"],
+        "origin": ["TAP", "CEC", "IR", "NETWORK"],
         "timeOutList": []
     },
     {
@@ -241,6 +249,22 @@
         "timeOutList": []
     },
     {
+        "action": "ACTION_ASSERT_MUTE",
+        "commment": "assert mute",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_MUTE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_ASSERT_UNMUTE",
+        "commment": "assert unmute",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_UNMUTE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
+        "timeOutList": []
+    },
+    {
         "action": "ACTION_SOUNDTOUCH",
         "commment": "select soundtouch",
         "keyEvent": "PRESS",
@@ -366,6 +390,14 @@
         "keyEvent": "PRESS",
         "keyList": ["BOSE_USB_NET_SVR"],
         "origin": ["IR", "TAP", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_AUDIO_MODE_TOGGLE",
+        "comment": "toggle audio mode",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_SYSTEM"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
     }
     ],

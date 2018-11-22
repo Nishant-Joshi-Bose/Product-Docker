@@ -65,6 +65,7 @@ enum class Action
     TOGGLE_WIFI_RADIO  = ActionCommon_t::TOGGLE_WIFI_RADIO,
     FACTORY_DEFAULT    = ActionCommon_t::FACTORY_DEFAULT,
     POWER_OFF          = ActionCommon_t::POWER_OFF,
+    POWER_ON           = ActionCommon_t::POWER_ON,
 
     ///
     /// Bluetooth Intents
@@ -141,7 +142,10 @@ enum class Action
     ACTION_APAPTIQ_CANCEL           = 125,
     ACTION_GAME                     = 126,
     ACTION_DVD                      = 127,
-    ACTION_CABLESAT                 = 128
+    ACTION_CABLESAT                 = 128,
+    ACTION_ASSERT_MUTE              = 129,
+    ACTION_ASSERT_UNMUTE            = 130,
+    ACTION_AUDIO_MODE_TOGGLE        = 131
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,53 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file     AudioModeManager.h
+/// @brief    This source code file declares an audio manager class for implementing audio mode control
+///           (toggling NORMAL and DIALOG modes) based on key actions.
+/// @author   Nicholas Craffey
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///           Included Header Files
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "IntentManager.h"
+#include "Intents.h"
+#include "FrontDoorClientIF.h"
+#include "Utilities.h"
+#include "CustomProductAudioService.h"
+#include "AudioSettings.pb.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///     Beginning of Product Application Namespace
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace ProductApp
+{
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///     Forward Class Declarations
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class ProductController;
+class CustomProductController;
+
+class AudioModeManager : public IntentManager
+{
+private:
+    ProductController&                      m_ProductController;
+    CustomProductController& GetCustomProductController( ) const;
+
+public:
+    AudioModeManager( NotifyTargetTaskIF&        task,
+                      const CliClientMT&         commandLineClient,
+                      const FrontDoorClientIF_t& frontDoorClient,
+                      ProductController&         productController );
+
+    ~AudioModeManager( ) override
+    {
+
+    }
+
+    bool Handle( KeyHandlerUtil::ActionType_t& action ) override;
+};
+}

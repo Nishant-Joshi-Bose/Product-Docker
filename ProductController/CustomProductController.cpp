@@ -65,7 +65,6 @@
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
-#include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlaying.h"
 #include "ProductControllerStatePlayingSelected.h"
@@ -87,7 +86,6 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
-#include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQCancelling.h"
@@ -98,11 +96,13 @@
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
+#include "CustomProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingDeselected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
+#include "CustomProductControllerStateTop.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
 #include "ProductBLERemoteManager.h"
@@ -239,8 +239,8 @@ void CustomProductController::Run( )
     ///
     /// Top State
     ///
-    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
-                                                    nullptr );
+    auto* stateTop = new CustomProductControllerStateTop( GetHsm( ),
+                                                          nullptr );
     ///
     /// Booting State and Various System Level States
     ///
@@ -317,10 +317,10 @@ void CustomProductController::Run( )
       statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
 
-    auto* statePlayableTransitionNetworkStandby = new ProductControllerStatePlayableTransitionNetworkStandby
+    auto* statePlayableTransitionNetworkStandby = new CustomProductControllerStatePlayableTransitionNetworkStandby
     ( GetHsm( ),
       statePlayableTransitionInternal,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
 
     ///
     /// Top On State
@@ -665,7 +665,7 @@ void CustomProductController::Run( )
                         SystemPowerControl_State_OFF,
                         stateStoppingStreams );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
                         SystemPowerControl_State_ON,
                         stateAccessoryPairing );
 
@@ -673,7 +673,7 @@ void CustomProductController::Run( )
                         SystemPowerControl_State_Not_Notify,
                         stateAccessoryPairingCancelling );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
                         SystemPowerControl_State_ON,
                         stateAdaptIQ );
 
@@ -711,7 +711,10 @@ void CustomProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_CommonProductCommandLine    = std::make_shared< CommonProductCommandLine          >( );
-    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
+    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "CustomProductKeyInputManager",
+                                                           GetTask( ) );
+    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this,
+                                    m_QSSClient );
     m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
                                     m_ProductKeyInputManager,
                                     m_FrontDoorClientIF );
@@ -778,6 +781,16 @@ void CustomProductController::Run( )
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
     m_ProductBLERemoteManager    ->Run( );
+
+
+    ///
+    /// Register as listener for system sources update
+    ///
+    auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
+    {
+        UpdatePowerMacro( );
+    };
+    GetSourceInfo().RegisterSourceListener( sourceInfoCb );
 
     ///
     /// Register FrontDoor EndPoints
@@ -1100,19 +1113,25 @@ void CustomProductController::SetupProductSTSController( )
     ///
     /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
     /// will always be available. SLOT sources need to be set-up before they become available.
+    /// This is set up in CustomProductController::SendInitialCapsData().
     ///
-    ProductSTSController::SourceDescriptor descriptor_Setup   { SETUP,   SetupSourceSlot_Name( SETUP ),   false, silentStateFactory };
+    /// The "resumesupported" (5th) constructor argument (copied from "enabled" (3rd) if absent) determines whether the source is SETUP or PRODUCT.
+    /// if false, the source is SETUP.
+    /// If true, the source is PRODUCT.
+    /// See ProductSTSController::Initialize().
+    ///
+    ProductSTSController::SourceDescriptor descriptor_SETUP   { SETUP,   SetupSourceSlot_Name( SETUP ),     false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
-    ProductSTSController::SourceDescriptor descriptor_Pairing { PAIRING, SetupSourceSlot_Name( PAIRING ), false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_ADAPTIQ { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ),   false, aiqStateFactory    };
+    ProductSTSController::SourceDescriptor descriptor_PAIRING { PAIRING, SetupSourceSlot_Name( PAIRING ),   false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, commonStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, commonStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, commonStateFactory, true };
 
-    sources.push_back( descriptor_Setup );
+    sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
-    sources.push_back( descriptor_AiQ );
-    sources.push_back( descriptor_Pairing );
+    sources.push_back( descriptor_ADAPTIQ );
+    sources.push_back( descriptor_PAIRING );
     sources.push_back( descriptor_SLOT_0 );
     sources.push_back( descriptor_SLOT_1 );
     sources.push_back( descriptor_SLOT_2 );
@@ -1360,7 +1379,7 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
                                      this,
                                      std::placeholders::_1,
                                      std::placeholders::_2,
-                                     std::placeholders::_3 ) ,
+                                     std::placeholders::_3 ),
                           GetTask( ) );
 
         m_FrontDoorClientIF->RegisterPut<ProductPb::AccessoriesPlayTonesRequest>(
@@ -1652,6 +1671,11 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         else if( GetIntentHandler( ).IsIntentSetupBLERemote( message.action( ) ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentSetupBLERemote );
+        }
+        else if( GetIntentHandler( ).IsIntentAudioModeToggle( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentAudioModeToggle,
+                                                              message.action( ) );
         }
         else
         {
@@ -2157,7 +2181,7 @@ void CustomProductController::HandlePutPowerMacro(
         if( req.powerontv() )
         {
             const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( not( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() ) )
+            if( not( tvSource and tvSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )   // source status field has to be AVAILABLE in order to be controlled
             {
                 error.set_message( "TV is not configured but power on tv requested!" );
                 success = false;
@@ -2167,7 +2191,7 @@ void CustomProductController::HandlePutPowerMacro(
         {
             const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
 
-            if( not( reqSource and reqSource->has_details( ) and reqSource->details().has_cicode() ) )
+            if( not( reqSource and reqSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )
             {
                 error.set_message( "Requested source is not configured or available!" );
                 success = false;
@@ -2233,6 +2257,48 @@ void CustomProductController::LoadPowerMacroFromPersistance( )
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::UpdatePowerMacro
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::UpdatePowerMacro( )
+{
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
+    bool isChanged = false;
+    // if devices enabled in power macro is removed from Control Integration
+    // power macro should be updated, and turn control off automatically
+    if( m_powerMacro.powerontv() )  // if "powerOnTv" field is not there, it will evaluate as false
+    {
+        const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( not( tvSource && tvSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+        {
+            m_powerMacro.clear_powerontv();
+            isChanged = true;
+        }
+    }
+    if( m_powerMacro.has_powerondevice() )
+    {
+        const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
+
+        if( not( reqSource and reqSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+        {
+            m_powerMacro.clear_powerondevice();
+            isChanged = true;
+        }
+    }
+    if( m_powerMacro.has_enabled() &&
+        !m_powerMacro.has_powerontv() &&
+        !m_powerMacro.has_powerondevice() )
+    {
+        m_powerMacro.clear_enabled();
+        isChanged = true;
+    }
+    if( isChanged )
+    {
+        GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API, m_powerMacro );
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

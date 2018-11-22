@@ -101,7 +101,9 @@ public:
     ///
     static bool IsIntentMuteControl( KeyHandlerUtil::ActionType_t argument )
     {
-        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_MUTE );
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_MUTE ||
+                 argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_ASSERT_MUTE ||
+                 argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_ASSERT_UNMUTE );
     }
 
     static bool IsIntentSpeakerPairing( KeyHandlerUtil::ActionType_t argument )
@@ -134,6 +136,11 @@ public:
     {
         return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_UP ) ||
                ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_THUMB_DOWN );
+    }
+
+    static bool IsIntentAudioModeToggle( KeyHandlerUtil::ActionType_t argument )
+    {
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_AUDIO_MODE_TOGGLE );
     }
 };
 

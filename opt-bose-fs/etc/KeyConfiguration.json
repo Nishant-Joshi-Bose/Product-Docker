@@ -72,6 +72,66 @@
         }, 
         {
             "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "power off", 
+            "action": 9, 
+            "keyList": [
+                204
+            ]
+        }, 
+        {
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "power off", 
+            "action": 9, 
+            "keyList": [
+                204
+            ]
+        }, 
+        {
+            "comment": "power on", 
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 10, 
+            "keyList": [
+                140
+            ]
+        }, 
+        {
+            "comment": "power on", 
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 10, 
+            "keyList": [
+                140
+            ]
+        }, 
+        {
+            "comment": "power on", 
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 10, 
+            "keyList": [
+                140
+            ]
+        }, 
+        {
+            "comment": "power on", 
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 10, 
+            "keyList": [
+                140
+            ]
+        }, 
+        {
+            "origin": 2, 
             "keyEvent": 1, 
             "timeOutList": [
                 0
@@ -1592,6 +1652,126 @@
             "action": 114, 
             "keyList": [
                 1
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 1, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert mute", 
+            "action": 129, 
+            "keyList": [
+                254
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
+            ]
+        }, 
+        {
+            "origin": 1, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "assert unmute", 
+            "action": 130, 
+            "keyList": [
+                205
             ]
         }, 
         {
@@ -2226,6 +2406,56 @@
             "action": 52, 
             "keyList": [
                 31
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
+            ]
+        }, 
+        {
+            "comment": "toggle audio mode", 
+            "origin": 5, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "action": 131, 
+            "keyList": [
+                128
             ]
         }
     ]
