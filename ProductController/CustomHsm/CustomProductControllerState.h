@@ -451,6 +451,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSetupDeactivated()
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAborted()
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Custom Product Controller reference of type

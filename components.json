@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/2.2.4-59+f7a7908"
+    "selected_version": "Release/master/2.2.3-54+65fc780"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
@@ -189,7 +189,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@b411dcb0f165946a40b94e1eb779154ba0445dde"
+    "selected_version": "PP_setup_state_changes_23498@ce1f018b1adaf21611a6033372d06d53608401c6"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
