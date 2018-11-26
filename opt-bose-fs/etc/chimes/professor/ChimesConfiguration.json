@@ -67,6 +67,12 @@
             "volume":39
         },
         {
+            "event_id":14,
+            "tone":"T9_failure.flac",
+            "volume":39,
+            "comment":"Failed to store preset"
+        },
+        {
             "event_id":20,
             "tone":"T16_bass_box_pairing_complete.flac",
             "comment":"Bass Box pairing complete",
