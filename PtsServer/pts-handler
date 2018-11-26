@@ -312,21 +312,20 @@ if path == "/dev" and is_development():
 <script>
 
 function set_address() {
-  var ain = document.getElementById("address");
-  var address = ain.value.trim();
+  var av = address.value.trim();
   var err = "";
-  if (address.match(/^[-\w.]+$/)) {
+  if (av.match(/^[-\w.]+$/)) {
     var anchors = document.getElementsByTagName("a");
     for (var i = anchors.length; --i >= 0;) {
       a = anchors[i];
-      a.href = "http://" + address + a.text;
+      a.href = "http://" + av + a.text;
     }
   }
   else {
     err = "(malformed)";
   }
-  document.getElementById("error").textContent = err;
-  ain.setSelectionRange(0, ain.value.length);
+  oops.textContent = err;
+  address.setSelectionRange(0, address.value.length);
 }
 
 </script>
@@ -339,7 +338,7 @@ function set_address() {
 <p>
 Address:
 <input type="text" id="address" value="{local_address}" onchange="set_address()">
-<span class="error" id="error"/>
+<span class="error" id="oops"/>
 """.format(local_address=os.environ.get("LOCAL_ADDRESS", ""))
 
     print """\

@@ -169,17 +169,6 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 # from `make clean` and such.
 trap 'chmod -R +w "$secure_dir"' EXIT
 
-# Remove files that should belong to product-script
-# Any file on system can belong only to one IPK.
-# If more than one IPK has file with same path-name, the IPK that is 
-# installed last will own the file. In case of Riviera, as product.ipk
-# is installed after product-script.ipk, the critical files below belongs to
-# product.ipk. Next time, when product.ipk is installed, they become 0 byte 
-# - bricking the system
-rm "$opt_dir/.bashrc"
-rm "$opt_dir/.bash_profile"
-rm "$opt_dir/etc/product"
-
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
