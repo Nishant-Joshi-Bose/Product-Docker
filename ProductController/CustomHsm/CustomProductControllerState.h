@@ -174,6 +174,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOn( )
+    {
+        return false;
+    }
+
     virtual bool HandleBluetoothModuleReadiness( )
     {
         return false;
