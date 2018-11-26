@@ -665,7 +665,7 @@ void CustomProductController::Run( )
                         SystemPowerControl_State_OFF,
                         stateStoppingStreams );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
                         SystemPowerControl_State_ON,
                         stateAccessoryPairing );
 
@@ -673,7 +673,7 @@ void CustomProductController::Run( )
                         SystemPowerControl_State_Not_Notify,
                         stateAccessoryPairingCancelling );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( NotifiedNames::SELECTED,
                         SystemPowerControl_State_ON,
                         stateAdaptIQ );
 
@@ -711,7 +711,10 @@ void CustomProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_CommonProductCommandLine    = std::make_shared< CommonProductCommandLine          >( );
-    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
+    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "CustomProductKeyInputManager",
+                                                           GetTask( ) );
+    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this,
+                                    m_QSSClient );
     m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
                                     m_ProductKeyInputManager,
                                     m_FrontDoorClientIF );
@@ -1110,19 +1113,25 @@ void CustomProductController::SetupProductSTSController( )
     ///
     /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
     /// will always be available. SLOT sources need to be set-up before they become available.
+    /// This is set up in CustomProductController::SendInitialCapsData().
     ///
-    ProductSTSController::SourceDescriptor descriptor_Setup   { SETUP,   SetupSourceSlot_Name( SETUP ),   false, silentStateFactory };
+    /// The "resumesupported" (5th) constructor argument (copied from "enabled" (3rd) if absent) determines whether the source is SETUP or PRODUCT.
+    /// if false, the source is SETUP.
+    /// If true, the source is PRODUCT.
+    /// See ProductSTSController::Initialize().
+    ///
+    ProductSTSController::SourceDescriptor descriptor_SETUP   { SETUP,   SetupSourceSlot_Name( SETUP ),     false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_AiQ     { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ), false, aiqStateFactory    };
-    ProductSTSController::SourceDescriptor descriptor_Pairing { PAIRING, SetupSourceSlot_Name( PAIRING ), false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_ADAPTIQ { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ),   false, aiqStateFactory    };
+    ProductSTSController::SourceDescriptor descriptor_PAIRING { PAIRING, SetupSourceSlot_Name( PAIRING ),   false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, commonStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, commonStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, commonStateFactory, true };
 
-    sources.push_back( descriptor_Setup );
+    sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
-    sources.push_back( descriptor_AiQ );
-    sources.push_back( descriptor_Pairing );
+    sources.push_back( descriptor_ADAPTIQ );
+    sources.push_back( descriptor_PAIRING );
     sources.push_back( descriptor_SLOT_0 );
     sources.push_back( descriptor_SLOT_1 );
     sources.push_back( descriptor_SLOT_2 );
@@ -1370,7 +1379,7 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
                                      this,
                                      std::placeholders::_1,
                                      std::placeholders::_2,
-                                     std::placeholders::_3 ) ,
+                                     std::placeholders::_3 ),
                           GetTask( ) );
 
         m_FrontDoorClientIF->RegisterPut<ProductPb::AccessoriesPlayTonesRequest>(

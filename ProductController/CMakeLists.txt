@@ -97,7 +97,6 @@ TARGET_LINK_LIBRARIES(Professor
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
-  VPAControllerClient
   CliClient
   AudioLibs
   PassportClient
@@ -119,7 +118,6 @@ TARGET_LINK_LIBRARIES(Professor
   PassportLan
   SASSClient
   StsAmazon
-  VoiceService
   ProtoToMarkup
   jsoncpp
   protobuf

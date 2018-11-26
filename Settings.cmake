@@ -147,6 +147,7 @@ INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${AVSLIBS_DIR}/include
+  ${LIBWEBSOCKETS_DIR}/include
   ${FRONTDOOR_DIR}/include
   ${FRONTDOOR_DIR}/include/FrontDoor
   ${SASS_DIR}/include
@@ -163,7 +164,8 @@ INCLUDE_DIRECTORIES(
   ${A4VREMOTECOMMUNICATIONSERVICE_DIR}/include
   ${A4VVIDEOMANAGER_DIR}/include
   ${A4VQUICKSET_DIR}/include
-  ${VPACONTROLLER_DIR}/include
+  ${VPACONTROLLER_DIR}/include/VoiceServiceClient
+  ${VPACONTROLLER_DIR}/include/VPAControllerClient
 )
 
 LINK_DIRECTORIES(

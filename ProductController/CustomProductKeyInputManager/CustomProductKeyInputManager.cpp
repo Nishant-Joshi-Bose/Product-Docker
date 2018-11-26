@@ -49,7 +49,8 @@ constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConf
 /// @param CustomProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController )
+CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController,
+                                                            const A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr& QSSClient )
 
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),
@@ -58,6 +59,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController ),
+      m_QSSClient( QSSClient ),
       m_TimeOfChordRelease( 0 ),
       m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
@@ -95,15 +97,12 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductKeyInputManager::InitializeQuickSetService( )
 {
-    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "CustomProductKeyInputManager",
-                                                           m_ProductController.GetTask( ) );
-
-    if( not m_QSSClient )
+    bool loadResult = m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    if( not loadResult )
     {
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
 
-    m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
     m_QSSClient->Connect( [ ]( bool connected ) { } );
 }
 
@@ -149,7 +148,7 @@ void CustomProductKeyInputManager::BlastKey(
 ///
 /// @param  const IpcKeyInformation_t& keyEvent
 ///
-/// @return This method returns a true value if the key is to be blasted so that no further
+/// @return This method returns a true value if the key was consumed so that no further
 ///         processing of the key event in the base ProductKeyInputManager class takes place;
 ///         otherwise, it returns false to allow further processing.
 ///
@@ -157,14 +156,15 @@ void CustomProductKeyInputManager::BlastKey(
 bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformation_t&
                                                           keyEvent )
 {
-
     if( FilterIncompleteChord( keyEvent ) )
     {
         return true;
     }
 
+    auto keyid = keyEvent.keyid( );
+
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
-    if( keyEvent.keyid( ) == BOSE_TV_INPUT )
+    if( keyid == BOSE_TV_INPUT )
     {
         const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSourceSlot_Name( TV ) );
 
@@ -213,7 +213,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
         // In this case, we need to consume keys that normally would have been blasted
         if(
             ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
-            m_QSSClient->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
+            m_QSSClient->IsBlastedKey( keyid, DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
             return true;
@@ -223,8 +223,23 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
-    if( not m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceItem->details( ).devicetype( ) ) )
+    if( not m_QSSClient->IsBlastedKey( keyid, sourceItem->details( ).devicetype( ) ) )
     {
+        // Per PGC-3306 Product sources shouldn't generate preset intents
+        // Note this check isn't required in the "if( not sourceItem->has_details() )" since
+        // we shouldn't be able to switch to a source (other than TV) that hasn't been configured
+        if(
+            ( sourceItem->sourcename() == SHELBY_SOURCE::PRODUCT ) &&
+            (
+                ( keyid == BOSE_NUMBER_1 ) || ( keyid == BOSE_NUMBER_2 ) || ( keyid == BOSE_NUMBER_3 ) ||
+                ( keyid == BOSE_NUMBER_4 ) || ( keyid == BOSE_NUMBER_5 ) || ( keyid == BOSE_NUMBER_6 )
+            ) &&
+            ( keyEvent.keyorigin( ) == KEY_ORIGIN_RF )
+        )
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -250,31 +265,54 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
         return;
     }
 
-    BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
-               pwrMacro.ShortDebugString().c_str() );
+    if( pwrMacro.enabled() )
+    {
+        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
+                   pwrMacro.ShortDebugString().c_str() );
 
-    if( pwrMacro.powerontv() )
-    {
-        const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-        if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
+        auto srcMacro = [ this, key, pwrMacro]()
         {
-            QSSMSG::BoseKeyReqMessage_t request;
-            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-            request.set_keyval( key );
-            request.set_codeset( tvSource->details( ).cicode( ) );
-            m_QSSClient->SendKey( request );
+            if( pwrMacro.has_powerondevice() )
+            {
+                const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
+                if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
+                {
+                    QSSMSG::BoseKeyReqMessage_t request;
+                    request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+                    request.set_keyval( key );
+                    request.set_codeset( macroSrc->details( ).cicode( ) );
+                    m_QSSClient->SendKey( request );
+                }
+            }
+        };
+
+        auto cbFunc = [ this, key, pwrMacro, srcMacro]( QSSMSG::BoseKeyReqMessage_t resp )
+        {
+            srcMacro( );
+        };
+        AsyncCallback<QSSMSG::BoseKeyReqMessage_t> respCb( cbFunc, m_ProductController.GetTask() );
+
+        if( pwrMacro.powerontv() )
+        {
+            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+            if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
+            {
+                QSSMSG::BoseKeyReqMessage_t request;
+                request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+                request.set_keyval( key );
+                request.set_codeset( tvSource->details( ).cicode( ) );
+                // Wait for the callback from qss before sending the next key
+                m_QSSClient->SendKey( request, respCb );
+            }
+            else
+            {
+                srcMacro();
+            }
         }
-    }
-    if( pwrMacro.has_powerondevice() )
-    {
-        const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
-        if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
+        else
         {
-            QSSMSG::BoseKeyReqMessage_t request;
-            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-            request.set_keyval( key );
-            request.set_codeset( macroSrc->details( ).cicode( ) );
-            m_QSSClient->SendKey( request );
+            srcMacro( );
+
         }
     }
 }
