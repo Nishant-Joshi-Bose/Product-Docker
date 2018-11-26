@@ -8,6 +8,7 @@
     {"origin": 0, "keyEvent": 2, "keyList": [2,3], "timeOutList": [5020], "action": 6, "comment": "Console: AUX+VolumeUp press and hold for at least 5020ms ---> Manual Update"},
     {"origin": 0, "keyEvent": 2, "keyList": [1,4], "timeOutList": [5020], "action": 7, "comment": "Console: Bluetoot+MFB press and hold for at least 5020ms ---> Toggle WiFi Radio"},
     {"origin": 0, "keyEvent": 2, "keyList": [2,5], "timeOutList": [10020], "action": 8, "comment": "Console: AUX+VolumeDown press and hold for at lease 10020ms ---> Factory Default"},
+    {"origin": 0, "keyEvent": 2, "keyList": [1,5], "timeOutList": [10020], "action": 11, "comment": "Console: Bluetooth+VolumeDown press and hold for at lease 10020ms ---> OTA update"},
 
     {"origin": 0, "keyEvent": 1, "keyList": [1], "timeOutList": [20], "action": 20, "comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
     {"origin": 0, "keyEvent": 2, "keyList": [1], "timeOutList": [750], "action": 21, "comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
@@ -61,6 +62,10 @@
     {"origin": 0, "keyEvent": 3, "keyList": [1], "timeOutList": [5000,1000], "action": 116, "comment": "Console: Bluetooth press and hold will generate first event at 5000ms and repeat every 1000ms ---> Bluetooth clear pairing list down"},
     {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeUP will generate ---> System Info Cancel"},
     {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeDown will generate ---> System Info Cancel"},
-    {"origin": 0, "keyEvent": 5, "keyList": [1], "timeOutList": [], "action": 126, "comment": "Console: Release of Bluetooth will generate ---> Bluetooth clear pairing Cancel"}
+    {"origin": 0, "keyEvent": 5, "keyList": [1], "timeOutList": [], "action": 126, "comment": "Console: Release of Bluetooth will generate ---> Bluetooth clear pairing Cancel"},
+
+    {"origin": 0, "keyEvent": 3, "keyList": [1,5], "timeOutList": [5,1000], "action": 117, "comment": "Console: Bluetooth+VolumeDown press and hold will generate generate first event at 5ms and repeat every 1000ms ---> Software Update Count down"},
+    {"origin": 0, "keyEvent": 5, "keyList": [1], "timeOutList": [], "action": 127, "comment": "Console: Release of Bluetooth will generate ---> Software Update Cancel"},
+    {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 127, "comment": "Console: Release of VolumeDown will generate ---> Software Update Cancel"}
 ]
 }

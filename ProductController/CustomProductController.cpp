@@ -82,6 +82,7 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicated( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED ),
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
+    m_ProductControllerStateSelectedSoftwareUpdate( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SELECTED_SOFTWARE_UPDATE ),
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
@@ -271,6 +272,10 @@ void CustomProductController::InitializeHsm()
     GetHsm().AddState( Device_State_Not_Notify,
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
+
+    GetHsm().AddState( NotifiedNames::SOFTWARE_UPDATE,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateSelectedSoftwareUpdate );
 
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 }

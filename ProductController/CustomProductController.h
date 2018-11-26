@@ -61,6 +61,7 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
+#include "ProductControllerStateSelectedSoftwareUpdate.h"
 #include "LightBarController.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "NetManager.pb.h"
@@ -352,6 +353,7 @@ private:
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
+    ProductControllerStateSelectedSoftwareUpdate                    m_ProductControllerStateSelectedSoftwareUpdate;
 
     /// ProductAudioService
     std::shared_ptr<CustomProductAudioService>                      m_ProductAudioService;
@@ -365,7 +367,7 @@ private:
     std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
     std::shared_ptr<DisplayController>                              m_displayController;
     IntentHandler                                                   m_IntentHandler;
-    Clock 	                                                    m_Clock;
+    Clock                                                           m_Clock;
     bool                                                            m_isBLEModuleReady  = false;
     bool                                                            m_isUiConnected = false;
 
