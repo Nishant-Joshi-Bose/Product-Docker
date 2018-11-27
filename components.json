@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/2.2.3-54+65fc780"
+    "selected_version": "Release/master/2.2.4-59+f7a7908"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
@@ -86,6 +86,10 @@
   {
     "name": "opensource-opkg-x86",
     "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "product-startup",
+    "selected_version": "Continuous/master/4.0.0-2+5f99fcc"
   },
   {
     "name": "BoseWebMonaco",
