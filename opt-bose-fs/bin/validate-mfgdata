@@ -122,7 +122,7 @@ if not pt: # allow any non-empty string
 # 'irBlasterCapability' is optional, but if present must be "partial" or "full"
 ir = get("irBlasterCapability")
 if ir is not None and ir != "partial" and ir != "full":
-    warn("Invalid irBlasterCapability:", ir)
+    # Do not fail! warn("Invalid irBlasterCapability:", ir)
     fixes.append("set irBlasterCapability partial")
 
 # Check for duplicate MAC addresses.
