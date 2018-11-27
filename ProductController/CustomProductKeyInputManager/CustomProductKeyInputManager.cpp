@@ -247,13 +247,13 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
             return true;
         }
 
-        return KeyIgnoredInCurrentSource( keyEvent, sourceItem );
+        return false;
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
     if( not m_QSSClient->IsBlastedKey( keyid, sourceItem->details( ).devicetype( ) ) )
     {
-        return KeyIgnoredInCurrentSource( keyEvent, sourceItem );
+        return false;
     }
 
     // If the device has been configured, blast the key (if it hasn't been configured but it's a key
@@ -393,45 +393,49 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductKeyInputManager::KeyIgnoredInCurrentSource
+/// @name   CustomProductKeyInputManager::IntentName
 ///
-/// @param  const IpcKeyInformation_t& keyEvent
+/// @param  KeyHandlerUtil::ActionType_t intent
 ///
-/// @return This method returns a true value if the key is to be ignored because
-///         the key table indicates that it should be filtered for the current source.
+/// @return This method returns the name of the supplied intent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::KeyIgnoredInCurrentSource( const IpcKeyInformation_t& keyEvent,
-                                                              const SoundTouchInterface::Sources::SourceItem* sourceItem ) const
+const std::string& CustomProductKeyInputManager::IntentName( KeyHandlerUtil::ActionType_t intent )
+{
+//    return ( intent <= Action::ActionCommon_t::ACTION_COMMON_LAST ) ? ActionCommon_t_Name( static_cast<ActionCommon_t>( intent ) ) : Action_Name( static_cast<Action>( intent ) );
+//    return "";
+    static std::string ret = "";
+    return ret;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductKeyInputManager::IsIntentIgnored
+///
+/// @param  KeyHandlerUtil::ActionType_t intent
+///
+/// @return This method returns a true value if the intent is to be ignored
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductKeyInputManager::IsIntentIgnored( KeyHandlerUtil::ActionType_t intent,
+                                                    const SoundTouchInterface::Sources::SourceItem* sourceItem ) const
 {
     using namespace KeyFilter;
     using namespace LpmServiceMessages;
 
     ///
-    /// First we check the key table to see if there's an entry matching this key
-    /// (this check is superfluous in the case where the key configuration file
-    /// covers all possible keys that could be generated)
+    /// First we check the key table to see if there's an entry matching this intent
     ///
-    const KEY_VALUE keyid = static_cast<KEY_VALUE>( keyEvent.keyid() );
-    if( ! KEY_VALUE_IsValid( keyid ) )
+    const auto& intentName = IntentName( intent );
+    auto matchKey = [ intentName ]( const KeyEntry & e )
     {
-        BOSE_WARNING( s_logger, "%s: received unknown key %d", __PRETTY_FUNCTION__, keyid );
-        return false;
-    }
-    const auto& keyName = KEY_VALUE_Name( keyid );
-    auto matchKey = [ keyName ]( const KeyEntry & e )
-    {
-        // Note that while keylist is technically an array of keys, this is just a consequence
-        // of the structure imposed by the keyhandler component (this is intended for when chord
-        // keys are being handled by the keyhandler).  In PGC chords are processed in the remote
-        // so keylist only has one entry.
-        return keyName == e.keylist( 0 );
+        return intentName == e.action();
     };
     const auto& keys = m_filterTable.keytable( );
     const auto& it = std::find_if( keys.begin(), keys.end(), matchKey );
     if( it == keys.end() )
     {
-        BOSE_WARNING( s_logger, "%s No key entry for %s", __PRETTY_FUNCTION__, keyName.c_str() );
+        BOSE_WARNING( s_logger, "%s No key entry for %s", __PRETTY_FUNCTION__, intentName.c_str() );
         return false;
     }
 
@@ -441,38 +445,7 @@ bool CustomProductKeyInputManager::KeyIgnoredInCurrentSource( const IpcKeyInform
         return false;
     }
 
-    ///
-    /// Now that we have a filter, check if the origin for this key is in the filter
-    ///
-    if( ! KeyOrigin_t_IsValid( keyEvent.keyorigin() ) )
-    {
-        BOSE_WARNING( s_logger, "%s: received unknown key origin %d", __PRETTY_FUNCTION__, keyEvent.keyorigin() );
-        return false;
-    }
-    auto originName = KeyOrigin_t_Name( keyEvent.keyorigin() );
-    originName.erase( 0, sizeof( "KEY_ORIGIN_" ) - 1 );
-    auto matchOrigin = [ originName ]( const std::string & o )
-    {
-        BOSE_DEBUG( s_logger, "%s: check %s (%s)", __PRETTY_FUNCTION__, originName.c_str(), o.c_str() );
-        try
-        {
-            std::regex r( o );
-            return std::regex_match( originName, r );
-        }
-        catch( const std::regex_error& e )
-        {
-            BOSE_ERROR( s_logger, "%s: regex error %s (%d) (%s)", __PRETTY_FUNCTION__, e.what(), e.code(), o.c_str() );
-            return false;
-        }
-    };
     const auto& filter = it->filter();
-    const auto& origins = filter.origins();
-    const auto& ito = std::find_if( origins.begin(), origins.end(), matchOrigin );
-    if( ito == origins.end() )
-    {
-        return false;
-    }
-
     auto matchSource = [ sourceItem ]( const SourceEntry & s )
     {
         BOSE_DEBUG( s_logger, "%s: check %s %s (%s %s)", __PRETTY_FUNCTION__,  sourceItem->sourcename().c_str(), sourceItem->sourceaccountname().c_str(),

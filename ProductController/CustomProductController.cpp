@@ -1632,11 +1632,15 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_action( ) )
     {
+        if( m_ProductKeyInputManager->IsIntentIgnored( message.action() ) )
+        {
+            BOSE_VERBOSE( s_logger, "Action key %u ignored", message.action() );
+        }
         ///
         /// The following attempts to handle the key action using a common intent
         /// manager.
         ///
-        if( HandleCommonIntents( message.action() ) )
+        else if( HandleCommonIntents( message.action() ) )
         {
             BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", message.action() );
         }

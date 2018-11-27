@@ -29,9 +29,8 @@ message SourceEntry
 // For example, the entry to ignore keys from IR and RF origin in slot sources for key 
 // BOSE_NUMBER_1 would look like this
 //
-// "keyList": ["BOSE_NUMBER_1"],
+// "action": "PRESET_SELECT_1",
 // "filter": {
-//      "origins": ["KEY_ORIGIN_IR", "KEY_ORIGIN_RF"],
 //      "sources": [
 //          { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_0" },
 //          { "sourceName": "PRODUCT", "sourceAccountName": "SLOT_1" },
@@ -52,7 +51,7 @@ message KeyEntry
 {
     option (ignore_unexpected_markup) = true;
 
-    repeated string                             keyList = 1; 
+    optional string action = 1; 
     optional FilterEntry                        filter  = 2;
 }
 
