@@ -57,6 +57,11 @@ string getPublicECKey( EVP_PKEY *keypair )
 
     int size = BIO_ctrl_pending( bp_public );
     void *buf = malloc( size );
+    if( buf == nullptr )
+    {
+        cout << "Error getPublicECKey() can not get memory" << endl;
+        return string();
+    }
     if( BIO_read( bp_public, buf, size ) < 0 )
     {
         cout << "Error BIO_read()" << endl;
