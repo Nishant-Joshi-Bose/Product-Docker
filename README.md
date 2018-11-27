@@ -1,8 +1,8 @@
 Eddie
 =====
 <a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Eddie'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Eddie/latest release/blue'></a>
-[MASTER Eddie Continuous build Testing] <a title='Jenkins build status for Eddie MASTER' href='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/'><img src='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/badge/icon'></a>
-
+[MASTER Eddie Continuous build Testing]
+[![Build Status](http://jnkwebhook.ngrok.io/buildStatus/icon?job=Continous_Build_Testing/Eddie_Continuous_Build_Testing_Master)](http://eco2jenkins.bose.com:8080/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/)
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
 This repo contains the source code and tools specific to the Eddie product.
@@ -29,12 +29,12 @@ Repo contacts for eddie/... branches:
 
 ### Getting Started
 
-Clone CastleTools.git and Eddie.git:
+Clone CastleTools and Eddie:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone git@github.com:BoseCorp/Eddie.git
+$ git clone --branch eddie/master git@github.com:BoseCorp/CastleProducts.git Eddie
 ```
 
 Make sure your Eddie unit is accessible via adb.
@@ -46,6 +46,15 @@ List of devices attached
 
 $
 ```
+
+If you have multiple Android devices, you can set the ANDROID_SERIAL environment
+variable to select a specific device:
+
+```
+export ANDROID_SERIAL=5166240
+```
+
+(Some scripts will not work correctly if you don't do that.)
 
 Access the APQ console via the tap cable.
 
