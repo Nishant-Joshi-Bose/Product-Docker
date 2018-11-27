@@ -238,7 +238,6 @@ void CustomProductController::Run( )
     ///
     /// Construction of the Common and Custom States
     ///
-
     ///
     /// Top State
     ///
@@ -251,6 +250,7 @@ void CustomProductController::Run( )
     ( GetHsm( ),
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
+
 
     auto* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
@@ -430,7 +430,7 @@ void CustomProductController::Run( )
     auto* statePlayingSelectedSetupNetworkConfig = new CustomProductControllerStatePlayingSelectedSetupNetworkConfig
     ( GetHsm( ),
       statePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG );
 
     auto* statePlayingSelectedSetupNetworkConfigWiFiTransition = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition
     ( GetHsm( ),
@@ -517,7 +517,6 @@ void CustomProductController::Run( )
     ///
     using namespace DeviceManagerPb;
     using namespace SystemPowerPb;
-
     GetHsm( ).AddState( Device_State_Not_Notify,
                         SystemPowerControl_State_Not_Notify,
                         stateTop );
@@ -525,6 +524,7 @@ void CustomProductController::Run( )
     GetHsm( ).AddState( NotifiedNames::BOOTING,
                         SystemPowerControl_State_Not_Notify,
                         stateBooting );
+
 
     GetHsm( ).AddState( NotifiedNames::FIRST_BOOT_GREETING,
                         SystemPowerControl_State_Not_Notify,
