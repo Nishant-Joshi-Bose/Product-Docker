@@ -57,24 +57,25 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+product_startup_dir=$(components get product-startup installed_location) || exit
 audiopath_dir=$(components get AudioPathService-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
 web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
+wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get opensource-opkg-qc8017_32 installed_location) || exit
 
-sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
+sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux || exit
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
 tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
 
 destination=$wspace/builds/$cfg
 stage=$destination/minimal-product-stage
-rm -rf "$stage"
+rm -rf "$stage" || exit
 echo "Stage directory $stage"
-
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
@@ -84,12 +85,18 @@ rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_d
 
 components record "$stage" || exit
 
+# Add a ParentBoseVersion.json file that contains the version of the release
+# that includes this minimal image.
+echo "Creating ParentBoseVersion.json"
+gen-version-files $wspace/version.txt $opt_dir/etc || exit
+mv $opt_dir/etc/BoseVersion.json $opt_dir/etc/ParentBoseVersion.json || exit
+
 # Generate a version.txt file hardcoded to 0.1.0 to force
 # a system running minimal image to download of all components.
 version_files_dir=$wspace/builds/$cfg/qc8017_32
-echo "0.1.0" > $version_files_dir/version.txt
-gen-version-files $version_files_dir/version.txt $opt_dir/etc
-rm $version_files_dir/version.txt
+echo "0.1.0" > $version_files_dir/version.txt || exit
+gen-version-files $version_files_dir/version.txt $opt_dir/etc || exit
+rm $version_files_dir/version.txt || exit
 
 cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 
@@ -151,6 +158,8 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
+"$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
+"$product_startup_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
