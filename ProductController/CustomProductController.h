@@ -61,7 +61,7 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
-#include "ProductControllerStateSelectedSoftwareUpdate.h"
+#include "ProductControllerStateForcedSoftwareUpdate.h"
 #include "LightBarController.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "NetManager.pb.h"
@@ -353,7 +353,7 @@ private:
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
-    ProductControllerStateSelectedSoftwareUpdate                    m_ProductControllerStateSelectedSoftwareUpdate;
+    ProductControllerStateForcedSoftwareUpdate                      m_ProductControllerStateForcedSoftwareUpdate;
 
     /// ProductAudioService
     std::shared_ptr<CustomProductAudioService>                      m_ProductAudioService;
