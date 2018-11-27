@@ -402,10 +402,9 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string& CustomProductKeyInputManager::IntentName( KeyHandlerUtil::ActionType_t intent )
 {
-//    return ( intent <= Action::ActionCommon_t::ACTION_COMMON_LAST ) ? ActionCommon_t_Name( static_cast<ActionCommon_t>( intent ) ) : Action_Name( static_cast<Action>( intent ) );
-//    return "";
-    static std::string ret = "";
-    return ret;
+    return ( intent <= Action::ActionCommon_t::ACTION_COMMON_LAST ) ?
+           Action::ActionCommon_t::Actions_Name( static_cast<Action::ActionCommon_t::Actions>( intent ) ) :
+           Action::ActionCustom_t::Actions_Name( static_cast<Action::ActionCustom_t::Actions>( intent ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -417,8 +416,7 @@ const std::string& CustomProductKeyInputManager::IntentName( KeyHandlerUtil::Act
 /// @return This method returns a true value if the intent is to be ignored
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::IsIntentIgnored( KeyHandlerUtil::ActionType_t intent,
-                                                    const SoundTouchInterface::Sources::SourceItem* sourceItem ) const
+bool CustomProductKeyInputManager::IsIntentIgnored( KeyHandlerUtil::ActionType_t intent ) const
 {
     using namespace KeyFilter;
     using namespace LpmServiceMessages;
@@ -445,6 +443,16 @@ bool CustomProductKeyInputManager::IsIntentIgnored( KeyHandlerUtil::ActionType_t
         return false;
     }
 
+    const auto& nowSelection = m_ProductController.GetNowSelection( );
+    if( not nowSelection.has_contentitem( ) )
+    {
+        return false;
+    }
+    auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
+    if( not sourceItem )
+    {
+        return false;
+    }
     const auto& filter = it->filter();
     auto matchSource = [ sourceItem ]( const SourceEntry & s )
     {
