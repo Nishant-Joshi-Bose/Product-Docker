@@ -23,7 +23,6 @@
 #include "SystemPowerMacro.pb.h"
 #include "FrontDoorClient.h"
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +61,8 @@ public:
 
     }
 
+    void Run() override;
+
 protected:
 
     ///
@@ -87,7 +88,6 @@ private:
     int64_t m_TimeOfChordRelease;
     ::google::protobuf::uint32 m_KeyIdOfIncompleteChordRelease;
 
-    void InitializeDeviceController( );
     bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
 
     bool IsSourceKey( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );

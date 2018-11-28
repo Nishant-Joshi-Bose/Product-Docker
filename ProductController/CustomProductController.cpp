@@ -38,10 +38,11 @@
 #include "ProductAdaptIQManager.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
-#include "ControlIntegrationSTSStateFactory.h"
-#include "ControlIntegrationSTSStateTop.h"
-#include "ControlIntegrationSTSStateTopSilent.h"
-#include "ProductSTSStateTopAiQ.h"
+#include "ProductSTSStateFactory.h"
+#include "ProductSTSStateTop.h"
+#include "ProductSTSStateTopSilent.h"
+#include "CustomSTSController/ProductSTSStateTopAiQ.h"
+#include "CustomSTSController/ProductSTSStateDeviceControl.h"
 #include "SystemSourcesProperties.pb.h"
 #include "ProductControllerHsm.h"
 #include "CustomProductControllerStates.h"
@@ -138,10 +139,13 @@ constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
 constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
-}
+
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
 constexpr uint32_t UI_ALIVE_TIMEOUT = 60 * 1000;
+
+constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConfiguration.json";
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -175,9 +179,9 @@ CustomProductController::CustomProductController( ) :
     m_networkOperationalMode( NetManager::Protobuf::wifiOff ),
 
     ///
-    /// Initialization of STS contorller.
+    /// Initialization of STS controller.
     ///
-    m_ControlIntegrationSTSController( ),
+    m_ProductSTSController( *this ),
 
     ///
     /// Intent Handler Initialization
@@ -701,6 +705,17 @@ void CustomProductController::Run( )
     CommonInitialize( );
 
     ///
+    /// Set up connection with DeviceController service
+    ///
+    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductController", GetTask( ) );
+    bool loadResult = m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    if( not loadResult )
+    {
+        BOSE_DIE( "Failed loading key blaster configuration file." );
+    }
+    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
+
+    ///
     /// Get instances of all the modules.
     ///
     BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
@@ -1093,7 +1108,7 @@ std::pair<bool, int32_t> CustomProductController::GetDesiredPlayingVolume( ) con
 ///
 /// @name   CustomProductController::SetupProductSTSController
 ///
-/// @brief  This method is called to perform the needed initialization of the ControlIntegrationSTSController,
+/// @brief  This method is called to perform the needed initialization of the ProductSTSController,
 ///         specifically, provide the set of sources to be created initially.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1101,11 +1116,11 @@ void CustomProductController::SetupProductSTSController( )
 {
     using namespace ProductSTS;
 
-    std::vector< ControlIntegrationSTSController::SourceDescriptor > sources;
+    std::vector< ProductSTSController::SourceDescriptor > sources;
 
-    ControlIntegrationSTSStateFactory<ControlIntegrationSTSStateTop>          commonStateFactory;
-    ControlIntegrationSTSStateFactory<ControlIntegrationSTSStateTopSilent>    silentStateFactory;
-    ControlIntegrationSTSStateFactory<ProductSTSStateTopAiQ>                  aiqStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSilent>        silentStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopAiQ>           aiqStateFactory;
+    ProductSTSStateFactory<ProductSTSStateDeviceControl>    deviceControlStateFactory;
 
     ///
     /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
@@ -1117,13 +1132,13 @@ void CustomProductController::SetupProductSTSController( )
     /// If true, the source is PRODUCT.
     /// See ProductSTSController::Initialize().
     ///
-    ControlIntegrationSTSController::SourceDescriptor descriptor_SETUP   { SETUP,   SetupSourceSlot_Name( SETUP ),      false, silentStateFactory };
-    ControlIntegrationSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),       true,  commonStateFactory };
-    ControlIntegrationSTSController::SourceDescriptor descriptor_ADAPTIQ { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ),    false, aiqStateFactory    };
-    ControlIntegrationSTSController::SourceDescriptor descriptor_PAIRING { PAIRING, SetupSourceSlot_Name( PAIRING ),    false, silentStateFactory };
-    ControlIntegrationSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),   false, commonStateFactory, true };
-    ControlIntegrationSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),   false, commonStateFactory, true };
-    ControlIntegrationSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),   false, commonStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SETUP   { SETUP,   SetupSourceSlot_Name( SETUP ),     false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  deviceControlStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_ADAPTIQ { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ),   false, aiqStateFactory    };
+    ProductSTSController::SourceDescriptor descriptor_PAIRING { PAIRING, SetupSourceSlot_Name( PAIRING ),   false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, deviceControlStateFactory, true };
 
     sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
@@ -1138,29 +1153,29 @@ void CustomProductController::SetupProductSTSController( )
                                        this ) );
 
 
-    Callback< ControlIntegrationSTSAccount::ProductSourceSlot >
+    Callback< ProductSTSAccount::ProductSourceSlot >
     CallbackToHandleSelectSourceSlot( std::bind( &CustomProductController::HandleSelectSourceSlot,
                                                  this,
                                                  std::placeholders::_1 ) );
 
-    m_ControlIntegrationSTSController.Initialize( sources,
-                                                  CallbackForSTSComplete,
-                                                  CallbackToHandleSelectSourceSlot );
+    m_ProductSTSController.Initialize( sources,
+                                       CallbackForSTSComplete,
+                                       CallbackToHandleSelectSourceSlot );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::HandleSelectSourceSlot
 ///
-/// @brief  This method is called from the ControlIntegrationSTSController, when one of our sources is
+/// @brief  This method is called from the ProductSTSController, when one of our sources is
 ///         activated by CAPS via STS.
 ///
-/// @note   This method is called on the ControlIntegrationSTSController task.
+/// @note   This method is called on the ProductSTSController task.
 ///
-/// @param  ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot This identifies the activated slot.
+/// @param  ProductSTSAccount::ProductSourceSlot sourceSlot This identifies the activated slot.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleSelectSourceSlot( ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot )
+void CustomProductController::HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot )
 {
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );

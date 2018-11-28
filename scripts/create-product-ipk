@@ -92,7 +92,6 @@ devicecontroller_dir=$(components get A4VDeviceController-qc8017_32 installed_lo
 rcs_dir=$(components get A4VRemoteCommunicationService-qc8017_32 installed_location) || exit
 vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
 
-arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
 tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
@@ -175,17 +174,6 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 # from `make clean` and such.
 trap 'chmod -R +w "$secure_dir"' EXIT
 
-# Remove files that should belong to product-script
-# Any file on system can belong only to one IPK.
-# If more than one IPK has file with same path-name, the IPK that is 
-# installed last will own the file. In case of Riviera, as product.ipk
-# is installed after product-script.ipk, the critical files below belongs to
-# product.ipk. Next time, when product.ipk is installed, they become 0 byte 
-# - bricking the system
-rm "$opt_dir/.bashrc"
-rm "$opt_dir/.bash_profile"
-rm "$opt_dir/etc/product"
-
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
@@ -251,6 +239,12 @@ fi
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
+
+"$wspace"/PtsServer/make-static-content-map / /opt/Bose/html $(
+  # index.html has special handling in the pts-handler script, so don't
+  # include it in the static content map.
+  cd "$opt_dir"/html && find ! -name index.html ! -name '*~' -type f
+) > "$opt_dir"/etc/static-content-map.txt || exit
 
 PackageName=SoundTouch
 

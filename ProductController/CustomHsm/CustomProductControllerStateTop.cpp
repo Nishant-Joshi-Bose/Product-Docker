@@ -58,7 +58,7 @@ bool CustomProductControllerStateTop::HandleAdaptIQControl( const ProductAdaptIQ
 
     if( cmd.action() == ProductAdaptIQControl::Start )
     {
-        s_ActionPendingFromTansition = ( KeyHandlerUtil::ActionType_t )Action::ACTION_APAPTIQ_START;
+        s_ActionPendingFromTransition = ( KeyHandlerUtil::ActionType_t )Action::ACTION_APAPTIQ_START;
     }
 
     return true;
@@ -77,7 +77,7 @@ bool CustomProductControllerStateTop::HandleIntentSpeakerPairing( KeyHandlerUtil
 
     if( intent == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS_LAN )
     {
-        s_ActionPendingFromTansition = intent;
+        s_ActionPendingFromTransition = intent;
     }
 
     return true;

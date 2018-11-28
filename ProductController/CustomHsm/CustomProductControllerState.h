@@ -144,6 +144,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOn( )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentFactoryDefault( )
     {
         return false;
@@ -487,7 +492,7 @@ protected:
 
     static ProductController* s_productController;
 
-    static  KeyHandlerUtil::ActionType_t s_ActionPendingFromTansition;
+    static  KeyHandlerUtil::ActionType_t s_ActionPendingFromTransition;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

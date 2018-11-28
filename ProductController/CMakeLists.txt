@@ -21,6 +21,7 @@ INCLUDE_DIRECTORIES(
   CustomProductKeyInputManager
   CustomProductLpmHardwareInterface
   CustomHsm
+  CustomProductSTSController
   IntentHandler
 )
 
@@ -78,8 +79,8 @@ ADD_EXECUTABLE(Professor
   ProductCommandLine.cpp
   ProductDspHelper.cpp
   ProductStart.cpp
-  ProductSTSStateTopAiQ.cpp
-
+  CustomSTSController/ProductSTSStateTopAiQ.cpp
+  CustomSTSController/ProductSTSStateDeviceControl.cpp
   CustomProductController.cpp
 )
 

@@ -58,10 +58,15 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController ),
+      m_deviceControllerPtr( ProductController.GetDeviceControllerClient() ),
       m_TimeOfChordRelease( 0 ),
       m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
-    InitializeDeviceController( );
+}
+
+void CustomProductKeyInputManager::Run()
+{
+    ProductKeyInputManager::Run();
 
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
@@ -85,26 +90,6 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
         }
     };
     m_ProductController.GetSourceInfo().RegisterSourceListener( sourceInfoCb );
-
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductKeyInputInterface::InitializeDeviceController
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductKeyInputManager::InitializeDeviceController( )
-{
-    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductKeyInputManager",
-                                                                   m_ProductController.GetTask( ) );
-
-    bool loadResult = m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
-    if( not loadResult )
-    {
-        BOSE_DIE( "Failed loading key blaster configuration file." );
-    }
-
-    m_deviceControllerPtr->Connect( []( bool connected ) {} );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +165,7 @@ void CustomProductKeyInputManager::BlastKey(
 ///
 /// @param  const IpcKeyInformation_t& keyEvent
 ///
-/// @return This method returns a true value if the key is to be blasted so that no further
+/// @return This method returns a true value if the key was consumed so that no further
 ///         processing of the key event in the base ProductKeyInputManager class takes place;
 ///         otherwise, it returns false to allow further processing.
 ///
@@ -188,24 +173,15 @@ void CustomProductKeyInputManager::BlastKey(
 bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformation_t&
                                                           keyEvent )
 {
-
     if( FilterIncompleteChord( keyEvent ) )
     {
         return true;
     }
 
-
-    if( IsSourceKey( keyEvent ) )
-    {
-
-        BlastKey( keyEvent, "SourceKeysAreABlast" );
-
-        // Still want this to be handled by ProductController key handler
-        return false;
-    }
+    auto keyid = keyEvent.keyid( );
 
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
-    if( keyEvent.keyid( ) == BOSE_TV_INPUT )
+    if( keyid == BOSE_TV_INPUT )
     {
         const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSourceSlot_Name( TV ) );
 
@@ -252,9 +228,8 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     {
         // TV source won't have "details" after a factory default (before /system/sources has been written)
         // In this case, we need to consume keys that normally would have been blasted
-        if(
-            ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
-            m_deviceControllerPtr->IsBlastedKey( keyEvent.keyid( ), DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
+        if( ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
+            m_deviceControllerPtr->IsBlastedKey( keyid, DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
             return true;
@@ -264,8 +239,23 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
-    if( not m_deviceControllerPtr->IsBlastedKey( keyEvent.keyid( ), sourceItem->details( ).devicetype( ) ) )
+    if( not m_deviceControllerPtr->IsBlastedKey( keyid, sourceItem->details( ).devicetype( ) ) )
     {
+        // Per PGC-3306 Product sources shouldn't generate preset intents
+        // Note this check isn't required in the "if( not sourceItem->has_details() )" since
+        // we shouldn't be able to switch to a source (other than TV) that hasn't been configured
+        if(
+            ( sourceItem->sourcename() == SHELBY_SOURCE::PRODUCT ) &&
+            (
+                ( keyid == BOSE_NUMBER_1 ) || ( keyid == BOSE_NUMBER_2 ) || ( keyid == BOSE_NUMBER_3 ) ||
+                ( keyid == BOSE_NUMBER_4 ) || ( keyid == BOSE_NUMBER_5 ) || ( keyid == BOSE_NUMBER_6 )
+            ) &&
+            ( keyEvent.keyorigin( ) == KEY_ORIGIN_RF )
+        )
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -291,11 +281,11 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
         return;
     }
 
-    if (pwrMacro.enabled() )
+    if( pwrMacro.enabled() )
     {
-        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ), 
+        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
                    pwrMacro.ShortDebugString().c_str() );
-  
+
         auto srcMacro = [ this, key, pwrMacro]()
         {
             if( pwrMacro.has_powerondevice() )
@@ -399,7 +389,6 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
     }
 
     BOSE_VERBOSE( s_logger, "%s( %s ) @ %lld returning %s", __func__, keyEvent.ShortDebugString().c_str( ), timeNow, retVal ? "true" : "false" );
-
     return retVal;
 }
 

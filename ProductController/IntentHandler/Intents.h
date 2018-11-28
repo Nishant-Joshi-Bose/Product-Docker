@@ -65,6 +65,7 @@ enum class Action
     TOGGLE_WIFI_RADIO  = ActionCommon_t::TOGGLE_WIFI_RADIO,
     FACTORY_DEFAULT    = ActionCommon_t::FACTORY_DEFAULT,
     POWER_OFF          = ActionCommon_t::POWER_OFF,
+    POWER_ON           = ActionCommon_t::POWER_ON,
 
     ///
     /// Bluetooth Intents

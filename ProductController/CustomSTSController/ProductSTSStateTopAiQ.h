@@ -5,14 +5,14 @@
 
 #pragma once
 
-#include "ControlIntegrationSTSStateTop.h"
+#include "ProductSTSStateTop.h"
 
-class ProductSTSStateTopAiQ : public ControlIntegrationSTSStateTop
+class ProductSTSStateTopAiQ : public ProductSTSStateTop
 {
 public:
-    ProductSTSStateTopAiQ( ControlIntegrationSTSHsm& hsm,
+    ProductSTSStateTopAiQ( ProductSTSHsm& hsm,
                            CHsmState *pSuperState,
-                           ControlIntegrationSTSAccount& account );
+                           ProductSTSAccount& account );
     ~ProductSTSStateTopAiQ() override {}
 
 protected:

@@ -40,7 +40,7 @@
 #include "ProductCecHelper.h"
 #include "ProductDspHelper.h"
 #include "ProductController.h"
-#include "ControlIntegrationSTSController.h"
+#include "ProductSTSController.h"
 #include "FrontDoorClientIF.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
@@ -174,6 +174,11 @@ public:
     IntentHandler& GetIntentHandler( ) override
     {
         return m_IntentHandler;
+    }
+
+    const DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr& GetDeviceControllerClient() const override
+    {
+        return m_deviceControllerPtr;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,6 +333,15 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following subclasses declarations are used to manage the lower level hardware and
+    ///        the device, as well as to interface with the user and higher level system
+    ///        applications and command line. 
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr       m_deviceControllerPtr;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following member variables are used to determined whether certain required
     ///        processes or connections are ready for setting the various Product Controller state
     ///        machine states.
@@ -355,15 +369,15 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declarations are used as interfaces to the ControlIntegrationSTSController,
+    /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Custom Product Controller and the
     ///        STS source proxies.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ControlIntegrationSTSController m_ControlIntegrationSTSController;
+    ProductSTSController m_ProductSTSController;
 
     void SetupProductSTSController( ) override;
-    void HandleSelectSourceSlot( ControlIntegrationSTSAccount::ProductSourceSlot sourceSlot );
+    void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

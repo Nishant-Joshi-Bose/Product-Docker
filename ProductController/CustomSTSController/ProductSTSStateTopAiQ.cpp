@@ -8,10 +8,10 @@
 std::string ProductSTSStateTopAiQ::s_aiqAudioURL{ "adaptiq://" };
 
 //////////////////////////////////////////////////////////////
-ProductSTSStateTopAiQ::ProductSTSStateTopAiQ( ControlIntegrationSTSHsm& hsm,
+ProductSTSStateTopAiQ::ProductSTSStateTopAiQ( ProductSTSHsm& hsm,
                                               CHsmState *pSuperState,
-                                              ControlIntegrationSTSAccount& account ) :
-    ControlIntegrationSTSStateTop( hsm, pSuperState, account )
+                                              ProductSTSAccount& account ) :
+    ProductSTSStateTop( hsm, pSuperState, account )
 {
 }
 
