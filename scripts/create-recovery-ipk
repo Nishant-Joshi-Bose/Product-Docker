@@ -75,9 +75,6 @@ components record "$stage" || exit
 minimal_image="Bose_minimal.tar.gz"
 cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
 
-# copy network configured script which will be required in restore operation
-cp "$wspace/misc/isNetworkConfigured" "$opt_dir/bin/" || exit
-
 # copy recovery images from RivieraSwUpRecovery
 "$rivierarecovery_dir/stage" "$opt_dir" || exit
 
@@ -114,7 +111,7 @@ if ! [ "\$(awk '\$2 == "/cache"' /proc/mounts)" ]; then
 fi
 
 # To increase the cache partition size, reflash it
-# Todo: Remove this block of code as soon as new HSP with 
+# Todo: Remove this block of code as soon as new HSP with
 #   proper /cache partition size is released (remove after SOS)
 ##########################################################
 
@@ -142,9 +139,6 @@ mv /opt/Bose/Bose_minimal.tar.gz /cache/ || exit
 # move RecoveryMain binary to /cache partition
 mv /opt/Bose/bin/RecoveryMain /cache/ || exit
 mv /opt/Bose/etc/RecoveryMgr /cache/ || exit
-
-# move network check script to /cache
-cp /opt/Bose/bin/isNetworkConfigured /cache/ || exit 
 
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
