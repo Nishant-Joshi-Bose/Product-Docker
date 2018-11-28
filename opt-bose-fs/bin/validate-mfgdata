@@ -119,10 +119,8 @@ if not pt: # allow any non-empty string
     warn("Invalid productType:", pt)
     fixes.append("set productType professor # ginger-cheevers")
 
-# 'irBlasterCapability' is optional, but if present must be "partial" or "full"
-ir = get("irBlasterCapability")
-if ir is not None and ir != "partial" and ir != "full":
-    fixes.append("set irBlasterCapability partial")
+# 'irBlasterCapability' is optional, don't check for an invalid value"
+
 
 # Check for duplicate MAC addresses.
 addrs = [get("snMacWlan0"), get("snMacWlan1"), get("snMacBt"), get("snMacUSB"), get("snMacEth")]
