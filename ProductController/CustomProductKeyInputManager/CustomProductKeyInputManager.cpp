@@ -318,39 +318,24 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
 
         if( pwrMacro.has_powerondevice() )
         {
-            if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
-            {
-                const auto& nowSelection = m_ProductController.GetNowSelection( );
-                if( nowSelection.has_contentitem( ) )
-                {
-                    const auto& activeSrc = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
-                    if( activeSrc )
-                    {
-                        // If the source only has power toggle key (no discrete power on/off)
-                        // only send the power key, if we are currently off or if source is the active source
-                        if( ( key == BOSE_ASSERT_OFF ) and ( ( macroSrc->sourcename() != activeSrc->sourcename() ) || ( macroSrc->sourceaccountname() != activeSrc->sourceaccountname() ) ) )
-                        {
-                            BOSE_INFO( s_logger, "power macro going off and active source:macro source %s:%s", activeSrc->sourcename().c_str(), macroSrc->sourcename().c_str() );
-                            QSSMSG::IsKeyInCodesetMessage_t keyReq;
-                            keyReq.set_cicode( macroSrc->details().cicode() );
-                            keyReq.set_ueikey( 3 );
-                            m_QSSClient->IsKeyInCodeset( keyReq, srcCb );
-                        }
-                    }
-                    else
-                    {
-                        srcMacro();
-                    }
-                }
-                else
-                {
-                    srcMacro();
-                }
-            }
-            else
+            if( !macroSrc or !macroSrc->has_details( ) or !macroSrc->details().has_cicode() )
             {
                 tvMacro();
+                return;
             }
+            // If the source only has power toggle key (no discrete power on/off)
+            // only send the power key, if we are currently off or if source is the active source
+            const auto& lastSelection = m_ProductController.GetLastContentItem( );
+            if( ( key == BOSE_ASSERT_ON ) || ( ( macroSrc->sourcename() == lastSelection.source() ) && ( macroSrc->sourceaccountname() == lastSelection.sourceaccount() ) ) )
+            {
+                srcMacro();
+                return;
+            }
+
+            QSSMSG::IsKeyInCodesetMessage_t keyReq;
+            keyReq.set_cicode( macroSrc->details().cicode() );
+            keyReq.set_ueikey( 3 );   // 3 is UEI kKey_POWER_OFF - These will be added to A4VQuickSetService protobuf file in next qss release
+            m_QSSClient->IsKeyInCodeset( keyReq, srcCb );
         }
         else
         {
