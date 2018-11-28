@@ -60,7 +60,7 @@ endif
 
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
-	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
+	rm -rf $(BUILDS_DIR)/CMakeCache.txt
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
@@ -81,7 +81,7 @@ PACKAGENAMES = SoundTouchRecovery product-script software-update wpe monaco Soun
 
 .PHONY: generate-metadata
 generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json.sh $(BOSE_WORKSPACE)/builds/$(cfg) $(product) dev
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
