@@ -66,6 +66,7 @@ ADD_EXECUTABLE(Professor
   CustomHsm/CustomProductControllerStatePlayingDeselected.cpp
   CustomHsm/CustomProductControllerStatePlayingSelected.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelectedSetupNetworkConfig.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
   CustomHsm/CustomProductControllerStateTop.cpp
   IntentHandler/IntentHandler.cpp

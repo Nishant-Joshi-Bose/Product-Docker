@@ -451,6 +451,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSetupDeactivated()
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAborted()
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Custom Product Controller reference of type
@@ -478,16 +488,6 @@ public:
     }
 
     virtual bool HandleDspBooted( const LpmServiceMessages::IpcDeviceBoot_t& dspBooted )
-    {
-        return false;
-    }
-
-    virtual bool HandleSetupAborted( )
-    {
-        return false;
-    }
-
-    virtual bool HandleSetupDeactivated( )
     {
         return false;
     }

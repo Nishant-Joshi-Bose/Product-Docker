@@ -1,28 +1,30 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file      CustomProductControllerStateIdle.cpp
+///
+/// @file      CustomProductControllerStatePlayingSelectedSetupNetworkConfig.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product network setup state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
-/// ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 ///            Included Header Files
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "ProductControllerStates.h"
+#include "Utilities.h"
+#include "CustomProductControllerStatePlayingSelectedSetupNetworkConfig.h"
 #include "CustomProductController.h"
-#include "CustomProductControllerStateIdle.h"
-#include "DPrint.h"
-#include "ProductLogger.h"
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Class name declaration for logging
-////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace
-{
-constexpr char CLASS_NAME[ ] = "CustomProductControllerStateIdle";
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -31,44 +33,55 @@ namespace ProductApp
 {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief CustomProductControllerStateIdle::CustomProductControllerStateIdle
+///
+/// @brief CustomProductControllerStatePlayingSelectedSetupNetworkConfig::CustomProductControllerStatePlayingSelectedSetupNetworkConfig
+///
 /// @param ProductControllerHsm& hsm
+///
 /// @param CHsmState*            pSuperState
+///
 /// @param Hsm::STATE            stateId
+///
 /// @param const std::string&    name
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm& hsm,
-                                                                    CHsmState* pSuperState,
-                                                                    Hsm::STATE stateId,
-                                                                    const std::string& name )
-    : ProductControllerStateIdle( hsm, pSuperState, stateId, name )
+CustomProductControllerStatePlayingSelectedSetupNetworkConfig::CustomProductControllerStatePlayingSelectedSetupNetworkConfig(
+    ProductControllerHsm&       hsm,
+    CHsmState*                  pSuperState,
+    Hsm::STATE                  stateId,
+    const std::string&          name )
+
+    : ProductControllerStatePlayingSelectedSetupNetworkConfig( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, "%s::%s - is being constructed.", CLASS_NAME, __FUNCTION__ );
+    BOSE_INFO( s_logger, "The %s state is being constructed.", name.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief CustomProductControllerStateIdle::HandleStateEnter
+///
+/// @brief CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateEnter
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateEnter( )
+void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateEnter( )
 {
-    GetCustomProductController( ).GetDspHelper()->SetAutoWakeMonitor( GetCustomProductController( ).IsAutoWakeEnabled() );
+    BOSE_INFO( s_logger, __func__ );
+    ProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateEnter( );
+
+    // Mute DSP Amp to avoid noise produced during AP mode on
+    GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, true );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief CustomProductControllerStateIdle::HandleAutowakeStatus
+///
+/// @brief  CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateExit
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateIdle::HandleAutowakeStatus( bool active )
+void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateExit( )
 {
-    GetCustomProductController( ).GetDspHelper()->SetAutoWakeMonitor( active );
-    return true;
-}
+    BOSE_INFO( s_logger, __func__ );
+    ProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateExit( );
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief CustomProductControllerStateIdle::HandleStateExit
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateExit( )
-{
-    GetCustomProductController( ).GetDspHelper()->SetAutoWakeMonitor( false );
+    // Unmute DSP Amp
+    GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
