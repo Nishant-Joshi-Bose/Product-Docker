@@ -69,22 +69,6 @@ void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateE
     GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, true );
 }
 
-
-/*
-bool CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleNetworkWifiAPStatus( bool APStatus )
-{
-    BOSE_INFO( s_logger, "The %s state is in %s. AP mode is %s",
-               GetName( ).c_str( ), __func__ , APStatus ? "Enabled" : "Disabled" );
-
-    if( !APStatus )
-    {
-        GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, false );
-    }
-
-    return true;
-}
-*/
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateExit
