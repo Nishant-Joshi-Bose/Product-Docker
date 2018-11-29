@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Release/master/3.0.4-116+3cfd366"
+    "selected_version": "Release/master/3.0.5-120+537b11b"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "product-startup",
-    "selected_version": "Continuous/master/4.0.0-2+5f99fcc"
+    "selected_version": "Release/master/4.0.0-5+5179185"
   },
   {
     "name": "BoseWebMonaco",

@@ -278,56 +278,89 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
         return;
     }
 
-    if( pwrMacro.enabled() )
+    // Macro isn't enabled, nothing to do
+    if( ! pwrMacro.enabled() )
     {
-        BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
-                   pwrMacro.ShortDebugString().c_str() );
+        return;
+    }
 
-        auto srcMacro = [ this, key, pwrMacro]()
+    BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
+               pwrMacro.ShortDebugString().c_str() );
+
+    // We'll use this both directly and as a callback
+    auto tvMacro = [ this, key, pwrMacro]()
+    {
+        if( !pwrMacro.powerontv() )
         {
-            if( pwrMacro.has_powerondevice() )
-            {
-                const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
-                if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
-                {
-                    QSSMSG::BoseKeyReqMessage_t request;
-                    request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                    request.set_keyval( key );
-                    request.set_codeset( macroSrc->details( ).cicode( ) );
-                    m_QSSClient->SendKey( request );
-                }
-            }
-        };
+            return;
+        }
+        const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
+        if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
+        {
+            QSSMSG::BoseKeyReqMessage_t request;
+            request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+            request.set_keyval( key );
+            request.set_codeset( tvSource->details( ).cicode( ) );
+            m_QSSClient->SendKey( request );
+        }
+    };
 
-        auto cbFunc = [ this, key, pwrMacro, srcMacro]( QSSMSG::BoseKeyReqMessage_t resp )
+    // No source device configured with power sync macro, send the TV power
+    if( ! pwrMacro.has_powerondevice() )
+    {
+        tvMacro( );
+        return;
+    }
+
+
+    // We need to execute the tvMacro after we get the response for the device macro
+    auto cbFunc = [ this, key, pwrMacro, tvMacro]( QSSMSG::BoseKeyReqMessage_t resp )
+    {
+        tvMacro( );
+    };
+    AsyncCallback<QSSMSG::BoseKeyReqMessage_t> respCb( cbFunc, m_ProductController.GetTask() );
+
+    const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
+    auto srcMacro = [ this, key, pwrMacro, macroSrc, respCb]()
+    {
+        QSSMSG::BoseKeyReqMessage_t request;
+        request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
+        request.set_keyval( key );
+        request.set_codeset( macroSrc->details( ).cicode( ) );
+        // Wait for the callback from qss before sending the next key
+        m_QSSClient->SendKey( request, respCb );
+    };
+    auto cbSrcFunc = [ this, key, pwrMacro, macroSrc, srcMacro, tvMacro]( QSSMSG::IsKeyInCodesetMessage_t resp )
+    {
+        if( resp.response() == true )
         {
             srcMacro( );
-        };
-        AsyncCallback<QSSMSG::BoseKeyReqMessage_t> respCb( cbFunc, m_ProductController.GetTask() );
-
-        if( pwrMacro.powerontv() )
-        {
-            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
-            {
-                QSSMSG::BoseKeyReqMessage_t request;
-                request.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( key );
-                request.set_codeset( tvSource->details( ).cicode( ) );
-                // Wait for the callback from qss before sending the next key
-                m_QSSClient->SendKey( request, respCb );
-            }
-            else
-            {
-                srcMacro();
-            }
         }
         else
         {
-            srcMacro( );
-
+            tvMacro();
         }
+    };
+    AsyncCallback<QSSMSG::IsKeyInCodesetMessage_t> srcCb( cbSrcFunc, m_ProductController.GetTask() );
+
+    if( !macroSrc or !macroSrc->has_details( ) or !macroSrc->details().has_cicode() )
+    {
+        tvMacro();
+        return;
     }
+    // If the source only has power toggle key (no discrete power on/off)
+    // only send the power key, if we are currently off or if source is the active source
+    const auto& lastSelection = m_ProductController.GetLastContentItem( );
+    if( ( key == BOSE_ASSERT_ON ) || ( ( macroSrc->sourcename() == lastSelection.source() ) && ( macroSrc->sourceaccountname() == lastSelection.sourceaccount() ) ) )
+    {
+        srcMacro();
+        return;
+    }
+
+    QSSMSG::IsKeyInCodesetMessage_t keyReq;
+    keyReq.set_cicode( macroSrc->details().cicode() );
+    keyReq.set_ueikey( 3 );   // 3 is UEI kKey_POWER_OFF - These will be added to A4VQuickSetService protobuf file in next qss release
+    m_QSSClient->IsKeyInCodeset( keyReq, srcCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
