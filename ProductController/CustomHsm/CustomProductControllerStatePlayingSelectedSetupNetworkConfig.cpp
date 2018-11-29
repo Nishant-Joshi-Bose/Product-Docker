@@ -78,7 +78,7 @@ bool CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleNetwor
 
     if( !APStatus )
     {
-        GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, true );
+        GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, false );
     }
 
     return true;
