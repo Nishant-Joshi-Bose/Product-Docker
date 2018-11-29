@@ -482,6 +482,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSetupAborted( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupDeactivated( )
+    {
+        return false;
+    }
+
 protected:
     ///
     /// The custom version of this function returns the custom ProductController.
