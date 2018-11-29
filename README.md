@@ -296,3 +296,5 @@ Ask to be added to the SSG-Taylor mailing list to stay in the loop by clicking
 [Join the Taylor Slack channel.](https://bosessg.slack.com/messages/CBMJH0U01)
 
 Wikis [ATHOME](https://wiki.bose.com/display/ATHOME/Taylor) and [WSSW](https://wiki.bose.com/display/WSSW/Taylor).
+
+[Buttons/Keys](https://wiki.bose.com/display/ATHOME/Taylor+Button+Handling+Design)
