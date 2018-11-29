@@ -654,6 +654,8 @@ void ProductCecHelper::HandleCecState( const IpcCecState_t& state )
     m_cecStateCache.set_activesource( state.actsrc( ) );
     m_cecStateCache.set_strmpath( state.strmpath( ) );
 
+    // Clear the list before copying over new items
+    m_cecStateCache.mutable_cecdevices()->Clear();
     for( auto i = 0; i < state.cec_devices_size( ); i++ )
     {
         const auto& idev = state.cec_devices( i );
