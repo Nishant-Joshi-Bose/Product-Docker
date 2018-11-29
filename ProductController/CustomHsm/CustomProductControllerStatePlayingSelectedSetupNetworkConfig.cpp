@@ -64,6 +64,7 @@ CustomProductControllerStatePlayingSelectedSetupNetworkConfig::CustomProductCont
 void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateEnter( )
 {
     BOSE_INFO( s_logger, __func__ );
+    ProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateEnter( );
 
     // Mute DSP Amp to avoid noise produced during AP mode on
     GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, true );
@@ -77,6 +78,7 @@ void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateE
 void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateExit( )
 {
     BOSE_INFO( s_logger, __func__ );
+    ProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateExit( );
 
     // Unmute DSP Amp
     GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, false );
