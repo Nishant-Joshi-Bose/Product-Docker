@@ -70,7 +70,7 @@ public:
     }
 
     void HandleStateEnter( )    override;
-    bool HandleNetworkWifiAPStatus( bool APStatus ) override;
+    //bool HandleNetworkWifiAPStatus( bool APStatus ) override;
     void HandleStateExit( )     override;
 
 };

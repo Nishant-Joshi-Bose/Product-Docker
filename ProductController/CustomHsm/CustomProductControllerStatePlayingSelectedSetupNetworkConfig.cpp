@@ -70,7 +70,7 @@ void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateE
 }
 
 
-
+/*
 bool CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleNetworkWifiAPStatus( bool APStatus )
 {
     BOSE_INFO( s_logger, "The %s state is in %s. AP mode is %s",
@@ -83,6 +83,7 @@ bool CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleNetwor
 
     return true;
 }
+*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
