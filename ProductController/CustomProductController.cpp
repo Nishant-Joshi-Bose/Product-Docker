@@ -654,23 +654,23 @@ void CustomProductController::Run( )
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSetup );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSetupNetworkConfig );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSetupNetworkConfigWiFiConnection );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupNetworkConfigWiFiTransition );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupNetworkConfigWiFiExiting );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupNetworkConfigWifiAborting );
 
