@@ -78,7 +78,7 @@ PACKAGENAMES = SoundTouchRecovery product-script software-update wpe monaco Soun
 
 .PHONY: generate-metadata
 generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json.sh $(BOSE_WORKSPACE)/builds/$(cfg) $(product) dev
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
