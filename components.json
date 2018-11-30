@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/AVS-VPA/2018-11-22_0745"
+    "selected_version": "Release/AVS-VPA/2.2.0.44289.3109626"
   },
   {
     "name": "BLERemoteXCVR",
@@ -149,7 +149,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.3-601+f21e13e"
+    "selected_version": "Release/master/2.2.3-638+74a3294"
   },
   {
     "name": "HTTPInterface-qc8017_32",
