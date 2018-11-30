@@ -33,7 +33,7 @@ endif
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
-RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
+RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLPM-Tools installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
