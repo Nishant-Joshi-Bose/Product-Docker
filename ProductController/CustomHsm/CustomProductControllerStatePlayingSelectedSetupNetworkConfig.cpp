@@ -68,6 +68,8 @@ void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateE
 
     // Mute DSP Amp to avoid noise produced during AP mode on
     GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, true );
+    // Prepare to cache chimes that may be generated while system is muted (PGC-2819)
+    m_pendingChimeEvent = static_cast<ProductApp::ChimeEvents_t>( 0 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +84,24 @@ void CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandleStateE
 
     // Unmute DSP Amp
     GetCustomProductController( ).GetLpmHardwareInterface( )->SetAmp( true, false );
+    // Play cached chime, if any
+    if( m_pendingChimeEvent )
+    {
+        ( void ) GetProductController().HandleChimePlayRequest( m_pendingChimeEvent );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandlePlayChimeRequest
+/// @param  ChimeEvents_t chimeEvent )
+/// @return This method returns true after caching the chime
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandlePlayChimeRequest( ChimeEvents_t chimeEvent )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s caching %d.", GetName( ).c_str( ), __func__, chimeEvent );
+
+    m_pendingChimeEvent = chimeEvent;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

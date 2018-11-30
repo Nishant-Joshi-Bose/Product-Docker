@@ -30,10 +30,10 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
 #include "ProductControllerStatePlayingSelectedSetupNetworkConfig.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
+#include "ChimeEvents.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -64,14 +64,17 @@ public:
                                                                    Hsm::STATE            stateId,
                                                                    const std::string&    name  = "CustomPlayingSelectedSetupNetworkConfig" );
 
-    ~CustomProductControllerStatePlayingSelectedSetupNetworkConfig( ) override
+    ~CustomProductControllerStatePlayingSelectedSetupNetworkConfig( )   override
     {
 
     }
 
-    void HandleStateEnter( )    override;
-    void HandleStateExit( )     override;
+    void HandleStateEnter( )                                            override;
+    void HandleStateExit( )                                             override;
+    bool HandlePlayChimeRequest( ProductApp::ChimeEvents_t chimeEvent ) override;
 
+private:
+    ChimeEvents_t   m_pendingChimeEvent;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
