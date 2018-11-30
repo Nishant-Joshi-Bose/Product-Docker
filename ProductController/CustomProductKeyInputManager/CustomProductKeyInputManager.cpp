@@ -512,21 +512,23 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
         return true;
     }
 
-    if( filter.has_translate() )
+    if( ! filter.has_translate() )
     {
-        const auto& translate = filter.translate();
-        ActionCustom_t::Actions customAction = static_cast<ActionCustom_t::Actions>( intent );
-        ActionCommon_t::Actions commonAction = static_cast<ActionCommon_t::Actions>( intent );
-        if( ActionCustom_t::Actions_Parse( translate, &customAction ) )
-        {
-            intent = static_cast<KeyHandlerUtil::ActionType_t>( customAction );
-        }
-        else if( ActionCommon_t::Actions_Parse( translate, &commonAction ) )
-        {
-            intent = static_cast<KeyHandlerUtil::ActionType_t>( commonAction );
-        }
-        BOSE_INFO( s_logger, "%s: translate %s -> %s", __PRETTY_FUNCTION__, intentName.c_str(), translate.c_str() );
+        return false;
     }
+
+    const auto& translate = filter.translate();
+    ActionCustom_t::Actions customAction = static_cast<ActionCustom_t::Actions>( intent );
+    ActionCommon_t::Actions commonAction = static_cast<ActionCommon_t::Actions>( intent );
+    if( ActionCustom_t::Actions_Parse( translate, &customAction ) )
+    {
+        intent = static_cast<KeyHandlerUtil::ActionType_t>( customAction );
+    }
+    else if( ActionCommon_t::Actions_Parse( translate, &commonAction ) )
+    {
+        intent = static_cast<KeyHandlerUtil::ActionType_t>( commonAction );
+    }
+    BOSE_INFO( s_logger, "%s: translate %s -> %s", __PRETTY_FUNCTION__, intentName.c_str(), translate.c_str() );
 
     return false;
 }
