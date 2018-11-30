@@ -68,7 +68,7 @@ def build_enum_map_from_proto(e, swap):
 
 
 """
-Friendly config -> raw config
+Load a python source file
 """
 def load_source(name, filename):
     try:

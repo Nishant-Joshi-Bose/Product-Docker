@@ -76,17 +76,15 @@ keyconfig: check_tools
 		--keys $(LPM_KEYS) \
 		--outputcfg $(KEYCONFIG) 
 
-USERBLASTCONFIG=$(PWD)/Config/UserKeyConfig.json
 BLASTCONFIG=$(PWD)/opt-bose-fs/etc/BlastConfiguration.json
-LPM_KEYS_BLAST=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
 
 .PHONY: blastconfig
 blastconfig: check_tools
 	cd tools/key_config_generator && \
 	./generate_blast_config \
 		$(BUILDS_DIR) \
-		--inputcfg $(USERBLASTCONFIG) \
-		--keyfile $(LPM_KEYS_BLAST) \
+		--inputcfg $(USERKEYCONFIG) \
+		--keys $(LPM_KEYS) \
 		--outputcfg $(BLASTCONFIG)
 
 .PHONY: cmake_build
