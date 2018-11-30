@@ -65,6 +65,7 @@ public:
     }
 
     bool IsIntentIgnored( KeyHandlerUtil::ActionType_t ) const;
+    static const std::string& IntentName( KeyHandlerUtil::ActionType_t intent );
 
 protected:
 
@@ -101,8 +102,6 @@ private:
     ///
     KeyFilter::KeyFilter        m_filterTable;
     void InitializeKeyFilter( );
-    bool KeyIgnoredInCurrentSource( const IpcKeyInformation_t& keyEvent, const SoundTouchInterface::Sources::SourceItem* sourceItem ) const;
-    static const std::string& IntentName( KeyHandlerUtil::ActionType_t intent );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

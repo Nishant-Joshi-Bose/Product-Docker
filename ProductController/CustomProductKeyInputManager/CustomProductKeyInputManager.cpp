@@ -486,7 +486,6 @@ bool CustomProductKeyInputManager::IsIntentIgnored( KeyHandlerUtil::ActionType_t
     {
         return false;
     }
-    const auto& filter = it->filter();
     auto matchSource = [ sourceItem ]( const SourceEntry & s )
     {
         BOSE_DEBUG( s_logger, "%s: check %s %s (%s %s)", __PRETTY_FUNCTION__,  sourceItem->sourcename().c_str(), sourceItem->sourceaccountname().c_str(),
@@ -504,7 +503,7 @@ bool CustomProductKeyInputManager::IsIntentIgnored( KeyHandlerUtil::ActionType_t
             return false;
         }
     };
-    const auto& sources = filter.sources();
+    const auto& sources = it->filter().sources();
     const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
     if( its != sources.end() )
     {
