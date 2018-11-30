@@ -12,8 +12,6 @@ def buildJob(jobName)
     build job: jobName, parameters: [string(name: 'TESTRAIL_RUNID', value: "${TESTRAIL_RUNID}"),string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'SW_VERSION', value: "${SW_VERSION}"), string(name: 'EC_URL', value: "${EC_URL}"),booleanParam(name: 'SW_UPDATE', value: Boolean.valueOf("${SW_UPDATE}")),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
 }
 
-/*def Eddie_Product  = ["Bluetooth/Bluetooth_Sink_Target_SOS",
-					"EddieProduct/Eddie_chimes_test"]*/
 def Eddie_Product  = 			["EddieProduct/Eddie-Bootup-Sequence-Timing",
                       			//"EddieProduct/Eddie-DemoController",
 					//"EddieProduct/Eddie-Factory-Default",
@@ -27,10 +25,11 @@ def Eddie_Product  = 			["EddieProduct/Eddie-Bootup-Sequence-Timing",
 					"EddieProduct/Eddie-Network-Disabled",
 					//"EddieProduct/Eddie-AUX",
 					"EddieProduct/Eddie-Manufacturing",
-					"EddieProduct/Eddie-Language"
+					"EddieProduct/Eddie-Language",
 					//"EddieProduct/Eddie-Clock"
 					//"Bluetooth/Bluetooth_Sink_Target_SOS",
-					//"EddieProduct/Eddie_chimes_test"
+					"EddieProduct/Eddie-Chimes",
+					"EddieProduct/Eddie-PTS-Licenses"
 					]
 
 failureList = [] 
