@@ -64,7 +64,7 @@ public:
 
     }
 
-    bool IsIntentIgnored( KeyHandlerUtil::ActionType_t ) const;
+    bool FilterIntent( KeyHandlerUtil::ActionType_t& ) const;
     static const std::string& IntentName( KeyHandlerUtil::ActionType_t intent );
 
 protected:

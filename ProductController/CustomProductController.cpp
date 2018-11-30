@@ -1648,61 +1648,62 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_action( ) )
     {
-        if( m_ProductKeyInputManager->IsIntentIgnored( message.action() ) )
+        auto action = message.action();
+        if( m_ProductKeyInputManager->FilterIntent( action ) )
         {
-            BOSE_VERBOSE( s_logger, "Action key %s ignored", CustomProductKeyInputManager::IntentName( message.action() ).c_str() );
+            BOSE_VERBOSE( s_logger, "Action key %s ignored", CustomProductKeyInputManager::IntentName( action ).c_str() );
         }
         ///
         /// The following attempts to handle the key action using a common intent
         /// manager.
         ///
-        else if( HandleCommonIntents( message.action() ) )
+        else if( HandleCommonIntents( action ) )
         {
-            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", message.action() );
+            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", action );
         }
         ///
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
         ///
-        else if( GetIntentHandler( ).IsIntentMuteControl( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentMuteControl( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentSpeakerPairing( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentSpeakerPairing( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentSpeakerPairing,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentPlayProductSource( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentPlayProductSource( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayProductSource,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentRating( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentRating( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentRating,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( action ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
         }
-        else if( GetIntentHandler( ).IsIntentSetupBLERemote( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentSetupBLERemote( action ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentSetupBLERemote );
         }
-        else if( GetIntentHandler( ).IsIntentAudioModeToggle( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentAudioModeToggle( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentAudioModeToggle,
-                                                              message.action( ) );
+                                                              action );
         }
         else
         {
-            BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", message.action( ) );
+            BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", action );
 
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntent,
-                                                              message.action( ) );
+                                                              action );
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////

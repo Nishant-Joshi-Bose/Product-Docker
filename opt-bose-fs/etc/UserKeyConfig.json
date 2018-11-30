@@ -109,83 +109,131 @@
         "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_1"],
-        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [],
-        "filter": {
-            "origins": [".*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
-            ]
-        }
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_2",
         "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_2"],
-        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [],
-        "filter": {
-            "origins": [".*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
-            ]
-        }
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_3",
         "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_3"],
-        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [],
-        "filter": {
-            "origins": [".*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
-            ]
-        }
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_4",
         "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_4"],
-        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [],
-        "filter": {
-            "origins": [".*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
-            ]
-        }
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_5",
         "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_5"],
-        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [],
-        "filter": {
-            "origins": [".*"],
-            "sources": [
-                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
-            ]
-        }
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_6",
         "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_6"],
-        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_SELECT_1_RF",
+        "commment": "Console: Preset 1 release (Kepler) ---> Select Preset stored on Key 1",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_1"],
+        "origin": ["RF"],
         "timeOutList": [],
         "filter": {
-            "origins": [".*"],
             "sources": [
                 { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
-            ]
+            ],
+            "translate": "PRESET_SELECT_1"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_2_RF",
+        "commment": "Console: Preset 2 release (Kepler) ---> Select Preset stored on Key 2",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_2"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_2"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_3_RF",
+        "commment": "Console: Preset 3 release (Kepler) ---> Select Preset stored on Key 3",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_3"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_3"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_4_RF",
+        "commment": "Console: Preset 4 release (Kepler) ---> Select Preset stored on Key 4",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_4"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_4"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_5_RF",
+        "commment": "Console: Preset 5 release (Kepler) ---> Select Preset stored on Key 5",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_5"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_5"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_6_RF",
+        "commment": "Console: Preset 6 release (Kepler) ---> Select Preset stored on Key 6",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_6"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_6"
         }
     },
     {

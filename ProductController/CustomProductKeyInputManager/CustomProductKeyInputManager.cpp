@@ -442,14 +442,14 @@ const std::string& CustomProductKeyInputManager::IntentName( KeyHandlerUtil::Act
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductKeyInputManager::IsIntentIgnored
+/// @name   CustomProductKeyInputManager::FilterIntent
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true value if the intent is to be ignored
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::IsIntentIgnored( KeyHandlerUtil::ActionType_t intent ) const
+bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& intent ) const
 {
     using namespace KeyFilter;
     using namespace LpmServiceMessages;
@@ -503,12 +503,29 @@ bool CustomProductKeyInputManager::IsIntentIgnored( KeyHandlerUtil::ActionType_t
             return false;
         }
     };
-    const auto& sources = it->filter().sources();
+    const auto& filter = it->filter();
+    const auto& sources = filter.sources();
     const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
     if( its != sources.end() )
     {
         // We found a matching source, this key event is to be filtered
         return true;
+    }
+
+    if( filter.has_translate() )
+    {
+        const auto& translate = filter.translate();
+        ActionCustom_t::Actions customAction = static_cast<ActionCustom_t::Actions>( intent );
+        ActionCommon_t::Actions commonAction = static_cast<ActionCommon_t::Actions>( intent );
+        if( ActionCustom_t::Actions_Parse( translate, &customAction ) )
+        {
+            intent = static_cast<KeyHandlerUtil::ActionType_t>( customAction );
+        }
+        else if( ActionCommon_t::Actions_Parse( translate, &commonAction ) )
+        {
+            intent = static_cast<KeyHandlerUtil::ActionType_t>( commonAction );
+        }
+        BOSE_INFO( s_logger, "%s: translate %s -> %s", __PRETTY_FUNCTION__, intentName.c_str(), translate.c_str() );
     }
 
     return false;
