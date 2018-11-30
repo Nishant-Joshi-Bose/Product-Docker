@@ -1659,7 +1659,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         ///
         else if( HandleCommonIntents( action ) )
         {
-            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", action );
+            BOSE_VERBOSE( s_logger, "Action key %s handled by common intent handler", CustomProductKeyInputManager::IntentName( action ).c_str() );
         }
         ///
         /// The following determines whether the key action is to be handled by the custom intent
@@ -1700,7 +1700,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         }
         else
         {
-            BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", action );
+            BOSE_ERROR( s_logger, "An action key %s was received that has no associated intent.", CustomProductKeyInputManager::IntentName( action ).c_str() );
 
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntent,
                                                               action );
