@@ -725,16 +725,6 @@
             ]
         }, 
         {
-            "origin": 3, 
-            "keyEvent": 1, 
-            "timeOutList": [], 
-            "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 33, 
-            "keyList": [
-                65
-            ]
-        }, 
-        {
             "origin": 5, 
             "keyEvent": 1, 
             "timeOutList": [], 
@@ -775,16 +765,6 @@
             ]
         }, 
         {
-            "origin": 3, 
-            "keyEvent": 1, 
-            "timeOutList": [], 
-            "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 34, 
-            "keyList": [
-                66
-            ]
-        }, 
-        {
             "origin": 5, 
             "keyEvent": 1, 
             "timeOutList": [], 
@@ -825,16 +805,6 @@
             ]
         }, 
         {
-            "origin": 3, 
-            "keyEvent": 1, 
-            "timeOutList": [], 
-            "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 35, 
-            "keyList": [
-                67
-            ]
-        }, 
-        {
             "origin": 5, 
             "keyEvent": 1, 
             "timeOutList": [], 
@@ -875,16 +845,6 @@
             ]
         }, 
         {
-            "origin": 3, 
-            "keyEvent": 1, 
-            "timeOutList": [], 
-            "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 36, 
-            "keyList": [
-                68
-            ]
-        }, 
-        {
             "origin": 5, 
             "keyEvent": 1, 
             "timeOutList": [], 
@@ -916,16 +876,6 @@
         }, 
         {
             "origin": 4, 
-            "keyEvent": 1, 
-            "timeOutList": [], 
-            "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 37, 
-            "keyList": [
-                69
-            ]
-        }, 
-        {
-            "origin": 3, 
             "keyEvent": 1, 
             "timeOutList": [], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
@@ -975,7 +925,7 @@
             ]
         }, 
         {
-            "origin": 3, 
+            "origin": 5, 
             "keyEvent": 1, 
             "timeOutList": [], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
@@ -985,11 +935,61 @@
             ]
         }, 
         {
-            "origin": 5, 
+            "origin": 3, 
             "keyEvent": 1, 
             "timeOutList": [], 
-            "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 38, 
+            "commment": "Console: Preset 1 release (Kepler) ---> Select Preset stored on Key 1", 
+            "action": 1000, 
+            "keyList": [
+                65
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 1, 
+            "timeOutList": [], 
+            "commment": "Console: Preset 2 release (Kepler) ---> Select Preset stored on Key 2", 
+            "action": 1001, 
+            "keyList": [
+                66
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 1, 
+            "timeOutList": [], 
+            "commment": "Console: Preset 3 release (Kepler) ---> Select Preset stored on Key 3", 
+            "action": 1002, 
+            "keyList": [
+                67
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 1, 
+            "timeOutList": [], 
+            "commment": "Console: Preset 4 release (Kepler) ---> Select Preset stored on Key 4", 
+            "action": 1003, 
+            "keyList": [
+                68
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 1, 
+            "timeOutList": [], 
+            "commment": "Console: Preset 5 release (Kepler) ---> Select Preset stored on Key 5", 
+            "action": 1004, 
+            "keyList": [
+                69
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 1, 
+            "timeOutList": [], 
+            "commment": "Console: Preset 6 release (Kepler) ---> Select Preset stored on Key 6", 
+            "action": 1005, 
             "keyList": [
                 70
             ]

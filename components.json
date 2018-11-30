@@ -193,11 +193,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "PGC-3338@c1e35b9a1a52b021b321b037edabb72f045f31a5"
+    "selected_version": "PGC-3338@0806afde74097de435187bd5fcd2aba5942a250b" 
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/PGC-3338/2.2.0-252+f1a4786"
+    "selected_version": "Continuous/PGC-3338/2.2.0-256+0806afd"
   },
   {
     "name": "ProductUIAssets",

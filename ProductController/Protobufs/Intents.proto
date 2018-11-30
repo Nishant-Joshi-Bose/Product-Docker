@@ -28,6 +28,18 @@ message ActionCustom_t
         ACTION_ASSERT_MUTE              = 129;
         ACTION_ASSERT_UNMUTE            = 130;
         ACTION_AUDIO_MODE_TOGGLE        = 131;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// These are "virtual" intents that are never processed directly (they are converted
+        /// to other intents; this is to work around the limitation in the keyhandler where it doesn't
+        /// report what origin an intent came from, but we want to do origin-specific things with the intent)
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        PRESET_SELECT_1_RF              = 1000;
+        PRESET_SELECT_2_RF              = 1001;
+        PRESET_SELECT_3_RF              = 1002;
+        PRESET_SELECT_4_RF              = 1003;
+        PRESET_SELECT_5_RF              = 1004;
+        PRESET_SELECT_6_RF              = 1005;
     }
 }
 

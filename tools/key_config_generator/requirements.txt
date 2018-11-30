@@ -1,1 +1,1 @@
-clang==3.4
+protobuf==2.6.1
