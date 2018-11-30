@@ -117,13 +117,13 @@ PACKAGENAMES = SoundTouchRecovery product-script software-update wpe monaco Soun
 
 .PHONY: generate-metadata
 generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json.sh $(BOSE_WORKSPACE)/builds/$(cfg) professor dev
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p professor,ginger-cheevers -k dev
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-#Create one more Zip file for Bonjour / Local update with HSP 
+#Create one more Zip file for Bonjour / Local update with HSP
 #- This is temporary, till DP2 boards are not available.
 IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp wpe monaco SoundTouch lpm_updater
@@ -146,7 +146,7 @@ graph: product-ipk
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build
-	./scripts/create-software-update-ipk 
+	./scripts/create-software-update-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build

@@ -70,10 +70,12 @@
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
-#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
-#include "ProductControllerStatePlayingSelectedSetupNetwork.h"
-#include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfig.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
@@ -101,6 +103,7 @@
 #include "CustomProductControllerStatePlayingDeselected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
+#include "CustomProductControllerStatePlayingSelectedSetupNetworkConfig.h"
 #include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
 #include "CustomProductControllerStateTop.h"
 #include "MfgData.h"
@@ -235,7 +238,6 @@ void CustomProductController::Run( )
     ///
     /// Construction of the Common and Custom States
     ///
-
     ///
     /// Top State
     ///
@@ -248,6 +250,7 @@ void CustomProductController::Run( )
     ( GetHsm( ),
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
+
 
     auto* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
@@ -424,15 +427,15 @@ void CustomProductController::Run( )
       statePlayingSelected,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
 
-    auto* statePlayingSelectedSetupNetwork = new ProductControllerStatePlayingSelectedSetupNetwork
+    auto* statePlayingSelectedSetupNetworkConfig = new CustomProductControllerStatePlayingSelectedSetupNetworkConfig
     ( GetHsm( ),
       statePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG );
 
-    auto* statePlayingSelectedSetupNetworkTransition = new ProductControllerStatePlayingSelectedSetupNetworkTransition
+    auto* statePlayingSelectedSetupNetworkConfigWiFiTransition = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition
     ( GetHsm( ),
-      statePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION );
+      statePlayingSelectedSetupNetworkConfig,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_TRANSITION );
 
     auto* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
     ( GetHsm( ),
@@ -444,10 +447,20 @@ void CustomProductController::Run( )
       statePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
-    auto* statePlayingSelectedSetupExitingAP = new ProductControllerStatePlayingSelectedSetupExitingAP
+    auto* statePlayingSelectedSetupNetworkConfigWiFiConnection = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection
     ( GetHsm( ),
-      statePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP );
+      statePlayingSelectedSetupNetworkConfig,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_CONNECTION );
+
+    auto* statePlayingSelectedSetupNetworkConfigWiFiExiting = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting
+    ( GetHsm( ),
+      statePlayingSelectedSetupNetworkConfig,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_EXITING );
+
+    auto* statePlayingSelectedSetupNetworkConfigWifiAborting = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting
+    ( GetHsm( ),
+      statePlayingSelectedSetupNetworkConfig,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_ABORTING );
 
     auto* stateStoppingStreams = new ProductControllerStatePlayingSelectedStoppingStreams
     ( GetHsm( ),
@@ -504,7 +517,6 @@ void CustomProductController::Run( )
     ///
     using namespace DeviceManagerPb;
     using namespace SystemPowerPb;
-
     GetHsm( ).AddState( Device_State_Not_Notify,
                         SystemPowerControl_State_Not_Notify,
                         stateTop );
@@ -512,6 +524,7 @@ void CustomProductController::Run( )
     GetHsm( ).AddState( NotifiedNames::BOOTING,
                         SystemPowerControl_State_Not_Notify,
                         stateBooting );
+
 
     GetHsm( ).AddState( NotifiedNames::FIRST_BOOT_GREETING,
                         SystemPowerControl_State_Not_Notify,
@@ -641,13 +654,25 @@ void CustomProductController::Run( )
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSetup );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
                         SystemPowerControl_State_ON,
-                        statePlayingSelectedSetupNetwork );
+                        statePlayingSelectedSetupNetworkConfig );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
+                        SystemPowerControl_State_ON,
+                        statePlayingSelectedSetupNetworkConfigWiFiConnection );
+
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
                         SystemPowerControl_State_Not_Notify,
-                        statePlayingSelectedSetupNetworkTransition );
+                        statePlayingSelectedSetupNetworkConfigWiFiTransition );
+
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingSelectedSetupNetworkConfigWiFiExiting );
+
+    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
+                        SystemPowerControl_State_Not_Notify,
+                        statePlayingSelectedSetupNetworkConfigWifiAborting );
 
     GetHsm( ).AddState( NotifiedNames::SELECTED,
                         SystemPowerControl_State_ON,
@@ -656,10 +681,6 @@ void CustomProductController::Run( )
     GetHsm( ).AddState( NotifiedNames::SELECTED,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupExiting );
-
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingSelectedSetupExitingAP );
 
     GetHsm( ).AddState( Device_State_Not_Notify,
                         SystemPowerControl_State_OFF,
@@ -1472,7 +1493,7 @@ void CustomProductController::HandlePutTimeouts( SystemPowerPb::SystemPowerTimeo
 /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( )
+NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( ) const
 {
     return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }
@@ -1575,11 +1596,6 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_networkstatus() )
     {
-        if( message.networkstatus().has_wifiapstate() )
-        {
-            GetLpmHardwareInterface( )->SetAmp( true, message.networkstatus( ).wifiapstate( ) );
-        }
-
         // if wired we need to update lpm
         if( GetNetworkServiceUtil().IsNetworkWired() )
         {
