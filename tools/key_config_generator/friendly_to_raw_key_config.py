@@ -56,6 +56,7 @@ EVENT_NAMES_REV = {
 convert protobuf enum to a dict
 """
 
+
 def build_enum_map_from_proto(e, swap):
     ret = {}
     for v in e.values:
@@ -70,6 +71,8 @@ def build_enum_map_from_proto(e, swap):
 """
 Load a python source file
 """
+
+
 def load_source(name, filename):
     try:
         print('loading {}'.format(filename))
@@ -78,20 +81,25 @@ def load_source(name, filename):
         print('couldn''t load file {}'.format(filename))
         return None
 
+
 """
 Friendly config -> raw config
 """
+
+
 def generate_raw_config(args):
     common_intents = load_source('CommonIntents', args.common_intents_file)
     custom_intents = load_source('CustomIntents', args.custom_intents_file)
     key_defs = load_source('BoseKeys', args.key_file)
 
     key_enum = build_enum_map_from_proto(key_defs._KEY_VALUE, False)
-    common_intents_enum = build_enum_map_from_proto(common_intents._ACTIONCOMMON_T_ACTIONS, False)
+    common_intents_enum = build_enum_map_from_proto(
+        common_intents._ACTIONCOMMON_T_ACTIONS, False)
     # custom is allowed to be empty
     custom_intents_enum = {}
     if custom_intents is not None:
-        custom_intents_enum = build_enum_map_from_proto(custom_intents._ACTIONCUSTOM_T_ACTIONS, False)
+        custom_intents_enum = build_enum_map_from_proto(
+            custom_intents._ACTIONCUSTOM_T_ACTIONS, False)
 
     # merge intents
     action_enum = {}
@@ -159,9 +167,12 @@ def generate_raw_config(args):
     with io.FileIO(args.outputcfg, "w") as file:
         file.write(s)
 
+
 """
 real main
 """
+
+
 def main():
     argparser = argparse.ArgumentParser('generate key config')
     # friendly input file
@@ -179,6 +190,7 @@ def main():
     argparser.add_argument('--outputcfg', dest='outputcfg', required=True,
                            help='Key config json output')
     generate_raw_config(argparser.parse_args())
+
 
 """
 main main
