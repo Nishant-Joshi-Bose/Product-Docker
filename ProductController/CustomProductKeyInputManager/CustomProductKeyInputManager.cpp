@@ -25,7 +25,6 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "SystemSourcesProperties.pb.h"
 #include "SystemUtils.h"
-#include <regex>
 
 using namespace ProductSTS;
 using namespace SystemSourcesProperties;
@@ -120,7 +119,7 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
     const auto& filter = SystemUtils::ReadFile( USER_KEY_CONFIGURATION_FILE_NAME );
     if( !filter )
     {
-        BOSE_DIE( "Failed loading key filter" );
+        BOSE_DIE( __PRETTY_FUNCTION__ << ": Failed loading key filter" );
         return;
     }
 
@@ -130,7 +129,24 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
     }
     catch( const ProtoToMarkup::MarkupError & e )
     {
-        BOSE_DIE( "Markup error in key configuration file: " << e.what( ) );
+        BOSE_DIE( __PRETTY_FUNCTION__ << ": Markup error in key configuration file: " << e.what( ) );
+    }
+
+    for( const auto& e : m_filterTable.keytable() )
+    {
+        const auto& f = e.filter();
+        for( const auto& s : f.sources() )
+        {
+            try
+            {
+                m_filterRegex[&f].push_back( FilterRegex( s.sourcename(), s.sourceaccountname() ) );
+            }
+            catch( const std::regex_error& e )
+            {
+                BOSE_DIE( __PRETTY_FUNCTION__ << ": regex error " << e.what() << ": sourceName = " <<
+                          s.sourcename() << ": accountName = " << s.sourceaccountname() );
+            }
+        }
     }
 }
 
@@ -485,27 +501,29 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
     {
         return false;
     }
-    auto matchSource = [ sourceItem ]( const SourceEntry & s )
+    auto filterSource = [ sourceItem ]( const FilterRegex & f )
     {
-        BOSE_DEBUG( s_logger, "%s: check %s %s (%s %s)", __PRETTY_FUNCTION__,  sourceItem->sourcename().c_str(), sourceItem->sourceaccountname().c_str(),
-                    s.sourcename().c_str(), s.sourceaccountname().c_str() );
+        BOSE_DEBUG( s_logger, "%s: check %s %s", __PRETTY_FUNCTION__,  sourceItem->sourcename().c_str(), sourceItem->sourceaccountname().c_str() );
+
         try
         {
-            std::regex regexSource( s.sourcename() );
-            std::regex regexAccount( s.sourceaccountname() );
-            return ( std::regex_match( sourceItem->sourcename(), regexSource ) && std::regex_match( sourceItem->sourceaccountname(), regexAccount ) );
+            return ( std::regex_match( sourceItem->sourcename(), f.m_sourceFilter ) && std::regex_match( sourceItem->sourceaccountname(), f.m_sourceAccountFilter ) );
         }
         catch( const std::regex_error& e )
         {
-            BOSE_ERROR( s_logger, "%s: regex error %s (%d) (%s, %s)", __PRETTY_FUNCTION__, e.what(), e.code(),
-                        s.sourcename().c_str(), s.sourceaccountname().c_str() );
+            BOSE_ERROR( s_logger, "%s: regex error %s (%d)", __PRETTY_FUNCTION__, e.what(), e.code() );
             return false;
         }
     };
     const auto& filter = it->filter();
-    const auto& sources = filter.sources();
-    const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
-    if( its != sources.end() )
+    const auto& filterRegex = m_filterRegex.find( &filter );
+    if( filterRegex == m_filterRegex.end() )
+    {
+        BOSE_ERROR( s_logger, "%s: Couldn't find filter regex for intent %s (this should not happen!)", __PRETTY_FUNCTION__, intentName.c_str() );
+        return false;
+    }
+    const auto& itf = std::find_if( filterRegex->second.begin(), filterRegex->second.end(), filterSource );
+    if( itf != filterRegex->second.end() )
     {
         // We found a matching source, this intent is to be filtered
         BOSE_INFO( s_logger, "%s: Discard intent %s due to filter", __PRETTY_FUNCTION__, intentName.c_str() );

@@ -23,6 +23,7 @@
 #include "SystemPowerMacro.pb.h"
 #include "FrontDoorClient.h"
 #include "KeyFilter.pb.h"
+#include <regex>
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +101,20 @@ private:
     ///
     /// Filter subset of key table
     ///
-    KeyFilter::KeyFilter        m_filterTable;
+    struct FilterRegex
+    {
+        FilterRegex( const std::string& source, const std::string& sourceAccount ) :
+            m_sourceFilter( std::regex( source ) ),
+            m_sourceAccountFilter( std::regex( sourceAccount ) )
+        {
+        }
+
+        const std::regex    m_sourceFilter;
+        const std::regex    m_sourceAccountFilter;
+    };
+
+    KeyFilter::KeyFilter                                                            m_filterTable;
+    std::map< const KeyFilter::FilterEntry*, std::vector<FilterRegex> >             m_filterRegex;
     void InitializeKeyFilter( );
 };
 
