@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// @file PlaybackRequestManager.cpp
+/// @file AuxInHandler.cpp
 ///
-/// @brief Implementation of Playback Request Manager
+/// @brief Handler for AuxIn intent
 ///
 /// @attention
 ///    BOSE CORPORATION.
@@ -15,33 +15,33 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "DPrint.h"
-#include "PlaybackRequestManager.h"
+#include "AuxInHandler.h"
 #include "ProductController.h"
 #include "Intents.h"
 #include "ProductSTS.pb.h"
 #include "SHELBY_SOURCE.h"
 
-static DPrint s_logger( "PlaybackRequestManager" );
+static DPrint s_logger( "AuxInHandler" );
 
 namespace ProductApp
 {
-PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
+AuxInHandler::AuxInHandler( NotifyTargetTaskIF& task,
                                                 const CliClientMT& cliClient,
                                                 const FrontDoorClientIF_t& frontDoorClient,
                                                 ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
-    m_NowPlayingRsp( std::bind( &PlaybackRequestManager::PostPlaybackRequestCbRsp, this,
+    m_NowPlayingRsp( std::bind( &AuxInHandler::PostPlaybackRequestCbRsp, this,
                                 std::placeholders::_1 ), &task )
 {
     m_frontDoorClientErrorCb = AsyncCallback<FrontDoor::Error>
-                               ( std::bind( &PlaybackRequestManager::FrontDoorClientErrorCb,
+                               ( std::bind( &AuxInHandler::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  Handle
 /// @brief Function to build and send FrontDoor message to activate and play
-//         source if it is selected,
+//         AUX source if it is selected,
 //         Else the function ignores the intent.
 //         The callBack function is called to give control back to the state
 //         machine if HSM has registered a call back.
@@ -49,7 +49,7 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
 //          false: Error
 ////////////////////////////////////////////////////////////////////////////////
 
-bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
+bool AuxInHandler::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     using namespace ProductSTS;
 
@@ -84,7 +84,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-void PlaybackRequestManager::PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlaying& resp )
+void AuxInHandler::PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlaying& resp )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     BOSE_LOG( INFO, "GOT Response to PlaybackRequest: " << resp.source().sourcedisplayname() );
