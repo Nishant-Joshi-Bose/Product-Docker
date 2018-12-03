@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file KeyConfiguration.proto
+/// @file KeyFilter.proto
 ///
-/// @brief This file describes the KeyConfiguration json file
+/// @brief This file describes the KeyFilter json file
 ///
 /// Copyright 2018 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ message SourceEntry
 // A filter entry for an intent contains a list of sources for which the intent should be filtered (discarded).
 // An intent can optionally be translated to a different intent via the "translate" field.
 //
-// For example, the entry to ignore intent PRESET_SELECT_1_RF in slot sources and translate it to 
+// For example, the entry to ignore intent PRESET_SELECT_1_RF in PRODUCT sources and translate it to 
 // PRESET_SELECT_1 in other sources would look like this
 //
 // "action": "PRESET_SELECT_1_RF",
@@ -52,7 +52,7 @@ message KeyEntry
 {
     option (ignore_unexpected_markup) = true;
 
-    optional string action = 1; 
-    optional FilterEntry                        filter  = 2;
+    optional string                             action      = 1; 
+    optional FilterEntry                        filter      = 2;
 }
 

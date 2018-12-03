@@ -42,8 +42,8 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr const char KEY_CONFIGURATION_FILE_NAME[ ] = "/var/run/KeyConfiguration.json";
-constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConfiguration.json";
-constexpr const char USER_KEY_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/UserKeyConfig.json";
+constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = BOSE_CONF_DIR "BlastConfiguration.json";
+constexpr const char USER_KEY_CONFIGURATION_FILE_NAME[ ] = BOSE_CONF_DIR "UserKeyConfig.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -130,7 +130,7 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
     }
     catch( const ProtoToMarkup::MarkupError & e )
     {
-        BOSE_ERROR( s_logger, "%s: markup error - %s", __PRETTY_FUNCTION__, e.what( ) );
+        BOSE_DIE( "Markup error in key configuration file: " << e.what( ) );
     }
 }
 
@@ -458,19 +458,18 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
     /// First we check the key table to see if there's an entry matching this intent
     ///
     const auto& intentName = IntentName( intent );
-    auto matchKey = [ intentName ]( const KeyEntry & e )
+    auto matchEntry = [ intentName ]( const KeyEntry & e )
     {
         return intentName == e.action();
     };
-    const auto& keys = m_filterTable.keytable( );
-    const auto& it = std::find_if( keys.begin(), keys.end(), matchKey );
-    if( it == keys.end() )
+    const auto& entries = m_filterTable.keytable( );
+    const auto& it = std::find_if( entries.begin(), entries.end(), matchEntry );
+    if( it == entries.end() )
     {
-        BOSE_WARNING( s_logger, "%s No key entry for %s", __PRETTY_FUNCTION__, intentName.c_str() );
+        BOSE_WARNING( s_logger, "%s No entry for %s (%d)", __PRETTY_FUNCTION__, intentName.c_str(), intent );
         return false;
     }
 
-    // does this entry have a filter?
     if( !it->has_filter( ) )
     {
         return false;
@@ -508,7 +507,8 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
     const auto& its = std::find_if( sources.begin(), sources.end(), matchSource );
     if( its != sources.end() )
     {
-        // We found a matching source, this key event is to be filtered
+        // We found a matching source, this intent is to be filtered
+        BOSE_INFO( s_logger, "%s: Discard intent %s due to filter", __PRETTY_FUNCTION__, intentName.c_str() );
         return true;
     }
 
