@@ -43,11 +43,13 @@
 #include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
-#include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
-#include "ProductControllerStatePlayingSelectedSetupNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfig.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
-#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting.h"
 #include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
@@ -306,7 +308,7 @@ public:
 /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( );
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) const;
 
 private:
 
@@ -335,11 +337,13 @@ private:
     ProductControllerStatePlayingSelectedSilentSourceValid          m_ProductControllerStatePlayingSelectedSilentSourceValid;
     ProductControllerStatePlayingSelectedNotSilent                  m_ProductControllerStatePlayingSelectedNotSilent;
     ProductControllerStatePlayingSelectedSetup                      m_ProductControllerStatePlayingSelectedSetup;
-    ProductControllerStatePlayingSelectedSetupNetwork               m_ProductControllerStatePlayingSelectedSetupNetwork;
-    ProductControllerStatePlayingSelectedSetupNetworkTransition     m_ProductControllerStatePlayingSelectedSetupNetworkTransition;
+    ProductControllerStatePlayingSelectedSetupNetworkConfig         m_ProductControllerStatePlayingSelectedSetupNetworkConfig;
+    ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection     m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection;
+    ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition     m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition;
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
-    ProductControllerStatePlayingSelectedSetupExitingAP             m_ProductControllerStatePlayingSelectedSetupExitingAP;
+    ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting        m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting;
+    ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting       m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting;
     ProductControllerStatePlayingSelectedStoppingStreams            m_ProductControllerStatePlayingSelectedStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
