@@ -139,6 +139,19 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
         {
             try
             {
+                // A "filter" entry in the filter table contains a "sources" array, which 
+                // in turn contains a pair of regular expressions that are applied to the source name
+                // and source account name
+                //
+                // "filter": {
+                //     "sources": [
+                //         { "sourceName": "(PRODUCT|INVALID_SOURCE)", "sourceAccountName": ".*" }
+                //     ],
+                // 
+                // m_filterRegex is a map of vectors of FilterRegex structs, where the vector represents
+                // the "sources" array and the FilterRegex contains regular expression objects
+                // associated with sourceName and sourceAccountName.  The map is indexed by the address
+                // of the filter structure from the filter table.
                 m_filterRegex[&f].push_back( FilterRegex( s.sourcename(), s.sourceaccountname() ) );
             }
             catch( const std::regex_error& e )
@@ -494,11 +507,13 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
     const auto& nowSelection = m_ProductController.GetNowSelection( );
     if( not nowSelection.has_contentitem( ) )
     {
+        BOSE_WARNING( s_logger, "%s: missing content item", __PRETTY_FUNCTION__ );
         return false;
     }
     auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
     if( not sourceItem )
     {
+        BOSE_WARNING( s_logger, "%s: no source item", __PRETTY_FUNCTION__ );
         return false;
     }
     auto filterSource = [ sourceItem ]( const FilterRegex & f )
