@@ -24,6 +24,7 @@
 #include "MonotonicClock.h"
 #include "AutoLpmServiceMessages.pb.h"
 #include "SystemSourcesProperties.pb.h"
+#include "UEIKeyNames.pb.h"
 
 using namespace ProductSTS;
 using namespace SystemSourcesProperties;
@@ -346,7 +347,8 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
 
     QSSMSG::IsKeyInCodesetMessage_t keyReq;
     keyReq.set_cicode( macroSrc->details().cicode() );
-    keyReq.set_ueikey( 3 );   // 3 is UEI kKey_POWER_OFF - These will be added to A4VQuickSetService protobuf file in next qss release
+//    keyReq.set_ueikey( 3 );   // 3 is UEI kKey_POWER_OFF - These will be added to A4VQuickSetService protobuf file in next qss release
+    keyReq.set_ueikey( UEIKeyNamesPB::ueikey::kKey_POWER_OFF );   // 3 is UEI kKey_POWER_OFF - These will be added to A4VQuickSetService protobuf file in next qss release
     m_QSSClient->IsKeyInCodeset( keyReq, srcCb );
 }
 
