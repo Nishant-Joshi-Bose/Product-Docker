@@ -236,8 +236,6 @@ if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
     rm "$opt_dir/etc/Shepherd-vfe.xml"
 fi
 
-
-
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
