@@ -1648,6 +1648,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_action( ) )
     {
+        // Note that "action" is a reference argument to and may be changed by FilterIntent
         auto action = message.action();
         if( m_ProductKeyInputManager->FilterIntent( action ) )
         {

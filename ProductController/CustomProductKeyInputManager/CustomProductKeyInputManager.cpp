@@ -139,7 +139,7 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
         {
             try
             {
-                // A "filter" entry in the filter table contains a "sources" array, which 
+                // A "filter" entry in the filter table contains a "sources" array, which
                 // in turn contains a pair of regular expressions that are applied to the source name
                 // and source account name
                 //
@@ -147,7 +147,7 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
                 //     "sources": [
                 //         { "sourceName": "(PRODUCT|INVALID_SOURCE)", "sourceAccountName": ".*" }
                 //     ],
-                // 
+                //
                 // m_filterRegex is a map of vectors of FilterRegex structs, where the vector represents
                 // the "sources" array and the FilterRegex contains regular expression objects
                 // associated with sourceName and sourceAccountName.  The map is indexed by the address
@@ -473,7 +473,8 @@ const std::string& CustomProductKeyInputManager::IntentName( KeyHandlerUtil::Act
 ///
 /// @name   CustomProductKeyInputManager::FilterIntent
 ///
-/// @param  KeyHandlerUtil::ActionType_t intent
+/// @param  KeyHandlerUtil::ActionType_t& intent
+///         Note "intent" may be modified if the filter contains a "translate" entry
 ///
 /// @return This method returns a true value if the intent is to be ignored
 ///
@@ -510,19 +511,15 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
         BOSE_WARNING( s_logger, "%s: missing content item", __PRETTY_FUNCTION__ );
         return false;
     }
-    auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
-    if( not sourceItem )
+    const auto& source = nowSelection.contentitem( ).source( );
+    const auto& sourceAccount = nowSelection.contentitem( ).sourceaccount( );
+    auto filterSource = [ source, sourceAccount]( const FilterRegex & f )
     {
-        BOSE_WARNING( s_logger, "%s: no source item", __PRETTY_FUNCTION__ );
-        return false;
-    }
-    auto filterSource = [ sourceItem ]( const FilterRegex & f )
-    {
-        BOSE_DEBUG( s_logger, "%s: check %s %s", __PRETTY_FUNCTION__,  sourceItem->sourcename().c_str(), sourceItem->sourceaccountname().c_str() );
+        BOSE_DEBUG( s_logger, "%s: check %s %s", __PRETTY_FUNCTION__,  source.c_str(), sourceAccount.c_str() );
 
         try
         {
-            return ( std::regex_match( sourceItem->sourcename(), f.m_sourceFilter ) && std::regex_match( sourceItem->sourceaccountname(), f.m_sourceAccountFilter ) );
+            return ( std::regex_match( source, f.m_sourceFilter ) && std::regex_match( sourceAccount, f.m_sourceAccountFilter ) );
         }
         catch( const std::regex_error& e )
         {

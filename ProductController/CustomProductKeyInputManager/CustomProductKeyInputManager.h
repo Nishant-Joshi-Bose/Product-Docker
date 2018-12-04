@@ -98,9 +98,6 @@ private:
 
     void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
 
-    ///
-    /// Filter subset of key table
-    ///
     struct FilterRegex
     {
         FilterRegex( const std::string& source, const std::string& sourceAccount ) :
@@ -113,6 +110,9 @@ private:
         const std::regex    m_sourceAccountFilter;
     };
 
+    ///
+    /// Filter subset of key table
+    ///
     KeyFilter::KeyFilter                                                            m_filterTable;
     std::map< const KeyFilter::FilterEntry*, std::vector<FilterRegex> >             m_filterRegex;
     void InitializeKeyFilter( );
