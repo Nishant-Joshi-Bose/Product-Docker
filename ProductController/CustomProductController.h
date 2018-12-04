@@ -514,6 +514,7 @@ private:
     void HandleGetPowerMacro( const Callback<ProductPb::PowerMacro> & respCb,
                               const Callback<FrontDoor::Error> & errorCb ) const;
     void UpdatePowerMacro( );
+    void ReconcileCurrentProductSource( );
     void LoadPowerMacroFromPersistance( );
 
     bool m_haltInPlayableTransitionNetworkStandby = false;
