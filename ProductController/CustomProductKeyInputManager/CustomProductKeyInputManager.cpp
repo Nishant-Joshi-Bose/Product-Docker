@@ -506,11 +506,7 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
     }
 
     const auto& nowSelection = m_ProductController.GetNowSelection( );
-    if( not nowSelection.has_contentitem( ) )
-    {
-        BOSE_WARNING( s_logger, "%s: missing content item", __PRETTY_FUNCTION__ );
-        return false;
-    }
+    BOSE_DEBUG( s_logger, "%s: nowSelection %s", __PRETTY_FUNCTION__,  ProtoToMarkup::ToJson( nowSelection ).c_str() );
     const auto& source = nowSelection.contentitem( ).source( );
     const auto& sourceAccount = nowSelection.contentitem( ).sourceaccount( );
     auto filterSource = [ source, sourceAccount]( const FilterRegex & f )

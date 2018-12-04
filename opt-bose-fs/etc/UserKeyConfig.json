@@ -161,7 +161,7 @@
         "timeOutList": [],
         "filter": {
             "sources": [
-                { "sourceName": "(PRODUCT|INVALID_SOURCE)", "sourceAccountName": ".*" }
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
             ],
             "translate": "PRESET_SELECT_1"
         }
@@ -175,7 +175,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(PRODUCT|INVALID_SOURCE)", "sourceAccountName": ".*" }
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
             ],
             "translate": "PRESET_SELECT_2"
         }
@@ -189,7 +189,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(PRODUCT|INVALID_SOURCE)", "sourceAccountName": ".*" }
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
             ],
             "translate": "PRESET_SELECT_3"
         }
@@ -203,7 +203,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(PRODUCT|INVALID_SOURCE)", "sourceAccountName": ".*" }
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
             ],
             "translate": "PRESET_SELECT_4"
         }
@@ -217,7 +217,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(PRODUCT|INVALID_SOURCE)", "sourceAccountName": ".*" }
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
             ],
             "translate": "PRESET_SELECT_5"
         }
@@ -231,7 +231,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(PRODUCT|INVALID_SOURCE)", "sourceAccountName": ".*" }
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
             ],
             "translate": "PRESET_SELECT_6"
         }
