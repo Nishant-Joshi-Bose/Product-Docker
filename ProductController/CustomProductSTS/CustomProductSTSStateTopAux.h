@@ -63,13 +63,6 @@ public:
     bool HandleStop( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
-    /// @brief Act on Puase request
-    /// @param Void
-    /// @return true if successful
-    ////////////////////////////////////////////////////////
-    bool HandlePause( const STS::Void & ) override;
-
-    ////////////////////////////////////////////////////////
     /// @brief Act on play request
     /// @param Void
     /// @return true if successful
@@ -103,7 +96,7 @@ private:
     void HandleAUXCableDetect( LpmServiceMessages::IpcAuxState_t IpcAuxState );
     void RegisterAuxPlugStatusCallbacks();
     void AuxPlay();
-    void AuxStopPlaying( bool isStop );
+    void AuxStopPlaying( );
     inline void SetUserPlayStatus( bool isPlay )
     {
         m_NextState.state.userPlayStatus = isPlay;
