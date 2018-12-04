@@ -2137,6 +2137,15 @@ void CustomProductController::AttemptToStartPlayback()
     }
     else
     {
+        // The last content item may point to a now-removed source (PGC-3439)
+        if( m_lastContentItem.source( ) == SHELBY_SOURCE::PRODUCT )
+        {
+            auto sourceItem = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, m_lastContentItem.sourceaccount( ) );
+            if( !sourceItem || !GetSourceInfo( ).IsSourceAvailable( *sourceItem ) )
+            {
+                m_lastContentItem = GetOOBDefaultLastContentItem( );
+            }
+        }
         ProductController::AttemptToStartPlayback();
     }
 }
