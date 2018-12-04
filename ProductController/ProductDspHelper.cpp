@@ -210,8 +210,8 @@ void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus
     // Update /audio/eqSelect supported EQs based on AiqInstalled info
     m_ProductController.GetProductAudioServiceInstance()->SetAiqInstalled( ( status.aiqinstalled() > 0 ) ? true : false );
     // Notify AudioPath about the minimumLatency value from DSP (uint16_t)
-    m_ProductController.GetProductAudioServiceInstance()->SetNetworkSourceLatency( static_cast<int32_t>( status.networkSourceIntrinsicLatencyMs() ) );
-    m_ProductController.GetProductAudioServiceInstance()->SetTVSourceLatency( static_cast<int32_t>( status.tvSourceIntrinsicLatencyMs() ) );
+    m_ProductController.GetProductAudioServiceInstance()->SetNetworkSourceLatency( static_cast<int32_t>( status.networksourceintrinsiclatencyms() ) );
+    m_ProductController.GetProductAudioServiceInstance()->SetTVSourceLatency( static_cast<int32_t>( status.tvsourceintrinsiclatencyms() ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////

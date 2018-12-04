@@ -97,7 +97,7 @@ private:
     void RegisterFrontDoorEvents() override;
 
     LpmServiceMessages::IpcDspStreamConfigReqPayload_t m_DspStreamConfig;
-    int32_t m_currentNetworkSourceLatency;
-    int32_t m_currentTVSourceLatency;
+    uint32_t m_currentNetworkSourceLatency;
+    uint32_t m_currentTVSourceLatency;
 };
 }// namespace ProductApp
