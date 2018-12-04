@@ -810,6 +810,7 @@ void CustomProductController::Run( )
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
         UpdatePowerMacro( );
+        ReconcileCurrentProductSource( );
     };
     GetSourceInfo().RegisterSourceListener( sourceInfoCb );
 
@@ -2322,6 +2323,30 @@ void CustomProductController::UpdatePowerMacro( )
     if( isChanged )
     {
         GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API, m_powerMacro );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::ReconcileCurrentProductSource
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::ReconcileCurrentProductSource( )
+{
+    if( GetNowSelection( ).has_contentitem( ) && GetNowSelection( ).contentitem( ).source( ) == SHELBY_SOURCE::PRODUCT )
+    {
+        auto sourceItem = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, GetNowSelection( ).contentitem( ).sourceaccount( ) );
+        if( !sourceItem || !GetSourceInfo( ).IsSourceAvailable( *sourceItem ) )
+        {
+            // If the active source becomes unavailable, switch to TV source (PGC-3375)
+            KeyHandlerUtil::ActionType_t startTvPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_TV );
+            ProductMessage message;
+            message.set_action( startTvPlayback );
+
+            IL::BreakThread( std::bind( GetMessageHandler( ),
+                                        message ),
+                             GetTask( ) );
+        }
     }
 }
 
