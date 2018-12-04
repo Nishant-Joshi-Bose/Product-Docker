@@ -133,7 +133,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/2.2.1-162+1725791"
+    "selected_version": "Release/master/2.2.1-174+4896d7d"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -249,7 +249,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@007d453d988dd5258996ad9291d2067e52924238"
+    "selected_version": "master@3b8415af4ec4ea41e288beb2bbb2248a0ef43886"
   },
   {
     "name": "Webkit",
