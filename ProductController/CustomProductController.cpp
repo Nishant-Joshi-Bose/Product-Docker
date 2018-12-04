@@ -45,7 +45,6 @@ CustomProductController::CustomProductController():
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerResume( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME ),
     m_CustomProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
-    m_CustomProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
     m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
@@ -76,7 +75,6 @@ CustomProductController::CustomProductController():
     m_ProductControllerStatePlayableTransitionInternal( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL ),
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransitionInternal, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
     m_ProductControllerStatePlayableTransitionNetworkStandby( GetHsm(), &m_ProductControllerStatePlayableTransitionInternal, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY ),
-    m_ProductControllerStateSoftwareUpdateTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION ),
     m_ProductControllerStatePlayingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION ),
     m_ProductControllerStateFirstBootGreeting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING ),
     m_ProductControllerStateFirstBootGreetingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION ),
@@ -84,7 +82,10 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicated( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED ),
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
-    m_ProductControllerStateForcedSoftwareUpdate( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FORCED_SOFTWARE_UPDATE ),
+    m_ProductControllerStateSoftwareInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
+    m_ProductControllerStateSoftwareInstallTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_TRANSITION ),
+    m_ProductControllerStateSoftwareInstallForced( GetHsm(), &m_ProductControllerStateSoftwareInstall, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_FORCED ),
+    m_ProductControllerStateSoftwareInstallNormal( GetHsm(), &m_ProductControllerStateSoftwareInstall, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_NORMAL ),
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
@@ -114,10 +115,6 @@ void CustomProductController::InitializeHsm()
     GetHsm().AddState( Device_State_Not_Notify,
                        SystemPowerControl_State_OFF,
                        &m_CustomProductControllerStateLowPowerStandby );
-
-    GetHsm().AddState( NotifiedNames::UPDATING,
-                       SystemPowerControl_State_Not_Notify,
-                       &m_CustomProductControllerStateSwInstall );
 
     GetHsm().AddState( NotifiedNames::BOOTING,
                        SystemPowerControl_State_Not_Notify,
@@ -253,10 +250,6 @@ void CustomProductController::InitializeHsm()
 
     GetHsm().AddState( Device_State_Not_Notify,
                        SystemPowerControl_State_Not_Notify,
-                       &m_ProductControllerStateSoftwareUpdateTransition );
-
-    GetHsm().AddState( Device_State_Not_Notify,
-                       SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStatePlayingTransition );
 
     GetHsm().AddState( NotifiedNames::FIRST_BOOT_GREETING,
@@ -283,9 +276,21 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
 
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateSoftwareInstall );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateSoftwareInstallTransition );
+
+    GetHsm().AddState( NotifiedNames::UPDATING,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateSoftwareInstallNormal );
+
     GetHsm().AddState( NotifiedNames::FORCED_SOFTWARE_UPDATE,
                        SystemPowerControl_State_Not_Notify,
-                       &m_ProductControllerStateForcedSoftwareUpdate );
+                       &m_ProductControllerStateSoftwareInstallForced );
 
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 }

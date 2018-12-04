@@ -32,8 +32,6 @@
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
-#include "ProductControllerStateSoftwareInstall.h"
-#include "CustomProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -55,7 +53,10 @@
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
-#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStateSoftwareInstall.h"
+#include "ProductControllerStateSoftwareInstallTransition.h"
+#include "ProductControllerStateSoftwareInstallForced.h"
+#include "ProductControllerStateSoftwareInstallNormal.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStateFirstBootGreeting.h"
 #include "ProductControllerStateFirstBootGreetingTransition.h"
@@ -63,7 +64,6 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
-#include "ProductControllerStateForcedSoftwareUpdate.h"
 #include "LightBarController.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "NetManager.pb.h"
@@ -318,7 +318,6 @@ private:
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
     ProductControllerStateLowPowerResume                            m_ProductControllerStateLowPowerResume;
     CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
-    CustomProductControllerStateSoftwareInstall                     m_CustomProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
@@ -349,7 +348,6 @@ private:
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
     ProductControllerStatePlayableTransitionIdle                    m_ProductControllerStatePlayableTransitionIdle;
     ProductControllerStatePlayableTransitionNetworkStandby          m_ProductControllerStatePlayableTransitionNetworkStandby;
-    ProductControllerStateSoftwareUpdateTransition                  m_ProductControllerStateSoftwareUpdateTransition;
     ProductControllerStatePlayingTransition                         m_ProductControllerStatePlayingTransition;
     ProductControllerStateFirstBootGreeting                         m_ProductControllerStateFirstBootGreeting;
     ProductControllerStateFirstBootGreetingTransition               m_ProductControllerStateFirstBootGreetingTransition;
@@ -357,7 +355,11 @@ private:
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
-    ProductControllerStateForcedSoftwareUpdate                      m_ProductControllerStateForcedSoftwareUpdate;
+    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSoftwareInstall;
+    ProductControllerStateSoftwareInstallTransition                 m_ProductControllerStateSoftwareInstallTransition;
+    ProductControllerStateSoftwareInstallForced                     m_ProductControllerStateSoftwareInstallForced;
+    ProductControllerStateSoftwareInstallNormal                     m_ProductControllerStateSoftwareInstallNormal;
+
 
     /// ProductAudioService
     std::shared_ptr<CustomProductAudioService>                      m_ProductAudioService;
