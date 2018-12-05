@@ -1190,9 +1190,7 @@ void CustomProductController::HandleSelectSourceSlot( ProductSTSAccount::Product
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );
 
-    IL::BreakThread( std::bind( GetMessageHandler( ),
-                                message ),
-                     GetTask( ) );
+    SendAsynchronousProductMessage( message );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2046,9 +2044,7 @@ void CustomProductController::HandlePutOpticalAutoWake(
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
 
-        IL::BreakThread( std::bind( GetMessageHandler( ),
-                                    message ),
-                         GetTask( ) );
+        SendAsynchronousProductMessage( message );
         respCb( req );
     }
     else
@@ -2343,9 +2339,7 @@ void CustomProductController::ReconcileCurrentProductSource( )
             ProductMessage message;
             message.set_action( startTvPlayback );
 
-            IL::BreakThread( std::bind( GetMessageHandler( ),
-                                        message ),
-                             GetTask( ) );
+            SendAsynchronousProductMessage( message );
         }
     }
 }
@@ -2563,7 +2557,7 @@ void CustomProductController::InitializeAccessorySoftwareInstallManager( )
     {
         ProductMessage productMessage;
         productMessage.set_softwareinstall( true );
-        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+        SendAsynchronousProductMessage( productMessage );
     };
     auto softwareInstallcb = std::make_shared<AsyncCallback<void> > ( softwareInstallFunc, GetTask() );
 

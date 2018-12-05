@@ -219,9 +219,7 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
         ProductMessage message;
         message.mutable_accessoriesplaytones( )->set_subs( isSubValid );
         message.mutable_accessoriesplaytones( )->set_rears( isRearValid );
-        IL::BreakThread( std::bind( GetProductController( ).GetMessageHandler( ),
-                                    message ),
-                         GetProductController( ).GetTask( ) );
+        GetProductController( ).SendAsynchronousProductMessage( message );
     }
 
     ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
