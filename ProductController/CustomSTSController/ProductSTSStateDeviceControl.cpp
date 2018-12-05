@@ -27,42 +27,92 @@ static constexpr uint32_t LOW_LATENCY_DELAYED_START_MS = 25;
 bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void &, uint32_t seq )
 {
     BOSE_INFO( m_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
-    m_account.IPC().SendActivateResponse( seq );
 
-    if( !m_active )
+    const auto source = m_account.GetProductSTSController()->GetProductController().GetSourceInfo().FindSource( m_account.GetSourceContentItem() );
+    if( source != nullptr && source->has_accountid() )
     {
-        const std::string& URL = GetURL( );
-        if( !URL.empty( ) )
+        // Form activation callback
+        auto cb = [ this, seq ]( DeviceControllerClientMessages::DeviceActivationRequest_t req )
         {
-            STS::AudioSetURL asu;
-            asu.set_url( URL );
-            asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
-            m_account.IPC().SendAudioSetURLEvent( asu );
-        }
+            m_account.IPC().SendActivateResponse( seq );
+        };
+        AsyncCallback< DeviceControllerClientMessages::DeviceActivationRequest_t >
+        activationCb( cb, m_account.GetProductSTSController()->GetProductController().GetTask() );
+        // Send activation request
+        DeviceControllerClientMessages::DeviceActivationRequest_t request;
+        request.set_activation( true );
+        request.set_id( source->accountid() );
+        m_deviceControllerPtr->SendDeviceActivationRequest( request, activationCb );
 
-        const auto source = m_account.GetProductSTSController()->GetProductController().GetSourceInfo().FindSource( m_account.GetSourceContentItem() );
-        if( source->status() == SoundTouchInterface::SourceStatus::AVAILABLE )
+        // Update nowPlaying to STS
+        if( !m_active )
         {
-            m_np.set_canpause( true );
-            m_np.set_canstop( true );
-            m_np.set_skipenabled( true );           //skip next
-            m_np.set_skippreviousenabled( true );   //skip previous
-            m_np.set_seeksupported( true );
+            const std::string& URL = GetURL( );
+            if( !URL.empty( ) )
+            {
+                STS::AudioSetURL asu;
+                asu.set_url( URL );
+                asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
+                m_account.IPC().SendAudioSetURLEvent( asu );
+            }
+            if( source->status() == SoundTouchInterface::SourceStatus::AVAILABLE )
+            {
+                m_np.set_canpause( true );
+                m_np.set_canstop( true );
+                m_np.set_skipenabled( true );           //skip next
+                m_np.set_skippreviousenabled( true );   //skip previous
+                m_np.set_seeksupported( true );
+            }
+            else
+            {
+                m_np.set_canpause( false );
+                m_np.set_canstop( false );
+                m_np.set_skipenabled( false );           //skip next
+                m_np.set_skippreviousenabled( false );   //skip previous
+                m_np.set_seeksupported( false );
+            }
+            m_np.set_playstatus( STS::PlayStatus::PLAY );
+            STS::NowPlayingChange npc;
+            *( npc.mutable_nowplaying() ) = m_np;
+            m_account.IPC().SendNowPlayingChangeEvent( npc );
+            m_active = true;
         }
-        else
-        {
-            m_np.set_canpause( false );
-            m_np.set_canstop( false );
-            m_np.set_skipenabled( false );           //skip next
-            m_np.set_skippreviousenabled( false );   //skip previous
-            m_np.set_seeksupported( false );
-        }
+    }
+    else
+    {
+        m_account.IPC().SendActivateResponse( seq );
+        //TODO: what would be cases where accountId is empty
+    }
 
-        m_np.set_playstatus( STS::PlayStatus::PLAY );
-        STS::NowPlayingChange npc;
-        *( npc.mutable_nowplaying() ) = m_np;
-        m_account.IPC().SendNowPlayingChangeEvent( npc );
-        m_active = true;
+    return true;
+}
+
+bool ProductSTSStateDeviceControl::HandleDeactivateRequest( const STS::DeactivateRequest &, uint32_t seq )
+{
+    BOSE_INFO( m_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
+
+    const auto source = m_account.GetProductSTSController()->GetProductController().GetSourceInfo().FindSource( m_account.GetSourceContentItem() );
+    if( source != nullptr && source->has_accountid() )
+    {
+        // Form dectivation callback
+        auto cb = [ this, seq ]( DeviceControllerClientMessages::DeviceActivationRequest_t req )
+        {
+            m_account.IPC().SendAudioStopEvent();
+            m_account.IPC().SendDeactivateResponse( seq );
+            m_np.set_playstatus( STS::PlayStatus::STOP );
+            m_active = false;
+        };
+        AsyncCallback< DeviceControllerClientMessages::DeviceActivationRequest_t >
+        activationCb( cb, m_account.GetProductSTSController()->GetProductController().GetTask() );
+        // Send activation request
+        DeviceControllerClientMessages::DeviceActivationRequest_t request;
+        request.set_activation( false );
+        request.set_id( source->accountid() );
+        m_deviceControllerPtr->SendDeviceActivationRequest( request, activationCb );
+    }
+    else
+    {
+        m_account.IPC().SendDeactivateResponse( seq );
     }
     return true;
 }

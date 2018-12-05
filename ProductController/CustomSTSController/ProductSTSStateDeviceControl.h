@@ -19,6 +19,7 @@ public:
     ~ProductSTSStateDeviceControl() override {}
 
     bool HandleActivateRequest( const STS::Void &, uint32_t seq ) override;
+    bool HandleDeactivateRequest( const STS::DeactivateRequest &, uint32_t seq ) override;
 
     ////////////////////////////////////////////////////////
     /// Below are functions we need to proxy to the
@@ -37,6 +38,5 @@ public:
 
 private:
     DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr m_deviceControllerPtr;
-
 };
 }
