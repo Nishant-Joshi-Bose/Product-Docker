@@ -100,11 +100,16 @@ if path == "/audio.tar" and is_development():
 # ----------------------------------------------------------------------------
 # AirPlay2 Album Art
 if path.startswith("/AirPlay2/"):
-   files = path.split("/")
-   iFile = files[2]
+   iFile = path[len("/AirPlay2/"):len(path)] 
+   # Prevent dir traversal
+   if ".." in iFile:
+       http_err()
+       sys.exit()
+   # Strip Query string.
    i = iFile.find("?")
    if i != -1:
        iFile = iFile[:i]
+   # Combine image file name with abs. path
    image = "/var/run/AirPlay2/" + iFile
    # Only jpeg and png images are supported.
    if image.endswith('.jpg'):
