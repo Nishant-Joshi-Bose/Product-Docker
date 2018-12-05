@@ -116,6 +116,10 @@
     "selected_version": "Release/master/2.2.0-150+458ef28"
   },
   {
+    "name": "CloudControlClient-qc8017_32",
+    "selected_version": "Release/dog-food-rc0/0.0.2-43+ba7a0ec"
+  },
+  {
     "name": "DataCollectionClient-qc8017_32",
     "selected_version": "Release/master/2.2.3-189+2fc39b1"
   },
