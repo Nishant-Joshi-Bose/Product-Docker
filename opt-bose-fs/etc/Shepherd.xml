@@ -23,9 +23,4 @@
   <daemon name="Spotify"/>
   <daemon name="Upnp"/>
 
-  <daemon name="PtsServer">
-    <arg>/opt/Bose/etc/pts-handler</arg>
-    <arg>--static=/opt/Bose/etc/static-content-map.txt</arg>
-  </daemon>
-
 </ShepherdConfig>

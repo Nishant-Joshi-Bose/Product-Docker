@@ -51,8 +51,6 @@ def only_for_usb():
 
 def only_for_ifaces(allowed_ifaces):
     iface = os.environ.get("IFACE", "")
-    if iface == "lo": # loopback is always considered safe
-        return
     for allowed_iface in allowed_ifaces:
         if allowed_iface.endswith("*"):
             if iface.startswith(allowed_iface[:-1]):
