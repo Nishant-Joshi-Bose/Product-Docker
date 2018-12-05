@@ -7,7 +7,6 @@
 import os
 import sys
 import subprocess
-import re
 
 debug = False
 
@@ -100,7 +99,7 @@ if path == "/audio.tar" and is_development():
 
 # ----------------------------------------------------------------------------
 # AirPlay2 Album Art
-if re.search("/AirPlay2/\w+", path):
+if path.startswith("/AirPlay2/"):
    files = path.split("/")
    iFile = files[2]
    i = iFile.find("?")
@@ -113,9 +112,8 @@ if re.search("/AirPlay2/\w+", path):
    elif image.endswith('.png'):
         http_ok("image/png")
    else:
-        http_err(code="404 Not Found")
+        http_err()
         sys.exit()
-   sys.stdout.flush()
    sys.stdout.write(open(image).read())
    sys.exit()
 
