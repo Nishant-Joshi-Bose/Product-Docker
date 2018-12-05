@@ -100,7 +100,7 @@ if path == "/audio.tar" and is_development():
 # ----------------------------------------------------------------------------
 # AirPlay2 Album Art
 if path.startswith("/AirPlay2/"):
-   iFile = path[len("/AirPlay2/"):len(path)] 
+   iFile = path[len("/AirPlay2/"):] 
    # Prevent dir traversal
    if ".." in iFile:
        http_err()
