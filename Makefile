@@ -62,7 +62,7 @@ endif
 USERKEYCONFIG=$(PWD)/opt-bose-fs/etc/UserKeyConfig.json
 KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
 LPM_KEYS=$(RIVIERALPMSERVICE_DIR)/Python/AutoLpmServiceMessages_pb2.py
-COMMON_INTENTS=$(PRODUCTCONTROLLERCOMMONPROTO_DIR)/include/CommonIntents_pb2.py
+COMMON_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/CommonIntents_pb2.py
 CUSTOM_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/Intents_pb2.py
 
 .PHONY: keyconfig
