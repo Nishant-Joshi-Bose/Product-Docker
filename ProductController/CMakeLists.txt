@@ -32,6 +32,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/AudioFormat.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
+  ${PROTO_CC_DEST}/CommonIntents.pb.cc
   ${PROTO_CC_DEST}/HdmiEdid.pb.cc
   ${PROTO_CC_DEST}/Intents.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
