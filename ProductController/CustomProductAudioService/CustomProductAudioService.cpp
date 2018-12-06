@@ -470,12 +470,14 @@ void CustomProductAudioService::SetNetworkSourceLatency( uint32_t latency )
         return;
     }
     m_currentNetworkSourceLatency = latency;
+#if 0
     auto respCb = []( uint32_t resp )
     {
         BOSE_VERBOSE( s_logger, "%s: received callback with latency(%d)", __func__, resp );
     };
     BOSE_INFO( s_logger, "%s: sending network source latency(%d) to AudioPath", __func__, m_currentNetworkSourceLatency );
     m_APPointer -> SetNetworkSourceLatency( m_currentNetworkSourceLatency, respCb );
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -495,12 +497,14 @@ void CustomProductAudioService::SetTVSourceLatency( uint32_t latency )
         return;
     }
     m_currentTVSourceLatency = latency;
+#if 0
     auto respCb = []( uint32_t resp )
     {
         BOSE_VERBOSE( s_logger, "%s: received callback with latency(%d)", __func__, resp );
     };
     BOSE_INFO( s_logger, "%s: sending network source latency(%d) to AudioPath", __func__, m_currentTVSourceLatency );
     m_APPointer -> SetTVSourceLatency( m_currentTVSourceLatency, respCb );
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

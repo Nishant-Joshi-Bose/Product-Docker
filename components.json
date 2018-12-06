@@ -13,27 +13,27 @@
   },
   {
     "name": "AudioPathService-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Continuous/master/2.2.11-2933+eaabc47"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Continuous/master/2.2.11-2933+eaabc47"
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Continuous/master/2.2.11-2933+eaabc47"
   },
   {
     "name": "AudioPathClient-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Continuous/master/2.2.11-2933+eaabc47"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Continuous/master/2.2.11-2933+eaabc47"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Continuous/master/2.2.11-2933+eaabc47"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -197,7 +197,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-274+7b95705"
+    "selected_version": "Continuous/ys_update_components/2.2.0-277+45dd711"
   },
   {
     "name": "ProductUIAssets",
