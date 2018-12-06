@@ -56,7 +56,6 @@ ProductCommandLine::ProductCommandLine( CustomProductController& ProductControll
 
     m_ProductController( ProductController ),
     m_ProductTask( ProductController.GetTask( ) ),
-    m_ProductNotify( ProductController.GetMessageHandler( ) ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
 {
     BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
@@ -318,7 +317,7 @@ void ProductCommandLine::HandleAutowake( const std::list<std::string>& argList,
             response = "Incorrect Usage: product autowake [on | off]";
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+        m_ProductController.SendAsynchronousProductMessage( productMessage );
     }
 }
 
@@ -350,7 +349,7 @@ void ProductCommandLine::HandleKey( const std::list<std::string>& argList,
             ProductMessage productMessage;
             productMessage.set_action( static_cast< uint32_t >( keyActionValue ) );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+            m_ProductController.SendAsynchronousProductMessage( productMessage );
         }
         else
         {
@@ -440,9 +439,7 @@ void ProductCommandLine::HandleSource( const std::list<std::string>& argList,
             ProductMessage message;
             message.set_action( startTvPlayback );
 
-            IL::BreakThread( std::bind( m_ProductController.GetMessageHandler( ),
-                                        message ),
-                             m_ProductController.GetTask( ) );
+            m_ProductController.SendAsynchronousProductMessage( message );
         }
         else if( sourceString == "st" )
         {
@@ -450,9 +447,7 @@ void ProductCommandLine::HandleSource( const std::list<std::string>& argList,
             ProductMessage message;
             message.set_action( startSoundTouchPlayback );
 
-            IL::BreakThread( std::bind( m_ProductController.GetMessageHandler( ),
-                                        message ),
-                             m_ProductController.GetTask( ) );
+            m_ProductController.SendAsynchronousProductMessage( message );
         }
         else
         {
@@ -556,7 +551,7 @@ void ProductCommandLine::HandleTestFreq( const std::list<std::string>& argList,
             productMessage.mutable_wirelessstatus( )->set_configured( true );
             productMessage.mutable_wirelessstatus( )->set_frequencykhz( frequencyValue );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+            m_ProductController.SendAsynchronousProductMessage( productMessage );
         }
         else
         {
@@ -580,7 +575,7 @@ void ProductCommandLine::HandleTestPairing( const std::list<std::string>& argLis
 
     response  = "An attempt to pair with another speaker to this device will be made.";
 
-    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    m_ProductController.SendAsynchronousProductMessage( productMessage );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -596,7 +591,7 @@ void ProductCommandLine::HandleTestPower( const std::list<std::string>& argList,
     ProductMessage productMessage;
     productMessage.set_action( static_cast< uint32_t >( Action::POWER_TOGGLE ) );
 
-    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    m_ProductController.SendAsynchronousProductMessage( productMessage );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -639,7 +634,7 @@ void ProductCommandLine::HandleTestVoice( const std::list<std::string>& argList,
             response = "Incorrect Usage: product test_voice [on | off]";
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+        m_ProductController.SendAsynchronousProductMessage( productMessage );
     }
 }
 
@@ -746,7 +741,7 @@ void ProductCommandLine::HandleTestTransition( const std::list<std::string>& arg
             {
                 ProductMessage productMessage;
                 productMessage.mutable_lpmstatus( )->set_systemstate( SYSTEM_STATE_STANDBY );
-                IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+                m_ProductController.SendAsynchronousProductMessage( productMessage );
                 response  = "Releasing";
             }
             else
