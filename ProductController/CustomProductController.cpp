@@ -810,6 +810,7 @@ void CustomProductController::Run( )
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
         UpdatePowerMacro( );
+        ReconcileCurrentProductSource( );
     };
     GetSourceInfo().RegisterSourceListener( sourceInfoCb );
 
@@ -1189,9 +1190,7 @@ void CustomProductController::HandleSelectSourceSlot( ProductSTSAccount::Product
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );
 
-    IL::BreakThread( std::bind( GetMessageHandler( ),
-                                message ),
-                     GetTask( ) );
+    SendAsynchronousProductMessage( message );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2045,9 +2044,7 @@ void CustomProductController::HandlePutOpticalAutoWake(
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
 
-        IL::BreakThread( std::bind( GetMessageHandler( ),
-                                    message ),
-                         GetTask( ) );
+        SendAsynchronousProductMessage( message );
         respCb( req );
     }
     else
@@ -2137,6 +2134,15 @@ void CustomProductController::AttemptToStartPlayback()
     }
     else
     {
+        // The last content item may point to a now-removed source (PGC-3439)
+        if( m_lastContentItem.source( ) == SHELBY_SOURCE::PRODUCT )
+        {
+            auto sourceItem = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, m_lastContentItem.sourceaccount( ) );
+            if( !sourceItem || !GetSourceInfo( ).IsSourceAvailable( *sourceItem ) )
+            {
+                m_lastContentItem = GetOOBDefaultLastContentItem( );
+            }
+        }
         ProductController::AttemptToStartPlayback();
     }
 }
@@ -2313,6 +2319,28 @@ void CustomProductController::UpdatePowerMacro( )
     if( isChanged )
     {
         GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API, m_powerMacro );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::ReconcileCurrentProductSource
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::ReconcileCurrentProductSource( )
+{
+    if( GetNowSelection( ).has_contentitem( ) && GetNowSelection( ).contentitem( ).source( ) == SHELBY_SOURCE::PRODUCT )
+    {
+        auto sourceItem = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, GetNowSelection( ).contentitem( ).sourceaccount( ) );
+        if( !sourceItem || !GetSourceInfo( ).IsSourceAvailable( *sourceItem ) )
+        {
+            // If the active source becomes unavailable, switch to TV source (PGC-3375)
+            KeyHandlerUtil::ActionType_t startTvPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_TV );
+            ProductMessage message;
+            message.set_action( startTvPlayback );
+
+            SendAsynchronousProductMessage( message );
+        }
     }
 }
 
@@ -2529,7 +2557,7 @@ void CustomProductController::InitializeAccessorySoftwareInstallManager( )
     {
         ProductMessage productMessage;
         productMessage.set_softwareinstall( true );
-        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+        SendAsynchronousProductMessage( productMessage );
     };
     auto softwareInstallcb = std::make_shared<AsyncCallback<void> > ( softwareInstallFunc, GetTask() );
 

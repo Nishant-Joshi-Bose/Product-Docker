@@ -32,9 +32,7 @@ void CustomProductControllerStateFirstBootGreetingTransition::HandleStateEnter()
     {
         ProductMessage productMessage;
         productMessage.mutable_lpmstatus( )->set_systemstate( SYSTEM_STATE_ON );
-        IL::BreakThread( std::bind( GetProductController( ).GetMessageHandler( ),
-                                    productMessage ),
-                         GetProductController( ).GetTask( ) );
+        GetProductController( ).SendAsynchronousProductMessage( productMessage );
     }
 }
 
