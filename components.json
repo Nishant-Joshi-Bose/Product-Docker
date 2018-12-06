@@ -37,11 +37,11 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/2.2.0-210+073bd1c"
+    "selected_version": "Release/master/2.2.0-215+4e548ea"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44286.3108525"
+    "selected_version": "Continuous/Castle-Fork/2018-12-05_1702"
   },
   {
     "name": "BLERemoteXCVR",
@@ -49,15 +49,15 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/3.0.2-350+6ea39e6"
+    "selected_version": "Release/master/3.1.0-361+4bd7187"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.1-202+37b68ca"
+    "selected_version": "Release/master/2.2.2-207+82b89ce"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/master/2.3.2-225+c075c88"
+    "selected_version": "Release/master/2.4.0-235+05ee0a1"
   },
   {
     "name": "bose-opkg-utils",
@@ -97,7 +97,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/2.3.0-371+512fe57"
+    "selected_version": "Release/master/2.4.0-380+e61fb42"
   },
   {
     "name": "CastleLibs-native",
@@ -121,11 +121,11 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/2.2.1-161+64fbc70"
+    "selected_version": "Release/master/2.2.1-174+0dedebe"
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/2.2.0-188+27f4ff5"
+    "selected_version": "Release/master/2.2.0-190+65b1cbd"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -137,7 +137,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.0-496+f0db4f8"
+    "selected_version": "Release/master/2.2.0-498+7d72bc0"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
@@ -145,15 +145,15 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/2.2.0-294+e537d22"
+    "selected_version": "Release/master/2.2.0-304+2240588"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/2.2.1-162+1725791"
+    "selected_version": "Release/master/2.2.1-174+4896d7d"
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/2.2.0-187+658bda1"
+    "selected_version": "Release/master/2.2.0-190+ee9b474"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/2.2.0-1482+41376ba"
+    "selected_version": "Release/master/2.2.0-1536+d97126b"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -193,11 +193,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@a1e71509aaaa9cf7a9e70d4e9c7bfc80d76e13a2"
+    "selected_version": "master@f13a01771ec0c2799cb10ed004ee01150cb5d877"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-267+9402191"
+    "selected_version": "Release/master/2.2.0-274+7b95705"
   },
   {
     "name": "ProductUIAssets",
@@ -237,7 +237,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/master/3.0.0-89+4087a4b"
+    "selected_version": "Release/master/3.0.0-92+aad484f"
   },
   {
     "name": "SASS-qc8017_32",
@@ -249,11 +249,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/3.0.3-1157+f53fd0d"
+    "selected_version": "Release/master/3.0.3-1193+b8e2408"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44286.3108525"
+    "selected_version": "Continuous/Castle-Fork/2018-12-05_1702"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -265,11 +265,11 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/master/2.2.0-87+3be333a"
+    "selected_version": "Release/master/2.2.0-89+c72c74d"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@f6148b4d6670a86b9dccc67c838a911d58a269f1"
+    "selected_version": "master@3d5a721242a4c4997d16df648b68c01086f99a61"
   },
   {
     "name": "unittest-cpp-qc8017_32",
