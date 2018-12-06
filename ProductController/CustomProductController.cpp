@@ -2229,7 +2229,7 @@ void CustomProductController::HandlePutPowerMacro(
     if( success )
     {
         m_powerMacro.CopyFrom( req );
-        PersistPowerMacro():
+        PersistPowerMacro();
         respCb( req );
     }
 
@@ -2327,7 +2327,7 @@ void CustomProductController::UpdatePowerMacro( )
 
     if( isChanged )
     {
-        PersistPowerMacro():
+        PersistPowerMacro();
     }
 }
 
