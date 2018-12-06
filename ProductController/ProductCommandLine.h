@@ -92,7 +92,6 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     CustomProductController&                             m_ProductController;
     NotifyTargetTaskIF*                                  m_ProductTask;
-    Callback< ProductMessage >                           m_ProductNotify;
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
