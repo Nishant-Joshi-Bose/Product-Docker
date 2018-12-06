@@ -2229,28 +2229,8 @@ void CustomProductController::HandlePutPowerMacro(
     if( success )
     {
         m_powerMacro.CopyFrom( req );
-        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
-        try
-        {
-            persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
-            respCb( req );
-
-            GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
-                                                     m_powerMacro );
-
-        }
-        catch( const ProtoToMarkup::MarkupError & e )
-        {
-            BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
-            error.set_message( e.what( ) );
-            success = false;
-        }
-        catch( ProtoPersistenceIF::ProtoPersistenceException & e )
-        {
-            BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
-            error.set_message( e.what( ) );
-            success = false;
-        }
+        PersistPowerMacro():
+        respCb( req );
     }
 
     if( not success )
@@ -2281,6 +2261,30 @@ void CustomProductController::LoadPowerMacroFromPersistance( )
     {
         BOSE_ERROR( s_logger, "Power Macro persistence error - %s", e.what( ) );
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::PersistPowerMacro
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::PersistPowerMacro( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+    try
+    {
+        persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
+    }
+    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                             m_powerMacro );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2323,21 +2327,7 @@ void CustomProductController::UpdatePowerMacro( )
 
     if( isChanged )
     {
-        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
-        try
-        {
-            persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
-            GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
-                                                     m_powerMacro );
-        }
-        catch( const ProtoToMarkup::MarkupError & e )
-        {
-            BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
-        }
-        catch( ProtoPersistenceIF::ProtoPersistenceException & e )
-        {
-            BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
-        }
+        PersistPowerMacro():
     }
 }
 
