@@ -63,7 +63,6 @@ endif
 KEYCONFIG_GENERATOR_DIR=$(PRODUCTCONTROLLERCOMMON_DIR)/tools/key_config_generator
 
 USERKEYCONFIG=$(BOSE_WORKSPACE)/opt-bose-fs/etc/UserKeyConfig.json
-LPM_KEYS=$(RIVIERALPMSERVICE_DIR)/Python/AutoLpmServiceMessages_pb2.py
 COMMON_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/CommonIntents_pb2.py
 CUSTOM_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/Intents_pb2.py
 AUTOLPM_SERVICES=$(RIVIERALPMSERVICE_DIR)/Python/AutoLpmServiceMessages_pb2.py
@@ -73,7 +72,7 @@ BLASTCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/BlastConfiguration.json
 
 $(COMMON_INTENTS) $(CUSTOM_INTENTS): | generated_sources
 
-$(KEYCONFIG): $(USERKEYCONFIG) $(LPM_KEYS) $(CUSTOM_INTENTS) $(COMMON_INTENTS)
+$(KEYCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES) $(CUSTOM_INTENTS) $(COMMON_INTENTS)
 	cd $(KEYCONFIG_GENERATOR_DIR) && \
 	./generate_key_config \
 		$(BUILDS_DIR) \
@@ -81,15 +80,15 @@ $(KEYCONFIG): $(USERKEYCONFIG) $(LPM_KEYS) $(CUSTOM_INTENTS) $(COMMON_INTENTS)
 		--common $(COMMON_INTENTS) \
 		--custom $(CUSTOM_INTENTS) \
         --autolpm $(AUTOLPM_SERVICES) \
-		--keys $(LPM_KEYS) \
+		--keys $(AUTOLPM_SERVICES) \
 		--outputcfg $(KEYCONFIG) 
 
-$(BLASTCONFIG): $(USERKEYCONFIG) $(LPM_KEYS)
+$(BLASTCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES)
 	cd tools/key_config_generator && \
 	./generate_blast_config \
 		$(BUILDS_DIR) \
 		--inputcfg $(USERKEYCONFIG) \
-		--keys $(LPM_KEYS) \
+		--keys $(AUTOLPM_SERVICES) \
 		--outputcfg $(BLASTCONFIG)
 
 .PHONY: cmake_build
