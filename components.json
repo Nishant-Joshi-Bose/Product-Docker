@@ -13,27 +13,27 @@
   },
   {
     "name": "AudioPathService-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathClient-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-12-05_1702"
+    "selected_version": "Release/Castle-Fork/2.2.0.44354.3116893"
   },
   {
     "name": "BLERemoteXCVR",
@@ -209,7 +209,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/ys_update_components/2.2.0-277+45dd711"
+    "selected_version": "Release/master/2.2.0-274+7b95705"
   },
   {
     "name": "ProductUIAssets",
@@ -265,7 +265,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-12-05_1702"
+    "selected_version": "Release/Castle-Fork/2.2.0.44354.3116893"
   },
   {
     "name": "svc-pts-log-decrypt",
