@@ -1,27 +1,27 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathClient-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathService-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioSource-BMX-native",
@@ -133,7 +133,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.4-694+9f9102f"
+    "selected_version": "Continuous/master/2.2.4-719+285cb77"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -241,7 +241,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-985+12ee977"
+    "selected_version": "Continuous/master/2.3.0-991+d2c9af7"
   },
   {
     "name": "Shepherd-qc8017_32",
