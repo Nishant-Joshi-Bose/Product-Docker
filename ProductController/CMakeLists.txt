@@ -32,7 +32,9 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/AudioFormat.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
+  ${PROTO_CC_DEST}/CommonIntents.pb.cc
   ${PROTO_CC_DEST}/HdmiEdid.pb.cc
+  ${PROTO_CC_DEST}/Intents.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
@@ -43,6 +45,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
   ${PROTO_CC_DEST}/Kepler.pb.cc
+  ${PROTO_CC_DEST}/KeyFilter.pb.cc
   AccessorySoftwareInstallManager.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductAudioService/CustomProductAudioService.cpp

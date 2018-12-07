@@ -1190,9 +1190,7 @@ void CustomProductController::HandleSelectSourceSlot( ProductSTSAccount::Product
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );
 
-    IL::BreakThread( std::bind( GetMessageHandler( ),
-                                message ),
-                     GetTask( ) );
+    SendAsynchronousProductMessage( message );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1649,57 +1647,63 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_action( ) )
     {
+        // Note that "action" is a reference argument to and may be changed by FilterIntent
+        auto action = message.action();
+        if( m_ProductKeyInputManager->FilterIntent( action ) )
+        {
+            BOSE_VERBOSE( s_logger, "Action key %s ignored", CustomProductKeyInputManager::IntentName( action ).c_str() );
+        }
         ///
         /// The following attempts to handle the key action using a common intent
         /// manager.
         ///
-        if( HandleCommonIntents( message.action() ) )
+        else if( HandleCommonIntents( action ) )
         {
-            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", message.action() );
+            BOSE_VERBOSE( s_logger, "Action key %s handled by common intent handler", CustomProductKeyInputManager::IntentName( action ).c_str() );
         }
         ///
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
         ///
-        else if( GetIntentHandler( ).IsIntentMuteControl( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentMuteControl( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentSpeakerPairing( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentSpeakerPairing( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentSpeakerPairing,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentPlayProductSource( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentPlayProductSource( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayProductSource,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentRating( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentRating( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentRating,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( action ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
         }
-        else if( GetIntentHandler( ).IsIntentSetupBLERemote( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentSetupBLERemote( action ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentSetupBLERemote );
         }
-        else if( GetIntentHandler( ).IsIntentAudioModeToggle( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentAudioModeToggle( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentAudioModeToggle,
-                                                              message.action( ) );
+                                                              action );
         }
         else
         {
-            BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", message.action( ) );
+            BOSE_ERROR( s_logger, "An action key %s was received that has no associated intent.", CustomProductKeyInputManager::IntentName( action ).c_str() );
 
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntent,
-                                                              message.action( ) );
+                                                              action );
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -2046,9 +2050,7 @@ void CustomProductController::HandlePutOpticalAutoWake(
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
 
-        IL::BreakThread( std::bind( GetMessageHandler( ),
-                                    message ),
-                         GetTask( ) );
+        SendAsynchronousProductMessage( message );
         respCb( req );
     }
     else
@@ -2229,28 +2231,8 @@ void CustomProductController::HandlePutPowerMacro(
     if( success )
     {
         m_powerMacro.CopyFrom( req );
-        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
-        try
-        {
-            persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
-            respCb( req );
-
-            GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
-                                                     m_powerMacro );
-
-        }
-        catch( const ProtoToMarkup::MarkupError & e )
-        {
-            BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
-            error.set_message( e.what( ) );
-            success = false;
-        }
-        catch( ProtoPersistenceIF::ProtoPersistenceException & e )
-        {
-            BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
-            error.set_message( e.what( ) );
-            success = false;
-        }
+        PersistPowerMacro();
+        respCb( req );
     }
 
     if( not success )
@@ -2281,6 +2263,30 @@ void CustomProductController::LoadPowerMacroFromPersistance( )
     {
         BOSE_ERROR( s_logger, "Power Macro persistence error - %s", e.what( ) );
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::PersistPowerMacro
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::PersistPowerMacro( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+    try
+    {
+        persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
+    }
+    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                             m_powerMacro );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2320,9 +2326,10 @@ void CustomProductController::UpdatePowerMacro( )
         m_powerMacro.clear_enabled();
         isChanged = true;
     }
+
     if( isChanged )
     {
-        GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API, m_powerMacro );
+        PersistPowerMacro();
     }
 }
 
@@ -2343,9 +2350,7 @@ void CustomProductController::ReconcileCurrentProductSource( )
             ProductMessage message;
             message.set_action( startTvPlayback );
 
-            IL::BreakThread( std::bind( GetMessageHandler( ),
-                                        message ),
-                             GetTask( ) );
+            SendAsynchronousProductMessage( message );
         }
     }
 }
@@ -2563,7 +2568,7 @@ void CustomProductController::InitializeAccessorySoftwareInstallManager( )
     {
         ProductMessage productMessage;
         productMessage.set_softwareinstall( true );
-        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+        SendAsynchronousProductMessage( productMessage );
     };
     auto softwareInstallcb = std::make_shared<AsyncCallback<void> > ( softwareInstallFunc, GetTask() );
 

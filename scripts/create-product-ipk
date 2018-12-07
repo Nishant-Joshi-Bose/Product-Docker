@@ -117,6 +117,9 @@ cp "$components_json" "$opt_dir/etc" || exit
 
 cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 
+cp "$wspace/builds/$cfg/qc8017_32/KeyConfiguration.json" "$opt_dir/etc" || exit
+cp "$wspace/builds/$cfg/qc8017_32/BlastConfiguration.json" "$opt_dir/etc" || exit
+
 # ----------------------------------------------------------------------------
 # Legacy SoundTouch-SDK stuff.  This will all go away soon.
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
