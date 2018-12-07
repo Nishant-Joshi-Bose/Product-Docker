@@ -70,7 +70,7 @@ AUTOLPM_SERVICES=$(RIVIERALPMSERVICE_DIR)/Python/AutoLpmServiceMessages_pb2.py
 KEYCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/KeyConfiguration.json
 BLASTCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/BlastConfiguration.json
 
-$(COMMON_INTENTS) $(CUSTOM_INTENTS): | generated_sources
+$(COMMON_INTENTS) $(CUSTOM_INTENTS) $(AUTOLPM_SERVICES): | generated_sources
 
 $(KEYCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES) $(CUSTOM_INTENTS) $(COMMON_INTENTS)
 	cd $(KEYCONFIG_GENERATOR_DIR) && \
