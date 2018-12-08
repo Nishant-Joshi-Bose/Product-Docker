@@ -79,7 +79,7 @@ $(KEYCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES) $(CUSTOM_INTENTS) $(COMMON_IN
 		--inputcfg $(USERKEYCONFIG) \
 		--common $(COMMON_INTENTS) \
 		--custom $(CUSTOM_INTENTS) \
-        --autolpm $(AUTOLPM_SERVICES) \
+		--autolpm $(AUTOLPM_SERVICES) \
 		--keys $(AUTOLPM_SERVICES) \
 		--outputcfg $(KEYCONFIG) 
 
