@@ -197,7 +197,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@220944def647a72ce0194d43ef23f1d3fe146987"
+    "selected_version": "CASTLE-25832-Add-modified-firstboot-chime@83c41f6775f0b737b028b380598ae2a37c17eb94"
   },
   {
     "name": "protobuf-native",
