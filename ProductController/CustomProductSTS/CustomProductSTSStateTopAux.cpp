@@ -27,13 +27,9 @@ void CustomProductSTSStateTopAux::Init()
     {
         AuxPlay();
     };
-    auto AuxPauseCallback = [this]()
-    {
-        AuxStopPlaying( false );
-    };
     auto AuxStopCallback = [this]()
     {
-        AuxStopPlaying( true );
+        AuxStopPlaying( );
     };
 
     auto GenerateKey = []( bool isAuxInserted, bool doesUserWantsPlay )
@@ -59,11 +55,11 @@ void CustomProductSTSStateTopAux::Init()
     // initialize the aggregateStatus - action map
     // 1) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - PLAY
     m_AuxStateActionMap[GenerateKey( true, true )] = AuxPlayCallback;
-    // 2) isAuxInserted - Yes(true), doesUserWantsPlay - PAUSE(false) Expected action - PAUSE
-    m_AuxStateActionMap[GenerateKey( true, false )] = AuxPauseCallback;
-    // 3) isAuxInserted - Yes(true), doesUserWantsPlay - PAUSE(false) Expected action - STOP
+    // 2) isAuxInserted - Yes(true), doesUserWantsPlay - STOP(false) Expected action - PAUSE
+    m_AuxStateActionMap[GenerateKey( true, false )] = AuxStopCallback;
+    // 3) isAuxInserted - No(false), doesUserWantsPlay - STOP(false) Expected action - STOP
     m_AuxStateActionMap[GenerateKey( false, false )] = AuxStopCallback;
-    // 4) isAuxInserted - Yes(true), doesUserWantsPlay - PLAY(true) Expected action - STOP
+    // 4) isAuxInserted - No(false), doesUserWantsPlay - PLAY(true) Expected action - STOP
     m_AuxStateActionMap[GenerateKey( false, true )] = AuxStopCallback;
 
     BOSE_INFO( m_logger, "%s: m_CurrentState=0x%x, Aux is %sinserted,User Play status:%s", __func__,
@@ -91,15 +87,7 @@ bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
     BOSE_DEBUG( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
                 __FUNCTION__, m_account.GetSourceName().c_str(),
                 m_active ? "" : "not ", GetAuxInsertedStatus() ? "" : "NOT " );
-    ProcessAuxAggregateStatus();
-    return true;
-}
 
-bool CustomProductSTSStateTopAux::HandlePause( const STS::Void & )
-{
-    BOSE_DEBUG( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
-                __FUNCTION__, m_account.GetSourceName().c_str(),
-                m_active ? "" : "not ", GetAuxInsertedStatus() ? "" : "NOT " );
     if( GetAuxInsertedStatus() )
     {
         SetUserPlayStatus( false );
@@ -107,6 +95,7 @@ bool CustomProductSTSStateTopAux::HandlePause( const STS::Void & )
     ProcessAuxAggregateStatus();
     return true;
 }
+
 
 bool CustomProductSTSStateTopAux::HandlePlay( const STS::Void & )
 {
@@ -143,10 +132,6 @@ bool CustomProductSTSStateTopAux::HandleActivateRequest( const STS::Void &req, u
 {
     BOSE_INFO( m_logger, "Custom-HandleActivateRequest( %s )", m_account.GetSourceName().c_str() );
     SetUserPlayStatus( true );
-    //update the canStop field
-    m_np.set_canstop( true );
-    //update the canPause field
-    m_np.set_canpause( true );
     // Activate would start PLAYing, so set the current state
     // to PLAYing.
     m_CurrentState.SetPlaying();
@@ -204,18 +189,18 @@ void CustomProductSTSStateTopAux::AuxPlay()
     m_account.IPC().SendNowPlayingChangeEvent( npc );
 }
 
-void CustomProductSTSStateTopAux::AuxStopPlaying( bool isStop )
+void CustomProductSTSStateTopAux::AuxStopPlaying( )
 {
     BOSE_INFO( m_logger, "%s: Current status:%s, req=%s", __func__,
-               STS::PlayStatus::Enum_Name( m_np.playstatus( ) ).c_str(), isStop ? "STOP" : "PAUSE" );
+               STS::PlayStatus::Enum_Name( m_np.playstatus( ) ).c_str(), GetAuxInsertedStatus() ? "STOP" : "PAUSE" );
     m_account.IPC().SendAudioStopEvent();
-    if( isStop )
+    if( GetAuxInsertedStatus() )
     {
-        m_np.set_playstatus( STS::PlayStatus::STOP );
+        m_np.set_playstatus( STS::PlayStatus::PAUSE );
     }
     else
     {
-        m_np.set_playstatus( STS::PlayStatus::PAUSE );
+        m_np.set_playstatus( STS::PlayStatus::STOP );
     }
 
     STS::NowPlayingChange npc;

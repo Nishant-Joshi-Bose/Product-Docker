@@ -50,8 +50,6 @@ def only_for_usb():
 
 def only_for_ifaces(allowed_ifaces):
     iface = os.environ.get("IFACE", "")
-    if iface == "lo": # loopback is always considered safe
-        return
     for allowed_iface in allowed_ifaces:
         if allowed_iface.endswith("*"):
             if iface.startswith(allowed_iface[:-1]):
@@ -98,6 +96,31 @@ if path == "/audio.tar" and is_development():
     # audio data files /tmp/spotify-<url id>-<timestamp>.ogg
     # This can also be enabled with the tap command "spotify debug out"
     os.execl("/bin/sh", "sh", "-c", "/bin/tar -c /tmp/spotify*.ogg")
+
+# ----------------------------------------------------------------------------
+# AirPlay2 Album Art
+if path.startswith("/AirPlay2/"):
+   iFile = path[len("/AirPlay2/"):] 
+   # Prevent dir traversal
+   if ".." in iFile:
+       http_err()
+       sys.exit()
+   # Strip Query string.
+   i = iFile.find("?")
+   if i != -1:
+       iFile = iFile[:i]
+   # Combine image file name with abs. path
+   image = "/var/run/AirPlay2/" + iFile
+   # Only jpeg and png images are supported.
+   if image.endswith('.jpg'):
+        http_ok("image/jpeg")
+   elif image.endswith('.png'):
+        http_ok("image/png")
+   else:
+        http_err()
+        sys.exit()
+   sys.stdout.write(open(image).read())
+   sys.exit()
 
 # ----------------------------------------------------------------------------
 # Diagnostics pages.

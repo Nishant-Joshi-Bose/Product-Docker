@@ -34,7 +34,7 @@
 #include <unordered_map>
 #include "DPrint.h"
 #include "IntentHandler.h"
-#include "PlaybackRequestManager.h"
+#include "AuxInHandler.h"
 #include "CountDownManager.h"
 #include "VoiceManager.h"
 
@@ -59,12 +59,12 @@ void IntentHandler::Initialize()
     BOSE_DEBUG( s_logger, "%s", __func__ );
 
     //+ AUX Control API's
-    IntentManagerPtr_t playbackRequestManager =
-        std::make_shared<PlaybackRequestManager>( GetTask() , GetCli(),
-                                                  GetFrontDoorClient(),
-                                                  GetProductController() );
+    IntentManagerPtr_t auxInHandler =
+        std::make_shared<AuxInHandler>( GetTask() , GetCli(),
+                                        GetFrontDoorClient(),
+                                        GetProductController() );
 
-    m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::AUX_IN] = auxInHandler;
     //- AUX Control API's
 
     //+ (Common Countdown manager for key combination)
