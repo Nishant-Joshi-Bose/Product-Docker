@@ -1,0 +1,58 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file KeyFilter.proto
+///
+/// @brief This file describes the KeyFilter json file
+///
+/// Copyright 2018 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+import "AutoLpmServiceMessages.proto";
+
+package KeyFilter;
+
+message KeyFilter
+{
+    option (ignore_unexpected_markup) = true;
+
+    repeated KeyEntry keyTable = 1;
+}
+
+message SourceEntry
+{
+    optional string sourceName          = 1; 
+    optional string sourceAccountName   = 2; 
+}
+
+// A filter entry for an intent contains a list of sources for which the intent should be filtered (discarded).
+// An intent can optionally be translated to a different intent via the "translate" field.
+//
+// For example, the entry to ignore intent PRESET_SELECT_1_RF in PRODUCT sources and translate it to 
+// PRESET_SELECT_1 in other sources would look like this
+//
+// "action": "PRESET_SELECT_1_RF",
+// "filter": {
+//      "sources": [
+//          { "sourceName": "PRODUCT", "sourceAccountName": ".*" }
+//      ],
+//      "translate": "PRESET_SELECT_1"
+// }
+//
+//
+// Note that this is designed to overlap the entries in the keyTable array of UserKeyConfig.json such
+// that all information on key handling can be specified in one place.
+message FilterEntry
+{
+    repeated SourceEntry                        sources     = 1;
+    optional string                             translate   = 2;
+    optional string                             comment     = 3; 
+}
+
+message KeyEntry
+{
+    option (ignore_unexpected_markup) = true;
+
+    optional string                             action      = 1; 
+    optional FilterEntry                        filter      = 2;
+}
+

@@ -43,7 +43,8 @@ PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon ins
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get TestUtils installed_location)
-PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommonProto installed_location)
+PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommonProto-qc8017_32 installed_location)
+RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -58,43 +59,40 @@ ifndef DONT_RUN_ASTYLE
 	run-astyle
 endif
 
-USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
-KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
-LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
-INTENT_DEFS=$(PWD)/ProductController/IntentHandler/Intents.h
-KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
 
-.PHONY: keyconfig
-keyconfig: check_tools
-	cd tools/key_config_generator && \
+KEYCONFIG_GENERATOR_DIR=$(PRODUCTCONTROLLERCOMMON_DIR)/tools/key_config_generator
+
+USERKEYCONFIG=$(BOSE_WORKSPACE)/opt-bose-fs/etc/UserKeyConfig.json
+COMMON_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/CommonIntents_pb2.py
+CUSTOM_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/Intents_pb2.py
+AUTOLPM_SERVICES=$(RIVIERALPMSERVICE_DIR)/Python/AutoLpmServiceMessages_pb2.py
+
+KEYCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/KeyConfiguration.json
+BLASTCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/BlastConfiguration.json
+
+$(COMMON_INTENTS) $(CUSTOM_INTENTS) $(AUTOLPM_SERVICES): | generated_sources
+
+$(KEYCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES) $(CUSTOM_INTENTS) $(COMMON_INTENTS)
+	cd $(KEYCONFIG_GENERATOR_DIR) && \
 	./generate_key_config \
 		$(BUILDS_DIR) \
 		--inputcfg $(USERKEYCONFIG) \
-		--actions $(INTENT_DEFS) \
-		--cap $(LPM_KEYS) \
-		--ir $(LPM_KEYS) \
-		--tap $(LPM_KEYS) \
-		--cec $(LPM_KEYS) \
-		--rf $(LPM_KEYS) \
-		--net $(LPM_KEYS) \
-		--outputcfg $(KEYCONFIG) \
-		--incdirs $(KEYCONFIG_INCS)
+		--common $(COMMON_INTENTS) \
+		--custom $(CUSTOM_INTENTS) \
+		--autolpm $(AUTOLPM_SERVICES) \
+		--keys $(AUTOLPM_SERVICES) \
+		--outputcfg $(KEYCONFIG) 
 
-USERBLASTCONFIG=$(PWD)/Config/UserKeyConfig.json
-BLASTCONFIG=$(PWD)/opt-bose-fs/etc/BlastConfiguration.json
-LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
-
-.PHONY: blastconfig
-blastconfig: check_tools
+$(BLASTCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES)
 	cd tools/key_config_generator && \
 	./generate_blast_config \
 		$(BUILDS_DIR) \
-		--inputcfg $(USERBLASTCONFIG) \
-		--keyfile $(LPM_KEYS) \
+		--inputcfg $(USERKEYCONFIG) \
+		--keys $(AUTOLPM_SERVICES) \
 		--outputcfg $(BLASTCONFIG)
 
 .PHONY: cmake_build
-cmake_build: generated_sources | $(BUILDS_DIR) astyle
+cmake_build: generated_sources $(BLASTCONFIG) $(KEYCONFIG)| $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
