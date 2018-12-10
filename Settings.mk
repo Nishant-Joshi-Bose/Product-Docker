@@ -1,6 +1,6 @@
-product = generic
-PRODUCT = GENERIC
-Product = Generic
+product = eddie
+PRODUCT = EDDIE
+Product = Eddie
 
 ifndef BOSE_WORKSPACE
   $(error No BOSE_WORKSPACE)

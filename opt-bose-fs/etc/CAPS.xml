@@ -9,11 +9,11 @@
   <isOutOfBoxAPSetupSupported>true</isOutOfBoxAPSetupSupported>
   <hasKeys>false</hasKeys>
   <moduleType>riviera</moduleType>
-  <productName>Bose Home Speaker TBD</productName>
+  <productName>Bose Home Speaker 500</productName>
   <speakerType>5</speakerType>
   <swUpdateDeviceId>0x0939</swUpdateDeviceId>
   <swUpdateXmlFilePath>/opt/Bose/etc/SCM_Update.xml</swUpdateXmlFilePath>
-  <variantName>taylor</variantName>
+  <variantName>eddie</variantName>
   <volume thresholdLow="10"
           thresholdHigh="70"
           defaultValue="50"/>

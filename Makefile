@@ -107,7 +107,7 @@ graph: product-ipk
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build
-	./scripts/create-software-update-ipk
+	./scripts/create-software-update-ipk 
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
