@@ -67,6 +67,7 @@ lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) 
 cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get opensource-opkg-qc8017_32 installed_location) || exit
+libarchive_dir=$(components get opensource-libarchive-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux || exit
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -79,7 +80,7 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" "$opt_dir/update/bin" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
@@ -160,6 +161,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
 "$product_startup_dir/stage" "$opt_dir" || exit
+cp "$libarchive_dir/bin/bsdtar" "$opt_dir/update/bin/" || exit
 
 # ----------------------------------------------------------------------------
 
