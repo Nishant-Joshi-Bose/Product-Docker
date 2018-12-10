@@ -1,13 +1,5 @@
 [
   {
-    "name": "AudioPathService-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
-  },
-  {
-    "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/2.2.11-2791+9fea303"
-  },
-  {
     "name": "AudioPathClient-qc8017_32",
     "selected_version": "Release/stable/2.2.11-2791+9fea303"
   },
@@ -21,6 +13,14 @@
   },
   {
     "name": "AudioPathProducts-qc8017_64",
+    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+  },
+  {
+    "name": "AudioPathService-qc8017_32",
+    "selected_version": "Release/stable/2.2.11-2791+9fea303"
+  },
+  {
+    "name": "AudioPathService-qc8017_64",
     "selected_version": "Release/stable/2.2.11-2791+9fea303"
   },
   {
@@ -58,26 +58,6 @@
   {
     "name": "BoseLibs-qc8017_32",
     "selected_version": "Release/master/2.2.3-807+ef01867"
-  },
-  {
-    "name": "opensource-opkg-native",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
-  },
-  {
-    "name": "opensource-opkg-qc8017_32",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
-  },
-  {
-    "name": "opensource-opkg-x86",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
-  },
-  {
-    "name": "opensource-libarchive-qc8017_32",
-    "selected_version": "Release/bose-dev/v3.3.1-13-gb412ba2"
-  },
-  {
-    "name": "product-startup",
-    "selected_version": "Release/master/4.0.0-5+5179185"
   },
   {
     "name": "BoseWebMonaco",
@@ -164,8 +144,24 @@
     "selected_version": "Release/bose-master/1.8.3-22-gbda6e44"
   },
   {
+    "name": "opensource-libarchive-qc8017_32",
+    "selected_version": "Release/bose-dev/v3.3.1-13-gb412ba2"
+  },
+  {
     "name": "opensource-libwebsockets-qc8017_32",
     "selected_version": "Release/bose-v2.4-stable/2.4.1-53+ga6495a7"
+  },
+  {
+    "name": "opensource-opkg-native",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "opensource-opkg-qc8017_32",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "opensource-opkg-x86",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
     "name": "opensource-zlib-qc8017_32",
@@ -178,6 +174,10 @@
   {
     "name": "PassportClient-qc8017_32",
     "selected_version": "Release/master/2.2.0-1134+f4120b0"
+  },
+  {
+    "name": "product-startup",
+    "selected_version": "Release/master/4.0.0-5+5179185"
   },
   {
     "name": "ProductControllerCommon",
