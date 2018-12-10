@@ -48,7 +48,7 @@ ADD_EXECUTABLE(ProductController
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   IntentHandler/CountDownManager.cpp
   IntentHandler/IntentHandler.cpp
-  IntentHandler/PlaybackRequestManager.cpp
+  IntentHandler/AuxInHandler.cpp
   DisplayController/DisplayController.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
