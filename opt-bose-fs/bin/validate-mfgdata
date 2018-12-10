@@ -119,18 +119,11 @@ if len(addrs) != len(set(addrs)):
 # Match floating point values.
 fpv = r'\s*[-+]?(\d+\.?\d*|\.\d+)\s*'
 
-dal = get("deviceAbsorptionLux")
-if dal is None \
-   or not re.match('^' + fpv + '$', dal) \
-   or float(dal) < 1.0 \
-   or float(dal) > 100.00:
-    warn("Suspicious deviceAbsorptionLux:", dal)
-
-# mic_gain is 8 floating point values separated by commas,
+# mic_gain is 6 floating point values separated by commas,
 # enclosed in square brackets.
-# Ex. "[-0.4056,0.2780,0.1743,0.1110,0.3240,0.3477,-0.0819,0.3959]"
+# Ex. "[-0.4056,0.2780,0.1743,0.1110,0.3240,0.3477]"
 mg = get("mic_gain")
-if mg is None or not re.match('^\[' + fpv + '(,' + fpv + '){7}\]$', mg):
+if mg is None or not re.match('^\[' + fpv + '(,' + fpv + '){5}\]$', mg):
     warn("Suspicious mic_gain:", mg)
 
 if not fixes:
