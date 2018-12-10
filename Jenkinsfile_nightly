@@ -9,19 +9,27 @@ import NodeVerification
 
 def buildJob(jobName)
 {
-    build job: jobName, parameters: [string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'EC_URL', value: "${EC_URL}"),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
+    build job: jobName, parameters: [string(name: 'TESTRAIL_RUNID', value: "${TESTRAIL_RUNID}"),string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'SW_VERSION', value: "${SW_VERSION}"), string(name: 'EC_URL', value: "${EC_URL}"),booleanParam(name: 'SW_UPDATE', value: Boolean.valueOf("${SW_UPDATE}")),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
 }
 
-def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
-					  "EddieProduct/Eddie-DemoController",
-					  "EddieProduct/Eddie-Factory-Default",
-					  "EddieProduct/Eddie-Key-Functionality",
-					  "EddieProduct/Eddie-LightBar",
-					  "EddieProduct/Eddie-LPM",
-					  "EddieProduct/Eddie-Network-Disabled",
-					  "EddieProduct/Eddie-Preset",
-					  "EddieProduct/Eddie-ProductController"]
-
+def Eddie_Product  = 			["EddieProduct/Eddie-Bootup-Sequence-Timing",
+                      			//"EddieProduct/Eddie-DemoController",
+					//"EddieProduct/Eddie-Factory-Default",
+					//"EddieProduct/Eddie-Key-Functionality",
+					//"EddieProduct/Eddie-LightBar",
+					"EddieProduct/Eddie-LPM",
+					"EddieProduct/Eddie-ProductController",
+					"EddieProduct/Eddie-Preset",
+					//"EddieProduct/Eddie-LowPowerStandby",
+					//"EddieProduct/Eddie-NoCrashResumingLowPowerStandby",
+					"EddieProduct/Eddie-Network-Disabled",
+					//"EddieProduct/Eddie-AUX",
+					"EddieProduct/Eddie-Manufacturing",
+					"EddieProduct/Eddie-Language",
+					//"EddieProduct/Eddie-Clock"
+					//"Bluetooth/Bluetooth_Sink_Target_SOS",
+					"EddieProduct/Eddie_chimes_test"
+					]
 
 failureList = [] 
 buildCount=0
@@ -100,12 +108,17 @@ def executeBuild(item){
 
 timeout(time: 8, unit: 'HOURS')
 {
-  node('master')
+  node('eco2-pipeline-container')
     {
-      try
+      echo "EC_URL used: ${env.EC_URL}"
+      echo "Branch Used used: ${env.SW_BRANCH}"
+      echo "freq Used used: ${env.SW_FREQUENCY}"
+      echo "VERSION used: ${env.VERSION}"
+      echo "Git Branch used: ${env.Branch}"
+     try
        {
-               "stream 1 (Eddie-Product)" :{
-					
+               
+
 					stage("Eddie_Product")
                     {
                         for (item in Eddie_Product)
@@ -122,7 +135,7 @@ timeout(time: 8, unit: 'HOURS')
                            continue
                          }
                     }
-               }
+                
         }
 
        catch (e)
@@ -145,5 +158,9 @@ timeout(time: 8, unit: 'HOURS')
 	// To Push Data of Failed Job and Total Job on Graphite
     println failureList.size()
     println buildCount
-    def GraphiteSocket = new GraphiteSocket(failureList.size(),buildCount,'Eddie-Product-Pipeline') 
+    graphite_table_name = 'Eddie-Product-Pipeline'
+    if ("${SW_BRANCH}" != 'SOS'){
+        graphite_table_name += "-${SW_BRANCH}"
+    }
+    def GraphiteSocket = new GraphiteSocket(failureList.size(),buildCount,graphite_table_name,Eddie_Product)  
 }

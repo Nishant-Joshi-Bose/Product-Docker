@@ -37,16 +37,13 @@ ADD_EXECUTABLE(ProductController
   ProductCommandLine.cpp
   CustomProductController.cpp
   Main.cpp
+  Clock.cpp
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
-  ${PROTO_CC_DEST}/Treble.pb.cc
-  ${PROTO_CC_DEST}/Bass.pb.cc
-  ${PROTO_CC_DEST}/Center.pb.cc
-  ${PROTO_CC_DEST}/Mode.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   IntentHandler/CountDownManager.cpp

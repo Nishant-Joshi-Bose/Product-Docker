@@ -1,3 +1,7 @@
+product = generic
+PRODUCT = GENERIC
+Product = Generic
+
 ifndef BOSE_WORKSPACE
   $(error No BOSE_WORKSPACE)
 endif

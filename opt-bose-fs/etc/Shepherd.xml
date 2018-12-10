@@ -13,7 +13,7 @@
     <arg>-c/opt/Bose/etc/CAPS.xml</arg>
   </daemon>
 
-  <daemon name="AirPlay2"/>
+  <daemon name="AirPlay2" cpuset="6"/>
   <daemon name="Amazon"/>
   <daemon name="AudioNotification"/>
   <daemon name="BMX"/>
@@ -25,6 +25,7 @@
 
   <daemon name="PtsServer">
     <arg>/opt/Bose/etc/pts-handler</arg>
+    <arg>--static=/opt/Bose/etc/static-content-map.txt</arg>
   </daemon>
 
 </ShepherdConfig>

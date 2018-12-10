@@ -85,6 +85,7 @@ CustomProductController::CustomProductController():
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
+    m_Clock( m_FrontDoorClientIF, GetTask(), GetProductGuid() ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_ProductSTSController( *this )
 {
@@ -279,6 +280,7 @@ void CustomProductController::InitializeAction()
     InitializeHsm( );
     CommonInitialize( );
 
+    m_Clock.Initialize( );
     AsyncCallback<bool> uiConnectedCb( std::bind( &CustomProductController::UpdateUiConnectedStatus,
                                                   this, std::placeholders::_1 ), GetTask() ) ;
 
@@ -346,7 +348,7 @@ std::string CustomProductController::GetDefaultProductName() const
     std::string productName;
     if( !IsDevelopmentMode() )
     {
-        productName = "Bose Home Speaker 500";
+        productName = "Bose Home Speaker TBD";
     }
     else
     {

@@ -9,15 +9,11 @@ SYSTEMEVENTSERVICE_DIR := $(shell components get SystemEventService-$(sdk) insta
 
 PROTO_SOURCES = \
   AudioSettings.proto \
-  Bass.proto \
-  Center.proto \
   KeyActions.proto \
   KeyNames.proto \
   LightBarController.proto \
-  Mode.proto \
   ProductMessage.proto \
   ProductSTS.proto \
-  Treble.proto \
 
 PROTO_IMPORT_DIRS := \
  . \

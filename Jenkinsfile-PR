@@ -1,45 +1,26 @@
 #!/usr/bin/env groovy
-@Library(['JenkinsSharedLibrary']) _
-import JenkinsJobCleanup
 /*
   Description: Jenkinsfile is a container for the pipeline script.
-               Runs tests against a given branch in CastleProducts repo
+               Runs tests against a given branch in CastleSAAS repostiory
 */
-
-/*
-To abort in progress / in queue jobs started on PR.
-*/
-def JobCleanup = new JenkinsJobCleanup()
-JobCleanup.CheckPendingJob('Continous_Build_Testing/CastleProducts', env.BRANCH_NAME)
 
 def buildJob(jobName)
 {
-   build job: jobName , parameters: [[$class: 'GitParameterValue', name: 'Branch', value: "${env.CHANGE_BRANCH}"],string(name: 'PullReqId', value: "${env.CHANGE_ID}"), string(name: 'PR_NAME', value: "${env.BRANCH_NAME}")]
-}
-
-def buildQCJob(jobName, SDKValue)
-{
-   build job: jobName, parameters: [string(name: 'SDK', value: SDKValue), string(name: 'Branch', value: "${env.CHANGE_BRANCH}"), string(name: 'PullReqId', value: "${env.CHANGE_ID}")]
+   build job: jobName , parameters: [[$class: 'GitParameterValue', name: 'Branch', value: "${env.CHANGE_BRANCH}"]]
 }
 
 /*
 Below are the jobs list to run against each PR.
 */
 
-def EddiePRTest   = ["Continuous_Build_Testing/CastleProduct_Continuous_Build_Testing_Master_PR"]
-
+def ProductContinousTest         = ["Continous_Build_Testing/CastleProduct_Continuous_Build_Testing_Master_PR"]
 
 failureList = []
 
-def executeBuild(item, SDKValue = null){
+def executeBuild(item){
     try
     {
-        if(SDKValue != null){
-            buildQCJob(item, SDKValue)
-        }
-        else{
-            buildJob(item)
-        }
+        buildJob(item)
         echo 'Current Build set to SUCCESS'
     }
     catch (Exception ex)
@@ -56,9 +37,11 @@ timeout(time: 4, unit: 'HOURS')
     {
       try
        {
-          stage("EDDIE_PR")
+        parallel(
+            "stream 1 (ProductContinousTest)" :{
+                 stage("ProductContinousTest")
                  {
-                    for (item in EddiePRTest)
+                    for (item in ProductContinousTest)
                     {
                         try
                         {
@@ -68,10 +51,12 @@ timeout(time: 4, unit: 'HOURS')
                         {
                             echo "Caught: ${ex}"
                         }
-                    }
+                        continue
+                     }
                  }
-        }
-    }
+             }
+         )
+       }
      catch (e)
        {
            currentBuild.result = 'FAILURE'

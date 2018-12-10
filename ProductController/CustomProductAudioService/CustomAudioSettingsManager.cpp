@@ -17,11 +17,6 @@ constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json"
 constexpr uint32_t kConfigVersionMajor = 3;
 constexpr uint32_t kConfigVersionMinor = 0;
 
-constexpr char kBassName                [] = "audioBassLevel";
-constexpr char kCenterName              [] = "audioCenterLevel";
-constexpr char kModeName                [] = "audioMode";
-constexpr char kTrebleName              [] = "audioTrebleLevel";
-
 // Some flags used to enable on configure testing features.
 constexpr char kTestOptionsName         [] = "testOptions";
 constexpr char kTestCenterEnabledName   [] = "centerEnabled";
@@ -41,21 +36,21 @@ CustomAudioSettingsManager::CustomAudioSettingsManager() :
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-/// Bass setting setter/getter
+/// Bass setting setter/getter/refresh function
 /////////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
+AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !bass.has_value() )
     {
-        return ResultCode_t::MISSING_VALUE;
+        return AudioSettingResultCode::ResultCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( bass.value(),
                            m_audioSettings["audioSettingValues"][kBassName]["properties"]["min"].asInt(),
                            m_audioSettings["audioSettingValues"][kBassName]["properties"]["max"].asInt(),
                            m_audioSettings["audioSettingValues"][kBassName]["properties"]["step"].asInt() ) )
     {
-        return ResultCode_t::INVALID_VALUE;
+        return AudioSettingResultCode::ResultCode_t::INVALID_VALUE;
     }
     return SetAudioProperties( bass, kBassName, m_currentBass );
 }
@@ -66,22 +61,28 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
     return m_currentBass;
 }
 
+void CustomAudioSettingsManager::RefreshBass()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kBassName, m_currentBass );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
-/// Center setting setter/getter
+/// Center setting setter/getter/refresh function
 ///////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
+AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !center.has_value() )
     {
-        return ResultCode_t::MISSING_VALUE;
+        return AudioSettingResultCode::ResultCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( center.value(),
                            m_audioSettings["audioSettingValues"][kCenterName]["properties"]["min"].asInt(),
                            m_audioSettings["audioSettingValues"][kCenterName]["properties"]["max"].asInt(),
                            m_audioSettings["audioSettingValues"][kCenterName]["properties"]["step"].asInt() ) )
     {
-        return ResultCode_t::INVALID_VALUE;
+        return AudioSettingResultCode::ResultCode_t::INVALID_VALUE;
     }
     return SetAudioProperties( center, kCenterName, m_currentCenter );
 }
@@ -92,20 +93,27 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
     return m_currentCenter;
 }
 
+void CustomAudioSettingsManager::RefreshCenter()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kCenterName,        m_currentCenter );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
-/// Mode setting setter/getter
+/// Mode setting setter/getter/refresh function
 //////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
+AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !mode.has_value() )
     {
-        return ResultCode_t::MISSING_VALUE;
+        BOSE_INFO( s_logger, "Mode doesn't contain any value (%s)", mode.DebugString().c_str() );
+        return AudioSettingResultCode::ResultCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( mode.value(),
                          m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"] ) )
     {
-        return ResultCode_t::INVALID_VALUE;
+        return AudioSettingResultCode::ResultCode_t::INVALID_VALUE;
     }
     return SetAudioProperties( mode, kModeName, m_currentMode );
 }
@@ -116,22 +124,28 @@ const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode() const
     return m_currentMode;
 }
 
+void CustomAudioSettingsManager::RefreshMode()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kModeName,          m_currentMode );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
-/// Treble setting setter/getter
+/// Treble setting setter/getter/refresh function
 ///////////////////////////////////////////////////////////////////////////////////////
-ResultCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
+AudioSettingResultCode::ResultCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !treble.has_value() )
     {
-        return ResultCode_t::MISSING_VALUE;
+        return AudioSettingResultCode::ResultCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( treble.value(),
                            m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["min"].asInt(),
                            m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["max"].asInt(),
                            m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["step"].asInt() ) )
     {
-        return ResultCode_t::INVALID_VALUE;
+        return AudioSettingResultCode::ResultCode_t::INVALID_VALUE;
     }
     return SetAudioProperties( treble, kTrebleName, m_currentTreble );
 }
@@ -142,15 +156,21 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
     return m_currentTreble;
 }
 
+void CustomAudioSettingsManager::RefreshTreble()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kTrebleName,        m_currentTreble );
+}
+
 void CustomAudioSettingsManager::UpdateAllProtos()
 {
     BOSE_DEBUG( s_logger, __func__ );
 
     // Default functionality using super class functionality.
-    UpdateCurrentProto( kBassName, m_currentBass );
-    UpdateCurrentProto( kCenterName, m_currentCenter );
-    UpdateCurrentProto( kModeName, m_currentMode );
-    UpdateCurrentProto( kTrebleName, m_currentTreble );
+    RefreshBass();
+    RefreshTreble();
+    RefreshCenter();
+    RefreshMode();
 }
 
 /*!

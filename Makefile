@@ -57,7 +57,7 @@ endif
 
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
-	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
+	rm -rf $(BUILDS_DIR)/CMakeCache.txt
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
@@ -76,11 +76,15 @@ privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.p
 IPKS = recovery.ipk product-script.ipk software-update.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES = SoundTouchRecovery product-script software-update wpe monaco SoundTouch lpm_updater
 
+.PHONY: generate-metadata
+generate-metadata:
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json.sh $(BOSE_WORKSPACE)/builds/$(cfg) $(product) dev
+
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-#Create one more Zip file for Bonjour / Local update with HSP 
+#Create one more Zip file for Bonjour / Local update with HSP
 #- This is temporary, till DP2 boards are not available.
 IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp wpe monaco SoundTouch lpm_updater
@@ -90,20 +94,20 @@ package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk wpe-ipk softwareupdate-ipk monaco-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk
+packages-gz: product-ipk wpe-ipk softwareupdate-ipk monaco-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk
+packages-gz-with-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
+	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build
-	./scripts/create-software-update-ipk 
+	./scripts/create-software-update-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
@@ -115,8 +119,8 @@ lpm-bos:
 ifeq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
 	$(error BUILD_TYPE must equal Release, Nightly or Continuous)
 endif
-	rm -f ./builds/$(cfg)/eddie_package*.bos
-	rm -f ./builds/$(cfg)/lpm_eddie*.hex
+	rm -f ./builds/$(cfg)/$(product)_package*.bos
+	rm -f ./builds/$(cfg)/lpm_$(product)*.hex
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: recovery-ipk
@@ -125,7 +129,7 @@ recovery-ipk: cmake_build minimal-product-tar
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos
-	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ eddie
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ $(product)
 
 .PHONY: monaco-ipk
 monaco-ipk:
@@ -152,4 +156,3 @@ clean:
 .PHONY: distclean
 distclean:
 	git clean -fdX
-

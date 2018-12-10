@@ -924,6 +924,8 @@ void DisplayController::HandleLpmGetUIBrightness( IpcUIBrightness_t response )
 {
     m_lcdBrightness.set_mode( BrightnessIpcEnumToProtoEnum( ( IpcUIBrightnessMode_t ) response.mode() ) );
     m_lcdBrightness.set_value( response.value() );
+
+    m_frontdoorClientPtr->SendNotification( FRONTDOOR_ENDPOINT_BRIGHTNESS, m_lcdBrightness );
 }
 
 /*!
@@ -988,6 +990,8 @@ void DisplayController::HandlePutLcdBrightnessRequest( Brightness req, const Cal
             m_lpmClient->SetUIBrightness( lpmBrightness );
         };
         IL::BreakThread( f, m_productController.GetTask() );
+
+        m_frontdoorClientPtr->SendNotification( FRONTDOOR_ENDPOINT_BRIGHTNESS, m_lcdBrightness );
     }
 
     resp.Send( m_lcdBrightness );

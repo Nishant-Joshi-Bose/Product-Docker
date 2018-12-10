@@ -226,8 +226,7 @@ class DiagnosticsPage(SeleniumWrapper):
                 assert "red.png" in output, "red.png string did not match"
                 assert "blue.png" in output, "blue.png string did not match"
                 assert "green.png" in output, "green.png string did not match"
-                assert "vertical.png" in output, "vertical.png string did not match"
-                assert "horizontal.png" in output, "horizontal.png string did not match"
+                assert "outline.png" in output, "outline.png string did not match"
         # Delete the files once done checking for the string
         for item in os.listdir(self.dir_name):
             if item.endswith(".txt"):
