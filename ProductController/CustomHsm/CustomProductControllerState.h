@@ -401,6 +401,11 @@ public:
         return false;
     }
 
+    virtual bool HandleForcedSoftwareUpdateResponse( bool status )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static CustomProductController& GetCustomProductController();

@@ -103,8 +103,8 @@ void IntentHandler::Initialize()
     //- (PTS Update countdown and cancel)
 
     //+ (Software Update countdown and cancel)
-    m_IntentManagerMap[( uint16_t )Action::FORCED_SOFTWARE_UPDATE_COUNTDOWN] = countDownManager;
-    m_IntentManagerMap[( uint16_t )Action::FORCED_SOFTWARE_UPDATE_CANCEL] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::SOFTWARE_UPDATE_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::SOFTWARE_UPDATE_CANCEL] = countDownManager;
     //- (Software Update countdown and cancel)
     //- (Common Countdown manager for key combination)
 }

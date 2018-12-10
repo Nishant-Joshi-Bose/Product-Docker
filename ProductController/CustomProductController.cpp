@@ -288,7 +288,7 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateSoftwareInstallNormal );
 
-    GetHsm().AddState( NotifiedNames::FORCED_SOFTWARE_UPDATE,
+    GetHsm().AddState( NotifiedNames::UPDATING,
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateSoftwareInstallForced );
 
