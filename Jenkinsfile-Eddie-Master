@@ -10,7 +10,7 @@ import JenkinsJobCleanup
 To abort in progress / in queue jobs started on PR.
 */
 def JobCleanup = new JenkinsJobCleanup()
-JobCleanup.CheckPendingJob('Continous_Build_Testing/CastleProducts', env.BRANCH_NAME)
+JobCleanup.CheckPendingJob('Continuous_Build_Testing/CastleProductsPR', env.BRANCH_NAME)
 
 def buildJob(jobName)
 {
