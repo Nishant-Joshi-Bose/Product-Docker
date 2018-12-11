@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44401.3125552"
+    "selected_version": "Release/AVS-VPA/2.2.0.44376.3125661"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.4-742+d6b89f1"
+    "selected_version": "Release/master/2.2.4-745+20f9208"
   },
   {
     "name": "HTTPInterface-qc8017_32",
