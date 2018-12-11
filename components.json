@@ -232,16 +232,12 @@
     "selected_version": "Release/master/4.4"
   },
   {
-    "name": "RivieraLPM",
-    "selected_version": "trunk@3099"
-  },
-  {
     "name": "RivieraLpmService-qc8017_32",
     "selected_version": "Release/master/3.0.1-304+f947259"
   },
   {
-    "name": "RivieraLpmTools",
-    "selected_version": "@3604"
+    "name": "RivieraLPM-Tools",
+    "selected_version": "master@e66da1af8c1edb982721996c9c51576f25adca00"
   },
   {
     "name": "RivieraLpmUpdater",
