@@ -69,6 +69,7 @@ audiopath_dir=$(components get AudioPathService-qc8017_32 installed_location) ||
 audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
 audiopathproduct_dir=$(components get AudioPathProducts-qc8017_32 installed_location) || exit
 audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
+audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlesass_dir=$(components get SASS-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
@@ -116,6 +117,9 @@ cp "$components_json" "$opt_dir/etc" || exit
 
 cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 
+cp "$wspace/builds/$cfg/qc8017_32/KeyConfiguration.json" "$opt_dir/etc" || exit
+cp "$wspace/builds/$cfg/qc8017_32/BlastConfiguration.json" "$opt_dir/etc" || exit
+
 # ----------------------------------------------------------------------------
 # Legacy SoundTouch-SDK stuff.  This will all go away soon.
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
@@ -132,7 +136,6 @@ cp "$stfs"/opt/Bose/bin/ptp/daemon_cl "$opt_dir/bin/ptp/daemon_cl" || exit
 cp "$stfs"/opt/Bose/bin/ptp/aptp_cfg.ini "$opt_dir/bin/ptp/aptp_cfg.ini" || exit
 cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BMX "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
@@ -226,6 +229,7 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
 "$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
+"$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$vm_dir/stage" "$opt_dir" || exit
 "$rcs_dir/stage" "$opt_dir" || exit
 "$qss_dir/stage" "$opt_dir" || exit

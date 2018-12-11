@@ -115,6 +115,8 @@
 #include "SystemUtils.h"
 #include "CustomChimeEvents.h"
 #include "LpmClientLiteIF.h"
+#include "AudioService.pb.h"
+#include "AudioPathControl.pb.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -140,7 +142,8 @@ namespace
 constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
-constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
+constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone";
+constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
 }
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -810,6 +813,7 @@ void CustomProductController::Run( )
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
         UpdatePowerMacro( );
+        ReconcileCurrentProductSource( );
     };
     GetSourceInfo().RegisterSourceListener( sourceInfoCb );
 
@@ -1189,9 +1193,7 @@ void CustomProductController::HandleSelectSourceSlot( ProductSTSAccount::Product
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );
 
-    IL::BreakThread( std::bind( GetMessageHandler( ),
-                                message ),
-                     GetTask( ) );
+    SendAsynchronousProductMessage( message );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1648,57 +1650,63 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_action( ) )
     {
+        // Note that "action" is a reference argument to and may be changed by FilterIntent
+        auto action = message.action();
+        if( m_ProductKeyInputManager->FilterIntent( action ) )
+        {
+            BOSE_VERBOSE( s_logger, "Action key %s ignored", CustomProductKeyInputManager::IntentName( action ).c_str() );
+        }
         ///
         /// The following attempts to handle the key action using a common intent
         /// manager.
         ///
-        if( HandleCommonIntents( message.action() ) )
+        else if( HandleCommonIntents( action ) )
         {
-            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", message.action() );
+            BOSE_VERBOSE( s_logger, "Action key %s handled by common intent handler", CustomProductKeyInputManager::IntentName( action ).c_str() );
         }
         ///
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
         ///
-        else if( GetIntentHandler( ).IsIntentMuteControl( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentMuteControl( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentSpeakerPairing( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentSpeakerPairing( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentSpeakerPairing,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentPlayProductSource( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentPlayProductSource( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayProductSource,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentRating( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentRating( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentRating,
-                                                              message.action( ) );
+                                                              action );
         }
-        else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( action ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
         }
-        else if( GetIntentHandler( ).IsIntentSetupBLERemote( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentSetupBLERemote( action ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentSetupBLERemote );
         }
-        else if( GetIntentHandler( ).IsIntentAudioModeToggle( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentAudioModeToggle( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentAudioModeToggle,
-                                                              message.action( ) );
+                                                              action );
         }
         else
         {
-            BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", message.action( ) );
+            BOSE_ERROR( s_logger, "An action key %s was received that has no associated intent.", CustomProductKeyInputManager::IntentName( action ).c_str() );
 
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntent,
-                                                              message.action( ) );
+                                                              action );
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1907,7 +1915,7 @@ void CustomProductController::SendInitialCapsData()
             desiredVolume,
             { },
             m_errorCb );
-        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
+        BOSE_INFO( s_logger, "%s sent %s", __func__, desiredVolume.DebugString( ).c_str( ) );
 
         // Populate /system/sources::properties
         Sources message;
@@ -1997,10 +2005,33 @@ void CustomProductController::SendInitialCapsData()
             message,
             sourcesRespCb,
             m_errorCb );
-        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
+        BOSE_INFO( s_logger, "%s sent %s", __func__, message.DebugString( ).c_str( ) );
     }
 
-    // Do the Common stuff last, the PUT above must come first
+    std::string DefaultRebroadcastLatencyModeFile{ g_PersistenceRootDir };
+    DefaultRebroadcastLatencyModeFile += g_ProductPersistenceDir;
+    DefaultRebroadcastLatencyModeFile += g_DefaultRebroadcastLatencyModeFile;
+    const bool defaultRebroadcastLatencyModeDone = SystemUtils::Exists( DefaultRebroadcastLatencyModeFile );
+    if( !defaultRebroadcastLatencyModeDone )
+    {
+        // Do this only once, after factory default or on a system before RebroadcastLatencyMode existed
+        if( ! SystemUtils::WriteFile( "", DefaultRebroadcastLatencyModeFile ) )
+        {
+            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultRebroadcastLatencyModeFile.c_str( ) );
+        }
+
+        // Set the default value for /audio/rebroadcastLatency/mode
+        RebroadcastLatencyModeMsg rebroadcastLatencyModeMsg;
+        rebroadcastLatencyModeMsg.set_mode( APControlMsgRebroadcastLatencyMode::APRebroadcastLatencyMode_Name( APControlMsgRebroadcastLatencyMode::SYNC_TO_ROOM ) );
+        GetFrontDoorClient()->SendPut<RebroadcastLatencyModeMsg, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_REBROADCASTLATENCY_MODE_API,
+            rebroadcastLatencyModeMsg,
+            { },
+            m_errorCb );
+        BOSE_INFO( s_logger, "%s sent %s", __func__, rebroadcastLatencyModeMsg.DebugString( ).c_str( ) );
+    }
+
+    // Do the Common stuff last, the operations above must come first
     ProductController::SendInitialCapsData();
 }
 
@@ -2045,9 +2076,7 @@ void CustomProductController::HandlePutOpticalAutoWake(
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
 
-        IL::BreakThread( std::bind( GetMessageHandler( ),
-                                    message ),
-                         GetTask( ) );
+        SendAsynchronousProductMessage( message );
         respCb( req );
     }
     else
@@ -2137,6 +2166,15 @@ void CustomProductController::AttemptToStartPlayback()
     }
     else
     {
+        // The last content item may point to a now-removed source (PGC-3439)
+        if( m_lastContentItem.source( ) == SHELBY_SOURCE::PRODUCT )
+        {
+            auto sourceItem = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, m_lastContentItem.sourceaccount( ) );
+            if( !sourceItem || !GetSourceInfo( ).IsSourceAvailable( *sourceItem ) )
+            {
+                m_lastContentItem = GetOOBDefaultLastContentItem( );
+            }
+        }
         ProductController::AttemptToStartPlayback();
     }
 }
@@ -2219,28 +2257,8 @@ void CustomProductController::HandlePutPowerMacro(
     if( success )
     {
         m_powerMacro.CopyFrom( req );
-        auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
-        try
-        {
-            persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
-            respCb( req );
-
-            GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
-                                                     m_powerMacro );
-
-        }
-        catch( const ProtoToMarkup::MarkupError & e )
-        {
-            BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
-            error.set_message( e.what( ) );
-            success = false;
-        }
-        catch( ProtoPersistenceIF::ProtoPersistenceException & e )
-        {
-            BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
-            error.set_message( e.what( ) );
-            success = false;
-        }
+        PersistPowerMacro();
+        respCb( req );
     }
 
     if( not success )
@@ -2271,6 +2289,30 @@ void CustomProductController::LoadPowerMacroFromPersistance( )
     {
         BOSE_ERROR( s_logger, "Power Macro persistence error - %s", e.what( ) );
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::PersistPowerMacro
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::PersistPowerMacro( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "PowerMacro.json", GetProductPersistenceDir( ) );
+    try
+    {
+        persistence->Store( ProtoToMarkup::ToJson( m_powerMacro ) );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro store persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "Power Macro store persistence error - %s", e.what( ) );
+    }
+    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
+                                             m_powerMacro );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2310,9 +2352,32 @@ void CustomProductController::UpdatePowerMacro( )
         m_powerMacro.clear_enabled();
         isChanged = true;
     }
+
     if( isChanged )
     {
-        GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API, m_powerMacro );
+        PersistPowerMacro();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::ReconcileCurrentProductSource
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::ReconcileCurrentProductSource( )
+{
+    if( GetNowSelection( ).has_contentitem( ) && GetNowSelection( ).contentitem( ).source( ) == SHELBY_SOURCE::PRODUCT )
+    {
+        auto sourceItem = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, GetNowSelection( ).contentitem( ).sourceaccount( ) );
+        if( !sourceItem || !GetSourceInfo( ).IsSourceAvailable( *sourceItem ) )
+        {
+            // If the active source becomes unavailable, switch to TV source (PGC-3375)
+            KeyHandlerUtil::ActionType_t startTvPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_TV );
+            ProductMessage message;
+            message.set_action( startTvPlayback );
+
+            SendAsynchronousProductMessage( message );
+        }
     }
 }
 
@@ -2529,7 +2594,7 @@ void CustomProductController::InitializeAccessorySoftwareInstallManager( )
     {
         ProductMessage productMessage;
         productMessage.set_softwareinstall( true );
-        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+        SendAsynchronousProductMessage( productMessage );
     };
     auto softwareInstallcb = std::make_shared<AsyncCallback<void> > ( softwareInstallFunc, GetTask() );
 
