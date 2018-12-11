@@ -78,14 +78,13 @@ timeout(time: 4, unit: 'HOURS')
            throw e
        }
     finally
-      {
+   {
           currentBuild.description = "${failureList}"
           if(failureList){
               currentBuild.result = 'FAILURE'
           }
           else{
               currentBuild.result = 'SUCCESS'
-          }
-      }
+        }
     }
 }
