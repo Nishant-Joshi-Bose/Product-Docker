@@ -17,11 +17,6 @@ def buildJob(jobName)
    build job: jobName , parameters: [[$class: 'GitParameterValue', name: 'Branch', value: "${env.CHANGE_BRANCH}"],string(name: 'PullReqId', value: "${env.CHANGE_ID}"), string(name: 'PR_NAME', value: "${env.BRANCH_NAME}")]
 }
 
-def buildQCJob(jobName, SDKValue)
-{
-   build job: jobName, parameters: [string(name: 'SDK', value: SDKValue), string(name: 'Branch', value: "${env.CHANGE_BRANCH}"), string(name: 'PullReqId', value: "${env.CHANGE_ID}")]
-}
-
 /*
 Below are the jobs list to run against each PR.
 */
@@ -31,15 +26,10 @@ def EddiePRTest   = ["Continuous_Build_Testing/CastleProduct_Continuous_Build_Te
 
 failureList = []
 
-def executeBuild(item, SDKValue = null){
+def executeBuild(item){
     try
     {
-        if(SDKValue != null){
-            buildQCJob(item, SDKValue)
-        }
-        else{
             buildJob(item)
-        }
         echo 'Current Build set to SUCCESS'
     }
     catch (Exception ex)
@@ -71,7 +61,7 @@ timeout(time: 4, unit: 'HOURS')
                     }
                  }
         }
-    }
+    
      catch (e)
        {
            currentBuild.result = 'FAILURE'
@@ -85,6 +75,7 @@ timeout(time: 4, unit: 'HOURS')
           }
           else{
               currentBuild.result = 'SUCCESS'
-        }
-    }
+			}
+		}
+	}	
 }
