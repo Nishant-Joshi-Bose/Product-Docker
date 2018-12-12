@@ -58,7 +58,6 @@ message ProductMessage
         optional LpmServiceMessages.IpcKeyInformation_t    keyevent                    = 19;
         optional bool                                      softwareinstall             = 20;
         optional bool                                      softwareupdatestatus        = 21;
-        optional bool                                      forcedsoftwareinstall       = 22;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
