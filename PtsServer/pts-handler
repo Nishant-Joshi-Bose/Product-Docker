@@ -447,6 +447,11 @@ Address:
     <td><a>/</a>, <a>/index.html</a></td>
     <td>Wi-Fi setup</td>
   </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>:17008/update.html</a></td>
+    <td>Bonjour Update</td>
+  </tr>
 </table>
 
 <p>
