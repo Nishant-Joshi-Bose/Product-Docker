@@ -116,6 +116,8 @@
 #include "SystemUtils.h"
 #include "CustomChimeEvents.h"
 #include "LpmClientLiteIF.h"
+#include "AudioService.pb.h"
+#include "AudioPathControl.pb.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -141,7 +143,8 @@ namespace
 constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
-constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
+constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone";
+constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
 }
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -1967,7 +1970,7 @@ void CustomProductController::SendInitialCapsData()
             desiredVolume,
             { },
             m_errorCb );
-        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
+        BOSE_INFO( s_logger, "%s sent %s", __func__, desiredVolume.DebugString( ).c_str( ) );
 
         // Populate /system/sources::properties
         Sources message;
@@ -2057,10 +2060,33 @@ void CustomProductController::SendInitialCapsData()
             message,
             sourcesRespCb,
             m_errorCb );
-        BOSE_INFO( s_logger, "DefaultCAPSValuesStateFile didn't exist, sent %s", message.DebugString( ).c_str( ) );
+        BOSE_INFO( s_logger, "%s sent %s", __func__, message.DebugString( ).c_str( ) );
     }
 
-    // Do the Common stuff last, the PUT above must come first
+    std::string DefaultRebroadcastLatencyModeFile{ g_PersistenceRootDir };
+    DefaultRebroadcastLatencyModeFile += g_ProductPersistenceDir;
+    DefaultRebroadcastLatencyModeFile += g_DefaultRebroadcastLatencyModeFile;
+    const bool defaultRebroadcastLatencyModeDone = SystemUtils::Exists( DefaultRebroadcastLatencyModeFile );
+    if( !defaultRebroadcastLatencyModeDone )
+    {
+        // Do this only once, after factory default or on a system before RebroadcastLatencyMode existed
+        if( ! SystemUtils::WriteFile( "", DefaultRebroadcastLatencyModeFile ) )
+        {
+            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultRebroadcastLatencyModeFile.c_str( ) );
+        }
+
+        // Set the default value for /audio/rebroadcastLatency/mode
+        RebroadcastLatencyModeMsg rebroadcastLatencyModeMsg;
+        rebroadcastLatencyModeMsg.set_mode( APControlMsgRebroadcastLatencyMode::APRebroadcastLatencyMode_Name( APControlMsgRebroadcastLatencyMode::SYNC_TO_ROOM ) );
+        GetFrontDoorClient()->SendPut<RebroadcastLatencyModeMsg, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_REBROADCASTLATENCY_MODE_API,
+            rebroadcastLatencyModeMsg,
+            { },
+            m_errorCb );
+        BOSE_INFO( s_logger, "%s sent %s", __func__, rebroadcastLatencyModeMsg.DebugString( ).c_str( ) );
+    }
+
+    // Do the Common stuff last, the operations above must come first
     ProductController::SendInitialCapsData();
 }
 
