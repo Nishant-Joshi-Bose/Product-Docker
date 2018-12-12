@@ -96,6 +96,7 @@
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
+#include "CustomProductControllerStateNetworkStandby.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayableTransitionNetworkStandby.h"
@@ -179,7 +180,8 @@ CustomProductController::CustomProductController( ) :
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
     m_networkOperationalMode( NetManager::Protobuf::wifiOff ),
-
+    m_isNetworkWired( false ),
+    m_ethernetEnabled( true ),
     ///
     /// Initialization of STS contorller.
     ///
@@ -344,10 +346,10 @@ void CustomProductController::Run( )
       stateOn,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 
-    auto* stateNetworkStandby = new ProductControllerStateNetworkStandby
+    auto* stateNetworkStandby = new CustomProductControllerStateNetworkStandby
     ( GetHsm( ),
       statePlayable,
-      PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
 
     auto* stateNetworkStandbyConfigured = new ProductControllerStateNetworkStandbyConfigured
     ( GetHsm( ),
@@ -1087,6 +1089,52 @@ bool CustomProductController::IsBLERemoteConnected( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductController::SetEthernetEnabled
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::SetEthernetEnabled( bool enabled )
+{
+    if( GetProductType().compare("professor") == 0 )
+    {
+        return;
+    }
+
+    if( m_ethernetEnabled != enabled )
+    {
+        m_ethernetEnabled = enabled;
+        BOSE_INFO( s_logger, "%s ethernet being set to state %d", __func__, m_ethernetEnabled );
+        if( m_ethernetEnabled )
+        {
+            SystemUtils::Spawn( { "ifconfig", "eth0", "down" } );
+            SystemUtils::Spawn( { "ifconfig", "eth0", "up" } );
+        }
+        else
+        {
+            SystemUtils::Spawn( {"ip", "addr", "flush", "dev", "eth0" } );
+            SystemUtils::Spawn( { "ifconfig", "eth0", "down" } );
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::HandleCapsNowPlaying
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleCapsNowPlaying( SoundTouchInterface::NowPlaying np )
+{
+    if( IsNowPlayingChanged( np ) )
+    {
+        m_radioStatus.set_btactive( np.container().contentitem().source() == SHELBY_SOURCE::BLUETOOTH );
+        m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
+
+        BOSE_VERBOSE( s_logger, "Now Playing Changed Sent New Radio Status: %s", m_radioStatus.ShortDebugString().c_str() );
+    }
+    ProductController::HandleCapsNowPlaying( np );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   CustomProductController::GetDesiredPlayingVolume
 ///
 /// @return std::pair<bool, int32_t> whether a volume change is desired, and the desired volume level
@@ -1598,6 +1646,13 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_networkstatus() )
     {
+        // When switching away from ethernet we should bring down the interface
+        // and let wifi connect
+        if( m_isNetworkWired != GetNetworkServiceUtil().IsNetworkConnected() and m_isNetworkWired )
+        {
+            GetHsm( ).Handle< >( &CustomProductControllerState::HandleEthernetConnectionRemoved );
+            m_isNetworkWired = GetNetworkServiceUtil().IsNetworkConnected();
+        }
         // if wired we need to update lpm
         if( GetNetworkServiceUtil().IsNetworkWired() )
         {

@@ -61,6 +61,7 @@ ADD_EXECUTABLE(Professor
   CustomHsm/CustomProductControllerState.cpp
   CustomHsm/CustomProductControllerStateOn.cpp
   CustomHsm/CustomProductControllerStateLowPowerResume.cpp
+  CustomHsm/CustomProductControllerStateNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlayable.cpp
   CustomHsm/CustomProductControllerStatePlayableTransitionNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlaying.cpp
