@@ -274,7 +274,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentSoftwareUpdate( )
+    virtual bool HandleIntentSoftwareInstall( )
     {
         return false;
     }
@@ -401,7 +401,7 @@ public:
         return false;
     }
 
-    virtual bool HandleForcedSoftwareUpdateResponse( bool status )
+    virtual bool HandleForcedSoftwareInstallResponse( bool status )
     {
         return false;
     }
