@@ -242,7 +242,11 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_UP"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [0]
+        "timeOutList": [0],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
     },
     {
         "action": "VOLUME_RAMP_UP",
@@ -250,7 +254,11 @@
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [300, 100]
+        "timeOutList": [300, 100],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
     },
     {
         "action": "VOLUME_RAMP_UP_CANCEL",
@@ -266,7 +274,11 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_DOWN"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [0]
+        "timeOutList": [0],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
     },
     {
         "action": "VOLUME_RAMP_DOWN",
@@ -274,7 +286,11 @@
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
-        "timeOutList": [300, 100]
+        "timeOutList": [300, 100],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
     },
     {
         "action": "VOLUME_RAMP_DOWN_CANCEL",
@@ -330,7 +346,11 @@
         "keyEvent": "PRESS",
         "keyList": ["BOSE_MUTE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
-        "timeOutList": []
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
     },
     {
         "action": "ACTION_ASSERT_MUTE",
@@ -338,7 +358,11 @@
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ASSERT_MUTE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
-        "timeOutList": []
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
     },
     {
         "action": "ACTION_ASSERT_UNMUTE",
@@ -346,7 +370,11 @@
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ASSERT_UNMUTE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
-        "timeOutList": []
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
     },
     {
         "action": "ACTION_SOUNDTOUCH",
