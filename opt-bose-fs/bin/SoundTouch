@@ -110,8 +110,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         systemctl start adbd.service
         systemctl start sshd.socket
         ulimit -c unlimited
-        echo "|/opt/Bose/etc/store-core %e-%u-%g-%p-%t-%s" > \
-            /proc/sys/kernel/core_pattern
+        /opt/Bose/etc/store-core
     fi
 
     if ! [ -e /mnt/nv/BoseLog ]; then
