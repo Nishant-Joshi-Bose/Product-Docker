@@ -236,6 +236,10 @@
     "selected_version": "Release/master/2.3.0-997+a55b317"
   },
   {
+    "name": "SecureDeviceKey",
+    "selected_version": "master@4d0764da125bb32e5253b96c9599c49798752bac"
+  },
+  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/master/2.2.0-143+ae38480"
   },
