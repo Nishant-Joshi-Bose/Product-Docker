@@ -295,7 +295,7 @@ if path == "/clear-first-greeting":
 # Read out this unit's device ID. This is used on the manufacturing
 # line in user mode at the very last test station that verifies
 # both device ID and that the user code was installed correctly.
-if path == "/deviceID":
+if path == "/device-id":
     only_for_usb()
 
     http_ok()
