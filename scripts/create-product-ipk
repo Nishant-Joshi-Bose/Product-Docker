@@ -180,7 +180,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 
 "$avs_dir/stage" "$opt_dir" || exit
 
-# below is temporary due to stage issue in 1.0.1 Audiopath release that expects these folders ( although empty )
 "$audiopath64_dir/stage" --product=professor "$opt_dir" || exit
 "$audiopathproduct64_dir/stage" --product=professor "$opt_dir" || exit
 
