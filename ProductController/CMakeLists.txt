@@ -108,6 +108,7 @@ TARGET_LINK_LIBRARIES(Professor
   SoftwareUpdateAPI
   STS
   STSClient
+  uuid
   ShelbyUtils
   CommonTypes
   STSProtoBufs
