@@ -298,9 +298,9 @@ void CustomProductController::InitializeAction()
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  lpmLitePtr ) );
 
     DisplayController::Configuration displayCtrlConfig;
-    displayCtrlConfig.m_hasLightSensor = true;
-    displayCtrlConfig.m_hasLcd = true;
-    displayCtrlConfig.m_blackScreenDetectEnabled = true;
+    displayCtrlConfig.m_hasLightSensor = false;
+    displayCtrlConfig.m_hasLcd = false;
+    displayCtrlConfig.m_blackScreenDetectEnabled = false;
     m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
 
     // Start ProductAudioService

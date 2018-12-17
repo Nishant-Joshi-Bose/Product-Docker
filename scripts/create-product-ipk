@@ -78,7 +78,6 @@ web_update_page_dir=$(components get bose-web-update-page installed_location) ||
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
 democontroller_dir=$(components get DemoController-qc8017_32 installed_location) || exit
-webkit_dir=$(components get Webkit installed_location) || exit
 productuiassets_dir=$(components get ProductUIAssets installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
@@ -188,7 +187,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$lpmservice_dir/stage" "$opt_dir" || exit
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
-"$webkit_dir/stage" "$opt_dir" || exit
 "$productuiassets_dir/stage" --chimes=HomeSpeaker --type=flac "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$frontdoorutility_dir/stage" "$opt_dir" || exit
