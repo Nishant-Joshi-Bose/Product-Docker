@@ -98,6 +98,31 @@ if path == "/audio.tar" and is_development():
     os.execl("/bin/sh", "sh", "-c", "/bin/tar -c /tmp/spotify*.ogg")
 
 # ----------------------------------------------------------------------------
+# AirPlay2 Album Art
+if path.startswith("/AirPlay2/"):
+   iFile = path[len("/AirPlay2/"):] 
+   # Prevent dir traversal
+   if ".." in iFile:
+       http_err()
+       sys.exit()
+   # Strip Query string.
+   i = iFile.find("?")
+   if i != -1:
+       iFile = iFile[:i]
+   # Combine image file name with abs. path
+   image = "/var/run/AirPlay2/" + iFile
+   # Only jpeg and png images are supported.
+   if image.endswith('.jpg'):
+        http_ok("image/jpeg")
+   elif image.endswith('.png'):
+        http_ok("image/png")
+   else:
+        http_err()
+        sys.exit()
+   sys.stdout.write(open(image).read())
+   sys.exit()
+
+# ----------------------------------------------------------------------------
 # Diagnostics pages.
 
 http_redirect(path, "/diag", "/diag/")
@@ -272,6 +297,26 @@ if path == "/clear-first-greeting":
         else:
             print "Unable to clear first greeting:", e.strerror
 
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Read out this unit's device ID. This is used on the manufacturing
+# line in user mode at the very last test station that verifies
+# both device ID and that the user code was installed correctly.
+if path == "/device-id":
+    only_for_usb()
+
+    http_ok()
+    redirect_stderr()
+    # The SecureDeviceKey and HSP libraries used by get-device-id
+    # currently spew gratuitous output to stdout and stderr. For that
+    # reason, we discard both stdout and stderr and read the .json file instead.
+    # Presumably one day the SecureDeviceKey libraries will be cleaned up
+    # and this code can be simplified.
+    if subprocess.call("get-device-id &> /dev/null", shell=True) == 0:
+        print open('/tmp/deviceID.json').read()
+    else:
+        print "Could not read device ID."
     sys.exit()
 
 # ----------------------------------------------------------------------------

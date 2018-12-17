@@ -57,8 +57,6 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )      override;
-    bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )       override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
     bool HandleIntentPowerToggle( )                                             override;
     bool HandleIntentPowerOff( )                                                override;
     bool HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )  override;
