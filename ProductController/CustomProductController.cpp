@@ -60,18 +60,13 @@
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
-#include "ProductControllerStateOn.h"
-#include "ProductControllerStatePlayable.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlaying.h"
-#include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
-#include "ProductControllerStatePlayingSelectedSetup.h"
-#include "ProductControllerStatePlayingSelectedSetupNetworkConfig.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting.h"
@@ -96,15 +91,14 @@
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
+#include "CustomProductControllerStateNetworkStandby.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "CustomProductControllerStatePlaying.h"
-#include "CustomProductControllerStatePlayingDeselected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "CustomProductControllerStatePlayingSelectedSetupNetworkConfig.h"
-#include "CustomProductControllerStatePlayingSelectedSilentSourceInvalid.h"
 #include "CustomProductControllerStateTop.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
@@ -179,7 +173,8 @@ CustomProductController::CustomProductController( ) :
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
     m_networkOperationalMode( NetManager::Protobuf::wifiOff ),
-
+    m_isNetworkWired( false ),
+    m_ethernetEnabled( true ),
     ///
     /// Initialization of STS contorller.
     ///
@@ -244,63 +239,63 @@ void CustomProductController::Run( )
     ///
     /// Top State
     ///
-    auto* stateTop = new CustomProductControllerStateTop( GetHsm( ),
-                                                          nullptr );
+    CustomProductControllerState* stateTop = new CustomProductControllerStateTop( GetHsm( ),
+                                                                                  nullptr );
     ///
     /// Booting State and Various System Level States
     ///
-    auto* stateBooting = new CustomProductControllerStateBooting
+    CustomProductControllerState* stateBooting = new CustomProductControllerStateBooting
     ( GetHsm( ),
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
 
-    auto* stateBooted = new ProductControllerStateBooted
+    CustomProductControllerState* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTED );
 
-    auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
+    CustomProductControllerState* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
 
-    auto* stateFirstBootGreetingTransition = new CustomProductControllerStateFirstBootGreetingTransition
+    CustomProductControllerState* stateFirstBootGreetingTransition = new CustomProductControllerStateFirstBootGreetingTransition
     ( GetHsm( ),
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
-    auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
+    CustomProductControllerState* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
 
-    auto* stateSoftwareInstall = new ProductControllerStateSoftwareInstall
+    CustomProductControllerState* stateSoftwareInstall = new ProductControllerStateSoftwareInstall
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
 
-    auto* stateCriticalError = new ProductControllerStateCriticalError
+    CustomProductControllerState* stateCriticalError = new ProductControllerStateCriticalError
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR );
 
-    auto* stateFactoryDefault = new ProductControllerStateFactoryDefault
+    CustomProductControllerState* stateFactoryDefault = new ProductControllerStateFactoryDefault
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
 
-    auto* stateLowPowerStandbyTransition = new ProductControllerStateLowPowerStandbyTransition
+    CustomProductControllerState* stateLowPowerStandbyTransition = new ProductControllerStateLowPowerStandbyTransition
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
-    auto* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
+    CustomProductControllerState* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
 
-    auto* stateLowPowerResume = new CustomProductControllerStateLowPowerResume
+    CustomProductControllerState* stateLowPowerResume = new CustomProductControllerStateLowPowerResume
     ( GetHsm( ),
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME );
@@ -308,22 +303,22 @@ void CustomProductController::Run( )
     ///
     /// Playable Transition State and Sub-States
     ///
-    auto* statePlayableTransition = new ProductControllerStatePlayableTransition
+    CustomProductControllerState* statePlayableTransition = new ProductControllerStatePlayableTransition
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
 
-    auto* statePlayableTransitionInternal = new ProductControllerStatePlayableTransitionInternal
+    CustomProductControllerState* statePlayableTransitionInternal = new ProductControllerStatePlayableTransitionInternal
     ( GetHsm( ),
       statePlayableTransition,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL );
 
-    auto* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
+    CustomProductControllerState* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
     ( GetHsm( ),
       statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
 
-    auto* statePlayableTransitionNetworkStandby = new CustomProductControllerStatePlayableTransitionNetworkStandby
+    CustomProductControllerState* statePlayableTransitionNetworkStandby = new CustomProductControllerStatePlayableTransitionNetworkStandby
     ( GetHsm( ),
       statePlayableTransitionInternal,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
@@ -331,7 +326,7 @@ void CustomProductController::Run( )
     ///
     /// Top On State
     ///
-    auto* stateOn = new CustomProductControllerStateOn
+    CustomProductControllerState* stateOn = new CustomProductControllerStateOn
     ( GetHsm( ),
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ON );
@@ -339,37 +334,37 @@ void CustomProductController::Run( )
     ///
     /// Playable State and Sub-States
     ///
-    auto* statePlayable = new CustomProductControllerStatePlayable
+    CustomProductControllerState* statePlayable = new CustomProductControllerStatePlayable
     ( GetHsm( ),
       stateOn,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 
-    auto* stateNetworkStandby = new ProductControllerStateNetworkStandby
+    CustomProductControllerState* stateNetworkStandby = new CustomProductControllerStateNetworkStandby
     ( GetHsm( ),
       statePlayable,
-      PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
 
-    auto* stateNetworkStandbyConfigured = new ProductControllerStateNetworkStandbyConfigured
+    CustomProductControllerState* stateNetworkStandbyConfigured = new ProductControllerStateNetworkStandbyConfigured
     ( GetHsm( ),
       stateNetworkStandby,
       PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
 
-    auto* stateNetworkStandbyNotConfigured = new ProductControllerStateNetworkStandbyNotConfigured
+    CustomProductControllerState* stateNetworkStandbyNotConfigured = new ProductControllerStateNetworkStandbyNotConfigured
     ( GetHsm( ),
       stateNetworkStandby,
       PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED );
 
-    auto* stateIdle = new CustomProductControllerStateIdle
+    CustomProductControllerState* stateIdle = new CustomProductControllerStateIdle
     ( GetHsm( ),
       statePlayable,
       CUSTOM_PRODUCT_CONTROLLER_STATE_IDLE );
 
-    auto* stateIdleVoiceConfigured = new ProductControllerStateIdleVoiceConfigured
+    CustomProductControllerState* stateIdleVoiceConfigured = new ProductControllerStateIdleVoiceConfigured
     ( GetHsm( ),
       stateIdle,
       PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
 
-    auto* stateIdleVoiceNotConfigured = new ProductControllerStateIdleVoiceNotConfigured
+    CustomProductControllerState* stateIdleVoiceNotConfigured = new ProductControllerStateIdleVoiceNotConfigured
     ( GetHsm( ),
       stateIdle,
       PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED );
@@ -377,12 +372,12 @@ void CustomProductController::Run( )
     ///
     /// Playing Transition State and Sub-States
     ///
-    auto* statePlayingTransition = new ProductControllerStatePlayingTransition
+    CustomProductControllerState* statePlayingTransition = new ProductControllerStatePlayingTransition
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
 
-    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSwitch
+    CustomProductControllerState* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSwitch
     ( GetHsm( ),
       statePlayingTransition,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH );
@@ -390,82 +385,82 @@ void CustomProductController::Run( )
     ///
     /// Playing State and Sub-States
     ///
-    auto* statePlaying = new CustomProductControllerStatePlaying
+    CustomProductControllerState* statePlaying = new CustomProductControllerStatePlaying
     ( GetHsm( ),
       stateOn,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING );
 
-    auto* statePlayingDeselected = new CustomProductControllerStatePlayingDeselected
+    CustomProductControllerState* statePlayingDeselected = new ProductControllerStatePlayingDeselected
     ( GetHsm( ),
       statePlaying,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+      PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
 
-    auto* statePlayingSelected = new CustomProductControllerStatePlayingSelected
+    CustomProductControllerState* statePlayingSelected = new CustomProductControllerStatePlayingSelected
     ( GetHsm( ),
       statePlaying,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
 
-    auto* statePlayingSelectedSilent = new ProductControllerStatePlayingSelectedSilent
+    CustomProductControllerState* statePlayingSelectedSilent = new ProductControllerStatePlayingSelectedSilent
     ( GetHsm( ),
       statePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
 
-    auto* statePlayingSelectedSilentSourceInvalid = new CustomProductControllerStatePlayingSelectedSilentSourceInvalid
+    CustomProductControllerState* statePlayingSelectedSilentSourceInvalid = new ProductControllerStatePlayingSelectedSilentSourceInvalid
     ( GetHsm( ),
       statePlayingSelectedSilent,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID );
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID );
 
-    auto* statePlayingSelectedSilentSourceValid = new ProductControllerStatePlayingSelectedSilentSourceValid
+    CustomProductControllerState* statePlayingSelectedSilentSourceValid = new ProductControllerStatePlayingSelectedSilentSourceValid
     ( GetHsm( ),
       statePlayingSelectedSilent,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_VALID );
 
-    auto* statePlayingSelectedNotSilent = new ProductControllerStatePlayingSelectedNotSilent
+    CustomProductControllerState* statePlayingSelectedNotSilent = new ProductControllerStatePlayingSelectedNotSilent
     ( GetHsm( ),
       statePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT );
 
-    auto* statePlayingSelectedSetup = new CustomProductControllerStatePlayingSelectedSetup
+    CustomProductControllerState* statePlayingSelectedSetup = new CustomProductControllerStatePlayingSelectedSetup
     ( GetHsm( ),
       statePlayingSelected,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
 
-    auto* statePlayingSelectedSetupNetworkConfig = new CustomProductControllerStatePlayingSelectedSetupNetworkConfig
+    CustomProductControllerState* statePlayingSelectedSetupNetworkConfig = new CustomProductControllerStatePlayingSelectedSetupNetworkConfig
     ( GetHsm( ),
       statePlayingSelectedSetup,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG );
 
-    auto* statePlayingSelectedSetupNetworkConfigWiFiTransition = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition
+    CustomProductControllerState* statePlayingSelectedSetupNetworkConfigWiFiTransition = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition
     ( GetHsm( ),
       statePlayingSelectedSetupNetworkConfig,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_TRANSITION );
 
-    auto* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
+    CustomProductControllerState* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
     ( GetHsm( ),
       statePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER );
 
-    auto* statePlayingSelectedSetupExiting = new ProductControllerStatePlayingSelectedSetupExiting
+    CustomProductControllerState* statePlayingSelectedSetupExiting = new ProductControllerStatePlayingSelectedSetupExiting
     ( GetHsm( ),
       statePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
-    auto* statePlayingSelectedSetupNetworkConfigWiFiConnection = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection
+    CustomProductControllerState* statePlayingSelectedSetupNetworkConfigWiFiConnection = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection
     ( GetHsm( ),
       statePlayingSelectedSetupNetworkConfig,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_CONNECTION );
 
-    auto* statePlayingSelectedSetupNetworkConfigWiFiExiting = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting
+    CustomProductControllerState* statePlayingSelectedSetupNetworkConfigWiFiExiting = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting
     ( GetHsm( ),
       statePlayingSelectedSetupNetworkConfig,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_EXITING );
 
-    auto* statePlayingSelectedSetupNetworkConfigWifiAborting = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting
+    CustomProductControllerState* statePlayingSelectedSetupNetworkConfigWifiAborting = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting
     ( GetHsm( ),
       statePlayingSelectedSetupNetworkConfig,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_ABORTING );
 
-    auto* stateStoppingStreams = new ProductControllerStatePlayingSelectedStoppingStreams
+    CustomProductControllerState* stateStoppingStreams = new ProductControllerStatePlayingSelectedStoppingStreams
     ( GetHsm( ),
       statePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
@@ -473,12 +468,12 @@ void CustomProductController::Run( )
     ///
     /// Accessory Pairing States
     ///
-    auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
+    CustomProductControllerState* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
     ( GetHsm( ),
       statePlayingSelected,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
 
-    auto* stateAccessoryPairingCancelling = new CustomProductControllerStateAccessoryPairingCancelling
+    CustomProductControllerState* stateAccessoryPairingCancelling = new CustomProductControllerStateAccessoryPairingCancelling
     ( GetHsm( ),
       statePlayingSelected,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_CANCELLING );
@@ -486,13 +481,13 @@ void CustomProductController::Run( )
     ///
     /// AdaptIQ States
     ///
-    auto* stateAdaptIQ = new CustomProductControllerStateAdaptIQ
+    CustomProductControllerState* stateAdaptIQ = new CustomProductControllerStateAdaptIQ
     ( GetHsm( ),
       statePlayingSelected,
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
-    auto* stateAdaptIQCancelling = new CustomProductControllerStateAdaptIQCancelling
+    CustomProductControllerState* stateAdaptIQCancelling = new CustomProductControllerStateAdaptIQCancelling
     ( GetHsm( ),
       statePlayingSelected,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
@@ -500,17 +495,17 @@ void CustomProductController::Run( )
     ///
     /// Stopping Dedicated Streams State and Sub-States
     ///
-    auto* stateStoppingStreamsDedicated = new ProductControllerStateStoppingStreamsDedicated
+    CustomProductControllerState* stateStoppingStreamsDedicated = new ProductControllerStateStoppingStreamsDedicated
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED );
 
-    auto* stateStoppingStreamsDedicatedForFactoryDefault = new ProductControllerStateStoppingStreamsDedicatedForFactoryDefault
+    CustomProductControllerState* stateStoppingStreamsDedicatedForFactoryDefault = new ProductControllerStateStoppingStreamsDedicatedForFactoryDefault
     ( GetHsm( ),
       stateStoppingStreamsDedicated,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT );
 
-    auto* stateStoppingStreamsDedicatedForSoftwareUpdate = new ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate
+    CustomProductControllerState* stateStoppingStreamsDedicatedForSoftwareUpdate = new ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate
     ( GetHsm( ),
       stateStoppingStreamsDedicated,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE );
@@ -1087,6 +1082,52 @@ bool CustomProductController::IsBLERemoteConnected( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductController::SetEthernetEnabled
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::SetEthernetEnabled( bool enabled )
+{
+    if( GetProductType().compare( "professor" ) == 0 )
+    {
+        return;
+    }
+
+    if( m_ethernetEnabled != enabled )
+    {
+        m_ethernetEnabled = enabled;
+        BOSE_INFO( s_logger, "%s ethernet being set to state %d", __func__, m_ethernetEnabled );
+        if( m_ethernetEnabled )
+        {
+            SystemUtils::Spawn( { "ifconfig", "eth0", "down" } );
+            SystemUtils::Spawn( { "ifconfig", "eth0", "up" } );
+        }
+        else
+        {
+            SystemUtils::Spawn( {"ip", "addr", "flush", "dev", "eth0" } );
+            SystemUtils::Spawn( { "ifconfig", "eth0", "down" } );
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::HandleCapsNowPlaying
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleCapsNowPlaying( SoundTouchInterface::NowPlaying np )
+{
+    if( IsNowPlayingChanged( np ) )
+    {
+        m_radioStatus.set_btactive( np.container().contentitem().source() == SHELBY_SOURCE::BLUETOOTH );
+        m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
+
+        BOSE_VERBOSE( s_logger, "Now Playing Changed Sent New Radio Status: %s", m_radioStatus.ShortDebugString().c_str() );
+    }
+    ProductController::HandleCapsNowPlaying( np );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   CustomProductController::GetDesiredPlayingVolume
 ///
 /// @return std::pair<bool, int32_t> whether a volume change is desired, and the desired volume level
@@ -1598,6 +1639,13 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_networkstatus() )
     {
+        // When switching away from ethernet we should bring down the interface
+        // and let wifi connect
+        if( m_isNetworkWired != GetNetworkServiceUtil().IsNetworkConnected() and m_isNetworkWired )
+        {
+            GetHsm( ).Handle< >( &CustomProductControllerState::HandleEthernetConnectionRemoved );
+            m_isNetworkWired = GetNetworkServiceUtil().IsNetworkConnected();
+        }
         // if wired we need to update lpm
         if( GetNetworkServiceUtil().IsNetworkWired() )
         {
