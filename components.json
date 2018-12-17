@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44401.3125552"
+    "selected_version": "Release/Castle-Fork/2.2.1.44421.3126982"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -81,15 +81,15 @@
   },
   {
     "name": "CastleLibs-native",
-    "selected_version": "branches/castle-libs@2766"
+    "selected_version": "branches/castle-libs@2780"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2766"
+    "selected_version": "branches/castle-libs@2780"
   },
   {
     "name": "CastleLibs-x86",
-    "selected_version": "branches/castle-libs@2766"
+    "selected_version": "branches/castle-libs@2780"
   },
   {
     "name": "Cli-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/2.2.1-711+3d59dc3"
+    "selected_version": "Release/master/2.2.2-723+af9fd51"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -189,11 +189,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "software_update@064d4357e8f93facd6eafd7aa2d1296ebba52fb0"
+    "selected_version": "software_update@519606ae5d8c5b747dfc2e884245e309a1a6ea1f"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-287+89564cd"
+    "selected_version": "Release/master/2.2.0-292+8ec75b2"
   },
   {
     "name": "ProductUIAssets",
@@ -236,6 +236,10 @@
     "selected_version": "Release/master/2.3.0-997+a55b317"
   },
   {
+    "name": "SecureDeviceKey",
+    "selected_version": "master@4d0764da125bb32e5253b96c9599c49798752bac"
+  },
+  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/master/2.2.0-143+ae38480"
   },
@@ -245,7 +249,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44401.3125552"
+    "selected_version": "Release/Castle-Fork/2.2.1.44421.3126982"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -261,7 +265,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@3d5a721242a4c4997d16df648b68c01086f99a61"
+    "selected_version": "master@e51fcdbe71aefc2b3eb853f175cf51cdad1bf093"
   },
   {
     "name": "Webkit",
