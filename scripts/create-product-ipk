@@ -65,9 +65,7 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
-audiopath_dir=$(components get AudioPathService-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
-audiopathproduct_dir=$(components get AudioPathProducts-qc8017_32 installed_location) || exit
 audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
@@ -184,11 +182,8 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 
 "$avs_dir/stage" "$opt_dir" || exit
 
-# below is temporary due to stage issue in 1.0.1 Audiopath release that expects these folders ( although empty )
-mkdir -p "$audiopath_dir/professor/lib"
-mkdir -p "$audiopath_dir/ginger-cheevers/lib"
-"$audiopath_dir/stage" --product=professor "$opt_dir" || exit
-"$audiopathproduct_dir/stage" --product=professor "$opt_dir" || exit
+"$audiopath64_dir/stage" --product=professor "$opt_dir" || exit
+"$audiopathproduct64_dir/stage" --product=professor "$opt_dir" || exit
 
 #copy Vfe binary only
 "$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary || exit
