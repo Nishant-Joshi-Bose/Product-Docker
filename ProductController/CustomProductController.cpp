@@ -48,7 +48,7 @@
 #include "CustomProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
-#include "ProductControllerStateBooted.h"
+#include "CustomProductControllerStateBooted.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStateFirstBootGreeting.h"
@@ -138,6 +138,11 @@ constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
 constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone";
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
+// These following two numbers define a time window within which a BOOTUP_FACTORY_DEFAULT intent
+// is valid.  The key configuration requires a 15 second press-and-hold of the associated key
+// after the system has booted, so we need a 5 second window 15 seconds after booting.
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_START = 15000;
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_END   = 20000;
 }
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -250,10 +255,10 @@ void CustomProductController::Run( )
       CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
 
-    CustomProductControllerState* stateBooted = new ProductControllerStateBooted
+    CustomProductControllerState* stateBooted = new CustomProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_BOOTED );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTED );
 
     CustomProductControllerState* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
     ( GetHsm( ),
@@ -1700,6 +1705,22 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     {
         // Note that "action" is a reference argument to and may be changed by FilterIntent
         auto action = message.action();
+
+        if( GetIntentHandler( ).IsIntentBootupFactoryDefault( action ) )
+        {
+            int64_t timeSinceBooted = MonotonicClock::NowMs( ) - m_bootCompleteTime;
+
+            if( ( m_bootCompleteTime != 0 ) &&
+                ( timeSinceBooted > BOOTUP_FACTORY_DEFAULT_WINDOW_START ) &&
+                ( timeSinceBooted < BOOTUP_FACTORY_DEFAULT_WINDOW_END ) )
+            {
+                BOSE_INFO( s_logger, "%s: Performing bootup factory default", __PRETTY_FUNCTION__ );
+                action = Action::FACTORY_DEFAULT;
+                // reset so we can only do this once
+                m_bootCompleteTime = 0;
+            }
+        }
+
         if( m_ProductKeyInputManager->FilterIntent( action ) )
         {
             BOSE_VERBOSE( s_logger, "Action key %s ignored", CustomProductKeyInputManager::IntentName( action ).c_str() );

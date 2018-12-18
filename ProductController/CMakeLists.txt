@@ -55,6 +55,7 @@ ADD_EXECUTABLE(Professor
   CustomHsm/CustomProductControllerStateAccessoryPairingCancelling.cpp
   CustomHsm/CustomProductControllerStateAdaptIQ.cpp
   CustomHsm/CustomProductControllerStateAdaptIQCancelling.cpp
+  CustomHsm/CustomProductControllerStateBooted.cpp
   CustomHsm/CustomProductControllerStateBooting.cpp
   CustomHsm/CustomProductControllerStateFirstBootGreetingTransition.cpp
   CustomHsm/CustomProductControllerStateIdle.cpp

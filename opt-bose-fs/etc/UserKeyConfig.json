@@ -57,6 +57,14 @@
         "timeOutList": [0]
     },
     {
+        "action": "BOOTUP_FACTORY_DEFAULT",
+        "commment": "action press ---> factory default (15 second window after booting)",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_AMAZON_ACTION"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": [15000]
+    },
+    {
         "action": "PRESET_STORE_1",
         "commment": "Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1",
         "keyEvent": "PRESS_HOLD",

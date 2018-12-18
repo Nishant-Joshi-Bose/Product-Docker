@@ -142,6 +142,11 @@ public:
     {
         return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_AUDIO_MODE_TOGGLE );
     }
+
+    static bool IsIntentBootupFactoryDefault( KeyHandlerUtil::ActionType_t argument )
+    {
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::BOOTUP_FACTORY_DEFAULT );
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

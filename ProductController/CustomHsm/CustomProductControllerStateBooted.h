@@ -34,9 +34,9 @@ class CustomProductControllerStateBooted : public ProductControllerStateBooted
 public:
 
     CustomProductControllerStateBooted( ProductControllerHsm& hsm,
-                                   CHsmState* pSuperState,
-                                   Hsm::STATE stateId,
-                                   const std::string& name = "Booted" );
+                                        CHsmState* pSuperState,
+                                        Hsm::STATE stateId,
+                                        const std::string& name = "Booted" );
 
     ~CustomProductControllerStateBooted( ) override
     {
@@ -45,6 +45,7 @@ public:
 
     void HandleStateExit( ) override
     {
+        BOSE_INFO( s_logger, "%s: booted", __PRETTY_FUNCTION__ );
         GetCustomProductController( ).SetBootCompleteTime( );
     }
 
