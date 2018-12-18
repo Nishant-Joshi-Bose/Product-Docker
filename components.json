@@ -177,7 +177,7 @@
   },
   {
     "name": "product-startup",
-    "selected_version": "Release/master/4.0.0-5+5179185"
+    "selected_version": "Release/MR1_2019/4.0.1-7+17e25f4"
   },
   {
     "name": "ProductControllerCommon",
@@ -237,7 +237,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/3.0.4-1237+d4f0ba4"
+    "selected_version": "Release/MR1_2019/3.0.5-1271+3c6c1e1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
