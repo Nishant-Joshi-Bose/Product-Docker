@@ -31,6 +31,7 @@ parser.add_argument("--build", "-b", action="store_true",
                     help="Run make first")
 parser.add_argument("--verbose", "-v", action="store_true",
                     help="Verbose logging")
+parser.add_argument("stage", nargs="?", help="The stage directory")
 opts = parser.parse_args()
 del parser
 
@@ -49,13 +50,18 @@ def call(cmd, **kwargs):
         print " ".join(shell_quote(cmd))
     return subprocess.call(cmd, **kwargs)
 
-wspace_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-os.chdir(wspace_dir)
+if opts.stage:
+    if opts.build:
+        os.exit("{}: Don't use --build/-b with an explicit stage directory")
+    os.chdir(opts.stage)
+else:
+    wspace_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    os.chdir(wspace_dir)
 
-if opts.build:
-    check_call("make product-ipk".split())
+    if opts.build:
+        check_call("make product-ipk".split())
 
-os.chdir(stage_dir)
+    os.chdir(stage_dir)
 
 made_writeable = False
 
