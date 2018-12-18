@@ -4,10 +4,6 @@
     "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
-    "name": "AudioPathClient-qc8017_64",
-    "selected_version": "Release/stable/2.2.12-2983+cce833a"
-  },
-  {
     "name": "AudioPathProducts-qc8017_32",
     "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
@@ -16,16 +12,8 @@
     "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
-    "name": "AudioPathService-qc8017_32",
-    "selected_version": "Release/stable/2.2.12-2983+cce833a"
-  },
-  {
     "name": "AudioPathService-qc8017_64",
     "selected_version": "Release/stable/2.2.12-2983+cce833a"
-  },
-  {
-    "name": "AudioSource-BMX-native",
-    "selected_version": "Release/master/0.0.1-22+6abe31b"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -172,6 +160,10 @@
     "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
+    "name": "opensource-util-linux-qc8017_32",
+    "selected_version": "Release/bose-master/1.5.0-10+877ade5"
+  },
+  {
     "name": "opensource-zlib-qc8017_32",
     "selected_version": "Release/bose-master/v1.2.11-8-gc49d32b"
   },
@@ -185,7 +177,7 @@
   },
   {
     "name": "product-startup",
-    "selected_version": "Release/master/4.0.0-5+5179185"
+    "selected_version": "Release/MR1_2019/4.0.1-7+17e25f4"
   },
   {
     "name": "ProductControllerCommon",
@@ -245,7 +237,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/3.0.4-1237+d4f0ba4"
+    "selected_version": "Release/MR1_2019/3.0.5-1271+3c6c1e1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
