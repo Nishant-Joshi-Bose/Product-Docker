@@ -65,9 +65,7 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
-audiopath_dir=$(components get AudioPathService-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
-audiopathproduct_dir=$(components get AudioPathProducts-qc8017_32 installed_location) || exit
 audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
@@ -124,6 +122,8 @@ cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/bin/avahi-daemon "$opt_dir/bin/avahi-daemon" || exit
+cp "$stfs"/opt/Bose/bin/avahi-autoipd "$opt_dir/bin/avahi-autoipd" || exit
+cp "$stfs"/opt/Bose/bin/avahi-autoipd.action "$opt_dir/bin/avahi-autoipd.action" || exit
 cp "$stfs"/opt/Bose/bin/ptp/daemon_cl "$opt_dir/bin/ptp/daemon_cl" || exit
 cp "$stfs"/opt/Bose/bin/ptp/aptp_cfg.ini "$opt_dir/bin/ptp/aptp_cfg.ini" || exit
 cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
@@ -173,9 +173,9 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-"$audiopath_dir/stage" --product=eddie "$opt_dir" || exit
+"$audiopath64_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopath64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
-"$audiopathproduct_dir/stage" --product=eddie "$opt_dir" || exit
+"$audiopathproduct64_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopathproduct64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
