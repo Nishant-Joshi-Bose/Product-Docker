@@ -1,0 +1,12 @@
+This directory contains a script and associated files to generate the
+Open Source Licenses disclosure document which is now an HTML table
+instead of just a text file.  The following files are included in this
+directory:
+
+  o dinghy-licenses.txt: LICENSES.md from Igalia-buildroot-bose repo
+  o eula.html: manually converted from eula.txt
+  o eula.txt: file obtained from MAUI team
+  o monaco-licenses.txt: generated with 'npm run license-aggregation'
+  o projects: license files from all manually added projects
+  o README: this file
+  o riviera-licenses.pl: script that creates license disclosure document
