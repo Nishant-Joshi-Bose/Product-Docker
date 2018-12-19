@@ -43,11 +43,7 @@ public:
 
     }
 
-    void HandleStateExit( ) override
-    {
-        BOSE_INFO( s_logger, "%s: booted", __PRETTY_FUNCTION__ );
-        GetCustomProductController( ).SetBootCompleteTime( );
-    }
+    void HandleStateExit( ) override;
 
 protected:
 

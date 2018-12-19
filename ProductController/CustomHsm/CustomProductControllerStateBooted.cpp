@@ -29,12 +29,22 @@ namespace ProductApp
 /// @param const std::string&    name
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateBooted::CustomProductControllerStateBooted( ProductControllerHsm& hsm,
-                                                                          CHsmState* pSuperState,
-                                                                          Hsm::STATE stateId,
-                                                                          const std::string& name ) :
+                                                                        CHsmState* pSuperState,
+                                                                        Hsm::STATE stateId,
+                                                                        const std::string& name ) :
     ProductControllerStateBooted( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  CustomProductControllerStateBooted::HandleStateExit
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateBooted::HandleStateExit( )
+{
+    ProductControllerStateBooted::HandleStateExit();
+    BOSE_INFO( s_logger, "%s: booted", __PRETTY_FUNCTION__ );
+    GetCustomProductController( ).SetBootCompleteTime( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

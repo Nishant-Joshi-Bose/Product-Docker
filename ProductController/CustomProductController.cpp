@@ -141,8 +141,8 @@ constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLat
 // These following two numbers define a time window within which a BOOTUP_FACTORY_DEFAULT intent
 // is valid.  The key configuration requires a 15 second press-and-hold of the associated key
 // after the system has booted, so we need a 5 second window 15 seconds after booting.
-constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_START = 15000;
-constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_END   = 20000;
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_START_MSEC    = 15000;
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_END_MSEC      = 20000;
 }
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -1711,8 +1711,8 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
             int64_t timeSinceBooted = MonotonicClock::NowMs( ) - m_bootCompleteTime;
 
             if( ( m_bootCompleteTime != 0 ) &&
-                ( timeSinceBooted > BOOTUP_FACTORY_DEFAULT_WINDOW_START ) &&
-                ( timeSinceBooted < BOOTUP_FACTORY_DEFAULT_WINDOW_END ) )
+                ( timeSinceBooted > BOOTUP_FACTORY_DEFAULT_WINDOW_START_MSEC ) &&
+                ( timeSinceBooted < BOOTUP_FACTORY_DEFAULT_WINDOW_END_MSEC ) )
             {
                 BOSE_INFO( s_logger, "%s: Performing bootup factory default", __PRETTY_FUNCTION__ );
                 action = Action::FACTORY_DEFAULT;
