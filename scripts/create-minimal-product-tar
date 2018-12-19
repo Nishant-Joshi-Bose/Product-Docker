@@ -11,7 +11,6 @@ if (( $# != 1 )); then
     echo >&2 "usage: $0 product-type"
     exit 1
 fi
-
 product_type=$1; shift
 
 function put_script {
@@ -123,7 +122,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$swup_dir/stage" "$opt_dir" "$riviera_toolchain_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 "$audiopath64_dir/stage" --product=$product_type "$opt_dir" || exit
-"$audiopathproduct64_dir/stage" --product=$product_type "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
