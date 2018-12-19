@@ -31,7 +31,7 @@ Clone CastleTools.git and CastleProducts.git:
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone --branch taylor/master git@github.com:BoseCorp/CastleProducts.git Eddie
+$ git clone --branch taylor/master git@github.com:BoseCorp/CastleProducts.git Taylor
 ```
 
 Make sure your Taylor unit is accessible via adb.
