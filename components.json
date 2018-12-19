@@ -1,9 +1,5 @@
 [
   {
-    "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/2.2.12-2983+cce833a"
-  },
-  {
     "name": "AudioPathClient-qc8017_32",
     "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
@@ -16,12 +12,8 @@
     "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
-    "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/2.2.0-215+4e548ea"
-  },
-  {
-    "name": "AudioSource-BMX-native",
-    "selected_version": "Release/master/0.0.1-22+6abe31b"
+    "name": "AudioPathService-qc8017_64",
+    "selected_version": "Release/stable/2.2.12-2983+cce833a"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -32,8 +24,12 @@
     "selected_version": "Release/master/0.0.1-22+6abe31b"
   },
   {
+    "name": "AudioSource-qc8017_32",
+    "selected_version": "Release/master/2.2.0-215+4e548ea"
+  },
+  {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44401.3125552"
+    "selected_version": "Release/Castle-Fork/2.2.1.44421.3126982"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -64,24 +60,8 @@
     "selected_version": "Release/master/2.2.3-807+ef01867"
   },
   {
-    "name": "opensource-opkg-native",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
-  },
-  {
-    "name": "opensource-opkg-qc8017_32",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
-  },
-  {
-    "name": "opensource-opkg-x86",
-    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
-  },
-  {
-    "name": "product-startup",
-    "selected_version": "Release/master/4.0.0-5+5179185"
-  },
-  {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/MR1_2019/3.0.8-578+462a3b48"
+    "selected_version": "Release/MR1_2019/3.0.9-587+04500173"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -89,15 +69,15 @@
   },
   {
     "name": "CastleLibs-native",
-    "selected_version": "branches/castle-libs@2766"
+    "selected_version": "branches/castle-libs@2780"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2766"
+    "selected_version": "branches/castle-libs@2780"
   },
   {
     "name": "CastleLibs-x86",
-    "selected_version": "branches/castle-libs@2766"
+    "selected_version": "branches/castle-libs@2780"
   },
   {
     "name": "Cli-qc8017_32",
@@ -157,7 +137,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/2.2.1-711+3d59dc3"
+    "selected_version": "Release/master/2.2.2-723+af9fd51"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -166,6 +146,22 @@
   {
     "name": "opensource-libwebsockets-qc8017_32",
     "selected_version": "Release/bose-v2.4-stable/2.4.1-53+ga6495a7"
+  },
+  {
+    "name": "opensource-opkg-native",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "opensource-opkg-qc8017_32",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "opensource-opkg-x86",
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "opensource-util-linux-qc8017_32",
+    "selected_version": "Release/bose-master/1.5.0-10+877ade5"
   },
   {
     "name": "opensource-zlib-qc8017_32",
@@ -180,16 +176,20 @@
     "selected_version": "Release/master/2.2.0-1157+665135d"
   },
   {
+    "name": "product-startup",
+    "selected_version": "Release/MR1_2019/4.0.1-7+17e25f4"
+  },
+  {
     "name": "ProductControllerCommon",
-    "selected_version": "master@6f8487105d2e09a0b557e0fd6683240d71209b8a"
+    "selected_version": "master@9ecf3053592008f029a799b88cf9e21c732f9223"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-287+89564cd"
+    "selected_version": "Release/master/2.2.0-292+8ec75b2"
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@220944def647a72ce0194d43ef23f1d3fe146987"
+    "selected_version": "master@49516f77c25f1abf2ececfb12be97b2c89ed53f7"
   },
   {
     "name": "protobuf-native",
@@ -201,19 +201,19 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/4.4"
+    "selected_version": "Release/master/4.5"
   },
   {
     "name": "Riviera-Toolchain",
     "selected_version": "Release/master/4.4"
   },
   {
-    "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/3.0.2-306+da5c167"
-  },
-  {
     "name": "RivieraLPM-Tools",
     "selected_version": "master@8a023b09df3b8234638479586e51ab4f333743e1"
+  },
+  {
+    "name": "RivieraLpmService-qc8017_32",
+    "selected_version": "Release/master/3.0.2-306+da5c167"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -232,16 +232,20 @@
     "selected_version": "Release/master/2.3.0-997+a55b317"
   },
   {
+    "name": "SecureDeviceKey",
+    "selected_version": "master@4d0764da125bb32e5253b96c9599c49798752bac"
+  },
+  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/master/2.2.0-143+ae38480"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/3.0.4-1237+d4f0ba4"
+    "selected_version": "Release/MR1_2019/3.0.5-1271+3c6c1e1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.0.44401.3125552"
+    "selected_version": "Release/Castle-Fork/2.2.1.44421.3126982"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -257,7 +261,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@3b8415af4ec4ea41e288beb2bbb2248a0ef43886"
+    "selected_version": "master@e51fcdbe71aefc2b3eb853f175cf51cdad1bf093"
   },
   {
     "name": "Webkit",

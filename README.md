@@ -27,7 +27,7 @@ Repo contacts for taylor/... branches:
 
 ### Getting Started
 
-Clone CastleTools and Taylor:
+Clone CastleTools.git and CastleProducts.git:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
@@ -274,6 +274,7 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | usb | /validate-mfgdata | Check the manufacturing data |
 | usb | /controller-version | The LPM version strings |
 | usb | /clear-first-greeting | Clear the flag indicating the unit's first boot |
+| usb | /device-id | Displays the public device ID. Used on the mfg line after user code is put on the system to verify the device ID with Galapagos. |
 | any | /opensource | List the licenses of open source software used in the system |
 | any | /service | Remanufacturing. Only if the unit is in service mode |
 | any | /dev | Developer links * |

@@ -372,7 +372,7 @@ std::string CustomProductController::GetDefaultProductName() const
             productName += macAddress;
             BOSE_WARNING( s_logger, "errorType = %s", error.what() );
         }
-        productName += " HS 500";
+        productName += " HS TBD";
     }
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str() );
     return productName;
