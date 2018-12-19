@@ -24,9 +24,9 @@ ProductSTSStateDeviceControl::ProductSTSStateDeviceControl( ProductSTSHsm& hsm,
 // @TODO what is the proper value here? Is it product-specific? CASTLE-5047 https://jirapro.bose.com/browse/PAELLA-9910
 static constexpr uint32_t LOW_LATENCY_DELAYED_START_MS = 25;
 
-bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void &, uint32_t seq )
+bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & request, uint32_t seq )
 {
-    BOSE_INFO( m_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
+    BOSE_INFO( s_logger, "%s( %s ): %s", __func__, m_account.GetSourceName().c_str(), request.DebugString().c_str() );
 
     const auto source = m_account.GetProductSTSController()->GetProductController().GetSourceInfo().FindSource( m_account.GetSourceContentItem() );
     if( source != nullptr && source->has_accountid() )
@@ -87,9 +87,9 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void &, uin
     return true;
 }
 
-bool ProductSTSStateDeviceControl::HandleDeactivateRequest( const STS::DeactivateRequest &, uint32_t seq )
+bool ProductSTSStateDeviceControl::HandleDeactivateRequest( const STS::DeactivateRequest & request, uint32_t seq )
 {
-    BOSE_INFO( m_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
+    BOSE_INFO( s_logger, "%s( %s ): request = %s", __func__, m_account.GetSourceName().c_str(), request.DebugString().c_str() );
 
     const auto source = m_account.GetProductSTSController()->GetProductController().GetSourceInfo().FindSource( m_account.GetSourceContentItem() );
     if( source != nullptr && source->has_accountid() )
@@ -113,6 +113,25 @@ bool ProductSTSStateDeviceControl::HandleDeactivateRequest( const STS::Deactivat
     else
     {
         m_account.IPC().SendDeactivateResponse( seq );
+    }
+    return true;
+}
+
+bool ProductSTSStateDeviceControl::HandleSelectContentItem( const STS::ContentItem  &contentItem )
+{
+    BOSE_INFO( s_logger, "%s( %s ): contentItem = %s", __func__, m_account.GetSourceName().c_str(), contentItem.DebugString().c_str() );
+    // Need to tell CAPS to proceed with the source selection
+    m_account.IPC().SendSourceSelectEvent();
+    *( m_np.mutable_contentitem() ) = contentItem;
+    m_np.mutable_contentitem()->set_ispresetable( false );
+    m_np.set_resumesupported( m_resumeSupported );
+    m_account.GetProductSTSController()->HandlePlaybackRequestSlot( m_account.GetSourceID() );
+
+    if( !contentItem.location().empty() )
+    {
+        DeviceControllerClientMessages::DeviceSelectAdditionalInfo_t additionalInfo;
+        additionalInfo.set_info( contentItem.location() );
+        m_deviceControllerPtr->SendSelectAdditionalInfo( additionalInfo );
     }
     return true;
 }
