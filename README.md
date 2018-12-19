@@ -17,7 +17,6 @@ Repo contacts for taylor/... branches:
 
 ##### Table of Contents
 [Getting Started](#start)  
-[Initial Install](#initial-install)  
 [Software Updates](#updates)  
 [Building different LPM BLOBs](#lpmblobs)  
 [PTS Server Links](#pts)  
@@ -32,7 +31,7 @@ Clone CastleTools.git and CastleProducts.git:
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone --branch eddie/master git@github.com:BoseCorp/CastleProducts.git Eddie
+$ git clone --branch taylor/master git@github.com:BoseCorp/CastleProducts.git Eddie
 ```
 
 Make sure your Taylor unit is accessible via adb.
@@ -134,39 +133,6 @@ $ cd CastleTestUtils
 $ pip2.7 install -r requirements.txt
 $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
 ```
-
-<a name="initial-install"/>
-
-### Initial Installation on Development Units
-
-In your Taylor workspace:
-
-```shell session
-$ cd /scratch/Taylor
-$ make
-$ adb shell mount -oremount,rw /opt/Bose
-$ ./scripts/upstage
-$ adb push builds/Release/lpm_updater.ipk /tmp/lpm_updater.ipk
-$ adb push builds/Release/software-update.ipk /tmp/software-update.ipk
-$ adb push builds/Release/product-script.ipk /tmp/product-script.ipk
-```
-
-On the Taylor unit:
-
-```shell session
-# rw
-# [ -e /persist/mfg_data.json ] || mfgdata clear
-# mfgdata set development true
-# validate-mfgdata
-...make the corrections suggested by validate-mfgdata (including running sadi)...
-# validate-mfgdata && echo good to go || echo needs more work
-# opkg install -d bose --force-reinstall /tmp/lpm_updater.ipk
-# opkg install -d bose --force-reinstall /tmp/software-update.ipk
-# opkg install -d bose --force-reinstall /tmp/product-script.ipk
-# reboot
-```
-
-Now you should see the usual daemons start.
 
 <a name="updates"/>
 
