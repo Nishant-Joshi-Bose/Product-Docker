@@ -29,6 +29,7 @@
 
 using namespace ProductSTS;
 using namespace SystemSourcesProperties;
+using namespace LpmServiceMessages;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -216,26 +217,27 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 {
     auto retStatus = [ this, keyEvent ]( const bool pressRet )
     {
+        unsigned idx = ( keyEvent.keyorigin( ) * LpmServiceMessages::NUM_BOSE_KEYS ) + keyEvent.keyid( );
+
         if( keyEvent.keystate( ) == KEY_PRESSED )
         {
-            m_lastPressStatus[ keyEvent.keyorigin( ) ] = pressRet;
+            m_lastPressStatus[ idx ] = pressRet;
             return pressRet;
         }
-        else
+        // we shouldn't ever get here without having a corresponding press entry, but
+        // let's be safe and check
+        auto ret = m_lastPressStatus.find( idx );
+        if( ret == m_lastPressStatus.end( ) )
         {
-            // we shouldn't ever get here without having a corresponding press entry, but
-            // let's be safe and check
-            auto ret = m_lastPressStatus.find( keyEvent.keyorigin( ) );
-            if( ret == m_lastPressStatus.end( ) )
-            {
-                BOSE_WARNING( s_logger, "%s: got release without press for origin %d", __PRETTY_FUNCTION__, keyEvent.keyorigin( ) );
-                return false;
-            }
-            else
-            {
-                return ret->second;
-            }
+            BOSE_WARNING( s_logger, "%s: got release without press for origin %s, key %s", __PRETTY_FUNCTION__,
+                          KeyOrigin_t_Name( static_cast< KeyOrigin_t >( keyEvent.keyorigin( ) ) ).c_str( ),
+                          KEY_VALUE_Name( static_cast< KEY_VALUE >( keyEvent.keyid( ) ) ).c_str( ) );
+            return false;
         }
+
+        const auto status = ret->second;
+        m_lastPressStatus.erase( ret );
+        return status;
     };
 
     if( FilterIncompleteChord( keyEvent ) )
