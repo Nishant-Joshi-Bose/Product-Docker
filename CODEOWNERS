@@ -1,0 +1,6 @@
+# See https://help.github.com/articles/about-codeowners/
+
+* @Michael-Cook-Bose @Jonathan-Cooper-Bose
+/EC/ @Alfred-von-Campe-Bose @Michael-Cook-Bose
+/Test/ @Aman-Osman-Bose
+/Jenkins* @Aman-Osman-Bose
