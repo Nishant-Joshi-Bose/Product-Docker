@@ -139,8 +139,11 @@ constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
 constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone";
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
 // These following two numbers define a time window within which a BOOTUP_FACTORY_DEFAULT intent
-// is valid.  The key configuration requires a 15 second press-and-hold of the associated key
-// after the system has booted, so we need a 5 second window 15 seconds after booting.
+// is valid.  The requirement for this feature is that the keypress to initiate the factory default
+// starts within 5 seconds of the lightbar boot animation completing and that the keypress last at least
+// 15 seconds.  The key entry for this feature requires a hold of 15 seconds (after which the
+// corresponding intent is generated).  This means that the window where the intent is valid starts
+// at 15 seconds after the boot animation completes and ends 20 seconds after the boot animation completes.
 constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_START_MSEC    = 15000;
 constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_END_MSEC      = 20000;
 }
