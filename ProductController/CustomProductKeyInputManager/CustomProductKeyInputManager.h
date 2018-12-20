@@ -116,6 +116,7 @@ private:
     KeyFilter::KeyFilter                                                            m_filterTable;
     std::map< const KeyFilter::FilterEntry*, std::vector<FilterRegex> >             m_filterRegex;
     void InitializeKeyFilter( );
+    std::map< LpmServiceMessages::KeyOrigin_t, bool >                               m_lastPressStatus;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

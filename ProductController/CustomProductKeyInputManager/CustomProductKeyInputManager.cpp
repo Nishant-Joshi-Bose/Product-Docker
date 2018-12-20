@@ -214,9 +214,33 @@ void CustomProductKeyInputManager::BlastKey(
 bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformation_t&
                                                           keyEvent )
 {
+    auto retStatus = [ this, keyEvent ]( const bool pressRet )
+    {
+        if( keyEvent.keystate( ) == KEY_PRESSED )
+        {
+            m_lastPressStatus[ keyEvent.keyorigin( ) ] = pressRet;
+            return pressRet;
+        }
+        else
+        {
+            // we shouldn't ever get here without having a corresponding press entry, but
+            // let's be safe and check
+            auto ret = m_lastPressStatus.find( keyEvent.keyorigin( ) );
+            if( ret == m_lastPressStatus.end( ) )
+            {
+                BOSE_WARNING( s_logger, "%s: got release without press for origin %d", __PRETTY_FUNCTION__, keyEvent.keyorigin( ) );
+                return false;
+            }
+            else
+            {
+                return ret->second;
+            }
+        }
+    };
+
     if( FilterIncompleteChord( keyEvent ) )
     {
-        return true;
+        return retStatus( true );
     }
 
     auto keyid = keyEvent.keyid( );
@@ -231,7 +255,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
             BlastKey( keyEvent, tvSource->details( ).cicode( ) );
         }
 
-        return true;
+        return retStatus( true );
     }
 
     // Do some sanity-checks to see if we can proceed
@@ -239,12 +263,12 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     const auto& nowSelection = m_ProductController.GetNowSelection( );
     if( not nowSelection.has_contentitem( ) )
     {
-        return false;
+        return retStatus( false );
     }
     auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
     if( not sourceItem )
     {
-        return false;
+        return retStatus( false );
     }
 
     // CEC key handling is also special.
@@ -255,11 +279,10 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     // from TV to Bluetooth; we don't want to process this)
     if(
         ( keyEvent.keyorigin( ) == KEY_ORIGIN_CEC ) and
-        ( keyEvent.keystate( ) == KEY_PRESSED ) and
         ( sourceItem->sourcename().compare( SHELBY_SOURCE::PRODUCT ) != 0 )
     )
     {
-        return true;
+        return retStatus( true );
     }
 
     // The rest of the checks require a valid details field; if it doesn't exist, pass this to the KeyHandler
@@ -271,20 +294,19 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
         // In this case, we need to consume keys that normally would have been blasted
         if(
             ( sourceItem->sourceaccountname().compare( ProductSourceSlot_Name( TV ) ) == 0 ) and
-            ( keyEvent.keystate( ) == KEY_PRESSED ) and
             m_QSSClient->IsBlastedKey( keyid, DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
-            return true;
+            return retStatus( true );
         }
 
-        return false;
+        return retStatus( false );
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
     if( not m_QSSClient->IsBlastedKey( keyid, sourceItem->details( ).devicetype( ) ) )
     {
-        return false;
+        return retStatus( false );
     }
 
     // If the device has been configured, blast the key (if it hasn't been configured but it's a key
@@ -298,7 +320,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
         BOSE_INFO( s_logger, "%s unconfigured source - consuming key", __func__ );
     }
 
-    return true;
+    return retStatus( true );
 }
 
 void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key )
