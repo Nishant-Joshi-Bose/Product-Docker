@@ -23,6 +23,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#include <iomanip>
 #include "Utilities.h"
 #include "CustomProductController.h"
 #include "ProductCecHelper.h"
@@ -473,20 +474,20 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
 {
-    BOSE_DEBUG( s_logger, "ProductCecHelper::SendEdidDataCollection" );
-
     //convert protobuf byte buffer to string
     std::stringstream stringEdid;
     const char *bytesBuf = rawEdid.edid().c_str();
     stringEdid << std::hex;
+    stringEdid.fill( '0' );
     for( uint i = 0; i < rawEdid.edid().size(); ++i )
     {
-        stringEdid << ( int )bytesBuf[i];
+        stringEdid << std::setw( 2 ) << ( int )bytesBuf[i];
     }
 
     m_eedid.set_ediddata( stringEdid.str() );
 
     m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
+    BOSE_DEBUG( s_logger, "ProductCecHelper::HandleRawEDIDResponse sent %s", m_eedid.ediddata().c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
