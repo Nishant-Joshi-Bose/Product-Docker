@@ -85,7 +85,7 @@
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/dog-food-rc0/0.0.2-43+ba7a0ec"
+    "selected_version": "Release/dog-food-rc1/0.0.3-44+9980948"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.5-793+a441ead"
+    "selected_version": "Continuous/master/2.2.5-805+1f44e98"
   },
   {
     "name": "HTTPInterface-qc8017_32",
