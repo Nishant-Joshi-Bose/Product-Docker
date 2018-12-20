@@ -43,7 +43,7 @@ CustomProductControllerStateBooted::CustomProductControllerStateBooted( ProductC
 void CustomProductControllerStateBooted::HandleStateExit( )
 {
     ProductControllerStateBooted::HandleStateExit();
-    BOSE_INFO( s_logger, "%s: booted", __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, "The %s is exiting.", GetName( ).c_str( ) );
     GetCustomProductController( ).SetBootCompleteTime( );
 }
 
