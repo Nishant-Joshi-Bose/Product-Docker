@@ -99,7 +99,7 @@ cmake_build: generated_sources $(BLASTCONFIG) $(KEYCONFIG)| $(BUILDS_DIR) astyle
 
 .PHONY: minimal-product-tar
 minimal-product-tar: cmake_build
-	./scripts/create-minimal-product-tar professor
+	./scripts/create-minimal-product-tar
 
 .PHONY: product-ipk
 product-ipk: cmake_build
