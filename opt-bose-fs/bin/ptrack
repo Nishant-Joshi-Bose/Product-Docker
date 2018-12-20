@@ -90,11 +90,12 @@ while opts.iterations == 0 or i < opts.iterations:
     i += 1
 
     system_total_ticks, system_busy_ticks = get_system_ticks()
-    print "s", system_total_ticks, system_busy_ticks
+    print("s {} {}".format(system_total_ticks, system_busy_ticks))
 
     for pid in get_pids():
         try:
-            print "p", pid, get_proc("/proc/{}".format(pid))
+            proc_info = get_proc("/proc/{}".format(pid))
+            print("p {} {}".format(pid, proc_info))
         except IOError:
             continue
 
@@ -105,6 +106,7 @@ while opts.iterations == 0 or i < opts.iterations:
 
         for tid in tids:
             try:
-                print "t", tid, get_proc("/proc/{}/task/{}".format(pid, tid))
+                proc_info = get_proc("/proc/{}/task/{}".format(pid, tid))
+                print("t {} {}".format(tid, proc_info))
             except IOError:
                 continue
