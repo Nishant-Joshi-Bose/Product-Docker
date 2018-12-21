@@ -207,7 +207,7 @@ void CustomProductKeyInputManager::BlastKey(
 ///
 /// @param  const IpcKeyInformation_t& keyEvent
 ///
-/// @param  const bool pressRet
+/// @param  bool pressRet
 ///
 /// @return This is a convenience method that
 ///             1) Determines the correct return value of CustomProcessKeyEvent
