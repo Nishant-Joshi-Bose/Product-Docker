@@ -127,8 +127,12 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     fi
 
     if ! is-development; then
-        log info "Production mode (core files disabled, recovery enabled)"
-        set -- "$@" --recovery
+        if [ -e /cache/restore_in_progress ]; then
+            log info "Production mode - RESTORE (core files disabled, recovery disabled)"
+        else
+            log info "Production mode (core files disabled, recovery enabled)"
+            set -- "$@" --recovery
+        fi
         ulimit -c 0
     else
         log info "Development mode (core files enabled, recovery disabled)"
@@ -139,6 +143,10 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         echo "|/opt/Bose/etc/store-core %e-%u-%g-%p-%t-%s" > \
             /proc/sys/kernel/core_pattern
     fi
+
+    # By default, keep processes off the 4th processor.
+    # Override with the `cpuset` attribute in Shepherd*.xml.
+    set -- "$@" --default-cpu-set 7
 
     if ! [ -e /mnt/nv/BoseLog ]; then
         ln -s /data/logs /mnt/nv/BoseLog
