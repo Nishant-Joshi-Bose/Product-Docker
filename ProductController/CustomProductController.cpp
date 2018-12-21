@@ -138,14 +138,15 @@ constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
 constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone";
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
-// These following two numbers define a time window within which a BOOTUP_FACTORY_DEFAULT intent
-// is valid.  The requirement for this feature is that the keypress to initiate the factory default
-// starts within 5 seconds of the lightbar boot animation completing and that the keypress last at least
-// 15 seconds.  The key entry for this feature requires a hold of 15 seconds (after which the
-// corresponding intent is generated).  This means that the window where the intent is valid starts
-// at 15 seconds after the boot animation completes and ends 20 seconds after the boot animation completes.
-constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_START_MSEC    = 15000;
-constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_END_MSEC      = 20000;
+// This number defines the time window after exiting the BOOTUP state where a press of the "action"
+// key can initiate a factory default.  The conditions that must be satisifed in order for a factory
+// default to be initiated are
+//  1) The system must *not* be communicating with a Kepler remote
+//  2) The action button must be pressed within 5 seconds of exiting the bootup state
+//  3) The action button must be held for between 15 and 45 seconds
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_MSEC      = 5000;
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC    = 15000;
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_MAX_HOLD_MSEC    = 45000;
 }
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -1713,15 +1714,32 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         {
             int64_t timeSinceBooted = MonotonicClock::NowMs( ) - m_bootCompleteTime;
 
-            if( ( m_bootCompleteTime != 0 ) &&
-                ( timeSinceBooted > BOOTUP_FACTORY_DEFAULT_WINDOW_START_MSEC ) &&
-                ( timeSinceBooted < BOOTUP_FACTORY_DEFAULT_WINDOW_END_MSEC ) )
+            if( ( m_bootCompleteTime != 0 ) && ( timeSinceBooted < BOOTUP_FACTORY_DEFAULT_WINDOW_MSEC ) && !IsBLERemoteConnected( ) )
             {
-                BOSE_INFO( s_logger, "%s: Performing bootup factory default", __PRETTY_FUNCTION__ );
-                action = Action::FACTORY_DEFAULT;
-                // reset so we can only do this once
-                m_bootCompleteTime = 0;
+                // we allow the key start time to be latched anywhere within the window such that
+                // if a user were to press the key, release it, and press it again within the window,
+                // the time of the last press would be latched; this should prevent frustration in case
+                // the user doesn't get a "solid touch" immediately
+                m_bootupFactoryDefaultKeyTime = MonotonicClock::NowMs( );
             }
+        }
+        else if( GetIntentHandler( ).IsIntentVoice( action ) && ( m_bootupFactoryDefaultKeyTime != 0 ) )
+        {
+            int64_t timeSinceBootupFactoryDefaultRequest = MonotonicClock::NowMs( ) - m_bootupFactoryDefaultKeyTime;
+
+            if(
+                ( timeSinceBootupFactoryDefaultRequest > BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC ) &&
+                ( timeSinceBootupFactoryDefaultRequest < BOOTUP_FACTORY_DEFAULT_MAX_HOLD_MSEC ) )
+            {
+                BOSE_VERBOSE( s_logger, "%s: Initiating bootup factory default", __PRETTY_FUNCTION__ );
+                action = Action::FACTORY_DEFAULT;
+            }
+            else
+            {
+                BOSE_VERBOSE( s_logger, "%s: Cancelling request for bootup factory default", __PRETTY_FUNCTION__ );
+            }
+            // reset so we can only do this once
+            m_bootupFactoryDefaultKeyTime = 0;
         }
 
         if( m_ProductKeyInputManager->FilterIntent( action ) )
