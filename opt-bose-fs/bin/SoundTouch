@@ -127,8 +127,12 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     fi
 
     if ! is-development; then
-        log info "Production mode (core files disabled, recovery enabled)"
-        set -- "$@" --recovery
+        if [ -e /cache/restore_in_progress ]; then
+            log info "Production mode - RESTORE (core files disabled, restore disabled)"
+        else
+            log info "Production mode (core files disabled, recovery enabled)"
+            set -- "$@" --recovery
+        fi
         ulimit -c 0
     else
         log info "Development mode (core files enabled, recovery disabled)"
