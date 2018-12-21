@@ -1710,7 +1710,6 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         // Note that "action" is a reference argument to and may be changed by FilterIntent
         auto action = message.action();
 
-        BOSE_INFO( s_logger, "%s: bootup action %s", __PRETTY_FUNCTION__,  CustomProductKeyInputManager::IntentName( action ).c_str() );
         if( GetIntentHandler( ).IsIntentBootupFactoryDefault( action ) )
         {
             int64_t timeSinceBooted = MonotonicClock::NowMs( ) - m_bootCompleteTime;
