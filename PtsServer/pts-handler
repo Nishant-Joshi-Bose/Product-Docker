@@ -323,8 +323,8 @@ if path == "/device-id":
 # Open source license documents.
 # The customer end-user documentation references this URL path.
 
-http_redirect(path.lower(), "/opensource", "/licenses.txt")
-http_redirect(path.lower(), "/opensource/", "/licenses.txt")
+http_redirect(path.lower(), "/opensource", "/licenses/licenses.html")
+http_redirect(path.lower(), "/opensource/", "/licenses/licenses.html")
 
 # ----------------------------------------------------------------------------
 # Remanufacturing.

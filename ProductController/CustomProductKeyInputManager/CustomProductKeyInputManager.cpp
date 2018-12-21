@@ -29,6 +29,7 @@
 
 using namespace ProductSTS;
 using namespace SystemSourcesProperties;
+using namespace LpmServiceMessages;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -202,6 +203,47 @@ void CustomProductKeyInputManager::BlastKey(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductKeyInputManager::AccommodateOrphanReleaseEvents
+///
+/// @param  const IpcKeyInformation_t& keyEvent
+///
+/// @param  bool pressRet
+///
+/// @return This is a convenience method that
+///             1) Determines the correct return value of CustomProcessKeyEvent
+///             2) For KEY_PRESSED events, saves the return status of CustomProcessKeyEvent for the given key+origin combination
+///
+///         The purpose of this function is to ensure that for a given key+origin press event, 
+///         CustomProductKeyInputManager returns the same value for the corresponding release event.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductKeyInputManager::AccommodateOrphanReleaseEvents( const IpcKeyInformation_t& keyEvent, bool pressRet )
+{
+    unsigned idx = ( keyEvent.keyorigin( ) * LpmServiceMessages::NUM_BOSE_KEYS ) + keyEvent.keyid( );
+
+    if( keyEvent.keystate( ) == KEY_PRESSED )
+    {
+        m_lastPressStatus[ idx ] = pressRet;
+        return pressRet;
+    }
+    // we shouldn't ever get here without having a corresponding press entry, but
+    // let's be safe and check
+    auto ret = m_lastPressStatus.find( idx );
+    if( ret == m_lastPressStatus.end( ) )
+    {
+        BOSE_WARNING( s_logger, "%s: got release without press for origin %s, key %s", __PRETTY_FUNCTION__,
+                      KeyOrigin_t_Name( static_cast< KeyOrigin_t >( keyEvent.keyorigin( ) ) ).c_str( ),
+                      KEY_VALUE_Name( static_cast< KEY_VALUE >( keyEvent.keyid( ) ) ).c_str( ) );
+        return false;
+    }
+
+    auto status = ret->second;
+    m_lastPressStatus.erase( ret );
+    return status;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   CustomProductKeyInputManager::CustomProcessKeyEvent
 ///
 /// @param  const IpcKeyInformation_t& keyEvent
@@ -211,12 +253,11 @@ void CustomProductKeyInputManager::BlastKey(
 ///         otherwise, it returns false to allow further processing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformation_t&
-                                                          keyEvent )
+bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformation_t& keyEvent )
 {
     if( FilterIncompleteChord( keyEvent ) )
     {
-        return true;
+        return AccommodateOrphanReleaseEvents( keyEvent, true );
     }
 
     auto keyid = keyEvent.keyid( );
@@ -231,7 +272,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
             BlastKey( keyEvent, tvSource->details( ).cicode( ) );
         }
 
-        return true;
+        return AccommodateOrphanReleaseEvents( keyEvent, true );
     }
 
     // Do some sanity-checks to see if we can proceed
@@ -239,12 +280,12 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     const auto& nowSelection = m_ProductController.GetNowSelection( );
     if( not nowSelection.has_contentitem( ) )
     {
-        return false;
+        return AccommodateOrphanReleaseEvents( keyEvent, false );
     }
     auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
     if( not sourceItem )
     {
-        return false;
+        return AccommodateOrphanReleaseEvents( keyEvent, false );
     }
 
     // CEC key handling is also special.
@@ -255,11 +296,10 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     // from TV to Bluetooth; we don't want to process this)
     if(
         ( keyEvent.keyorigin( ) == KEY_ORIGIN_CEC ) and
-        ( keyEvent.keystate( ) == KEY_PRESSED ) and
         ( sourceItem->sourcename().compare( SHELBY_SOURCE::PRODUCT ) != 0 )
     )
     {
-        return true;
+        return AccommodateOrphanReleaseEvents( keyEvent, true );
     }
 
     // The rest of the checks require a valid details field; if it doesn't exist, pass this to the KeyHandler
@@ -274,16 +314,16 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
             m_QSSClient->IsBlastedKey( keyid, DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) )
         {
             BOSE_INFO( s_logger, "%s consuming key for unconfigured TV", __func__ );
-            return true;
+            return AccommodateOrphanReleaseEvents( keyEvent, true );
         }
 
-        return false;
+        return AccommodateOrphanReleaseEvents( keyEvent, false );
     }
 
     // Determine whether this is a blasted key for the current device type; if not, pass it to KeyHandler
     if( not m_QSSClient->IsBlastedKey( keyid, sourceItem->details( ).devicetype( ) ) )
     {
-        return false;
+        return AccommodateOrphanReleaseEvents( keyEvent, false );
     }
 
     // If the device has been configured, blast the key (if it hasn't been configured but it's a key
@@ -297,7 +337,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
         BOSE_INFO( s_logger, "%s unconfigured source - consuming key", __func__ );
     }
 
-    return true;
+    return AccommodateOrphanReleaseEvents( keyEvent, true );
 }
 
 void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key )
