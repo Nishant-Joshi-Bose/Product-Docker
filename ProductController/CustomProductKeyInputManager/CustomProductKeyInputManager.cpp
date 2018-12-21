@@ -214,7 +214,7 @@ void CustomProductKeyInputManager::BlastKey(
 ///         otherwise, it returns false to allow further processing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductKeyInputManager::AccommodateOrphanReleaseEvents( const IpcKeyInformation_t& keyEvent, const bool pressRet )
+bool CustomProductKeyInputManager::AccommodateOrphanReleaseEvents( const IpcKeyInformation_t& keyEvent, bool pressRet )
 {
     unsigned idx = ( keyEvent.keyorigin( ) * LpmServiceMessages::NUM_BOSE_KEYS ) + keyEvent.keyid( );
 
