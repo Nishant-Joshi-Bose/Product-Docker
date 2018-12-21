@@ -1710,6 +1710,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         // Note that "action" is a reference argument to and may be changed by FilterIntent
         auto action = message.action();
 
+        BOSE_INFO( s_logger, "%s: bootup action %s", __PRETTY_FUNCTION__,  CustomProductKeyInputManager::IntentName( action ).c_str() );
         if( GetIntentHandler( ).IsIntentBootupFactoryDefault( action ) )
         {
             int64_t timeSinceBooted = MonotonicClock::NowMs( ) - m_bootCompleteTime;
@@ -1724,9 +1725,10 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
                 m_bootupFactoryDefaultKeyTime = MonotonicClock::NowMs( );
             }
         }
-        else if( GetIntentHandler( ).IsIntentVoice( action ) && ( m_bootupFactoryDefaultKeyTime != 0 ) )
+        else if( ( m_bootupFactoryDefaultKeyTime != 0 ) && GetIntentHandler( ).IsIntentSetupBLERemote( action ) )
         {
             int64_t timeSinceBootupFactoryDefaultRequest = MonotonicClock::NowMs( ) - m_bootupFactoryDefaultKeyTime;
+            BOSE_INFO( s_logger, "%s: bootup intent check %lld", __PRETTY_FUNCTION__, timeSinceBootupFactoryDefaultRequest );
 
             if(
                 ( timeSinceBootupFactoryDefaultRequest > BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC ) &&
