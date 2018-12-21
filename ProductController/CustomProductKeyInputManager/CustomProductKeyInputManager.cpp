@@ -211,9 +211,9 @@ void CustomProductKeyInputManager::BlastKey(
 ///
 /// @return This is a convenience method that
 ///             1) Determines the correct return value of CustomProcessKeyEvent
-///             2) Saves the return status of CustomProcessKeyEvent for the given key+origin combination
+///             2) For KEY_PRESSED events, saves the return status of CustomProcessKeyEvent for the given key+origin combination
 ///
-///         The purpose of this function is to ensure that for a given key+origin presse event, 
+///         The purpose of this function is to ensure that for a given key+origin press event, 
 ///         CustomProductKeyInputManager returns the same value for the corresponding release event.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
