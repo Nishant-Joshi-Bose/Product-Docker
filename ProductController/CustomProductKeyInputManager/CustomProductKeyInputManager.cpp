@@ -209,9 +209,12 @@ void CustomProductKeyInputManager::BlastKey(
 ///
 /// @param  const bool pressRet
 ///
-/// @return This method returns a true value if the key was consumed so that no further
-///         processing of the key event in the base ProductKeyInputManager class takes place;
-///         otherwise, it returns false to allow further processing.
+/// @return This is a convenience method that
+///             1) Determines the correct return value of CustomProcessKeyEvent
+///             2) Saves the return status of CustomProcessKeyEvent for the given key+origin combination
+///
+///         The purpose of this function is to ensure that for a given key+origin presse event, 
+///         CustomProductKeyInputManager returns the same value for the corresponding release event.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductKeyInputManager::AccommodateOrphanReleaseEvents( const IpcKeyInformation_t& keyEvent, bool pressRet )
@@ -234,7 +237,7 @@ bool CustomProductKeyInputManager::AccommodateOrphanReleaseEvents( const IpcKeyI
         return false;
     }
 
-    const auto status = ret->second;
+    auto status = ret->second;
     m_lastPressStatus.erase( ret );
     return status;
 };
