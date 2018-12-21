@@ -6,18 +6,17 @@
 this=${0##*/} # this script's name
 
 cfg=Release
-
 if (( $# != 1 )); then
     echo >&2 "usage: $0 product-type"
     exit 1
 fi
-product_type=$1; shift
 
 function put_script {
     local file="$1"; shift
     cat "$@" >"$file" || exit
     chmod 755 "$file" || exit
 }
+product_type=$1; shift
 
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
@@ -41,7 +40,6 @@ lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) 
 cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get opensource-opkg-qc8017_32 installed_location) || exit
-webkit_dir=$(components get Webkit installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux || exit
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -51,9 +49,6 @@ destination=$wspace/builds/$cfg
 stage=$destination/minimal-product-stage
 rm -rf "$stage" || exit
 echo "Stage directory $stage"
-
-#monaco_stage=$wspace/builds/$cfg/monaco-ipk-stage
-#wpe_stage=$wspace/builds/$cfg/wpe-ipk-stage
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
@@ -117,13 +112,12 @@ cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 find "$secure_dir" -type d -exec chmod 550 {} \; || exit
 find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 
-cp "$wspace/builds/$cfg/qc8017_32/KeyConfiguration.json" "$opt_dir/etc" || exit
-cp "$wspace/builds/$cfg/qc8017_32/BlastConfiguration.json" "$opt_dir/etc" || exit
-bin/run_dinghy
-
 # On exit, make this dir writeable again to avoid spurious error messages
 # from `make clean` and such.
 trap 'chmod -R +w "$secure_dir"' EXIT
+
+cp "$wspace/builds/$cfg/qc8017_32/KeyConfiguration.json" "$opt_dir/etc" || exit
+cp "$wspace/builds/$cfg/qc8017_32/BlastConfiguration.json" "$opt_dir/etc" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
@@ -143,13 +137,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
 "$product_startup_dir/stage" "$opt_dir" || exit
-#"$webkit_dir/stage" "$opt_dir" || exit
-
-# ----------------------------------------------------------------------------
-# include monaco and wpe to minimal tar (Due to Professor crashing without UI)
-#cp -rf "$monaco_stage/Bose/" "$opt_dir/" || exit
-## wpe provides ipk, so copy data.tar.gz and extract
-#tar xzf "$wpe_stage/data.tar.gz" -C "$opt_dir/" || exit
 
 # ----------------------------------------------------------------------------
 
