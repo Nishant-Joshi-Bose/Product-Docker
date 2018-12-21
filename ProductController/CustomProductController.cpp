@@ -1720,6 +1720,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
                 // if a user were to press the key, release it, and press it again within the window,
                 // the time of the last press would be latched; this should prevent frustration in case
                 // the user doesn't get a "solid touch" immediately
+                BOSE_INFO( s_logger, "%s: Recived bootup factory default within valid window", __PRETTY_FUNCTION__ );
                 m_bootupFactoryDefaultKeyTime = MonotonicClock::NowMs( );
             }
         }
@@ -1731,12 +1732,12 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
                 ( timeSinceBootupFactoryDefaultRequest > BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC ) &&
                 ( timeSinceBootupFactoryDefaultRequest < BOOTUP_FACTORY_DEFAULT_MAX_HOLD_MSEC ) )
             {
-                BOSE_VERBOSE( s_logger, "%s: Initiating bootup factory default", __PRETTY_FUNCTION__ );
+                BOSE_INFO( s_logger, "%s: Initiating bootup factory default", __PRETTY_FUNCTION__ );
                 action = Action::FACTORY_DEFAULT;
             }
             else
             {
-                BOSE_VERBOSE( s_logger, "%s: Cancelling request for bootup factory default", __PRETTY_FUNCTION__ );
+                BOSE_INFO( s_logger, "%s: Cancelling request for bootup factory default", __PRETTY_FUNCTION__ );
             }
             // reset so we can only do this once
             m_bootupFactoryDefaultKeyTime = 0;
