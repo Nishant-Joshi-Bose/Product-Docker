@@ -65,9 +65,7 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
-audiopath_dir=$(components get AudioPathService-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
-audiopathproduct_dir=$(components get AudioPathProducts-qc8017_32 installed_location) || exit
 audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
@@ -155,6 +153,15 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
+# Generate the Open Source license list from the Riviera-HSP-licenses.tar.gz file 
+# Note that for PGC we need to add the -soundbar option when invoking the Perl script
+if dpkg -l libfile-slurp-perl >& /dev/null && dpkg -l libdigest-md5-file-perl >& /dev/null; then
+    "$wspace/OpenSourceLicensing/riviera-licenses" "$riviera_hsp_images_dir/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
+else
+   echo "Error: please run 'sudo apt install libfile-slurp-perl libdigest-md5-file-perl' to support open source license generation"
+   exit 1
+fi
+
 # Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
 if [ -e "$secure_dir" ]; then
@@ -175,9 +182,9 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-"$audiopath_dir/stage" --product=eddie "$opt_dir" || exit
+"$audiopath64_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopath64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
-"$audiopathproduct_dir/stage" --product=eddie "$opt_dir" || exit
+"$audiopathproduct64_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopathproduct64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
