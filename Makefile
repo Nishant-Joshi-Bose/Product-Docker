@@ -81,16 +81,10 @@ EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
 EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
 EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
 
-# Metadata proto file did not have "option (ignore_unexpected_markup) =
-# true;" option enabled and hence for the device having this proto
-# version can not use new tags from metadata.json file.
-# So for current scenario we will use exclude list from
-# "/opt/Bose/update/etc/SwUpExcludePackagesList" file and when we decide
-# to use exclude list from metadata.json we can enable below options.
-
+# Add exclude packages list in metadata.json
 .PHONY: generate-metadata
 generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev #-l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev -l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
