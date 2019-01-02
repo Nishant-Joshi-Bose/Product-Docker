@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Continuous/qss-update-mmechtinger/3.0.8-135+f763cd6"
+    "selected_version": "Release/master/3.0.8-137+9fda807"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/master/2.2.4-59+f7a7908"
+    "selected_version": "Release/master/2.2.5-56+84ae984"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
@@ -13,15 +13,15 @@
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Continuous/master/3.0.1-3491+d0c3100"
+    "selected_version": "Release/stable/3.0.1-3529+4108201"
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Continuous/master/3.0.1-3491+d0c3100"
+    "selected_version": "Release/stable/3.0.1-3529+4108201"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Continuous/master/3.0.1-3491+d0c3100"
+    "selected_version": "Release/stable/3.0.1-3529+4108201"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-12-20_1347"
+    "selected_version": "Release/Castle-Fork/2.2.1.44485.3140117"
   },
   {
     "name": "BLERemoteXCVR",
@@ -49,15 +49,15 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/master/3.1.1-380+3362b4e"
+    "selected_version": "Release/master/3.1.1-381+9b24c0a"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.3-225+eb61a2e"
+    "selected_version": "Release/master/2.2.3-226+7871565"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/master/2.4.2-260+6954291"
+    "selected_version": "Release/master/2.4.2-261+7910748"
   },
   {
     "name": "bose-opkg-utils",
@@ -97,7 +97,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/master/2.4.3-436+89a0a26"
+    "selected_version": "Release/master/2.4.3-437+c422309"
   },
   {
     "name": "CastleLibs-native",
@@ -125,7 +125,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-197+42657f9"
+    "selected_version": "Release/master/2.2.0-198+0f7f806"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -201,7 +201,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-299+b9b2abc"
+    "selected_version": "Release/master/2.2.0-301+1482a8a"
   },
   {
     "name": "ProductUIAssets",
@@ -241,7 +241,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/2.3.1-1033+0a86cd0"
+    "selected_version": "Release/master/2.3.1-1037+b2c38c4"
   },
   {
     "name": "SecureDeviceKey",
@@ -257,7 +257,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-12-20_1347"
+    "selected_version": "Release/Castle-Fork/2.2.1.44485.3140117"
   },
   {
     "name": "svc-pts-log-decrypt",
