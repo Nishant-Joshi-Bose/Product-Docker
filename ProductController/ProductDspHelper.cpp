@@ -121,9 +121,12 @@ bool ProductDspHelper::Run( )
     {
         if( enabled )
         {
-            m_ProductController.GetDataCollectionClient()->SendData(
-                std::make_shared< LpmServiceMessages::DspDataCollection >( m_DspDataCollection ),
-                DATA_COLLECTION_DSP_AIQ );
+            if( m_DspDataCollection.has_data() )
+            {
+                m_ProductController.GetDataCollectionClient()->SendData(
+                    std::make_shared< LpmServiceMessages::DspDataCollection >( m_DspDataCollection ),
+                    DATA_COLLECTION_DSP_AIQ );
+            }
         }
     };
     m_ProductController.GetDataCollectionClient()->RegisterForEnabledNotifications( Callback<bool>( func ) );
