@@ -244,6 +244,10 @@
     "selected_version": "Release/master/2.3.1-1037+b2c38c4"
   },
   {
+    "name": "SASS-qc8017_64",
+    "selected_version": "Release/master/2.3.1-1037+b2c38c4"
+  },
+  {
     "name": "SecureDeviceKey",
     "selected_version": "master@4d0764da125bb32e5253b96c9599c49798752bac"
   },
