@@ -20,7 +20,7 @@ tryhelp () {
     exit 1
 }
 opts=$(getopt --name "$this" --shell sh \
-    -o uh \
+    -o h \
     -l "help" \
     -- "$@") || tryhelp
 eval set -- "$opts"
