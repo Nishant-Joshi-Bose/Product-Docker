@@ -51,8 +51,8 @@ public:
                  ( arg == ( uint16_t ) Action::SYSTEM_INFO_CANCEL ) ||
                  ( arg == ( uint16_t ) Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN ) ||
                  ( arg == ( uint16_t ) Action::BLUETOOTH_CLEAR_PAIRING_CANCEL ) ||
-                 ( arg == ( uint16_t ) Action::SOFTWARE_INSTALL_COUNTDOWN ) ||
-                 ( arg == ( uint16_t ) Action::SOFTWARE_INSTALL_CANCEL ) );
+                 ( arg == ( uint16_t ) Action::MANUAL_SOFTWARE_INSTALL_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::MANUAL_SOFTWARE_INSTALL_CANCEL ) );
     }
 
 

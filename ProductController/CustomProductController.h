@@ -55,8 +55,6 @@
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateSoftwareInstallTransition.h"
-#include "ProductControllerStateSoftwareInstallForced.h"
-#include "ProductControllerStateSoftwareInstallNormal.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStateFirstBootGreeting.h"
 #include "ProductControllerStateFirstBootGreetingTransition.h"
@@ -357,8 +355,7 @@ private:
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
     ProductControllerStateSoftwareInstall                           m_ProductControllerStateSoftwareInstall;
     ProductControllerStateSoftwareInstallTransition                 m_ProductControllerStateSoftwareInstallTransition;
-    ProductControllerStateSoftwareInstallForced                     m_ProductControllerStateSoftwareInstallForced;
-    ProductControllerStateSoftwareInstallNormal                     m_ProductControllerStateSoftwareInstallNormal;
+    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSoftwareInstallManual;
 
 
     /// ProductAudioService

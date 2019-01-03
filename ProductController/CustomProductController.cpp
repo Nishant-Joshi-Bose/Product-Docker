@@ -84,8 +84,7 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
     m_ProductControllerStateSoftwareInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateSoftwareInstallTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_TRANSITION ),
-    m_ProductControllerStateSoftwareInstallForced( GetHsm(), &m_ProductControllerStateSoftwareInstall, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_FORCED ),
-    m_ProductControllerStateSoftwareInstallNormal( GetHsm(), &m_ProductControllerStateSoftwareInstall, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_NORMAL ),
+    m_ProductControllerStateSoftwareInstallManual( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_MANUAL ),
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
@@ -284,13 +283,9 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateSoftwareInstallTransition );
 
-    GetHsm().AddState( NotifiedNames::UPDATING,
+    GetHsm().AddState( NotifiedNames::UPDATING /*TODO MANUAL_SOFTWARE_INSTALL*/,
                        SystemPowerControl_State_Not_Notify,
-                       &m_ProductControllerStateSoftwareInstallNormal );
-
-    GetHsm().AddState( NotifiedNames::UPDATING /*TODO SOFTWARE_INSTALL*/,
-                       SystemPowerControl_State_Not_Notify,
-                       &m_ProductControllerStateSoftwareInstallForced );
+                       &m_ProductControllerStateSoftwareInstallManual );
 
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 }

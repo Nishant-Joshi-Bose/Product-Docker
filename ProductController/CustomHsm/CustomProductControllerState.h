@@ -274,7 +274,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentSoftwareInstall( )
+    virtual bool HandleIntentManualSoftwareInstall( )
     {
         return false;
     }
