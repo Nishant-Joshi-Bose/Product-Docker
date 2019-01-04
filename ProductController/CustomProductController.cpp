@@ -138,7 +138,7 @@ namespace
 constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
-constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
+constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone_V2";
 
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -1929,6 +1929,14 @@ void CustomProductController::SendInitialCapsData()
             SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
 
         messageProperties->set_inputrouterequired( false );
+
+        for( uint32_t friendlyName = SystemSourcesProperties::FRIENDLY_NAME__MIN; friendlyName <= SystemSourcesProperties::FRIENDLY_NAME__MAX; ++friendlyName )
+        {
+            messageProperties->add_supportedfriendlynames(
+                SystemSourcesProperties::FRIENDLY_NAME__Name( static_cast<SystemSourcesProperties::FRIENDLY_NAME_>( friendlyName ) ) );
+        }
+
+        messageProperties->set_friendlynamerequired(false);
 
         // Populate status and visibility of PRODUCT sources.
         using namespace ProductSTS;
