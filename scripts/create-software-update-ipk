@@ -67,11 +67,16 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/update/bin/" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/update/bin/" "$opt_dir/update/etc/" || exit
 # run stage for SoftwareUpdate
 "$softwareupdate_dir/stage" "$opt_dir" "$toolchain_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
 cp "$toolchain_dir/sdk/sysroots/aarch64-oe-linux/usr/bin/unshare" "$opt_dir/update/bin/" || exit
+
+# Specifically required for CASTLE-26007
+# While going from SOP/SOS/MR4_2018 to MR2_2019 or higher we will not have metadata.json downloaded as part of update flow
+# So we will keep this metadata in software-update to get the exclude packages list
+cp "$wspace/builds/$cfg/metadata.json" "$opt_dir/update/etc/" || exit
 
 InstallFileContent=$(<"$opt_dir/bin/install")
 InstallFileContent=${InstallFileContent//\/Bose\/etc\//\/Bose\/update\/backup\/}
