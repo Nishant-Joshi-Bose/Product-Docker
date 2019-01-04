@@ -113,6 +113,7 @@
 #include "SystemUtils.h"
 #include "CustomChimeEvents.h"
 #include "LpmClientLiteIF.h"
+#include "SystemSourcesFriendlyNames.pb.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -138,7 +139,7 @@ namespace
 constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
-constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone_V2";
+constexpr auto      g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
 
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -1859,6 +1860,54 @@ std::string CustomProductController::GetDefaultProductName( ) const
     return productName;
 }
 
+void CustomProductController::SendSystemSourcesPropertiesToCAPS()
+{
+    using namespace SoundTouchInterface;
+    // Populate /system/sources::properties
+    Sources message;
+    auto messageProperties = message.mutable_properties();
+
+    for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
+         activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
+         ++activationKey )
+    {
+        messageProperties->add_supportedactivationkeys(
+            SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
+    }
+    messageProperties->set_activationkeyrequired( true );
+
+    for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
+    {
+        messageProperties->add_supporteddevicetypes(
+            SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
+    }
+    messageProperties->set_devicetyperequired( true );
+
+    messageProperties->add_supportedinputroutes(
+        SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
+
+    messageProperties->set_inputrouterequired( false );
+
+    for( uint32_t friendlyName = SystemSourcesProperties::FRIENDLY_NAME__MIN; friendlyName <= SystemSourcesProperties::FRIENDLY_NAME__MAX; ++friendlyName )
+    {
+        messageProperties->add_supportedfriendlynames(
+            SystemSourcesProperties::FRIENDLY_NAME__Name( static_cast<SystemSourcesProperties::FRIENDLY_NAME_>( friendlyName ) ) );
+    }
+
+    messageProperties->set_friendlynamerequired( false );
+
+    auto sourcesRespCb = []( Sources sources )
+    {
+        BOSE_INFO( s_logger, FRONTDOOR_SYSTEM_SOURCES_API " properties: %s", sources.properties( ).DebugString( ).c_str( ) );
+    };
+
+    GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+        FRONTDOOR_SYSTEM_SOURCES_API,
+        message,
+        sourcesRespCb,
+        m_errorCb );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductController::SendInitialCapsData
@@ -1874,6 +1923,9 @@ void CustomProductController::SendInitialCapsData()
     DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
     DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
     const bool defaultCAPSValuesDone = SystemUtils::Exists( DefaultCAPSValuesStateFile );
+
+    SendSystemSourcesPropertiesToCAPS();
+
     if( defaultCAPSValuesDone )
     {
         // GET the current values, we may have missed an initial notification
@@ -1907,36 +1959,6 @@ void CustomProductController::SendInitialCapsData()
 
         // Populate /system/sources::properties
         Sources message;
-        auto messageProperties = message.mutable_properties();
-
-        for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
-             activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
-             ++activationKey )
-        {
-            messageProperties->add_supportedactivationkeys(
-                SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
-        }
-        messageProperties->set_activationkeyrequired( true );
-
-        for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
-        {
-            messageProperties->add_supporteddevicetypes(
-                SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
-        }
-        messageProperties->set_devicetyperequired( true );
-
-        messageProperties->add_supportedinputroutes(
-            SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
-
-        messageProperties->set_inputrouterequired( false );
-
-        for( uint32_t friendlyName = SystemSourcesProperties::FRIENDLY_NAME__MIN; friendlyName <= SystemSourcesProperties::FRIENDLY_NAME__MAX; ++friendlyName )
-        {
-            messageProperties->add_supportedfriendlynames(
-                SystemSourcesProperties::FRIENDLY_NAME__Name( static_cast<SystemSourcesProperties::FRIENDLY_NAME_>( friendlyName ) ) );
-        }
-
-        messageProperties->set_friendlynamerequired(false);
 
         // Populate status and visibility of PRODUCT sources.
         using namespace ProductSTS;

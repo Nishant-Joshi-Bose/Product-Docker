@@ -58,39 +58,3 @@ enum ACTIVATION_KEY_
     ACTIVATION_KEY_BD_DVD = 3;
     ACTIVATION_KEY_TV = 4;
 }
-
-enum FRIENDLY_NAME_
-{
-    FRIENDLY_NAME_CABLE_BOX                 =  0;
-    FRIENDLY_NAME_SAT_BOX                   =  1;
-    FRIENDLY_NAME_HDTV_TUNER                =  2;
-    FRIENDLY_NAME_DIGITIAL_TV_TUNER         =  3;
-    FRIENDLY_NAME_VCR                       =  4;
-    FRIENDLY_NAME_DVR                       =  5;
-    FRIENDLY_NAME_TIVO                      =  6;
-    FRIENDLY_NAME_SET_TOP_BOX               =  7;
-    FRIENDLY_NAME_APPLE_TV                  =  8;
-    FRIENDLY_NAME_VUDO                      =  9;
-    FRIENDLY_NAME_DVD_PLAYER                = 10;
-    FRIENDLY_NAME_BLUERAY_PLAYER            = 11;
-    FRIENDLY_NAME_DVD_RECORDER              = 12;
-    FRIENDLY_NAME_BLUERAY_RECORDER          = 13;
-    FRIENDLY_NAME_CD_PLAYER                 = 14;
-    FRIENDLY_NAME_DIGITIAL_MEDIA_PLAYER     = 15;
-    FRIENDLY_NAME_PLAYSTATION               = 16;
-    FRIENDLY_NAME_XBOX                      = 17;
-    FRIENDLY_NAME_WII                       = 18;
-    FRIENDLY_NAME_GAME_CONSOLE              = 19;
-    FRIENDLY_NAME_ROKU                      = 20;
-    FRIENDLY_NAME_COMPUTER                  = 21;
-    FRIENDLY_NAME_IPOD                      = 22;
-    FRIENDLY_NAME_RADIO_TUNER               = 23;
-    FRIENDLY_NAME_XBOX_ONE                  = 24;
-    FRIENDLY_NAME_XBOX_360                  = 25;
-    FRIENDLY_NAME_AMAZON_FIRE_TV            = 26;
-    FRIENDLY_NAME_CHROMECAST                = 27;
-    FRIENDLY_NAME_TV                        = 28;
-    FRIENDLY_NAME_SOUNDTOUCH                = 29;
-    FRIENDLY_NAME_BLUETOOTH                 = 30;
-}
-

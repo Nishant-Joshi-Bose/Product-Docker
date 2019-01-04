@@ -240,6 +240,7 @@ public:
 
     bool IsSystemLanguageSet( ) const;
 
+    void SendSystemSourcesPropertiesToCAPS();
     void SendInitialCapsData() override;
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
@@ -335,7 +336,7 @@ private:
     ///
     /// @brief The following subclasses declarations are used to manage the lower level hardware and
     ///        the device, as well as to interface with the user and higher level system
-    ///        applications and command line. 
+    ///        applications and command line.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr       m_deviceControllerPtr;
