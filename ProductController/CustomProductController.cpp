@@ -1087,11 +1087,6 @@ bool CustomProductController::IsBLERemoteConnected( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductController::SetEthernetEnabled( bool enabled )
 {
-    if( GetProductType().compare( "professor" ) == 0 )
-    {
-        return;
-    }
-
     if( m_ethernetEnabled != enabled )
     {
         m_ethernetEnabled = enabled;
