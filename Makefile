@@ -83,7 +83,7 @@ EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
 
 # Add exclude packages list in metadata.json
 .PHONY: generate-metadata
-generate-metadata:
+generate-metadata: cmake_build
 	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev -l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
 
 .PHONY: package-no-hsp
