@@ -1924,6 +1924,8 @@ void CustomProductController::SendInitialCapsData()
     DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
     const bool defaultCAPSValuesDone = SystemUtils::Exists( DefaultCAPSValuesStateFile );
 
+    // Properties are sent unconditionally. We need to accommodate systems that were wet up with earlier software
+    // versions and may be missing elements introduced later. E.g., Friendly Names introduced by MONTAUK-323.
     SendSystemSourcesPropertiesToCAPS();
 
     if( defaultCAPSValuesDone )
