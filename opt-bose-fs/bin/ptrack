@@ -90,7 +90,7 @@ while opts.iterations == 0 or i < opts.iterations:
     i += 1
 
     system_total_ticks, system_busy_ticks = get_system_ticks()
-    print("s {} {}".format(system_total_ticks, system_busy_ticks))
+    print("s {} {} {}".format(system_total_ticks, system_busy_ticks, time.time()))
 
     for pid in get_pids():
         try:
