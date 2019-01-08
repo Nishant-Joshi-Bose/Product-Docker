@@ -110,7 +110,6 @@ if len(sys.argv) > 1:
     try:
         data = json.loads(output[0])
         mics = data['body']['micLevels']
-        beams = data['body']['beamLevels']
         raw = json.dumps(data['body'],indent=4)
 
     # Catch error Parsing JSON, output error messages from utility.
