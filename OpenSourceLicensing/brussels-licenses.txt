@@ -1,7 +1,9 @@
 
-> @bosecorp/bose-web-monaco@3.0.8 license-aggregation /scratch/sandbox/Riviera/git/license/bose-web-monaco
+> @bosecorp/bose-web-brussels@3.0.1 license-aggregation /Users/jn1034288/Repos/bose-web-brussels
 > license-aggregation
 
+
+===================
 
 Package Name: @reactivex/rxjs
 Package URL: https://github.com/ReactiveX/RxJS
@@ -212,419 +214,8 @@ Apache License
 
 ===================
 
-Package Name: @types/mocha
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/node
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx-core-binding
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx-core
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-# Installation
-> `npm install --save @types/rx-core`
-
-# Summary
-This package contains type definitions for rx-core (https://github.com/Reactive-Extensions/RxJS).
-
-# Details
-Files were exported from https://www.github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/rx-core
-
-Additional Details
- * Last updated: Fri, 31 Mar 2017 18:05:16 GMT
- * Dependencies: none
- * Global values: none
-
-# Credits
-These definitions were written by gsino <http://www.codeplex.com/site/users/view/gsino>, Igor Oleinikov <https://github.com/Igorbek>, Mizunashi Mana <https://github.com/mizunashi-mana>.
-
-===================
-
-Package Name: @types/rx-lite-aggregates
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx-lite-async
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx-lite-backpressure
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx-lite-coincidence
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx-lite-experimental
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-# Installation
-> `npm install --save @types/rx-lite-experimental`
-
-# Summary
-This package contains type definitions for rx-lite-experimental (https://github.com/Reactive-Extensions/RxJS).
-
-# Details
-Files were exported from https://www.github.com/DefinitelyTyped/DefinitelyTyped/tree/master/rx-lite-experimental
-
-Additional Details
- * Last updated: Wed, 29 Mar 2017 22:28:10 GMT
- * Dependencies: rx-lite
- * Global values: none
-
-# Credits
-These definitions were written by Igor Oleinikov <https://github.com/Igorbek>.
-
-===================
-
-Package Name: @types/rx-lite-joinpatterns
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-# Installation
-> `npm install --save @types/rx-lite-joinpatterns`
-
-# Summary
-This package contains type definitions for rx-lite-joinpatterns (https://github.com/Reactive-Extensions/RxJS).
-
-# Details
-Files were exported from https://www.github.com/DefinitelyTyped/DefinitelyTyped/tree/master/rx-lite-joinpatterns
-
-Additional Details
- * Last updated: Wed, 29 Mar 2017 22:28:11 GMT
- * Dependencies: rx-lite
- * Global values: none
-
-# Credits
-These definitions were written by Igor Oleinikov <https://github.com/Igorbek>.
-
-===================
-
-Package Name: @types/rx-lite-testing
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-# Installation
-> `npm install --save @types/rx-lite-testing`
-
-# Summary
-This package contains type definitions for rx-lite-testing (https://github.com/Reactive-Extensions/RxJS).
-
-# Details
-Files were exported from https://www.github.com/DefinitelyTyped/DefinitelyTyped/tree/master/rx-lite-testing
-
-Additional Details
- * Last updated: Tue, 28 Mar 2017 19:51:21 GMT
- * Dependencies: rx-lite-virtualtime
- * Global values: Rx
-
-# Credits
-These definitions were written by Igor Oleinikov <https://github.com/Igorbek>.
-
-===================
-
-Package Name: @types/rx-lite-time
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx-lite-virtualtime
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx-lite
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
-===================
-
-Package Name: @types/rx
-Package URL: https://github.com/DefinitelyTyped/DefinitelyTyped
-
--------------------
-
-# Installation
-> `npm install --save @types/rx`
-
-# Summary
-This package contains type definitions for rx (https://github.com/Reactive-Extensions/RxJS).
-
-# Details
-Files were exported from https://www.github.com/DefinitelyTyped/DefinitelyTyped/tree/master/rx
-
-Additional Details
- * Last updated: Wed, 04 Jan 2017 14:34:50 GMT
- * Library Dependencies: rx-core, rx-core-binding, rx-lite, rx-lite-aggregates, rx-lite-async, rx-lite-backpressure, rx-lite-coincidence, rx-lite-experimental, rx-lite-joinpatterns, rx-lite-testing, rx-lite-time, rx-lite-virtualtime
- * Module Dependencies: none
- * Global values: none
-
-# Credits
-These definitions were written by Carl de Billy <http://carl.debilly.net/>, gsino <http://www.codeplex.com/site/users/view/gsino>, Igor Oleinikov <https://github.com/Igorbek>.
-
-===================
-
 Package Name: asap
-Package URL: https://github.com/kriskowal/asap
+Package URL: https://github.com/kriskowal/asap#readme
 
 -------------------
 
@@ -651,7 +242,7 @@ IN THE SOFTWARE.
 ===================
 
 Package Name: core-js
-Package URL: https://github.com/zloirock/core-js
+Package URL: https://github.com/zloirock/core-js#readme
 
 -------------------
 
@@ -678,7 +269,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: debug
-Package URL: https://github.com/visionmedia/debug
+Package URL: https://github.com/visionmedia/debug#readme
 
 -------------------
 
@@ -686,25 +277,25 @@ Package URL: https://github.com/visionmedia/debug
 
 Copyright (c) 2014 TJ Holowaychuk <tj@vision-media.ca>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
-and associated documentation files (the 'Software'), to deal in the Software without restriction, 
-including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+and associated documentation files (the 'Software'), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
 and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
 subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial 
+The above copyright notice and this permission notice shall be included in all copies or substantial
 portions of the Software.
 
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ===================
 
 Package Name: decode-uri-component
-Package URL: https://github.com/SamVerschueren/decode-uri-component
+Package URL: https://github.com/SamVerschueren/decode-uri-component#readme
 
 -------------------
 
@@ -733,7 +324,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: dot-prop
-Package URL: https://github.com/sindresorhus/dot-prop
+Package URL: https://github.com/sindresorhus/dot-prop#readme
 
 -------------------
 
@@ -762,7 +353,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: encoding
-Package URL: https://github.com/andris9/encoding
+Package URL: https://github.com/andris9/encoding#readme
 
 -------------------
 
@@ -786,7 +377,7 @@ SOFTWARE.
 ===================
 
 Package Name: fbjs
-Package URL: https://github.com/facebook/fbjs
+Package URL: https://github.com/facebook/fbjs#readme
 
 -------------------
 
@@ -842,7 +433,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ===================
 
 Package Name: is-obj
-Package URL: https://github.com/sindresorhus/is-obj
+Package URL: https://github.com/sindresorhus/is-obj#readme
 
 -------------------
 
@@ -871,7 +462,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: is-stream
-Package URL: https://github.com/sindresorhus/is-stream
+Package URL: https://github.com/sindresorhus/is-stream#readme
 
 -------------------
 
@@ -926,7 +517,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ===================
 
 Package Name: isomorphic-fetch
-Package URL: https://github.com/matthew-andrews/isomorphic-fetch
+Package URL: https://github.com/matthew-andrews/isomorphic-fetch/issues
 
 -------------------
 
@@ -955,7 +546,7 @@ SOFTWARE.
 ===================
 
 Package Name: js-tokens
-Package URL: https://github.com/lydell/js-tokens
+Package URL: https://github.com/lydell/js-tokens#readme
 
 -------------------
 
@@ -1013,7 +604,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: ms
-Package URL: https://github.com/zeit/ms
+Package URL: https://github.com/zeit/ms#readme
 
 -------------------
 
@@ -1042,7 +633,7 @@ SOFTWARE.
 ===================
 
 Package Name: nan
-Package URL: https://github.com/nodejs/nan
+Package URL: https://github.com/nodejs/nan#readme
 
 -------------------
 
@@ -1092,7 +683,7 @@ SOFTWARE.
 ===================
 
 Package Name: object-assign
-Package URL: https://github.com/sindresorhus/object-assign
+Package URL: https://github.com/sindresorhus/object-assign#readme
 
 -------------------
 
@@ -1121,7 +712,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: promise
-Package URL: https://github.com/then/promise
+Package URL: https://github.com/then/promise#readme
 
 -------------------
 
@@ -1148,36 +739,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: prop-types
-Package URL: https://github.com/facebook/prop-types
-
--------------------
-
-MIT License
-
-Copyright (c) 2013-present, Facebook, Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-===================
-
-Package Name: @bosecorp/bose-web-style-guide-components/node_modules/prop-types
-Package URL: https://github.com/facebook/prop-types
+Package URL: https://facebook.github.io/react/
 
 -------------------
 
@@ -1206,7 +768,7 @@ SOFTWARE.
 ===================
 
 Package Name: query-string
-Package URL: https://github.com/sindresorhus/query-string
+Package URL: https://github.com/sindresorhus/query-string#readme
 
 -------------------
 
@@ -1222,37 +784,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ===================
 
-Package Name: react-dom
-Package URL: https://github.com/facebook/react
-
--------------------
-
-MIT License
-
-Copyright (c) 2013-present, Facebook, Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-===================
-
 Package Name: react
-Package URL: https://github.com/facebook/react
+Package URL: https://reactjs.org/
 
 -------------------
 
@@ -1280,14 +813,14 @@ SOFTWARE.
 
 ===================
 
-Package Name: @bosecorp/bose-web-style-guide-components/node_modules/react
-Package URL: https://github.com/facebook/react
+Package Name: react-dom
+Package URL: https://reactjs.org/
 
 -------------------
 
 MIT License
 
-Copyright (c) Facebook, Inc. and its affiliates.
+Copyright (c) 2013-present, Facebook, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1519,7 +1052,7 @@ Apache License
 ===================
 
 Package Name: safer-buffer
-Package URL: https://github.com/ChALkeR/safer-buffer
+Package URL: https://github.com/ChALkeR/safer-buffer#readme
 
 -------------------
 
@@ -1548,7 +1081,7 @@ SOFTWARE.
 ===================
 
 Package Name: sax
-Package URL: https://github.com/isaacs/sax-js
+Package URL: https://github.com/isaacs/sax-js#readme
 
 -------------------
 
@@ -1596,37 +1129,8 @@ License, as follows:
 
 ===================
 
-Package Name: schedule
-Package URL: https://github.com/facebook/react
-
--------------------
-
-MIT License
-
-Copyright (c) Facebook, Inc. and its affiliates.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-===================
-
 Package Name: setimmediate
-Package URL: https://github.com/YuzuJS/setImmediate
+Package URL: https://github.com/YuzuJS/setImmediate#readme
 
 -------------------
 
@@ -1654,7 +1158,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ===================
 
 Package Name: strict-uri-encode
-Package URL: https://github.com/kevva/strict-uri-encode
+Package URL: https://github.com/kevva/strict-uri-encode#readme
 
 -------------------
 
@@ -1683,7 +1187,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: symbol-observable
-Package URL: https://github.com/blesh/symbol-observable
+Package URL: https://github.com/blesh/symbol-observable#readme
 
 -------------------
 
@@ -1713,7 +1217,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: typedarray-to-buffer
-Package URL: https://github.com/feross/typedarray-to-buffer
+Package URL: http://feross.org
 
 -------------------
 
@@ -1742,7 +1246,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: typescript
-Package URL: https://github.com/Microsoft/TypeScript
+Package URL: http://typescriptlang.org/
 
 -------------------
 
@@ -1750,7 +1254,7 @@ Apache License
 
 Version 2.0, January 2004
 
-http://www.apache.org/licenses/ 
+http://www.apache.org/licenses/
 
 TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
@@ -1805,7 +1309,7 @@ END OF TERMS AND CONDITIONS
 ===================
 
 Package Name: ua-parser-js
-Package URL: https://github.com/faisalman/ua-parser-js
+Package URL: http://github.com/faisalman/ua-parser-js
 
 -------------------
 
@@ -2018,7 +1522,7 @@ END OF TERMS AND CONDITIONS
 ===================
 
 Package Name: whatwg-fetch
-Package URL: https://github.com/github/fetch
+Package URL: https://github.com/github/fetch#readme
 
 -------------------
 
@@ -2073,7 +1577,7 @@ IN THE SOFTWARE.
 ===================
 
 Package Name: xmlbuilder
-Package URL: https://github.com/oozcitak/xmlbuilder-js
+Package URL: http://github.com/oozcitak/xmlbuilder-js
 
 -------------------
 
@@ -2102,7 +1606,7 @@ THE SOFTWARE.
 ===================
 
 Package Name: yaeti
-Package URL: https://github.com/ibc/yaeti
+Package URL: https://github.com/ibc/yaeti#readme
 
 -------------------
 
