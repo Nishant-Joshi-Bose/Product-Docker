@@ -144,6 +144,10 @@
     "selected_version": "Release/bose-master/1.8.3-22-gbda6e44"
   },
   {
+    "name": "opensource-libarchive-qc8017_32",
+    "selected_version": "Release/bose-dev/v3.3.1-13-gb412ba2"
+  },
+  {
     "name": "opensource-libwebsockets-qc8017_32",
     "selected_version": "Release/bose-v2.4-stable/2.4.1-54+g9d42960"
   },
@@ -241,7 +245,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/CASTLE-26007/3.1.0-1336+965cf4e"
+    "selected_version": "Continuous/master/3.1.0-1349+c338cfb"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

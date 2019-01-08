@@ -56,6 +56,7 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get opensource-opkg-qc8017_32 installed_location) || exit
+libarchive_dir=$(components get opensource-libarchive-qc8017_32 installed_location) || exit
 swupdate_ver=$(components get SoftwareUpdate-qc8017_32 selected_version) || exit
 toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 package_version=${swupdate_ver##*/}
@@ -71,6 +72,7 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/up
 # run stage for SoftwareUpdate
 "$softwareupdate_dir/stage" "$opt_dir" "$toolchain_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
+cp "$libarchive_dir/bin/bsdtar" "$opt_dir/update/bin/" || exit
 cp "$toolchain_dir/sdk/sysroots/aarch64-oe-linux/usr/bin/unshare" "$opt_dir/update/bin/" || exit
 
 # Specifically required for CASTLE-26007
