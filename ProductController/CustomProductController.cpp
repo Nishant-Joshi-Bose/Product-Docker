@@ -283,7 +283,7 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateSoftwareInstallTransition );
 
-    GetHsm().AddState( NotifiedNames::UPDATING /*TODO MANUAL_SOFTWARE_INSTALL*/,
+    GetHsm().AddState( NotifiedNames::UPDATING_MANUAL,
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateSoftwareInstallManual );
 

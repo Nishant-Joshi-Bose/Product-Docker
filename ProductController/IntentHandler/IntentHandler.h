@@ -39,9 +39,7 @@ public:
 
     static bool IsIntentCountDown( KeyHandlerUtil::ActionType_t arg )
     {
-        return ( ( arg == ( uint16_t ) Action::MANUAL_UPDATE_COUNTDOWN ) ||
-                 ( arg == ( uint16_t ) Action::MANUAL_UPDATE_CANCEL ) ||
-                 ( arg == ( uint16_t ) Action::FACTORY_DEFAULT_COUNTDOWN ) ||
+        return ( ( arg == ( uint16_t ) Action::FACTORY_DEFAULT_COUNTDOWN ) ||
                  ( arg == ( uint16_t ) Action::FACTORY_DEFAULT_CANCEL ) ||
                  ( arg == ( uint16_t ) Action::MANUAL_SETUP_COUNTDOWN ) ||
                  ( arg == ( uint16_t ) Action::MANUAL_SETUP_CANCEL ) ||
