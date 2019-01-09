@@ -72,8 +72,7 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & requ
                 m_np.set_seeksupported( false );
             }
             // set friendly name in nowPlaying
-            std::string friendlyName = source->details().friendlyname();
-            m_np.mutable_contentitem()->set_name( friendlyName );
+            m_np.mutable_contentitem()->set_name( source->details().friendlyname() );
 
             m_np.set_playstatus( STS::PlayStatus::PLAY );
             STS::NowPlayingChange npc;
