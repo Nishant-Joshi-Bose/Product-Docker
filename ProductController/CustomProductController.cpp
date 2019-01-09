@@ -275,7 +275,7 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
 
-    GetHsm().AddState( Device_State_Not_Notify,
+    GetHsm().AddState( NotifiedNames::UPDATING,
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateSoftwareInstall );
 
