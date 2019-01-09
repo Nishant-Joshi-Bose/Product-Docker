@@ -73,10 +73,10 @@ void IntentHandler::Initialize()
                                             GetFrontDoorClient(),
                                             GetProductController() );
 
-    //+ (Manual Update countdown and cancel)
-    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_COUNTDOWN] = countDownManager;
-    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_CANCEL] = countDownManager;
-    //- (Manual Update countdown and cancel)
+    //+ (Manual Software Install countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_SOFTWARE_INSTALL_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_SOFTWARE_INSTALL_CANCEL] = countDownManager;
+    //- (Manual Software Install countdown and cancel)
 
     //+ (Factory Reset countdown and cancel)
     m_IntentManagerMap[( uint16_t )Action::FACTORY_DEFAULT_COUNTDOWN] = countDownManager;
@@ -101,6 +101,7 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN] = countDownManager;
     m_IntentManagerMap[( uint16_t )Action::BLUETOOTH_CLEAR_PAIRING_CANCEL] = countDownManager;
     //- (PTS Update countdown and cancel)
+
     //- (Common Countdown manager for key combination)
 }
 
