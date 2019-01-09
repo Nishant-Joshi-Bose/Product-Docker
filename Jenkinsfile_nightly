@@ -134,7 +134,7 @@ timeout(time: 8, unit: 'HOURS')
             {
                 def job = item
                 testJobs["task_${job}"] = { 
-                    stage ("branch_${job}"){ 
+                    stage (job){ 
                         executeBuild(job)
                     }
                 }
