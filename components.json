@@ -189,7 +189,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "CASTLE-25783@a11587a0dd3cbe6aca1970169f9d89240395959a"
+    "selected_version": "master@bb307cdc29dff1964e30fd5d3501efcabaf84f4a"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -269,7 +269,7 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Continuous/master/2.2.5-478+9d74f18"
+    "selected_version": "Continuous/master/2.2.5-497+ee49b4d"
   },
   {
     "name": "Webkit",

@@ -41,6 +41,7 @@ lowpower=(
     Shepherd-avs.xml
     Shepherd-GVA.xml
     Shepherd-vfe.xml
+    Shepherd-VPAController.xml
     Shepherd-Bluetooth.xml
     Shepherd-BLEToFrontDoorService.xml
 )
