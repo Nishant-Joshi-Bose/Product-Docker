@@ -121,7 +121,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/CASTLE-25801/2.2.6-858+0ea4eac"
+    "selected_version": "Continuous/master/2.2.6-849+4b18f27"
   },
   {
     "name": "HTTPInterface-qc8017_32",
