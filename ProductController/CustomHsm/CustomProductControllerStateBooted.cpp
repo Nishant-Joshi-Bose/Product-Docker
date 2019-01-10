@@ -2,7 +2,7 @@
 /// @file      CustomProductControllerStateBooted.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product booting state.
+///            product booted state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////

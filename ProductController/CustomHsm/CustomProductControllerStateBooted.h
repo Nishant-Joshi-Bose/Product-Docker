@@ -2,7 +2,7 @@
 /// @file      CustomProductControllerStateBooted.h
 ///
 /// @brief     This header file declares functionality to process events that occur during the
-///            product booting state.
+///            product booted state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12,7 +12,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include "ProductControllerStateBooted.h"
-#include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
