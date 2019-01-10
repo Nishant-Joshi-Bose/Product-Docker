@@ -70,12 +70,13 @@ ADD_EXECUTABLE(Professor
   CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSetupNetworkConfig.cpp
   CustomHsm/CustomProductControllerStateTop.cpp
-  IntentHandler/IntentHandler.cpp
-  IntentHandler/PlaybackRequestManager.cpp
-  IntentHandler/SpeakerPairingManager.cpp
-  IntentHandler/MuteManager.cpp
-  IntentHandler/RatingManager.cpp
   IntentHandler/AudioModeManager.cpp
+  IntentHandler/BootupFactoryDefaultManager.cpp
+  IntentHandler/IntentHandler.cpp
+  IntentHandler/MuteManager.cpp
+  IntentHandler/PlaybackRequestManager.cpp
+  IntentHandler/RatingManager.cpp
+  IntentHandler/SpeakerPairingManager.cpp
   ProductAdaptIQManager.cpp
   ProductBLERemoteManager.cpp
   ProductCecHelper.cpp

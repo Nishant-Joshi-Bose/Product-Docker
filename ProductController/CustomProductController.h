@@ -313,6 +313,11 @@ public:
         m_bootCompleteTime = MonotonicClock::NowMs( );
     }
 
+    int64_t GetBootCompleteTime( ) const
+    {
+        return m_bootCompleteTime;
+    }
+
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -551,7 +556,6 @@ private:
     bool m_haltInPlayableTransitionNetworkStandby = false;
 
     int64_t m_bootCompleteTime              = 0;
-    int64_t m_bootupFactoryDefaultKeyTime   = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

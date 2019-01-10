@@ -138,15 +138,6 @@ constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
 constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone";
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
-// This number defines the time window after exiting the BOOTUP state where a press of the "action"
-// key can initiate a factory default.  The conditions that must be satisifed in order for a factory
-// default to be initiated are
-//  1) The system must *not* be communicating with a Kepler remote
-//  2) The action button must be pressed within 5 seconds of exiting the bootup state
-//  3) The action button must be held for between 15 and 45 seconds
-constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_MSEC      = 5000;
-constexpr int64_t   BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC    = 15000;
-constexpr int64_t   BOOTUP_FACTORY_DEFAULT_MAX_HOLD_MSEC    = 45000;
 }
 
 constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
@@ -1702,51 +1693,8 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_action( ) )
     {
-        // Note that "action" may be changed by code below, including FilterIntent()
+        // Note that "action" may be changed by code below, e.g., by FilterIntent()
         auto action = message.action();
-
-        if( GetIntentHandler( ).IsIntentBootupFactoryDefault( action ) )
-        {
-            if( action == ( KeyHandlerUtil::ActionType_t )Action::BOOTUP_FACTORY_DEFAULT_START )
-            {
-                int64_t timeSinceBooted = MonotonicClock::NowMs( ) - m_bootCompleteTime;
-
-                if( ( m_bootCompleteTime != 0 ) && ( timeSinceBooted < BOOTUP_FACTORY_DEFAULT_WINDOW_MSEC ) && !IsBLERemoteConnected( ) )
-                {
-                    // we allow the key start time to be latched anywhere within the window such that
-                    // if a user were to press the key, release it, and press it again within the window,
-                    // the time of the last press would be latched; this should prevent frustration in case
-                    // the user doesn't get a "solid touch" immediately
-                    BOSE_INFO( s_logger, "%s: Received bootup factory default press within valid window [%lld, %lld]",
-                               __PRETTY_FUNCTION__, m_bootCompleteTime, timeSinceBooted );
-                    m_bootupFactoryDefaultKeyTime = MonotonicClock::NowMs( );
-                }
-                else
-                {
-                    BOSE_VERBOSE( s_logger, "%s: Recieved bootup factory default press outside valid window [%lld, %lld]",
-                                  __PRETTY_FUNCTION__, m_bootCompleteTime, timeSinceBooted );
-                }
-            }
-            else if( ( action == ( KeyHandlerUtil::ActionType_t )Action::BOOTUP_FACTORY_DEFAULT_COMPLETE ) && ( m_bootupFactoryDefaultKeyTime != 0 ) )
-            {
-                int64_t timeSinceBootupFactoryDefaultRequest = MonotonicClock::NowMs( ) - m_bootupFactoryDefaultKeyTime;
-                BOSE_INFO( s_logger, "%s: bootup intent check %lld", __PRETTY_FUNCTION__, timeSinceBootupFactoryDefaultRequest );
-
-                if(
-                    ( timeSinceBootupFactoryDefaultRequest > BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC ) &&
-                    ( timeSinceBootupFactoryDefaultRequest < BOOTUP_FACTORY_DEFAULT_MAX_HOLD_MSEC ) )
-                {
-                    BOSE_INFO( s_logger, "%s: Initiating bootup factory default", __PRETTY_FUNCTION__ );
-                    action = Action::FACTORY_DEFAULT;
-                }
-                else
-                {
-                    BOSE_VERBOSE( s_logger, "%s: Cancelling window for bootup factory default [%lld]", __PRETTY_FUNCTION__, timeSinceBootupFactoryDefaultRequest );
-                }
-                // reset so we can only do this once
-                m_bootupFactoryDefaultKeyTime = 0;
-            }
-        }
 
         if( m_ProductKeyInputManager->FilterIntent( action ) )
         {
@@ -1764,6 +1712,12 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
         ///
+        else if( GetIntentHandler( ).IsIntentBootupFactoryDefault( action ) )
+        {
+            // These intents are handled statelessly because at most, if not ignored, they only trigger another ProductMessage which
+            // would then be handled statefully
+            GetIntentHandler( ).Handle( action );
+        }
         else if( GetIntentHandler( ).IsIntentMuteControl( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,
