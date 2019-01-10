@@ -140,7 +140,7 @@ constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
 }
 
-constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
+constexpr char     UI_KILL_PID_FILE[] = "/var/run/brussels.pid";
 constexpr uint32_t UI_ALIVE_TIMEOUT = 60 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
