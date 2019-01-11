@@ -24,10 +24,6 @@ information is pulled out of mfg data.
 using namespace Bose;
 using namespace Bose::Riviera;
 
-extern "C" {
-#include "hsp_security_if.h"
-}
-
 constexpr char MFG_DATA[] = "/persist/mfg_data.json";
 constexpr char DEVICE_TYPE[] = "RIVIERA";
 
