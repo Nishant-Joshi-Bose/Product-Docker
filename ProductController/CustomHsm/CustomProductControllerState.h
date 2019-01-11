@@ -274,6 +274,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentManualSoftwareInstall( )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
