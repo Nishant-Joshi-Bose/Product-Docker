@@ -7,6 +7,7 @@ COMPONENT(CASTLE_SEC_PATH SecureDeviceKey)
 ADD_EXECUTABLE(get-device-id
   get-device-id.cpp
   ${CASTLE_SEC_PATH}/src/RivieraUtils.cpp
+  ${CASTLE_SEC_PATH}/src/hsp_security.c
 )
 
 TARGET_INCLUDE_DIRECTORIES(get-device-id PUBLIC
