@@ -105,10 +105,7 @@ string getStoredPublicKey()
 int main( int argc, char** argv )
 {
     string guid;
-    string serialNumber;
-    string macAdder;
     string pubKey;
-    string priKey;
     string productType;
     Json::Value deviceIdJson;
     std::ofstream file_id;
