@@ -48,7 +48,7 @@
 #include "CustomProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
-#include "ProductControllerStateBooted.h"
+#include "CustomProductControllerStateBooted.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStateFirstBootGreeting.h"
@@ -250,10 +250,10 @@ void CustomProductController::Run( )
       CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
 
-    CustomProductControllerState* stateBooted = new ProductControllerStateBooted
+    CustomProductControllerState* stateBooted = new CustomProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_BOOTED );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTED );
 
     CustomProductControllerState* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
     ( GetHsm( ),
@@ -1693,8 +1693,9 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_action( ) )
     {
-        // Note that "action" is a reference argument to and may be changed by FilterIntent
+        // Note that "action" may be changed by code below, e.g., by FilterIntent()
         auto action = message.action();
+
         if( m_ProductKeyInputManager->FilterIntent( action ) )
         {
             BOSE_VERBOSE( s_logger, "Action key %s ignored", CustomProductKeyInputManager::IntentName( action ).c_str() );
@@ -1711,6 +1712,12 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
         ///
+        else if( GetIntentHandler( ).IsIntentBootupFactoryDefault( action ) )
+        {
+            // These intents are handled statelessly because at most, if not ignored, they only trigger another ProductMessage which
+            // would then be handled statefully
+            GetIntentHandler( ).Handle( action );
+        }
         else if( GetIntentHandler( ).IsIntentMuteControl( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,
