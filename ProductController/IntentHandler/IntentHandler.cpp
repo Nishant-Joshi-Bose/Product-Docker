@@ -48,6 +48,7 @@
 #include "PlaybackRequestManager.h"
 #include "RatingManager.h"
 #include "AudioModeManager.h"
+#include "BootupFactoryDefaultManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -125,6 +126,12 @@ void IntentHandler::Initialize( )
                                             GetFrontDoorClient( ),
                                             GetProductController( ) );
 
+    IntentManagerPtr_t bootupFactoryDefaultManager = std::make_shared< BootupFactoryDefaultManager >
+                                                     ( GetTask( ),
+                                                       GetCli( ),
+                                                       GetFrontDoorClient( ),
+                                                       GetProductController( ) );
+
     ///
     /// A map is created to associate the custom volume and mute control intent manager with volume
     /// and mute key actions. Note that these actions are product specific,
@@ -166,6 +173,13 @@ void IntentHandler::Initialize( )
     /// which toggles the audio mode.
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_AUDIO_MODE_TOGGLE ] = audioModeManager;
+
+    ///
+    /// A map is created to associate the custom BootupFactoryDefault intent manager with the key actions
+    /// which participate in triggering a FactoryDefault at bootup time
+    ///
+    m_IntentManagerMap[( uint16_t )Action::BOOTUP_FACTORY_DEFAULT_START ] = bootupFactoryDefaultManager;
+    m_IntentManagerMap[( uint16_t )Action::BOOTUP_FACTORY_DEFAULT_COMPLETE ] = bootupFactoryDefaultManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
