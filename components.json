@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.1.44523.3157411"
+    "selected_version": "Release/Castle-Fork/2.2.1.44555.3168029"
   },
   {
     "name": "BLERemoteXCVR",
@@ -92,8 +92,8 @@
     "selected_version": "Release/master/4.0.1-8+17e25f4"
   },
   {
-    "name": "BoseWebMonaco",
-    "selected_version": "Release/MR1_2019/3.0.9-587+04500173"
+    "name": "BoseWebBrussels",
+    "selected_version": "Release/MR1_2019/3.0.1-10+3b33ad3"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -261,7 +261,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.1.44523.3157411"
+    "selected_version": "Release/Castle-Fork/2.2.1.44555.3168029"
   },
   {
     "name": "svc-pts-log-decrypt",

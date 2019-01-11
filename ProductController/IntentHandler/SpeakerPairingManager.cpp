@@ -101,9 +101,9 @@ void SpeakerPairingManager::Initialize( )
 
     auto func = [this]( bool enabled )
     {
-        if( enabled )
+        if( enabled && m_firstAccessoryListReceived )
         {
-            // Connection to DataCollection server established, send current accessories list.
+            // Connection to DataCollection server established, send current accessories list (unless we never got one since boot)
             m_DataCollectionClient->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
                                               DATA_COLLECTION_ACCESSORIES );
         }
@@ -508,6 +508,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s. Accessory list = %s", __FUNCTION__, accList.DebugString().c_str() );
 
     m_accessoryListReceived = true;
+    m_firstAccessoryListReceived = true;
 
     ProductPb::AccessorySpeakerState oldAccessorySpeakerState;
     oldAccessorySpeakerState.CopyFrom( m_accessorySpeakerState );

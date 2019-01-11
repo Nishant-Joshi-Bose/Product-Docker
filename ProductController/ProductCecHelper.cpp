@@ -161,8 +161,14 @@ bool ProductCecHelper::Run( )
     {
         if( enabled )
         {
-            m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
-            m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::CecState >( m_cecStateCache ), DATA_COLLECTION_CEC_STATE );
+            if( m_eedid.has_ediddata() )
+            {
+                m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
+            }
+            if( m_cecStateCache.has_physicaladdress() )
+            {
+                m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::CecState >( m_cecStateCache ), DATA_COLLECTION_CEC_STATE );
+            }
         }
     };
     m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );

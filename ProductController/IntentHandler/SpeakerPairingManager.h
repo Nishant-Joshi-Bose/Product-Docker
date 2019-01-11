@@ -217,6 +217,7 @@ private:
                                                             ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
                                                             spkrInfo );
     bool m_accessoryListReceived = false;
+    bool m_firstAccessoryListReceived = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
