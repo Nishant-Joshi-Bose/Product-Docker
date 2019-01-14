@@ -13,15 +13,15 @@
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/3.1.0-3736+dd1f3f8"
+    "selected_version": "Release/stable/4.0.0-4066+63854a3"
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/3.1.0-3736+dd1f3f8"
+    "selected_version": "Release/stable/4.0.0-4066+63854a3"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/3.1.0-3736+dd1f3f8"
+    "selected_version": "Release/stable/4.0.0-4066+63854a3"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.1.44572.3168948"
+    "selected_version": "Release/Castle-Fork/2.2.2.44625.3185839"
   },
   {
     "name": "BLERemoteXCVR",
@@ -49,15 +49,15 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/3.1.2-402+323f23d"
+    "selected_version": "Release/master/3.1.3-415+21944e7"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.5-243+1019556"
+    "selected_version": "Release/master/2.2.5-247+9ce4035"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/master/2.4.2-267+0ed24a8"
+    "selected_version": "Release/master/2.4.2-269+a6e2948"
   },
   {
     "name": "bose-opkg-utils",
@@ -81,7 +81,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/2.4.4-466+5f6dd3a"
+    "selected_version": "Release/master/2.4.4-506+b607e00"
   },
   {
     "name": "CastleLibs-native",
@@ -109,7 +109,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/2.2.0-200+86b65b0"
+    "selected_version": "Release/master/2.2.0-202+b547262"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -197,15 +197,23 @@
   },
   {
     "name": "ProductControllerCommon",
+<<<<<<< HEAD
     "selected_version": "master@bb307cdc29dff1964e30fd5d3501efcabaf84f4a"
+=======
+    "selected_version": "master@08ceaa271c0fa5625ea298785a16ac21db945beb"
+>>>>>>> 2025e18... Components Update.
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-314+3711f7a"
+    "selected_version": "Release/master/2.2.0-322+08ceaa2"
   },
   {
     "name": "ProductUIAssets",
     "selected_version": "master@49516f77c25f1abf2ececfb12be97b2c89ed53f7"
+  },
+  {
+    "name": "protobuf-native",
+    "selected_version": "branches/protobuf@2815"
   },
   {
     "name": "protobuf-qc8017_32",
@@ -241,15 +249,19 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/2.3.2-1068+2074a77"
+    "selected_version": "Release/master/2.3.3-1100+f3f991c"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/master/2.3.2-1068+2074a77"
+    "selected_version": "Release/master/2.3.3-1100+f3f991c"
   },
   {
     "name": "SecureDeviceKey",
+<<<<<<< HEAD
     "selected_version": "master@4d0764da125bb32e5253b96c9599c49798752bac"
+=======
+    "selected_version": "master@5b260896e58eb4575ddbd5fd0f676439f5ea54aa"
+>>>>>>> 2025e18... Components Update.
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -261,7 +273,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.1.44572.3168948"
+    "selected_version": "Release/Castle-Fork/2.2.2.44625.3185839"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -277,7 +289,11 @@
   },
   {
     "name": "TestUtils",
+<<<<<<< HEAD
     "selected_version": "master@9ffa8e2971d766444798427b2fd4d0d909bfc708"
+=======
+    "selected_version": "master@1698e8fcb854b95472d6955285641f37e0fc0ad1"
+>>>>>>> 2025e18... Components Update.
   },
   {
     "name": "unittest-cpp-qc8017_32",
@@ -285,6 +301,10 @@
   },
   {
     "name": "Webkit",
+<<<<<<< HEAD
     "selected_version": "Release/master/2.2.0-107+a68de81"
+=======
+    "selected_version": "Release/master/2.2.0-112+ea97924"
+>>>>>>> 2025e18... Components Update.
   }
 ]
