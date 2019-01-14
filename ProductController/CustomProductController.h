@@ -55,6 +55,7 @@
 #include "ProductFrontDoorKeyInjectIF.h"
 #include "AccessorySoftwareInstallManager.h"
 #include "A4VQuickSetServiceClientFactory.h"
+#include "MonotonicClock.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -307,6 +308,16 @@ public:
         return m_haltInPlayableTransitionNetworkStandby;
     }
 
+    void SetBootCompleteTime( )
+    {
+        m_bootCompleteTime = MonotonicClock::NowMs( );
+    }
+
+    int64_t GetBootCompleteTime( ) const
+    {
+        return m_bootCompleteTime;
+    }
+
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -414,7 +425,7 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declaration is for killing the Monaco process if no /ui/alive messages
+    /// @brief The following declaration is for killing the Brussels process if no /ui/alive messages
     ///        received by ProductController.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -543,6 +554,8 @@ private:
     void LoadPowerMacroFromPersistance( );
 
     bool m_haltInPlayableTransitionNetworkStandby = false;
+
+    int64_t m_bootCompleteTime              = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
