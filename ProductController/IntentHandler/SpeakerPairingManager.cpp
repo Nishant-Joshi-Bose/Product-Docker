@@ -563,7 +563,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
     }
 
-    // check if any previously connected accessory speaker is disconnected
+    // check if any previously connected subwoofer is disconnected
     if( m_accessorySpeakerState.subs_size() < oldAccessorySpeakerState.subs_size() )
     {
         BOSE_INFO( s_logger, "num of subs changed from %d to %d", oldAccessorySpeakerState.subs_size(), m_accessorySpeakerState.subs_size() );
@@ -571,8 +571,8 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         if( m_accessorySpeakerState.subs_size() == 0 )
         {
             // new speakerState does not have subs but old speakerState does
-            // This can happen if one previously connected sub lost connection or two sub lost connection simultaneously
-            // copy one sub info from old speakerState but set configuration to MISSING_BASS so lightbar works
+            // This can happen if (1) one sub was connected and now disconnected (2) two subs lose connection simultaneously
+            // copy one sub info from old speakerState but set configuration to MISSING_BASS so lightbar blinks
             const auto& spkrInfo = m_accessorySpeakerState.add_subs();
             spkrInfo->set_type( oldAccessorySpeakerState.subs( 0 ).type() );
             spkrInfo->set_wireless( oldAccessorySpeakerState.subs( 0 ).wireless() );
@@ -583,20 +583,23 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         }
         else
         {
-            // new SpeakerState includes sub but the number is less, one previously connected sub disconnected
+            // new SpeakerState includes sub but the number is less than previous list.
+            // This happens if two subs were connected, but one of them lost connection
             int missed_sub_index = -1;
-            bool sub_missing = true;
+
             for( int i = 0; i < oldAccessorySpeakerState.subs_size(); i++ )
             {
-                sub_missing = true;
+                bool sub_missing = true;
                 for( int j = 0; j < m_accessorySpeakerState.subs_size(); j++ )
                 {
                     if( oldAccessorySpeakerState.subs( i ).serialnum() == m_accessorySpeakerState.subs( j ).serialnum() )
                     {
+                        // it exists in both list, so not missing
                         sub_missing = false;
                         break;
                     }
                 }
+                // Can't find it in new list, it is missing
                 if( sub_missing == true )
                 {
                     missed_sub_index = i;
@@ -605,6 +608,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
             }
             if( missed_sub_index >= 0 )
             {
+                //Found the disconnected sub, copy the info from old list but set configurationStatus to MISSING_BASS
                 BOSE_INFO( s_logger, "Sub %d disconnected", missed_sub_index );
                 const auto missed_sub_info = oldAccessorySpeakerState.subs( missed_sub_index );
                 const auto& spkrInfo = m_accessorySpeakerState.add_subs();
@@ -613,7 +617,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
                 spkrInfo->set_serialnum( missed_sub_info.serialnum() );
                 spkrInfo->set_version( missed_sub_info.version() );
                 spkrInfo->set_available( false );
-                spkrInfo->set_configurationstatus( " MISSING_BASS" );
+                spkrInfo->set_configurationstatus( "MISSING_BASS" );
             }
         }
     }
