@@ -557,12 +557,30 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     m_accessorySpeakerState.mutable_enabled()->set_rears( rearsEnabled );
     m_accessorySpeakerState.mutable_enabled()->set_subs( subsEnabled );
 
-    // Subwoofers are always in VALID config as LPM controls that to mitigate improper tuning
+    // Subwoofers are always in VALID config if it is really connected or expected as LPM controls that to mitigate improper tuning
     for( int i = 0; i < m_accessorySpeakerState.subs_size(); i++ )
     {
         m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
     }
 
+    // check if any previously connected accessory speaker is disconnected
+    if( m_accessorySpeakerState.subs_size() < oldAccessorySpeakerState.subs_size() )
+    {
+        BOSE_INFO( s_logger, "num of subs changed from %d to %d", oldAccessorySpeakerState.subs_size(), m_accessorySpeakerState.subs_size() );
+
+        if( m_accessorySpeakerState.subs_size() == 0 )
+        {
+            //new speakerState does not have subs but old speakerState does
+            //copy one sub from old speakerState but set configuration to MISSING_BASS so lightbar works
+            const auto& spkrInfo = m_accessorySpeakerState.add_subs();
+            spkrInfo->set_type( oldAccessorySpeakerState.subs( 0 ).type() );
+            spkrInfo->set_wireless( oldAccessorySpeakerState.subs( 0 ).wireless() );
+            spkrInfo->set_serialnum( oldAccessorySpeakerState.subs( 0 ).serialnum() );
+            spkrInfo->set_version( oldAccessorySpeakerState.subs( 0 ).version() );
+            spkrInfo->set_available( false );
+            spkrInfo->set_configurationstatus( "MISSING_BASS" );
+        }
+    }
     // Rears we send off to get valid config
     const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears );
     for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
