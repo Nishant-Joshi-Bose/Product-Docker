@@ -69,7 +69,7 @@ my %projects = (
     wpewebkit           => ["wpewebkit",        "0.20.0",   "Igalia & Apple & LGPLv2.1"],
     wpebackend          => ["wpebackend",       "20180305", "Igalia"],
     wpebackendbose      => ["wpebackend-bose",  "20180305", "Igalia"],
-    # Monaco licenses extracted from monaco-licenses.txt (output of 'npm run license-aggregation')
+    # Brussels licenses extracted from brussels-licenses.txt (output of 'npm run license-aggregation')
     asap                => ["asap",             "2.0.6",    "MIT"],
     corejs              => ["core-js",          "1.2.7",    "MIT"],
     debug               => ["debug",            "2.6.9",    "MIT"],
