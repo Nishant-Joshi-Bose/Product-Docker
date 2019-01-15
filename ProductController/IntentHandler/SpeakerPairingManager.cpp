@@ -570,8 +570,9 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
         if( m_accessorySpeakerState.subs_size() == 0 )
         {
-            //new speakerState does not have subs but old speakerState does
-            //copy one sub from old speakerState but set configuration to MISSING_BASS so lightbar works
+            // new speakerState does not have subs but old speakerState does
+            // This can happen if one previously connected sub lost connection or two sub lost connection simultaneously
+            // copy one sub info from old speakerState but set configuration to MISSING_BASS so lightbar works
             const auto& spkrInfo = m_accessorySpeakerState.add_subs();
             spkrInfo->set_type( oldAccessorySpeakerState.subs( 0 ).type() );
             spkrInfo->set_wireless( oldAccessorySpeakerState.subs( 0 ).wireless() );
@@ -579,6 +580,33 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
             spkrInfo->set_version( oldAccessorySpeakerState.subs( 0 ).version() );
             spkrInfo->set_available( false );
             spkrInfo->set_configurationstatus( "MISSING_BASS" );
+        }
+        else
+        {
+            // new SpeakerState includes sub but the number is less, one previously connected sub disconnected
+            int missed_sub_index = -1;
+            bool sub_missing = true;
+            for( int i = 0; i < oldAccessorySpeakerState.subs_size(); i++ )
+            {
+                sub_missing = true;
+                for( int j = 0; j < m_accessorySpeakerState.subs_size(); j++ )
+                {
+                    if( oldAccessorySpeakerState.subs( i ).serialnum() == m_accessorySpeakerState.subs( j ).serialnum() )
+                    {
+                        sub_missing = false;
+                        break;
+                    }
+                }
+                if( sub_missing == true )
+                {
+                    missed_sub_index = i;
+                    break;
+                }
+            }
+            if( missed_sub_index >= 0 )
+            {
+                BOSE_INFO( s_logger, "Sub %d disconnected", missed_sub_index );
+            }
         }
     }
     // Rears we send off to get valid config
