@@ -628,6 +628,29 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
     }
 
+    if( strcmp( rearConfig, "VALID" ) == 0 )
+    {
+        // If rears_size() returns 0 or list contains one left and one right, rears_valid is true
+        if( ( m_accessorySpeakerState.rears_size() == 0 ) and ( oldAccessorySpeakerState.rears_size() != 0 ) )
+        {
+            // The new speakerState does not include any rear surround but the old speakerState has surround
+            // This can happen if both surrounds are disconnected at the same time, e.g., on the same power strip and turned off
+            if( oldAccessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" )
+            {
+                // configurationStatus of all surround is set to the same value, so only need to compare the first one
+                // If old status valid but both disconnect, add one rears with invalid status so lightbar blinks
+                const auto& spkrInfo = m_accessorySpeakerState.add_rears();
+                const auto& old_rear_info = oldAccessorySpeakerState.rears( 0 );
+                spkrInfo->set_type( old_rear_info.type() );
+                spkrInfo->set_wireless( old_rear_info.wireless() );
+                spkrInfo->set_serialnum( old_rear_info.serialnum() );
+                spkrInfo->set_version( old_rear_info.version() );
+                spkrInfo->set_available( false );
+                spkrInfo->set_configurationstatus( "MISSING_REARS" );
+            }
+        }
+    }
+
     SendAccessoryPairingStateToProduct();
 
     m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
