@@ -606,6 +606,14 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
             if( missed_sub_index >= 0 )
             {
                 BOSE_INFO( s_logger, "Sub %d disconnected", missed_sub_index );
+                const auto missed_sub_info = oldAccessorySpeakerState.subs( missed_sub_index );
+                const auto& spkrInfo = m_accessorySpeakerState.add_subs();
+                spkrInfo->set_type( missed_sub_info.type() );
+                spkrInfo->set_wireless( missed_sub_info.wireless() );
+                spkrInfo->set_serialnum( missed_sub_info.serialnum() );
+                spkrInfo->set_version( missed_sub_info.version() );
+                spkrInfo->set_available( false );
+                spkrInfo->set_configurationstatus( " MISSING_BASS" );
             }
         }
     }
