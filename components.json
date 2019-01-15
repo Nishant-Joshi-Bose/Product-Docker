@@ -25,7 +25,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/2.2.0-232+70e7f10"
+    "selected_version": "Continuous/master/2.2.0-238+5da640d"
   },
   {
     "name": "AVS-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.6-882+5a8a624"
+    "selected_version": "Continuous/master/2.2.6-889+6d214c0"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -257,7 +257,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.1.44572.3168948"
+    "selected_version": "Continuous/Castle-Fork/2019-01-14_2042"
   },
   {
     "name": "svc-pts-log-decrypt",
