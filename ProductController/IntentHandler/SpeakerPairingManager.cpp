@@ -507,20 +507,21 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
 {
     if( m_accessorySpeakerState.subs_size() == 0 )
     {
-        // new speakerState does not have subs but old speakerState does
+        // New speakerState does not have subs but old speakerState does
         // This can happen if (1) one sub was connected and now disconnected (2) two subs lose connection simultaneously
-        // copy one sub info from old speakerState but set configuration to MISSING_BASS so lightbar blinks
+        // Copy one sub info from old speakerState but set configuration to MISSING_BASS so lightbar blinks
+        const auto& old_sub_info = oldAccessorySpeakerState.subs( 0 );
         const auto& spkrInfo = m_accessorySpeakerState.add_subs();
-        spkrInfo->set_type( oldAccessorySpeakerState.subs( 0 ).type() );
-        spkrInfo->set_wireless( oldAccessorySpeakerState.subs( 0 ).wireless() );
-        spkrInfo->set_serialnum( oldAccessorySpeakerState.subs( 0 ).serialnum() );
-        spkrInfo->set_version( oldAccessorySpeakerState.subs( 0 ).version() );
+        spkrInfo->set_type( old_sub_info.type() );
+        spkrInfo->set_wireless( old_sub_info.wireless() );
+        spkrInfo->set_serialnum( old_sub_info.serialnum() );
+        spkrInfo->set_version( old_sub_info.version() );
         spkrInfo->set_available( false );
         spkrInfo->set_configurationstatus( "MISSING_BASS" );
     }
     else
     {
-        // new SpeakerState includes sub but the number is less than previous list.
+        // New SpeakerState includes sub but the number is less than previous list.
         // This happens if two subs were connected, but one of them lost connection
         int missed_sub_index = -1;
 
@@ -531,7 +532,7 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
             {
                 if( oldAccessorySpeakerState.subs( i ).serialnum() == m_accessorySpeakerState.subs( j ).serialnum() )
                 {
-                    // it exists in both list, so not missing
+                    // It exists in both list, so not missing
                     sub_missing = false;
                     break;
                 }
@@ -559,17 +560,23 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief SpeakerPairingManager::DetectMissingRears
+///
+/// @param const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState )
 {
-    // If rears_size() returns 0 or list contains one left and one right, rears_valid is true
     if( ( m_accessorySpeakerState.rears_size() == 0 ) and ( oldAccessorySpeakerState.rears_size() != 0 ) )
     {
         // The new speakerState does not include any rear surround but the old speakerState has surround
-        // This can happen if both surrounds are disconnected at the same time, e.g., on the same power strip and turned off
+        // This can happen if both surrounds are disconnected simultaneously, e.g., on the same power strip and turned off
+        // configurationStatus of both surrounds are set to the same value, so only need to compare the first one.
         if( oldAccessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" )
         {
-            // configurationStatus of all surround is set to the same value, so only need to compare the first one
-            // If old status valid but both disconnect, add one rears with invalid status so lightbar blinks
+            // If old status VALID but new status does not contain rear, add one rear with MISSING_REARS status so lightbar blinks
             const auto& spkrInfo = m_accessorySpeakerState.add_rears();
             const auto& old_rear_info = oldAccessorySpeakerState.rears( 0 );
             spkrInfo->set_type( old_rear_info.type() );
@@ -643,7 +650,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     m_accessorySpeakerState.mutable_enabled()->set_rears( rearsEnabled );
     m_accessorySpeakerState.mutable_enabled()->set_subs( subsEnabled );
 
-    // Subwoofers are always in VALID config if it is really connected or expected as LPM controls that to mitigate improper tuning
+    // Subwoofers are in VALID config if it is really connected or expected as LPM controls that to mitigate improper tuning
     for( int i = 0; i < m_accessorySpeakerState.subs_size(); i++ )
     {
         m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
@@ -663,6 +670,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
     }
 
+    // Check if rears disconnected
     if( strcmp( rearConfig, "VALID" ) == 0 )
     {
         DetectMissingRears( oldAccessorySpeakerState );
