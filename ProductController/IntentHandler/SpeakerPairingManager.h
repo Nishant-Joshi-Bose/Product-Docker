@@ -207,15 +207,18 @@ private:
     ///        types.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    static const char* AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight );
-    static bool AccessoryStatusIsConnected( unsigned int status );
-    static bool AccessoryTypeIsRear( unsigned int type );
-    static bool AccessoryTypeIsSub( unsigned int type );
-    static const char* AccessoryTypeToString( unsigned int type );
-    static void AccessoryDescriptionToAccessorySpeakerInfo( const LpmServiceMessages::AccessoryDescription_t&
-                                                            accDesc,
-                                                            ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
-                                                            spkrInfo );
+    const char* AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight );
+    bool AccessoryStatusIsConnected( unsigned int status );
+    bool AccessoryTypeIsRear( unsigned int type );
+    bool AccessoryTypeIsSub( unsigned int type );
+    const char* AccessoryTypeToString( unsigned int type );
+    void AccessoryDescriptionToAccessorySpeakerInfo( const LpmServiceMessages::AccessoryDescription_t&
+                                                     accDesc,
+                                                     ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
+                                                     spkrInfo );
+
+    void DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
+
     bool m_accessoryListReceived = false;
     bool m_firstAccessoryListReceived = false;
 };
