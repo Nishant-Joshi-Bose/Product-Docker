@@ -569,25 +569,22 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState )
 {
-    if( ( m_accessorySpeakerState.rears_size() == 0 ) and ( oldAccessorySpeakerState.rears_size() != 0 ) )
-    {
-        // The new speakerState does not include any rear surround but the old speakerState has surround
-        // This can happen if both surrounds are disconnected simultaneously, e.g., on the same power strip and turned off
-        // configurationStatus of both surrounds are set to the same value, so only need to compare the first one.
-        if( oldAccessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" )
-        {
-            // If old status VALID but new status does not contain rear, add one rear with MISSING_REARS status so lightbar blinks
-            const auto& spkrInfo = m_accessorySpeakerState.add_rears();
-            const auto& old_rear_info = oldAccessorySpeakerState.rears( 0 );
-            spkrInfo->set_type( old_rear_info.type() );
-            spkrInfo->set_wireless( old_rear_info.wireless() );
-            spkrInfo->set_serialnum( old_rear_info.serialnum() );
-            spkrInfo->set_version( old_rear_info.version() );
-            spkrInfo->set_available( false );
-            spkrInfo->set_configurationstatus( "MISSING_REARS" );
-        }
-    }
 
+    // The new speakerState does not include any rear surround but the old speakerState has surround
+    // This can happen if both surrounds are disconnected simultaneously, e.g., on the same power strip and turned off
+    // configurationStatus of both surrounds are set to the same value, so only need to compare the first one.
+    if( oldAccessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" )
+    {
+        // If old status VALID but new status does not contain rear, add one rear with MISSING_REARS status so lightbar blinks
+        const auto& spkrInfo = m_accessorySpeakerState.add_rears();
+        const auto& old_rear_info = oldAccessorySpeakerState.rears( 0 );
+        spkrInfo->set_type( old_rear_info.type() );
+        spkrInfo->set_wireless( old_rear_info.wireless() );
+        spkrInfo->set_serialnum( old_rear_info.serialnum() );
+        spkrInfo->set_version( old_rear_info.version() );
+        spkrInfo->set_available( false );
+        spkrInfo->set_configurationstatus( "MISSING_REARS" );
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -659,7 +656,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     // check if any previously connected subwoofer is disconnected
     if( m_accessorySpeakerState.subs_size() < oldAccessorySpeakerState.subs_size() )
     {
-        BOSE_INFO( s_logger, "num of subs changed from %d to %d", oldAccessorySpeakerState.subs_size(), m_accessorySpeakerState.subs_size() );
+        BOSE_INFO( s_logger, "subs changed from %d to %d", oldAccessorySpeakerState.subs_size(), m_accessorySpeakerState.subs_size() );
         DetectMissingSub( oldAccessorySpeakerState );
     }
 
@@ -671,9 +668,14 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     }
 
     // Check if rears disconnected
-    if( strcmp( rearConfig, "VALID" ) == 0 )
+    if( ( strcmp( rearConfig, "VALID" ) == 0 ) )
     {
-        DetectMissingRears( oldAccessorySpeakerState );
+        // rearConfig VALID if (1) One Left and One Right (2) No Left and No right
+        if( ( m_accessorySpeakerState.rears_size() == 0 ) and ( oldAccessorySpeakerState.rears_size() != 0 ) )
+        {
+            BOSE_INFO( s_logger, "rears changed from %d to 0", oldAccessorySpeakerState.rears_size() );
+            DetectMissingRears( oldAccessorySpeakerState );
+        }
     }
 
     SendAccessoryPairingStateToProduct();
