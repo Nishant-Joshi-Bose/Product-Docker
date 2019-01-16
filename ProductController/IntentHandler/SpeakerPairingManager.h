@@ -218,6 +218,7 @@ private:
                                                      spkrInfo );
 
     void DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
+    void DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
 
     bool m_accessoryListReceived = false;
     bool m_firstAccessoryListReceived = false;
