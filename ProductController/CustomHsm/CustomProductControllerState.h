@@ -497,6 +497,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentManualSoftwareInstall()
+    {
+        return false;
+    }
+
 protected:
     ///
     /// The custom version of this function returns the custom ProductController.

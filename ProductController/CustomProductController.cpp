@@ -79,7 +79,7 @@
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateSoftwareInstall.h"
-#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStateSoftwareInstallTransition.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
@@ -265,10 +265,10 @@ void CustomProductController::Run( )
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
-    CustomProductControllerState* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
+    CustomProductControllerState* stateSoftwareInstallTransition = new ProductControllerStateSoftwareInstallTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_TRANSITION );
 
     CustomProductControllerState* stateSoftwareInstall = new ProductControllerStateSoftwareInstall
     ( GetHsm( ),
@@ -530,7 +530,7 @@ void CustomProductController::Run( )
 
     GetHsm( ).AddState( NotifiedNames::UPDATING,
                         SystemPowerControl_State_Not_Notify,
-                        stateSoftwareUpdateTransition );
+                        stateSoftwareInstallTransition );
 
     GetHsm( ).AddState( NotifiedNames::UPDATING,
                         SystemPowerControl_State_Not_Notify,

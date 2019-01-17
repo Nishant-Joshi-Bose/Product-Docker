@@ -90,6 +90,8 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
         HandleTimeOut();
     } );
 
+    GetProductController( ).GetVoiceServiceClient( ).Stop( );
+
     GetProductController( ).GetProductAudioServiceInstance( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
 }
 
@@ -158,6 +160,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
         ///
         GetProductController( ).SendAllowSourceSelectMessage( true );
         GetProductController( ).SendStopPlaybackMessage( );
+        GetProductController( ).GetVoiceServiceClient( ).Start( );
     }
 }
 
