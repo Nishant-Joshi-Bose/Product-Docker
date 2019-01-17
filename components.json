@@ -128,6 +128,10 @@
     "selected_version": "Release/master/2.2.0-162+9d18f31"
   },
   {
+    "name": "LedAnimationTool-qc8017_32",
+    "selected_version": "Release/animationComponent_taylor/1.27-155+2fe18d9"
+  },
+  {
     "name": "LightBarController-qc8017_32",
     "selected_version": "Release/master/2.2.0-286+146c0bb"
   },
