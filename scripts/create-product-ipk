@@ -88,6 +88,7 @@ lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
+lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_location) ||exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -223,6 +224,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
 "$sadi_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
+"$lightBarAnimationTool_dir/stage" --config=lightBar/Configuration-Taylor-DP1.json --assets=lightBar/Taylor-DP1 "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
