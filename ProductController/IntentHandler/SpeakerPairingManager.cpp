@@ -507,9 +507,9 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
 {
     if( m_accessorySpeakerState.subs_size() == 0 )
     {
-        // New speakerState does not have subs but old speakerState does
-        // This can happen if (1) one sub was connected and now disconnected (2) two subs lose connection simultaneously
-        // Copy one sub info from old speakerState but set configuration to MISSING_BASS so lightbar blinks
+        // New accessorySpeakerState does not have subs but old speakerState does.
+        // This can happen if (1) one sub was connected but now disconnected (2) two subs were connected but lose connection simultaneously
+        // Copy one sub info to the list from old speakerState but set configuration to MISSING_BASS so lightbar blinks
         const auto& old_sub_info = oldAccessorySpeakerState.subs( 0 );
         const auto& spkrInfo = m_accessorySpeakerState.add_subs();
         spkrInfo->set_type( old_sub_info.type() );
@@ -521,7 +521,7 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
     }
     else
     {
-        // New SpeakerState includes sub but the number is less than previous list.
+        // New accessorySpeakerState includes sub but the number is less than previous list.
         // This happens if two subs were connected, but one of them lost connection
         int missed_sub_index = -1;
 
@@ -569,13 +569,11 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState )
 {
-
-    // The new speakerState does not include any rear surround but the old speakerState has surround
-    // This can happen if both surrounds are disconnected simultaneously, e.g., on the same power strip and turned off
-    // configurationStatus of both surrounds are set to the same value, so only need to compare the first one.
+    // The new speakerState does not include any rear surround but the old speakerState has rear surround
+    // This can happen if both surrounds are disconnected simultaneously, e.g., on the same power strip and turned off.
     if( oldAccessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" )
     {
-        // If old status VALID but new status does not contain rear, add one rear with MISSING_REARS status so lightbar blinks
+        // If old status VALID but new status does not contain rear, add one rear but set status to MISSING_REARS so lightbar blinks
         const auto& spkrInfo = m_accessorySpeakerState.add_rears();
         const auto& old_rear_info = oldAccessorySpeakerState.rears( 0 );
         spkrInfo->set_type( old_rear_info.type() );
@@ -586,6 +584,7 @@ void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeake
         spkrInfo->set_configurationstatus( "MISSING_REARS" );
     }
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief SpeakerPairingManager::ReceiveAccessoryListCallback
@@ -661,7 +660,8 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     }
 
     // Rears we send off to get valid config
-    const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears );
+    uint8_t oldAccessorySpeakerStateRearSize = oldAccessorySpeakerState.rears().size();
+    const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears, oldAccessorySpeakerStateRearSize );
     for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
     {
         m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
@@ -752,29 +752,32 @@ void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
 /// @return This method returns a char* based on whether the configuration is valid
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const char* SpeakerPairingManager::AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight )
+const char* SpeakerPairingManager::AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight, uint8_t oldRearSize )
 {
-    if( numLeft == 0 )
+    if( oldRearSize != 0 )
     {
-        if( numRight == 1 )
+        if( numLeft == 0 )
         {
-            return "MISSING_LEFT";
+            if( numRight == 1 )
+            {
+                return "MISSING_LEFT";
+            }
+            else if( numRight > 1 )
+            {
+                return "TWO_RIGHT";
+            }
         }
-        else if( numRight > 1 )
-        {
-            return "TWO_RIGHT";
-        }
-    }
 
-    if( numRight == 0 )
-    {
-        if( numLeft == 1 )
+        if( numRight == 0 )
         {
-            return "MISSING_RIGHT";
-        }
-        else if( numLeft > 1 )
-        {
-            return "TWO_LEFT";
+            if( numLeft == 1 )
+            {
+                return "MISSING_RIGHT";
+            }
+            else if( numLeft > 1 )
+            {
+                return "TWO_LEFT";
+            }
         }
     }
 
