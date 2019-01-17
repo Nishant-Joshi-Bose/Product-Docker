@@ -13,6 +13,7 @@
 #pragma once
 #include <string>
 #include "ProductControllerState.h"
+#include "ProductControllerStatePlayingSelected.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

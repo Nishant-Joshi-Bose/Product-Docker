@@ -69,7 +69,6 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
       m_CustomProductController( static_cast< CustomProductController & >( productController ) ),
       m_ProductTask( m_CustomProductController.GetTask( ) ),
-      m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) ),
       m_FrontDoorClientIF( frontDoorClient ),
       m_DataCollectionClient( productController.GetDataCollectionClient() ),
@@ -102,9 +101,9 @@ void SpeakerPairingManager::Initialize( )
 
     auto func = [this]( bool enabled )
     {
-        if( enabled )
+        if( enabled && m_firstAccessoryListReceived )
         {
-            // Connection to DataCollection server established, send current accessories list.
+            // Connection to DataCollection server established, send current accessories list (unless we never got one since boot)
             m_DataCollectionClient->SendData( std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
                                               DATA_COLLECTION_ACCESSORIES );
         }
@@ -327,7 +326,7 @@ void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
 
     ProductMessage productMessage;
     productMessage.set_action( pairingAction );
-    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    m_CustomProductController.SendAsynchronousProductMessage( productMessage );
 
     frontDoorCB( m_accessorySpeakerState );
 }
@@ -509,6 +508,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s. Accessory list = %s", __FUNCTION__, accList.DebugString().c_str() );
 
     m_accessoryListReceived = true;
+    m_firstAccessoryListReceived = true;
 
     ProductPb::AccessorySpeakerState oldAccessorySpeakerState;
     oldAccessorySpeakerState.CopyFrom( m_accessorySpeakerState );
@@ -582,7 +582,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     ProductMessage productMessage;
     productMessage.set_accessoriesareknown( true );
-    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    m_CustomProductController.SendAsynchronousProductMessage( productMessage );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -624,7 +624,7 @@ void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
     {
         ProductMessage productMessage;
         productMessage.mutable_accessorypairing( )->CopyFrom( m_accessorySpeakerState );
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+        m_CustomProductController.SendAsynchronousProductMessage( productMessage );
     }
 }
 

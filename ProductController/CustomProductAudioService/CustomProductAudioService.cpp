@@ -52,7 +52,8 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
                                                    ProductController.GetTask( ) ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
-    m_currentMinimumLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN )
+    m_currentNetworkSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
+    m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN )
 {
     BOSE_DEBUG( s_logger, __func__ );
 
@@ -318,9 +319,9 @@ void CustomProductAudioService::SendAudioSettingsToDataCollection( ) const
 void CustomProductAudioService::RebroadcastLatencyCallback( uint32_t latency )
 {
     BOSE_DEBUG( s_logger, "%s: latency = %d", __func__, latency );
-    if( latency != m_MainStreamAudioSettings.networklatencyms() )
+    if( latency != m_MainStreamAudioSettings.additionallocallatencyms() )
     {
-        m_MainStreamAudioSettings.set_networklatencyms( latency );
+        m_MainStreamAudioSettings.set_additionallocallatencyms( latency );
         SendMainStreamAudioSettingsEvent();
     }
 }
@@ -340,7 +341,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
     m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
     m_MainStreamAudioSettings.set_surrounddelay( m_AudioSettingsMgr->GetSurroundDelay( ).value() );
     m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
-    m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
+    m_MainStreamAudioSettings.set_appxvideolatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
     m_MainStreamAudioSettings.set_subwooferlevel( m_AudioSettingsMgr->GetSubwooferGain( ).value() );
     m_MainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
     m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
@@ -454,27 +455,52 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductAudioService::SetMinimumOutputLatency
+/// @name   CustomProductAudioService::SetNetworkSourceLatency
 ///
-/// @param  int32_t latency
+/// @param  uint32_t latency
 ///
-/// @brief  Send DSP minimumOutputLatency to AudioPath
+/// @brief  Send DSP networkSourceLatency to AudioPath
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::SetMinimumOutputLatency( int32_t latency )
+void CustomProductAudioService::SetNetworkSourceLatency( uint32_t latency )
 {
     BOSE_VERBOSE( s_logger, __func__ );
-    if( ( latency == LpmServiceMessages::LATENCY_VALUE_UNKNOWN ) or ( latency == m_currentMinimumLatency ) )
+    if( ( latency == LpmServiceMessages::LATENCY_VALUE_UNKNOWN ) or ( latency == m_currentNetworkSourceLatency ) )
     {
         return;
     }
-    m_currentMinimumLatency = latency;
-    auto respCb = []( int32_t resp )
+    m_currentNetworkSourceLatency = latency;
+    auto respCb = []( uint32_t resp )
     {
         BOSE_VERBOSE( s_logger, "%s: received callback with latency(%d)", __func__, resp );
     };
-    BOSE_INFO( s_logger, "%s: sending minimum output latency(%d) to AudioPath", __func__, m_currentMinimumLatency );
-    m_APPointer -> SetOutputLatency( m_currentMinimumLatency, respCb );
+    BOSE_INFO( s_logger, "%s: sending network source latency(%d) to AudioPath", __func__, m_currentNetworkSourceLatency );
+    m_APPointer -> SetNetworkSourceLatency( m_currentNetworkSourceLatency, respCb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SetTVSourceLatency
+///
+/// @param  uint32_t latency
+///
+/// @brief  Send DSP TVSourceLatency to AudioPath
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SetTVSourceLatency( uint32_t latency )
+{
+    BOSE_VERBOSE( s_logger, __func__ );
+    if( ( latency == LpmServiceMessages::LATENCY_VALUE_UNKNOWN ) or ( latency == m_currentTVSourceLatency ) )
+    {
+        return;
+    }
+    m_currentTVSourceLatency = latency;
+    auto respCb = []( uint32_t resp )
+    {
+        BOSE_VERBOSE( s_logger, "%s: received callback with latency(%d)", __func__, resp );
+    };
+    BOSE_INFO( s_logger, "%s: sending network source latency(%d) to AudioPath", __func__, m_currentTVSourceLatency );
+    m_APPointer -> SetTVSourceLatency( m_currentTVSourceLatency, respCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -874,7 +900,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
+            m_MainStreamAudioSettings.set_appxvideolatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return error;

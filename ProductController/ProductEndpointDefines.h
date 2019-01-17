@@ -48,6 +48,7 @@
 #define FRONTDOOR_AUDIO_FORMAT_API                      "/audio/format"
 #define FRONTDOOR_AUDIO_GAINOFFSET_API                  "/audio/gainOffset"
 #define FRONTDOOR_AUDIO_MODE_API                        "/audio/mode"
+#define FRONTDOOR_AUDIO_REBROADCASTLATENCY_MODE_API     "/audio/rebroadcastLatency/mode"
 #define FRONTDOOR_AUDIO_SUBWOOFERGAIN_API               "/audio/subwooferGain"
 #define FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API           "/audio/subwooferPolarity"
 #define FRONTDOOR_AUDIO_SURROUND_API                    "/audio/surround"

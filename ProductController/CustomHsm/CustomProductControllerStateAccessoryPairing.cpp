@@ -94,46 +94,6 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentSpeakerPairing( K
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentVolumeControl
-///
-/// @param  KeyHandlerUtil::ActionType_t intent
-///
-/// @return This method returns a true Boolean value indicating that it has handled the volume
-///         control intent. It is ignored during acessory pairing.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairing::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
-
-    ///
-    /// The intent is ignored in this custom state.
-    ///
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentMuteControl
-///
-/// @param  KeyHandlerUtil::ActionType_t intent
-///
-/// @return This method returns a true Boolean value indicating that it has handled the muting
-///         intent. It is ignored during acessory pairing.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairing::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
-
-    ///
-    /// The intent is ignored in this custom state.
-    ///
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle
 ///
 /// @return This method returns a true Boolean value indicating that it handles the PowerToggle
@@ -219,9 +179,7 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
         ProductMessage message;
         message.mutable_accessoriesplaytones( )->set_subs( isSubValid );
         message.mutable_accessoriesplaytones( )->set_rears( isRearValid );
-        IL::BreakThread( std::bind( GetProductController( ).GetMessageHandler( ),
-                                    message ),
-                         GetProductController( ).GetTask( ) );
+        GetProductController( ).SendAsynchronousProductMessage( message );
     }
 
     ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );

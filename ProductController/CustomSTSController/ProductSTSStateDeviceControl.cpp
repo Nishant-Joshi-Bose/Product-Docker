@@ -144,7 +144,7 @@ bool ProductSTSStateDeviceControl::HandlePlay( const STS::Void & )
     BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
 
     DeviceControllerClientMessages::TranportControlMessage_t request;
-    request.set_request( DevicePlaybackControl::PLAYBACK_CTRL_PLAY );
+    request.set_request( DeviceControllerClientMessages::DevicePlaybackControl::PLAYBACK_CTRL_PLAY );
 
     m_deviceControllerPtr->SendTransportControlRequest( request );
     return true;
@@ -155,7 +155,7 @@ bool ProductSTSStateDeviceControl::HandlePause( const STS::Void & )
     BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
 
     DeviceControllerClientMessages::TranportControlMessage_t request;
-    request.set_request( DevicePlaybackControl::PLAYBACK_CTRL_PAUSE );
+    request.set_request( DeviceControllerClientMessages::DevicePlaybackControl::PLAYBACK_CTRL_PAUSE );
 
     m_deviceControllerPtr->SendTransportControlRequest( request );
     return true;
@@ -166,7 +166,7 @@ bool ProductSTSStateDeviceControl::HandleStop( const STS::Void & )
     BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
 
     DeviceControllerClientMessages::TranportControlMessage_t request;
-    request.set_request( DevicePlaybackControl::PLAYBACK_CTRL_STOP );
+    request.set_request( DeviceControllerClientMessages::DevicePlaybackControl::PLAYBACK_CTRL_STOP );
 
     m_deviceControllerPtr->SendTransportControlRequest( request );
     return true;
@@ -177,7 +177,7 @@ bool ProductSTSStateDeviceControl::HandleSkipNext( const STS::Void & )
     BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
 
     DeviceControllerClientMessages::TranportControlMessage_t request;
-    request.set_request( DevicePlaybackControl::PLAYBACK_CTRL_NEXT );
+    request.set_request( DeviceControllerClientMessages::DevicePlaybackControl::PLAYBACK_CTRL_NEXT );
 
     m_deviceControllerPtr->SendTransportControlRequest( request );
     return true;
@@ -188,7 +188,7 @@ bool ProductSTSStateDeviceControl::HandleSkipPrevious( const STS::Void & )
     BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
 
     DeviceControllerClientMessages::TranportControlMessage_t request;
-    request.set_request( DevicePlaybackControl::PLAYBACK_CTRL_PREVIOUS );
+    request.set_request( DeviceControllerClientMessages::DevicePlaybackControl::PLAYBACK_CTRL_PREVIOUS );
 
     m_deviceControllerPtr->SendTransportControlRequest( request );
     return true;

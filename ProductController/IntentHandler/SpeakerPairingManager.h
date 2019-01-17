@@ -123,7 +123,6 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     NotifyTargetTaskIF*                                  m_ProductTask;
-    Callback< ProductMessage >                           m_ProductNotify;
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr<FrontDoorClientIF>                   m_FrontDoorClientIF;
     std::shared_ptr< DataCollectionClientIF >            m_DataCollectionClient;
@@ -218,6 +217,7 @@ private:
                                                             ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
                                                             spkrInfo );
     bool m_accessoryListReceived = false;
+    bool m_firstAccessoryListReceived = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
