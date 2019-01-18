@@ -221,10 +221,11 @@ private:
     void DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
     void RearAccessoryConnectTimeout();
 
-    APTimerPtr                                           m_timerRearAccessoryConnect;
-    bool                                                 m_accessoryListReceived = false;
-    bool                                                 m_firstAccessoryListReceived = false;
-    bool                                                 m_waitRearAccessoryConnect = false;
+private:
+    APTimerPtr  m_timerRearAccessoryConnect;
+    bool        m_accessoryListReceived = false;
+    bool        m_firstAccessoryListReceived = false;
+    bool        m_waitRearAccessoryConnect = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
