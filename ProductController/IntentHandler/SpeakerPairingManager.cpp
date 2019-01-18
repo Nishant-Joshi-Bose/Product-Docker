@@ -112,7 +112,6 @@ void SpeakerPairingManager::Initialize( )
         }
     };
     m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
-    m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MAX_CONNECT_TIME, 0 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -580,6 +579,7 @@ void SpeakerPairingManager::RearAccessoryConnectTimeout()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState )
 {
+    BOSE_INFO( s_logger, "DetectMissingRears, rears size %d", m_accessorySpeakerState.rears_size() );
     if( ( m_accessorySpeakerState.rears_size() == 0 ) and ( oldAccessorySpeakerState.rears_size() != 0 ) )
     {
         // The new speakerState does not include any rear surround but the old speakerState has rear surround
@@ -598,15 +598,15 @@ void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeake
             spkrInfo->set_configurationstatus( "MISSING_REARS" );
         }
     }
-    else
+    if( ( m_accessorySpeakerState.rears_size() == 1 ) and ( m_accessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" ) )
     {
-        if( ( m_accessorySpeakerState.rears_size() == 1 ) and ( m_accessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" ) )
-        {
-            // Both Maxwells were disconnected, one is connected.
-            // The second Maxwell is not connected yet, it is expected to connect with a few seconds
-            m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
-            m_waitRearAccessoryConnect = true;
-        }
+        // Both Maxwells were disconnected, one is connected.
+        // The second Maxwell is not connected yet, it is expected to connect with a few seconds
+        BOSE_INFO( s_logger, "One rear connected, start timer" );
+        m_timerRearAccessoryConnect->Stop();
+        m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MAX_CONNECT_TIME, 0 );
+        m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
+        m_waitRearAccessoryConnect = true;
     }
 }
 
@@ -698,6 +698,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         // rearConfig VALID if (1) One Left and One Right (2) No Left and No right
         if( ( m_waitRearAccessoryConnect == true ) and ( numOfLeftRears == 1 ) and ( numOfRightRears == 1 ) )
         {
+            BOSE_INFO( s_logger, "Both Left and Right connected, stop timer" );
             m_timerRearAccessoryConnect->Stop();
             m_waitRearAccessoryConnect = false;
         }
