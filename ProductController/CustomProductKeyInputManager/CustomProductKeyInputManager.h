@@ -22,6 +22,8 @@
 #include "DeviceControllerClientFactory.h"
 #include "SystemPowerMacro.pb.h"
 #include "FrontDoorClient.h"
+#include "KeyFilter.pb.h"
+#include <regex>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -61,6 +63,9 @@ public:
 
     }
 
+    bool FilterIntent( KeyHandlerUtil::ActionType_t& ) const;
+    static const std::string& IntentName( KeyHandlerUtil::ActionType_t intent );
+
     void Run() override;
 
 protected:
@@ -93,6 +98,27 @@ private:
     bool IsSourceKey( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );
 
     void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
+
+    struct FilterRegex
+    {
+        FilterRegex( const std::string& source, const std::string& sourceAccount ) :
+            m_sourceFilter( std::regex( source ) ),
+            m_sourceAccountFilter( std::regex( sourceAccount ) )
+        {
+        }
+
+        const std::regex    m_sourceFilter;
+        const std::regex    m_sourceAccountFilter;
+    };
+
+    ///
+    /// Filter subset of key table
+    ///
+    KeyFilter::KeyFilter                                                            m_filterTable;
+    std::map< const KeyFilter::FilterEntry*, std::vector<FilterRegex> >             m_filterRegex;
+    void InitializeKeyFilter( );
+    std::map< unsigned, bool >                                                      m_lastPressStatus;
+    bool AccommodateOrphanReleaseEvents( const IpcKeyInformation_t& keyEvent, bool pressRet );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

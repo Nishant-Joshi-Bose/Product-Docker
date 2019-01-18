@@ -43,7 +43,8 @@ PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon ins
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get TestUtils installed_location)
-PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommonProto installed_location)
+PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommonProto-qc8017_32 installed_location)
+RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -58,50 +59,47 @@ ifndef DONT_RUN_ASTYLE
 	run-astyle
 endif
 
-USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
-KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
-LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
-INTENT_DEFS=$(PWD)/ProductController/IntentHandler/Intents.h
-KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
 
-.PHONY: keyconfig
-keyconfig: check_tools
-	cd tools/key_config_generator && \
+KEYCONFIG_GENERATOR_DIR=$(PRODUCTCONTROLLERCOMMON_DIR)/tools/key_config_generator
+
+USERKEYCONFIG=$(BOSE_WORKSPACE)/opt-bose-fs/etc/UserKeyConfig.json
+COMMON_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/CommonIntents_pb2.py
+CUSTOM_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/Intents_pb2.py
+AUTOLPM_SERVICES=$(RIVIERALPMSERVICE_DIR)/Python/AutoLpmServiceMessages_pb2.py
+
+KEYCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/KeyConfiguration.json
+BLASTCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/BlastConfiguration.json
+
+$(COMMON_INTENTS) $(CUSTOM_INTENTS) $(AUTOLPM_SERVICES): | generated_sources
+
+$(KEYCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES) $(CUSTOM_INTENTS) $(COMMON_INTENTS)
+	cd $(KEYCONFIG_GENERATOR_DIR) && \
 	./generate_key_config \
 		$(BUILDS_DIR) \
 		--inputcfg $(USERKEYCONFIG) \
-		--actions $(INTENT_DEFS) \
-		--cap $(LPM_KEYS) \
-		--ir $(LPM_KEYS) \
-		--tap $(LPM_KEYS) \
-		--cec $(LPM_KEYS) \
-		--rf $(LPM_KEYS) \
-		--net $(LPM_KEYS) \
-		--outputcfg $(KEYCONFIG) \
-		--incdirs $(KEYCONFIG_INCS)
+		--common $(COMMON_INTENTS) \
+		--custom $(CUSTOM_INTENTS) \
+		--autolpm $(AUTOLPM_SERVICES) \
+		--keys $(AUTOLPM_SERVICES) \
+		--outputcfg $(KEYCONFIG)
 
-USERBLASTCONFIG=$(PWD)/Config/UserKeyConfig.json
-BLASTCONFIG=$(PWD)/opt-bose-fs/etc/BlastConfiguration.json
-LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
-
-.PHONY: blastconfig
-blastconfig: check_tools
+$(BLASTCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES)
 	cd tools/key_config_generator && \
 	./generate_blast_config \
 		$(BUILDS_DIR) \
-		--inputcfg $(USERBLASTCONFIG) \
-		--keyfile $(LPM_KEYS) \
+		--inputcfg $(USERKEYCONFIG) \
+		--keys $(AUTOLPM_SERVICES) \
 		--outputcfg $(BLASTCONFIG)
 
 .PHONY: cmake_build
-cmake_build: generated_sources | $(BUILDS_DIR) astyle
+cmake_build: generated_sources $(BLASTCONFIG) $(KEYCONFIG)| $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: minimal-product-tar
 minimal-product-tar: cmake_build
-	./scripts/create-minimal-product-tar
+	./scripts/create-minimal-product-tar professor
 
 .PHONY: product-ipk
 product-ipk: cmake_build
@@ -112,32 +110,32 @@ privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
 #Create Zip file for Local update - no hsp
-IPKS = recovery.ipk product-script.ipk software-update.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES = SoundTouchRecovery product-script software-update wpe monaco SoundTouch lpm_updater
+IPKS = recovery.ipk product-script.ipk software-update.ipk wpe.ipk brussels.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES = SoundTouchRecovery product-script software-update wpe brussels SoundTouch lpm_updater
 
 .PHONY: generate-metadata
 generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json.sh $(BOSE_WORKSPACE)/builds/$(cfg) professor dev
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p professor,ginger-cheevers -k dev
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-#Create one more Zip file for Bonjour / Local update with HSP 
+#Create one more Zip file for Bonjour / Local update with HSP
 #- This is temporary, till DP2 boards are not available.
-IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp wpe monaco SoundTouch lpm_updater
+IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk brussels.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp wpe brussels SoundTouch lpm_updater
 
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk wpe-ipk softwareupdate-ipk monaco-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz: product-ipk wpe-ipk softwareupdate-ipk brussels-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz-with-hsp: brussels-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -146,7 +144,7 @@ graph: product-ipk
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build
-	./scripts/create-software-update-ipk 
+	./scripts/create-software-update-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
@@ -171,9 +169,9 @@ recovery-ipk: cmake_build minimal-product-tar
 lpmupdater-ipk: lpm-bos
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ professor
 
-.PHONY: monaco-ipk
-monaco-ipk:
-	./scripts/create-monaco-ipk
+.PHONY: brussels-ipk
+brussels-ipk:
+	./scripts/create-brussels-ipk
 
 .PHONY: wpe-ipk
 wpe-ipk:

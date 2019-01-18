@@ -1,0 +1,87 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      CustomProductControllerStatePlayingSelectedSetupNetworkConfig.h
+///
+/// @brief     This source code file contains functionality to process events that occur during the
+///            product network setup state.
+///
+/// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following compiler directive prevents this header file from being included more than once,
+/// which may cause multiple declaration compiler errors.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma once
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Included Header Files
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfig.h"
+#include "ProductControllerStates.h"
+#include "HsmState.h"
+#include "ChimeEvents.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                            Start of Product Application Namespace                            ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace ProductApp
+{
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Forward Class Declarations
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class ProductControllerHsm;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @class CustomProductControllerStatePlayable
+///
+/// @brief This class is used for executing produce specific actions when in an playing state.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class CustomProductControllerStatePlayingSelectedSetupNetworkConfig : public ProductControllerStatePlayingSelectedSetupNetworkConfig
+{
+public:
+
+    CustomProductControllerStatePlayingSelectedSetupNetworkConfig( ProductControllerHsm& hsm,
+                                                                   CHsmState*            pSuperState,
+                                                                   Hsm::STATE            stateId,
+                                                                   const std::string&    name  = "CustomPlayingSelectedSetupNetworkConfig" );
+
+    ~CustomProductControllerStatePlayingSelectedSetupNetworkConfig( )   override
+    {
+
+    }
+
+    void HandleStateEnter( )                                            override;
+    void HandleStateExit( )                                             override;
+    bool HandlePlayChimeRequest( ProductApp::ChimeEvents_t chimeEvent ) override;
+
+private:
+    ChimeEvents_t   m_pendingChimeEvent;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           End of the Product Application Namespace                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                         End of File                                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////

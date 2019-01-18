@@ -155,6 +155,46 @@ bool CustomProductControllerStateAdaptIQCancelling::HandleIntentSpeakerPairing( 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateAdaptIQCancelling::HandleIntentVolumeControl
+///
+/// @param  KeyHandlerUtil::ActionType_t intent
+///
+/// @return This method returns a true Boolean value indicating that it has handled the volume
+///         control intent. It is ignored when cancelling accessory pairing.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQCancelling::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
+
+    ///
+    /// The intent is ignored in this custom state.
+    ///
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateAdaptIQCancelling::HandleIntentMuteControl
+///
+/// @param  KeyHandlerUtil::ActionType_t intent
+///
+/// @return This method returns a true Boolean value indicating that it has handled the muting
+///         intent. It is ignored when cancelling accessory pairing.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQCancelling::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
+
+    ///
+    /// The intent is ignored in this custom state.
+    ///
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

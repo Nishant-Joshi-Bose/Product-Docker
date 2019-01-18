@@ -121,9 +121,12 @@ bool ProductDspHelper::Run( )
     {
         if( enabled )
         {
-            m_ProductController.GetDataCollectionClient()->SendData(
-                std::make_shared< LpmServiceMessages::DspDataCollection >( m_DspDataCollection ),
-                DATA_COLLECTION_DSP_AIQ );
+            if( m_DspDataCollection.has_data() )
+            {
+                m_ProductController.GetDataCollectionClient()->SendData(
+                    std::make_shared< LpmServiceMessages::DspDataCollection >( m_DspDataCollection ),
+                    DATA_COLLECTION_DSP_AIQ );
+            }
         }
     };
     m_ProductController.GetDataCollectionClient()->RegisterForEnabledNotifications( Callback<bool>( func ) );
@@ -210,7 +213,8 @@ void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus
     // Update /audio/eqSelect supported EQs based on AiqInstalled info
     m_ProductController.GetProductAudioServiceInstance()->SetAiqInstalled( ( status.aiqinstalled() > 0 ) ? true : false );
     // Notify AudioPath about the minimumLatency value from DSP (uint16_t)
-    m_ProductController.GetProductAudioServiceInstance()->SetMinimumOutputLatency( static_cast<int32_t>( status.minimumoutputlatencyms() ) );
+    m_ProductController.GetProductAudioServiceInstance()->SetNetworkSourceLatency( static_cast<int32_t>( status.networksourceintrinsiclatencyms() ) );
+    m_ProductController.GetProductAudioServiceInstance()->SetTVSourceLatency( static_cast<int32_t>( status.tvsourceintrinsiclatencyms() ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////

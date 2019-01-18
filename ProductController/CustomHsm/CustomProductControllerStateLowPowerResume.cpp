@@ -25,6 +25,7 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
+#include "CustomProductController.h"
 #include "CustomProductControllerStateLowPowerResume.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +92,19 @@ bool CustomProductControllerStateLowPowerResume::HandleIntentPlaySoundTouchSourc
     BOSE_INFO( s_logger, "The %s state is caching play soundtouch source", GetName( ).c_str( ) );
     s_cachedAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );
     return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief CustomProductControllerStateLowPowerResume::HandleLPMPowerStatusNetworkStandby
+/// @brief Confirm the LPM has risen to SYSTEM_STATE_STANDBY
+/// @return true
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateLowPowerResume::HandleLPMPowerStatusNetworkStandby()
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    GetCustomProductController().SetEthernetEnabled( true );
+
+    return ProductControllerStateLowPowerResume::HandleLPMPowerStatusNetworkStandby();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

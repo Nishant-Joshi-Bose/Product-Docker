@@ -53,6 +53,7 @@
 #include "SystemPowerMacro.pb.h"
 #include "ProductFrontDoorKeyInjectIF.h"
 #include "AccessorySoftwareInstallManager.h"
+#include "MonotonicClock.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -213,7 +214,7 @@ public:
     /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) override;
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) const override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -261,6 +262,14 @@ public:
     {
         return m_AccessoriesAreKnown;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method is used to bring up and down the ethernet interface for network standby
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    void SetEthernetEnabled( bool enabled );
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following method is called to fetch the desired volume level for audio playback
@@ -301,6 +310,16 @@ public:
     bool GetHaltInPlayableTransitionNetworkStandby( ) const
     {
         return m_haltInPlayableTransitionNetworkStandby;
+    }
+
+    void SetBootCompleteTime( )
+    {
+        m_bootCompleteTime = MonotonicClock::NowMs( );
+    }
+
+    int64_t GetBootCompleteTime( ) const
+    {
+        return m_bootCompleteTime;
     }
 
 private:
@@ -353,6 +372,8 @@ private:
 
     NetManager::Protobuf::OperationalMode m_networkOperationalMode;
 
+    bool m_isNetworkWired;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following member variable is used to cache the radio status as to not spam
@@ -360,6 +381,13 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     IpcRadioStatus_t m_radioStatus;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member variable is used to cache whether ethernet is enabled or disabled
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    bool             m_ethernetEnabled;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -408,7 +436,7 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declaration is for killing the Monaco process if no /ui/alive messages
+    /// @brief The following declaration is for killing the Brussels process if no /ui/alive messages
     ///        received by ProductController.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -427,6 +455,13 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleAudioVolumeNotification( SoundTouchInterface::volume volume );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration is used for now playing information handling
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void  HandleCapsNowPlaying( SoundTouchInterface::NowPlaying nowPlayingStatus ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -525,9 +560,13 @@ private:
     void HandleGetPowerMacro( const Callback<ProductPb::PowerMacro> & respCb,
                               const Callback<FrontDoor::Error> & errorCb ) const;
     void UpdatePowerMacro( );
+    void PersistPowerMacro( );
+    void ReconcileCurrentProductSource( );
     void LoadPowerMacroFromPersistance( );
 
     bool m_haltInPlayableTransitionNetworkStandby = false;
+
+    int64_t m_bootCompleteTime              = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

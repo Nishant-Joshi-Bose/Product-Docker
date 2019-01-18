@@ -23,6 +23,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#include <iomanip>
 #include "Utilities.h"
 #include "CustomProductController.h"
 #include "ProductCecHelper.h"
@@ -160,8 +161,14 @@ bool ProductCecHelper::Run( )
     {
         if( enabled )
         {
-            m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
-            m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::CecState >( m_cecStateCache ), DATA_COLLECTION_CEC_STATE );
+            if( m_eedid.has_ediddata() )
+            {
+                m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
+            }
+            if( m_cecStateCache.has_physicaladdress() )
+            {
+                m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::CecState >( m_cecStateCache ), DATA_COLLECTION_CEC_STATE );
+            }
         }
     };
     m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
@@ -381,6 +388,11 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
     switch( source )
     {
     case LPM_IPC_SOURCE_TV:
+        if( m_LpmSourceID == LPM_IPC_SOURCE_TV )
+        {
+            BOSE_INFO( s_logger, "Ignoring source switch to TV, already in cec source TV" );
+            return;
+        }
         productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV ) );
         break;
 
@@ -473,20 +485,20 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
 {
-    BOSE_DEBUG( s_logger, "ProductCecHelper::SendEdidDataCollection" );
-
     //convert protobuf byte buffer to string
     std::stringstream stringEdid;
     const char *bytesBuf = rawEdid.edid().c_str();
     stringEdid << std::hex;
+    stringEdid.fill( '0' );
     for( uint i = 0; i < rawEdid.edid().size(); ++i )
     {
-        stringEdid << ( int )bytesBuf[i];
+        stringEdid << std::setw( 2 ) << ( int )bytesBuf[i];
     }
 
     m_eedid.set_ediddata( stringEdid.str() );
 
     m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
+    BOSE_DEBUG( s_logger, "ProductCecHelper::HandleRawEDIDResponse sent %s", m_eedid.ediddata().c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

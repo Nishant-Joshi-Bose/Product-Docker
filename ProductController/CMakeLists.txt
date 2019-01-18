@@ -33,7 +33,9 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/AudioFormat.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
+  ${PROTO_CC_DEST}/CommonIntents.pb.cc
   ${PROTO_CC_DEST}/HdmiEdid.pb.cc
+  ${PROTO_CC_DEST}/Intents.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
@@ -44,6 +46,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemPowerMacro.pb.cc
   ${PROTO_CC_DEST}/DataCollectionCecState.pb.cc
   ${PROTO_CC_DEST}/Kepler.pb.cc
+  ${PROTO_CC_DEST}/KeyFilter.pb.cc
   AccessorySoftwareInstallManager.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
@@ -53,26 +56,29 @@ ADD_EXECUTABLE(Professor
   CustomHsm/CustomProductControllerStateAccessoryPairingCancelling.cpp
   CustomHsm/CustomProductControllerStateAdaptIQ.cpp
   CustomHsm/CustomProductControllerStateAdaptIQCancelling.cpp
+  CustomHsm/CustomProductControllerStateBooted.cpp
   CustomHsm/CustomProductControllerStateBooting.cpp
   CustomHsm/CustomProductControllerStateFirstBootGreetingTransition.cpp
   CustomHsm/CustomProductControllerStateIdle.cpp
   CustomHsm/CustomProductControllerState.cpp
   CustomHsm/CustomProductControllerStateOn.cpp
   CustomHsm/CustomProductControllerStateLowPowerResume.cpp
+  CustomHsm/CustomProductControllerStateLowPowerStandbyTransition.cpp
+  CustomHsm/CustomProductControllerStateNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlayable.cpp
   CustomHsm/CustomProductControllerStatePlayableTransitionNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlaying.cpp
-  CustomHsm/CustomProductControllerStatePlayingDeselected.cpp
   CustomHsm/CustomProductControllerStatePlayingSelected.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
-  CustomHsm/CustomProductControllerStatePlayingSelectedSilentSourceInvalid.cpp
+  CustomHsm/CustomProductControllerStatePlayingSelectedSetupNetworkConfig.cpp
   CustomHsm/CustomProductControllerStateTop.cpp
-  IntentHandler/IntentHandler.cpp
-  IntentHandler/PlaybackRequestManager.cpp
-  IntentHandler/SpeakerPairingManager.cpp
-  IntentHandler/MuteManager.cpp
-  IntentHandler/RatingManager.cpp
   IntentHandler/AudioModeManager.cpp
+  IntentHandler/BootupFactoryDefaultManager.cpp
+  IntentHandler/IntentHandler.cpp
+  IntentHandler/MuteManager.cpp
+  IntentHandler/PlaybackRequestManager.cpp
+  IntentHandler/RatingManager.cpp
+  IntentHandler/SpeakerPairingManager.cpp
   ProductAdaptIQManager.cpp
   ProductBLERemoteManager.cpp
   ProductCecHelper.cpp
@@ -107,6 +113,7 @@ TARGET_LINK_LIBRARIES(Professor
   DeviceControllerClient
   STS
   STSClient
+  uuid
   ShelbyUtils
   CommonTypes
   STSProtoBufs

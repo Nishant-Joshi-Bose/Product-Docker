@@ -1,0 +1,10 @@
+<ShepherdConfig>
+
+  <daemon name="Brussels"
+          exe="/opt/Bose/bin/run_dinghy">
+    <arg>Brussels</arg>
+    <!-- <arg>- -log-console</arg> -->
+    <env>WPE_FBDEV=/dev/fb1</env>
+  </daemon>
+
+</ShepherdConfig>
