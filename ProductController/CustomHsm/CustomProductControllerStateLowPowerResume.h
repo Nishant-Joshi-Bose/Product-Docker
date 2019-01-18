@@ -68,7 +68,7 @@ public:
     {
 
     }
-
+    bool HandleLPMPowerStatusNetworkStandby()                                 override;
     bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent ) override;
     bool HandleIntentPlaySoundTouchSource( )                                  override;
 
