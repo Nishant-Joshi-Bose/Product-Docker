@@ -569,7 +569,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     }
 
     // check if any previously connected subwoofer is disconnected
-    if( m_accessorySpeakerState.subs_size() < oldAccessorySpeakerState.subs_size() )
+    if( oldAccessorySpeakerState.subs_size() > m_accessorySpeakerState.subs_size() )
     {
         BOSE_INFO( s_logger, "subs changed from %d to %d", oldAccessorySpeakerState.subs_size(), m_accessorySpeakerState.subs_size() );
         DetectMissingSub( oldAccessorySpeakerState );
@@ -587,11 +587,14 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     if( ( strcmp( rearConfig, "VALID" ) == 0 ) )
     {
         // rearConfig VALID if (1) One Left and One Right (2) No Left and No right
-        if( ( m_waitRearAccessoryConnect == true ) and ( numOfLeftRears == 1 ) and ( numOfRightRears == 1 ) )
+        if( m_waitRearAccessoryConnect == true )
         {
-            BOSE_INFO( s_logger, "Both rears connect, stop timer" );
-            m_timerRearAccessoryConnect->Stop();
-            m_waitRearAccessoryConnect = false;
+            if( ( numOfLeftRears == 1 ) and ( numOfRightRears == 1 ) )
+            {
+                BOSE_INFO( s_logger, "Both rears connect, stop timer" );
+                m_timerRearAccessoryConnect->Stop();
+                m_waitRearAccessoryConnect = false;
+            }
         }
         else
         {
@@ -676,16 +679,18 @@ void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const char* SpeakerPairingManager::AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight, uint8_t oldRearSize )
 {
-    // After both rear accessory speakers are disconnected, the status is set to NONE.
-    // When they are powered on again, it is very likely one connects after the other in a few seconds
+    // After both rear accessory speakers are disconnected, the status of both is set to NONE and rears_size()=0
+    // When they are powered on again, it is very likely one connects after the other in a few seconds,
+    // although it is also possible they connect at the same time.
     // When the first connects, we receive the accesory list with one left or right and oldRearSize is 0.
     // If this function returns MISSING_LEFT or MISSING_RIGHT, the lightbar blinks for non-critical error.
     // This is confusing to user since the second rear may connect soon.
     // In this case, return VALID so the configurationStatus of the first rear is set to VALID.
-    // We then start a timer to wait for the second rear.
+    // Start a timer to wait for the second rear.
     // If the second rear does not connect before the timer goes off, set the configurationStatus of the first to
     // MISSING_SECOND_REAR so lightbar blinks.
-    // If the second rear connect before timer goes off, the lightbar does not blink
+    // If the second rear connects before timer goes off, the lightbar does not blink.
+    // This can happen if the user powers on one but not the other.
 
     if( oldRearSize != 0 )
     {
@@ -871,9 +876,12 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
 {
     if( m_accessorySpeakerState.subs_size() == 0 )
     {
-        // New accessorySpeakerState does not have subs but old speakerState does.
-        // This can happen if (1) one sub was connected but now disconnected (2) two subs were connected but lose connection simultaneously
-        // Copy one sub info to the list from old speakerState but set configuration to MISSING_BASS so lightbar blinks
+        // New accessorySpeakerState does not include sub but oldAccessorySpeakerState does (subs_size > 0).
+        // This can happen if:
+        // (1) one sub was connected but now disconnected, or
+        // (2) two subs were connected but lose connection simultaneously
+        // Copy one sub info from old speakerState to the current list,
+        // but set configuration to MISSING_BASS so lightbar blinks.
         const auto& old_sub_info = oldAccessorySpeakerState.subs( 0 );
         const auto& spkrInfo = m_accessorySpeakerState.add_subs();
         spkrInfo->set_type( old_sub_info.type() );
@@ -885,8 +893,9 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
     }
     else
     {
-        // New accessorySpeakerState includes sub but the number is less than previous list.
-        // This happens if two subs were connected, but one of them lost connection
+        // New accessorySpeakerState includes sub but the number 1 is less than previous list 2.
+        // This happens if two subs were connected, but one of them lost connection.
+        // Find which one lost connection
         int missed_sub_index = -1;
 
         for( int i = 0; i < oldAccessorySpeakerState.subs_size(); i++ )
@@ -910,7 +919,8 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
         }
         if( missed_sub_index >= 0 )
         {
-            //Found the disconnected sub, copy the info from old list but set configurationStatus to MISSING_BASS
+            // Found the disconnected sub, copy the info from old list but set configurationStatus to MISSING_BASS
+            // The status of the other sub is still valid
             BOSE_INFO( s_logger, "Sub %d disconnected", missed_sub_index );
             const auto missed_sub_info = oldAccessorySpeakerState.subs( missed_sub_index );
             const auto& spkrInfo = m_accessorySpeakerState.add_subs();
@@ -919,7 +929,7 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
             spkrInfo->set_serialnum( missed_sub_info.serialnum() );
             spkrInfo->set_version( missed_sub_info.version() );
             spkrInfo->set_available( false );
-            spkrInfo->set_configurationstatus( "MISSING_BASS" );
+            spkrInfo->set_configurationstatus( "MISSING_ONE_BASS" );
         }
     }
 }
