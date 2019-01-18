@@ -219,9 +219,12 @@ private:
 
     void DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
     void DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
+    void RearAccessoryConnectTimeout();
 
-    bool m_accessoryListReceived = false;
-    bool m_firstAccessoryListReceived = false;
+    APTimerPtr                                           m_timerRearAccessoryConnect;
+    bool                                                 m_accessoryListReceived = false;
+    bool                                                 m_firstAccessoryListReceived = false;
+    bool                                                 m_waitRearAccessoryConnect = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

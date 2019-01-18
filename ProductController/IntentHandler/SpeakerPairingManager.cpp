@@ -33,6 +33,7 @@
 #include "ProductEndpointDefines.h"
 #include "PGCErrorCodes.h"
 #include "ProductDataCollectionDefines.h"
+#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -47,6 +48,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
+constexpr uint32_t REAR_ACCESSORY_MAX_CONNECT_TIME = 30 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -72,7 +74,8 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
       m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) ),
       m_FrontDoorClientIF( frontDoorClient ),
       m_DataCollectionClient( productController.GetDataCollectionClient() ),
-      m_lpmConnected( false )
+      m_lpmConnected( false ),
+      m_timerRearAccessoryConnect( APTimer::Create( m_ProductTask, "RearAccessoryConnectTimer" ) )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", "SpeakerPairingManager" );
 
@@ -109,6 +112,7 @@ void SpeakerPairingManager::Initialize( )
         }
     };
     m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
+    m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MAX_CONNECT_TIME, 0 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -560,6 +564,13 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
     }
 }
 
+void SpeakerPairingManager::RearAccessoryConnectTimeout()
+{
+    BOSE_INFO( s_logger, "Wait for rear speakers timeout" );
+    m_accessorySpeakerState.mutable_rears( 0 )->set_configurationstatus( "MISSING_SECOND_REAR" );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief SpeakerPairingManager::DetectMissingRears
@@ -569,19 +580,33 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState )
 {
-    // The new speakerState does not include any rear surround but the old speakerState has rear surround
-    // This can happen if both surrounds are disconnected simultaneously, e.g., on the same power strip and turned off.
-    if( oldAccessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" )
+    if( ( m_accessorySpeakerState.rears_size() == 0 ) and ( oldAccessorySpeakerState.rears_size() != 0 ) )
     {
-        // If old status VALID but new status does not contain rear, add one rear but set status to MISSING_REARS so lightbar blinks
-        const auto& spkrInfo = m_accessorySpeakerState.add_rears();
-        const auto& old_rear_info = oldAccessorySpeakerState.rears( 0 );
-        spkrInfo->set_type( old_rear_info.type() );
-        spkrInfo->set_wireless( old_rear_info.wireless() );
-        spkrInfo->set_serialnum( old_rear_info.serialnum() );
-        spkrInfo->set_version( old_rear_info.version() );
-        spkrInfo->set_available( false );
-        spkrInfo->set_configurationstatus( "MISSING_REARS" );
+        // The new speakerState does not include any rear surround but the old speakerState has rear surround
+        // This can happen if both surrounds are disconnected simultaneously, e.g., on the same power strip and turned off.
+        BOSE_INFO( s_logger, "rears changed from %d to 0", oldAccessorySpeakerState.rears_size() );
+        if( oldAccessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" )
+        {
+            // If old status VALID but new status does not contain rear, add one rear but set status to MISSING_REARS so lightbar blinks
+            const auto& spkrInfo = m_accessorySpeakerState.add_rears();
+            const auto& old_rear_info = oldAccessorySpeakerState.rears( 0 );
+            spkrInfo->set_type( old_rear_info.type() );
+            spkrInfo->set_wireless( old_rear_info.wireless() );
+            spkrInfo->set_serialnum( old_rear_info.serialnum() );
+            spkrInfo->set_version( old_rear_info.version() );
+            spkrInfo->set_available( false );
+            spkrInfo->set_configurationstatus( "MISSING_REARS" );
+        }
+    }
+    else
+    {
+        if( ( m_accessorySpeakerState.rears_size() == 1 ) and ( m_accessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" ) )
+        {
+            // Both Maxwells were disconnected, one is connected.
+            // The second Maxwell is not connected yet, it is expected to connect with a few seconds
+            m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
+            m_waitRearAccessoryConnect = true;
+        }
     }
 }
 
@@ -671,9 +696,13 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     if( ( strcmp( rearConfig, "VALID" ) == 0 ) )
     {
         // rearConfig VALID if (1) One Left and One Right (2) No Left and No right
-        if( ( m_accessorySpeakerState.rears_size() == 0 ) and ( oldAccessorySpeakerState.rears_size() != 0 ) )
+        if( ( m_waitRearAccessoryConnect == true ) and ( numOfLeftRears == 1 ) and ( numOfRightRears == 1 ) )
         {
-            BOSE_INFO( s_logger, "rears changed from %d to 0", oldAccessorySpeakerState.rears_size() );
+            m_timerRearAccessoryConnect->Stop();
+            m_waitRearAccessoryConnect = false;
+        }
+        else
+        {
             DetectMissingRears( oldAccessorySpeakerState );
         }
     }
