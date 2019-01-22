@@ -49,7 +49,7 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@5c7d49f4fcf35b08a3e426d2cc8057c13d58f87e"
+    "selected_version": "master@27c68d395d207814956f881a2a45eba57b6eaf13"
   },
   {
     "name": "bose-web-update-page",
@@ -181,7 +181,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@3711f7a75da80db150343db80f3bd0ab41f03e58"
+    "selected_version": "master@08ceaa271c0fa5625ea298785a16ac21db945beb"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -245,7 +245,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/stable/3.0.7-1414+416d131"
+    "selected_version": "Release/stable/3.0.7-1415+416d131"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -265,7 +265,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@e51fcdbe71aefc2b3eb853f175cf51cdad1bf093"
+    "selected_version": "master@1698e8fcb854b95472d6955285641f37e0fc0ad1"
   },
   {
     "name": "Webkit",
