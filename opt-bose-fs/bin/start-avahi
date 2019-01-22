@@ -12,9 +12,7 @@ conf=/var/run/avahi-daemon.conf
 
 # Make a unique hostname.
 product=`mfgdata get "productType"`
-if [ "$product" = eddie ]; then
-    product="Bose-HS500"
-elif [ "$product" = professor ]; then
+if [ "$product" = professor ]; then
     product="Bose-SB500"
 elif [ "$product" = ginger-cheevers ]; then
     product="Bose-SB700"
