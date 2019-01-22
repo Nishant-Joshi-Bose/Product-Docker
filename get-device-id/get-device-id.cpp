@@ -24,10 +24,6 @@ information is pulled out of mfg data.
 using namespace Bose;
 using namespace Bose::Riviera;
 
-extern "C" {
-#include "hsp_security_if.h"
-}
-
 constexpr char MFG_DATA[] = "/persist/mfg_data.json";
 constexpr char DEVICE_TYPE[] = "RIVIERA";
 
@@ -48,31 +44,22 @@ string getMfgData( string key )
 //converts it to PEM format.
 string getPublicECKey( EVP_PKEY *keypair )
 {
-    BIO *bp_public = BIO_new( BIO_s_mem() );
-    if( !PEM_write_bio_PUBKEY( bp_public, keypair ) )
+    OpenSSL::Bio bp_public( BIO_new( BIO_s_mem() ) );
+    if( !bp_public || !PEM_write_bio_PUBKEY( bp_public.get(), keypair ) )
     {
         cout << "Error PEM_write_bio_PublicKey()" << endl;
         return string();
     }
 
-    int size = BIO_ctrl_pending( bp_public );
-    void *buf = malloc( size );
-    if( buf == nullptr )
+    char const * str = nullptr;
+    long len = BIO_get_mem_data( bp_public.get(), &str );
+    if( len <= 0 || !str )
     {
         cout << "Error getPublicECKey() can not get memory" << endl;
         return string();
     }
-    if( BIO_read( bp_public, buf, size ) < 0 )
-    {
-        cout << "Error BIO_read()" << endl;
-        free( buf );
-        return string();
-    }
 
-    string retStr( static_cast<const char*>( buf ), size );
-    free( buf );
-    BIO_free_all( bp_public );
-    return retStr;
+    return string( str, len );
 }
 
 //Assuming that the system has already generated a key pair and stored
@@ -118,10 +105,7 @@ string getStoredPublicKey()
 int main( int argc, char** argv )
 {
     string guid;
-    string serialNumber;
-    string macAdder;
     string pubKey;
-    string priKey;
     string productType;
     Json::Value deviceIdJson;
     std::ofstream file_id;
