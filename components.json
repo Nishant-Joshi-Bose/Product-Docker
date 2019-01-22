@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Continuous/product_stager_fix/4.0.0-4071+6a57c65"
+    "selected_version": "Release/stable/4.0.0-4072+9512a3b"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Continuous/product_stager_fix/4.0.0-4071+6a57c65"
+    "selected_version": "Release/stable/4.0.0-4072+9512a3b"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Continuous/product_stager_fix/4.0.0-4071+6a57c65"
+    "selected_version": "Release/stable/4.0.0-4072+9512a3b"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Continuous/product_stager_fix/4.0.0-4071+6a57c65"
+    "selected_version": "Release/stable/4.0.0-4072+9512a3b"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -29,19 +29,19 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44625.3185839"
+    "selected_version": "Release/Castle-Fork/2.2.2.44629.3186142"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/3.1.3-415+21944e7"
+    "selected_version": "Release/master/3.1.3-422+6dd62f0"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.5-247+9ce4035"
+    "selected_version": "Release/master/2.2.5-249+0ca2c4c"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/master/2.4.2-269+a6e2948"
+    "selected_version": "Release/master/2.4.2-271+6184073"
   },
   {
     "name": "bose-opkg-utils",
@@ -65,7 +65,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/2.4.4-506+b607e00"
+    "selected_version": "Release/master/2.4.4-512+9b6ce9e"
   },
   {
     "name": "CastleLibs-native",
@@ -93,7 +93,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/2.2.0-202+b547262"
+    "selected_version": "Release/master/2.2.0-204+600fe0c"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -185,11 +185,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@08ceaa271c0fa5625ea298785a16ac21db945beb"
+    "selected_version": "master@33c33d4b883b5a44e1ba8166e421678b57fa09c7"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-322+08ceaa2"
+    "selected_version": "Release/master/2.2.0-324+33c33d4"
   },
   {
     "name": "ProductUIAssets",
@@ -213,7 +213,7 @@
   },
   {
     "name": "RivieraLPM-Tools",
-    "selected_version": "master@8a023b09df3b8234638479586e51ab4f333743e1"
+    "selected_version": "master@e66da1af8c1edb982721996c9c51576f25adca00"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/master/3.0.0-104+58503d0"
+    "selected_version": "Release/master/3.0.0-107+5123c33"
   },
   {
     "name": "SADI-qc8017_32",
@@ -233,15 +233,15 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/2.3.3-1100+f3f991c"
+    "selected_version": "Release/master/2.3.3-1102+ae1ead1"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/master/2.3.3-1100+f3f991c"
+    "selected_version": "Release/master/2.3.3-1102+ae1ead1"
   },
   {
     "name": "SecureDeviceKey",
-    "selected_version": "master@4d0764da125bb32e5253b96c9599c49798752bac"
+    "selected_version": "master@5b260896e58eb4575ddbd5fd0f676439f5ea54aa"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -253,7 +253,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44625.3185839"
+    "selected_version": "Release/Castle-Fork/2.2.2.44629.3186142"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -269,7 +269,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@e51fcdbe71aefc2b3eb853f175cf51cdad1bf093"
+    "selected_version": "master@1698e8fcb854b95472d6955285641f37e0fc0ad1"
   },
   {
     "name": "Webkit",
