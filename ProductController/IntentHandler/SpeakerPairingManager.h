@@ -222,9 +222,9 @@ private:
     void RearAccessoryConnectTimeout();
 
 private:
-    APTimerPtr  m_timerRearAccessoryConnect;
     bool        m_accessoryListReceived = false;
     bool        m_firstAccessoryListReceived = false;
+    APTimerPtr  m_timerRearAccessoryConnect;
     bool        m_waitRearAccessoryConnect = false;
 };
 

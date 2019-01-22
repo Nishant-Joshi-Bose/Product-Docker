@@ -48,7 +48,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0;
-constexpr uint32_t REAR_ACCESSORY_MAX_CONNECT_TIME = 30 * 1000;
+constexpr uint32_t REAR_ACCESSORY_MAX_CONNECT_TIME_MS = 30 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -591,7 +591,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         {
             if( ( numOfLeftRears == 1 ) and ( numOfRightRears == 1 ) )
             {
-                BOSE_INFO( s_logger, "Both rears connect, stop timer" );
+                BOSE_INFO( s_logger, "Both rears connected, stop timer" );
                 m_timerRearAccessoryConnect->Stop();
                 m_waitRearAccessoryConnect = false;
             }
@@ -599,6 +599,14 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         else
         {
             DetectMissingRears( oldAccessorySpeakerState );
+        }
+    }
+    else
+    {
+        if( m_waitRearAccessoryConnect == true )
+        {
+            m_timerRearAccessoryConnect->Stop();
+            m_waitRearAccessoryConnect = false;
         }
     }
 
@@ -981,7 +989,7 @@ void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeake
         // Both Maxwells were disconnected, one is connected.
         // The second Maxwell is not connected yet, it is expected to connect with a few seconds
         BOSE_INFO( s_logger, "One rear connected, start timer" );
-        m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MAX_CONNECT_TIME, 0 );
+        m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MAX_CONNECT_TIME_MS, 0 );
         m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
         m_waitRearAccessoryConnect = true;
     }
