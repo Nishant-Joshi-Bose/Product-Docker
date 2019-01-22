@@ -11,7 +11,7 @@ fi
 conf=/var/run/avahi-daemon.conf
 
 # Make a unique hostname.
-product="Bose-HS500"
+product="Bose" # TODO: What's the right marketing name? Eddie is "Bose-HS500"
 
 hwaddr=$(sed 's/://g' /sys/class/net/wlan0/address)
 if [ "$hwaddr" ]; then
