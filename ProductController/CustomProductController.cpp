@@ -56,7 +56,6 @@
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
-#include "ProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
@@ -91,6 +90,7 @@
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
+#include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "CustomProductControllerStateNetworkStandby.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
@@ -285,10 +285,10 @@ void CustomProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
 
-    CustomProductControllerState* stateLowPowerStandbyTransition = new ProductControllerStateLowPowerStandbyTransition
+    CustomProductControllerState* stateLowPowerStandbyTransition = new CustomProductControllerStateLowPowerStandbyTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
     CustomProductControllerState* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
     ( GetHsm( ),
