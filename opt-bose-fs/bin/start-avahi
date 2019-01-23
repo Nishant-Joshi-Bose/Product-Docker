@@ -11,9 +11,20 @@ fi
 conf=/var/run/avahi-daemon.conf
 
 # Make a unique hostname.
-hostname=$(sed 's/://g' /sys/class/net/wlan0/address)
-if ! [ "$hostname" ]; then
-    hostname="$(hostname)-$(date +%s)"
+product=`mfgdata get "productType"`
+if [ "$product" = professor ]; then
+    product="Bose-SB500"
+elif [ "$product" = ginger-cheevers ]; then
+    product="Bose-SB700"
+else
+    product="Bose"
+fi
+
+hwaddr=$(sed 's/://g' /sys/class/net/wlan0/address)
+if [ "$hwaddr" ]; then
+    hostname="$product-$hwaddr"
+else
+    hostname="$product-$(date +%s)"
 fi
 
 # Make the general config file in a writable location
