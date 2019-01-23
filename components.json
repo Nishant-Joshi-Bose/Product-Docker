@@ -269,7 +269,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
+<<<<<<< HEAD
     "selected_version": "Release/MR1_2019/3.0.6-1368+0e91f4e"
+=======
+    "selected_version": "Release/stable/3.0.7-1415+416d131"
+>>>>>>> c2999cc... Updated SoftwareUpdate component.
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
