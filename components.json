@@ -81,7 +81,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/2.4.4-506+b607e00"
+    "selected_version": "Release/master/2.4.4-512+9b6ce9e"
   },
   {
     "name": "CastleLibs-native",
@@ -109,7 +109,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/2.2.0-202+b547262"
+    "selected_version": "Release/master/2.2.0-204+600fe0c"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -198,14 +198,18 @@
   {
     "name": "ProductControllerCommon",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "selected_version": "master@bb307cdc29dff1964e30fd5d3501efcabaf84f4a"
 =======
     "selected_version": "master@08ceaa271c0fa5625ea298785a16ac21db945beb"
 >>>>>>> 2025e18... Components Update.
+=======
+    "selected_version": "master@b9b6ea70466f778c9f8712ab719589af61b0460e"
+>>>>>>> 637736d... Components update.
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-322+08ceaa2"
+    "selected_version": "Release/master/2.2.0-326+b9b6ea7"
   },
   {
     "name": "ProductUIAssets",
@@ -245,15 +249,19 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
+<<<<<<< HEAD
     "selected_version": "Release/master/3.0.0-102+0ac244e"
+=======
+    "selected_version": "Release/master/3.0.0-107+5123c33"
+>>>>>>> 637736d... Components update.
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/2.3.3-1100+f3f991c"
+    "selected_version": "Release/master/2.3.3-1102+ae1ead1"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/master/2.3.3-1100+f3f991c"
+    "selected_version": "Release/master/2.3.3-1102+ae1ead1"
   },
   {
     "name": "SecureDeviceKey",
@@ -281,7 +289,7 @@
   },
   {
     "name": "svc-pts-log-decrypt",
-    "selected_version": "master@12e8bd2762b5e5a78c743280deb43cfb097fa05c"
+    "selected_version": "master@2bb0045d023c434a6b6569a1bba24c32af744312"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -294,10 +302,14 @@
   {
     "name": "TestUtils",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "selected_version": "master@9ffa8e2971d766444798427b2fd4d0d909bfc708"
 =======
     "selected_version": "master@1698e8fcb854b95472d6955285641f37e0fc0ad1"
 >>>>>>> 2025e18... Components Update.
+=======
+    "selected_version": "master@a421b510e20f25cb06d6adc15435370b1e6f79ad"
+>>>>>>> 637736d... Components update.
   },
   {
     "name": "unittest-cpp-qc8017_32",
