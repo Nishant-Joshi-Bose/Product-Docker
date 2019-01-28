@@ -48,7 +48,7 @@
 #include "CustomProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
-#include "ProductControllerStateBooted.h"
+#include "CustomProductControllerStateBooted.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStateFirstBootGreeting.h"
@@ -56,7 +56,6 @@
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
-#include "ProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
@@ -79,7 +78,7 @@
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateSoftwareInstall.h"
-#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStateSoftwareInstallTransition.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
@@ -91,6 +90,7 @@
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
+#include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "CustomProductControllerStateNetworkStandby.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
@@ -140,7 +140,7 @@ constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
 }
 
-constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
+constexpr char     UI_KILL_PID_FILE[] = "/var/run/brussels.pid";
 constexpr uint32_t UI_ALIVE_TIMEOUT = 60 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,10 +250,10 @@ void CustomProductController::Run( )
       CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
 
-    CustomProductControllerState* stateBooted = new ProductControllerStateBooted
+    CustomProductControllerState* stateBooted = new CustomProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_BOOTED );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTED );
 
     CustomProductControllerState* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
     ( GetHsm( ),
@@ -265,12 +265,17 @@ void CustomProductController::Run( )
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
-    CustomProductControllerState* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
+    CustomProductControllerState* stateSoftwareInstallTransition = new ProductControllerStateSoftwareInstallTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_TRANSITION );
 
     CustomProductControllerState* stateSoftwareInstall = new ProductControllerStateSoftwareInstall
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
+
+    CustomProductControllerState* stateSoftwareInstallManual = new ProductControllerStateSoftwareInstall
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
@@ -285,10 +290,10 @@ void CustomProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
 
-    CustomProductControllerState* stateLowPowerStandbyTransition = new ProductControllerStateLowPowerStandbyTransition
+    CustomProductControllerState* stateLowPowerStandbyTransition = new CustomProductControllerStateLowPowerStandbyTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
     CustomProductControllerState* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
     ( GetHsm( ),
@@ -530,11 +535,15 @@ void CustomProductController::Run( )
 
     GetHsm( ).AddState( NotifiedNames::UPDATING,
                         SystemPowerControl_State_Not_Notify,
-                        stateSoftwareUpdateTransition );
+                        stateSoftwareInstallTransition );
 
     GetHsm( ).AddState( NotifiedNames::UPDATING,
                         SystemPowerControl_State_Not_Notify,
                         stateSoftwareInstall );
+
+    GetHsm( ).AddState( NotifiedNames::UPDATING_MANUAL,
+                        SystemPowerControl_State_Not_Notify,
+                        stateSoftwareInstallManual );
 
     GetHsm( ).AddState( NotifiedNames::CRITICAL_ERROR,
                         SystemPowerControl_State_Not_Notify,
@@ -1693,8 +1702,9 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_action( ) )
     {
-        // Note that "action" is a reference argument to and may be changed by FilterIntent
+        // Note that "action" may be changed by code below, e.g., by FilterIntent()
         auto action = message.action();
+
         if( m_ProductKeyInputManager->FilterIntent( action ) )
         {
             BOSE_VERBOSE( s_logger, "Action key %s ignored", CustomProductKeyInputManager::IntentName( action ).c_str() );
@@ -1711,6 +1721,12 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
         ///
+        else if( GetIntentHandler( ).IsIntentBootupFactoryDefault( action ) )
+        {
+            // These intents are handled statelessly because at most, if not ignored, they only trigger another ProductMessage which
+            // would then be handled statefully
+            GetIntentHandler( ).Handle( action );
+        }
         else if( GetIntentHandler( ).IsIntentMuteControl( action ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,

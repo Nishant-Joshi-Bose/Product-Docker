@@ -388,6 +388,11 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
     switch( source )
     {
     case LPM_IPC_SOURCE_TV:
+        if( m_LpmSourceID == LPM_IPC_SOURCE_TV )
+        {
+            BOSE_INFO( s_logger, "Ignoring source switch to TV, already in cec source TV" );
+            return;
+        }
         productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV ) );
         break;
 
