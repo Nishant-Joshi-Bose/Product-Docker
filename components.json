@@ -49,7 +49,7 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@27c68d395d207814956f881a2a45eba57b6eaf13"
+    "selected_version": "master@1adf1514484f4f320795cd1a2074e48abc8137e1"
   },
   {
     "name": "bose-web-update-page",
@@ -181,7 +181,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@e4a605a99db09f5b26212ce0d21ede87bf671a0c"
+    "selected_version": "stable@7cd3e21227055025642d23b44d1ebabc13a785f0"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -221,7 +221,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/1.0.0-69+a38d6c8"
+    "selected_version": "Release/stable/2.1.0-88+ff212a3"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
@@ -241,7 +241,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/2.2.0-147+f0370df"
+    "selected_version": "Release/stable/2.2.0-148+1bd49fb"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
