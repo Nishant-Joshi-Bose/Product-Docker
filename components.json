@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44676.3194794"
+    "selected_version": "Release/Castle-Fork/2.2.2.44682.3195590"
   },
   {
     "name": "BLERemoteXCVR",
@@ -53,11 +53,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.5-256+da5795f"
+    "selected_version": "Release/master/2.2.5-260+4a07574"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/master/2.4.3-293+8a271a6"
+    "selected_version": "Release/master/2.4.3-300+5cc357f"
   },
   {
     "name": "bose-opkg-utils",
@@ -265,7 +265,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44676.3194794"
+    "selected_version": "Release/Castle-Fork/2.2.2.44682.3195590"
   },
   {
     "name": "svc-pts-log-decrypt",
