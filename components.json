@@ -145,7 +145,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-301+7ef79e3"
+    "selected_version": "Release/stable/2.2.0-307+3b513ef"
   },
   {
     "name": "LpmMfgTool",
@@ -201,7 +201,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-338+7cd3e21"
+    "selected_version": "Release/stable/2.2.0-344+b80fae6"
   },
   {
     "name": "ProductUIAssets",
