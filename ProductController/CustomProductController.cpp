@@ -314,7 +314,9 @@ void CustomProductController::InitializeAction()
 
     // Start ProductKeyInputManager
     m_ProductKeyInputManager = std::make_shared< CustomProductKeyInputManager >( *this );
-    m_ProductKeyInputManager -> Run();
+    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ) , GetTask( ) );
+
+    m_ProductKeyInputManager -> Run( cancelAlarmCb );
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
