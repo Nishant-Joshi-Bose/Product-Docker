@@ -44,7 +44,6 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
                               ProductController.GetMessageHandler( ),
                               ProductController.GetLpmHardwareInterface( ),
                               ProductController.GetCommonCliClientMT( ),
-                              ProductController.GetVoiceServiceClient( ),
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController )
