@@ -550,6 +550,7 @@ private:
                               const Callback<FrontDoor::Error> & errorCb ) const;
     void UpdatePowerMacro( );
     void PersistPowerMacro( );
+    void SendPowerMacroToDataCollection( );
     void ReconcileCurrentProductSource( );
     void LoadPowerMacroFromPersistance( );
 
