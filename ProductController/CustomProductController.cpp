@@ -804,7 +804,8 @@ void CustomProductController::Run( )
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
-    m_ProductKeyInputManager     ->Run( );
+    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ) , GetTask( ) );
+    m_ProductKeyInputManager     ->Run( cancelAlarmCb );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
