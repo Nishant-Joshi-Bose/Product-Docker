@@ -37,11 +37,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.5-260+4a07574"
+    "selected_version": "Release/master/2.2.5-262+abe5045"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/master/2.4.3-300+5cc357f"
+    "selected_version": "Release/master/2.4.3-302+fd0c09e"
   },
   {
     "name": "bose-opkg-utils",
@@ -81,11 +81,11 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Continuous/stable/2.2.0-163+506c019"
+    "selected_version": "Release/master/2.2.0-158+02e67cb"
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/dog-food-rc2/0.0.4-48+6ef78c4"
+    "selected_version": "Release/stable/0.0.4-49+e73e5d4"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.6-1002+eea7a20"
+    "selected_version": "Continuous/master/2.2.6-1005+b92b3bd"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -189,11 +189,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@7cd3e21227055025642d23b44d1ebabc13a785f0"
+    "selected_version": "GVAInteg@f587cce47d1b900891b1a0bacc159f624a3256b8"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/master/2.2.0-342+0fd207f"
+    "selected_version": "Release/stable/2.2.0-344+b80fae6"
   },
   {
     "name": "ProductUIAssets",
@@ -257,7 +257,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44682.3195590"
+    "selected_version": "Release/Castle-Fork/2.2.2.44685.3196280"
   },
   {
     "name": "svc-pts-log-decrypt",
