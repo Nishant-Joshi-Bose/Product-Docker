@@ -195,8 +195,6 @@ for i in "$stage"/Bose/{lib,bin,update/bin,update/lib}/*; do
     esac
 done
 
-cd  || exit
-
 # -----------------------------------------------------------------------------
 # Stage area is complete.  Package it into a *.ipk file.
 
