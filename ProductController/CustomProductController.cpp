@@ -111,6 +111,7 @@
 #include "LpmClientLiteIF.h"
 #include "AudioService.pb.h"
 #include "AudioPathControl.pb.h"
+#include "ProductDataCollectionDefines.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -840,6 +841,16 @@ void CustomProductController::Run( )
     /// Initialize the AccessorySoftwareInstallManager.
     ///
     InitializeAccessorySoftwareInstallManager( );
+
+    auto func = [this]( bool enabled )
+    {
+        if( enabled )
+        {
+            // Connection to DataCollection server established, send current state info.
+            SendPowerMacroToDataCollection( );
+        }
+    };
+    m_dataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
 
     BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
@@ -2311,7 +2322,14 @@ void CustomProductController::HandlePutPowerMacro(
             }
         }
     }
-    // else no op as we wont act on it if enabled == false
+    else
+    {
+        success = ( !req.powerontv() && !req.has_powerondevice() );
+        if( !success )
+        {
+            error.set_message( "powerontv and powerondevice must not be specified when not enabled!" );
+        }
+    }
 
     if( success )
     {
@@ -2319,10 +2337,10 @@ void CustomProductController::HandlePutPowerMacro(
         PersistPowerMacro();
         respCb( req );
     }
-
-    if( not success )
+    else
     {
         errorCb( error );
+        BOSE_WARNING( s_logger, "\"%s\": %s", req.ShortDebugString().c_str(), error.ShortDebugString().c_str() );
     }
 }
 
@@ -2372,6 +2390,18 @@ void CustomProductController::PersistPowerMacro( )
     }
     GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
                                              m_powerMacro );
+    SendPowerMacroToDataCollection( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::SendPowerMacroToDataCollection
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::SendPowerMacroToDataCollection( )
+{
+    auto collectionData = std::make_shared<ProductPb::PowerMacro>( m_powerMacro );
+    m_dataCollectionClient->SendData( collectionData, DATA_COLLECTION_POWER_MACRO );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
