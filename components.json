@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/AVS-VPA/2019-01-30_0512"
+    "selected_version": "Release/AVS-VPA/2.2.2.44718.3198962"
   },
   {
     "name": "BLERemoteXCVR",
@@ -137,7 +137,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.6-1005+b92b3bd"
+    "selected_version": "Release/stable/2.2.6-1008+a65e488"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -273,7 +273,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44708.3197731"
+    "selected_version": "Release/AVS-VPA/2.2.2.44718.3198962"
   },
   {
     "name": "svc-pts-log-decrypt",
