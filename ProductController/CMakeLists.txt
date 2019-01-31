@@ -37,6 +37,7 @@ ADD_EXECUTABLE(ProductController
   CustomProductController.cpp
   Main.cpp
   Clock.cpp
+  ${PROTO_CC_DEST}/ProductConfig.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc

@@ -31,6 +31,8 @@
 
 static DPrint s_logger( "CustomProductController" );
 
+static constexpr char PRODUCT_CONFIG_FILE_PATH[] = "/opt/Bose/etc/ProductConfig.json";
+
 using namespace DeviceManagerPb;
 
 namespace ProductApp
@@ -302,10 +304,34 @@ void CustomProductController::InitializeAction()
     LpmClientLiteIF::LpmClientLitePtr lpmLitePtr( std::static_pointer_cast<LpmClientLiteIF>( m_LpmInterface->GetLpmClient( ) ) );
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  lpmLitePtr ) );
 
+    bool success = LoadProductConfiguration();
     DisplayController::Configuration displayCtrlConfig;
-    displayCtrlConfig.m_hasLightSensor = true;
-    displayCtrlConfig.m_hasLcd = true;
-    displayCtrlConfig.m_blackScreenDetectEnabled = true;
+
+    if( !success )
+    {
+        BOSE_INFO( s_logger, "%s: LoadProductConfiguration failed, using defaults", __func__ );
+        displayCtrlConfig.m_hasLightSensor = true;
+        displayCtrlConfig.m_hasLcd = true;
+        displayCtrlConfig.m_blackScreenDetectEnabled = true;
+    }
+    else
+    {
+        int productIndex = 0;
+
+        for( uint16_t j = 0; j < m_productConfig.product_details_size(); j++ )
+        {
+            if( m_productConfig.product_details( j ).product() == GetProductType() )
+            {
+                productIndex = j;
+                BOSE_INFO( s_logger, "%s: Product Type %s, found in config file at index %d", __func__, GetProductType().c_str(), productIndex );
+                displayCtrlConfig.m_hasLightSensor = m_productConfig.product_details( productIndex ).has_lightsensor();
+                displayCtrlConfig.m_hasLcd = m_productConfig.product_details( productIndex ).has_lcd();
+                displayCtrlConfig.m_blackScreenDetectEnabled = m_productConfig.product_details( productIndex ).has_blackscreendetectenabled();
+                break;
+            }
+        }
+    }
+
     m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
 
     // Start ProductAudioService
@@ -342,6 +368,39 @@ void CustomProductController::Initialize( void )
 {
     BOSE_INFO( s_logger, __func__ );
     IL::BreakThread( std::bind( &CustomProductController::InitializeAction, this ), GetTask( ) );
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  LoadProductConfiguration
+/// @brief Function to load the Product Configuration Json from a predetermined location.
+/// @return true: Successful
+//          false: Error
+////////////////////////////////////////////////////////////////////////////////
+bool CustomProductController::LoadProductConfiguration()
+{
+    BOSE_INFO( s_logger, "%s: Load Product Controller's Product Configuration:", __func__ );
+
+    try
+    {
+        BOptional<std::string> cfg = SystemUtils::ReadFile( PRODUCT_CONFIG_FILE_PATH );
+
+        if( !cfg )
+        {
+            BOSE_ERROR( s_logger, "%s: %s not found", __func__, PRODUCT_CONFIG_FILE_PATH );
+            return false;
+        }
+        else
+        {
+            ProtoToMarkup::FromJson( *cfg, &m_productConfig );
+        }
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_LOG( ERROR, "Product config from disk failed markup error - " << e.what() );
+        return false;
+    }
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
