@@ -174,6 +174,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerOn( )
+    {
+        return false;
+    }
+
     virtual bool HandleBluetoothModuleReadiness( )
     {
         return false;
@@ -265,6 +270,11 @@ public:
     }
 
     virtual bool HandlePlayChimeRequest( ProductApp::ChimeEvents_t chimeEvent )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentManualSoftwareInstall( )
     {
         return false;
     }
@@ -377,6 +387,16 @@ public:
     }
 
     virtual bool HandleIntentPowerOff( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupDeactivated()
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAborted()
     {
         return false;
     }

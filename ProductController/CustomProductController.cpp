@@ -22,7 +22,7 @@
 #include "MfgData.h"
 #include "BLESetupEndpoints.h"
 #include "ProductSTSStateFactory.h"
-#include "ProductSTSStateTopSilent.h"
+#include "ProductSTSStateTopSetup.h"
 #include "CustomProductSTSStateTopAux.h"
 #include "ProductSTS.pb.h"
 #include "SystemUtils.h"
@@ -45,7 +45,6 @@ CustomProductController::CustomProductController():
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerResume( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME ),
     m_CustomProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
-    m_CustomProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
     m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
@@ -64,17 +63,18 @@ CustomProductController::CustomProductController():
     m_ProductControllerStatePlayingSelectedSilentSourceValid( GetHsm(), &m_ProductControllerStatePlayingSelectedSilent, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_VALID ),
     m_ProductControllerStatePlayingSelectedNotSilent( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT ),
     m_ProductControllerStatePlayingSelectedSetup( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP ),
-    m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK ),
-    m_ProductControllerStatePlayingSelectedSetupNetworkTransition( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION ),
+    m_ProductControllerStatePlayingSelectedSetupNetworkConfig( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG ),
+    m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection( GetHsm(), &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_CONNECTION ),
+    m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition( GetHsm(), &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_TRANSITION ),
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
     m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
-    m_ProductControllerStatePlayingSelectedSetupExitingAP( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP ),
+    m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_EXITING ),
+    m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_ABORTING ),
     m_ProductControllerStatePlayingSelectedStoppingStreams( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS ),
     m_ProductControllerStatePlayableTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
     m_ProductControllerStatePlayableTransitionInternal( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL ),
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransitionInternal, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
     m_ProductControllerStatePlayableTransitionNetworkStandby( GetHsm(), &m_ProductControllerStatePlayableTransitionInternal, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY ),
-    m_ProductControllerStateSoftwareUpdateTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION ),
     m_ProductControllerStatePlayingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION ),
     m_ProductControllerStateFirstBootGreeting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING ),
     m_ProductControllerStateFirstBootGreetingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION ),
@@ -82,6 +82,9 @@ CustomProductController::CustomProductController():
     m_ProductControllerStateStoppingStreamsDedicated( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED ),
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
+    m_ProductControllerStateSoftwareInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
+    m_ProductControllerStateSoftwareInstallTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_TRANSITION ),
+    m_ProductControllerStateSoftwareInstallManual( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_MANUAL ),
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
@@ -111,10 +114,6 @@ void CustomProductController::InitializeHsm()
     GetHsm().AddState( Device_State_Not_Notify,
                        SystemPowerControl_State_OFF,
                        &m_CustomProductControllerStateLowPowerStandby );
-
-    GetHsm().AddState( NotifiedNames::UPDATING,
-                       SystemPowerControl_State_Not_Notify,
-                       &m_CustomProductControllerStateSwInstall );
 
     GetHsm().AddState( NotifiedNames::BOOTING,
                        SystemPowerControl_State_Not_Notify,
@@ -200,13 +199,17 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_ON,
                        &m_ProductControllerStatePlayingSelectedSetup );
 
-    GetHsm().AddState( NotifiedNames::SELECTED,
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
                        SystemPowerControl_State_ON,
-                       &m_ProductControllerStatePlayingSelectedSetupNetwork );
+                       &m_ProductControllerStatePlayingSelectedSetupNetworkConfig );
 
-    GetHsm().AddState( NotifiedNames::SELECTED,
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
+                       SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection );
+
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
                        SystemPowerControl_State_Not_Notify,
-                       &m_ProductControllerStatePlayingSelectedSetupNetworkTransition );
+                       &m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition );
 
     GetHsm().AddState( NotifiedNames::SELECTED,
                        SystemPowerControl_State_ON,
@@ -216,9 +219,13 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStatePlayingSelectedSetupExiting );
 
-    GetHsm().AddState( NotifiedNames::SELECTED,
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
                        SystemPowerControl_State_Not_Notify,
-                       &m_ProductControllerStatePlayingSelectedSetupExitingAP );
+                       &m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting );
+
+    GetHsm().AddState( NotifiedNames::NETWORK_CONFIG,
+                       SystemPowerControl_State_ON,
+                       &m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting );
 
     GetHsm().AddState( Device_State_Not_Notify,
                        SystemPowerControl_State_Not_Notify,
@@ -239,10 +246,6 @@ void CustomProductController::InitializeHsm()
     GetHsm().AddState( Device_State_Not_Notify,
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStatePlayableTransitionNetworkStandby );
-
-    GetHsm().AddState( Device_State_Not_Notify,
-                       SystemPowerControl_State_Not_Notify,
-                       &m_ProductControllerStateSoftwareUpdateTransition );
 
     GetHsm().AddState( Device_State_Not_Notify,
                        SystemPowerControl_State_Not_Notify,
@@ -272,6 +275,18 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
 
+    GetHsm().AddState( NotifiedNames::UPDATING,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateSoftwareInstall );
+
+    GetHsm().AddState( Device_State_Not_Notify,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateSoftwareInstallTransition );
+
+    GetHsm().AddState( NotifiedNames::UPDATING_MANUAL,
+                       SystemPowerControl_State_Not_Notify,
+                       &m_ProductControllerStateSoftwareInstallManual );
+
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 }
 
@@ -299,7 +314,9 @@ void CustomProductController::InitializeAction()
 
     // Start ProductKeyInputManager
     m_ProductKeyInputManager = std::make_shared< CustomProductKeyInputManager >( *this );
-    m_ProductKeyInputManager -> Run();
+    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ) , GetTask( ) );
+
+    m_ProductKeyInputManager -> Run( cancelAlarmCb );
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
@@ -539,7 +556,7 @@ void CustomProductController::SendDeActivateAccessPointCmd()
     BOSE_INFO( s_logger, __func__ );
 }
 
-NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( )
+NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( ) const
 {
     return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }
@@ -659,7 +676,7 @@ void CustomProductController::SetupProductSTSController( void )
     using namespace ProductSTS;
 
     ProductSTSStateFactory<CustomProductSTSStateTopAux> auxStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSetup>    silentStateFactory;
 
     // 'AUX' is a product defined source used for the auxilary port.
     std::vector<ProductSTSController::SourceDescriptor> sources;

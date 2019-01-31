@@ -1,13 +1,13 @@
 Eddie
 =====
 <a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Eddie'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Eddie/latest release/blue'></a>
-[MASTER Eddie Continuous build Testing] <a title='Jenkins build status for Eddie MASTER' href='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/'><img src='http://jnkwebhook.ngrok.io/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/badge/icon'></a>
-
+[MASTER Eddie Continuous build Testing]
+[![Build Status](http://jnkwebhook.ngrok.io/buildStatus/icon?job=Continous_Build_Testing/Eddie_Continuous_Build_Testing_Master)](http://eco2jenkins.bose.com:8080/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/)
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
 This repo contains the source code and tools specific to the Eddie product.
 
-Repo admins:
+Repo contacts for eddie/... branches:
 * [Jonathan Cooper](mailto:Jonathan_cooper@bose.com)
 * [Michael Cook](mailto:Michael_Cook@bose.com)
 * [Santosh Ghondi](mailto:Santosh_Gondi@bose.com)
@@ -29,12 +29,12 @@ Repo admins:
 
 ### Getting Started
 
-Clone CastleTools.git and Eddie.git:
+Clone CastleTools and Eddie:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone git@github.com:BoseCorp/Eddie.git
+$ git clone --branch eddie/master git@github.com:BoseCorp/CastleProducts.git Eddie
 ```
 
 Make sure your Eddie unit is accessible via adb.
@@ -46,6 +46,15 @@ List of devices attached
 
 $
 ```
+
+If you have multiple Android devices, you can set the ANDROID_SERIAL environment
+variable to select a specific device:
+
+```
+export ANDROID_SERIAL=5166240
+```
+
+(Some scripts will not work correctly if you don't do that.)
 
 Access the APQ console via the tap cable.
 
@@ -164,39 +173,22 @@ work or it no longer boots, please use QFIL / VIP programming. Follow the
 instructions found on the wiki: [Recoverying A Bricked
 Eddie](https://wiki.bose.com/display/WSSW/Recovering+A+Bricked+Eddie).
 
-#### push-to-target Script
+#### Quick updates: upstage
 
-In case if you do not want to perform full software update and just copy
-binaries/libraries related to your module you can use push-to-target script
-under scripts directory.  Example usage:
-
-1. Let say you want to push Software update module binaries to your device [same way you can use -l for libraries and -c for config files]
+If you do not want to take the time to perform a full software update,
+you can use `./scripts/upstage` to copy only the files
+from product IPK staging area that have changed.
 
 ```shell session
-    push-to-target -b SoftwareUpdateService [-i ADB_device_id] [-r reset_device]
+$ make product-ipk && scripts/upstage
 ```
 
-2. Let say you want to push Software Update components(libraries, binaries and configuration files) to your device
-
+Or simply:
 ```shell session
-    push-to-target -m SoftwareUpdate [-i ADB_device_id] [-r reset_device]
+$ scripts/upstage -b
 ```
 
-3. Let say you want to push Software Update as well as NetManager components to your device
-
-```shell session
-    push-to-target -m SoftwareUpdate NetManager [-i ADB_device_id] [-r reset_device]
-```
-
-4. You can copy all the binaries built in you local system using
-
-```shell session
-    push-to-target -a [-i ADB_device_id] [-r reset_device]
-```
-
-Please note that this script will stop all services in your device so you will
-need to restart all services after copy or you can just use -r option to reset
-device after push operation.
+See `upstage --help` for more information.
 
 <a name="lpmblobs"/>
 
@@ -251,6 +243,7 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | usb | /validate-mfgdata | Check the manufacturing data |
 | usb | /controller-version | The LPM version strings |
 | usb | /clear-first-greeting | Clear the flag indicating the unit's first boot |
+| usb | /device-id | Displays the public device ID. Used on the mfg line after user code is put on the system to verify the device ID with Galapagos. |
 | any | /opensource | List the licenses of open source software used in the system |
 | any | /service | Remanufacturing. Only if the unit is in service mode |
 | any | /dev | Developer links * |

@@ -32,8 +32,6 @@
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
-#include "ProductControllerStateSoftwareInstall.h"
-#include "CustomProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -43,17 +41,20 @@
 #include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
-#include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
-#include "ProductControllerStatePlayingSelectedSetupNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfig.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
-#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting.h"
 #include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
-#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStateSoftwareInstall.h"
+#include "ProductControllerStateSoftwareInstallTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStateFirstBootGreeting.h"
 #include "ProductControllerStateFirstBootGreetingTransition.h"
@@ -305,7 +306,7 @@ public:
 /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( );
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) const;
 
 private:
 
@@ -315,7 +316,6 @@ private:
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
     ProductControllerStateLowPowerResume                            m_ProductControllerStateLowPowerResume;
     CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
-    CustomProductControllerStateSoftwareInstall                     m_CustomProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
@@ -334,17 +334,18 @@ private:
     ProductControllerStatePlayingSelectedSilentSourceValid          m_ProductControllerStatePlayingSelectedSilentSourceValid;
     ProductControllerStatePlayingSelectedNotSilent                  m_ProductControllerStatePlayingSelectedNotSilent;
     ProductControllerStatePlayingSelectedSetup                      m_ProductControllerStatePlayingSelectedSetup;
-    ProductControllerStatePlayingSelectedSetupNetwork               m_ProductControllerStatePlayingSelectedSetupNetwork;
-    ProductControllerStatePlayingSelectedSetupNetworkTransition     m_ProductControllerStatePlayingSelectedSetupNetworkTransition;
+    ProductControllerStatePlayingSelectedSetupNetworkConfig         m_ProductControllerStatePlayingSelectedSetupNetworkConfig;
+    ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection     m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection;
+    ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition     m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition;
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
-    ProductControllerStatePlayingSelectedSetupExitingAP             m_ProductControllerStatePlayingSelectedSetupExitingAP;
+    ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting        m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting;
+    ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting       m_ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting;
     ProductControllerStatePlayingSelectedStoppingStreams            m_ProductControllerStatePlayingSelectedStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
     ProductControllerStatePlayableTransitionIdle                    m_ProductControllerStatePlayableTransitionIdle;
     ProductControllerStatePlayableTransitionNetworkStandby          m_ProductControllerStatePlayableTransitionNetworkStandby;
-    ProductControllerStateSoftwareUpdateTransition                  m_ProductControllerStateSoftwareUpdateTransition;
     ProductControllerStatePlayingTransition                         m_ProductControllerStatePlayingTransition;
     ProductControllerStateFirstBootGreeting                         m_ProductControllerStateFirstBootGreeting;
     ProductControllerStateFirstBootGreetingTransition               m_ProductControllerStateFirstBootGreetingTransition;
@@ -352,6 +353,10 @@ private:
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
+    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSoftwareInstall;
+    ProductControllerStateSoftwareInstallTransition                 m_ProductControllerStateSoftwareInstallTransition;
+    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSoftwareInstallManual;
+
 
     /// ProductAudioService
     std::shared_ptr<CustomProductAudioService>                      m_ProductAudioService;
@@ -365,7 +370,7 @@ private:
     std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
     std::shared_ptr<DisplayController>                              m_displayController;
     IntentHandler                                                   m_IntentHandler;
-    Clock 	                                                    m_Clock;
+    Clock                                                           m_Clock;
     bool                                                            m_isBLEModuleReady  = false;
     bool                                                            m_isUiConnected = false;
 

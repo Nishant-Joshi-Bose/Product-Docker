@@ -57,8 +57,8 @@ endif
 
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
-	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
-	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
+	rm -rf $(BUILDS_DIR)/CMakeCache.txt
+	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: minimal-product-tar
@@ -76,9 +76,20 @@ privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.p
 IPKS = recovery.ipk product-script.ipk software-update.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES = SoundTouchRecovery product-script software-update wpe monaco SoundTouch lpm_updater
 
+EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
+EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
+EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
+
+# Metadata proto file did not have "option (ignore_unexpected_markup) =
+# true;" option enabled and hence for the device having this proto
+# version can not use new tags from metadata.json file.
+# So for current scenario we will use exclude list from
+# "/opt/Bose/update/etc/SwUpExcludePackagesList" file and when we decide
+# to use exclude list from metadata.json we can enable below options.
+
 .PHONY: generate-metadata
 generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json.sh $(BOSE_WORKSPACE)/builds/$(cfg) $(product) dev
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev #-l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz

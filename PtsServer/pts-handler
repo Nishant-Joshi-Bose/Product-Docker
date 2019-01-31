@@ -50,8 +50,6 @@ def only_for_usb():
 
 def only_for_ifaces(allowed_ifaces):
     iface = os.environ.get("IFACE", "")
-    if iface == "lo": # loopback is always considered safe
-        return
     for allowed_iface in allowed_ifaces:
         if allowed_iface.endswith("*"):
             if iface.startswith(allowed_iface[:-1]):
@@ -98,6 +96,31 @@ if path == "/audio.tar" and is_development():
     # audio data files /tmp/spotify-<url id>-<timestamp>.ogg
     # This can also be enabled with the tap command "spotify debug out"
     os.execl("/bin/sh", "sh", "-c", "/bin/tar -c /tmp/spotify*.ogg")
+
+# ----------------------------------------------------------------------------
+# AirPlay2 Album Art
+if path.startswith("/AirPlay2/"):
+   iFile = path[len("/AirPlay2/"):] 
+   # Prevent dir traversal
+   if ".." in iFile:
+       http_err()
+       sys.exit()
+   # Strip Query string.
+   i = iFile.find("?")
+   if i != -1:
+       iFile = iFile[:i]
+   # Combine image file name with abs. path
+   image = "/var/run/AirPlay2/" + iFile
+   # Only jpeg and png images are supported.
+   if image.endswith('.jpg'):
+        http_ok("image/jpeg")
+   elif image.endswith('.png'):
+        http_ok("image/png")
+   else:
+        http_err()
+        sys.exit()
+   sys.stdout.write(open(image).read())
+   sys.exit()
 
 # ----------------------------------------------------------------------------
 # Diagnostics pages.
@@ -269,11 +292,31 @@ if path == "/clear-first-greeting":
     sys.exit()
 
 # ----------------------------------------------------------------------------
+# Read out this unit's device ID. This is used on the manufacturing
+# line in user mode at the very last test station that verifies
+# both device ID and that the user code was installed correctly.
+if path == "/device-id":
+    only_for_usb()
+
+    http_ok()
+    redirect_stderr()
+    # The SecureDeviceKey and HSP libraries used by get-device-id
+    # currently spew gratuitous output to stdout and stderr. For that
+    # reason, we discard both stdout and stderr and read the .json file instead.
+    # Presumably one day the SecureDeviceKey libraries will be cleaned up
+    # and this code can be simplified.
+    if subprocess.call("get-device-id &> /dev/null", shell=True) == 0:
+        print open('/tmp/deviceID.json').read()
+    else:
+        print "Could not read device ID."
+    sys.exit()
+
+# ----------------------------------------------------------------------------
 # Open source license documents.
 # The customer end-user documentation references this URL path.
 
-http_redirect(path.lower(), "/opensource", "/licenses.txt")
-http_redirect(path.lower(), "/opensource/", "/licenses.txt")
+http_redirect(path.lower(), "/opensource", "/licenses/licenses.html")
+http_redirect(path.lower(), "/opensource/", "/licenses/licenses.html")
 
 # ----------------------------------------------------------------------------
 # Remanufacturing.
@@ -312,21 +355,20 @@ if path == "/dev" and is_development():
 <script>
 
 function set_address() {
-  var ain = document.getElementById("address");
-  var address = ain.value.trim();
+  var av = address.value.trim();
   var err = "";
-  if (address.match(/^[-\w.]+$/)) {
+  if (av.match(/^[-\w.]+$/)) {
     var anchors = document.getElementsByTagName("a");
     for (var i = anchors.length; --i >= 0;) {
       a = anchors[i];
-      a.href = "http://" + address + a.text;
+      a.href = "http://" + av + a.text;
     }
   }
   else {
     err = "(malformed)";
   }
-  document.getElementById("error").textContent = err;
-  ain.setSelectionRange(0, ain.value.length);
+  oops.textContent = err;
+  address.setSelectionRange(0, address.value.length);
 }
 
 </script>
@@ -339,7 +381,7 @@ function set_address() {
 <p>
 Address:
 <input type="text" id="address" value="{local_address}" onchange="set_address()">
-<span class="error" id="error"/>
+<span class="error" id="oops"/>
 """.format(local_address=os.environ.get("LOCAL_ADDRESS", ""))
 
     print """\
@@ -424,6 +466,11 @@ Address:
     <td class="iface">usb, wlan1</td>
     <td><a>/</a>, <a>/index.html</a></td>
     <td>Wi-Fi setup</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>:17008/update.html</a></td>
+    <td>Bonjour Update</td>
   </tr>
 </table>
 
