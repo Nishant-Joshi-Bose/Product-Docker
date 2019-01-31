@@ -25,12 +25,12 @@
             wildcard to match characters. If either of these methods match more than one
             file, the program will exit with an error.
 
-            --><header master_version="3.0.2" name="eddie_package.bos" />
+            --><header master_version="3.0.3" name="eddie_package.bos" />
     <manifest_entries>
 
         <entry chip="lpm_eddie" combine="True" name="eddie_mfg.bin" path="/home/softlib/verisoft/EddieLPM-Diags/Release/diags-alpha/1.0.0.2681/ALPHA/lpm_*.bin" version="filename" />
         <entry chip="lpm_eddie" combine="True" name="eddie_bl.bin" path="/home/softlib/verisoft/EddieLPM-BL/Release/trunk/0.1.0.1599/DP2/lpm_bootloader*.bin" version="filename" />
-        <entry name="eddie.bin" path="/home/softlib/verisoft/EddieLPM-App/Release/trunk/3.0.1.3766/EDDIE_DP2/lpm_*.bin" version="filename" />
+        <entry name="eddie.bin" path="/home/softlib/verisoft/EddieLPM-App/Release/Eddie/master/3.0.1-22+e4f669d/EDDIE_DP2/lpm_*.bin" version="filename" />
         <entry name="eddie_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/2.5-129+8464db7/HomeSpeaker/Animations.bin" version="dynamic" />
         <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/4.3-343+8d7c421/App-Eddie-DP2*.cyacd" version="dynamic" />
     </manifest_entries>
