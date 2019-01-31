@@ -41,7 +41,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44676.3194794"
+    "selected_version": "Release/Castle-Fork/2.2.2.44708.3197731"
   },
   {
     "name": "BLERemoteXCVR",
@@ -53,11 +53,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.5-256+da5795f"
+    "selected_version": "Release/master/2.2.5-262+abe5045"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/master/2.4.3-293+8a271a6"
+    "selected_version": "Release/master/2.4.3-302+fd0c09e"
   },
   {
     "name": "bose-opkg-utils",
@@ -145,7 +145,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-301+7ef79e3"
+    "selected_version": "Release/stable/2.2.0-307+3b513ef"
   },
   {
     "name": "LpmMfgTool",
@@ -201,7 +201,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-338+7cd3e21"
+    "selected_version": "Release/stable/2.2.0-344+b80fae6"
   },
   {
     "name": "ProductUIAssets",
@@ -229,15 +229,15 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/stable/3.0.2-322+3164f8e"
+    "selected_version": "Release/master/3.0.3-321+d17990e"
   },
   {
     "name": "RivieraLPM-Tools",
-    "selected_version": "master@e66da1af8c1edb982721996c9c51576f25adca00"
+    "selected_version": "master@7a7009ce8bd0bc3f272180729930563a41eb2118"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/1.0.0-69+a38d6c8"
+    "selected_version": "Release/stable/2.1.0-88+ff212a3"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
@@ -265,7 +265,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44676.3194794"
+    "selected_version": "Release/Castle-Fork/2.2.2.44708.3197731"
   },
   {
     "name": "svc-pts-log-decrypt",
