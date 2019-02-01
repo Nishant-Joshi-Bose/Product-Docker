@@ -70,6 +70,7 @@ TARGET_LINK_LIBRARIES(ProductController
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
+  VPAControllerClient
   CliClient
   AudioLibs
   EddieAudioSettings
@@ -90,7 +91,6 @@ TARGET_LINK_LIBRARIES(ProductController
   PassportLan
   SASSClient
   StsAmazon
-  VoiceService
   ProtoToMarkup
   jsoncpp
   protobuf
