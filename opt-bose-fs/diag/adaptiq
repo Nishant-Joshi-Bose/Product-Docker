@@ -50,7 +50,7 @@ else:
     function aiqstart() {
         var url = "/diag/adaptiq/put";
         var request = new XMLHttpRequest();
-        request.open('GET', url);
+        request.open('PUT', url);
         request.send(null);
     }
     </script
