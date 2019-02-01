@@ -29,7 +29,7 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Continuous/CASTLE-27090/2.2.0-3+5cd82b4"
+    "selected_version": "Continuous/master/2.2.0-6+2a277fd"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -181,7 +181,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@c6db308d8670b8e5ecc0432915365d1f7441d1f8"
+    "selected_version": "GVAInteg@f587cce47d1b900891b1a0bacc159f624a3256b8"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
