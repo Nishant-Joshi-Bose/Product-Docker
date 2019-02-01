@@ -1,6 +1,14 @@
 { "alarmCancelKeyExceptionList":
 [
-    {"keyOrigin": 0, "keyId": 3, "comment": "Volume UP key press does not cancel an alarm"},
-    {"keyOrigin": 0, "keyId": 5, "comment": "Volume Down key press does not cancel an alarm"}
+    {"keyOrigin": 1, "keyId": 3, "comment": "Vol+ RF"},
+    {"keyOrigin": 1, "keyId": 2, "comment": "Vol- RF"},
+    {"keyOrigin": 2, "keyId": 3, "comment": "Vol+ IR"},
+    {"keyOrigin": 2, "keyId": 2, "comment": "Vol- IR"}
+],
+"alarmCancelOriginExceptionList":
+[
+    {"keyOrigin": 5, "comment": "IPC"},
+    {"keyOrigin": 6, "comment": "CEC"}
 ]
+
 }
