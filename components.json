@@ -28,8 +28,8 @@
     "selected_version": "Release/master/2.2.0-242+6370224"
   },
   {
-    "name": "AVS-qc8017_32",
-    "selected_version": "Release/AVS-VPA/2.2.2.44718.3198962"
+    "name": "AVSService-qc8017_32",
+    "selected_version": "Continuous/master/2.2.0-6+2a277fd"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -248,6 +248,10 @@
     "selected_version": "master@5b260896e58eb4575ddbd5fd0f676439f5ea54aa"
   },
   {
+    "name": "ServicesClients-qc8017_32",
+    "selected_version": "Continuous/master/2.0.0-21+9326e4a"
+  },
+  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/stable/2.2.0-148+1bd49fb"
   },
@@ -257,7 +261,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/AVS-VPA/2.2.2.44718.3198962"
+    "selected_version": "Continuous/Castle-Fork-2019-MR2/2019-01-29_1406"
   },
   {
     "name": "svc-pts-log-decrypt",

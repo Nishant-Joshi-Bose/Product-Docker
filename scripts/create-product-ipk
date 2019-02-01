@@ -64,7 +64,7 @@ httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
-avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
+avs_dir=$(components get AVSService-qc8017_32 installed_location) || exit
 audiopathservice64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
 audiopathproducts64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
@@ -86,9 +86,9 @@ bluetooth_dir=$(components get Bluetooth-qc8017_32 installed_location) || exit
 bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
+svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
 googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
-svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -223,11 +223,11 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
-"$vpacontroller_dir/stage" "$opt_dir" || exit
 "$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
 "$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
 "$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
+"$vpacontroller_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
