@@ -304,32 +304,39 @@ void CustomProductController::InitializeAction()
     LpmClientLiteIF::LpmClientLitePtr lpmLitePtr( std::static_pointer_cast<LpmClientLiteIF>( m_LpmInterface->GetLpmClient( ) ) );
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  lpmLitePtr ) );
 
-    bool success = LoadProductConfiguration();
     DisplayController::Configuration displayCtrlConfig;
 
-    if( !success )
+    // Set default display values in case we fail reading config file or if product type not found in config file
+    displayCtrlConfig.m_hasLightSensor = true;
+    displayCtrlConfig.m_hasLcd = true;
+    displayCtrlConfig.m_blackScreenDetectEnabled = true;
+
+    auto productType = GetProductType();
+    bool productFound = false;
+
+    if( not LoadProductConfiguration() )
     {
-        BOSE_INFO( s_logger, "%s: LoadProductConfiguration failed, using defaults", __func__ );
-        displayCtrlConfig.m_hasLightSensor = true;
-        displayCtrlConfig.m_hasLcd = true;
-        displayCtrlConfig.m_blackScreenDetectEnabled = true;
+        BOSE_WARNING( s_logger, "%s: LoadProductConfiguration failed, using defaults", __func__ );
     }
     else
     {
-        int productIndex = 0;
-
         for( uint16_t j = 0; j < m_productConfig.product_details_size(); j++ )
         {
-            if( m_productConfig.product_details( j ).product() == GetProductType() )
+            if( m_productConfig.product_details( j ).product() == productType )
             {
-                productIndex = j;
-                BOSE_INFO( s_logger, "%s: Product Type %s, found in config file at index %d", __func__, GetProductType().c_str(), productIndex );
-                displayCtrlConfig.m_hasLightSensor = m_productConfig.product_details( productIndex ).has_lightsensor();
-                displayCtrlConfig.m_hasLcd = m_productConfig.product_details( productIndex ).has_lcd();
-                displayCtrlConfig.m_blackScreenDetectEnabled = m_productConfig.product_details( productIndex ).has_blackscreendetectenabled();
+                BOSE_INFO( s_logger, "%s: Product Type %s, found in config file at index %d", __func__, productType.c_str(), j );
+                productFound = true;
+                displayCtrlConfig.m_hasLightSensor = m_productConfig.product_details( j ).has_lightsensor();
+                displayCtrlConfig.m_hasLcd = m_productConfig.product_details( j ).has_lcd();
+                displayCtrlConfig.m_blackScreenDetectEnabled = m_productConfig.product_details( j ).has_blackscreendetectenabled();
                 break;
             }
         }
+    }
+
+    if( not productFound )
+    {
+        BOSE_WARNING( s_logger, "%s: Product Type %s, NOT found in config file, using defaults", __func__, productType.c_str() );
     }
 
     m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
@@ -381,19 +388,17 @@ bool CustomProductController::LoadProductConfiguration()
 {
     BOSE_INFO( s_logger, "%s: Load Product Controller's Product Configuration:", __func__ );
 
+    BOptional<std::string> cfg = SystemUtils::ReadFile( PRODUCT_CONFIG_FILE_PATH );
+
+    if( !cfg )
+    {
+        BOSE_ERROR( s_logger, "%s: %s not found", __func__, PRODUCT_CONFIG_FILE_PATH );
+        return false;
+    }
+
     try
     {
-        BOptional<std::string> cfg = SystemUtils::ReadFile( PRODUCT_CONFIG_FILE_PATH );
-
-        if( !cfg )
-        {
-            BOSE_ERROR( s_logger, "%s: %s not found", __func__, PRODUCT_CONFIG_FILE_PATH );
-            return false;
-        }
-        else
-        {
-            ProtoToMarkup::FromJson( *cfg, &m_productConfig );
-        }
+        ProtoToMarkup::FromJson( *cfg, &m_productConfig );
     }
     catch( const ProtoToMarkup::MarkupError &e )
     {
