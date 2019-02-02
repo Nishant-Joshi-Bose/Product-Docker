@@ -40,8 +40,8 @@
     "selected_version": "Release/master/0.0.1-123+6bffbeb"
   },
   {
-    "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44722.3199246"
+    "name": "AVSService-qc8017_32",
+    "selected_version": "Continuous/master/2.2.0-6+2a277fd"
   },
   {
     "name": "BLERemoteXCVR",
@@ -282,6 +282,10 @@
   {
     "name": "TestUtils",
     "selected_version": "master@a421b510e20f25cb06d6adc15435370b1e6f79ad"
+  },
+  {
+    "name": "VPAController-qc8017_32",
+    "selected_version": "Release/stable/2.2.5-531+17fed2a"
   },
   {
     "name": "unittest-cpp-qc8017_32",
