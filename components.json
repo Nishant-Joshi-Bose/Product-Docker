@@ -28,8 +28,8 @@
     "selected_version": "Release/master/2.2.0-242+6370224"
   },
   {
-    "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44685.3196280"
+    "name": "AVSService-qc8017_32",
+    "selected_version": "Continuous/master/2.2.0-6+2a277fd"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -181,7 +181,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@c6db308d8670b8e5ecc0432915365d1f7441d1f8"
+    "selected_version": "master@9febaa77377721bd483c2ac6db5e77e941bd016b"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -240,6 +240,10 @@
     "selected_version": "master@5b260896e58eb4575ddbd5fd0f676439f5ea54aa"
   },
   {
+    "name": "ServicesClients-qc8017_32",
+    "selected_version": "Continuous/master/2.0.0-21+9326e4a"
+  },
+  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/stable/2.2.0-148+1bd49fb"
   },
@@ -249,7 +253,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44685.3196280"
+    "selected_version": "Continuous/Castle-Fork-2019-MR2/2019-01-29_1406"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -266,6 +270,10 @@
   {
     "name": "TestUtils",
     "selected_version": "master@a421b510e20f25cb06d6adc15435370b1e6f79ad"
+  },
+  {
+    "name": "VPAController-qc8017_32",
+    "selected_version": "Release/stable/2.2.5-531+17fed2a"
   },
   {
     "name": "Webkit",
