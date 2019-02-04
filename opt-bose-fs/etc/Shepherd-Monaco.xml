@@ -1,0 +1,15 @@
+<ShepherdConfig>
+
+  <daemon name="Monaco"
+          exe="/opt/Bose/bin/run_dinghy">
+    <arg>MONACO</arg>
+    <!-- The single-buffer option is needed for Eddie. The default double-buffering
+    behaviour causes intermittent black screens and a y-position drift each time
+    the buffer is swapped. -->
+    <arg>--single-buffer</arg>
+    <arg>--scale=1.0</arg>
+    <!-- Log web console messages to STDOUT -->
+    <!-- <arg>- -log-console</arg> -->
+  </daemon>
+
+</ShepherdConfig>

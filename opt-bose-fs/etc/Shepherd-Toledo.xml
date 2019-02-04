@@ -1,6 +1,0 @@
-<ShepherdConfig>
-
-  <daemon name="Toledo" exe="/opt/Bose/bin/run_toledo">
-  </daemon>
-
-</ShepherdConfig>

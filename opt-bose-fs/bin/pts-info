@@ -16,7 +16,7 @@ uptime
 cat /opt/Bose/etc/BoseVersion.json
 cat /persist/mfg_data.json
 cat /etc/riviera-version
-cat /opt/Bose/toledo/version.txt
+cat /opt/Bose/monaco/version.txt
 free -m
 df -h
 ifconfig -a
