@@ -1,0 +1,20 @@
+{
+  "ProductConfig": {
+    "product_details": [
+      {
+        "product": "eddie",
+        "has_lcd": true,
+        "has_lightsensor": true,
+        "blackscreendetectenabled": true,
+        "has_clock": true
+      },
+      {
+        "product": "eddie-club",
+        "has_lcd": false,
+        "has_lightsensor": false,
+        "blackscreendetectenabled": false,
+        "has_clock": false
+      }
+    ]
+  }
+}
