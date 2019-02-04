@@ -26,3 +26,8 @@ BUILDS_DIR := $(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)
 
 PROTO_CC_DEST := $(BUILDS_DIR)/proto
 
+ifeq (CentOS,$(shell lsb_release -is))
+  CMAKE = cmake3          # sudo yum install cmake3
+else
+  CMAKE = cmake
+endif

@@ -17,4 +17,7 @@
   <volume thresholdLow="10"
           thresholdHigh="70"
           defaultValue="50"/>
+  <supportedRebroadcastLatencyModes>
+    <mode>SYNC_TO_ZONE</mode>
+  </supportedRebroadcastLatencyModes>
 </Configuration>
