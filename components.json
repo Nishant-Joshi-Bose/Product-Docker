@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44685.3196280"
+    "selected_version": "Release/Castle-Fork/2.2.2.44722.3199246"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -37,11 +37,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/master/2.2.5-262+abe5045"
+    "selected_version": "Release/master/2.2.5-264+26176ad"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/master/2.4.3-302+fd0c09e"
+    "selected_version": "Release/DelayReportingHotFixMR1_2019/2.4.3-305+192562d"
   },
   {
     "name": "bose-opkg-utils",
@@ -49,7 +49,7 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@1adf1514484f4f320795cd1a2074e48abc8137e1"
+    "selected_version": "master@27c68d395d207814956f881a2a45eba57b6eaf13"
   },
   {
     "name": "bose-web-update-page",
@@ -65,7 +65,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/2.4.5-537+a11f84d"
+    "selected_version": "Release/DelayReportingHotFixMR1_2019/2.4.5-548+6047fdf"
   },
   {
     "name": "CastleLibs-native",
@@ -97,7 +97,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.0-67+155c3e8"
+    "selected_version": "Release/bose-master/1.0.0-99+ed967f3"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -189,7 +189,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-344+b80fae6"
+    "selected_version": "Release/stable/2.2.0-346+96b59ec"
   },
   {
     "name": "ProductUIAssets",
@@ -197,11 +197,11 @@
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
+    "selected_version": "branches/protobuf@2815"
   },
   {
     "name": "protobuf-x86_64",
-    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
+    "selected_version": "branches/protobuf@2815"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -213,7 +213,7 @@
   },
   {
     "name": "RivieraLPM-Tools",
-    "selected_version": "master@e66da1af8c1edb982721996c9c51576f25adca00"
+    "selected_version": "master@c232bf9c1560c9709b16f8aecf206a5caa692b6e"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -221,7 +221,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/stable/2.1.0-88+ff212a3"
+    "selected_version": "Release/master/1.0.0-69+a38d6c8"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
@@ -241,11 +241,11 @@
   },
   {
     "name": "SecureDeviceKey",
-    "selected_version": "master@5b260896e58eb4575ddbd5fd0f676439f5ea54aa"
+    "selected_version": "stable@ec74b3d421cf76a1a32d1d75fa49dec6760d7090"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-148+1bd49fb"
+    "selected_version": "Release/master/2.2.0-147+f0370df"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -253,7 +253,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44685.3196280"
+    "selected_version": "Release/Castle-Fork/2.2.2.44722.3199246"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -269,7 +269,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@384b5fd5950dccc89a4b85ae0abe319a6dea5c79"
+    "selected_version": "master@bb3929bbd58e39286e7f729e43b81972ea4b4aad"
   },
   {
     "name": "Webkit",
