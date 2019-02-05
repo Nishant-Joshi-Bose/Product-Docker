@@ -166,7 +166,7 @@ bool CustomProductControllerStateAdaptIQCancelling::HandleIntentSpeakerPairing( 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQCancelling::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %s.", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     ///
     /// The intent is ignored in this custom state.
@@ -186,7 +186,7 @@ bool CustomProductControllerStateAdaptIQCancelling::HandleIntentVolumeControl( K
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQCancelling::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %s.", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     ///
     /// The intent is ignored in this custom state.

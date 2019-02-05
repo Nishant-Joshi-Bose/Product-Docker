@@ -29,6 +29,14 @@
 #include "ProductMessage.pb.h"
 #include "APTimerFactory.h"
 
+///
+/// Class Name Declaration for Logging
+///
+namespace
+{
+constexpr char CLASS_NAME[ ] = "CustomProductControllerStateAdaptIQ";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +75,7 @@ CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
     : ProductControllerState( hsm, pSuperState, stateId, name ),
       m_timer( APTimer::Create( productController.GetTask( ), "AdaptIQTimer" ) )
 {
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being constructed." );
+    BOSE_INFO( s_logger, "%s is being constructed.", CLASS_NAME );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,14 +85,12 @@ CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::StartTimer( int timeout )
 {
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
     m_timer->SetTimeouts( timeout, 0 );
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
     m_timer->Start( [ = ]( )
     {
         HandleTimeOut();
     } );
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +100,7 @@ void CustomProductControllerStateAdaptIQ::StartTimer( int timeout )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 {
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being started." );
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
 
     ///
     /// Disable source selection while in AdaptIQ.
@@ -121,7 +127,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 {
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s (%s)\n", __func__, m_status.smstate().c_str() );
+    BOSE_INFO( s_logger, "%s::%s (%s)", CLASS_NAME, __func__, m_status.smstate().c_str() );
     if( m_status.smstate() == "NA" )
     {
         // DSP booted, wait for "Advance"
@@ -158,7 +164,7 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus )
 {
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
     return true;
 }
 
@@ -169,7 +175,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 {
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
 
     ///
     /// Re-enable source selection when exiting AdaptIQ.
@@ -189,7 +195,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
 {
-    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
+    BOSE_INFO( s_logger, "%s::%s (%s)", CLASS_NAME, __func__, ProductAdaptIQControl_AdaptIQAction_Name( cmd.action() ).c_str( ) );
     switch( cmd.action() )
     {
     case ProductAdaptIQControl::Start:
@@ -274,7 +280,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 bool CustomProductControllerStateAdaptIQ::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
 
 {
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %s.", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
     return true;
 }
 
