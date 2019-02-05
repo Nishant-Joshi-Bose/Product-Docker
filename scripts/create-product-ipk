@@ -76,7 +76,6 @@ web_update_page_dir=$(components get bose-web-update-page installed_location) ||
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
 democontroller_dir=$(components get DemoController-qc8017_32 installed_location) || exit
-webkit_dir=$(components get Webkit installed_location) || exit
 productuiassets_dir=$(components get ProductUIAssets installed_location) || exit
 frontdoorservice_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
@@ -156,7 +155,7 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Generate the Open Source license list from the Riviera-HSP-licenses.tar.gz file 
+# Generate the Open Source license list from the Riviera-HSP-licenses.tar.gz file
 # Note that for PGC we need to add the -soundbar option when invoking the Perl script
 distro=$(lsb_release -is)
 if [ "$distro" = "Ubuntu" ]; then
@@ -178,7 +177,7 @@ else
     exit 1
 fi
 
-# Copy public keys in FS for development key. EC will take care of generation for Production 
+# Copy public keys in FS for development key. EC will take care of generation for Production
 secure_dir=$opt_dir/etc/secure/
 if [ -e "$secure_dir" ]; then
     chmod -R 755 "$secure_dir" || exit
@@ -210,7 +209,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$lpmservice_dir/stage" "$opt_dir" || exit
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
-"$webkit_dir/stage" "$opt_dir" || exit
 "$productuiassets_dir/stage" --chimes=HomeSpeaker --type=flac "$opt_dir" || exit
 "$frontdoorservice_dir/stage" "$opt_dir" || exit
 "$frontdoorutility_dir/stage" "$opt_dir" || exit

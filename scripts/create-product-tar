@@ -616,7 +616,7 @@ def create_output(is_without_lpm, development, ipksList):
 
     if os_arch() == '64':
         ''' create bose partition
-            ['product.ipk', 'toledo.ipk', 'lpm_updater.ipk', 'hsp.ipk', 'recovery.ipk', 'product-script.ipk', 'software-update.ipk', 'wpe.ipk'])
+            ['product.ipk', 'toledo.ipk', 'lpm_updater.ipk', 'hsp.ipk', 'recovery.ipk', 'product-script.ipk', 'software-update.ipk'])
         '''
         err, errMsg = create_bose_partition(is_without_lpm, development, ipksList)
         if err != 0:

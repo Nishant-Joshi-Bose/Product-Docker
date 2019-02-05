@@ -68,11 +68,13 @@ echo "Stage directory $stage"
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir" || exit
+mkdir -p "$output_dir" "$opt_dir/bin" || exit
 
 echo "Package version \"$toledo_ver\""
 "$wspace"/scripts/validate-version "$toledo_ver" || exit
 cp -rf "$toledo_dir"/toledo "$opt_dir/" || exit
 
+cp -f  "$toledo_dir"/run_toledo "$opt_dir/bin" || exit
 PackageName=toledo
 
 cat >"$stage/control" <<EOF || exit

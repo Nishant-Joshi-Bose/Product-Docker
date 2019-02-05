@@ -61,7 +61,7 @@
   },
   {
     "name": "BoseWebToledo",
-    "selected_version": "Continuous/develop/1.0.0-1+595c677"
+    "selected_version": "Release/master/1.0.1-6+0d2fc61"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -270,9 +270,5 @@
   {
     "name": "TestUtils",
     "selected_version": "master@bb3929bbd58e39286e7f729e43b81972ea4b4aad"
-  },
-  {
-    "name": "Webkit",
-    "selected_version": "Release/master/2.2.0-112+ea97924"
   }
 ]
