@@ -41,7 +41,7 @@ using namespace ProductPb;
 ///
 namespace
 {
-constexpr char CLASS_NAME[ ] = "MuteManager";
+constexpr char CLASS_NAME[ ] = "PlaybackRequestManager";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
