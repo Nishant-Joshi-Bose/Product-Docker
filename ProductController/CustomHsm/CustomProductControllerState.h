@@ -44,6 +44,7 @@
 #include "CustomProductControllerStates.h"
 #include "SystemEventMessage.pb.h"
 #include "ChimeEvents.h"
+#include "CommonIntentHandler.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///

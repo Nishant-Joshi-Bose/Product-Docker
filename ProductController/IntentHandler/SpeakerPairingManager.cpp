@@ -34,6 +34,14 @@
 #include "PGCErrorCodes.h"
 #include "ProductDataCollectionDefines.h"
 
+///
+/// Class Name Declaration for Logging
+///
+namespace
+{
+constexpr char CLASS_NAME[ ] = "SpeakerPairingManager";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,9 +133,7 @@ void SpeakerPairingManager::Initialize( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool SpeakerPairingManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
-    BOSE_INFO( s_logger, "%s is in %s handling the action %u.", "SpeakerPairingManager",
-               __FUNCTION__,
-               action );
+    BOSE_INFO( s_logger, "%s::%s is handling the intent %s", CLASS_NAME, __func__, CommonIntentHandler::GetIntentName( action ).c_str( ) );
 
     if( action == ( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS )
     {
@@ -208,7 +214,7 @@ void SpeakerPairingManager::RegisterLpmClientEvents( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::RegisterFrontDoorEvents( )
 {
-    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s entering method %s.", CLASS_NAME, __func__ );
 
     {
         AsyncCallback<Callback< ProductPb::AccessorySpeakerState >, Callback<FrontDoor::Error> >
@@ -254,13 +260,15 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
 ///
 /// @brief SpeakerPairingManager::AccessoriesGetHandler
 ///
-/// @param resp
+/// @param Callback<ProductPb::AccessorySpeakerState> resp
+///
+/// @param Callback<FrontDoor::Error> error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::AccessoriesGetHandler( Callback<ProductPb::AccessorySpeakerState> resp,
                                                    Callback<FrontDoor::Error> error )
 {
-    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s entering method %s.", CLASS_NAME, __func__ );
 
     resp( m_accessorySpeakerState );
 }
@@ -273,12 +281,14 @@ void SpeakerPairingManager::AccessoriesGetHandler( Callback<ProductPb::Accessory
 ///
 /// @param Callback<ProductPb::AccessorySpeakerState> resp
 ///
+/// @param Callback<FrontDoor::Error> error
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::AccessoriesPutHandler( ProductPb::AccessorySpeakerState req,
                                                    Callback<ProductPb::AccessorySpeakerState> resp,
                                                    Callback<FrontDoor::Error> error )
 {
-    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s entering method %s.", CLASS_NAME, __func__ );
 
     if( req.has_enabled( ) )
     {
@@ -505,7 +515,7 @@ void SpeakerPairingManager::SetSpeakersEnabled( const ProductPb::AccessorySpeake
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList )
 {
-    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s. Accessory list = %s", __FUNCTION__, accList.DebugString().c_str() );
+    BOSE_INFO( s_logger, "%s entering method %s. Accessory list = %s", CLASS_NAME, __func__, accList.DebugString().c_str() );
 
     m_accessoryListReceived = true;
     m_firstAccessoryListReceived = true;
@@ -594,7 +604,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairingMode_t pair )
 {
-    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s with pair mode %d", __FUNCTION__, pair.pairingenabled( ) );
+    BOSE_INFO( s_logger, "%s entering method %s with pair mode %d", CLASS_NAME, __func__, pair.pairingenabled( ) );
 
     if( pair.pairingenabled( ) && !m_accessorySpeakerState.pairing() )
     {

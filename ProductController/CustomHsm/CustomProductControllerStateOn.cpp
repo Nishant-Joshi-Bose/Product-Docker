@@ -96,16 +96,25 @@ void CustomProductControllerStateOn::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %s", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
 
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandleIntentRating
+///
+/// @param  KeyHandlerUtil::ActionType_t intent
+///
+/// @return This method returns a true Boolean value indicating that it has handled the intent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleIntentRating( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %s", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
 
@@ -148,7 +157,7 @@ bool CustomProductControllerStateOn::HandleAdaptIQControl( const ProductAdaptIQC
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %s", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     if( intent == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS ||
         intent == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS_LAN )
@@ -202,7 +211,7 @@ bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %s", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
 
