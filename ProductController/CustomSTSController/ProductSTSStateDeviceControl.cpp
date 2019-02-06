@@ -7,6 +7,7 @@
 #include "ProductSTSStateDeviceControl.h"
 #include "ProductSTSController.h"
 #include "DeviceControllerClientMessages.pb.h"
+#include "CustomProductController.h"
 
 namespace ProductApp
 {
@@ -16,7 +17,7 @@ ProductSTSStateDeviceControl::ProductSTSStateDeviceControl( ProductSTSHsm& hsm,
                                                             CHsmState *pSuperState,
                                                             ProductSTSAccount& account ) :
     ProductSTSStateTop( hsm, pSuperState, account ),
-    m_deviceControllerPtr( account.GetProductSTSController()->GetProductController().GetDeviceControllerClient() )
+    m_deviceControllerPtr( ( static_cast<CustomProductController&>( account.GetProductSTSController()->GetProductController() ) ).GetDeviceControllerClient() )
 
 {
 }
