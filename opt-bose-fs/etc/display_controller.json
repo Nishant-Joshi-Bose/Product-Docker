@@ -1,5 +1,5 @@
 {
-    "killUIOnHeartBeatLossPidFile" : "/var/run/flamenco.pid",
+    "killUIOnHeartBeatLossPidFile" : "/var/run/toledo.pid",
     "uiHeartBeatLossWarnMS" : 30000,
     "uiHeartBeatLossErrorMS" : 60000,
 
