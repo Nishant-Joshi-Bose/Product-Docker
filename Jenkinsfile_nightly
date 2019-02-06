@@ -12,25 +12,26 @@ def buildJob(jobName)
     build job: jobName, parameters: [string(name: 'TESTRAIL_RUNID', value: "${TESTRAIL_RUNID}"),string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'SW_VERSION', value: "${SW_VERSION}"), string(name: 'EC_URL', value: "${EC_URL}"),booleanParam(name: 'SW_UPDATE', value: Boolean.valueOf("${SW_UPDATE}")),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
 }
 
-def Eddie_Product  = 			["EddieProduct/Eddie-Bootup-Sequence-Timing",
-                      			"EddieProduct/Eddie-DemoEmulation",
-					//"EddieProduct/Eddie-Factory-Default",
-					"EddieProduct/Eddie-Key-Functionality",
-					"EddieProduct/Eddie-LightBar",
-					"EddieProduct/Eddie-LPM",
-					"EddieProduct/Eddie-ProductController",
-					"EddieProduct/Eddie-Preset",
-					//"EddieProduct/Eddie-LowPowerStandby",
-					//"EddieProduct/Eddie-Network-Disabled",
-					//"EddieProduct/Eddie-AUX",
-					"EddieProduct/Eddie-Manufacturing",
-					"EddieProduct/Eddie-Language",
-					//"EddieProduct/Eddie-Clock"
-					//"Bluetooth/Bluetooth_Sink_Target_SOS",
-					//"EddieProduct/Eddie-Chimes",
-					"EddieProduct/Eddie-PTS-Licenses",
-					"EddieProduct/Eddie-PTS-Logs"
-					]
+def Eddie_Product = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
+                     "EddieProduct/Eddie-DemoEmulation",
+                     "EddieProduct/Eddie-Factory-Default",
+                     "EddieProduct/Eddie-Key-Functionality",
+                     "EddieProduct/Eddie-LightBar",
+                     "EddieProduct/Eddie-LPM",
+                     "EddieProduct/Eddie-ProductController",
+                     "EddieProduct/Eddie-Preset",
+                     "EddieProduct/Eddie-LowPowerStandby",
+                     "EddieProduct/Eddie-Network-Disabled",
+                     "EddieProduct/Eddie-AUX",
+                     "EddieProduct/Eddie-Manufacturing",
+                     "EddieProduct/Eddie-Language",
+                     "EddieProduct/Eddie-Clock",
+                     //"Bluetooth/Bluetooth_Sink_Target_SOS",
+                     "EddieProduct/Eddie-Chimes",
+                     // WSCI-1326 "EddieProduct/Eddie-PTS-Licenses",
+                     "EddieProduct/Eddie-PTS-Logs",
+		     "EddieProduct/Eddie-DaemonResurrection"
+                    ]
 
 failureList = [] 
 buildCount=0
@@ -109,59 +110,60 @@ def executeBuild(item){
 
 timeout(time: 8, unit: 'HOURS')
 {
-  node('eco2-pipeline-container')
+    node('eco2-pipeline-container')
     {
-      echo "EC_URL used: ${env.EC_URL}"
-      echo "Branch Used used: ${env.SW_BRANCH}"
-      echo "freq Used used: ${env.SW_FREQUENCY}"
-      echo "VERSION used: ${env.VERSION}"
-      echo "Git Branch used: ${env.Branch}"
-     try
-       {
-               
-
-					stage("Eddie_Product")
-                    {
-                        for (item in Eddie_Product)
-                         {
-                           try
-                           {
-                              executeBuild(item)
-							  
-                           }
-                           catch (Exception ex)
-                           {
-                              echo "Caught: ${ex}"
-                           }
-                           continue
-                         }
-                    }
-                
+        echo "EC_URL used: ${env.EC_URL}"
+        echo "SW_BRANCH: ${env.SW_BRANCH}"
+        echo "SW_FREQUENCY: ${env.SW_FREQUENCY}"
+        echo "Git Branch used: ${env.Branch}"
+        if (env.SW_VERSION.toLowerCase() == "latest") 
+        {
+            def response = sh(script: "wget -qO - ${EC_URL}/Eddie/${SW_FREQUENCY}/${SW_BRANCH}/latest.txt", returnStdout: true)
+            echo "SW_VERSION: ${response}"
+        }
+        else
+        {
+            echo "SW_VERSION: ${env.SW_VERSION}"
         }
 
-       catch (e)
-       {
-           currentBuild.result = "FAILED"
-           throw e
-       }
+        try
+        {
+            // Prepare a map of jobs to run in parallel
+            def testJobs = [:]
+            for (item in Eddie_Product)
+            {
+                def job = item
+                testJobs["task_${job}"] = { 
+                    stage (job){ 
+                        executeBuild(job)
+                    }
+                }
+            }
 
-       finally
-       {
+            // Run all test jobs in parallel stages
+            parallel testJobs
+        }
+        catch (e)
+        {
+            currentBuild.result = "FAILED"
+            throw e
+        }
+        finally
+        {
             /* Comment out this part - To Stop sending Notifications Always
             * This will send notifications for Start Failure
             * Success or failure, always send notifications */
-			notifyBuild(currentBuild.result)
+            notifyBuild(currentBuild.result)
             currentBuild.description = "${failureList}"
-			println failureList
-       }
-
+            println failureList
+        }
     }
-	// To Push Data of Failed Job and Total Job on Graphite
+    // To Push Data of Failed Job and Total Job on Graphite
     println failureList.size()
     println buildCount
     graphite_table_name = 'Eddie-Product-Pipeline'
     if ("${SW_BRANCH}" != 'SOS'){
         graphite_table_name += "-${SW_BRANCH}"
     }
-    def GraphiteSocket = new GraphiteSocket(failureList.size(),buildCount,graphite_table_name,Eddie_Product)  
+    def GraphiteSocket = new GraphiteSocket(failureList.size(), buildCount, graphite_table_name, Eddie_Product)  
 }

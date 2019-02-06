@@ -1,7 +1,0 @@
-<ShepherdConfig>
-
-  <daemon name="Flamenco"
-          exe="/opt/Bose/bin/run_flamenco">
-  </daemon>
-
-</ShepherdConfig>

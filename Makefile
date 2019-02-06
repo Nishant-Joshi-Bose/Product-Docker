@@ -58,7 +58,7 @@ endif
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt
-	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
+	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: minimal-product-tar
@@ -73,12 +73,23 @@ product-ipk: cmake_build
 privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-IPKS = recovery.ipk product-script.ipk software-update.ipk flamenco.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES = SoundTouchRecovery product-script software-update flamenco monaco SoundTouch lpm_updater
+IPKS = recovery.ipk product-script.ipk software-update.ipk toledo.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES = SoundTouchRecovery product-script software-update toledo SoundTouch lpm_updater
+
+EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
+EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
+EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
+
+# Metadata proto file did not have "option (ignore_unexpected_markup) =
+# true;" option enabled and hence for the device having this proto
+# version can not use new tags from metadata.json file.
+# So for current scenario we will use exclude list from
+# "/opt/Bose/update/etc/SwUpExcludePackagesList" file and when we decide
+# to use exclude list from metadata.json we can enable below options.
 
 .PHONY: generate-metadata
 generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev #-l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
@@ -86,19 +97,19 @@ package-no-hsp: packages-gz
 
 #Create one more Zip file for Bonjour / Local update with HSP
 #- This is temporary, till DP2 boards are not available.
-IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk flamenco.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp flamenco monaco SoundTouch lpm_updater
+IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk toledo.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp toledo SoundTouch lpm_updater
 
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk flamenco-ipk softwareupdate-ipk monaco-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz: product-ipk softwareupdate-ipk toledo-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: monaco-ipk product-ipk flamenco-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz-with-hsp: toledo-ipk product-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -131,18 +142,13 @@ recovery-ipk: cmake_build minimal-product-tar
 lpmupdater-ipk: lpm-bos
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ $(product)
 
-.PHONY: monaco-ipk
-monaco-ipk:
-	./scripts/create-monaco-ipk
-
-.PHONY: flamenco-ipk
-flamenco-ipk:
-	./scripts/create-flamenco-ipk
+.PHONY: toledo-ipk
+toledo-ipk:
+	./scripts/create-toledo-ipk
 
 .PHONY: product-script-ipk
 product-script-ipk:
 	./scripts/create-product-script-ipk
-
 
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph

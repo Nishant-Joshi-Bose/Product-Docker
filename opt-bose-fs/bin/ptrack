@@ -1,0 +1,112 @@
+#!/usr/bin/python2.7
+#
+# Collect process status information over time.
+#
+import os
+import sys
+import argparse
+import time
+
+parser = argparse.ArgumentParser(description="""
+Collect process status information over time.
+""")
+parser.add_argument("--iterations", "-i", type=int, default=1, metavar="N",
+                    help="""
+Number of iterations.  0 means infinite.
+""")
+parser.add_argument("--sleep", "-s", type=float, default=1.0, metavar="SEC",
+                    help="""
+Amount of time to pause between iterations.
+""")
+opts = parser.parse_args()
+del parser
+
+# ----------------------------------------------------------------------------
+
+pids_file = "/var/run/shepherd/pids"
+last_pids_file_mtime = None
+last_pids = []
+
+def get_pids():
+    """
+    Get a list of the process IDs (as strings) of the
+    processes we're interested in.
+    """
+    global last_pids_file_mtime, last_pids
+
+    with open(pids_file) as fh:
+        mtime = os.fstat(fh.fileno()).st_mtime
+        if mtime != last_pids_file_mtime:
+            last_pids = [line[:line.find(" ")] for line in fh]
+            last_pids_file_mtime = mtime
+    return last_pids
+
+def get_system_ticks():
+    with open("/proc/stat") as fh:
+        #     0    1    2     3      4     5   6    7     8     9
+        #     user user sys   idle   iow   irq soft steal guest guest
+        #     mode mode mode                   irq              nice
+        #          nice
+        #cpu  8743 5722 18433 279978 25943 227 918  0     0     0
+        f = fh.readline().split()
+    total = sum(map(int, f[1:7]))
+    busy = total - int(f[3]) - int(f[4])
+    return total, busy
+
+def get_proc(proc_dir):
+    with open(proc_dir + "/stat") as fh:
+        line = fh.read().rstrip("\n")
+
+    # See the proc(5) man page.
+    #
+    # 0=pid 1=comm 2=state 3=ppid 4=pgrp 5=session 6=tty_nr 7=tpgid
+    # 8=flags 9=minflt 10=cminflt 11=majflt 12=cmajflt 13=utime 14=stime
+    # 15=cutime 16=cstime 17=priority 18=nice 19=num_threads
+    # 20=itrealvalue 21=starttime 22=vsize 23=rss 24=rsslim 25=startcode
+    # 26=endcode 27=startstack 28=kstkesp 29=kstkeip 30=signal 31=blocked
+    # 32=sigignore 33=sigcatch 34=wchan 35=nswap 36=cnswap 37=exit_signal
+    # 38=processor 39=rt_priority 40=policy 41=delayacct_blkio_ticks
+    # 42=guest_time 43=cguest_time
+
+    i = line.find("(")
+    j = line.rfind(")")
+    comm = line[i+1:j]
+    if " " in comm:
+        comm = comm.replace(" ", "_")
+        line = line[:i] + "-" + line[j+1:]
+
+    f = line.split(" ")
+    utime = f[13]
+    stime = f[14]
+    return "{} {} {}".format(utime, stime, comm)
+
+#SC_CLK_TCK = os.sysconf(os.sysconf_names["SC_CLK_TCK"])
+#print "SC_CLK_TCK={}".format(SC_CLK_TCK)
+
+i = 0
+while opts.iterations == 0 or i < opts.iterations:
+    if i != 0:
+        time.sleep(opts.sleep)
+    i += 1
+
+    system_total_ticks, system_busy_ticks = get_system_ticks()
+    print("s {} {} {}".format(system_total_ticks, system_busy_ticks, time.time()))
+
+    for pid in get_pids():
+        try:
+            proc_info = get_proc("/proc/{}".format(pid))
+            print("p {} {}".format(pid, proc_info))
+        except IOError:
+            continue
+
+        try:
+            tids = os.listdir("/proc/{}/task".format(pid))
+        except IOError:
+            continue
+
+        for tid in tids:
+            try:
+                proc_info = get_proc("/proc/{}/task/{}".format(pid, tid))
+                print("t {} {}".format(tid, proc_info))
+            except IOError:
+                continue

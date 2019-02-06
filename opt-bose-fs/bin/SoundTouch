@@ -113,6 +113,10 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         /opt/Bose/etc/store-core
     fi
 
+    # By default, keep processes off the 4th processor.
+    # Override with the `cpuset` attribute in Shepherd*.xml.
+    set -- "$@" --default-cpu-set 7
+
     if ! [ -e /mnt/nv/BoseLog ]; then
         ln -s /data/logs /mnt/nv/BoseLog
     fi

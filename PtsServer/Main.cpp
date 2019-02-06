@@ -269,17 +269,17 @@ strings split( std::string const& line )
     return fields;
 }
 
-void read_static_content_map( char const* file_name )
+void read_static_content_map( char const* map_file_name )
 {
     /*
-      Each line of the file is:
+      Each line of the map file is:
 
       url_path file_name mime_type
     */
-    std::ifstream ifs{ file_name };
+    std::ifstream ifs{ map_file_name };
     if( !ifs )
     {
-        LOG( "open " << file_name << ": " << err() );
+        LOG( "open " << map_file_name << ": " << err() );
         return;
     }
     std::string line;
@@ -293,7 +293,7 @@ void read_static_content_map( char const* file_name )
 
         if( fields.size() != 3 )
         {
-            LOG( "Malformed map at " << file_name << " line " << line_number );
+            LOG( "Malformed map at " << map_file_name << " line " << line_number );
             continue;
         }
         auto const& url_path = fields[0];
@@ -303,7 +303,7 @@ void read_static_content_map( char const* file_name )
         auto r = static_items.emplace( url_path, static_item{ file_name, mime_type } );
         if( !r.second )
             LOG( "Duplicate entry for " << url_path
-                 << " at " << file_name << " line " << line_number );
+                 << " at " << map_file_name << " line " << line_number );
     }
 }
 

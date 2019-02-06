@@ -292,11 +292,31 @@ if path == "/clear-first-greeting":
     sys.exit()
 
 # ----------------------------------------------------------------------------
+# Read out this unit's device ID. This is used on the manufacturing
+# line in user mode at the very last test station that verifies
+# both device ID and that the user code was installed correctly.
+if path == "/device-id":
+    only_for_usb()
+
+    http_ok()
+    redirect_stderr()
+    # The SecureDeviceKey and HSP libraries used by get-device-id
+    # currently spew gratuitous output to stdout and stderr. For that
+    # reason, we discard both stdout and stderr and read the .json file instead.
+    # Presumably one day the SecureDeviceKey libraries will be cleaned up
+    # and this code can be simplified.
+    if subprocess.call("get-device-id &> /dev/null", shell=True) == 0:
+        print open('/tmp/deviceID.json').read()
+    else:
+        print "Could not read device ID."
+    sys.exit()
+
+# ----------------------------------------------------------------------------
 # Open source license documents.
 # The customer end-user documentation references this URL path.
 
-http_redirect(path.lower(), "/opensource", "/licenses.txt")
-http_redirect(path.lower(), "/opensource/", "/licenses.txt")
+http_redirect(path.lower(), "/opensource", "/licenses/licenses.html")
+http_redirect(path.lower(), "/opensource/", "/licenses/licenses.html")
 
 # ----------------------------------------------------------------------------
 # Remanufacturing.

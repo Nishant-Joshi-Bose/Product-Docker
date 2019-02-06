@@ -75,7 +75,8 @@ static std::unordered_map < ProductApp::KeyActionMode_t, CountDownInfo> m_countd
     {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::wifiSetup ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
     {( std::make_pair( ProductApp::Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( false ) ) ), {ButtonEventName::ENTER_SYSTEM_INFO, 5}},
     {( std::make_pair( ProductApp::Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( true ) ) ), {ButtonEventName::EXIT_SYSTEM_INFO, 5}},
-    {( std::make_pair( ProductApp::Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN,     0 ) ), {ButtonEventName::BLUETOOTH_CLEAR_PAIRING, 5}}
+    {( std::make_pair( ProductApp::Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN,     0 ) ), {ButtonEventName::BLUETOOTH_CLEAR_PAIRING, 5}},
+    {( std::make_pair( ProductApp::Action::MANUAL_SOFTWARE_INSTALL_COUNTDOWN, 0 ) ), {ButtonEventName::MANUAL_SOFTWARE_INSTALL, 10}}
 };
 
 namespace ProductApp
@@ -119,6 +120,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_CANCEL:
     case( uint16_t ) Action::MANUAL_SETUP_CANCEL:
     case( uint16_t ) Action::BLUETOOTH_CLEAR_PAIRING_CANCEL:
+    case( uint16_t ) Action::MANUAL_SOFTWARE_INSTALL_CANCEL:
     {
         if( m_actionType.is_initialized() and m_countdownValue > 0 and m_countdownValue <= m_countdownIntentInfoMap[ std::make_pair( ( ProductApp::Action )m_actionType.get(), getMode( ( ProductApp::Action ) m_actionType.get() ) )].countdown )
         {
@@ -137,6 +139,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_COUNTDOWN:
     case( uint16_t ) Action::SYSTEM_INFO_COUNTDOWN:
     case( uint16_t ) Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN:
+    case( uint16_t ) Action::MANUAL_SOFTWARE_INSTALL_COUNTDOWN:
     {
         if( !m_actionType.is_initialized() )
         {

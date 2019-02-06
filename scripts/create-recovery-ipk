@@ -175,7 +175,7 @@ if [ "$LD_LIBRARY_PATH" ]; then
     unset LD_LIBRARY_PATH
 fi
 
-for i in "$stage"/Bose/{lib,bin}/*; do
+for i in "$stage"/Bose/bin/*; do
     type=$(file --brief "$i") || exit
     case "$type" in
         (*", stripped")

@@ -30,7 +30,6 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(ProductController
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
-  ${CUSTOM_HSM_DIR}/CustomProductControllerStateSoftwareInstall.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandby.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandbyTransition.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
@@ -80,6 +79,7 @@ TARGET_LINK_LIBRARIES(ProductController
   SoftwareUpdateAPI
   STS
   STSClient
+  uuid
   ShelbyUtils
   CommonTypes
   STSProtoBufs

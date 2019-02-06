@@ -3,7 +3,7 @@
         {
             "event_id":1,
             "tone":"T1_welcome_to_bose.flac",
-            "volume":47,
+            "volume":52,
             "comment":"Welcome, event first time the device boots up or after factory default"
         },
         {
@@ -63,7 +63,7 @@
         {
             "event_id":13,
             "tone":"T15_success.flac",
-            "volume":38,
+            "volume":47,
             "comment":"OOB Setup Completed"
         },
         {
