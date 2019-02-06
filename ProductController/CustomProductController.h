@@ -177,7 +177,7 @@ public:
         return m_IntentHandler;
     }
 
-    const DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr& GetDeviceControllerClient() const override
+    const DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr& GetDeviceControllerClient() const
     {
         return m_deviceControllerPtr;
     }
