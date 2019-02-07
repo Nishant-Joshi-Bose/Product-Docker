@@ -23,7 +23,8 @@ message ActionCustom_t
         PRESET_SELECT_6_RF              = 108;
         BOOTUP_FACTORY_DEFAULT_START    = 109;
         BOOTUP_FACTORY_DEFAULT_COMPLETE = 110;
-        // 111-113 are available
+        // 111-112 are available
+        ACTION_VOICE_LISTENING          = 113;
         ACTION_MUTE                     = 114;
         ACTION_SOUNDTOUCH               = 115;
         ACTION_CONNECT                  = 116;
