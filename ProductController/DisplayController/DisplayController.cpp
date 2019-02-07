@@ -382,40 +382,46 @@ bool DisplayController::ParseBrightnessData( Brightness* output, const Json::Val
  */
 void DisplayController::PushDefaultsToLPM()
 {
-    static constexpr float FRACTIONAL_PRECISION = 1000.0f;
+    BOSE_INFO( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
 
     IpcLightSensorParams_t defaults;
-    IpcUIBrightness_t* lcdBrightness;
     IpcUIBrightness_t* lightbarBrightness;
-    size_t entryCount = MIN( s_backLightLevels.size(), ( size_t ) IPC_MAX_LIGHT_SENSOR_THRESHOLD );
 
-    // Lux to level tables.
-    for( size_t i = 0; i < entryCount; ++i )
+    if( m_config.m_hasLcd )
     {
-        IpcLightSensorParamsValue_t* aValue;
+        static constexpr float FRACTIONAL_PRECISION = 1000.0f;
 
-        defaults.add_vec();
-        aValue = defaults.mutable_vec( i );
+        IpcUIBrightness_t* lcdBrightness;
+        size_t entryCount = MIN( s_backLightLevels.size(), ( size_t ) IPC_MAX_LIGHT_SENSOR_THRESHOLD );
 
-        aValue->set_backlightlevel( s_backLightLevels[i] );
-        aValue->set_loweringthresholddecimal( ( uint16_t ) s_loweringLuxThreshold[i] );
-        aValue->set_loweringthresholdfractional( FRACTIONAL_PRECISION * ( s_loweringLuxThreshold[i] - aValue->loweringthresholddecimal() ) );
-        aValue->set_risingthresholddecimal( ( uint16_t ) s_risingLuxThreshold[i] );
-        aValue->set_risingthresholdfractional( FRACTIONAL_PRECISION * ( s_risingLuxThreshold[i] - aValue->risingthresholddecimal() ) );
+        // Lux to level tables.
+        for( size_t i = 0; i < entryCount; ++i )
+        {
+            IpcLightSensorParamsValue_t* aValue;
+
+            defaults.add_vec();
+            aValue = defaults.mutable_vec( i );
+
+            aValue->set_backlightlevel( s_backLightLevels[i] );
+            aValue->set_loweringthresholddecimal( ( uint16_t ) s_loweringLuxThreshold[i] );
+            aValue->set_loweringthresholdfractional( FRACTIONAL_PRECISION * ( s_loweringLuxThreshold[i] - aValue->loweringthresholddecimal() ) );
+            aValue->set_risingthresholddecimal( ( uint16_t ) s_risingLuxThreshold[i] );
+            aValue->set_risingthresholdfractional( FRACTIONAL_PRECISION * ( s_risingLuxThreshold[i] - aValue->risingthresholddecimal() ) );
+        }
+
+        // Human detection values.
+        defaults.set_fastrisingluxdelta( 0 );
+        defaults.set_fastfaillingluxdelta( 0 );
+        defaults.set_slowrisinghysteresis( 0 );
+        defaults.set_fastrisinghysteresis( 0 );
+        defaults.set_slowfaillinghysteresis( 0 );
+        defaults.set_fastfaillinghysteresis( 0 );
+
+        // LCD UI Brightness.
+        defaults.add_uibrightness();
+        lcdBrightness = defaults.mutable_uibrightness( 0 );
+        BuildLpmUIBrightnessStruct( lcdBrightness, UI_BRIGTHNESS_DEVICE_LCD );
     }
-
-    // Human detection values.
-    defaults.set_fastrisingluxdelta( 0 );
-    defaults.set_fastfaillingluxdelta( 0 );
-    defaults.set_slowrisinghysteresis( 0 );
-    defaults.set_fastrisinghysteresis( 0 );
-    defaults.set_slowfaillinghysteresis( 0 );
-    defaults.set_fastfaillinghysteresis( 0 );
-
-    // LCD UI Brightness.
-    defaults.add_uibrightness();
-    lcdBrightness = defaults.mutable_uibrightness( 0 );
-    BuildLpmUIBrightnessStruct( lcdBrightness, UI_BRIGTHNESS_DEVICE_LCD );
 
     // Lightbar UI Brightness.
     defaults.add_uibrightness();
@@ -472,20 +478,23 @@ void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
  */
 void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, uint16_t time )
 {
-    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
+    BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
 
-    auto f = [this, capPercent, time]()
+    if( m_config.m_hasLcd )
     {
-        IpcUIBrightness_t lpmBrightness;
+        auto f = [this, capPercent, time]()
+        {
+            IpcUIBrightness_t lpmBrightness;
 
-        lpmBrightness.set_device( UI_BRIGTHNESS_DEVICE_LCD );
-        lpmBrightness.set_value( capPercent );
-        lpmBrightness.set_mode( UI_BRIGTHNESS_MODE_CAP_MAXIMUM );
-        lpmBrightness.set_time( time );
+            lpmBrightness.set_device( UI_BRIGTHNESS_DEVICE_LCD );
+            lpmBrightness.set_value( capPercent );
+            lpmBrightness.set_mode( UI_BRIGTHNESS_MODE_CAP_MAXIMUM );
+            lpmBrightness.set_time( time );
 
-        m_lpmClient->SetUIBrightness( lpmBrightness );
-    };
-    IL::BreakThread( f, m_productController.GetTask() );
+            m_lpmClient->SetUIBrightness( lpmBrightness );
+        };
+        IL::BreakThread( f, m_productController.GetTask() );
+    }
 }
 
 /*!
@@ -495,11 +504,11 @@ void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, uint16_t ti
  */
 void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
 {
-    auto f = [this, enabled]()
-    {
-        BOSE_DEBUG( s_logger, "SetStandbyLcdBrightnessCapEnabled enabled %i, hasLcd %i", enabled, m_config.m_hasLcd );
+    BOSE_DEBUG( s_logger, "SetStandbyLcdBrightnessCapEnabled enabled %i, hasLcd %i", enabled, m_config.m_hasLcd );
 
-        if( m_config.m_hasLcd )
+    if( m_config.m_hasLcd )
+    {
+        auto f = [this, enabled]()
         {
             m_lcdBrightnessCap = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
 
@@ -508,10 +517,10 @@ void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
             {
                 SetDisplayBrightnessCap( m_lcdBrightnessCap, UI_BRIGHTNESS_TIME_DEFAULT );
             }
-        }
-    };
+        };
 
-    IL::BreakThread( f, m_task );
+        IL::BreakThread( f, m_task );
+    }
 }
 
 /*!
@@ -683,21 +692,26 @@ void DisplayController::SetBlackScreenNowState( ScreenBlackState s )
  */
 void DisplayController::RegisterLpmEvents()
 {
-    // Register to receive IPC_PER_GET_BACKLIGHT messages from LPM.
-    auto backLightCallBack = [this]( IpcBackLight_t arg )
-    {
-        HandleLpmNotificationBackLight( arg );
-    };
-    AsyncCallback<IpcBackLight_t> notificationCbBackLight( backLightCallBack, m_productController.GetTask() );
-    m_lpmClient->RegisterEvent<IpcBackLight_t>( IPC_PER_GET_BACKLIGHT, notificationCbBackLight );
+    BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
 
-    // Register to receive IPC_PER_GET_UI_BRIGHTNESS messages from LPM.
-    auto uiBrightnessCallBack = [this]( IpcUIBrightness_t arg )
+    if( m_config.m_hasLcd )
     {
-        HandleLpmNotificationUIBrightness( arg );
-    };
-    AsyncCallback<IpcUIBrightness_t> notificationCbUIBrightness( uiBrightnessCallBack, m_productController.GetTask() );
-    m_lpmClient->RegisterEvent<IpcUIBrightness_t>( IPC_PER_GET_UI_BRIGHTNESS, notificationCbUIBrightness );
+        // Register to receive IPC_PER_GET_BACKLIGHT messages from LPM.
+        auto backLightCallBack = [this]( IpcBackLight_t arg )
+        {
+            HandleLpmNotificationBackLight( arg );
+        };
+        AsyncCallback<IpcBackLight_t> notificationCbBackLight( backLightCallBack, m_productController.GetTask() );
+        m_lpmClient->RegisterEvent<IpcBackLight_t>( IPC_PER_GET_BACKLIGHT, notificationCbBackLight );
+
+        // Register to receive IPC_PER_GET_UI_BRIGHTNESS messages from LPM.
+        auto uiBrightnessCallBack = [this]( IpcUIBrightness_t arg )
+        {
+            HandleLpmNotificationUIBrightness( arg );
+        };
+        AsyncCallback<IpcUIBrightness_t> notificationCbUIBrightness( uiBrightnessCallBack, m_productController.GetTask() );
+        m_lpmClient->RegisterEvent<IpcUIBrightness_t>( IPC_PER_GET_UI_BRIGHTNESS, notificationCbUIBrightness );
+    }
 }
 
 /*!
@@ -753,24 +767,26 @@ void DisplayController::RegisterFrontdoorEndPoints()
     //
     // Frontdoor /ui/lcd/brightness
     //
+    if( m_config.m_hasLcd )
+    {
+        // POST
+        AsyncCallback<Brightness, Callback<Brightness>, Callback<FrontDoor::Error>> putLcdBrightnessCb(
+                                                                                     std::bind( &DisplayController::HandlePutLcdBrightnessRequest, this, std::placeholders::_1, std::placeholders::_2 ),
+                                                                                     m_productController.GetTask() );
+        m_frontdoorClientPtr->RegisterPut<Brightness>( FRONTDOOR_ENDPOINT_BRIGHTNESS, putLcdBrightnessCb,
+                                                       FrontDoor::PUBLIC,
+                                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
-    // POST
-    AsyncCallback<Brightness, Callback<Brightness>, Callback<FrontDoor::Error>> putLcdBrightnessCb(
-                                                                                 std::bind( &DisplayController::HandlePutLcdBrightnessRequest, this, std::placeholders::_1, std::placeholders::_2 ),
-                                                                                 m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPut<Brightness>( FRONTDOOR_ENDPOINT_BRIGHTNESS, putLcdBrightnessCb,
-                                                   FrontDoor::PUBLIC,
-                                                   FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                                   FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
-
-    // GET
-    AsyncCallback< Callback<Brightness>, Callback<FrontDoor::Error>> getLcdBrightnessCb(
-                                                                      std::bind( &DisplayController::HandleGetLcdBrightnessRequest, this, std::placeholders::_1 ),
-                                                                      m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterGet( FRONTDOOR_ENDPOINT_BRIGHTNESS, getLcdBrightnessCb,
-                                       FrontDoor::PUBLIC,
-                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+        // GET
+        AsyncCallback< Callback<Brightness>, Callback<FrontDoor::Error>> getLcdBrightnessCb(
+                                                                          std::bind( &DisplayController::HandleGetLcdBrightnessRequest, this, std::placeholders::_1 ),
+                                                                          m_productController.GetTask() );
+        m_frontdoorClientPtr->RegisterGet( FRONTDOOR_ENDPOINT_BRIGHTNESS, getLcdBrightnessCb,
+                                           FrontDoor::PUBLIC,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
 
 }
 
@@ -792,20 +808,23 @@ void DisplayController::HandleGetDisplayRequest( Callback<Display> resp )
  */
 void DisplayController::PullUIBrightnessFromLpm( IpcUIBrightnessDevice_t deviceType )
 {
-    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
+    BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
 
-    Callback<IpcUIBrightness_t> cb( std::bind( &DisplayController::HandleLpmGetUIBrightness, this, std::placeholders::_1 ) );
-    AsyncCallback<const IpcUIBrightness_t> cbAsync( cb, m_task );
-
-    auto f = [this, deviceType, cbAsync]()
+    if( m_config.m_hasLcd )
     {
-        IpcGetUIBrightnessParams_t params;
-        params.set_device( deviceType );
+        Callback<IpcUIBrightness_t> cb( std::bind( &DisplayController::HandleLpmGetUIBrightness, this, std::placeholders::_1 ) );
+        AsyncCallback<const IpcUIBrightness_t> cbAsync( cb, m_task );
 
-        m_lpmClient->GetUIBrightness( params, cbAsync );
-    };
+        auto f = [this, deviceType, cbAsync]()
+        {
+            IpcGetUIBrightnessParams_t params;
+            params.set_device( deviceType );
 
-    IL::BreakThread( f, m_productController.GetTask() );
+            m_lpmClient->GetUIBrightness( params, cbAsync );
+        };
+
+        IL::BreakThread( f, m_productController.GetTask() );
+    }
 }
 
 /*!
@@ -895,6 +914,13 @@ void DisplayController::HandleGetUiHeartBeat( Callback<UiHeartBeat> resp )
 Display DisplayController::GetDisplay()
 {
     return m_display;
+}
+
+/*!
+ */
+DisplayController::Configuration DisplayController::GetConfig()
+{
+    return m_config;
 }
 
 /*!
