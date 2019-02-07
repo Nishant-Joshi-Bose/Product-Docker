@@ -586,7 +586,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     // Check if rears disconnected
     if( ( strcmp( rearConfig, "VALID" ) == 0 ) )
     {
-        // rearConfig VALID if any of these is true:
+        // AccessoryRearConiguration() returns rearConfig "VALID" if any of these is true:
         // (1) One Left and One Right
         // (2) No Left and No right
         // (3) Both left and right rears disconnect, one of them reconnect.
@@ -690,19 +690,19 @@ void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const char* SpeakerPairingManager::AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight, uint8_t oldRearSize )
 {
-    // After both rear accessory speakers are disconnected, the status of both is set to NONE and rears_size()=0
-    // When they are powered on again, although it is possible they connect at the same time,
-    // it is more likely one connects after the other in a few seconds,
+    // If both rear surrounds are connected with soundbar and they are both powered off,
+    // LPM sends the accessory list with status of both rears set to NONE (0), thus rears_size() = 0.
+    // When they are powered on again, although it is possible they connect with soundbar at the same time,
+    // it is more likely there is a delay of a few seconds.
     // When the first connects, we receive the accesory list from LPM with one rear status set to CONNECTED and the other
     // NONE and oldRearSize is 0.
-    // If this function returns MISSING_LEFT or MISSING_RIGHT, the lightbar blinks for non-critical error.
-    // This is confusing to user if s/he powered on both rear accessories.
-    // In this case, return "VALID" even though only one rear is connected.
-    // Then start a timer to wait for the second rear.
+    // If AccessoryRearConiguration() returns MISSING_LEFT or MISSING_RIGHT, the lightbar blinks for non-critical error.
+    // This is confusing to user if power is applied to both rear surrounds at the same time.
+    // In this case, return "VALID" even though only one rear is connected. Start a timer to wait for the second rear.
     // If the second rear connects before the timer goes off, the lightbar does not blink.
     // If the second rear does not connect before the timer goes off, the timer callback sets the configurationStatus
     // of the first rear accessory to MISSING_SECOND_REAR so the lightbar blinks.
-    // This can happen if the user powers on one but not the other rear accessories.
+    // This can happen if one rear surround is powered on but the other is not
 
     if( oldRearSize != 0 )
     {
