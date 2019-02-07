@@ -75,7 +75,7 @@ CustomProductControllerStateLowPowerResume::CustomProductControllerStateLowPower
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateLowPowerResume::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is caching the intent %s", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
     s_cachedAction = intent;
     return true;
 }

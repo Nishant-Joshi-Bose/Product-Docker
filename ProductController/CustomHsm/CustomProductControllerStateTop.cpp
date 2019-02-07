@@ -73,7 +73,7 @@ bool CustomProductControllerStateTop::HandleAdaptIQControl( const ProductAdaptIQ
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateTop::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s handling %d.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "%s in %s is handling the intent action %s", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     if( intent == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS_LAN )
     {
