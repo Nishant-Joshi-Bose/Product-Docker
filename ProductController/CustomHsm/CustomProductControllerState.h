@@ -44,6 +44,7 @@
 #include "CustomProductControllerStates.h"
 #include "SystemEventMessage.pb.h"
 #include "ChimeEvents.h"
+#include "CommonIntentHandler.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -426,6 +427,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentVoiceListening( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This handler is used to respond to the LPM detecting an amp fault.
@@ -493,6 +499,11 @@ public:
     }
 
     virtual bool HandleEthernetConnectionRemoved( )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentManualSoftwareInstall( )
     {
         return false;
     }

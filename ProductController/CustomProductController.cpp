@@ -79,7 +79,7 @@
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateSoftwareInstall.h"
-#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStateSoftwareInstallTransition.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
@@ -112,6 +112,7 @@
 #include "LpmClientLiteIF.h"
 #include "AudioService.pb.h"
 #include "AudioPathControl.pb.h"
+#include "ProductDataCollectionDefines.h"
 #include "SystemSourcesFriendlyNames.pb.h"
 
 ///
@@ -268,12 +269,17 @@ void CustomProductController::Run( )
       stateTop,
       CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
-    CustomProductControllerState* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
+    CustomProductControllerState* stateSoftwareInstallTransition = new ProductControllerStateSoftwareInstallTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_TRANSITION );
 
     CustomProductControllerState* stateSoftwareInstall = new ProductControllerStateSoftwareInstall
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
+
+    CustomProductControllerState* stateSoftwareInstallManual = new ProductControllerStateSoftwareInstall
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
@@ -533,11 +539,15 @@ void CustomProductController::Run( )
 
     GetHsm( ).AddState( NotifiedNames::UPDATING,
                         SystemPowerControl_State_Not_Notify,
-                        stateSoftwareUpdateTransition );
+                        stateSoftwareInstallTransition );
 
     GetHsm( ).AddState( NotifiedNames::UPDATING,
                         SystemPowerControl_State_Not_Notify,
                         stateSoftwareInstall );
+
+    GetHsm( ).AddState( NotifiedNames::UPDATING_MANUAL,
+                        SystemPowerControl_State_Not_Notify,
+                        stateSoftwareInstallManual );
 
     GetHsm( ).AddState( NotifiedNames::CRITICAL_ERROR,
                         SystemPowerControl_State_Not_Notify,
@@ -805,7 +815,8 @@ void CustomProductController::Run( )
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
-    m_ProductKeyInputManager     ->Run( );
+    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ) , GetTask( ) );
+    m_ProductKeyInputManager     ->Run( cancelAlarmCb );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
@@ -842,6 +853,16 @@ void CustomProductController::Run( )
     /// Initialize the AccessorySoftwareInstallManager.
     ///
     InitializeAccessorySoftwareInstallManager( );
+
+    auto func = [this]( bool enabled )
+    {
+        if( enabled )
+        {
+            // Connection to DataCollection server established, send current state info.
+            SendPowerMacroToDataCollection( );
+        }
+    };
+    m_dataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
 
     BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
@@ -1762,6 +1783,10 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentAudioModeToggle,
                                                               action );
         }
+        else if( GetIntentHandler( ).IsIntentVoiceListening( action ) )
+        {
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentVoiceListening );
+        }
         else
         {
             BOSE_ERROR( s_logger, "An action key %s was received that has no associated intent.", CustomProductKeyInputManager::IntentName( action ).c_str() );
@@ -2344,7 +2369,14 @@ void CustomProductController::HandlePutPowerMacro(
             }
         }
     }
-    // else no op as we wont act on it if enabled == false
+    else
+    {
+        success = ( !req.powerontv() && !req.has_powerondevice() );
+        if( !success )
+        {
+            error.set_message( "powerontv and powerondevice must not be specified when not enabled!" );
+        }
+    }
 
     if( success )
     {
@@ -2352,10 +2384,10 @@ void CustomProductController::HandlePutPowerMacro(
         PersistPowerMacro();
         respCb( req );
     }
-
-    if( not success )
+    else
     {
         errorCb( error );
+        BOSE_WARNING( s_logger, "\"%s\": %s", req.ShortDebugString().c_str(), error.ShortDebugString().c_str() );
     }
 }
 
@@ -2405,6 +2437,18 @@ void CustomProductController::PersistPowerMacro( )
     }
     GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MACRO_API,
                                              m_powerMacro );
+    SendPowerMacroToDataCollection( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::SendPowerMacroToDataCollection
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::SendPowerMacroToDataCollection( )
+{
+    auto collectionData = std::make_shared<ProductPb::PowerMacro>( m_powerMacro );
+    m_dataCollectionClient->SendData( collectionData, DATA_COLLECTION_POWER_MACRO );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2579,7 +2623,7 @@ void CustomProductController::AccessoriesPlayTonesPutHandler( ProductPb::Accesso
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief SpeakerPairingManager::AccessoriesPlayTones
+/// @brief CustomProductController::AccessoriesPlayTones
 ///
 /// @param bool subs
 ///
@@ -2601,6 +2645,30 @@ void CustomProductController::AccessoriesPlayTones( bool subs, bool rears )
         else
         {
             HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER );
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::HandleVoiceStatus
+///
+/// @param VoiceServicePB::VoiceStatus voiceStatus
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleVoiceStatus( VoiceServicePB::VoiceStatus voiceStatus )
+{
+    ProductController::HandleVoiceStatus( voiceStatus );
+
+    if( voiceStatus != m_voiceStatus )
+    {
+        m_voiceStatus = voiceStatus;
+        if( m_voiceStatus == VoiceServicePB::VoiceStatus::LISTENING )
+        {
+            ProductMessage productMessage;
+            auto listening = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_VOICE_LISTENING );
+            productMessage.set_action( listening );
+            SendAsynchronousProductMessage( productMessage );
         }
     }
 }

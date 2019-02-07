@@ -30,6 +30,14 @@
 #include "MuteManager.h"
 #include "ProductEndpointDefines.h"
 
+///
+/// Class Name Declaration for Logging
+///
+namespace
+{
+constexpr char CLASS_NAME[ ] = "MuteManager";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +68,7 @@ MuteManager::MuteManager( NotifyTargetTaskIF&        task,
       m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
       m_FrontDoorClient( frontDoorClient )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", "MuteManager" );
+    BOSE_INFO( s_logger, "%s is being constructed.", CLASS_NAME );
 
     Initialize( );
 }
@@ -96,8 +104,7 @@ void MuteManager::Initialize( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool MuteManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
-    BOSE_INFO( s_logger, "%s is in %s handling the action %u.", "MuteManager",
-               __func__, action );
+    BOSE_INFO( s_logger, "%s::%s is handling the intent %s", CLASS_NAME, __func__, CommonIntentHandler::GetIntentName( action ).c_str( ) );
 
     if( action == ( uint16_t )Action::ACTION_MUTE )
     {

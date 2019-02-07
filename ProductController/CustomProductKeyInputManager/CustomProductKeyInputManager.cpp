@@ -68,9 +68,9 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
 {
 }
 
-void CustomProductKeyInputManager::Run()
+void CustomProductKeyInputManager::Run( const Callback<>& cancelAlarmCallback )
 {
-    ProductKeyInputManager::Run();
+    ProductKeyInputManager::Run( cancelAlarmCallback );
 
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
