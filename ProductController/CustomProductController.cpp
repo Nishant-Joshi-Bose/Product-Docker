@@ -302,10 +302,10 @@ void CustomProductController::InitializeAction()
     LpmClientLiteIF::LpmClientLitePtr lpmLitePtr( std::static_pointer_cast<LpmClientLiteIF>( m_LpmInterface->GetLpmClient( ) ) );
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  lpmLitePtr ) );
 
-    DisplayController::Configuration displayCtrlConfig;
-    displayCtrlConfig.m_hasLightSensor = false;
-    displayCtrlConfig.m_hasLcd = false;
-    displayCtrlConfig.m_blackScreenDetectEnabled = false;
+    DisplayController::Configuration displayCtrlConfig;   // Custom display controller functionality for Taylor.
+    displayCtrlConfig.m_hasLightSensor = false;           // Taylor has no lightsensor.
+    displayCtrlConfig.m_hasLcd = false;                   // Nor LCD.
+    displayCtrlConfig.m_blackScreenDetectEnabled = false; // this is also an LCD feature.
     m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
 
     // Start ProductAudioService
