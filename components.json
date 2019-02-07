@@ -197,19 +197,19 @@
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2815"
+    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
   },
   {
     "name": "protobuf-x86_64",
-    "selected_version": "branches/protobuf@2815"
+    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/4.7"
+    "selected_version": "Release/master/4.8"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/4.7"
+    "selected_version": "Release/master/4.8"
   },
   {
     "name": "RivieraLPM-Tools",
@@ -221,7 +221,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/1.0.0-69+a38d6c8"
+    "selected_version": "Release/stable/2.1.0-88+ff212a3"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
@@ -245,7 +245,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/2.2.0-147+f0370df"
+    "selected_version": "Release/stable/2.2.0-148+1bd49fb"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
