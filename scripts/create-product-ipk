@@ -155,7 +155,7 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Generate the Open Source license list from the Riviera-HSP-licenses.tar.gz file 
+# Generate the Open Source license list from the Riviera-HSP-licenses.tar.gz file
 # Note that for PGC we need to add the -soundbar option when invoking the Perl script
 distro=$(lsb_release -is)
 if [ "$distro" = "Ubuntu" ]; then
@@ -177,7 +177,7 @@ else
     exit 1
 fi
 
-# Copy public keys in FS for development key. EC will take care of generation for Production 
+# Copy public keys in FS for development key. EC will take care of generation for Production
 secure_dir=$opt_dir/etc/secure/
 if [ -e "$secure_dir" ]; then
     chmod -R 755 "$secure_dir" || exit
@@ -297,7 +297,6 @@ if [ "\$b" = "\$i" ]; then
 else
     echo "Built for Riviera-HSP: \$b"
     echo "Installed Riviera-HSP: \$i"
-    echo "See https://github.com/BoseCorp/Eddie/blob/master/README.md#hsp"
 fi
 # Start Progress
 if [ -f /opt/Bose/bin/ProgressReport ]; then
