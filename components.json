@@ -28,8 +28,8 @@
     "selected_version": "Release/master/2.2.0-242+6370224"
   },
   {
-    "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44722.3199246"
+    "name": "AVSService-qc8017_32",
+    "selected_version": "Continuous/master/2.2.0-6+2a277fd"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -185,11 +185,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@c6db308d8670b8e5ecc0432915365d1f7441d1f8"
+    "selected_version": "master@9febaa77377721bd483c2ac6db5e77e941bd016b"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-346+96b59ec"
+    "selected_version": "Release/stable/2.2.0-344+b80fae6"
   },
   {
     "name": "ProductUIAssets",
@@ -244,6 +244,10 @@
     "selected_version": "stable@ec74b3d421cf76a1a32d1d75fa49dec6760d7090"
   },
   {
+    "name": "ServicesClients-qc8017_32",
+    "selected_version": "Continuous/master/2.0.0-21+9326e4a"
+  },
+  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/stable/2.2.0-148+1bd49fb"
   },
@@ -270,5 +274,9 @@
   {
     "name": "TestUtils",
     "selected_version": "master@7ef32dde63f62a3a843550a3358108f3225f83d0"
+  },
+  {
+    "name": "VPAController-qc8017_32",
+    "selected_version": "Release/stable/2.2.5-531+17fed2a"
   }
 ]
