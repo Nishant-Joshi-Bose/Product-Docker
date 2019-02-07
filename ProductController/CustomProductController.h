@@ -370,7 +370,7 @@ private:
     std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
     std::shared_ptr<DisplayController>                              m_displayController;
     IntentHandler                                                   m_IntentHandler;
-    Clock                                                       m_Clock;
+    Clock                                                           m_Clock;
     bool                                                            m_isBLEModuleReady  = false;
     bool                                                            m_isUiConnected = false;
 
