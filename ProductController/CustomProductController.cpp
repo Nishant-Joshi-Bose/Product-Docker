@@ -804,7 +804,8 @@ void CustomProductController::Run( )
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
-    m_ProductKeyInputManager     ->Run( );
+    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ) , GetTask( ) );
+    m_ProductKeyInputManager     ->Run( cancelAlarmCb );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
@@ -1771,6 +1772,10 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentAudioModeToggle,
                                                               action );
         }
+        else if( GetIntentHandler( ).IsIntentVoiceListening( action ) )
+        {
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentVoiceListening );
+        }
         else
         {
             BOSE_ERROR( s_logger, "An action key %s was received that has no associated intent.", CustomProductKeyInputManager::IntentName( action ).c_str() );
@@ -2576,7 +2581,7 @@ void CustomProductController::AccessoriesPlayTonesPutHandler( ProductPb::Accesso
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief SpeakerPairingManager::AccessoriesPlayTones
+/// @brief CustomProductController::AccessoriesPlayTones
 ///
 /// @param bool subs
 ///
@@ -2598,6 +2603,30 @@ void CustomProductController::AccessoriesPlayTones( bool subs, bool rears )
         else
         {
             HandleChimePlayRequest( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER );
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::HandleVoiceStatus
+///
+/// @param VoiceServicePB::VoiceStatus voiceStatus
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleVoiceStatus( VoiceServicePB::VoiceStatus voiceStatus )
+{
+    ProductController::HandleVoiceStatus( voiceStatus );
+
+    if( voiceStatus != m_voiceStatus )
+    {
+        m_voiceStatus = voiceStatus;
+        if( m_voiceStatus == VoiceServicePB::VoiceStatus::LISTENING )
+        {
+            ProductMessage productMessage;
+            auto listening = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_VOICE_LISTENING );
+            productMessage.set_action( listening );
+            SendAsynchronousProductMessage( productMessage );
         }
     }
 }

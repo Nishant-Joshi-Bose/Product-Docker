@@ -88,7 +88,7 @@ void CustomProductControllerStatePlayingSelected::GoToNextState( )
 
 bool CustomProductControllerStatePlayingSelected::HandleIntentAudioModeToggle( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling the intent action %u", GetName( ).c_str( ), __FUNCTION__, intent );
+    BOSE_INFO( s_logger, "%s in %s is handling the intent action %s", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
 

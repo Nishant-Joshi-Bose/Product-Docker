@@ -44,6 +44,7 @@
 #include "CustomProductControllerStates.h"
 #include "SystemEventMessage.pb.h"
 #include "ChimeEvents.h"
+#include "CommonIntentHandler.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -422,6 +423,11 @@ public:
     }
 
     virtual bool HandleIntentAudioModeToggle( KeyHandlerUtil::ActionType_t intent )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentVoiceListening( )
     {
         return false;
     }

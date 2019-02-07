@@ -260,7 +260,7 @@ std::shared_ptr<CustomProductLpmHardwareInterface>& CustomProductControllerState
 bool CustomProductControllerStateAdaptIQ::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
 
 {
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %s.", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
     return true;
 }
 
