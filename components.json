@@ -84,6 +84,10 @@
     "selected_version": "Release/stable/2.2.0-166+506c019"
   },
   {
+    "name": "CloudControlClient-qc8017_32",
+    "selected_version": "Release/stable/0.0.4-49+e73e5d4"
+  },
+  {
     "name": "DataCollectionClient-qc8017_32",
     "selected_version": "Release/master/2.2.3-198+f213928"
   },
@@ -114,6 +118,10 @@
   {
     "name": "GalapagosClient-qc8017_32",
     "selected_version": "Release/master/2.2.0-342+28c0ae1"
+  },
+  {
+    "name": "GoogleVoiceAssistant-qc8017_64",
+    "selected_version": "Release/stable/2.2.6-1008+a65e488"
   },
   {
     "name": "HTTPInterface-qc8017_32",

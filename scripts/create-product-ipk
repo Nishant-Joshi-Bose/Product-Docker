@@ -88,6 +88,8 @@ lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
+googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
+cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -221,7 +223,9 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
+"$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
 "$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
+"$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
 
