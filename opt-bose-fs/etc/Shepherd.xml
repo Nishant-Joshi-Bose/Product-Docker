@@ -13,10 +13,7 @@
     <arg>-c/opt/Bose/etc/CAPS.xml</arg>
   </daemon>
 
-  <!--
-  Temporarily disabling Airplay2. DO_NOT_MERGE this in master.
-  <daemon name="AirPlay2" cpuset="6"/>
-  -->
+  <daemon name="AirPlay2"/>
   <daemon name="Amazon"/>
   <daemon name="AudioNotification"/>
   <daemon name="BMX"/>
