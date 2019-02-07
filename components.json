@@ -245,7 +245,7 @@
   },
   {
     "name": "SecureDeviceKey",
-    "selected_version": "master@5b260896e58eb4575ddbd5fd0f676439f5ea54aa"
+    "selected_version": "stable@ec74b3d421cf76a1a32d1d75fa49dec6760d7090"
   },
   {
     "name": "ServicesClients-qc8017_32",
@@ -277,7 +277,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@a421b510e20f25cb06d6adc15435370b1e6f79ad"
+    "selected_version": "master@7ef32dde63f62a3a843550a3358108f3225f83d0"
   },
   {
     "name": "VPAController-qc8017_32",
