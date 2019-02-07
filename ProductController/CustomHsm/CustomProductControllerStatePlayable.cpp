@@ -95,6 +95,25 @@ bool CustomProductControllerStatePlayable::HandleIntentMuteControl( KeyHandlerUt
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayable::HandleIntentVoiceListening
+///
+/// @return This method returns a true Boolean value indicating that it has handled the event
+///         and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandleIntentVoiceListening( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    ///
+    /// Go to a playing transition state to bring the product to full power.
+    ///
+    ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH );
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
