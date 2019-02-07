@@ -224,8 +224,8 @@
     "selected_version": "Release/master/3.0.3-321+d17990e"
   },
   {
-    "name": "RivieraLpmTools",
-    "selected_version": "@3604"
+    "name": "RivieraLPM-Tools",
+    "selected_version": "master@c232bf9c1560c9709b16f8aecf206a5caa692b6e"
   },
   {
     "name": "RivieraLpmUpdater",
