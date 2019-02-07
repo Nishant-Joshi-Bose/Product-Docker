@@ -894,7 +894,7 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState )
 {
-    BOSE_INFO( s_logger, "%s in %s", "SpeakerPairingManager", __func__ );
+    BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
     if( m_accessorySpeakerState.subs_size() == 0 )
     {
         // New accessorySpeakerState does not include sub but oldAccessorySpeakerState does (subs_size > 0).
@@ -966,7 +966,7 @@ void SpeakerPairingManager::RearAccessoryConnectTimeout()
 {
     // The second rear accessory did not re-connect and the timer goes off
     // set the configurationStatus of the connected rear to MISSING_SECOND_REAR so lightbar blinks
-    BOSE_INFO( s_logger, "%s in %s", "SpeakerPairingManager", __func__ );
+    BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
     m_accessorySpeakerState.mutable_rears( 0 )->set_configurationstatus( "MISSING_SECOND_REAR" );
     m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
 }
@@ -980,7 +980,7 @@ void SpeakerPairingManager::RearAccessoryConnectTimeout()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState )
 {
-    BOSE_INFO( s_logger, "%s in %s", "SpeakerPairingManager", __func__ );
+    BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
     if( ( m_accessorySpeakerState.rears_size() == 0 ) and ( oldAccessorySpeakerState.rears_size() != 0 ) )
     {
         // The new speakerState does not include any rear surround but the old speakerState has rear surround
