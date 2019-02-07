@@ -28,8 +28,8 @@
     "selected_version": "Release/master/2.2.0-242+6370224"
   },
   {
-    "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44722.3199246"
+    "name": "AVSService-qc8017_32",
+    "selected_version": "Continuous/master/2.2.0-6+2a277fd"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -181,11 +181,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@c6db308d8670b8e5ecc0432915365d1f7441d1f8"
+    "selected_version": "master@9febaa77377721bd483c2ac6db5e77e941bd016b"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-346+96b59ec"
+    "selected_version": "Release/stable/2.2.0-344+b80fae6"
   },
   {
     "name": "ProductUIAssets",
@@ -193,19 +193,19 @@
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2815"
+    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
   },
   {
     "name": "protobuf-x86_64",
-    "selected_version": "branches/protobuf@2815"
+    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/4.7"
+    "selected_version": "Release/master/4.8"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/4.7"
+    "selected_version": "Release/master/4.8"
   },
   {
     "name": "RivieraLPM-Tools",
@@ -217,7 +217,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/1.0.0-69+a38d6c8"
+    "selected_version": "Release/stable/2.1.0-88+ff212a3"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
@@ -240,8 +240,12 @@
     "selected_version": "stable@ec74b3d421cf76a1a32d1d75fa49dec6760d7090"
   },
   {
+    "name": "ServicesClients-qc8017_32",
+    "selected_version": "Continuous/master/2.0.0-21+9326e4a"
+  },
+  {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/2.2.0-147+f0370df"
+    "selected_version": "Release/stable/2.2.0-148+1bd49fb"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -265,6 +269,10 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@bb3929bbd58e39286e7f729e43b81972ea4b4aad"
+    "selected_version": "master@7ef32dde63f62a3a843550a3358108f3225f83d0"
+  },
+  {
+    "name": "VPAController-qc8017_32",
+    "selected_version": "Release/stable/2.2.5-531+17fed2a"
   }
 ]

@@ -20,7 +20,7 @@ tryhelp () {
     exit 1
 }
 opts=$(getopt --name "$this" --shell sh \
-    -o uh \
+    -o h \
     -l "help" \
     -- "$@") || tryhelp
 eval set -- "$opts"
@@ -64,7 +64,7 @@ httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
-avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
+avs_dir=$(components get AVSService-qc8017_32 installed_location) || exit
 audiopathservice64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
 audiopathproducts64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
@@ -88,6 +88,7 @@ telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
 lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_location) ||exit
+vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -224,6 +225,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$sadi_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$lightBarAnimationTool_dir/stage" --config=lightBar/Configuration-Taylor-DP1.json --assets=lightBar/Taylor-DP1 "$opt_dir" || exit
+"$vpacontroller_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
