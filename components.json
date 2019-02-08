@@ -236,10 +236,6 @@
     "selected_version": "Release/Castle-Fork/2.2.0.44227.3095315"
   },
   {
-    "name": "svc-pts-log-decrypt",
-    "selected_version": "master@12e8bd2762b5e5a78c743280deb43cfb097fa05c"
-  },
-  {
     "name": "SystemEventService-qc8017_32",
     "selected_version": "Release/master/2.2.0-117+3227f40"
   },
