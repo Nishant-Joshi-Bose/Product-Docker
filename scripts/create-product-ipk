@@ -86,7 +86,6 @@ bluetooth_dir=$(components get Bluetooth-qc8017_32 installed_location) || exit
 bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
-svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
 googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
@@ -224,7 +223,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
 "$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
-"$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
 "$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
