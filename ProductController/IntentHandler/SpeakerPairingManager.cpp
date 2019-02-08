@@ -598,7 +598,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         // (1) One Left and One Right
         // (2) No Left and No right
         // (3) Both left and right rears disconnect, one of them reconnect.
-        if( m_waitRearAccessoryConnect != true )
+        if( m_waitSecondRearAccessoryConnect == false )
         {
             DetectMissingRears( oldAccessorySpeakerState );
         }
@@ -608,16 +608,16 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
             {
                 BOSE_INFO( s_logger, "Both rears connected, stop timer" );
                 m_timerRearAccessoryConnect->Stop();
-                m_waitRearAccessoryConnect = false;
+                m_waitSecondRearAccessoryConnect = false;
             }
         }
     }
     else
     {
-        if( m_waitRearAccessoryConnect == true )
+        if( m_waitSecondRearAccessoryConnect == true )
         {
             m_timerRearAccessoryConnect->Stop();
-            m_waitRearAccessoryConnect = false;
+            m_waitSecondRearAccessoryConnect = false;
         }
     }
 
@@ -1007,7 +1007,7 @@ void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeake
         BOSE_INFO( s_logger, "One rear connected, start timer" );
         m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MAX_CONNECT_TIME_MS, 0 );
         m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
-        m_waitRearAccessoryConnect = true;
+        m_waitSecondRearAccessoryConnect = true;
     }
 }
 
