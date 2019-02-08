@@ -47,7 +47,7 @@ BootupFactoryDefaultManager::BootupFactoryDefaultManager( NotifyTargetTaskIF&   
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
       m_productController( static_cast<CustomProductController&>( productController ) )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", "BootupFactoryDefaultManager" );
+    BOSE_INFO( s_logger, "%s is being constructed.", __func__ );
 
 }
 
@@ -60,7 +60,7 @@ BootupFactoryDefaultManager::BootupFactoryDefaultManager( NotifyTargetTaskIF&   
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool BootupFactoryDefaultManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
-    BOSE_INFO( s_logger, "%s in %s", "BootupFactoryDefaultManager", __func__ );
+    BOSE_INFO( s_logger, "%s received %s", __func__, CommonIntentHandler::GetIntentName( action ).c_str( ) );
 
     if( action == ( KeyHandlerUtil::ActionType_t )Action::BOOTUP_FACTORY_DEFAULT_START )
     {

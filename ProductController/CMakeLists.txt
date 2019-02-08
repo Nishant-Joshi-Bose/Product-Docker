@@ -126,7 +126,7 @@ TARGET_LINK_LIBRARIES(Professor
   PassportLan
   SASSClient
   StsAmazon
-  VoiceService
+  VoiceServiceClient
   ProtoToMarkup
   jsoncpp
   protobuf

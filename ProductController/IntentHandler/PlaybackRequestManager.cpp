@@ -36,6 +36,14 @@
 
 using namespace ProductPb;
 
+///
+/// Class Name Declaration for Logging
+///
+namespace
+{
+constexpr char CLASS_NAME[ ] = "PlaybackRequestManager";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +94,7 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF&         task
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
-    BOSE_INFO( s_logger, "%s in %s", "PlaybackRequestManager", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s::%s is handling the intent %s", CLASS_NAME, __func__, CommonIntentHandler::GetIntentName( action ).c_str( ) );
 
     using namespace ProductSTS;
 

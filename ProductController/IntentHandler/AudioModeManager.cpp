@@ -37,7 +37,7 @@ bool AudioModeManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else
     {
-        BOSE_ERROR( s_logger, "Unexpected intent %d received", action );
+        BOSE_ERROR( s_logger, "Unexpected intent %s received", CommonIntentHandler::GetIntentName( action ).c_str( ) );
         return false;
     }
 }
