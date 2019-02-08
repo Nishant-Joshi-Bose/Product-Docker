@@ -550,12 +550,17 @@ private:
                               const Callback<FrontDoor::Error> & errorCb ) const;
     void UpdatePowerMacro( );
     void PersistPowerMacro( );
+    void SendPowerMacroToDataCollection( );
     void ReconcileCurrentProductSource( );
     void LoadPowerMacroFromPersistance( );
+
+    void HandleVoiceStatus( VoiceServicePB::VoiceStatus voiceStatus ) override;
 
     bool m_haltInPlayableTransitionNetworkStandby = false;
 
     int64_t m_bootCompleteTime              = 0;
+
+    VoiceServicePB::VoiceStatus m_voiceStatus = VoiceServicePB::VoiceStatus::UNKNOWN;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

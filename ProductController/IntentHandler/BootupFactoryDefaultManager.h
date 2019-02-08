@@ -37,9 +37,9 @@ public:
     /// @param CustomProductController&    productController
     ////////////////////////////////////////////////////////////////////////////////////////////////
     BootupFactoryDefaultManager( NotifyTargetTaskIF&        task,
-                   const CliClientMT&         commandLineClient,
-                   const FrontDoorClientIF_t& frontDoorClient,
-                   ProductController&         productController );
+                                 const CliClientMT&         commandLineClient,
+                                 const FrontDoorClientIF_t& frontDoorClient,
+                                 ProductController&         productController );
 
 
     ~BootupFactoryDefaultManager( ) override

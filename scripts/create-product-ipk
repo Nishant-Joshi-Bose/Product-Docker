@@ -64,7 +64,8 @@ httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
-avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
+googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
+avs_dir=$(components get AVSService-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
 audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
@@ -90,6 +91,8 @@ svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location)
 qss_dir=$(components get A4VQuickSetService-qc8017_32 installed_location) || exit
 rcs_dir=$(components get A4VRemoteCommunicationService-qc8017_32 installed_location) || exit
 vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
+cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
+vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -127,6 +130,7 @@ cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/etc/multistring" || exit
 cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/CapsMultiroomVersions.json "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/bin/avahi-daemon "$opt_dir/bin/avahi-daemon" || exit
@@ -203,6 +207,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
+"$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
 
 "$audiopath64_dir/stage" --product=professor "$opt_dir" || exit
 "$audiopathproduct64_dir/stage" --product=professor "$opt_dir" || exit
@@ -252,6 +257,8 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$vm_dir/stage" "$opt_dir" || exit
 "$rcs_dir/stage" "$opt_dir" || exit
 "$qss_dir/stage" "$opt_dir" || exit
+"$cloudcontrolclient_dir/stage" "$opt_dir" || exit
+"$vpacontroller_dir/stage" "$opt_dir" || exit
 
 # remove Shepherd-vfe.xml
 if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then

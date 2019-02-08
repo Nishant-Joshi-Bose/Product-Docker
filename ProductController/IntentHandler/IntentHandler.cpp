@@ -86,7 +86,7 @@ IntentHandler::IntentHandler( NotifyTargetTaskIF&         task,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void IntentHandler::Initialize( )
 {
-    BOSE_DEBUG( s_logger, "IntentHandler is in %s.", __FUNCTION__ );
+    BOSE_DEBUG( s_logger, "IntentHandler is in %s.", __func__ );
 
     ///
     /// Initialize all the common intents found in the common source code.
