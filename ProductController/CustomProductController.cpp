@@ -743,6 +743,12 @@ void CustomProductController::Run( )
     }
     m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
 
+    auto dvcDisconnectCb  = [this]()
+    {
+        m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
+    };
+    m_deviceControllerPtr->RegisterDisconnectCb( dvcDisconnectCb );
+
     ///
     /// Get instances of all the modules.
     ///
