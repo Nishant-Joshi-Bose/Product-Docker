@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Continuous/master/0.3.2-466+355b001"
+    "selected_version": "Release/master/0.4.0-470+d29c548"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -197,7 +197,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "VSK_STS@4c68f1e766483a5fa38a89c3e663ff7f01a2fba1"
+    "selected_version": "master@7321677b7bfb59484a713300e8e0dba0776e064d"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
