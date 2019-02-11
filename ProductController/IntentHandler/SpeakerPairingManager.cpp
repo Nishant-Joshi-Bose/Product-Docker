@@ -56,7 +56,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0;
-constexpr uint32_t REAR_ACCESSORY_MAX_CONNECT_TIME_MS = 30 * 1000;
+constexpr uint32_t REAR_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME = 30 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -1006,7 +1006,7 @@ void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeake
         // The second rear is not connected yet, it is expected to connect with a few seconds
         // Start the timer to wait for it.
         BOSE_INFO( s_logger, "One rear connected, start timer" );
-        m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MAX_CONNECT_TIME_MS, 0 );
+        m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME, 0 );
         m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
         m_waitSecondRearAccessoryConnect = true;
     }
