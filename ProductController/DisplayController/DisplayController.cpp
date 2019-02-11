@@ -474,21 +474,23 @@ void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, uint16_t ti
 {
     BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
 
-    if( m_config.m_hasLcd )
+    if( !m_config.m_hasLcd )
     {
-        auto f = [this, capPercent, time]()
-        {
-            IpcUIBrightness_t lpmBrightness;
-
-            lpmBrightness.set_device( UI_BRIGTHNESS_DEVICE_LCD );
-            lpmBrightness.set_value( capPercent );
-            lpmBrightness.set_mode( UI_BRIGTHNESS_MODE_CAP_MAXIMUM );
-            lpmBrightness.set_time( time );
-
-            m_lpmClient->SetUIBrightness( lpmBrightness );
-        };
-        IL::BreakThread( f, m_productController.GetTask() );
+        return;
     }
+
+    auto f = [this, capPercent, time]()
+    {
+        IpcUIBrightness_t lpmBrightness;
+
+        lpmBrightness.set_device( UI_BRIGTHNESS_DEVICE_LCD );
+        lpmBrightness.set_value( capPercent );
+        lpmBrightness.set_mode( UI_BRIGTHNESS_MODE_CAP_MAXIMUM );
+        lpmBrightness.set_time( time );
+
+        m_lpmClient->SetUIBrightness( lpmBrightness );
+    };
+    IL::BreakThread( f, m_productController.GetTask() );
 }
 
 /*!
@@ -500,21 +502,23 @@ void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
 {
     BOSE_DEBUG( s_logger, "SetStandbyLcdBrightnessCapEnabled enabled %i, hasLcd %i", enabled, m_config.m_hasLcd );
 
-    if( m_config.m_hasLcd )
+    if( !m_config.m_hasLcd )
     {
-        auto f = [this, enabled]()
-        {
-            m_lcdBrightnessCap = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
-
-            // Cap (to 0) from screen black takes precedence.
-            if( m_screenBlackState == ScreenBlackState_NotBlack )
-            {
-                SetDisplayBrightnessCap( m_lcdBrightnessCap, UI_BRIGHTNESS_TIME_DEFAULT );
-            }
-        };
-
-        IL::BreakThread( f, m_task );
+        return;
     }
+
+    auto f = [this, enabled]()
+    {
+        m_lcdBrightnessCap = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
+
+        // Cap (to 0) from screen black takes precedence.
+        if( m_screenBlackState == ScreenBlackState_NotBlack )
+        {
+            SetDisplayBrightnessCap( m_lcdBrightnessCap, UI_BRIGHTNESS_TIME_DEFAULT );
+        }
+    };
+
+    IL::BreakThread( f, m_task );
 }
 
 /*!
@@ -688,24 +692,26 @@ void DisplayController::RegisterLpmEvents()
 {
     BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
 
-    if( m_config.m_hasLcd )
+    if( !m_config.m_hasLcd )
     {
-        // Register to receive IPC_PER_GET_BACKLIGHT messages from LPM.
-        auto backLightCallBack = [this]( IpcBackLight_t arg )
-        {
-            HandleLpmNotificationBackLight( arg );
-        };
-        AsyncCallback<IpcBackLight_t> notificationCbBackLight( backLightCallBack, m_productController.GetTask() );
-        m_lpmClient->RegisterEvent<IpcBackLight_t>( IPC_PER_GET_BACKLIGHT, notificationCbBackLight );
-
-        // Register to receive IPC_PER_GET_UI_BRIGHTNESS messages from LPM.
-        auto uiBrightnessCallBack = [this]( IpcUIBrightness_t arg )
-        {
-            HandleLpmNotificationUIBrightness( arg );
-        };
-        AsyncCallback<IpcUIBrightness_t> notificationCbUIBrightness( uiBrightnessCallBack, m_productController.GetTask() );
-        m_lpmClient->RegisterEvent<IpcUIBrightness_t>( IPC_PER_GET_UI_BRIGHTNESS, notificationCbUIBrightness );
+        return;
     }
+
+    // Register to receive IPC_PER_GET_BACKLIGHT messages from LPM.
+    auto backLightCallBack = [this]( IpcBackLight_t arg )
+    {
+        HandleLpmNotificationBackLight( arg );
+    };
+    AsyncCallback<IpcBackLight_t> notificationCbBackLight( backLightCallBack, m_productController.GetTask() );
+    m_lpmClient->RegisterEvent<IpcBackLight_t>( IPC_PER_GET_BACKLIGHT, notificationCbBackLight );
+
+    // Register to receive IPC_PER_GET_UI_BRIGHTNESS messages from LPM.
+    auto uiBrightnessCallBack = [this]( IpcUIBrightness_t arg )
+    {
+        HandleLpmNotificationUIBrightness( arg );
+    };
+    AsyncCallback<IpcUIBrightness_t> notificationCbUIBrightness( uiBrightnessCallBack, m_productController.GetTask() );
+    m_lpmClient->RegisterEvent<IpcUIBrightness_t>( IPC_PER_GET_UI_BRIGHTNESS, notificationCbUIBrightness );
 }
 
 /*!
@@ -804,21 +810,23 @@ void DisplayController::PullUIBrightnessFromLpm( IpcUIBrightnessDevice_t deviceT
 {
     BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
 
-    if( m_config.m_hasLcd )
+    if( !m_config.m_hasLcd )
     {
-        Callback<IpcUIBrightness_t> cb( std::bind( &DisplayController::HandleLpmGetUIBrightness, this, std::placeholders::_1 ) );
-        AsyncCallback<const IpcUIBrightness_t> cbAsync( cb, m_task );
-
-        auto f = [this, deviceType, cbAsync]()
-        {
-            IpcGetUIBrightnessParams_t params;
-            params.set_device( deviceType );
-
-            m_lpmClient->GetUIBrightness( params, cbAsync );
-        };
-
-        IL::BreakThread( f, m_productController.GetTask() );
+        return;
     }
+
+    Callback<IpcUIBrightness_t> cb( std::bind( &DisplayController::HandleLpmGetUIBrightness, this, std::placeholders::_1 ) );
+    AsyncCallback<const IpcUIBrightness_t> cbAsync( cb, m_task );
+
+    auto f = [this, deviceType, cbAsync]()
+    {
+        IpcGetUIBrightnessParams_t params;
+        params.set_device( deviceType );
+
+        m_lpmClient->GetUIBrightness( params, cbAsync );
+    };
+
+    IL::BreakThread( f, m_productController.GetTask() );
 }
 
 /*!
