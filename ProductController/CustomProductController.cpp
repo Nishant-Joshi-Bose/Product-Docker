@@ -90,7 +90,7 @@ CustomProductController::CustomProductController():
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
-    m_Clock( m_FrontDoorClientIF, GetTask(), GetProductGuid() ),
+    m_hasClock( true ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_ProductSTSController( *this )
 {
@@ -297,7 +297,6 @@ void CustomProductController::InitializeAction()
     InitializeHsm( );
     CommonInitialize( );
 
-    m_Clock.Initialize( );
     AsyncCallback<bool> uiConnectedCb( std::bind( &CustomProductController::UpdateUiConnectedStatus,
                                                   this, std::placeholders::_1 ), GetTask() ) ;
 
@@ -329,6 +328,7 @@ void CustomProductController::InitializeAction()
                 displayCtrlConfig.m_hasLightSensor = m_productConfig.product_details( j ).has_lightsensor();
                 displayCtrlConfig.m_hasLcd = m_productConfig.product_details( j ).has_lcd();
                 displayCtrlConfig.m_blackScreenDetectEnabled = m_productConfig.product_details( j ).has_blackscreendetectenabled();
+                m_hasClock = m_productConfig.product_details( j ).has_clock();
                 break;
             }
         }
@@ -337,6 +337,13 @@ void CustomProductController::InitializeAction()
     if( not productFound )
     {
         BOSE_WARNING( s_logger, "%s: Product Type %s, NOT found in config file, using defaults", __func__, productType.c_str() );
+    }
+
+    if( m_hasClock )
+    {
+        BOSE_INFO( s_logger, "%s: Product has a clock, initialize Clock", __func__ );
+        m_clock = std::make_shared<Clock>( m_FrontDoorClientIF, GetTask(), GetProductGuid() );
+        m_clock->Initialize( );
     }
 
     m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );

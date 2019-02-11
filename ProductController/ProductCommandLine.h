@@ -21,13 +21,13 @@ class ProductCommandLine
 
 public:
 
-    ProductCommandLine( CustomProductController& ProductController );
+    ProductCommandLine( CustomProductController& productController );
 
     void Run( );
 
 private:
 
-    CustomProductController&                                  m_ProductController;
+    CustomProductController&                                  m_productController;
     NotifyTargetTaskIF*                                       m_task;
 
     void RegisterCliCmds();

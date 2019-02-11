@@ -472,7 +472,12 @@ void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
  */
 void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, uint16_t time )
 {
-    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
+    BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
+
+    if( !m_config.m_hasLcd )
+    {
+        return;
+    }
 
     auto f = [this, capPercent, time]()
     {
@@ -495,19 +500,21 @@ void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, uint16_t ti
  */
 void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
 {
+    BOSE_DEBUG( s_logger, "SetStandbyLcdBrightnessCapEnabled enabled %i, hasLcd %i", enabled, m_config.m_hasLcd );
+
+    if( !m_config.m_hasLcd )
+    {
+        return;
+    }
+
     auto f = [this, enabled]()
     {
-        BOSE_DEBUG( s_logger, "SetStandbyLcdBrightnessCapEnabled enabled %i, hasLcd %i", enabled, m_config.m_hasLcd );
+        m_lcdBrightnessCap = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
 
-        if( m_config.m_hasLcd )
+        // Cap (to 0) from screen black takes precedence.
+        if( m_screenBlackState == ScreenBlackState_NotBlack )
         {
-            m_lcdBrightnessCap = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
-
-            // Cap (to 0) from screen black takes precedence.
-            if( m_screenBlackState == ScreenBlackState_NotBlack )
-            {
-                SetDisplayBrightnessCap( m_lcdBrightnessCap, UI_BRIGHTNESS_TIME_DEFAULT );
-            }
+            SetDisplayBrightnessCap( m_lcdBrightnessCap, UI_BRIGHTNESS_TIME_DEFAULT );
         }
     };
 
@@ -538,8 +545,8 @@ void DisplayController::UpdateLoop()
     //
     // Display settings send to LPM.
     //
-
-    if( ! m_defaultsSentToLpm
+    if( ( m_config.m_hasLightSensor && m_config.m_hasLcd )
+        && ! m_defaultsSentToLpm
         // Transfer and processing on LPM can take time. Throttle this.
         && MonotonicClock::NowMs() - m_defaultsSentTime > SEND_DEFAULTS_TO_LPM_RETRY_MS )
     {
@@ -683,6 +690,13 @@ void DisplayController::SetBlackScreenNowState( ScreenBlackState s )
  */
 void DisplayController::RegisterLpmEvents()
 {
+    BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
+
+    if( !m_config.m_hasLcd )
+    {
+        return;
+    }
+
     // Register to receive IPC_PER_GET_BACKLIGHT messages from LPM.
     auto backLightCallBack = [this]( IpcBackLight_t arg )
     {
@@ -753,24 +767,26 @@ void DisplayController::RegisterFrontdoorEndPoints()
     //
     // Frontdoor /ui/lcd/brightness
     //
+    if( m_config.m_hasLcd )
+    {
+        // POST
+        AsyncCallback<Brightness, Callback<Brightness>, Callback<FrontDoor::Error>> putLcdBrightnessCb(
+                                                                                     std::bind( &DisplayController::HandlePutLcdBrightnessRequest, this, std::placeholders::_1, std::placeholders::_2 ),
+                                                                                     m_productController.GetTask() );
+        m_frontdoorClientPtr->RegisterPut<Brightness>( FRONTDOOR_ENDPOINT_BRIGHTNESS, putLcdBrightnessCb,
+                                                       FrontDoor::PUBLIC,
+                                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
-    // POST
-    AsyncCallback<Brightness, Callback<Brightness>, Callback<FrontDoor::Error>> putLcdBrightnessCb(
-                                                                                 std::bind( &DisplayController::HandlePutLcdBrightnessRequest, this, std::placeholders::_1, std::placeholders::_2 ),
-                                                                                 m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPut<Brightness>( FRONTDOOR_ENDPOINT_BRIGHTNESS, putLcdBrightnessCb,
-                                                   FrontDoor::PUBLIC,
-                                                   FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                                   FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
-
-    // GET
-    AsyncCallback< Callback<Brightness>, Callback<FrontDoor::Error>> getLcdBrightnessCb(
-                                                                      std::bind( &DisplayController::HandleGetLcdBrightnessRequest, this, std::placeholders::_1 ),
-                                                                      m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterGet( FRONTDOOR_ENDPOINT_BRIGHTNESS, getLcdBrightnessCb,
-                                       FrontDoor::PUBLIC,
-                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+        // GET
+        AsyncCallback< Callback<Brightness>, Callback<FrontDoor::Error>> getLcdBrightnessCb(
+                                                                          std::bind( &DisplayController::HandleGetLcdBrightnessRequest, this, std::placeholders::_1 ),
+                                                                          m_productController.GetTask() );
+        m_frontdoorClientPtr->RegisterGet( FRONTDOOR_ENDPOINT_BRIGHTNESS, getLcdBrightnessCb,
+                                           FrontDoor::PUBLIC,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
 
 }
 
@@ -792,7 +808,12 @@ void DisplayController::HandleGetDisplayRequest( Callback<Display> resp )
  */
 void DisplayController::PullUIBrightnessFromLpm( IpcUIBrightnessDevice_t deviceType )
 {
-    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
+    BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
+
+    if( !m_config.m_hasLcd )
+    {
+        return;
+    }
 
     Callback<IpcUIBrightness_t> cb( std::bind( &DisplayController::HandleLpmGetUIBrightness, this, std::placeholders::_1 ) );
     AsyncCallback<const IpcUIBrightness_t> cbAsync( cb, m_task );
@@ -895,6 +916,13 @@ void DisplayController::HandleGetUiHeartBeat( Callback<UiHeartBeat> resp )
 Display DisplayController::GetDisplay()
 {
     return m_display;
+}
+
+/*!
+ */
+DisplayController::Configuration DisplayController::GetConfig()
+{
+    return m_config;
 }
 
 /*!
