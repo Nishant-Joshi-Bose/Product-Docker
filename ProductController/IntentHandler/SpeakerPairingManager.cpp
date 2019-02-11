@@ -541,7 +541,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         {
             if( accDesc.has_type( ) && AccessoryTypeIsRear( accDesc.type( ) ) )
             {
-                const auto& spkrInfo = m_accessorySpeakerState.add_rears( );
+                auto spkrInfo = m_accessorySpeakerState.add_rears( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
                 if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_LEFT_REAR )
                 {
@@ -555,7 +555,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
             }
             else if( accDesc.has_type( ) && AccessoryTypeIsSub( accDesc.type( ) ) )
             {
-                const auto& spkrInfo = m_accessorySpeakerState.add_subs( );
+                auto spkrInfo = m_accessorySpeakerState.add_subs( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
                 subsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
             }
@@ -906,7 +906,7 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
             // Copy one sub info from old speakerState to the current list,
             // but set configuration to MISSING_BASS so lightbar blinks.
             const auto& old_sub_info = oldAccessorySpeakerState.subs( 0 );
-            const auto& spkrInfo = m_accessorySpeakerState.add_subs();
+            auto spkrInfo = m_accessorySpeakerState.add_subs();
             spkrInfo->set_type( old_sub_info.type() );
             spkrInfo->set_wireless( old_sub_info.wireless() );
             spkrInfo->set_serialnum( old_sub_info.serialnum() );
@@ -928,8 +928,8 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
                     // Found the disconnected sub, copy the info from old list but set configurationStatus to MISSING_BASS
                     // The status of the other sub is still valid
                     BOSE_INFO( s_logger, "Sub %d disconnected", i );
-                    const auto missed_sub_info = oldAccessorySpeakerState.subs( i );
-                    const auto& spkrInfo = m_accessorySpeakerState.add_subs();
+                    const auto& missed_sub_info = oldAccessorySpeakerState.subs( i );
+                    auto spkrInfo = m_accessorySpeakerState.add_subs();
                     spkrInfo->set_type( missed_sub_info.type() );
                     spkrInfo->set_wireless( missed_sub_info.wireless() );
                     spkrInfo->set_serialnum( missed_sub_info.serialnum() );
@@ -977,8 +977,8 @@ void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeake
         if( oldAccessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" )
         {
             // If old status VALID but new status does not contain rear, add one rear but set status to MISSING_REARS so lightbar blinks
-            const auto& spkrInfo = m_accessorySpeakerState.add_rears();
             const auto& old_rear_info = oldAccessorySpeakerState.rears( 0 );
+            auto spkrInfo = m_accessorySpeakerState.add_rears();
             spkrInfo->set_type( old_rear_info.type() );
             spkrInfo->set_wireless( old_rear_info.wireless() );
             spkrInfo->set_serialnum( old_rear_info.serialnum() );
