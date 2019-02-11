@@ -382,46 +382,40 @@ bool DisplayController::ParseBrightnessData( Brightness* output, const Json::Val
  */
 void DisplayController::PushDefaultsToLPM()
 {
-    BOSE_INFO( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
+    static constexpr float FRACTIONAL_PRECISION = 1000.0f;
 
     IpcLightSensorParams_t defaults;
+    IpcUIBrightness_t* lcdBrightness;
     IpcUIBrightness_t* lightbarBrightness;
+    size_t entryCount = MIN( s_backLightLevels.size(), ( size_t ) IPC_MAX_LIGHT_SENSOR_THRESHOLD );
 
-    if( m_config.m_hasLcd )
+    // Lux to level tables.
+    for( size_t i = 0; i < entryCount; ++i )
     {
-        static constexpr float FRACTIONAL_PRECISION = 1000.0f;
+        IpcLightSensorParamsValue_t* aValue;
 
-        IpcUIBrightness_t* lcdBrightness;
-        size_t entryCount = MIN( s_backLightLevels.size(), ( size_t ) IPC_MAX_LIGHT_SENSOR_THRESHOLD );
+        defaults.add_vec();
+        aValue = defaults.mutable_vec( i );
 
-        // Lux to level tables.
-        for( size_t i = 0; i < entryCount; ++i )
-        {
-            IpcLightSensorParamsValue_t* aValue;
-
-            defaults.add_vec();
-            aValue = defaults.mutable_vec( i );
-
-            aValue->set_backlightlevel( s_backLightLevels[i] );
-            aValue->set_loweringthresholddecimal( ( uint16_t ) s_loweringLuxThreshold[i] );
-            aValue->set_loweringthresholdfractional( FRACTIONAL_PRECISION * ( s_loweringLuxThreshold[i] - aValue->loweringthresholddecimal() ) );
-            aValue->set_risingthresholddecimal( ( uint16_t ) s_risingLuxThreshold[i] );
-            aValue->set_risingthresholdfractional( FRACTIONAL_PRECISION * ( s_risingLuxThreshold[i] - aValue->risingthresholddecimal() ) );
-        }
-
-        // Human detection values.
-        defaults.set_fastrisingluxdelta( 0 );
-        defaults.set_fastfaillingluxdelta( 0 );
-        defaults.set_slowrisinghysteresis( 0 );
-        defaults.set_fastrisinghysteresis( 0 );
-        defaults.set_slowfaillinghysteresis( 0 );
-        defaults.set_fastfaillinghysteresis( 0 );
-
-        // LCD UI Brightness.
-        defaults.add_uibrightness();
-        lcdBrightness = defaults.mutable_uibrightness( 0 );
-        BuildLpmUIBrightnessStruct( lcdBrightness, UI_BRIGTHNESS_DEVICE_LCD );
+        aValue->set_backlightlevel( s_backLightLevels[i] );
+        aValue->set_loweringthresholddecimal( ( uint16_t ) s_loweringLuxThreshold[i] );
+        aValue->set_loweringthresholdfractional( FRACTIONAL_PRECISION * ( s_loweringLuxThreshold[i] - aValue->loweringthresholddecimal() ) );
+        aValue->set_risingthresholddecimal( ( uint16_t ) s_risingLuxThreshold[i] );
+        aValue->set_risingthresholdfractional( FRACTIONAL_PRECISION * ( s_risingLuxThreshold[i] - aValue->risingthresholddecimal() ) );
     }
+
+    // Human detection values.
+    defaults.set_fastrisingluxdelta( 0 );
+    defaults.set_fastfaillingluxdelta( 0 );
+    defaults.set_slowrisinghysteresis( 0 );
+    defaults.set_fastrisinghysteresis( 0 );
+    defaults.set_slowfaillinghysteresis( 0 );
+    defaults.set_fastfaillinghysteresis( 0 );
+
+    // LCD UI Brightness.
+    defaults.add_uibrightness();
+    lcdBrightness = defaults.mutable_uibrightness( 0 );
+    BuildLpmUIBrightnessStruct( lcdBrightness, UI_BRIGTHNESS_DEVICE_LCD );
 
     // Lightbar UI Brightness.
     defaults.add_uibrightness();
@@ -547,8 +541,8 @@ void DisplayController::UpdateLoop()
     //
     // Display settings send to LPM.
     //
-
-    if( ! m_defaultsSentToLpm
+    if( ( m_config.m_hasLightSensor && m_config.m_hasLcd )
+        && ! m_defaultsSentToLpm
         // Transfer and processing on LPM can take time. Throttle this.
         && MonotonicClock::NowMs() - m_defaultsSentTime > SEND_DEFAULTS_TO_LPM_RETRY_MS )
     {
