@@ -916,43 +916,28 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
         }
         else
         {
-            // New accessorySpeakerState includes sub but the number 1 is less than previous list 2.
+            // We currently support maximum of two bass boxes, if the code reaches this block, we know:
+            // New accessorySpeakerState includes 1 sub and oldAccesorySpeakerState includes 2 subs.
             // This happens if two subs were connected, but one of them lost connection.
-            // Find which one lost connection
-            int missed_sub_index = -1;
-
+            // Find which one lost connection by comparing the serial number.
+            //
             for( int i = 0; i < oldAccessorySpeakerState.subs_size(); i++ )
             {
-                bool sub_missing = true;
-                for( int j = 0; j < m_accessorySpeakerState.subs_size(); j++ )
+                if( m_accessorySpeakerState.subs( 0 ).serialnum() != oldAccessorySpeakerState.subs( i ).serialnum() )
                 {
-                    if( oldAccessorySpeakerState.subs( i ).serialnum() == m_accessorySpeakerState.subs( j ).serialnum() )
-                    {
-                        // It exists in both list, so not missing
-                        sub_missing = false;
-                        break;
-                    }
-                }
-                // Can't find it in new list, it is missing
-                if( sub_missing == true )
-                {
-                    missed_sub_index = i;
+                    // Found the disconnected sub, copy the info from old list but set configurationStatus to MISSING_BASS
+                    // The status of the other sub is still valid
+                    BOSE_INFO( s_logger, "Sub %d disconnected", i );
+                    const auto missed_sub_info = oldAccessorySpeakerState.subs( i );
+                    const auto& spkrInfo = m_accessorySpeakerState.add_subs();
+                    spkrInfo->set_type( missed_sub_info.type() );
+                    spkrInfo->set_wireless( missed_sub_info.wireless() );
+                    spkrInfo->set_serialnum( missed_sub_info.serialnum() );
+                    spkrInfo->set_version( missed_sub_info.version() );
+                    spkrInfo->set_available( false );
+                    spkrInfo->set_configurationstatus( "MISSING_ONE_BASS" );
                     break;
                 }
-            }
-            if( missed_sub_index >= 0 )
-            {
-                // Found the disconnected sub, copy the info from old list but set configurationStatus to MISSING_BASS
-                // The status of the other sub is still valid
-                BOSE_INFO( s_logger, "Sub %d disconnected", missed_sub_index );
-                const auto missed_sub_info = oldAccessorySpeakerState.subs( missed_sub_index );
-                const auto& spkrInfo = m_accessorySpeakerState.add_subs();
-                spkrInfo->set_type( missed_sub_info.type() );
-                spkrInfo->set_wireless( missed_sub_info.wireless() );
-                spkrInfo->set_serialnum( missed_sub_info.serialnum() );
-                spkrInfo->set_version( missed_sub_info.version() );
-                spkrInfo->set_available( false );
-                spkrInfo->set_configurationstatus( "MISSING_ONE_BASS" );
             }
         }
     }
