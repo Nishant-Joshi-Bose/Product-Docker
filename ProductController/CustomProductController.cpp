@@ -741,7 +741,19 @@ void CustomProductController::Run( )
     {
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
-    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
+
+    auto connectCb = [this]( bool connected )
+    {
+        BOSE_INFO( s_logger, "Connected to DeviceController!" );
+    };
+    m_deviceControllerPtr->Connect( connectCb );
+
+    auto dvcDisconnectCb  = [this, connectCb]()
+    {
+        BOSE_INFO( s_logger, "Disconnected to DeviceController!" );
+        m_deviceControllerPtr->Connect( connectCb );
+    };
+    m_deviceControllerPtr->RegisterDisconnectCb( dvcDisconnectCb );
 
     ///
     /// Get instances of all the modules.
