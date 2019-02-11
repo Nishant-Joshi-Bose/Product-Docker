@@ -576,6 +576,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
     }
 
+    BOSE_INFO( s_logger, "oldAccessorySpeakerState: %s", oldAccessorySpeakerState.DebugString().c_str() );
     // check if any previously connected subwoofer is disconnected
     if( oldAccessorySpeakerState.subs_size() > m_accessorySpeakerState.subs_size() )
     {
