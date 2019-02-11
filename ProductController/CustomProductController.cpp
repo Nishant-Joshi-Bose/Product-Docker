@@ -742,15 +742,15 @@ void CustomProductController::Run( )
         BOSE_DIE( "Failed loading key blaster configuration file." );
     }
 
-    m_deviceControllerPtr->Connect( [ ]( bool connected ) { } );
-
-    auto dvcDisconnectCb  = [this]()
+    auto connectCb = [this]( bool connected )
     {
-        auto reconnectCb = [this]( bool connected )
-        {
-            BOSE_INFO( s_logger, "Reconnected to DeviceController!" );
-        };
-        m_deviceControllerPtr->Connect( reconnectCb );
+        BOSE_INFO( s_logger, "(Re)connected to DeviceController!" );
+    };
+    m_deviceControllerPtr->Connect( connectCb );
+
+    auto dvcDisconnectCb  = [this, connectCb]()
+    {
+        m_deviceControllerPtr->Connect( connectCb );
     };
     m_deviceControllerPtr->RegisterDisconnectCb( dvcDisconnectCb );
 
