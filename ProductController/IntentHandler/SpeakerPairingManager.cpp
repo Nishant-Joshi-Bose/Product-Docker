@@ -1001,8 +1001,8 @@ void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeake
     }
     if( ( m_accessorySpeakerState.rears_size() == 1 ) and ( m_accessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" ) )
     {
-        // Both Maxwells were disconnected, one is re-connected.
-        // The second Maxwell is not connected yet, it is expected to connect with a few seconds
+        // Both rears were disconnected, one is re-connected.
+        // The second rear is not connected yet, it is expected to connect with a few seconds
         // Start the timer to wait for it.
         BOSE_INFO( s_logger, "One rear connected, start timer" );
         m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MAX_CONNECT_TIME_MS, 0 );
