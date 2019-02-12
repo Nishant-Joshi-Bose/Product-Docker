@@ -317,7 +317,11 @@ def install_ipk(ipks_dir, ipk_name, offline_dir):
                     + ' --volatile-cache --add-arch armv7a-vfp-neon:100 install ' +  ipk_to_install)
         logging.debug("\t\tExecuting [%s]", opkg_cmd)
         args = split(opkg_cmd)
-        subprocess.call(args)
+        cmdP = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        output, err = cmdP.communicate()
+        if err != '':
+            print err
+            return 93, "IPK installation failed with error"
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return 92, "Unknown error while installing ipk"
