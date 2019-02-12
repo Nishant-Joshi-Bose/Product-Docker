@@ -62,10 +62,6 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
-.PHONY: minimal-product-tar
-minimal-product-tar: cmake_build
-	./scripts/create-minimal-product-tar
-
 .PHONY: product-ipk
 product-ipk: cmake_build
 	./scripts/create-product-ipk
@@ -136,8 +132,8 @@ endif
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: recovery-ipk
-recovery-ipk: cmake_build minimal-product-tar
-	./scripts/create-recovery-ipk
+recovery-ipk: cmake_build 
+	./scripts/create-recovery-ipk -p eddie
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos

@@ -232,6 +232,10 @@
     "selected_version": "Release/stable/2.1.0-88+ff212a3"
   },
   {
+    "name": "RivieraMinimalFS-qc8017_32",
+    "selected_version": "Continuous/master/0.1.0-15+84630e4"
+  },
+  {
     "name": "RivieraSwUpRecovery-qc8017_32",
     "selected_version": "Release/master/3.0.0-109+6ac21a5"
   },
