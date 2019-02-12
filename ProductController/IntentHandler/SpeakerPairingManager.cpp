@@ -702,8 +702,8 @@ const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, 
     // it is more likely there is a delay of a few seconds.
     // When the first connects, we receive the accesory list from LPM with one rear status set to CONNECTED and the other
     // NONE and oldRearSize is 0.
-    // If AccessoryRearConiguration() returns MISSING_LEFT or MISSING_RIGHT, the lightbar blinks for non-critical error.
-    // This is confusing to user if power is applied to both rear surrounds at the same time.
+    // If AccessoryRearConiguration() was to return MISSING_LEFT or MISSING_RIGHT, the lightbar would blink for non-critical error.
+    // This would be confusing to user if power is applied to both rear surrounds at the same time.
     // In this case, return "VALID" even though only one rear is connected. Start a timer to wait for the second rear.
     // If the second rear connects before the timer goes off, the lightbar does not blink.
     // If the second rear does not connect before the timer goes off, the timer callback sets the configurationStatus
