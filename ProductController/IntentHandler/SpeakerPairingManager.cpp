@@ -529,12 +529,12 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     m_accessorySpeakerState.clear_rears( );
     m_accessorySpeakerState.clear_subs( );
 
-    uint8_t numOfLeftRears  = 0;
-    uint8_t numOfRightRears = 0;
+    uint32_t numOfLeftRears  = 0;
+    uint32_t numOfRightRears = 0;
     bool rearsEnabled = false;
     bool subsEnabled  = false;
 
-    for( uint8_t i = 0; i < accList.accessory_size( ); i++ )
+    for( int i = 0; i < accList.accessory_size( ); i++ )
     {
         const auto& accDesc = accList.accessory( i );
         if( accDesc.has_status( ) && AccessoryStatusIsConnected( accDesc.status( ) ) )
@@ -582,7 +582,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     DetectMissingSub( oldAccessorySpeakerState );
 
     // Rears we send off to get valid config
-    uint8_t oldAccessorySpeakerStateRearSize = oldAccessorySpeakerState.rears().size();
+    uint32_t oldAccessorySpeakerStateRearSize = oldAccessorySpeakerState.rears().size();
     const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears, oldAccessorySpeakerStateRearSize );
     for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
     {
@@ -687,14 +687,14 @@ void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
 ///
 /// @brief  SpeakerPairingManager::AccessoryRearConiguration
 ///
-/// @param  uint8_t numLeft  - number of left channel rears
-///         uint8_t numRight - number of right channel rears
-///         uint8_t oldRearSize - num of rear accessories in previous list
+/// @param  uint32_t numLeft  - number of left channel rears
+///         uint32_t numRight - number of right channel rears
+///         uint32_t oldRearSize - num of rear accessories in previous list
 ///
 /// @return This method returns a char* based on whether the configuration is valid
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const char* SpeakerPairingManager::AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight, uint8_t oldRearSize )
+const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight, uint32_t oldRearSize )
 {
     // If both rear surrounds are connected with soundbar and they are both powered off,
     // LPM sends the accessory list with status of both rears set to NONE (0), thus rears_size() = 0.
