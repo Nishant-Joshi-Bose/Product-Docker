@@ -987,7 +987,7 @@ void SpeakerPairingManager::DetectMissingRears( const ProductPb::AccessorySpeake
             spkrInfo->set_configurationstatus( "MISSING_REARS" );
         }
     }
-    if( ( m_accessorySpeakerState.rears_size() == 1 ) and ( m_accessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" ) )
+    else if( ( m_accessorySpeakerState.rears_size() == 1 ) and ( m_accessorySpeakerState.rears( 0 ).configurationstatus() == "VALID" ) )
     {
         // Both rears were disconnected, one is re-connected.
         // The second rear is not connected yet, it is expected to connect with a few seconds
