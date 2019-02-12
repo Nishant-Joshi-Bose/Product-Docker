@@ -28,8 +28,8 @@
     "selected_version": "Release/master/2.2.0-242+6370224"
   },
   {
-    "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44722.3199246"
+    "name": "AVSService-qc8017_32",
+    "selected_version": "Continuous/master/2.2.0-6+2a277fd"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -49,7 +49,7 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@27c68d395d207814956f881a2a45eba57b6eaf13"
+    "selected_version": "master@1adf1514484f4f320795cd1a2074e48abc8137e1"
   },
   {
     "name": "bose-web-update-page",
@@ -81,7 +81,11 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/2.2.0-158+02e67cb"
+    "selected_version": "Release/stable/2.2.0-166+506c019"
+  },
+  {
+    "name": "CloudControlClient-qc8017_32",
+    "selected_version": "Release/stable/0.0.4-49+e73e5d4"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -114,6 +118,10 @@
   {
     "name": "GalapagosClient-qc8017_32",
     "selected_version": "Release/master/2.2.0-342+28c0ae1"
+  },
+  {
+    "name": "GoogleVoiceAssistant-qc8017_64",
+    "selected_version": "Release/stable/2.2.6-1008+a65e488"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -181,7 +189,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@e4a605a99db09f5b26212ce0d21ede87bf671a0c"
+    "selected_version": "master@9febaa77377721bd483c2ac6db5e77e941bd016b"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -193,15 +201,15 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2815"
+    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2815"
+    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
   },
   {
     "name": "protobuf-x86_64",
-    "selected_version": "branches/protobuf@2815"
+    "selected_version": "Release/bose-stable/v2.4.1-9-ga75e122"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -216,12 +224,12 @@
     "selected_version": "Release/master/3.0.3-321+d17990e"
   },
   {
-    "name": "RivieraLpmTools",
-    "selected_version": "@3604"
+    "name": "RivieraLPM-Tools",
+    "selected_version": "master@c232bf9c1560c9709b16f8aecf206a5caa692b6e"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/1.0.0-69+a38d6c8"
+    "selected_version": "Release/stable/2.1.0-88+ff212a3"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
@@ -237,11 +245,15 @@
   },
   {
     "name": "SecureDeviceKey",
-    "selected_version": "master@5b260896e58eb4575ddbd5fd0f676439f5ea54aa"
+    "selected_version": "stable@ec74b3d421cf76a1a32d1d75fa49dec6760d7090"
+  },
+  {
+    "name": "ServicesClients-qc8017_32",
+    "selected_version": "Continuous/master/2.0.0-21+9326e4a"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/2.2.0-147+f0370df"
+    "selected_version": "Release/stable/2.2.0-148+1bd49fb"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -249,7 +261,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44722.3199246"
+    "selected_version": "Continuous/Castle-Fork-2019-MR2/2019-01-29_1406"
   },
   {
     "name": "svc-pts-log-decrypt",
@@ -265,7 +277,11 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@a421b510e20f25cb06d6adc15435370b1e6f79ad"
+    "selected_version": "master@7ef32dde63f62a3a843550a3358108f3225f83d0"
+  },
+  {
+    "name": "VPAController-qc8017_32",
+    "selected_version": "Release/stable/2.2.5-531+17fed2a"
   },
   {
     "name": "Webkit",
