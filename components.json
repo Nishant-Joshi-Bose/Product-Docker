@@ -13,15 +13,15 @@
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable_mr1_2019/4.0.2-4265+2c404b0"
+    "selected_version": "Release/stable_mr1_2019/4.0.2-4510+43d8fc0"
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable_mr1_2019/4.0.2-4265+2c404b0"
+    "selected_version": "Release/stable_mr1_2019/4.0.2-4510+43d8fc0"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable_mr1_2019/4.0.2-4265+2c404b0"
+    "selected_version": "Release/stable_mr1_2019/4.0.2-4510+43d8fc0"
   },
   {
     "name": "AudioSource-qc8017_32",
