@@ -28,7 +28,7 @@ while :; do
             cat << EOF
 Usage: $this [options]
 
-echo "Create recovery package for given product type."
+Create recovery package for given product type.
 Options:
     -p <Product Type e.g. eddie / professor / flipper / taylor> - Product type to use
     -h - Print help
