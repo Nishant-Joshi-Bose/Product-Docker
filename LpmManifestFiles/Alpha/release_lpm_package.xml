@@ -25,10 +25,12 @@
             wildcard to match characters. If either of these methods match more than one
             file, the program will exit with an error.
 
-            --><header master_version="3.0.14" name="professor_package.bos" />
+
+            -->
+    <header master_version="3.0.14" name="professor_package.bos" />
     <manifest_entries>
         <entry chip="lpm_professor" combine="True" name="professor_mfg.bin" path="/home/softlib/verisoft/ProfessorLPM-Diags/Release/master/0.3.18-151+2a7d046/DP2/lpm_0.3.18-151+2a7d046.bin" version="filename" />
-        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Release/Professor/master/3.0.8-97+f0da6f2/Alpha/lpm_3.0.8-97+f0da6f2.bin" version="filename" />
+        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Release/Professor/master/3.0.9-118+e5382d8/Alpha/lpm_3.0.9-118+e5382d8.bin" version="filename" />
         <entry chip="lpm_professor" combine="True" name="professor_bl.bin" path="/home/softlib/verisoft/ProfessorLPM-BL/Release/trunk/0.2.0.1674/lpm_bootloader_0.2.0.1674.bin" version="filename" />
         <entry name="f0.bin" path="/home/softlib/verisoft/A4V-F0/Release/trunk/1.8.1.12410/RIVIERA_F0_1.8.1.12410.bin" version="filename" />
         <entry name="darr.bin" path="/home/softlib/verisoft/A4V-WirelessAudio/Release/trunk/40.000.12236/wam_40.000.12236.bin" version="40" />
