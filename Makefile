@@ -159,7 +159,7 @@ else
 endif
 	rm -f ./builds/$(cfg)/professor_package*.bos
 	rm -f ./builds/$(cfg)/lpm_professor*.hex
-	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE) $(HW_VAR)
+	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE) $(HW_VAR) $(sdk)
 
 .PHONY: recovery-ipk
 recovery-ipk: cmake_build minimal-product-tar
