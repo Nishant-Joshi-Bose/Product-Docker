@@ -539,7 +539,8 @@ void DisplayController::UpdateLoop()
     // Display settings send to LPM.
     //
 
-    if( ! m_defaultsSentToLpm
+    if( ( m_config.m_hasLightSensor && m_config.m_hasLcd )
+        && ! m_defaultsSentToLpm
         // Transfer and processing on LPM can take time. Throttle this.
         && MonotonicClock::NowMs() - m_defaultsSentTime > SEND_DEFAULTS_TO_LPM_RETRY_MS )
     {

@@ -27,9 +27,7 @@ check_tools:
 ifndef DONT_UPDATE_CASTLETOOLS
 	castletools-update
 endif
-ifndef DONT_INSTALL_COMPONENTS
-	components install
-endif
+	castletools-build-host-is-sane
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
@@ -40,6 +38,7 @@ SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_
 TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 RIVIERA_LPM_SERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
 PRODUCTCONTROLLERCOMMONPROTO = $(shell components get ProductControllerCommonProto installed_location)
+GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -47,6 +46,8 @@ generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
 	ln -nsf $(RIVIERA_LPM_SERVICE_DIR) builds/RivieraLpmService
+	mkdir -p builds/$(cfg)
+	cp -av $(GVA_DIR)/tools/auth_util.py builds/$(cfg)
 	touch builds/__init__.py
 
 .PHONY: astyle
@@ -73,8 +74,8 @@ product-ipk: cmake_build
 privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-IPKS = recovery.ipk product-script.ipk software-update.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES = SoundTouchRecovery product-script software-update wpe monaco SoundTouch lpm_updater
+IPKS = recovery.ipk product-script.ipk software-update.ipk toledo.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES = SoundTouchRecovery product-script software-update toledo SoundTouch lpm_updater
 
 EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
 EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
@@ -97,19 +98,19 @@ package-no-hsp: packages-gz
 
 #Create one more Zip file for Bonjour / Local update with HSP
 #- This is temporary, till DP2 boards are not available.
-IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp wpe monaco SoundTouch lpm_updater
+IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk toledo.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp toledo SoundTouch lpm_updater
 
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk wpe-ipk softwareupdate-ipk monaco-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz: product-ipk softwareupdate-ipk toledo-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz-with-hsp: toledo-ipk product-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -142,18 +143,13 @@ recovery-ipk: cmake_build minimal-product-tar
 lpmupdater-ipk: lpm-bos
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ $(product)
 
-.PHONY: monaco-ipk
-monaco-ipk:
-	./scripts/create-monaco-ipk
-
-.PHONY: wpe-ipk
-wpe-ipk:
-	./scripts/create-wpe-ipk
+.PHONY: toledo-ipk
+toledo-ipk:
+	./scripts/create-toledo-ipk
 
 .PHONY: product-script-ipk
 product-script-ipk:
 	./scripts/create-product-script-ipk
-
 
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph

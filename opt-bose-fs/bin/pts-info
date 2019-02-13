@@ -16,7 +16,7 @@ uptime
 cat /opt/Bose/etc/BoseVersion.json
 cat /persist/mfg_data.json
 cat /etc/riviera-version
-cat /opt/Bose/monaco/version.txt
+cat /opt/Bose/toledo/version.txt
 free -m
 df -h
 ifconfig -a
@@ -52,3 +52,6 @@ tap-command galapagos status
 tap-command galapagos discovery response
 tap-command softwareupdate state
 tap-command softwareupdate status
+tap-command vpa getvoicesettings
+tap-command vpa getactivevpa
+tap-command vpa getstate

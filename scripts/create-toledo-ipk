@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-# Create an IPK file for installing Monaco with opkg.
+# Create an IPK file for installing Toledo with opkg.
 #
 # To install:
-#   opkg install -d bose monaco.ipk
+#   opkg install -d bose toledo.ipk
 #
 # The file /etc/opkg/opkg.conf should contain this line:
 #   dest bose /opt/Bose
 #
 # To uninstall:
-#   opkg remove monaco
+#   opkg remove toledo
 #
 this=${0##*/} # this script's name
 
@@ -31,7 +31,7 @@ while :; do
         cat <<EOF
 Usage: $this [options]
 
-Create an IPK file for installing Monaco with opkg.
+Create an IPK file for installing Toledo with opkg.
 
 Options:
 EOF
@@ -57,29 +57,31 @@ function put_script {
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
-monaco_dir=$(components get BoseWebMonaco installed_location) || exit
-monaco_ver=$(components get BoseWebMonaco selected_version) || exit
-monaco_ver=${monaco_ver##*/}
+toledo_dir=$(components get BoseWebToledo installed_location) || exit
+toledo_ver=$(components get BoseWebToledo selected_version) || exit
+toledo_ver=${toledo_ver##*/}
 
-stage=$wspace/builds/$cfg/monaco-ipk-stage
+stage=$wspace/builds/$cfg/toledo-ipk-stage
 rm -rf "$stage"
 echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir" || exit
+mkdir -p "$output_dir" "$opt_dir/bin" || exit
 
-echo "Package version \"$monaco_ver\""
-"$wspace"/scripts/validate-version "$monaco_ver" || exit
-cp -rf "$monaco_dir"/monaco "$opt_dir/" || exit
+echo "Package version \"$toledo_ver\""
+"$wspace"/scripts/validate-version "$toledo_ver" || exit
+cp -rf "$toledo_dir"/toledo "$opt_dir/" || exit
 
-PackageName=monaco
+cp -f  "$toledo_dir"/run_toledo "$opt_dir/bin" || exit
+PackageName=toledo
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName
-Version: $monaco_ver
-Description: Bose Web Monaco Package version $monaco_ver
- Bose Web Monaco
+Version: $toledo_ver
+Description: Bose Web Toledo Package version $toledo_ver
+ Bose Web Toledo
 Section: web browser app
 Priority: required
 License: Commercial
@@ -93,7 +95,7 @@ EOF
 # Installer scripts
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
-echo "monaco postinst"
+echo "toledo postinst"
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
 exit 0
@@ -101,13 +103,13 @@ EOF
 
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
-echo "monaco postrm"
+echo "toledo postrm"
 exit 0
 EOF
 
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
-echo "monaco preinst"
+echo "toledo preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
 exit 0
@@ -115,7 +117,7 @@ EOF
 
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
-echo "monaco prerm"
+echo "toledo prerm"
 exit 0
 EOF
 
@@ -128,7 +130,7 @@ tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
 echo "2.0" > debian-binary || exit
 
 ipk_dir=$wspace/builds/$cfg
-ipk=$ipk_dir/monaco.ipk
+ipk=$ipk_dir/toledo.ipk
 mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
