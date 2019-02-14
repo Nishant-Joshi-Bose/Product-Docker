@@ -53,3 +53,6 @@ tap-command softwareupdate history
 tap-command softwareupdate status
 tap-command softwareupdate update history
 tap-command softwareupdate list
+tap-command vpa getvoicesettings
+tap-command vpa getactivevpa
+tap-command vpa getstate
