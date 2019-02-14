@@ -31,9 +31,7 @@ check_tools:
 ifndef DONT_UPDATE_CASTLETOOLS
 	castletools-update
 endif
-ifndef DONT_INSTALL_COMPONENTS
-	components install
-endif
+	castletools-build-host-is-sane
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
