@@ -152,6 +152,10 @@
     "selected_version": "Release/bose-stable/1.8.3-29-gf5bca2f"
   },
   {
+    "name": "opensource-libarchive-qc8017_32",
+    "selected_version": "Release/bose-dev/v3.3.1-13-gb412ba2"
+  },
+  {
     "name": "opensource-libwebsockets-qc8017_32",
     "selected_version": "Release/bose-stable/2.4.1-67+gf1b00ef"
   },
