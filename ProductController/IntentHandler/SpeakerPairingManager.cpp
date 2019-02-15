@@ -778,6 +778,7 @@ bool SpeakerPairingManager::AccessoryTypeIsRear( unsigned int type )
     switch( static_cast< LpmServiceMessages::AccessoryType_t >( type ) )
     {
     case LpmServiceMessages::ACCESSORY_MAXWELL:
+    case LpmServiceMessages::ACCESSORY_MAXWELL_OMNIVO:
         return true;
     default:
         return false;
@@ -825,6 +826,8 @@ const char* SpeakerPairingManager::AccessoryTypeToString( unsigned int type )
         return "BOSE_BASS_MODULE_700";
     case LpmServiceMessages::ACCESSORY_MAXWELL:
         return "BOSE_SURROUND_SPEAKER";
+    case LpmServiceMessages::ACCESSORY_MAXWELL_OMNIVO:
+        return "BOSE_PREMIUM_SURROUND_SPEAKER";
     default:
         BOSE_ERROR( s_logger, "Received invalid accessory to convert to string" );
         return "Invalid";
