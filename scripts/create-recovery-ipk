@@ -145,7 +145,7 @@ rm -f /cache/recovery/last_log.*
 rm -f /cache/recovery/last_kmsg.*
 
 # move minimal product image to cache partition
-mv /opt/Bose/Bose_minimal.tar.gz /cache/ || exit
+mv /opt/Bose/RivieraMinimalFS_*.tar.gz /cache/Bose_minimal.tar.gz || exit
 
 # move RecoveryMain binary to /cache partition
 mv /opt/Bose/bin/RecoveryMain /cache/ || exit
