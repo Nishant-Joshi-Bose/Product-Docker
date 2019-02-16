@@ -207,7 +207,7 @@ private:
     ///        types.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    static const char* AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight );
+    static const char* AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight, uint32_t oldSize );
     static bool AccessoryStatusIsConnected( unsigned int status );
     static bool AccessoryTypeIsRear( unsigned int type );
     static bool AccessoryTypeIsSub( unsigned int type );
@@ -216,8 +216,16 @@ private:
                                                             accDesc,
                                                             ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
                                                             spkrInfo );
-    bool m_accessoryListReceived = false;
-    bool m_firstAccessoryListReceived = false;
+
+    void DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
+    void DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
+    void RearAccessoryConnectTimeout();
+
+private:
+    bool        m_accessoryListReceived = false;
+    bool        m_firstAccessoryListReceived = false;
+    APTimerPtr  m_timerRearAccessoryConnect;
+    bool        m_waitSecondRearAccessoryConnect = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
