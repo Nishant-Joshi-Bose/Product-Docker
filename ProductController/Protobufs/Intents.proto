@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+message ActionCustom_t
+{
+    enum Actions
+    {
+        INVALID                             = 0;
+        //+ AUX
+        AUX_IN                              = 25;
+        //- AUX
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Custom Defined Actions Valued 101 and Higher
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        ACTION_SETUP_BLE_REMOTE             = 102;
+        SYSTEM_INFO                         = 105;
+
+        //+ COUNT DOWN EVENTS FOR COMBINATION KEYS
+        FACTORY_DEFAULT_COUNTDOWN           = 112;
+        MANUAL_SETUP_COUNTDOWN              = 113;
+        TOGGLE_WIFI_RADIO_COUNTDOWN         = 114;
+        SYSTEM_INFO_COUNTDOWN               = 115;
+        BLUETOOTH_CLEAR_PAIRING_COUNTDOWN   = 116;
+        MANUAL_SOFTWARE_INSTALL_COUNTDOWN   = 117;
+        //- COUNT DOWN EVENTS FOR COMBINATION KEYS
+        
+        //+ CANCEL EVENTS FOR COMBINATION KEYS
+        FACTORY_DEFAULT_CANCEL              = 122;
+        MANUAL_SETUP_CANCEL                 = 123;
+        TOGGLE_WIFI_RADIO_CANCEL            = 124;
+        SYSTEM_INFO_CANCEL                  = 125;
+        BLUETOOTH_CLEAR_PAIRING_CANCEL      = 126;
+        MANUAL_SOFTWARE_INSTALL_CANCEL      = 127;
+        //- CANCEL EVENTS FOR COMBINATION KEYS
+
+    }
+}
+

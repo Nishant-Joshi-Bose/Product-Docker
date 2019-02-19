@@ -31,7 +31,7 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
-    uint16_t                            m_countdownValue;
-    BOptional<ProductApp::Action>       m_actionType;
+    uint16_t                             m_countdownValue;
+    BOptional<ActionCustom_t::Actions>   m_actionType;
 };
 } // namespace ProductApp
