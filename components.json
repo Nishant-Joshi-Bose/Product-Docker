@@ -41,7 +41,7 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.0-6+2a277fd"
+    "selected_version": "Release/stable/2.2.0-14+5cd9221"
   },
   {
     "name": "BLERemoteXCVR",
@@ -153,7 +153,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-307+3b513ef"
+    "selected_version": "Release/stable/2.2.0-317+0886193"
   },
   {
     "name": "LpmMfgTool",
@@ -209,7 +209,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-346+96b59ec"
+    "selected_version": "Release/master/2.2.0-360+6e19469"
   },
   {
     "name": "ProductUIAssets",
@@ -237,7 +237,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/3.0.3-321+d17990e"
+    "selected_version": "Release/master/3.0.3-337+4fa361a"
   },
   {
     "name": "RivieraLPM-Tools",
@@ -273,7 +273,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/2.2.2.44722.3199246"
+    "selected_version": "Release/Castle-Fork-stable/2.2.2.44832.3218974"
   },
   {
     "name": "svc-pts-log-decrypt",
