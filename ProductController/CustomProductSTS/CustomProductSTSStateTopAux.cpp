@@ -164,9 +164,9 @@ void CustomProductSTSStateTopAux::RegisterAuxPlugStatusCallbacks()
         HandleAUXCableDetect( IpcAuxState );
     };
 
-    AsyncCallback<LpmServiceMessages::IpcAuxState_t> cb( func, m_account.s_ProductSTSController->GetTask() );
+    AsyncCallback<LpmServiceMessages::IpcAuxState_t> cb( func, m_account.GetProductSTSController()->GetTask() );
 
-    ( static_cast<ProductApp::CustomProductController*>( &( m_account.s_ProductSTSController->GetProductController() ) ) )->RegisterAuxEvents( cb );
+    ( static_cast<ProductApp::CustomProductController*>( &( m_account.GetProductSTSController()->GetProductController() ) ) )->RegisterAuxEvents( cb );
     return;
 }
 void CustomProductSTSStateTopAux::AuxPlay()

@@ -563,9 +563,9 @@ NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationa
 
 void CustomProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "Translated Intent %d", intent );
+    BOSE_INFO( s_logger, "Translated Intent %s", CommonIntentHandler::GetIntentName( intent ).c_str( ) );
     GetCommonCliClientMT().SendAsyncResponse( "Translated intent = " + \
-                                              std::to_string( intent ) );
+                                              CommonIntentHandler::GetIntentName( intent ) );
 
     if( HandleCommonIntents( intent ) )
     {
@@ -607,7 +607,7 @@ void CustomProductController::InitializeKeyIdToKeyNameMap()
 
 void CustomProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent )
 {
-    BOSE_INFO( s_logger, "%s: Translated Intent %d", __func__, intent );
+    BOSE_INFO( s_logger, "%s: Translated Intent %s", __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     GetHsm().Handle<> ( &CustomProductControllerState::HandleNetworkStandbyIntent );
     return;
