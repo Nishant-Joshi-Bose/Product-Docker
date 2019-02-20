@@ -25,7 +25,7 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 
 bool CustomProductControllerStateOn::HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_LOG( INFO, "intent:" << intent );
+    BOSE_LOG( INFO, "intent:" << CommonIntentHandler::GetIntentName( intent ) );
 
     GetCustomProductController().GetIntentHandler().Handle( intent );
 
@@ -34,7 +34,7 @@ bool CustomProductControllerStateOn::HandleIntentAuxIn( KeyHandlerUtil::ActionTy
 
 bool CustomProductControllerStateOn::HandleIntentCountDown( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_LOG( INFO, "intent:" << intent );
+    BOSE_LOG( INFO, "intent:" << CommonIntentHandler::GetIntentName( intent ) );
 
     GetCustomProductController().GetIntentHandler().Handle( intent );
 
