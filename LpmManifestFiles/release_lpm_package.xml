@@ -31,6 +31,6 @@
         <entry chip="lpm_taylor" combine="True" name="taylor_mfg.bin" path="/home/softlib/verisoft/TaylorLPM-Diags/Release/TaylorDiags/master/0.2.4-15+e1c061c/TAYLORDP1/lpm_*.bin" version="filename" />
         <entry chip="lpm_taylor" combine="True" name="taylor_bl.bin" path="/home/softlib/verisoft/TaylorLPM-BL/Release/trunk/0.1.6.3770/TaylorDP1/lpm_bootloader*.bin" version="filename" />
         <entry name="taylor.bin" path="/home/softlib/verisoft/TaylorLPM-App/Continuous/Taylor/dmr-castle-27727/0.2.5-51+1abb7de/TAYLORDP1/lpm_*.bin" version="dynamic" />
-        <entry name="taylor_lb_anim_db.bin" path="../lightBar/Taylor-DP1/output/Animations.bin" version="dynamic" />
+        <entry name="taylor_lb_anim_db.bin" path="../lightBar/Taylor-DP1/output/Animations.bin" version="1.28" />
     </manifest_entries>
 </blob>
