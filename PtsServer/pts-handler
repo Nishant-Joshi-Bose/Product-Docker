@@ -195,6 +195,21 @@ if path == "/network.dat":
 http_redirect(path, "/network", "/network.dat")
 
 # ----------------------------------------------------------------------------
+# View recovery logs
+
+if path == "/recovery.txt" and is_development():
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("recovery-logs", "recovery-logs")
+
+if path == "/recovery.dat":
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs recovery-logs | gzip")
+
+http_redirect(path, "/recovery", "/recovery.dat")
+
+# ----------------------------------------------------------------------------
 # Force the system into reflash mode (QFIL).
 
 if path == "/reflash":
