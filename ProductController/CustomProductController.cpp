@@ -90,7 +90,6 @@ CustomProductController::CustomProductController():
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
-    m_hasClock( true ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_ProductSTSController( *this )
 {
@@ -329,6 +328,7 @@ void CustomProductController::InitializeAction()
                 displayCtrlConfig.m_hasLcd = m_productConfig.product_details( j ).has_lcd();
                 displayCtrlConfig.m_blackScreenDetectEnabled = m_productConfig.product_details( j ).has_blackscreendetectenabled();
                 m_hasClock = m_productConfig.product_details( j ).has_clock();
+                m_productName = m_productConfig.product_details( j ).productname();
                 break;
             }
         }
@@ -450,7 +450,7 @@ std::string CustomProductController::GetDefaultProductName() const
             productName += macAddress;
             BOSE_WARNING( s_logger, "errorType = %s", error.what() );
         }
-        productName += " HS 500";
+        productName += " " + m_productName;
     }
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str() );
     return productName;
