@@ -438,6 +438,16 @@ Address:
     <td>Same as /logread.txt but encrypted</td>
   </tr>
   <tr class="even">
+    <td class="iface">any</td>
+    <td><a>/recovery.txt</a></td>
+    <td>Recovery mode logs for HSP update</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/recovery.dat</a></td>
+    <td>Same as /recovery.txt but encrypted</td>
+  </tr>
+  <tr class="even">
     <td class="iface">usb</td>
     <td><a>/reflash</a></td>
     <td>Force the unit into reflash mode (QFIL)</td>
