@@ -55,6 +55,9 @@ private:
     void HandleLcd( const std::list<std::string> & argList,
                     std::string& response );
 
+    void HandleBattery( const std::list<std::string>& argList,
+                        std::string& response );
+
 };
 
 }

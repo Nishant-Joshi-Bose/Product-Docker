@@ -5,6 +5,7 @@
 #include <endian.h>
 #include <iostream>
 #include <fstream>
+#include <map>
 
 #include "ProductCommandLine.h"
 #include "DPrint.h"
@@ -132,6 +133,13 @@ void ProductCommandLine::RegisterCliCmds()
                                                                           callback,
                                                                           static_cast<int>( CLICmdsKeys::LCD ) );
 
+    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product battery",
+                                                                          "Get/set battery status.",
+                                                                          "product battery",
+                                                                          m_ProductController.GetTask(),
+                                                                          callback,
+                                                                          static_cast<int>( CLICmdsKeys::BATTERY ) );
+
     m_ProductController.m_Clock.RegisterCliCmds( m_ProductController.GetCommonCliClientMT() ) ;
 }
 
@@ -180,6 +188,10 @@ void ProductCommandLine::HandleCliCmd( uint16_t                              cmd
 
     case CLICmdsKeys::LCD:
         HandleLcd( argList, response );
+        break;
+
+    case CLICmdsKeys::BATTERY:
+        HandleBattery( argList, response );
         break;
 
     default:
@@ -510,4 +522,79 @@ void ProductCommandLine::HandleLcd( const std::list<std::string>& argList,
     return;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductCommandLine::HandleBattery
+///
+/// @brief  This command gets battery status.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
+                                        std::string& response )
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    SystemBatteryResponse batteryStatus  = m_ProductController.GetBatteryManager()->GetBatteryStatus(); //current battery status
+
+    if( argList.empty() )
+    {
+        std::ostringstream ss;
+        ss << "BM: Battery chargeStatus=" << batteryStatus.chargestatus()
+           << " minutesToFull=" << batteryStatus.minutestofull()
+           << " minutesToEmpty=" << batteryStatus.minutestoempty()
+           << " percent=" << batteryStatus.percent();
+
+        auto const& msg = ss.str();
+        BOSE_LOG( INFO, msg );
+        m_ProductController.GetCommonCliClientMT().SendAsyncResponse( msg );
+        response = "Retrieved battery status";
+    }
+    else if( argList.size() == 2 )
+    {
+        auto&   arg       = argList.front(); // [charge, percent, mfull, mempty]
+        auto&   val       = argList.back(); //value we want to set the arg to
+        uint32_t temp     = 0;
+
+        //Convert val to integer
+        if( !ToInteger( val, temp ) )
+        {
+            response = "Malformed integer: " + val;
+            return;
+        }
+
+        SystemBatteryResponse req  = m_ProductController.GetBatteryManager()->GetBatteryStatus(); //current battery status
+        if( arg == "charge" ) //request to change the chargeStatus
+        {
+            auto temp2 = static_cast<chargeStatus>( temp ); //converting int to chargeStatus enum
+            req.set_chargestatus( temp2 );
+        }
+        else if( arg == "percent" ) //request to change the percent
+        {
+            req.set_percent( temp );
+        }
+        else if( arg == "mfull" )
+        {
+            req.set_minutestofull( temp );
+        }
+        else if( arg == "mempty" )
+        {
+            req.set_minutestoempty( temp );
+        }
+        else
+        {
+            response = "Incorrect use of command. Usage: battery [charge] [0,1,2,3]  OR battery [percent|mfull|mempty] [0,1,2,... ]";
+            return;
+        }
+        
+        m_ProductController.GetBatteryManager()->DebugSetBattery( req );
+        response = "Sent request to set battery status";
+    }
+    else
+    {
+        response = "Incorrect use of command. Usage: battery [charge] [0,1,2,3]  OR battery [percent|mfull|mempty] [0,1,2,... ]";
+    }
+    return;
 }
+
+} //namespace ProductApp

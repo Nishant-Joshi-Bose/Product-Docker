@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(
   CustomProductLpmHardwareInterface
   CustomProductSTS
   DisplayController
+  BatteryManager
   IntentHandler
   ${CUSTOM_HSM_DIR}
   ${DATACOLLECTIONCLIENT_DIR}
@@ -45,10 +46,12 @@ ADD_EXECUTABLE(ProductController
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
+  ${PROTO_CC_DEST}/BatteryManager.pb.cc
   IntentHandler/CountDownManager.cpp
   IntentHandler/IntentHandler.cpp
   IntentHandler/AuxInHandler.cpp
   DisplayController/DisplayController.cpp
+  BatteryManager/BatteryManager.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
