@@ -1,2 +1,4 @@
 #!/bin/bash
-exec "$(dirname "$0")"/../builds/CastleTestUtils/CastleTestUtils/scripts/pushup "$@"
+testutils_dir=$(components get TestUtils installed_location) || exit
+
+exec "$testutils_dir"/CastleTestUtils/scripts/pushup "$@"
