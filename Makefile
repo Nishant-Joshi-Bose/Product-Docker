@@ -35,7 +35,6 @@ RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_locatio
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
-RIVIERA_LPM_SERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
 PRODUCTCONTROLLERCOMMONPROTO = $(shell components get ProductControllerCommonProto installed_location)
 GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_location)
 
@@ -43,7 +42,6 @@ GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_locati
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
-	ln -nsf $(RIVIERA_LPM_SERVICE_DIR) builds/RivieraLpmService
 	mkdir -p builds/$(cfg)
 	cp -av $(GVA_DIR)/tools/auth_util.py builds/$(cfg)
 	touch builds/__init__.py
