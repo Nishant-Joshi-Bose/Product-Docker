@@ -34,7 +34,6 @@ CMAKE_USE_CCACHE := $(USE_CCACHE)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
-PRODUCTCONTROLLERCOMMONPROTO = $(shell components get ProductControllerCommonProto installed_location)
 GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_location)
 
 .PHONY: generated_sources
