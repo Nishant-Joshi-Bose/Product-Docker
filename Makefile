@@ -40,7 +40,6 @@ GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_locati
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
-	mkdir -p builds/$(cfg)
 	cp -av $(GVA_DIR)/tools/auth_util.py builds/$(cfg)
 	touch builds/__init__.py
 
