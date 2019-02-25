@@ -237,7 +237,7 @@
   },
   {
     "name": "RivieraMinimalFS-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-22+1ce0e27"
+    "selected_version": "Continuous/stable/0.1.0-24+1ce0e27"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
@@ -265,7 +265,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/3.1.0-1553+b98e6c4"
+    "selected_version": "Continuous/stable/3.1.0-1595+5cf75dd"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
