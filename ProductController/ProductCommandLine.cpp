@@ -49,9 +49,9 @@ namespace ProductApp
 /// @name   ProductCommandLine::ProductCommandLine
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCommandLine::ProductCommandLine( CustomProductController& ProductController ):
+ProductCommandLine::ProductCommandLine( CustomProductController& productController ):
 
-    m_ProductController( ProductController )
+    m_productController( productController )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -90,49 +90,62 @@ void ProductCommandLine::RegisterCliCmds()
         HandleCliCmd( cmdKey, argList, respCb, transact_id );
     };
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product boot_status",
+    m_productController.GetCommonCliClientMT().RegisterCLIServerCommands( "product boot_status",
                                                                           "Output the status of the boot up state.",
                                                                           "product boot_status",
-                                                                          m_ProductController.GetTask(),
+                                                                          m_productController.GetTask(),
                                                                           callback,
                                                                           static_cast<int>( CLICmdsKeys::BOOT_STATUS ) );
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product mfgdata",
+    m_productController.GetCommonCliClientMT().RegisterCLIServerCommands( "product mfgdata",
                                                                           "Show the manufacturing data.",
                                                                           "product mfgdata",
-                                                                          m_ProductController.GetTask(),
+                                                                          m_productController.GetTask(),
                                                                           callback,
                                                                           static_cast<int>( CLICmdsKeys::MFGDATA ) );
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product backlight",
-                                                                          "Adjust the LCD back light level.",
-                                                                          "backlight",
-                                                                          m_ProductController.GetTask(),
-                                                                          callback,
-                                                                          static_cast<int>( CLICmdsKeys::BACKLIGHT ) );
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product lightsensor",
-                                                                          "Get the light sensor LUX value.",
-                                                                          "light sensor",
-                                                                          m_ProductController.GetTask(),
-                                                                          callback,
-                                                                          static_cast<int>( CLICmdsKeys::LIGHTSENSOR ) );
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product amp",
+    if( m_productController.GetDisplayController()->GetConfig().m_hasLightSensor )
+    {
+        m_productController.GetCommonCliClientMT().RegisterCLIServerCommands( "product lightsensor",
+                                                                              "Get the light sensor LUX value.",
+                                                                              "light sensor",
+                                                                              m_productController.GetTask(),
+                                                                              callback,
+                                                                              static_cast<int>( CLICmdsKeys::LIGHTSENSOR ) );
+    }
+
+    m_productController.GetCommonCliClientMT().RegisterCLIServerCommands( "product amp",
                                                                           "Get/set amplifier state.",
                                                                           "product amp [on|off|mute|unmute]",
-                                                                          m_ProductController.GetTask(),
+                                                                          m_productController.GetTask(),
                                                                           callback,
                                                                           static_cast<int>( CLICmdsKeys::AMP ) );
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product lcd",
-                                                                          "Manage the lcd hardware.",
-                                                                          "product lcd",
-                                                                          m_ProductController.GetTask(),
-                                                                          callback,
-                                                                          static_cast<int>( CLICmdsKeys::LCD ) );
 
-    m_ProductController.m_Clock.RegisterCliCmds( m_ProductController.GetCommonCliClientMT() ) ;
+
+    if( m_productController.GetDisplayController()->GetConfig().m_hasLcd )
+    {
+        m_productController.GetCommonCliClientMT().RegisterCLIServerCommands( "product backlight",
+                                                                              "Adjust the LCD back light level.",
+                                                                              "backlight",
+                                                                              m_productController.GetTask(),
+                                                                              callback,
+                                                                              static_cast<int>( CLICmdsKeys::BACKLIGHT ) );
+
+        m_productController.GetCommonCliClientMT().RegisterCLIServerCommands( "product lcd",
+                                                                              "Manage the lcd hardware.",
+                                                                              "product lcd",
+                                                                              m_productController.GetTask(),
+                                                                              callback,
+                                                                              static_cast<int>( CLICmdsKeys::LCD ) );
+    }
+
+    if( m_productController.m_hasClock )
+    {
+        m_productController.m_clock->RegisterCliCmds( m_productController.GetCommonCliClientMT() ) ;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,16 +221,16 @@ void ProductCommandLine::HandleBootStatus( const std::list<std::string>& argList
 {
     BOSE_INFO( s_logger, __func__ );
 
-    std::string CapsInitialized( m_ProductController.IsCAPSReady( )                 ? "true" : "false" );
-    std::string LpmConnected( m_ProductController.IsLpmReady( )                     ? "true" : "false" );
-    std::string audioPathConnected( m_ProductController.IsAudioPathReady( )         ? "true" : "false" );
-    std::string networkModuleReady( m_ProductController.IsNetworkModuleReady( )     ? "true" : "false" );
-    std::string StsInitialized( m_ProductController.IsSTSReady( )                   ? "true" : "false" );
-    std::string bluetoothInitialized( m_ProductController.IsBluetoothModuleReady( ) ? "true" : "false" );
-    std::string UiConnected( m_ProductController.IsUiConnected( )                   ? "true" : "false" );
-    std::string SassInitialized( m_ProductController.IsSassReady( )                 ? "true" : "false" );
-    std::string SoftwareUpdateReady( m_ProductController.IsSoftwareUpdateReady( )   ? "true" : "false" );
-    std::string VoiceInitialized( m_ProductController.IsVoiceModuleReady( )         ? "true" : "false" );
+    std::string CapsInitialized( m_productController.IsCAPSReady( )                 ? "true" : "false" );
+    std::string LpmConnected( m_productController.IsLpmReady( )                     ? "true" : "false" );
+    std::string audioPathConnected( m_productController.IsAudioPathReady( )         ? "true" : "false" );
+    std::string networkModuleReady( m_productController.IsNetworkModuleReady( )     ? "true" : "false" );
+    std::string StsInitialized( m_productController.IsSTSReady( )                   ? "true" : "false" );
+    std::string bluetoothInitialized( m_productController.IsBluetoothModuleReady( ) ? "true" : "false" );
+    std::string UiConnected( m_productController.IsUiConnected( )                   ? "true" : "false" );
+    std::string SassInitialized( m_productController.IsSassReady( )                 ? "true" : "false" );
+    std::string SoftwareUpdateReady( m_productController.IsSoftwareUpdateReady( )   ? "true" : "false" );
+    std::string VoiceInitialized( m_productController.IsVoiceModuleReady( )         ? "true" : "false" );
 
     response  = "------------- Product Controller Booting Status -------------\n";
     response += "\n";
@@ -253,7 +266,7 @@ void ProductCommandLine::HandleBootStatus( const std::list<std::string>& argList
     response += "\n";
     response += "\n";
 
-    if( m_ProductController.IsBooted( ) )
+    if( m_productController.IsBooted( ) )
     {
         response += "The device has been successfully booted.";
     }
@@ -303,7 +316,7 @@ void ProductCommandLine::HandleBacklight( const std::list<std::string>& argList,
 {
     BOSE_INFO( s_logger, __func__ );
 
-    if( m_ProductController.IsLpmReady() == false )
+    if( m_productController.IsLpmReady() == false )
     {
 
         response = "lpmClient not connected";
@@ -312,12 +325,12 @@ void ProductCommandLine::HandleBacklight( const std::list<std::string>& argList,
 
     if( argList.size() == 0 )
     {
-        m_ProductController.GetLpmHardwareInterface()->GetLpmClient()->GetBackLight( [this]( IpcBackLight_t const & rsp )
+        m_productController.GetLpmHardwareInterface()->GetLpmClient()->GetBackLight( [this]( IpcBackLight_t const & rsp )
         {
             std::ostringstream ss;
             ss << rsp.value() << "%";
             BOSE_LOG( INFO, ss.str() );
-            m_ProductController.GetCommonCliClientMT().SendAsyncResponse( ss.str() );
+            m_productController.GetCommonCliClientMT().SendAsyncResponse( ss.str() );
 
         } );
 
@@ -343,7 +356,7 @@ void ProductCommandLine::HandleBacklight( const std::list<std::string>& argList,
 
         IpcBackLight_t backlight;
         backlight.set_value( intensity );
-        m_ProductController.GetLpmHardwareInterface()->GetLpmClient()->SetBackLight( backlight );
+        m_productController.GetLpmHardwareInterface()->GetLpmClient()->SetBackLight( backlight );
 
         return;
     }// If there is 1 argument
@@ -364,7 +377,7 @@ void ProductCommandLine::HandleLightsensor( const std::list<std::string>& argLis
 {
     BOSE_INFO( s_logger, __func__ );
 
-    if( m_ProductController.IsLpmReady() == false )
+    if( m_productController.IsLpmReady() == false )
     {
 
         response = "lpmClient not connected";
@@ -373,7 +386,7 @@ void ProductCommandLine::HandleLightsensor( const std::list<std::string>& argLis
 
     if( argList.size() == 0 )
     {
-        m_ProductController.GetLpmHardwareInterface()->GetLpmClient()->GetLightSensor( [this]( IpcLightSensor_t const & rsp )
+        m_productController.GetLpmHardwareInterface()->GetLpmClient()->GetLightSensor( [this]( IpcLightSensor_t const & rsp )
         {
             std::ostringstream ss;
             int                lux_decimal    = ( int )( be16toh( rsp.lux_decimal_value() ) );
@@ -381,7 +394,7 @@ void ProductCommandLine::HandleLightsensor( const std::list<std::string>& argLis
 
             ss << lux_decimal << "." << lux_fractional << " LUX";
             BOSE_LOG( INFO, ss.str() );
-            m_ProductController.GetCommonCliClientMT().SendAsyncResponse( ss.str() );
+            m_productController.GetCommonCliClientMT().SendAsyncResponse( ss.str() );
 
         } );
 
@@ -404,7 +417,7 @@ void ProductCommandLine::HandleAmp( const std::list<std::string>& argList,
 {
     BOSE_INFO( s_logger, __func__ );
 
-    if( m_ProductController.IsLpmReady() == false )
+    if( m_productController.IsLpmReady() == false )
     {
 
         response = "lpmClient not connected";
@@ -414,7 +427,7 @@ void ProductCommandLine::HandleAmp( const std::list<std::string>& argList,
     if( argList.empty() )
     {
         BOSE_LOG( INFO, "Get amplifier status..." );
-        m_ProductController.GetLpmHardwareInterface()->GetLpmClient()->GetAmp( [this]( IpcAmp_t const & rsp )
+        m_productController.GetLpmHardwareInterface()->GetLpmClient()->GetAmp( [this]( IpcAmp_t const & rsp )
         {
             std::ostringstream ss;
             ss << "amplifier on=" << rsp.on()
@@ -423,7 +436,7 @@ void ProductCommandLine::HandleAmp( const std::list<std::string>& argList,
             auto const& msg = ss.str();
 
             BOSE_LOG( INFO, msg );
-            m_ProductController.GetCommonCliClientMT().SendAsyncResponse( msg );
+            m_productController.GetCommonCliClientMT().SendAsyncResponse( msg );
         } );
         response = "Sent request for amplifier status";
     }
@@ -455,7 +468,7 @@ void ProductCommandLine::HandleAmp( const std::list<std::string>& argList,
             response = "Expected on|off|mute|unmute got '" + arg + '\'';
             return;
         }
-        m_ProductController.GetLpmHardwareInterface()->GetLpmClient()->SetAmp( req );
+        m_productController.GetLpmHardwareInterface()->GetLpmClient()->SetAmp( req );
         response = "Sent request to set amplifier state";
     }
 }

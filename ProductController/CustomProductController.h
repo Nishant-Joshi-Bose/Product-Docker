@@ -74,6 +74,7 @@
 #include "DisplayController.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
+#include "ProductConfig.pb.h"
 
 namespace ProductApp
 {
@@ -130,6 +131,7 @@ private:
 
     void InitializeHsm( );
     void InitializeAction( );
+    bool LoadProductConfiguration();
     void RegisterLpmEvents();
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
@@ -370,9 +372,14 @@ private:
     std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
     std::shared_ptr<DisplayController>                              m_displayController;
     IntentHandler                                                   m_IntentHandler;
-    Clock                                                           m_Clock;
+    std::shared_ptr<Clock>                                          m_clock;
+    bool                                                            m_hasClock = false;
+    std::string                                                     m_productName = "NOT SET";
+
     bool                                                            m_isBLEModuleReady  = false;
     bool                                                            m_isUiConnected = false;
+
+    ProductPb::ProductConfig                                        m_productConfig;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
