@@ -2,7 +2,7 @@ export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: deploy
-deploy: all-packages
+deploy: all-packages graph
 	scripts/collect-deployables builds/Release builds/deploy
 
 .PHONY: force
@@ -114,12 +114,14 @@ packages-gz-with-hsp: monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk 
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
-graph: product-ipk
-	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
+graph:
+	mkdir -p builds/$(cfg)
+	components record builds/$(cfg)
+	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/component-info.gz -obuilds/$(cfg)/components
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build
-	./scripts/create-software-update-ipk 
+	./scripts/create-software-update-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
@@ -155,9 +157,8 @@ wpe-ipk:
 product-script-ipk:
 	./scripts/create-product-script-ipk
 
-
 .PHONY: all-packages
-all-packages: package-no-hsp package-with-hsp graph
+all-packages: package-no-hsp package-with-hsp product-ipk
 	./scripts/create-product-tar -i $(IPKS_HSP)
 
 .PHONY: clean
