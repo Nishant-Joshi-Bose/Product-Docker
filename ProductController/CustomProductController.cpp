@@ -90,7 +90,6 @@ CustomProductController::CustomProductController():
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
-    m_hasClock( true ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_ProductSTSController( *this )
 {
@@ -303,19 +302,12 @@ void CustomProductController::InitializeAction()
     LpmClientLiteIF::LpmClientLitePtr lpmLitePtr( std::static_pointer_cast<LpmClientLiteIF>( m_LpmInterface->GetLpmClient( ) ) );
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  lpmLitePtr ) );
 
-    DisplayController::Configuration displayCtrlConfig;
-
-    // Set default display values in case we fail reading config file or if product type not found in config file
-    displayCtrlConfig.m_hasLightSensor = true;
-    displayCtrlConfig.m_hasLcd = true;
-    displayCtrlConfig.m_blackScreenDetectEnabled = true;
-
     auto productType = GetProductType();
     bool productFound = false;
 
     if( not LoadProductConfiguration() )
     {
-        BOSE_WARNING( s_logger, "%s: LoadProductConfiguration failed, using defaults", __func__ );
+        BOSE_DIE( "LoadProductConfiguration failed" );
     }
     else
     {
@@ -325,10 +317,27 @@ void CustomProductController::InitializeAction()
             {
                 BOSE_INFO( s_logger, "%s: Product Type %s, found in config file at index %d", __func__, productType.c_str(), j );
                 productFound = true;
+                m_productName = m_productConfig.product_details( j ).productname();
+
+                DisplayController::Configuration displayCtrlConfig;
                 displayCtrlConfig.m_hasLightSensor = m_productConfig.product_details( j ).has_lightsensor();
                 displayCtrlConfig.m_hasLcd = m_productConfig.product_details( j ).has_lcd();
                 displayCtrlConfig.m_blackScreenDetectEnabled = m_productConfig.product_details( j ).has_blackscreendetectenabled();
+                m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
+
                 m_hasClock = m_productConfig.product_details( j ).has_clock();
+                if( m_hasClock )
+                {
+                    BOSE_INFO( s_logger, "%s: Product has a clock, initialize Clock", __func__ );
+                    m_clock = std::make_shared<Clock>( m_FrontDoorClientIF, GetTask(), GetProductGuid() );
+                    m_clock->Initialize( );
+                }
+
+                // Sanity check...
+                if( m_hasClock && not displayCtrlConfig.m_hasLcd )
+                {
+                    BOSE_ERROR( s_logger, "%s: Product Config file specifies clock but no LCD!!!", __func__ );
+                }
                 break;
             }
         }
@@ -336,17 +345,8 @@ void CustomProductController::InitializeAction()
 
     if( not productFound )
     {
-        BOSE_WARNING( s_logger, "%s: Product Type %s, NOT found in config file, using defaults", __func__, productType.c_str() );
+        BOSE_DIE( "Product Type " << productType.c_str() << " NOT found in config file:: " );
     }
-
-    if( m_hasClock )
-    {
-        BOSE_INFO( s_logger, "%s: Product has a clock, initialize Clock", __func__ );
-        m_clock = std::make_shared<Clock>( m_FrontDoorClientIF, GetTask(), GetProductGuid() );
-        m_clock->Initialize( );
-    }
-
-    m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
 
     // Start ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
@@ -434,23 +434,35 @@ Callback < ProductMessage > CustomProductController::GetMessageHandler( )
 std::string CustomProductController::GetDefaultProductName() const
 {
     std::string productName;
-    if( !IsDevelopmentMode() )
+
+    // Ensure that the device has a valid marketing product name, based on the manufacturing
+    // data, and assign this value to the default product name initially.
+    if( auto productNameValue = MfgData::Get( "productName" ) )
     {
-        productName = "Bose Home Speaker 500";
+        productName = *productNameValue;
     }
     else
+    {
+        BOSE_DIE( __func__ << " Fatal Error: No Product Name " );
+    }
+
+    // Leave the default product name assigned to the marketing product name in the manufacturing
+    // data for production non-development devices; otherwise, assign the default product name
+    // based on its MAC address and product name which is extracted from the Product Config file
+    // at startup.
+    if( IsDevelopmentMode() )
     {
         std::string macAddress = MacAddressInfo::GetPrimaryMAC();
         try
         {
-            productName += ( macAddress.substr( macAddress.length() - 6 ) );
+            productName = ( macAddress.substr( macAddress.length() - 6 ) );
         }
         catch( const std::out_of_range& error )
         {
-            productName += macAddress;
+            productName = macAddress;
             BOSE_WARNING( s_logger, "errorType = %s", error.what() );
         }
-        productName += " HS 500";
+        productName += " " + m_productName;
     }
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str() );
     return productName;
