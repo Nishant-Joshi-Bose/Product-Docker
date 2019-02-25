@@ -5,7 +5,6 @@
 #include <endian.h>
 #include <iostream>
 #include <fstream>
-#include <map>
 
 #include "ProductCommandLine.h"
 #include "DPrint.h"
@@ -535,15 +534,14 @@ void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
 {
     BOSE_INFO( s_logger, __func__ );
 
-    SystemBatteryResponse batteryStatus  = m_ProductController.GetBatteryManager()->GetBatteryStatus(); //current battery status
-
+    auto batteryStatus = m_ProductController.GetBatteryManager()->GetBatteryStatus();
     if( argList.empty() )
     {
         std::ostringstream ss;
-        ss << "BM: Battery chargeStatus=" << batteryStatus.chargestatus()
-           << " minutesToFull=" << batteryStatus.minutestofull()
-           << " minutesToEmpty=" << batteryStatus.minutestoempty()
-           << " percent=" << batteryStatus.percent();
+        ss << "BM: Battery chargeStatus=" << batteryStatus.charge
+           << " minutesToFull=" << batteryStatus.minutesToEmpty
+           << " minutesToEmpty=" << batteryStatus.minutesToEmpty
+           << " percent=" << batteryStatus.percent;
 
         auto const& msg = ss.str();
         BOSE_LOG( INFO, msg );
@@ -562,8 +560,14 @@ void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
             response = "Malformed integer: " + val;
             return;
         }
+        auto batteryStatus = m_ProductController.GetBatteryManager()->GetBatteryStatus(); //current battery status
 
-        SystemBatteryResponse req  = m_ProductController.GetBatteryManager()->GetBatteryStatus(); //current battery status
+        SystemBatteryResponse req;
+        req.set_chargestatus( batteryStatus.charge );
+        req.set_minutestoempty( batteryStatus.minutesToEmpty );
+        req.set_minutestofull( batteryStatus.minutesToFull );
+        req.set_percent( batteryStatus.percent );
+
         if( arg == "charge" ) //request to change the chargeStatus
         {
             auto temp2 = static_cast<chargeStatus>( temp ); //converting int to chargeStatus enum
@@ -586,7 +590,7 @@ void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
             response = "Incorrect use of command. Usage: battery [charge] [0,1,2,3]  OR battery [percent|mfull|mempty] [0,1,2,... ]";
             return;
         }
-        
+
         m_ProductController.GetBatteryManager()->DebugSetBattery( req );
         response = "Sent request to set battery status";
     }

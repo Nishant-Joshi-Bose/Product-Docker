@@ -5,16 +5,11 @@
 ///// @attention Copyright 2019 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include <iostream>
-#include <memory>
-#include <thread>
-#include "APTask.h"
-#include "APTimer.h"
 #include "AsyncCallback.h"
 #include "FrontDoorClientIF.h"
 #include "BatteryManager.pb.h"
 #include "LpmClientIF.h"
-#include "NotifyTargetTaskIF.h"
+#include "ProductController.h"
 
 using namespace ::BatteryManagerPb;
 
@@ -25,7 +20,13 @@ class ProductController;
 class BatteryManager
 {
 public:
-
+    struct BatteryStatus
+    {
+        chargeStatus charge = CHARGING;
+        int32_t minutesToEmpty    = 0;
+        int32_t minutesToFull     = 0;
+        int32_t percent           = 0;
+    };
     /*! \brief Constructor.
      * \param controller Reference to main Product Controller.
      * \param fdClient Frontdoor client reference.
@@ -33,67 +34,45 @@ public:
      */
     BatteryManager( ProductController& controller,
                     const std::shared_ptr<FrontDoorClientIF>& fdClient,
-                    LpmClientIF::LpmClientPtr clientPtr);
+                    LpmClientIF::LpmClientPtr clientPtr );
 
-    /*! \brief Destructor.
-     */
-    ~BatteryManager();
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name  Initialize()
-    /// @brief-
-    /// @return void
-    ///////////////////////////////////////////////////////////////////////////////
     void Initialize();
-
-    /*! \brief Register for LPM callback events.
-     */
-    void RegisterLpmEvents();
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method is used to return the LPM client pointer.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    inline SystemBatteryResponse GetBatteryStatus( )
-    {
-        return m_systemBatteryResponse;
-    }
 
     /*!
      */
-    void DebugSetBattery(SystemBatteryResponse req);
+    void RegisterLpmEvents();
+
+    /*! \brief This method is used for TAP debugging purposes.
+    */
+    inline BatteryStatus GetBatteryStatus( )
+    {
+        return m_batteryStatus;
+    }
+    /*! \brief This method is used for TAP debugging purposes.
+     */
+    void DebugSetBattery( SystemBatteryResponse req );
 
 private:
 
     BatteryManager( const BatteryManager& ) = delete;
     BatteryManager& operator=( const BatteryManager& ) = delete;
 
-    /*! \brief Register Frontdoor API's.
+    /*!
      */
     void RegisterFrontdoorEndPoints();
     /*!
      */
-    void HandleDebugPutBatteryRequest(SystemBatteryResponse req, const Callback <SystemBatteryResponse> resp);
+    void HandleDebugPutBatteryRequest( SystemBatteryResponse req, const Callback <SystemBatteryResponse> resp );
     /*!
      */
-    void HandleGetBatteryRequest(const Callback<SystemBatteryResponse>& resp );//Callback<Display> resp );
-    /*!
-     */
-    bool HandleLpmNotificationSystemBattery();
-    /*! 
-     */
-    void ChargeStatusProtoEnumToIpcEnum();
-    /*! 
-     */
-    void ChargeStatusIpcEnumToProtoEnum();
+    void HandleGetBatteryRequest( const Callback<SystemBatteryResponse>& resp );
 
     ProductController&                 m_productController;
     std::shared_ptr<FrontDoorClientIF> m_frontdoorClientPtr;
     LpmClientIF::LpmClientPtr          m_lpmClient;
 
-    NotifyTargetTaskIF*                m_task;                      //!< Background task for periodically polling.
+    BatteryStatus                      m_batteryStatus;
 
-    SystemBatteryResponse              m_systemBatteryResponse;
 };
 } //namespace ProductApp
 
