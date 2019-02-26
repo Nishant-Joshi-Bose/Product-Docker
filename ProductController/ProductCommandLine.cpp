@@ -562,6 +562,8 @@ void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
         }
 
         auto batteryStatus = m_ProductController.GetBatteryManager()->GetBatteryStatus();
+        
+        response = "usage: battery [charge|percent|mfull|mempty] [int]";
 
         if( arg == "charge" )
         {
@@ -581,16 +583,10 @@ void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
         }
         else
         {
-            response = "usage: battery [charge|percent|mfull|mempty] [int]";
             return;
         }
-
         m_ProductController.GetBatteryManager()->DebugSetBattery( batteryStatus );
-        response = "Sent request to set battery status";
-    }
-    else
-    {
-        response = "usage: battery [charge|percent|mfull|mempty] [int]";
+        response = "Sent to client";
     }
     return;
 }
