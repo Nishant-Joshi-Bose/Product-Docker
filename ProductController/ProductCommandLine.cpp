@@ -525,7 +525,7 @@ void ProductCommandLine::HandleLcd( const std::list<std::string>& argList,
 ///
 /// @name   ProductCommandLine::HandleBattery
 ///
-/// @brief  This command gets battery status.
+/// @brief  Implementation of the `battery` CLI command.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -538,7 +538,7 @@ void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
     if( argList.empty() )
     {
         std::ostringstream ss;
-        ss << "BM: Battery chargeStatus=" << batteryStatus.charge
+        ss << "BM: Battery chargeStatus=" << batteryStatus.chargeStatus
            << " minutesToFull=" << batteryStatus.minutesToEmpty
            << " minutesToEmpty=" << batteryStatus.minutesToEmpty
            << " percent=" << batteryStatus.percent;
@@ -560,43 +560,37 @@ void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
             response = "Malformed integer: " + val;
             return;
         }
-        auto batteryStatus = m_ProductController.GetBatteryManager()->GetBatteryStatus(); //current battery status
 
-        SystemBatteryResponse req;
-        req.set_chargestatus( batteryStatus.charge );
-        req.set_minutestoempty( batteryStatus.minutesToEmpty );
-        req.set_minutestofull( batteryStatus.minutesToFull );
-        req.set_percent( batteryStatus.percent );
+        auto batteryStatus = m_ProductController.GetBatteryManager()->GetBatteryStatus();
 
-        if( arg == "charge" ) //request to change the chargeStatus
+        if( arg == "charge" )
         {
-            auto temp2 = static_cast<chargeStatus>( temp ); //converting int to chargeStatus enum
-            req.set_chargestatus( temp2 );
+            batteryStatus.chargeStatus =  temp;
         }
-        else if( arg == "percent" ) //request to change the percent
+        else if( arg == "percent" )
         {
-            req.set_percent( temp );
+            batteryStatus.percent = temp;
         }
         else if( arg == "mfull" )
         {
-            req.set_minutestofull( temp );
+            batteryStatus.minutesToFull = temp;
         }
         else if( arg == "mempty" )
         {
-            req.set_minutestoempty( temp );
+            batteryStatus.minutesToEmpty = temp;
         }
         else
         {
-            response = "Incorrect use of command. Usage: battery [charge] [0,1,2,3]  OR battery [percent|mfull|mempty] [0,1,2,... ]";
+            response = "usage: battery [charge|percent|mfull|mempty] [int]";
             return;
         }
 
-        m_ProductController.GetBatteryManager()->DebugSetBattery( req );
+        m_ProductController.GetBatteryManager()->DebugSetBattery( batteryStatus );
         response = "Sent request to set battery status";
     }
     else
     {
-        response = "Incorrect use of command. Usage: battery [charge] [0,1,2,3]  OR battery [percent|mfull|mempty] [0,1,2,... ]";
+        response = "usage: battery [charge|percent|mfull|mempty] [int]";
     }
     return;
 }

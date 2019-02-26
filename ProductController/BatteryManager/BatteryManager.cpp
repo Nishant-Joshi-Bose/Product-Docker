@@ -15,8 +15,6 @@ using namespace ::BatteryManagerPb;
 namespace ProductApp
 {
 
-/*!
- */
 BatteryManager::BatteryManager( ProductController& controller,
                                 const std::shared_ptr<FrontDoorClientIF>& fdClient,
                                 LpmClientIF::LpmClientPtr clientPtr ):
@@ -26,8 +24,6 @@ BatteryManager::BatteryManager( ProductController& controller,
 {
 }
 
-/*!
- */
 void BatteryManager::Initialize()
 {
     RegisterFrontdoorEndPoints();
@@ -40,17 +36,14 @@ void BatteryManager::RegisterLpmEvents()
     BOSE_VERBOSE( s_logger, "BM: Registering LPM events ... " );
 }
 
-/*!
- */
 void BatteryManager::RegisterFrontdoorEndPoints()
 {
-    // GET
     auto batteryGetHandler = [this]( const Callback<SystemBatteryResponse>& resp,
                                      const Callback<FrontDoor::Error>& errorCb )
     {
         SystemBatteryResponse batteryStatusPb;
 
-        batteryStatusPb.set_chargestatus( ( chargeStatus )m_batteryStatus.charge );
+        batteryStatusPb.set_chargestatus( static_cast<ChargeStatus>( m_batteryStatus.chargeStatus ) );
         batteryStatusPb.set_minutestofull( m_batteryStatus.minutesToFull );
         batteryStatusPb.set_minutestoempty( m_batteryStatus.minutesToEmpty );
         batteryStatusPb.set_percent( m_batteryStatus.percent );
@@ -64,21 +57,17 @@ void BatteryManager::RegisterFrontdoorEndPoints()
 }
 
 
-void BatteryManager::DebugSetBattery( SystemBatteryResponse req )
+void BatteryManager::DebugSetBattery( const BatteryStatus& req )
 {
-    SystemBatteryResponse batteryStatusPb;
+    m_batteryStatus = req; //updating local struct with the TAP request received
 
-    batteryStatusPb.set_chargestatus( req.chargestatus() );
-    batteryStatusPb.set_minutestofull( req.minutestofull() );
-    batteryStatusPb.set_minutestoempty( req.minutestoempty() );
-    batteryStatusPb.set_percent( req.percent() );
-    m_frontdoorClientPtr->SendNotification( FRONTDOOR_ENDPOINT_BATTERY, batteryStatusPb );
-
-    //The following updates the local struct so the requests sent from TAP are also reflected in following GET requests
-    m_batteryStatus.charge = req.chargestatus();
-    m_batteryStatus.minutesToFull = req.minutestofull();
-    m_batteryStatus.minutesToEmpty = req.minutestoempty();
-    m_batteryStatus.percent = req.percent();
+    //Sending a NOTIFY with updated battery status when a TAP request is received
+    SystemBatteryResponse batteryStatusResp;
+    batteryStatusResp.set_chargestatus( static_cast<ChargeStatus>( req.chargeStatus ) );
+    batteryStatusResp.set_minutestofull( req.minutesToFull );
+    batteryStatusResp.set_minutestoempty( req.minutesToEmpty );
+    batteryStatusResp.set_percent( req.percent );
+    m_frontdoorClientPtr->SendNotification( FRONTDOOR_ENDPOINT_BATTERY, batteryStatusResp );
 }
 
 } //namespace ProductApp

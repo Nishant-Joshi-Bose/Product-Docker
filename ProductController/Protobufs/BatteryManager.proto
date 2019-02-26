@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file BatteryManager.proto
 ///
-/// @brief Battery manager protouf definition
+/// @brief Battery manager protobuf definition
 ///
 /// Copyright 2019 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
@@ -12,7 +12,7 @@ message BatteryRequestError {
     optional string id = 1;
 }
 
-enum chargeStatus {
+enum ChargeStatus {
     CHARGING              = 0;
     DISCHARGING           = 1;
     INSUFFICIENT_CHARGING = 2;
@@ -20,7 +20,7 @@ enum chargeStatus {
 }
 
 message SystemBatteryResponse {
-    optional chargeStatus        chargeStatus      = 1;
+    optional ChargeStatus        chargeStatus      = 1;
     optional int32              minutesToEmpty    = 2;
     optional int32              minutesToFull     = 3;
     optional int32              percent           = 4;
