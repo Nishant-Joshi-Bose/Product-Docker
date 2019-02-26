@@ -45,6 +45,8 @@ ADD_EXECUTABLE(ProductController
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
+  ${PROTO_CC_DEST}/CommonIntents.pb.cc
+  ${PROTO_CC_DEST}/Intents.pb.cc
   IntentHandler/CountDownManager.cpp
   IntentHandler/IntentHandler.cpp
   IntentHandler/AuxInHandler.cpp
@@ -70,6 +72,7 @@ TARGET_LINK_LIBRARIES(ProductController
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
+  VPAControllerClient
   CliClient
   AudioLibs
   EddieAudioSettings
@@ -90,7 +93,6 @@ TARGET_LINK_LIBRARIES(ProductController
   PassportLan
   SASSClient
   StsAmazon
-  VoiceService
   ProtoToMarkup
   jsoncpp
   protobuf
