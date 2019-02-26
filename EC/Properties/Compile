@@ -7,6 +7,10 @@ set -x
 cd $[buildDir]
 CastleToolsDir=/home/epd/srcref/CastleTools
 export PATH=$CastleToolsDir/bin:/tools/klocwork/user/bin:/tools/klocwork/server/bin:$PATH
+# Add RestoreVersion as additional property for this build
+MinimalFSFullVersion=$(components get RivieraMinimalFS-qc8017_32 selected_version) || exit
+MinimalFSVersion=${MinimalFSFullVersion##*/} || exit
+ectool setProperty /myJob/RestoreVersion "$MinimalFSVersion" || exit
 
 if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
     KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx'"
@@ -15,10 +19,6 @@ fi
 export DONT_UPDATE_CASTLETOOLS=1
 export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 deploy || exit
-MinimalFSFullVersion=$(components get RivieraMinimalFS-qc8017_32 selected_version) || exit
-MinimalFSVersion=${MinimalFSFullVersion##*/} || exit
-ectool setProperty /myJob/RestoreVersion "$MinimalFSVersion" || exit
-
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then
     # Get the version number for the recovery partition
     ar x builds/Release/recovery.ipk data.tar.gz

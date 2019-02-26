@@ -120,7 +120,7 @@ endif
 
 .PHONY: recovery-ipk
 recovery-ipk: cmake_build 
-	./scripts/create-recovery-ipk -p eddie
+	./scripts/create-recovery-ipk -p $(product)
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos

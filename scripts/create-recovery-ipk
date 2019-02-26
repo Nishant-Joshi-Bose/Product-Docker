@@ -47,8 +47,7 @@ if (( $# != 0 )); then
     echo >&2 "$this: unexpected argument '$1'"
     tryhelp
 fi
-if [ -z "$product_type" ]
-then
+if [ -z "$product_type" ]; then
     echo >&2 "$this: -p or --product is mandatory argument"
     tryhelp
 fi
@@ -89,7 +88,7 @@ cp "$minimal_image"  "$opt_dir/" || exit
 
 PackageName=SoundTouchRecovery
 
-# @todo: As of now, keep version same as product, but this should be minimalFS
+# @todo: CASTLE-28938 - As of now, keep version same as product, but this should be minimalFS
 # version. Also, Restore should become separate IPK with its own version
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
