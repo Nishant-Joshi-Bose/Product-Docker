@@ -5,7 +5,6 @@
 ///// @attention Copyright 2019 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "AsyncCallback.h"
 #include "FrontDoorClientIF.h"
 #include "BatteryManager.pb.h"
 #include "LpmClientIF.h"
@@ -60,12 +59,6 @@ private:
     /*!
      */
     void RegisterFrontdoorEndPoints();
-    /*!
-     */
-    void HandleDebugPutBatteryRequest( SystemBatteryResponse req, const Callback <SystemBatteryResponse> resp );
-    /*!
-     */
-    void HandleGetBatteryRequest( const Callback<SystemBatteryResponse>& resp );
 
     ProductController&                 m_productController;
     std::shared_ptr<FrontDoorClientIF> m_frontdoorClientPtr;

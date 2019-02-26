@@ -45,9 +45,19 @@ void BatteryManager::RegisterLpmEvents()
 void BatteryManager::RegisterFrontdoorEndPoints()
 {
     // GET
-    AsyncCallback< Callback<SystemBatteryResponse>, Callback<FrontDoor::Error>> getBatteryCb( std::bind( &BatteryManager::HandleGetBatteryRequest, this, std::placeholders::_1 ),
-                                                                             m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterGet( FRONTDOOR_ENDPOINT_BATTERY, getBatteryCb,
+    auto batteryGetHandler = [this]( const Callback<SystemBatteryResponse>& resp,
+                                     const Callback<FrontDoor::Error>& errorCb )
+    {
+        SystemBatteryResponse batteryStatusPb;
+
+        batteryStatusPb.set_chargestatus( ( chargeStatus )m_batteryStatus.charge );
+        batteryStatusPb.set_minutestofull( m_batteryStatus.minutesToFull );
+        batteryStatusPb.set_minutestoempty( m_batteryStatus.minutesToEmpty );
+        batteryStatusPb.set_percent( m_batteryStatus.percent );
+        resp.Send( batteryStatusPb );
+    };
+
+    m_frontdoorClientPtr->RegisterGet( FRONTDOOR_ENDPOINT_BATTERY, batteryGetHandler,
                                        FrontDoor::PUBLIC,
                                        FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                        FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
@@ -69,20 +79,6 @@ void BatteryManager::DebugSetBattery( SystemBatteryResponse req )
     m_batteryStatus.minutesToFull = req.minutestofull();
     m_batteryStatus.minutesToEmpty = req.minutestoempty();
     m_batteryStatus.percent = req.percent();
-}
-
-/*! \brief Frontdoor GET request handler for /system/battery.
- * \param resp Callback into which will be written current battery status as a SystemBatteryResponse protobuf.
- */
-void BatteryManager::HandleGetBatteryRequest( const Callback<SystemBatteryResponse>& resp )
-{
-    SystemBatteryResponse batteryStatusPb;
-
-    batteryStatusPb.set_chargestatus( ( chargeStatus )m_batteryStatus.charge );
-    batteryStatusPb.set_minutestofull( m_batteryStatus.minutesToFull );
-    batteryStatusPb.set_minutestoempty( m_batteryStatus.minutesToEmpty );
-    batteryStatusPb.set_percent( m_batteryStatus.percent );
-    resp.Send( batteryStatusPb );
 }
 
 } //namespace ProductApp
