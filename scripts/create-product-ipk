@@ -85,10 +85,11 @@ bluetooth_dir=$(components get Bluetooth-qc8017_32 installed_location) || exit
 bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
-svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
 lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_location) ||exit
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
+googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
+cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -161,14 +162,14 @@ EOF
 distro=$(lsb_release -is)
 if [ "$distro" = "Ubuntu" ]; then
     if dpkg -l libfile-slurp-perl >& /dev/null && dpkg -l libdigest-md5-file-perl >& /dev/null; then
-        "$wspace/OpenSourceLicensing/riviera-licenses" "$riviera_hsp_images_dir/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
+        "$wspace/OpenSourceLicensing/riviera-licenses" -taylor "$riviera_hsp_images_dir/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
     else
        echo >&2 "$(basename $0): Error: please run 'sudo apt install libfile-slurp-perl libdigest-md5-file-perl' to support open source license generation"
        exit 1
     fi
 elif [ "$distro" = "CentOS" ]; then
     if rpm -q perl-File-Slurp >& /dev/null && rpm -q  perl-Digest-MD5-File >& /dev/null; then
-        "$wspace/OpenSourceLicensing/riviera-licenses" "$riviera_hsp_images_dir/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
+        "$wspace/OpenSourceLicensing/riviera-licenses" -taylor "$riviera_hsp_images_dir/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
     else
        echo >&2 "$(basename $0): Error: please run 'sudo yum install perl-File-Slurp perl-Digest-MD5-File' to support open source license generation"
        exit 1
@@ -221,8 +222,9 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
-"$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
+"$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
 "$sadi_dir/stage" "$opt_dir" || exit
+"$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$lightBarAnimationTool_dir/stage" --config=lightBar/Configuration-Taylor-DP1.json --assets=lightBar/Taylor-DP1 "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit

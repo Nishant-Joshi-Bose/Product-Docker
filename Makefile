@@ -27,9 +27,7 @@ check_tools:
 ifndef DONT_UPDATE_CASTLETOOLS
 	castletools-update
 endif
-ifndef DONT_INSTALL_COMPONENTS
-	components install
-endif
+	castletools-build-host-is-sane
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
@@ -40,6 +38,7 @@ SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_
 TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 RIVIERA_LPM_SERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
 PRODUCTCONTROLLERCOMMONPROTO = $(shell components get ProductControllerCommonProto installed_location)
+GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -47,6 +46,8 @@ generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
 	ln -nsf $(RIVIERA_LPM_SERVICE_DIR) builds/RivieraLpmService
+	mkdir -p builds/$(cfg)
+	cp -av $(GVA_DIR)/tools/auth_util.py builds/$(cfg)
 	touch builds/__init__.py
 
 .PHONY: astyle

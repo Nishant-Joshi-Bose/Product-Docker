@@ -47,6 +47,8 @@ ADD_EXECUTABLE(ProductController
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   ${PROTO_CC_DEST}/BatteryManager.pb.cc
+  ${PROTO_CC_DEST}/CommonIntents.pb.cc
+  ${PROTO_CC_DEST}/Intents.pb.cc
   IntentHandler/CountDownManager.cpp
   IntentHandler/IntentHandler.cpp
   IntentHandler/AuxInHandler.cpp
