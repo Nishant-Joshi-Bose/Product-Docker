@@ -168,20 +168,47 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductKeyInputManager::IsBlastableEvent
+///
+/// @param  const IpcKeyInformation_t& keyEvent
+///
+/// @return true if event is blastable, false otherwise
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductKeyInputManager::IsBlastableEvent(
+    const IpcKeyInformation_t&  keyEvent
+)
+{
+    auto origin = keyEvent.keyorigin();
+
+    return (
+               ( origin == KEY_ORIGIN_RF ) ||
+               ( origin == KEY_ORIGIN_NETWORK ) ||
+               ( origin == KEY_ORIGIN_TAP )
+           );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   CustomProductKeyInputManager::BlastKey
 ///
-/// @param  const IpcKeyInformat_t& keyEvent
+/// @param  const IpcKeyInformation_t& keyEvent
 ///
 /// @param  const std::string& cicode
 ///
 /// @return None
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductKeyInputManager::BlastKey(
+bool CustomProductKeyInputManager::BlastKey(
     const IpcKeyInformation_t&  keyEvent,
     const std::string&          cicode
 )
 {
+    if( !IsBlastableEvent( keyEvent ) )
+    {
+        return false;
+    }
+
     QSSMSG::BoseKeyReqMessage_t request;
 
     request.set_keyval( keyEvent.keyid( ) );
@@ -200,6 +227,8 @@ void CustomProductKeyInputManager::BlastKey(
                ( keyEvent.keystate( ) ==  KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
 
     m_QSSClient->SendKey( request );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,17 +292,25 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 
     auto keyid = keyEvent.keyid( );
 
+    // blast release unconditionally (BlastKey will check origin)
+    // if nothing is currently being blasted this will have no effect
+    if( keyEvent.keystate( ) == KEY_RELEASED )
+    {
+        BlastKey( keyEvent, "" );
+    }
+
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
     if( keyid == BOSE_TV_INPUT )
     {
         const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSourceSlot_Name( TV ) );
+        auto blasted = false;
 
-        if( tvSource and tvSource->has_details( ) )
+        if( ( tvSource and tvSource->has_details( ) ) && ( keyEvent.keystate() == KEY_PRESSED ) )
         {
-            BlastKey( keyEvent, tvSource->details( ).cicode( ) );
+            blasted = BlastKey( keyEvent, tvSource->details( ).cicode( ) );
         }
 
-        return AccommodateOrphanReleaseEvents( keyEvent, true );
+        return AccommodateOrphanReleaseEvents( keyEvent, blasted );
     }
 
     // Do some sanity-checks to see if we can proceed
@@ -329,16 +366,17 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 
     // If the device has been configured, blast the key (if it hasn't been configured but it's a key
     // that normally would have been blasted, we'll consume the key)
-    if( m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) )
+    auto blasted = false;
+    if( m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) && ( keyEvent.keystate() == KEY_PRESSED ) )
     {
-        BlastKey( keyEvent, sourceItem->details( ).cicode( ) );
+        blasted = BlastKey( keyEvent, sourceItem->details( ).cicode( ) );
     }
     else
     {
         BOSE_INFO( s_logger, "%s unconfigured source - consuming key", __func__ );
     }
 
-    return AccommodateOrphanReleaseEvents( keyEvent, true );
+    return AccommodateOrphanReleaseEvents( keyEvent, blasted );
 }
 
 void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key )
