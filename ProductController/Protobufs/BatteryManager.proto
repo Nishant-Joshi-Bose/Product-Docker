@@ -1,0 +1,27 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file BatteryManager.proto
+///
+/// @brief Battery manager protobuf definition
+///
+/// Copyright 2019 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+package BatteryManagerPb;
+
+message BatteryRequestError {
+    // Battery manager will return/notify error string in case of an error
+    optional string id = 1;
+}
+
+enum ChargeStatus {
+    CHARGING              = 0;
+    DISCHARGING           = 1;
+    INSUFFICIENT_CHARGING = 2;
+    CRITICAL_ERROR        = 3;
+}
+
+message SystemBatteryResponse {
+    optional ChargeStatus        chargeStatus      = 1;
+    optional int32              minutesToEmpty    = 2;
+    optional int32              minutesToFull     = 3;
+    optional int32              percent           = 4;
+}
