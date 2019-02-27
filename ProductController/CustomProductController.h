@@ -304,9 +304,14 @@ public:
 /// @brief Returns an instance to the BatteryManager.
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< BatteryManager >& GetBatteryManager( )
+    const BatteryManager* GetBatteryManager() const
     {
-        return m_batteryManager;
+        return m_batteryManager.get();
+    }
+
+    BatteryManager* GetBatteryManager()
+    {
+        return m_batteryManager.get();
     }
 
 

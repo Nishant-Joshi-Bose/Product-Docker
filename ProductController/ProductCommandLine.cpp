@@ -56,13 +56,8 @@ ProductCommandLine::ProductCommandLine( CustomProductController& ProductControll
     BOSE_INFO( s_logger, __func__ );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::Initialize
-///
-/// @brief  This method initializes CliClientMT and calls to register commands.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \brief  This method initializes CliClientMT and calls to register commands.
+*/
 void ProductCommandLine::Run( )
 {
     BOSE_INFO( s_logger, __func__ );
@@ -70,13 +65,8 @@ void ProductCommandLine::Run( )
     RegisterCliCmds();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::RegisterCliCmds
-///
-/// @brief  Register the CLI commands for the product controller.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+/* \brief  Register the CLI commands for the product controller.
+*/
 void ProductCommandLine::RegisterCliCmds()
 {
     BOSE_INFO( s_logger, __func__ );
@@ -142,13 +132,8 @@ void ProductCommandLine::RegisterCliCmds()
     m_ProductController.m_Clock.RegisterCliCmds( m_ProductController.GetCommonCliClientMT() ) ;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleCliCmd
-///
-/// @brief  Callback function for registered product controller CLI commands.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+/* \brief  Callback function for registered product controller CLI commands.
+*/
 void ProductCommandLine::HandleCliCmd( uint16_t                              cmdKey,
                                        const std::list< std::string >&       argList,
                                        AsyncCallback< std::string, int32_t > respCb,
@@ -207,13 +192,8 @@ void ProductCommandLine::HandleCliCmd( uint16_t                              cmd
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleGetBootStatus
-///
-/// @brief  This command outputs the boot up status of the device.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
+/* \brief  This command outputs the boot up status of the device.
+*/
 void ProductCommandLine::HandleBootStatus( const std::list<std::string>& argList,
                                            std::string& response )
 {
@@ -274,13 +254,8 @@ void ProductCommandLine::HandleBootStatus( const std::list<std::string>& argList
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleMfgdata
-///
-/// @brief  This command retrieves manufacturing data from file
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \brief  This command retrieves manufacturing data from file
+*/
 void ProductCommandLine::HandleMfgdata( const std::list<std::string>& argList,
                                         std::string& response )
 {
@@ -302,13 +277,8 @@ void ProductCommandLine::HandleMfgdata( const std::list<std::string>& argList,
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleBacklight
-///
-/// @brief  This command sets the intensity of the backlight.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \brief  This command sets the intensity of the backlight.
+*/
 void ProductCommandLine::HandleBacklight( const std::list<std::string>& argList,
                                           std::string& response )
 {
@@ -363,13 +333,8 @@ void ProductCommandLine::HandleBacklight( const std::list<std::string>& argList,
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleLightsensor
-///
-/// @brief  This command returns the value of the lightsensor.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \brief  This command returns the value of the lightsensor.
+*/
 void ProductCommandLine::HandleLightsensor( const std::list<std::string>& argList,
                                             std::string& response )
 {
@@ -403,13 +368,8 @@ void ProductCommandLine::HandleLightsensor( const std::list<std::string>& argLis
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleAmp
-///
-/// @brief  This command sets values for the amplifier state.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \brief  This command sets values for the amplifier state.
+ */
 void ProductCommandLine::HandleAmp( const std::list<std::string>& argList,
                                     std::string& response )
 {
@@ -471,13 +431,8 @@ void ProductCommandLine::HandleAmp( const std::list<std::string>& argList,
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleLcd
-///
-/// @brief  This command turns LCD on and off.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \brief  This command turns LCD on and off.
+ */
 void ProductCommandLine::HandleLcd( const std::list<std::string>& argList,
                                     std::string& response )
 {
@@ -521,13 +476,8 @@ void ProductCommandLine::HandleLcd( const std::list<std::string>& argList,
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::HandleBattery
-///
-/// @brief  Implementation of the `battery` CLI command.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \brief  Implementation of the `battery` CLI command.
+ */
 
 void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
                                         std::string& response )
@@ -562,7 +512,7 @@ void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
         }
 
         auto batteryStatus = m_ProductController.GetBatteryManager()->GetBatteryStatus();
-        
+
         response = "usage: battery [charge|percent|mfull|mempty] [int]";
 
         if( arg == "charge" )
