@@ -278,5 +278,9 @@
   {
     "name": "VPAController-qc8017_32",
     "selected_version": "Release/stable/2.2.5-567+769d1aa"
+  },
+  {
+    "name": "VoicePromptsService-qc8017_32",
+    "selected_version": "Release/stable/0.0.2-89+305c34f"
   }
 ]

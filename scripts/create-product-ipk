@@ -90,7 +90,7 @@ lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
 googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
-
+voicepromptsservice_dir=$(components get VoicePromptsService-qc8017_32 installed_location) || exit
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
 tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
@@ -228,6 +228,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$lightBarAnimationTool_dir/stage" --config=lightBar/Configuration-Taylor-DP1.json --assets=lightBar/Taylor-DP1 "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
+"$voicepromptsservice_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
