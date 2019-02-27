@@ -25,7 +25,7 @@ while :; do
     arg="$1"; shift
     case "$arg" in
         (--help | -h)
-            cat << EOF
+            cat <<EOF
 Usage: $this [options]
 
 Create recovery package for given product type.
