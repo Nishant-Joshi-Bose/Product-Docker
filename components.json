@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/4.0.1-4568+aab0d83"
+    "selected_version": "Release/stable/4.0.2-4634+15d6881"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/4.0.1-4568+aab0d83"
+    "selected_version": "Release/stable/4.0.2-4634+15d6881"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/4.0.1-4568+aab0d83"
+    "selected_version": "Release/stable/4.0.2-4634+15d6881"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/4.0.1-4568+aab0d83"
+    "selected_version": "Release/stable/4.0.2-4634+15d6881"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -133,11 +133,11 @@
   },
   {
     "name": "LedAnimationTool-qc8017_32",
-    "selected_version": "Release/animationComponent_taylor/1.27-155+2fe18d9"
+    "selected_version": "Release/animationComponent_taylor/1.28-165+92005de"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-308+17ebabb"
+    "selected_version": "Release/stable/2.2.0-317+0886193"
   },
   {
     "name": "LpmMfgTool",
@@ -209,7 +209,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/4.7"
+    "selected_version": "Release/master/4.8"
   },
   {
     "name": "Riviera-Toolchain",
@@ -237,11 +237,11 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/stable/2.3.4-1167+affdbf5"
+    "selected_version": "Release/stable/2.4.0-1199+f86da40"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/stable/2.3.4-1167+affdbf5"
+    "selected_version": "Release/stable/2.4.0-1199+f86da40"
   },
   {
     "name": "SecureDeviceKey",
@@ -257,7 +257,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/stable/3.0.7-1521+9834f21"
+    "selected_version": "Release/stable/3.1.0-1613+dbd91d4"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
