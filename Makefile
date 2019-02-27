@@ -90,7 +90,7 @@ EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
 
 .PHONY: generate-metadata
 generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev #-l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p eddie,eddieclub -k dev #-l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
