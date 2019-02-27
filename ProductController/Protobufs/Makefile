@@ -15,6 +15,7 @@ PROTO_SOURCES = \
   LightBarController.proto \
   ProductMessage.proto \
   ProductSTS.proto \
+  BatteryManager.proto \
 
 PROTO_IMPORT_DIRS := \
  . \

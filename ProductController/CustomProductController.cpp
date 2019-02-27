@@ -307,6 +307,7 @@ void CustomProductController::InitializeAction()
     displayCtrlConfig.m_hasLcd = false;                   // Nor LCD.
     displayCtrlConfig.m_blackScreenDetectEnabled = false; // this is also an LCD feature.
     m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
+    m_batteryManager = std::make_shared<BatteryManager>( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
 
     // Start ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
@@ -331,6 +332,8 @@ void CustomProductController::InitializeAction()
     ///Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
     m_displayController->Initialize();
+    //Initialize the battery manager
+    m_batteryManager->Initialize();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -392,6 +395,7 @@ void CustomProductController::RegisterLpmEvents()
     // Register lightbar controller LPM events
     m_lightbarController->RegisterLpmEvents();
     m_displayController->RegisterLpmEvents();
+    m_batteryManager->RegisterLpmEvents();
 }
 
 void CustomProductController::RegisterAuxEvents( AsyncCallback<LpmServiceMessages::IpcAuxState_t> &cb )

@@ -132,6 +132,13 @@ void ProductCommandLine::RegisterCliCmds()
                                                                           callback,
                                                                           static_cast<int>( CLICmdsKeys::LCD ) );
 
+    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product battery",
+                                                                          "Get/set battery status.",
+                                                                          "product battery",
+                                                                          m_ProductController.GetTask(),
+                                                                          callback,
+                                                                          static_cast<int>( CLICmdsKeys::BATTERY ) );
+
     m_ProductController.m_Clock.RegisterCliCmds( m_ProductController.GetCommonCliClientMT() ) ;
 }
 
@@ -180,6 +187,10 @@ void ProductCommandLine::HandleCliCmd( uint16_t                              cmd
 
     case CLICmdsKeys::LCD:
         HandleLcd( argList, response );
+        break;
+
+    case CLICmdsKeys::BATTERY:
+        HandleBattery( argList, response );
         break;
 
     default:
@@ -510,4 +521,69 @@ void ProductCommandLine::HandleLcd( const std::list<std::string>& argList,
     return;
 }
 
+/*! \brief  Implementation of the `battery` CLI command.
+ */
+
+void ProductCommandLine::HandleBattery( const std::list<std::string>& argList,
+                                        std::string& response )
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    auto batteryStatus = m_ProductController.GetBatteryManager()->GetBatteryStatus();
+    if( argList.empty() )
+    {
+        std::ostringstream ss;
+        ss << "BM: Battery chargeStatus=" << batteryStatus.chargeStatus
+           << " minutesToFull=" << batteryStatus.minutesToEmpty
+           << " minutesToEmpty=" << batteryStatus.minutesToEmpty
+           << " percent=" << batteryStatus.percent;
+
+        auto const& msg = ss.str();
+        BOSE_LOG( INFO, msg );
+        m_ProductController.GetCommonCliClientMT().SendAsyncResponse( msg );
+        response = "Retrieved battery status";
+    }
+    else if( argList.size() == 2 )
+    {
+        auto&   arg       = argList.front(); // [charge, percent, mfull, mempty]
+        auto&   val       = argList.back(); //value we want to set the arg to
+        uint32_t temp     = 0;
+
+        //Convert val to integer
+        if( !ToInteger( val, temp ) )
+        {
+            response = "Malformed integer: " + val;
+            return;
+        }
+
+        auto batteryStatus = m_ProductController.GetBatteryManager()->GetBatteryStatus();
+        
+        response = "usage: battery [charge|percent|mfull|mempty] [int]";
+
+        if( arg == "charge" )
+        {
+            batteryStatus.chargeStatus =  temp;
+        }
+        else if( arg == "percent" )
+        {
+            batteryStatus.percent = temp;
+        }
+        else if( arg == "mfull" )
+        {
+            batteryStatus.minutesToFull = temp;
+        }
+        else if( arg == "mempty" )
+        {
+            batteryStatus.minutesToEmpty = temp;
+        }
+        else
+        {
+            return;
+        }
+        m_ProductController.GetBatteryManager()->DebugSetBattery( batteryStatus );
+        response = "Sent to client";
+    }
+    return;
 }
+
+} //namespace ProductApp
