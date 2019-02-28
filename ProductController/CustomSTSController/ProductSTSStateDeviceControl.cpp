@@ -135,6 +135,7 @@ bool ProductSTSStateDeviceControl::HandleSelectContentItem( const STS::ContentIt
     {
         DeviceControllerClientMessages::DeviceSelectAdditionalInfo_t additionalInfo;
         additionalInfo.set_info( contentItem.location() );
+        additionalInfo.set_sourcename( m_account.GetSourceName() );
         m_deviceControllerPtr->SendSelectAdditionalInfo( additionalInfo );
     }
     return true;
