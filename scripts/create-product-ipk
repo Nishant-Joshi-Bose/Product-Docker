@@ -91,6 +91,7 @@ vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) |
 googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
 voicepromptsservice_dir=$(components get VoicePromptsService-qc8017_32 installed_location) || exit
+
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
 tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
