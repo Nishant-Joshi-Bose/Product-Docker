@@ -116,7 +116,7 @@ EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
 generate-metadata: cmake_build
 	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p professor,ginger-cheevers -k dev -l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
 
-.PHONY: packaage-no-hsp
+.PHONY: package-no-hsp
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
