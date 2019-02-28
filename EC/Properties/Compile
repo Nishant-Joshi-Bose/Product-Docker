@@ -8,6 +8,12 @@ cd $[buildDir]
 CastleToolsDir=/home/epd/srcref/CastleTools
 export PATH=$CastleToolsDir/bin:/tools/klocwork/user/bin:/tools/klocwork/server/bin:$PATH
 
+# Add RestoreVersion as additional property for this build
+MinimalFSFullVersion=$(components get RivieraMinimalFS-qc8017_32 selected_version) || exit
+MinimalFSVersion=${MinimalFSFullVersion##*/} || exit
+ectool setProperty /myJob/RestoreVersion "$MinimalFSVersion" || exit
+
+
 if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
     KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx' --ignore-files */proto/*"
 fi
@@ -15,10 +21,6 @@ fi
 export DONT_UPDATE_CASTLETOOLS=1
 export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 hw_var=Alpha deploy || exit
-
-MinimalFSFullVersion=$(components get RivieraMinimalFS-qc8017_32 selected_version) || exit
-MinimalFSVersion=${MinimalFSFullVersion##*/} || exit
-ectool setProperty /myJob/RestoreVersion "$MinimalFSVersion" || exit
 
 set +x
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then

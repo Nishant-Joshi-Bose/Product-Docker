@@ -95,10 +95,6 @@ cmake_build: generated_sources $(BLASTCONFIG) $(KEYCONFIG)| $(BUILDS_DIR) astyle
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
-.PHONY: minimal-product-tar
-minimal-product-tar: cmake_build
-	./scripts/create-minimal-product-tar professor
-
 .PHONY: product-ipk
 product-ipk: cmake_build
 	./scripts/create-product-ipk
@@ -115,6 +111,7 @@ EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
 EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
 EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
 
+# Add exclude packages list in metadata.json
 .PHONY: generate-metadata
 generate-metadata: cmake_build
 	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p professor,ginger-cheevers -k dev -l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
