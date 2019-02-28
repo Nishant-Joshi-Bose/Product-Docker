@@ -102,7 +102,7 @@ graph: product-ipk
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build
-	./scripts/create-software-update-ipk 
+	./scripts/create-software-update-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
@@ -119,7 +119,7 @@ endif
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: recovery-ipk
-recovery-ipk: cmake_build 
+recovery-ipk: cmake_build
 	./scripts/create-recovery-ipk -p $(product)
 
 .PHONY: lpmupdater-ipk
@@ -137,7 +137,6 @@ wpe-ipk:
 .PHONY: product-script-ipk
 product-script-ipk:
 	./scripts/create-product-script-ipk
-
 
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph
