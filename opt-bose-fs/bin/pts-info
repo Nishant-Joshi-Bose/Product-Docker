@@ -28,8 +28,6 @@ head -20 /mnt/nv/product-persistence/*
 ls -lHt /mnt/nv/BoseLog
 ps
 printenv
-cat /mnt/nv/update/updateStates.txt
-cat /mnt/nv/update/updateStatus.txt
 jq . /mnt/nv/update/telemetry.json
 jq . /mnt/nv/updateSwUpComponentStatus.dat
 ls -lHt /opt/Bose/.swUpdateCache/ipks
@@ -51,7 +49,10 @@ tap-command network wifi status
 tap-command galapagos status
 tap-command galapagos discovery response
 tap-command softwareupdate state
+tap-command softwareupdate history
 tap-command softwareupdate status
+tap-command softwareupdate update history
+tap-command softwareupdate list
 tap-command vpa getvoicesettings
 tap-command vpa getactivevpa
 tap-command vpa getstate

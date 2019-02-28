@@ -62,10 +62,6 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
-.PHONY: minimal-product-tar
-minimal-product-tar: cmake_build
-	./scripts/create-minimal-product-tar
-
 .PHONY: product-ipk
 product-ipk: cmake_build
 	./scripts/create-product-ipk
@@ -81,16 +77,10 @@ EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
 EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
 EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
 
-# Metadata proto file did not have "option (ignore_unexpected_markup) =
-# true;" option enabled and hence for the device having this proto
-# version can not use new tags from metadata.json file.
-# So for current scenario we will use exclude list from
-# "/opt/Bose/update/etc/SwUpExcludePackagesList" file and when we decide
-# to use exclude list from metadata.json we can enable below options.
-
+# Add exclude packages list in metadata.json
 .PHONY: generate-metadata
-generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev #-l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
+generate-metadata: cmake_build
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p $(product) -k dev -l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
@@ -106,11 +96,11 @@ package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk softwareupdate-ipk toledo-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz: generate-metadata product-ipk softwareupdate-ipk toledo-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: toledo-ipk product-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz-with-hsp: generate-metadata toledo-ipk product-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -136,8 +126,8 @@ endif
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: recovery-ipk
-recovery-ipk: cmake_build minimal-product-tar
-	./scripts/create-recovery-ipk
+recovery-ipk: cmake_build 
+	./scripts/create-recovery-ipk -p taylor
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos

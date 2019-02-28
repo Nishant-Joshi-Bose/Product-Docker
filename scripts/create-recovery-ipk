@@ -17,31 +17,38 @@ tryhelp () {
     exit 1
 }
 opts=$(getopt --name "$this" --shell sh \
-    -o uh \
-    -l "help" \
+    -o hp: \
+    -l "help,product:" \
     -- "$@") || tryhelp
 eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-	(--help | -h)
-	    cat <<EOF
+        (--help | -h)
+            cat << EOF
 Usage: $this [options]
 
-Create an IPK file for installing minimal SoundTouch image for recovery.
-
+Create recovery package for given product type.
 Options:
+    -p <Product Type e.g. eddie / professor / flipper / taylor> - Product type to use
+    -h - Print help
 EOF
-	    exit 0
-	    ;;
-
-	(--) break ;;
-	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+            exit 0
+            ;;
+        (--) break ;;
+        (--product | -p)
+            product_type="$1"; shift
+            ;;
+        (*) echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
     esac
 done
 
 if (( $# != 0 )); then
     echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+if [ -z "$product_type" ]; then
+    echo >&2 "$this: -p or --product is mandatory argument"
     tryhelp
 fi
 
@@ -56,6 +63,7 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 rivierarecovery_dir=$(components get RivieraSwUpRecovery-qc8017_32 installed_location) || exit
+minimalfs_dir=$(components get RivieraMinimalFS-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -72,14 +80,16 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" || exit
 components record "$stage" || exit
 
 # copy minimal image tar to /opt/Bose
-minimal_image="Bose_minimal.tar.gz"
-cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
+minimal_image="$minimalfs_dir"/RivieraMinimalFS_"$product_type".tar.gz
+cp "$minimal_image"  "$opt_dir/" || exit
 
 # copy recovery images from RivieraSwUpRecovery
 "$rivierarecovery_dir/stage" "$opt_dir" || exit
 
 PackageName=SoundTouchRecovery
 
+# @todo: CASTLE-28938 - As of now, keep version same as product, but this should be minimalFS
+# version. Also, Restore should become separate IPK with its own version
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
@@ -134,7 +144,7 @@ rm -f /cache/recovery/last_log.*
 rm -f /cache/recovery/last_kmsg.*
 
 # move minimal product image to cache partition
-mv /opt/Bose/Bose_minimal.tar.gz /cache/ || exit
+mv /opt/Bose/RivieraMinimalFS_*.tar.gz /cache/Bose_minimal.tar.gz || exit
 
 # move RecoveryMain binary to /cache partition
 mv /opt/Bose/bin/RecoveryMain /cache/ || exit
