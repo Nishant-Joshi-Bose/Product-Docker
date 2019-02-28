@@ -276,6 +276,10 @@
     "selected_version": "stable@bb3929bbd58e39286e7f729e43b81972ea4b4aad"
   },
   {
+    "name": "VoicePromptsService-qc8017_32",
+    "selected_version": "Release/stable/1.0.1-94+cf5ebea"
+  },
+  {
     "name": "VPAController-qc8017_32",
     "selected_version": "Release/stable/2.2.5-567+769d1aa"
   }

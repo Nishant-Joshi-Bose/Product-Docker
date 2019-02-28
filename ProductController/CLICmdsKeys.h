@@ -16,5 +16,6 @@ enum class CLICmdsKeys
     BACKLIGHT,
     LIGHTSENSOR,
     AMP,
-    LCD
+    LCD,
+    BATTERY
 };

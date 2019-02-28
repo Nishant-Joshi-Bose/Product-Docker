@@ -72,6 +72,7 @@
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "DisplayController.h"
+#include "BatteryManager.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 
@@ -298,6 +299,21 @@ public:
         return m_displayController;
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief Returns an instance to the BatteryManager.
+///
+//////////////////////////////////////////////////////////////////////////////////////////////
+    const BatteryManager* GetBatteryManager() const
+    {
+        return m_batteryManager.get();
+    }
+
+    BatteryManager* GetBatteryManager()
+    {
+        return m_batteryManager.get();
+    }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -369,6 +385,7 @@ private:
 
     std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
     std::shared_ptr<DisplayController>                              m_displayController;
+    std::shared_ptr<BatteryManager>                                 m_batteryManager;
     IntentHandler                                                   m_IntentHandler;
     Clock                                                           m_Clock;
     bool                                                            m_isBLEModuleReady  = false;
