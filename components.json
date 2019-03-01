@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/4.0.2-4634+15d6881"
+    "selected_version": "Release/stable/4.0.3-4882+55f8d15"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/4.0.2-4634+15d6881"
+    "selected_version": "Release/stable/4.0.3-4882+55f8d15"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/4.0.2-4634+15d6881"
+    "selected_version": "Release/stable/4.0.3-4882+55f8d15"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/4.0.2-4634+15d6881"
+    "selected_version": "Release/stable/4.0.3-4882+55f8d15"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -189,7 +189,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@eb0ec0b79553292a4b6a2fb6ad6f55b6ee6d3069"
+    "selected_version": "CASTLE-27327_PlayVolumeTone@bd900d8d97cae8de4f284c4ada5d59cd3c722402"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -197,7 +197,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "stable@dc56420f98b965ba2cac3418df37fdf19bebd9df"
+    "selected_version": "CASTLE-27327_PlayVolumeTone@8919ca3cfb8962c6be9d4973b4018b1727957b10"
   },
   {
     "name": "protobuf-native",
@@ -237,11 +237,11 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/stable/2.4.0-1199+f86da40"
+    "selected_version": "Continuous/update_component_automated/2.4.0-1218+e78374a"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/stable/2.4.0-1199+f86da40"
+    "selected_version": "Continuous/update_component_automated/2.4.0-1218+e78374a"
   },
   {
     "name": "SecureDeviceKey",
@@ -273,7 +273,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@bb3929bbd58e39286e7f729e43b81972ea4b4aad"
+    "selected_version": "master@e6772fd10c7bfd0c61bf2e5356b6b3acaea3aa3b"
   },
   {
     "name": "VPAController-qc8017_32",
