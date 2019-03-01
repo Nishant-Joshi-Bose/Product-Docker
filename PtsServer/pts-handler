@@ -203,6 +203,21 @@ if path == "/network.dat":
 http_redirect(path, "/network", "/network.dat")
 
 # ----------------------------------------------------------------------------
+# View recovery logs
+
+if path == "/recovery.txt" and is_development():
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("recovery-logs", "recovery-logs")
+
+if path == "/recovery.dat":
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs recovery-logs | gzip")
+
+http_redirect(path, "/recovery", "/recovery.dat")
+
+# ----------------------------------------------------------------------------
 # Force the system into reflash mode (QFIL).
 
 if path == "/reflash":
@@ -429,6 +444,16 @@ Address:
     <td class="iface">any</td>
     <td><a>/logread.dat</a></td>
     <td>Same as /logread.txt but encrypted</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">any</td>
+    <td><a>/recovery.txt</a></td>
+    <td>Recovery mode logs for HSP update</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/recovery.dat</a></td>
+    <td>Same as /recovery.txt but encrypted</td>
   </tr>
   <tr class="even">
     <td class="iface">usb</td>
