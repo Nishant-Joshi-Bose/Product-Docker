@@ -296,21 +296,20 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     // if nothing is currently being blasted this will have no effect
     if( keyEvent.keystate( ) == KEY_RELEASED )
     {
-        BlastKey( keyEvent, "" );
+        BlastKey( keyEvent, "none" );
     }
 
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
     if( keyid == BOSE_TV_INPUT )
     {
         const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSourceSlot_Name( TV ) );
-        auto blasted = false;
 
         if( ( tvSource and tvSource->has_details( ) ) && ( keyEvent.keystate() == KEY_PRESSED ) )
         {
-            blasted = BlastKey( keyEvent, tvSource->details( ).cicode( ) );
+            BlastKey( keyEvent, tvSource->details( ).cicode( ) );
         }
 
-        return AccommodateOrphanReleaseEvents( keyEvent, blasted );
+        return AccommodateOrphanReleaseEvents( keyEvent, true );
     }
 
     // Do some sanity-checks to see if we can proceed
@@ -366,17 +365,16 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 
     // If the device has been configured, blast the key (if it hasn't been configured but it's a key
     // that normally would have been blasted, we'll consume the key)
-    auto blasted = false;
     if( m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) && ( keyEvent.keystate() == KEY_PRESSED ) )
     {
-        blasted = BlastKey( keyEvent, sourceItem->details( ).cicode( ) );
+        BlastKey( keyEvent, sourceItem->details( ).cicode( ) );
     }
     else
     {
         BOSE_INFO( s_logger, "%s unconfigured source - consuming key", __func__ );
     }
 
-    return AccommodateOrphanReleaseEvents( keyEvent, blasted );
+    return AccommodateOrphanReleaseEvents( keyEvent, true );
 }
 
 void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key )

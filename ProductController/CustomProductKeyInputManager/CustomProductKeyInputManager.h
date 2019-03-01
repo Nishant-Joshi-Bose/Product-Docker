@@ -118,7 +118,7 @@ private:
     void InitializeKeyFilter( );
     std::map< unsigned, bool >                                                      m_lastPressStatus;
     bool AccommodateOrphanReleaseEvents( const IpcKeyInformation_t& keyEvent, bool pressRet );
-    bool IsBlastableEvent( const IpcKeyInformation_t&  keyEvent );
+    static bool IsBlastableEvent( const IpcKeyInformation_t&  keyEvent );
 
 };
 
