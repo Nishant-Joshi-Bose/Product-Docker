@@ -309,6 +309,10 @@ fi
 find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
 find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 
+# copy version so it can be used while system is in Restore mode
+# Ignore error if any as exiting would fail ipk installation completely
+cp /opt/Bose/etc/BoseVersion.json /cache/OriginalFSVersion.json
+
 # Set Progress End
 # CASTLE-14239: Currently, though not required by IPK itself
 #   every IPK is doing full system reset. This is required to clear
