@@ -196,7 +196,7 @@ bool CustomProductKeyInputManager::IsBlastableEvent(
 ///
 /// @param  const std::string& cicode
 ///
-/// @return None
+/// @return true if key was blasted, false otherwise
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductKeyInputManager::BlastKey(
