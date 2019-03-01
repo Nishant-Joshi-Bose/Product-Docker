@@ -95,6 +95,7 @@ void CustomProductControllerStateAdaptIQCancelling::HandleStateExit( )
 
     GetProductController( ).SendStopPlaybackMessage( );
 
+    GetProductController( ).GetVoiceServiceClient( ).Start( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

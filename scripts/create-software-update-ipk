@@ -56,10 +56,15 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get opensource-opkg-qc8017_32 installed_location) || exit
+libarchive_dir=$(components get opensource-libarchive-qc8017_32 installed_location) || exit
 swupdate_ver=$(components get SoftwareUpdate-qc8017_32 selected_version) || exit
 toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 package_version=${swupdate_ver##*/}
 PackageName=software-update
+
+sysroot=$toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
+tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
+tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
 
 stage=$wspace/builds/$cfg/software-update-ipk-stage
 rm -rf "$stage"
@@ -67,11 +72,19 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/update/bin/" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/update/bin/" "$opt_dir/update/etc/" || exit
 # run stage for SoftwareUpdate
 "$softwareupdate_dir/stage" "$opt_dir" "$toolchain_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
+cp "$libarchive_dir/bin/bsdtar" "$opt_dir/update/bin/" || exit
 cp "$toolchain_dir/sdk/sysroots/aarch64-oe-linux/usr/bin/unshare" "$opt_dir/update/bin/" || exit
+
+# Specifically required for CASTLE-26007
+# While going from SOP/SOS/MR4_2018 to MR2_2019 or higher we will not have
+# metadata.json downloaded as part of update flow
+# So we will keep this metadata in software-update to get the exclude packages
+# list
+cp "$wspace/builds/$cfg/metadata.json" "$opt_dir/update/etc/" || exit
 
 InstallFileContent=$(<"$opt_dir/bin/install")
 InstallFileContent=${InstallFileContent//\/Bose\/etc\//\/Bose\/update\/backup\/}
@@ -148,6 +161,41 @@ put_script "$stage/prerm" <<EOF
 #!/bin/sh
 echo "SoftwareUpdate prerm"
 EOF
+
+# -----------------------------------------------------------------------------
+# Strip symbols from the executables.
+
+# Our standard CentOS configuration has
+# LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib which causes
+# ${tool64_prefix}strip to segfault.  As a workaround, unset LD_LIBRARY_PATH
+# here and hope it wasn't actually needed for anything else this script does.
+if [ "$LD_LIBRARY_PATH" ]; then
+    echo "$this: unsetting LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+    unset LD_LIBRARY_PATH
+fi
+
+for i in "$stage"/Bose/{lib,bin,update/bin,update/lib}/*; do
+    type=$(file --brief "$i") || exit
+    case "$type" in
+    (*", stripped")
+        echo >&2 "$this: (warning) No debug symbols: $i"
+        ;;
+    (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
+        # `strip` fails without an error message if the file is empty
+        if ! "${tool64_prefix}strip" "$i"; then
+            echo >&2 "$this: Failed to strip $i"
+            exit 1
+        fi
+        ;;
+        (*", not stripped")
+        # `strip` fails without an error message if the file is empty
+        if ! "${tool_prefix}strip" "$i"; then
+            echo >&2 "$this: Failed to strip $i"
+            exit 1
+        fi
+        ;;
+    esac
+done
 
 # -----------------------------------------------------------------------------
 # Stage area is complete.  Package it into a *.ipk file.
