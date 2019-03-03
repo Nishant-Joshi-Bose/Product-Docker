@@ -21,7 +21,6 @@ continuous_xml=$wspace/LpmManifestFiles/$hw_var/continuous_lpm_package.xml
 riviera_lpm_tools_dir=$(components get RivieraLPM-Tools installed_location) || exit
 
 
-
 # For release builds, we want to the timestamp of the BLOB to reflect that last time the manifest XML file was modified in git. This
 # allows for the BLOB version (which includes a timestamp) to stay static across builds where the contents of the BLOB does not change.
 # The main draw back is the case where someone changes the the release manifest XML locally and re-builds. In this case, since the changes

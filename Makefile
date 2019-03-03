@@ -31,9 +31,7 @@ check_tools:
 ifndef DONT_UPDATE_CASTLETOOLS
 	castletools-update
 endif
-ifndef DONT_INSTALL_COMPONENTS
-	components install
-endif
+	castletools-build-host-is-sane
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
@@ -97,10 +95,6 @@ cmake_build: generated_sources $(BLASTCONFIG) $(KEYCONFIG)| $(BUILDS_DIR) astyle
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
-.PHONY: minimal-product-tar
-minimal-product-tar: cmake_build
-	./scripts/create-minimal-product-tar professor
-
 .PHONY: product-ipk
 product-ipk: cmake_build
 	./scripts/create-product-ipk
@@ -113,9 +107,14 @@ privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.p
 IPKS = recovery.ipk product-script.ipk software-update.ipk wpe.ipk brussels.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES = SoundTouchRecovery product-script software-update wpe brussels SoundTouch lpm_updater
 
+EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
+EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
+EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
+
+# Add exclude packages list in metadata.json
 .PHONY: generate-metadata
-generate-metadata:
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p professor,ginger-cheevers -k dev
+generate-metadata: cmake_build
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p professor,ginger-cheevers -k dev -l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
@@ -131,11 +130,11 @@ package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk wpe-ipk softwareupdate-ipk brussels-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz: generate-metadata product-ipk wpe-ipk softwareupdate-ipk brussels-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: brussels-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
+packages-gz-with-hsp: generate-metadata brussels-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk generate-metadata
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -162,8 +161,8 @@ endif
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE) $(HW_VAR)
 
 .PHONY: recovery-ipk
-recovery-ipk: cmake_build minimal-product-tar
-	./scripts/create-recovery-ipk
+recovery-ipk: cmake_build
+	./scripts/create-recovery-ipk -p professor
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos
