@@ -2354,14 +2354,12 @@ void CustomProductController::HandlePutPowerMacro(
     const Callback<FrontDoor::Error> & errorCb )
 {
     FrontDoor::Error error;
-    error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
-    error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_POWER_MACRO );
 
     bool success = true;
 
-    if( req.enabled() )
+    if( req.enabled( ) || ( !req.has_enabled( ) && m_powerMacro.enabled( ) ) )
     {
-        if( req.powerontv() )
+        if( req.powerontv( ) )
         {
             const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
             if( not( tvSource and tvSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )   // source status field has to be AVAILABLE in order to be controlled
@@ -2370,7 +2368,7 @@ void CustomProductController::HandlePutPowerMacro(
                 success = false;
             }
         }
-        if( success and req.has_powerondevice() )
+        if( success and req.has_powerondevice( ) )
         {
             const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
 
@@ -2381,23 +2379,21 @@ void CustomProductController::HandlePutPowerMacro(
             }
         }
     }
-    else
-    {
-        success = ( !req.powerontv() && !req.has_powerondevice() );
-        if( !success )
-        {
-            error.set_message( "powerontv and powerondevice must not be specified when not enabled!" );
-        }
-    }
 
     if( success )
     {
-        m_powerMacro.CopyFrom( req );
+        m_powerMacro.MergeFrom( req ); // copy the Booleans
+        if( m_powerMacro.enabled( ) && !req.has_powerondevice( ) )
+        {
+            m_powerMacro.clear_powerondevice( );
+        }
         PersistPowerMacro();
         respCb( req );
     }
     else
     {
+        error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_POWER_MACRO );
         errorCb( error );
         BOSE_WARNING( s_logger, "\"%s\": %s", req.ShortDebugString().c_str(), error.ShortDebugString().c_str() );
     }
@@ -2425,6 +2421,9 @@ void CustomProductController::LoadPowerMacroFromPersistance( )
     {
         BOSE_ERROR( s_logger, "Power Macro persistence error - %s", e.what( ) );
     }
+    // Prior to PGC-4157 Boolean fields were not explicitly stored
+    m_powerMacro.set_enabled( m_powerMacro.enabled( ) );
+    m_powerMacro.set_powerontv( m_powerMacro.powerontv( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2479,31 +2478,31 @@ void CustomProductController::UpdatePowerMacro( )
         const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
         if( not( tvSource && tvSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
         {
-            m_powerMacro.clear_powerontv();
+            m_powerMacro.set_powerontv( false );
             isChanged = true;
         }
     }
-    if( m_powerMacro.has_powerondevice() )
+    if( m_powerMacro.has_powerondevice( ) )
     {
         const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
 
         if( not( reqSource and reqSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
         {
-            m_powerMacro.clear_powerondevice();
+            m_powerMacro.clear_powerondevice( );
             isChanged = true;
         }
     }
-    if( m_powerMacro.has_enabled() &&
-        !m_powerMacro.has_powerontv() &&
-        !m_powerMacro.has_powerondevice() )
+    if( m_powerMacro.enabled( ) &&
+        !m_powerMacro.powerontv( ) &&
+        !m_powerMacro.has_powerondevice( ) )
     {
-        m_powerMacro.clear_enabled();
+        m_powerMacro.set_enabled( false );
         isChanged = true;
     }
 
     if( isChanged )
     {
-        PersistPowerMacro();
+        PersistPowerMacro( );
     }
 }
 
