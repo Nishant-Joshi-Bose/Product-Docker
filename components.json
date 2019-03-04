@@ -29,7 +29,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable-MR1hotfix/2.2.2.44932.3234929"
+    "selected_version": "Release/Castle-Fork-stable/2.2.2.44995.3245118"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -37,11 +37,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/stable_mr1_2019/2.2.5-274+588ce43"
+    "selected_version": "Release/2019_MR1.5/2.2.5-278+a0b04ce"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/stable_mr1_2019/2.4.3-323+9964e66"
+    "selected_version": "Release/2019_MR1.5/2.4.3-346+25b7e8a"
   },
   {
     "name": "bose-opkg-utils",
@@ -185,7 +185,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable_mr1_2019/2.2.0-364+e290d3f"
+    "selected_version": "Release/2019_MR1.5/2.2.0-366+28d8da5"
   },
   {
     "name": "ProductUIAssets",
@@ -249,7 +249,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable-MR1hotfix/2.2.2.44932.3234929"
+    "selected_version": "Release/Castle-Fork-stable/2.2.2.44995.3245118"
   },
   {
     "name": "svc-pts-log-decrypt",
