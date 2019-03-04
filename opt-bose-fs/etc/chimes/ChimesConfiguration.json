@@ -83,6 +83,12 @@
             "tone":"T19_neutral_ceiling.flac",
             "volume":100,
             "comment":"Volume set to max"
+        },
+        {
+            "event_id":17,
+            "tone":"T11_neutral_confirmation.flac",
+            "volume":38,
+            "comment":"Volume unmute"
         }
     ]
 }
