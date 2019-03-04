@@ -132,6 +132,14 @@
     "selected_version": "Release/stable/2.2.0-211+9fd9c16"
   },
   {
+    "name": "IotIpcClient-qc8017_32",
+    "selected_version": "Release/master/0.0.2-39+5486c7f"
+  },
+  {
+    "name": "IotIpcClient-x86_64",
+    "selected_version": "Release/master/0.0.2-39+5486c7f"
+  },
+  {
     "name": "KeyHandler-qc8017_32",
     "selected_version": "Release/stable/2.2.0-171+64edd1b"
   },
@@ -193,7 +201,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@eb0ec0b79553292a4b6a2fb6ad6f55b6ee6d3069"
+    "selected_version": "iotInputs@dfe2031472b904c0d39addffdd308e3ca3637bf9"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
