@@ -101,7 +101,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.2-44+34f9117"
+    "selected_version": "Release/bose-stable/1.0.2-44+34f9117"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -289,6 +289,6 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/2.2.0-120+bcfa448"
+    "selected_version": "Release/stable/2.2.1-125+7a4c153"
   }
 ]
