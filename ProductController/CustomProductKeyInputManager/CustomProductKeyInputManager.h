@@ -66,8 +66,6 @@ public:
     bool FilterIntent( KeyHandlerUtil::ActionType_t& ) const;
     static const std::string& IntentName( KeyHandlerUtil::ActionType_t intent );
 
-    void Run( const Callback<>& cancelAlarmCallback );
-
 protected:
 
     ///
