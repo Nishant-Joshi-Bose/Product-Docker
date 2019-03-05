@@ -69,34 +69,6 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
 {
 }
 
-void CustomProductKeyInputManager::Run( const Callback<>& cancelAlarmCallback )
-{
-    ProductKeyInputManager::Run( cancelAlarmCallback );
-
-    auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
-    {
-        DeviceControllerClientMessages::SrcCiCodeMessage_t          codes;
-        static DeviceControllerClientMessages::SrcCiCodeMessage_t   lastCodes;
-
-        for( auto i = 0 ; i < sources.sources_size(); i++ )
-        {
-            const auto& source = sources.sources( i );
-
-            if( source.has_details() and source.details().has_cicode() and m_ProductController.GetSourceInfo().IsSourceAvailable( source ) )
-            {
-                codes.add_cicode( source.details().cicode() );
-            }
-        }
-        if( ( codes.SerializeAsString() != lastCodes.SerializeAsString() ) )
-        {
-            BOSE_INFO( s_logger, "notify cicodes : %s", ProtoToMarkup::ToJson( codes ).c_str() );
-            m_deviceControllerPtr->NotifySourceCiCodes( codes );
-            lastCodes = codes;
-        }
-    };
-    m_ProductController.GetSourceInfo().RegisterSourceListener( sourceInfoCb );
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductKeyInputManager::IsSourceKey
@@ -195,13 +167,13 @@ void CustomProductKeyInputManager::InitializeKeyFilter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductKeyInputManager::BlastKey(
     const IpcKeyInformation_t&  keyEvent,
-    const std::string&          cicode
+    const std::string&          srcAccount
 )
 {
     DeviceControllerClientMessages::BoseKeyReqMessage_t request;
 
     request.set_keyval( keyEvent.keyid( ) );
-    request.set_codeset( cicode );
+    request.set_srcaccount( srcAccount );
 
     if( keyEvent.keystate( ) ==  KEY_PRESSED )
     {
@@ -212,7 +184,7 @@ void CustomProductKeyInputManager::BlastKey(
         request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_END_PRESS );
     }
 
-    BOSE_INFO( s_logger, "Blasting 0x%08x/%s (%s)", request.keyval( ), request.codeset( ).c_str( ),
+    BOSE_INFO( s_logger, "Blasting 0x%08x/%s (%s)", request.keyval( ), request.srcaccount( ).c_str( ),
                ( keyEvent.keystate( ) ==  KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
 
     m_deviceControllerPtr->SendKey( request );
@@ -286,7 +258,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 
         if( tvSource and tvSource->has_details( ) )
         {
-            BlastKey( keyEvent, tvSource->details( ).cicode( ) );
+            BlastKey( keyEvent, ProductSourceSlot_Name( TV ) );
         }
 
         return AccommodateOrphanReleaseEvents( keyEvent, true );
@@ -346,7 +318,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     // that normally would have been blasted, we'll consume the key)
     if( m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) )
     {
-        BlastKey( keyEvent, sourceItem->details( ).cicode( ) );
+        BlastKey( keyEvent, sourceItem->sourceaccountname() );
     }
     else
     {
@@ -358,7 +330,6 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 
 void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key )
 {
-    // TODO - MONTAUK-360 fix this to be more inline with new implementation
     if( key != LpmServiceMessages::BOSE_ASSERT_ON && key != LpmServiceMessages::BOSE_ASSERT_OFF )
     {
         BOSE_ERROR( s_logger, "Unexpected key value %d", key );
@@ -370,49 +341,15 @@ void CustomProductKeyInputManager::ExecutePowerMacro( const ProductPb::PowerMacr
         BOSE_INFO( s_logger, "Executing power macro %s : %s", ( key == LpmServiceMessages::BOSE_ASSERT_ON ? "on" : "off" ),
                    pwrMacro.ShortDebugString().c_str() );
 
-        auto srcMacro = [ this, key, pwrMacro]()
+        DeviceControllerClientMessages::PowerMacroReqMessage_t macroReq;
+        macroReq.set_action( ( key == LpmServiceMessages::BOSE_ASSERT_ON ? DeviceControllerClientMessages::PowerMacroReqMessage_t::POWER_ON
+                               : DeviceControllerClientMessages::PowerMacroReqMessage_t::POWER_OFF ) );
+        if( pwrMacro.has_powerondevice() )
         {
-            if( pwrMacro.has_powerondevice() )
-            {
-                const auto macroSrc = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
-                if( macroSrc and macroSrc->has_details( ) and macroSrc->details().has_cicode() )
-                {
-                    DeviceControllerClientMessages::BoseKeyReqMessage_t request;
-                    request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                    request.set_keyval( key );
-                    request.set_codeset( macroSrc->details( ).cicode( ) );
-                    m_deviceControllerPtr->SendKey( request );
-                }
-            }
-        };
-
-        auto cbFunc = [ this, key, pwrMacro, srcMacro]( DeviceControllerClientMessages::BoseKeyReqMessage_t resp )
-        {
-            srcMacro( );
-        };
-        AsyncCallback<DeviceControllerClientMessages::BoseKeyReqMessage_t> respCb( cbFunc, m_ProductController.GetTask() );
-
-        if( pwrMacro.powerontv() )
-        {
-            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( tvSource and tvSource->has_details( ) and tvSource->details().has_cicode() )
-            {
-                DeviceControllerClientMessages::BoseKeyReqMessage_t request;
-                request.set_keyaction( DeviceControllerClientMessages::BoseKeyReqMessage_t::KEY_ACTION_SINGLE_PRESS );
-                request.set_keyval( key );
-                request.set_codeset( tvSource->details( ).cicode( ) );
-                // Wait for the callback from DeviceController before sending the next key
-                m_deviceControllerPtr->SendKey( request, respCb );
-            }
-            else
-            {
-                srcMacro();
-            }
+            macroReq.set_source( ProductSourceSlot_Name( pwrMacro.powerondevice() ) );
         }
-        else
-        {
-            srcMacro( );
-        }
+        macroReq.set_powerontv( pwrMacro.powerontv() );
+        m_deviceControllerPtr->ExecutePowerMacro( macroReq );
     }
 }
 
