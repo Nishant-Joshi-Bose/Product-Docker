@@ -88,6 +88,11 @@ stage_dirs = set()
 target_dirs = set()
 
 for line in capture(["adb", "shell", "cd /opt/Bose && find -type d"]):
+    # * daemon started successfully *
+    # adb server is out of date.  killing...
+    if line.startswith('* daemon ') or \
+       line.startswith('adb server '):
+        continue
     if line == ".":
         continue
     if line[:2] != "./":
