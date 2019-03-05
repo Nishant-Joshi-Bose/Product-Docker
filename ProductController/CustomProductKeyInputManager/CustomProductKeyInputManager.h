@@ -96,8 +96,7 @@ private:
     bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
 
     bool IsSourceKey( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );
-
-    void BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
+    bool BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
 
     struct FilterRegex
     {
@@ -119,6 +118,8 @@ private:
     void InitializeKeyFilter( );
     std::map< unsigned, bool >                                                      m_lastPressStatus;
     bool AccommodateOrphanReleaseEvents( const IpcKeyInformation_t& keyEvent, bool pressRet );
+    static bool IsBlastableEvent( const IpcKeyInformation_t&  keyEvent );
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
