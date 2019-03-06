@@ -58,6 +58,8 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & requ
             }
             if( source->status() == SoundTouchInterface::SourceStatus::AVAILABLE )
             {
+                // TODO - Re-evaluate this for all AVAILABLE source
+                // https://jirapro.bose.com/browse/PGC-4182
                 m_np.set_canpause( true );
                 m_np.set_canstop( true );
                 m_np.set_skipenabled( true );
