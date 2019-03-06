@@ -41,7 +41,8 @@
 #include "ProductSTSStateFactory.h"
 #include "ProductSTSStateTop.h"
 #include "ProductSTSStateTopSilent.h"
-#include "ProductSTSStateTopAiQ.h"
+#include "CustomSTSController/ProductSTSStateTopAiQ.h"
+#include "CustomSTSController/ProductSTSStateDeviceControl.h"
 #include "SystemSourcesProperties.pb.h"
 #include "ProductControllerHsm.h"
 #include "CustomProductControllerStates.h"
@@ -112,6 +113,7 @@
 #include "AudioService.pb.h"
 #include "AudioPathControl.pb.h"
 #include "ProductDataCollectionDefines.h"
+#include "SystemSourcesFriendlyNames.pb.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -139,10 +141,11 @@ constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
 constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone";
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
-}
 
-constexpr char     UI_KILL_PID_FILE[] = "/var/run/brussels.pid";
-constexpr uint32_t UI_ALIVE_TIMEOUT = 60 * 1000;
+constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = BOSE_CONF_DIR "BlastConfiguration.json";
+constexpr char       UI_KILL_PID_FILE[] = "/var/run/brussels.pid";
+constexpr uint32_t   UI_ALIVE_TIMEOUT = 60 * 1000;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -177,7 +180,7 @@ CustomProductController::CustomProductController( ) :
     m_isNetworkWired( false ),
     m_ethernetEnabled( true ),
     ///
-    /// Initialization of STS contorller.
+    /// Initialization of STS controller.
     ///
     m_ProductSTSController( *this ),
 
@@ -730,6 +733,30 @@ void CustomProductController::Run( )
     CommonInitialize( );
 
     ///
+    /// Set up connection with DeviceController service
+    ///
+    m_deviceControllerPtr = DeviceControllerClientFactory::Create( "CustomProductController", GetTask( ) );
+    bool loadResult = m_deviceControllerPtr->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    if( not loadResult )
+    {
+        BOSE_DIE( "Failed loading key blaster configuration file." );
+    }
+
+    auto connectCb = [this]( bool connected )
+    {
+        BOSE_INFO( s_logger, "Connected to DeviceController!" );
+    };
+
+    auto dvcDisconnectCb  = [this, connectCb]()
+    {
+        BOSE_INFO( s_logger, "Disconnected from DeviceController!" );
+        m_deviceControllerPtr->Connect( connectCb );
+    };
+
+    m_deviceControllerPtr->RegisterDisconnectCb( dvcDisconnectCb );
+    m_deviceControllerPtr->Connect( connectCb );
+
+    ///
     /// Get instances of all the modules.
     ///
     BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
@@ -740,10 +767,7 @@ void CustomProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_CommonProductCommandLine    = std::make_shared< CommonProductCommandLine          >( );
-    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "CustomProductKeyInputManager",
-                                                           GetTask( ) );
-    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this,
-                                    m_QSSClient );
+    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductFrontDoorKeyInjectIF = std::make_shared< ProductFrontDoorKeyInjectIF >( GetTask(),
                                     m_ProductKeyInputManager,
                                     m_FrontDoorClientIF );
@@ -804,7 +828,7 @@ void CustomProductController::Run( )
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
-    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ) , GetTask( ) );
+    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ), GetTask( ) );
     m_ProductKeyInputManager     ->Run( cancelAlarmCb );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );
@@ -1188,9 +1212,9 @@ void CustomProductController::SetupProductSTSController( )
 
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
-    ProductSTSStateFactory<ProductSTSStateTop>          commonStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopAiQ>       aiqStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSilent>        silentStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopAiQ>           aiqStateFactory;
+    ProductSTSStateFactory<ProductSTSStateDeviceControl>    deviceControlStateFactory;
 
     ///
     /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
@@ -1203,12 +1227,12 @@ void CustomProductController::SetupProductSTSController( )
     /// See ProductSTSController::Initialize().
     ///
     ProductSTSController::SourceDescriptor descriptor_SETUP   { SETUP,   SetupSourceSlot_Name( SETUP ),     false, silentStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_TV      { TV,      ProductSourceSlot_Name( TV ),      true,  deviceControlStateFactory };
     ProductSTSController::SourceDescriptor descriptor_ADAPTIQ { ADAPTIQ, SetupSourceSlot_Name( ADAPTIQ ),   false, aiqStateFactory    };
     ProductSTSController::SourceDescriptor descriptor_PAIRING { PAIRING, SetupSourceSlot_Name( PAIRING ),   false, silentStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, commonStateFactory, true };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, commonStateFactory, true };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, commonStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, deviceControlStateFactory, true };
 
     sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
@@ -1946,6 +1970,54 @@ std::string CustomProductController::GetDefaultProductName( ) const
     return productName;
 }
 
+void CustomProductController::SendSystemSourcesPropertiesToCAPS()
+{
+    using namespace SoundTouchInterface;
+    // Populate /system/sources::properties
+    Sources message;
+    auto messageProperties = message.mutable_properties();
+
+    for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
+         activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
+         ++activationKey )
+    {
+        messageProperties->add_supportedactivationkeys(
+            SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
+    }
+    messageProperties->set_activationkeyrequired( true );
+
+    for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
+    {
+        messageProperties->add_supporteddevicetypes(
+            SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
+    }
+    messageProperties->set_devicetyperequired( true );
+
+    messageProperties->add_supportedinputroutes(
+        SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
+
+    messageProperties->set_inputrouterequired( false );
+
+    for( uint32_t friendlyName = SystemSourcesProperties::FRIENDLY_NAME__MIN; friendlyName <= SystemSourcesProperties::FRIENDLY_NAME__MAX; ++friendlyName )
+    {
+        messageProperties->add_supportedfriendlynames(
+            SystemSourcesProperties::FRIENDLY_NAME__Name( static_cast<SystemSourcesProperties::FRIENDLY_NAME_>( friendlyName ) ) );
+    }
+
+    messageProperties->set_friendlynamerequired( false );
+
+    auto sourcesRespCb = []( Sources sources )
+    {
+        BOSE_INFO( s_logger, FRONTDOOR_SYSTEM_SOURCES_API " properties: %s", sources.properties( ).DebugString( ).c_str( ) );
+    };
+
+    GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+        FRONTDOOR_SYSTEM_SOURCES_API,
+        message,
+        sourcesRespCb,
+        m_errorCb );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductController::SendInitialCapsData
@@ -1961,6 +2033,11 @@ void CustomProductController::SendInitialCapsData()
     DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
     DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
     const bool defaultCAPSValuesDone = SystemUtils::Exists( DefaultCAPSValuesStateFile );
+
+    // Properties are sent unconditionally. We need to accommodate systems that were wet up with earlier software
+    // versions and may be missing elements introduced later. E.g., Friendly Names introduced by MONTAUK-323.
+    SendSystemSourcesPropertiesToCAPS();
+
     if( defaultCAPSValuesDone )
     {
         // GET the current values, we may have missed an initial notification
@@ -1994,28 +2071,6 @@ void CustomProductController::SendInitialCapsData()
 
         // Populate /system/sources::properties
         Sources message;
-        auto messageProperties = message.mutable_properties();
-
-        for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
-             activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
-             ++activationKey )
-        {
-            messageProperties->add_supportedactivationkeys(
-                SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
-        }
-        messageProperties->set_activationkeyrequired( true );
-
-        for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
-        {
-            messageProperties->add_supporteddevicetypes(
-                SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
-        }
-        messageProperties->set_devicetyperequired( true );
-
-        messageProperties->add_supportedinputroutes(
-            SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
-
-        messageProperties->set_inputrouterequired( false );
 
         // Populate status and visibility of PRODUCT sources.
         using namespace ProductSTS;

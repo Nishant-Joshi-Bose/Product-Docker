@@ -88,7 +88,7 @@ bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 insta
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
-qss_dir=$(components get A4VQuickSetService-qc8017_32 installed_location) || exit
+devicecontroller_dir=$(components get A4VDeviceController-qc8017_32 installed_location) || exit
 rcs_dir=$(components get A4VRemoteCommunicationService-qc8017_32 installed_location) || exit
 vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
@@ -256,7 +256,7 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$vm_dir/stage" "$opt_dir" || exit
 "$rcs_dir/stage" "$opt_dir" || exit
-"$qss_dir/stage" "$opt_dir" || exit
+"$devicecontroller_dir/stage" "$opt_dir" || exit
 "$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
 

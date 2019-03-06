@@ -19,12 +19,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include "ProductKeyInputManager.h"
-#include "A4VQuickSetServiceClientFactory.h"
+#include "DeviceControllerClientFactory.h"
 #include "SystemPowerMacro.pb.h"
 #include "FrontDoorClient.h"
 #include "KeyFilter.pb.h"
 #include <regex>
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -51,8 +50,7 @@ public:
     ///
     /// CustomProductKeyInputManager Constructor
     ///
-    explicit CustomProductKeyInputManager( CustomProductController& ProductController,
-                                           const A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr& QSSClient );
+    explicit CustomProductKeyInputManager( CustomProductController& ProductController );
 
     void ExecutePowerMacro( const ProductPb::PowerMacro& pwrMacro, LpmServiceMessages::KEY_VALUE key );
 
@@ -83,9 +81,9 @@ private:
     CustomProductController& m_ProductController;
 
     ///
-    /// Custom A4V Quick Set Service Client and Initialization
+    /// A4V-DeviceController Client Shared Pointer
     ///
-    A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
+    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr       m_deviceControllerPtr;
 
     ///
     /// Data used by FilterIncompleteChord() to track history
@@ -93,9 +91,9 @@ private:
     int64_t m_TimeOfChordRelease;
     ::google::protobuf::uint32 m_KeyIdOfIncompleteChordRelease;
 
-    void InitializeQuickSetService( );
     bool FilterIncompleteChord( const IpcKeyInformation_t& keyEvent );
 
+    bool IsSourceKey( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );
     bool BlastKey( const IpcKeyInformation_t&  keyEvent, const std::string& cicode );
 
     struct FilterRegex

@@ -78,11 +78,11 @@ void CustomProductControllerStateOn::HandleStateEnter( )
 {
     ProductControllerStateOn::HandleStateEnter( );
 
-    if( s_ActionPendingFromTansition != ( KeyHandlerUtil::ActionType_t )Action::INVALID )
+    if( s_ActionPendingFromTransition != ( KeyHandlerUtil::ActionType_t )Action::INVALID )
     {
-        GetCustomProductController( ).GetIntentHandler( ).Handle( s_ActionPendingFromTansition );
+        GetCustomProductController( ).GetIntentHandler( ).Handle( s_ActionPendingFromTransition );
     }
-    s_ActionPendingFromTansition = ( KeyHandlerUtil::ActionType_t )Action::INVALID;
+    s_ActionPendingFromTransition = ( KeyHandlerUtil::ActionType_t )Action::INVALID;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
