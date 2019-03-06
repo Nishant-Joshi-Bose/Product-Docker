@@ -24,7 +24,6 @@
 #include "MonotonicClock.h"
 #include "AutoLpmServiceMessages.pb.h"
 #include "SystemSourcesProperties.pb.h"
-// #include "UEIKeyNames.pb.h"
 #include "SystemUtils.h"
 
 using namespace ProductSTS;
@@ -80,11 +79,6 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductKeyInputManager::IsSourceKey( const LpmServiceMessages::IpcKeyInformation_t& keyEvent )
 {
-
-    // ACTIVATION_KEY_GAME
-    // ACTIVATION_KEY_BD_DVD
-    // ACTIVATION_KEY_CBL_SAT
-
     switch( keyEvent.keyid() )
     {
     case BOSE_GAME_SOURCE:

@@ -81,7 +81,7 @@ private:
     CustomProductController& m_ProductController;
 
     ///
-    /// Custom A4V-DeviceController Client and Initialization
+    /// A4V-DeviceController Client Shared Pointer
     ///
     DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr       m_deviceControllerPtr;
 

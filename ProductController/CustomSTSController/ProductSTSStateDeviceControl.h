@@ -32,10 +32,6 @@ public:
     bool HandleStop( const STS::Void & ) override;
     bool HandleSkipNext( const STS::Void & ) override;
     bool HandleSkipPrevious( const STS::Void & ) override;
-    bool HandleMuteStatus( const STS::MuteStatus & ) override;
-    bool HandlePowerOff( const STS::Void & ) override;
-    bool HandleSearchRequest( const STS::SearchRequest &, uint32_t ) override;
-    bool HandleSeekToTime( const STS::SeekToTime & ) override;
 
 private:
     DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr m_deviceControllerPtr;

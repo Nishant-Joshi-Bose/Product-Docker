@@ -141,11 +141,11 @@ constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
 constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone";
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
-}
 
 constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = BOSE_CONF_DIR "BlastConfiguration.json";
 constexpr char       UI_KILL_PID_FILE[] = "/var/run/brussels.pid";
 constexpr uint32_t   UI_ALIVE_TIMEOUT = 60 * 1000;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -746,14 +746,15 @@ void CustomProductController::Run( )
     {
         BOSE_INFO( s_logger, "Connected to DeviceController!" );
     };
-    m_deviceControllerPtr->Connect( connectCb );
 
     auto dvcDisconnectCb  = [this, connectCb]()
     {
-        BOSE_INFO( s_logger, "Disconnected to DeviceController!" );
+        BOSE_INFO( s_logger, "Disconnected from DeviceController!" );
         m_deviceControllerPtr->Connect( connectCb );
     };
+
     m_deviceControllerPtr->RegisterDisconnectCb( dvcDisconnectCb );
+    m_deviceControllerPtr->Connect( connectCb );
 
     ///
     /// Get instances of all the modules.
@@ -827,7 +828,7 @@ void CustomProductController::Run( )
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
-    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ) , GetTask( ) );
+    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ), GetTask( ) );
     m_ProductKeyInputManager     ->Run( cancelAlarmCb );
     m_ProductFrontDoorKeyInjectIF->Run( );
     m_ProductCecHelper           ->Run( );

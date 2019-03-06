@@ -60,19 +60,19 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & requ
             {
                 m_np.set_canpause( true );
                 m_np.set_canstop( true );
-                m_np.set_skipenabled( true );           //skip next
-                m_np.set_skippreviousenabled( true );   //skip previous
+                m_np.set_skipenabled( true );
+                m_np.set_skippreviousenabled( true );
                 m_np.set_seeksupported( true );
             }
             else
             {
                 m_np.set_canpause( false );
                 m_np.set_canstop( false );
-                m_np.set_skipenabled( false );           //skip next
-                m_np.set_skippreviousenabled( false );   //skip previous
+                m_np.set_skipenabled( false );
+                m_np.set_skippreviousenabled( false );
                 m_np.set_seeksupported( false );
             }
-            // set friendly name in nowPlaying
+
             m_np.mutable_contentitem()->set_name( source->details().friendlyname() );
 
             m_np.set_playstatus( STS::PlayStatus::PLAY );
@@ -98,13 +98,14 @@ bool ProductSTSStateDeviceControl::HandleDeactivateRequest( const STS::Deactivat
     const auto source = m_account.GetProductSTSController()->GetProductController().GetSourceInfo().FindSource( m_account.GetSourceContentItem() );
     if( source != nullptr && source->has_accountid() )
     {
+        m_account.IPC().SendAudioStopEvent();
+
         // Form dectivation callback
         auto cb = [ this, seq ]( DeviceControllerClientMessages::DeviceActivationRequest_t req )
         {
-            m_account.IPC().SendAudioStopEvent();
+            m_active = false;
             m_account.IPC().SendDeactivateResponse( seq );
             m_np.set_playstatus( STS::PlayStatus::STOP );
-            m_active = false;
         };
         AsyncCallback< DeviceControllerClientMessages::DeviceActivationRequest_t >
         activationCb( cb, m_account.GetProductSTSController()->GetProductController().GetTask() );
@@ -196,27 +197,4 @@ bool ProductSTSStateDeviceControl::HandleSkipPrevious( const STS::Void & )
     return true;
 }
 
-bool ProductSTSStateDeviceControl::HandleMuteStatus( const STS::MuteStatus & )
-{
-    BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
-    return false;
-}
-
-bool ProductSTSStateDeviceControl::HandlePowerOff( const STS::Void & )
-{
-    BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
-    return false;
-}
-
-bool ProductSTSStateDeviceControl::HandleSearchRequest( const STS::SearchRequest &, uint32_t )
-{
-    BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
-    return false;
-}
-
-bool ProductSTSStateDeviceControl::HandleSeekToTime( const STS::SeekToTime & )
-{
-    BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
-    return false;
-}
 }
