@@ -148,8 +148,8 @@ if [ -e /opt/Bose/hsp/RecoveryMgr ]; then
 fi
 
 echo "Updating RecoveryFS - Start"
-/opt/Bose/update/bin/unzip -p /opt/Bose/hsp/update_ext4.zip recovery-updater.sh > /tmp/recovery-updater.sh || exiterror
-chmod a+x /tmp/recovery-updater.sh || exiterror
+busybox unzip -p /opt/Bose/hsp/update_ext4.zip recovery-updater.sh > /tmp/recovery-updater.sh || exiterror
+busybox chmod a+x /tmp/recovery-updater.sh || exiterror
 /tmp/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
 echo "Updating RecoveryFS - Done"
 
