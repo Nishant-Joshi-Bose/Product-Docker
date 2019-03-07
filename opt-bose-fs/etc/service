@@ -14,12 +14,14 @@ if len(sys.argv) != 2:
     raise Exception("wrong usage")
 params = sys.argv[1]
 
+
 def http_ok(content_type="text/plain"):
     print """\
 HTTP/1.1 200 OK\r
 Content-Type: {}\r
 Cache-Control: no-cache\r
 \r""".format(content_type)
+
 
 def http_err(code="404 Not Found"):
     print """\
@@ -28,23 +30,28 @@ Content-Type: text/plain\r
 \r
 {code}\r""".format(code=code)
 
+
 def html_escape(text):
-    return re.sub(r'[<"&>]', lambda x: { "<": "&lt;",
-                                         '"': "&quot;",
-                                         "&": "&amp;",
-                                         ">": "&gt;" }[x.group(0)], text)
+    return re.sub(r'[<"&>]', lambda x: {"<": "&lt;",
+                                        '"': "&quot;",
+                                        "&": "&amp;",
+                                        ">": "&gt;"}[x.group(0)], text)
+
 
 def url_unescape1(match):
     v = match.group(0)
     return " " if v == "+" else chr(int(v[1:], 16))
 
+
 def url_unescape(text):
     return re.sub(r'\+|%[0-9A-F][0-9A-F]', url_unescape1, text)
+
 
 def md5sig(text):
     m = md5.new()
     m.update(text)
     return m.hexdigest()
+
 
 # ----------------------------------------------------------------------------
 
@@ -62,16 +69,16 @@ fields = """
 """.split()
 
 field_notes = {
-  "BMAPVariantID":	"1 (black), 2 (white), 3 (silver)",
-  "productColor":	"Same as BMAPVariantID",
-  "country_code":	"US, JP, CN, NZ, ...",
-  "regionCode":	    "US, JP, CN, NZ, ...",
-  "rfMask24GHz":	"DARR 2.4GHz region setting",
-  "rfMask52GHz":	"DARR 5.2GHz region setting",
-  "rfMask58GHz":	"DARR 5.8GHz region setting",
-  "mic_gain":		"8 microphone gain values",
-  "snSystem":		"17-character serial number",
-  "irBlasterCapability": "'full' or 'partial' IR blaster functionality"
+    "BMAPVariantID": "1 (black), 2 (white), 3 (silver)",
+    "productColor": "Same as BMAPVariantID",
+    "country_code": "US, JP, CN, NZ, ...",
+    "regionCode": "US, JP, CN, NZ, ...",
+    "rfMask24GHz": "DARR 2.4GHz region setting",
+    "rfMask52GHz": "DARR 5.2GHz region setting",
+    "rfMask58GHz": "DARR 5.8GHz region setting",
+    "mic_gain": "8 microphone gain values",
+    "snSystem": "17-character serial number",
+    "irBlasterCapability": "'full' or 'partial' IR blaster functionality. If left empty, it will be auto populated based on snSystem"
 }
 
 # ----------------------------------------------------------------------------
@@ -95,7 +102,7 @@ for param in params.split("&"):
     if i == -1:
         name, value = param, ""
     else:
-        name, value = param[:i], url_unescape(param[i+1:])
+        name, value = param[:i], url_unescape(param[i + 1:])
     if name.startswith("i_"):
         name = name[2:]
         for f in fields:
@@ -114,10 +121,15 @@ is_valid = True
 validation_output = []
 
 if button == "validate" or button == "apply":
-    # Populate irBlasterCapability if it is not set
+    # Populate irBlasterCapability based on snSystem if it is not set
     if mfg_data.get("irBlasterCapability") is None or not mfg_data.get("irBlasterCapability"):
-        mfg_data["irBlasterCapability"] = "partial"
-
+    # mfg_data["irBlasterCapability"] = "partial"
+        serialNumber = str(mfg_data["snSystem"])
+        # snSystem's 8th digit to 11th digit represent the manufacturing date, if it's bigger or equal to 8344, it should have full IR Capability
+        if int(serialNumber[7]) >= 8 and int(serialNumber[8]) >= 3 and int(serialNumber[9]) >= 4 and int(serialNumber[10]) >= 4:
+            mfg_data["irBlasterCapability"] = "full"
+        else:
+            mfg_data["irBlasterCapability"] = "partial"
     # Validate the mfgdata values.
     del mfg_data["service"]
     mfg_data["modified"] = time.strftime("%a, %d %b %Y %H:%M:%S %z")
