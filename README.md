@@ -7,15 +7,6 @@ Eddie
 
 This repo contains the source code and tools specific to the Eddie product.
 
-Repo contacts for eddie/... branches:
-* [Jonathan Cooper](mailto:Jonathan_cooper@bose.com)
-* [Michael Cook](mailto:Michael_Cook@bose.com)
-* [Santosh Ghondi](mailto:Santosh_Gondi@bose.com)
-* [Vikram Singh](mailto:Vikram_Singh@bose.com)
-* [Ranjeet Ravindran](mailto:Ranjeet_Ravindran@bose.com)
-* [Alfred von Campe](mailto:Alfred_vonCampe@bose.com)
-* [Trevor Lai](mailto:Trevor_Lai@bose.com)
-
 ![Eddie](misc/product.png)
 
 ##### Table of Contents
@@ -236,6 +227,8 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | any | /pts.dat | Same as /pts.txt but encrypted ** |
 | any | /network.txt | Various network and WAN information * |
 | any | /network.dat | Same as /network.txt but encrypted ** |
+| any | /recovery.txt | Recovery mode logs for HSP update ** | 
+| any | /recovery.dat | Same as /recovery.txt but encrypted * |
 | any | /logread.dat | Same as /logread.txt but encrypted ** |
 | usb | /reflash | Force the unit into reflash mode (QFIL) |
 | usb | /bose-version | /opt/Bose/etc/BoseVersion.json |
