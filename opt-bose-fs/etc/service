@@ -118,9 +118,14 @@ if button == "validate" or button == "apply":
     if mfg_data.get("irBlasterCapability") is None or not mfg_data.get("irBlasterCapability"):
         serialNumber = str(mfg_data["snSystem"])
         # snSystem's 8th digit to 11th digit represent the manufacturing date, if it's bigger or equal to 8344, it should have full IR Capability
-        if int(serialNumber[7]) >= 8 and int(serialNumber[8]) >= 3 and int(serialNumber[9]) >= 4 and int(serialNumber[10]) >= 4:
+        dateCodeStr = serialNumber[7:11]
+        try:
+          dateCode = int(dateCodeStr)
+          if dateCode >= 8344:
             mfg_data["irBlasterCapability"] = "full"
-        else:
+          else:
+            mfg_data["irBlasterCapability"] = "partial"
+        except ValueError:
             mfg_data["irBlasterCapability"] = "partial"
     # Validate the mfgdata values.
     del mfg_data["service"]
