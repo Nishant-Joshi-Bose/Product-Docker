@@ -20,7 +20,7 @@ This repo contains the source code and tools specific to the Eddie product.
 
 ### Getting Started
 
-Clone CastleTools and Eddie:
+Clone CastleTools.git and CastleProducts.git:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
@@ -227,8 +227,8 @@ restriction: `touch /mnt/nv/product-persistence/anyiface`.
 | any | /pts.dat | Same as /pts.txt but encrypted ** |
 | any | /network.txt | Various network and WAN information * |
 | any | /network.dat | Same as /network.txt but encrypted ** |
-| any | /recovery.txt | Recovery mode logs for HSP update ** | 
-| any | /recovery.dat | Same as /recovery.txt but encrypted * |
+| any | /recovery.txt | Recovery mode logs for HSP update * |
+| any | /recovery.dat | Same as /recovery.txt but encrypted ** |
 | any | /logread.dat | Same as /logread.txt but encrypted ** |
 | usb | /reflash | Force the unit into reflash mode (QFIL) |
 | usb | /bose-version | /opt/Bose/etc/BoseVersion.json |
