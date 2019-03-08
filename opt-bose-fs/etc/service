@@ -62,15 +62,15 @@ fields = """
 """.split()
 
 field_notes = {
-  "BMAPVariantID":	"1 (black), 2 (white), 3 (silver)",
-  "productColor":	"Same as BMAPVariantID",
-  "country_code":	"US, JP, CN, NZ, ...",
-  "regionCode":	    "US, JP, CN, NZ, ...",
-  "rfMask24GHz":	"DARR 2.4GHz region setting",
-  "rfMask52GHz":	"DARR 5.2GHz region setting",
-  "rfMask58GHz":	"DARR 5.8GHz region setting",
-  "mic_gain":		"8 microphone gain values",
-  "snSystem":		"17-character serial number",
+  "BMAPVariantID":  "1 (black), 2 (white), 3 (silver)",
+  "productColor": "Same as BMAPVariantID",
+  "country_code": "US, JP, CN, NZ, ...",
+  "regionCode":     "US, JP, CN, NZ, ...",
+  "rfMask24GHz":  "DARR 2.4GHz region setting",
+  "rfMask52GHz":  "DARR 5.2GHz region setting",
+  "rfMask58GHz":  "DARR 5.8GHz region setting",
+  "mic_gain":   "8 microphone gain values",
+  "snSystem":   "17-character serial number",
   "irBlasterCapability": "'full' or 'partial' IR blaster functionality"
 }
 
@@ -114,10 +114,19 @@ is_valid = True
 validation_output = []
 
 if button == "validate" or button == "apply":
-    # Populate irBlasterCapability if it is not set
+    # Populate irBlasterCapability based on snSystem if it is not set
     if mfg_data.get("irBlasterCapability") is None or not mfg_data.get("irBlasterCapability"):
-        mfg_data["irBlasterCapability"] = "partial"
-
+        serialNumber = str(mfg_data["snSystem"])
+        # snSystem's 8th digit to 11th digit represent the manufacturing date, if it's bigger or equal to 8344, it should have full IR Capability
+        dateCodeStr = serialNumber[7:11]
+        try:
+          dateCode = int(dateCodeStr)
+          if dateCode >= 8344:
+            mfg_data["irBlasterCapability"] = "full"
+          else:
+            mfg_data["irBlasterCapability"] = "partial"
+        except ValueError:
+            mfg_data["irBlasterCapability"] = "partial"
     # Validate the mfgdata values.
     del mfg_data["service"]
     mfg_data["modified"] = time.strftime("%a, %d %b %Y %H:%M:%S %z")
