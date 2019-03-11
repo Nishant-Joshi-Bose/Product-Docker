@@ -156,6 +156,10 @@
     "selected_version": "Release/stable/2.2.6-807+fef4d3f"
   },
   {
+    "name": "opensource-avahi-qc8017_32",
+    "selected_version": "Release/bose-master/v1.0-12-ge05f7c1"
+  },
+  {
     "name": "opensource-jsoncpp-qc8017_32",
     "selected_version": "Release/bose-stable/1.8.3-29-gf5bca2f"
   },
@@ -186,6 +190,10 @@
   {
     "name": "opensource-zlib-qc8017_32",
     "selected_version": "Release/bose-stable/v1.2.11-16-g5c101d4"
+  },
+  {
+    "name": "opensource-OpenAvnuApple-qc8017_32",
+    "selected_version": "Release/bose-master/v1.0-1766-g1098033"
   },
   {
     "name": "Passport-qc8017_32",
