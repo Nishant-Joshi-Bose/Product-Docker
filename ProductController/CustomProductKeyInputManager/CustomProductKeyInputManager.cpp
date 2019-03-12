@@ -66,6 +66,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
       m_TimeOfChordRelease( 0 ),
       m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
+    InitializeKeyFilter( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
