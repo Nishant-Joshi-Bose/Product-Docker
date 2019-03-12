@@ -20,7 +20,9 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSoftwareInstallScheduler
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductIotHandler
   {PROTO_CC_DEST}
+  ${CASTLEIOTCLIENT}/include
   .
 )
 
@@ -83,6 +85,7 @@ TARGET_LINK_LIBRARIES(ProductController
   SoftwareUpdateAPI
   STS
   STSClient
+  IoTIPCClient
   uuid
   ShelbyUtils
   CommonTypes

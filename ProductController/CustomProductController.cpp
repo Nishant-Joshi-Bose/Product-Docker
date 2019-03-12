@@ -28,6 +28,7 @@
 #include "SystemUtils.h"
 #include "ProductCommandLine.h"
 #include "CommonProductCommandLine.h"
+#include "IoTIPCClient.h"
 
 static DPrint s_logger( "CustomProductController" );
 
@@ -91,7 +92,11 @@ CustomProductController::CustomProductController():
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
-    m_ProductSTSController( *this )
+    m_ProductSTSController( *this ),
+    m_ProductIotHandler( GetTask(),
+                         "/opt/Bose/etc/ProductInputs.json",
+                         m_FrontDoorClientIF,
+                         std::make_shared<IoTIPCClient>( GetTask(), "EddieIotClient" ) )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -144,7 +149,7 @@ void CustomProductController::InitializeHsm()
                        SystemPowerControl_State_Not_Notify,
                        &m_CustomProductControllerStateLowPowerStandbyTransition );
 
-    GetHsm().AddState( NotifiedNames::IDLE ,
+    GetHsm().AddState( NotifiedNames::IDLE,
                        SystemPowerControl_State_OFF,
                        &m_ProductControllerStateIdle );
 
@@ -354,7 +359,7 @@ void CustomProductController::InitializeAction()
 
     // Start ProductKeyInputManager
     m_ProductKeyInputManager = std::make_shared< CustomProductKeyInputManager >( *this );
-    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ) , GetTask( ) );
+    AsyncCallback<> cancelAlarmCb( std::bind( &ProductController::CancelAlarm, this ), GetTask( ) );
 
     m_ProductKeyInputManager -> Run( cancelAlarmCb );
 
@@ -371,6 +376,8 @@ void CustomProductController::InitializeAction()
     ///Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
     m_displayController->Initialize();
+
+    m_ProductIotHandler.Run();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -529,7 +536,7 @@ bool CustomProductController::IsAllModuleReady() const
                "%s:|CAPS=%d|LPM=%d|AudioPath=%d|Network=%d|Bluetooth=%d"
                "|STS=%d|SWUpdate=%d|ProductUI=%d|SASS=%d|Voice=%d",
                __func__,
-               IsCAPSReady() ,
+               IsCAPSReady(),
                IsLpmReady(),
                IsAudioPathReady(),
                IsNetworkModuleReady(),
@@ -698,7 +705,7 @@ void CustomProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil
 
 void CustomProductController::UpdateUiConnectedStatus( bool status )
 {
-    BOSE_INFO( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
+    BOSE_INFO( s_logger, "%s|status:%s", __func__, status ? "true" : "false" );
     m_isUiConnected = status;
     GetHsm().Handle<bool>( &ProductControllerState::HandleUiConnectedUpdateState, status );
 }
