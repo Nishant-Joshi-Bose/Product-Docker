@@ -75,6 +75,7 @@
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 #include "ProductConfig.pb.h"
+#include "ProductIotHandler.h"
 
 namespace ProductApp
 {
@@ -394,6 +395,7 @@ private:
     std::shared_ptr< CustomProductLpmHardwareInterface >            m_LpmInterface;
 
     ProductSTSController                                            m_ProductSTSController;
+    ProductIotHandler                                               m_ProductIotHandler;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {
