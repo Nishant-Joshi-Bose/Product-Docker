@@ -61,11 +61,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/MR2_2019/4.0.0-642+0d000af"
+    "selected_version": "Release/MR2_2019/4.0.1-650+ba27587"
   },
   {
     "name": "BTSTSSink-qc8017_32",
     "selected_version": "Release/stable/2.4.7-628+0373ff2"
+  },
+  {
+    "name": "CAPSAPI-qc8017_32",
+    "selected_version": "Continuous/stable/1.0.0-22+7f12d7c"
   },
   {
     "name": "CastleLibs-native",
@@ -132,6 +136,14 @@
     "selected_version": "Release/stable/2.2.0-215+2df5f15"
   },
   {
+    "name": "IotIpcClient-qc8017_32",
+    "selected_version": "Release/master/1.0.0-77+ba81e5e"
+  },
+  {
+    "name": "IotIpcClient-x86_64",
+    "selected_version": "Release/master/1.0.0-77+ba81e5e"
+  },
+  {
     "name": "KeyHandler-qc8017_32",
     "selected_version": "Release/stable/2.2.0-173+2e0a7ac"
   },
@@ -148,6 +160,10 @@
     "selected_version": "Release/stable/2.2.6-807+fef4d3f"
   },
   {
+    "name": "opensource-avahi-qc8017_32",
+    "selected_version": "Release/bose-stable/v1.0-26-ge366db4"
+  },
+  {
     "name": "opensource-jsoncpp-qc8017_32",
     "selected_version": "Release/bose-stable/1.8.3-29-gf5bca2f"
   },
@@ -158,6 +174,10 @@
   {
     "name": "opensource-libwebsockets-qc8017_32",
     "selected_version": "Release/bose-stable/2.4.1-67+gf1b00ef"
+  },
+  {
+    "name": "opensource-OpenAvnuApple-qc8017_32",
+    "selected_version": "Release/bose-stable/v1.0-1771-g12c9681"
   },
   {
     "name": "opensource-opkg-native",
@@ -193,11 +213,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "CASTLE-27327_PlayVolumeTone@e925b08de00ab8e50cc6d6932362028394766b68"
+    "selected_version": "CASTLE-27327_PlayVolumeTone@5bdb843d15326cfba1bbeb901239468b37fef5b6"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-367+04c9222"
+    "selected_version": "Continuous/master/2.2.0-373+8469ff2"
   },
   {
     "name": "ProductUIAssets",
@@ -224,12 +244,12 @@
     "selected_version": "Release/master/4.8"
   },
   {
-    "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/stable/3.0.3-327+3d8e803"
-  },
-  {
     "name": "RivieraLPM-Tools",
     "selected_version": "master@c232bf9c1560c9709b16f8aecf206a5caa692b6e"
+  },
+  {
+    "name": "RivieraLpmService-qc8017_32",
+    "selected_version": "Release/stable/3.0.3-327+3d8e803"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -269,7 +289,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.44998.3246382"
+    "selected_version": "Continuous/Castle-Fork-master/2019-03-07_1737"
   },
   {
     "name": "SystemEventService-qc8017_32",

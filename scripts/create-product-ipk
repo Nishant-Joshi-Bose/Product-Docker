@@ -89,6 +89,8 @@ telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
 googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
+opensource_ptp_dir=$(components get opensource-OpenAvnuApple-qc8017_32 installed_location) || exit
+opensource_avahi_dir=$(components get opensource-avahi-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -100,7 +102,7 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" "$opt_dir/bin/ptp" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
@@ -124,11 +126,6 @@ cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/CapsMultiroomVersions.json "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/bin/avahi-daemon "$opt_dir/bin/avahi-daemon" || exit
-cp "$stfs"/opt/Bose/bin/avahi-autoipd "$opt_dir/bin/avahi-autoipd" || exit
-cp "$stfs"/opt/Bose/bin/avahi-autoipd.action "$opt_dir/bin/avahi-autoipd.action" || exit
-cp "$stfs"/opt/Bose/bin/ptp/daemon_cl "$opt_dir/bin/ptp/daemon_cl" || exit
-cp "$stfs"/opt/Bose/bin/ptp/aptp_cfg.ini "$opt_dir/bin/ptp/aptp_cfg.ini" || exit
 cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
@@ -226,6 +223,8 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
+"$opensource_ptp_dir/Bose/stage" "$opt_dir" || exit
+"$opensource_avahi_dir/Bose/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
