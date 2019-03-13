@@ -37,11 +37,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/stable/2.2.5-292+8f83e4b"
+    "selected_version": "Release/stable/2.2.5-294+b217e64"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/stable/2.4.4-16-g96663b7"
+    "selected_version": "Release/2019_MR1.5/2.4.4-18-g20cc91b"
   },
   {
     "name": "bose-opkg-utils",
@@ -185,7 +185,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/2019_MR1.5/2.2.0-380+6ad329b"
+    "selected_version": "Release/2019_MR1.5/2.2.0-381+6ad329b"
   },
   {
     "name": "ProductUIAssets",
