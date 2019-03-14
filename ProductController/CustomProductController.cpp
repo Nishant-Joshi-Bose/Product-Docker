@@ -357,16 +357,17 @@ void CustomProductController::ProductDependentInitialize()
 {
     auto productType = GetProductType();
     bool productFound = false;
+    ProductPb::ProductConfig productConfig;
 
-    LoadProductConfiguration();
+    LoadProductConfiguration( productConfig );
 
-    for( uint16_t j = 0; j < m_productConfig.product_details_size(); j++ )
+    for( uint16_t j = 0; j < productConfig.product_details_size(); j++ )
     {
-        if( m_productConfig.product_details( j ).product() == productType )
+        if( productConfig.product_details( j ).product() == productType )
         {
             BOSE_INFO( s_logger, "%s: Product Type %s, found in config file at index %d", __func__, productType.c_str(), j );
             productFound = true;
-            const auto& thisProductConfig = m_productConfig.product_details( j );
+            const auto& thisProductConfig = productConfig.product_details( j );
             m_productName = thisProductConfig.product_name();
 
             DisplayController::Configuration displayCtrlConfig;
@@ -405,7 +406,7 @@ void CustomProductController::ProductDependentInitialize()
 /// @name  LoadProductConfiguration
 /// @brief Function to load the Product Configuration Json from a predetermined location.
 ////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::LoadProductConfiguration()
+void CustomProductController::LoadProductConfiguration( ProductPb::ProductConfig& productConfig )
 {
     BOSE_INFO( s_logger, "%s: Load Product Controller's Product Configuration:", __func__ );
 
@@ -418,7 +419,7 @@ void CustomProductController::LoadProductConfiguration()
 
     try
     {
-        ProtoToMarkup::FromJson( *cfg, &m_productConfig );
+        ProtoToMarkup::FromJson( *cfg, &productConfig );
     }
     catch( const ProtoToMarkup::MarkupError &e )
     {
