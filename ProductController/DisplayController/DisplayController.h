@@ -95,7 +95,7 @@ public:
 /// @brief return config paramaters that used to tune the behavior of DisplayController
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
-    Configuration GetConfig();
+    const Configuration& GetConfig() const;
 
     /*! \brief Put display in on or off state.
      * \param turnOn Pass true to turn the display on, and false to turn it off.

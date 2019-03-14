@@ -509,7 +509,7 @@ void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
 
     auto f = [this, enabled]()
     {
-        m_lcdBrightnessCap = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
+        m_lcdBrightnessCap = enabled ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
 
         // Cap (to 0) from screen black takes precedence.
         if( m_screenBlackState == ScreenBlackState_NotBlack )
@@ -920,7 +920,7 @@ Display DisplayController::GetDisplay()
 
 /*!
  */
-DisplayController::Configuration DisplayController::GetConfig()
+const DisplayController::Configuration& DisplayController::GetConfig() const
 {
     return m_config;
 }

@@ -11,11 +11,11 @@ package ProductPb;
 message ProductDetails
 {  
     optional string product = 1;
-    optional string productname = 2;
-    optional bool has_lcd = 3;
-    optional bool has_lightsensor = 4;
-    optional bool blackscreendetectenabled = 5;
-    optional bool has_clock = 6;
+    optional string product_name = 2;
+    optional bool lcd_available = 3;
+    optional bool lightsensor_available = 4;
+    optional bool blackscreen_detect_enabled = 5;
+    optional bool clock_available = 6;
 }
 
 message ProductConfig

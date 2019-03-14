@@ -142,7 +142,7 @@ void ProductCommandLine::RegisterCliCmds()
                                                                               static_cast<int>( CLICmdsKeys::LCD ) );
     }
 
-    if( m_productController.m_hasClock )
+    if( m_productController.m_clock )
     {
         m_productController.m_clock->RegisterCliCmds( m_productController.GetCommonCliClientMT() ) ;
     }
