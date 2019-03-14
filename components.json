@@ -68,6 +68,14 @@
     "selected_version": "Release/stable/2.4.7-628+0373ff2"
   },
   {
+    "name": "CAPSAPI-qc8017_32",
+    "selected_version": "Release/stable/1.0.0-25+c1bf763"
+  },
+  {
+    "name": "CAPSAPI-x86_64",
+    "selected_version": "Release/stable/1.0.0-25+c1bf763"
+  },
+  {
     "name": "CastleLibs-native",
     "selected_version": "branches/castle-libs@2830"
   },
@@ -209,11 +217,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@091c6df9e5b6029f4022c05ac900414cb6d7395b"
+    "selected_version": "master@8469ff245efebf51b44975b13cea7a6494a8b002"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-367+04c9222"
+    "selected_version": "Continuous/master/2.2.0-373+8469ff2"
   },
   {
     "name": "ProductUIAssets",
@@ -285,7 +293,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.44998.3246382"
+    "selected_version": "Continuous/Castle-Fork-master/2019-03-14_1547"
   },
   {
     "name": "SystemEventService-qc8017_32",
