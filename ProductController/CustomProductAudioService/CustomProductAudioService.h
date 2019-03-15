@@ -99,5 +99,7 @@ private:
     LpmServiceMessages::IpcDspStreamConfigReqPayload_t m_DspStreamConfig;
     uint32_t m_currentNetworkSourceLatency;
     uint32_t m_currentTVSourceLatency;
+
+    Callback<ProductPb::AudioEqSelect> m_deferredEqSelectResponse;
 };
 }// namespace ProductApp

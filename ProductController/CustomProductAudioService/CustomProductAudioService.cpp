@@ -556,6 +556,8 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
     {
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
     }
+    m_deferredEqSelectResponse( m_AudioSettingsMgr->GetEqSelect() );
+    m_deferredEqSelectResponse = {};
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1087,6 +1089,23 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         return error;
     };
     auto refreshEqSelectAction = []( ) {};
+
+    auto getEqSelectDeferred = [ this ]( Callback<AudioEqSelect> respCb )
+    {
+        if( !m_DspIsRebooting )
+        {
+            // If the DSP isn't rebooting, just answer with the most recent status
+            respCb( m_AudioSettingsMgr->GetEqSelect() );
+            return;
+        }
+
+        // Wait for the next status to arrive from the DSP before answering.  This is important
+        // to eliminate a race condition in which AiQ has just completed, the DSP is in the process
+        // of rebooting (so we haven't received the list of updated supported modes yet), and
+        // Madrid queries this endpoint.  In this case, we need to defer the response until we get
+        // the next update from the DSP.
+        m_deferredEqSelectResponse = respCb;
+    };
     m_EqSelectSetting = std::unique_ptr< AudioSetting< AudioEqSelect > >
                         ( new AudioSetting< AudioEqSelect >
                           ( FRONTDOOR_AUDIO_EQSELECT_API,
@@ -1098,7 +1117,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                             DATA_COLLECTION_EQSELECT,
-                            m_DataCollectionClient ) );
+                            m_DataCollectionClient,
+                            getEqSelectDeferred ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/SubwooferPolarity - register handlers for POST/PUT/GET requests
