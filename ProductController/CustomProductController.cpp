@@ -303,9 +303,6 @@ void CustomProductController::InitializeAction()
 
     ProductDependentInitialize();
 
-    //AsyncCallback<bool> uiConnectedCb( std::bind( &CustomProductController::UpdateUiConnectedStatus,
-    //                                              this, std::placeholders::_1 ), GetTask() ) ;
-
     LpmClientLiteIF::LpmClientLitePtr lpmLitePtr( std::static_pointer_cast<LpmClientLiteIF>( m_LpmInterface->GetLpmClient( ) ) );
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  lpmLitePtr ) );
 
