@@ -13,8 +13,8 @@ message ProductDetails
     optional string product = 1;
     optional string productName = 2;
     optional bool lcdAvailable = 3;
-    optional bool lightsensorAvailable = 4;
-    optional bool blackscreenDetectEnabled = 5;
+    optional bool lightSensorAvailable = 4;
+    optional bool blackScreenDetectEnabled = 5;
     optional bool clockAvailable = 6;
 }
 

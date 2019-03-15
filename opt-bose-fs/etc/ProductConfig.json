@@ -5,16 +5,16 @@
         "product": "eddie",
         "productName": "HS 500",
         "lcdAvailable": true,
-        "lightsensorAvailable": true,
-        "blackscreenDetectEnabled": true,
+        "lightSensorAvailable": true,
+        "blackScreenDetectEnabled": true,
         "clockAvailable": true
       },
       {
         "product": "eddieclub",
         "productName": "HS 450",
         "lcdAvailable": false,
-        "lightsensorAvailable": false,
-        "blackscreenDetectEnabled": false,
+        "lightSensorAvailable": false,
+        "blackScreenDetectEnabled": false,
         "clockAvailable": false
       }
     ]
