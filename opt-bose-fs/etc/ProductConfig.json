@@ -3,19 +3,19 @@
     "product_details": [
       {
         "product": "eddie",
-        "product_name": "HS 500",
-        "lcd_available": true,
-        "lightsensor_available": true,
-        "blackscreen_detect_enabled": true,
-        "clock_available": true
+        "productName": "HS 500",
+        "lcdAvailable": true,
+        "lightsensorAvailable": true,
+        "blackscreenDetectEnabled": true,
+        "clockAvailable": true
       },
       {
         "product": "eddieclub",
-        "product_name": "HS 450",
-        "lcd_available": false,
-        "lightsensor_available": false,
-        "blackscreen_detect_enabled": false,
-        "clock_available": false
+        "productName": "HS 450",
+        "lcdAvailable": false,
+        "lightsensorAvailable": false,
+        "blackscreenDetectEnabled": false,
+        "clockAvailable": false
       }
     ]
   }

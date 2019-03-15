@@ -11,15 +11,15 @@ package ProductPb;
 message ProductDetails
 {  
     optional string product = 1;
-    optional string product_name = 2;
-    optional bool lcd_available = 3;
-    optional bool lightsensor_available = 4;
-    optional bool blackscreen_detect_enabled = 5;
-    optional bool clock_available = 6;
+    optional string productName = 2;
+    optional bool lcdAvailable = 3;
+    optional bool lightsensorAvailable = 4;
+    optional bool blackscreenDetectEnabled = 5;
+    optional bool clockAvailable = 6;
 }
 
 message ProductConfig
 {  
-    repeated ProductDetails product_details = 1;
+    repeated ProductDetails productDetails = 1;
 }
 

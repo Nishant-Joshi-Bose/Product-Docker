@@ -361,26 +361,26 @@ void CustomProductController::ProductDependentInitialize()
 
     LoadProductConfiguration( productConfig );
 
-    for( uint16_t j = 0; j < productConfig.product_details_size(); j++ )
+    for( uint16_t j = 0; j < productConfig.productdetails_size(); j++ )
     {
-        if( productConfig.product_details( j ).product() == productType )
+        if( productConfig.productdetails( j ).product() == productType )
         {
             BOSE_INFO( s_logger, "%s: Product Type %s, found in config file at index %d", __func__, productType.c_str(), j );
             productFound = true;
-            const auto& thisProductConfig = productConfig.product_details( j );
-            m_productName = thisProductConfig.product_name();
+            const auto& thisProductConfig = productConfig.productdetails( j );
+            m_productName = thisProductConfig.productname();
 
             DisplayController::Configuration displayCtrlConfig;
-            displayCtrlConfig.m_hasLightSensor = thisProductConfig.lightsensor_available();
-            displayCtrlConfig.m_hasLcd = thisProductConfig.lcd_available();
-            displayCtrlConfig.m_blackScreenDetectEnabled = thisProductConfig.blackscreen_detect_enabled();
+            displayCtrlConfig.m_hasLightSensor = thisProductConfig.lightsensoravailable();
+            displayCtrlConfig.m_hasLcd = thisProductConfig.lcdavailable();
+            displayCtrlConfig.m_blackScreenDetectEnabled = thisProductConfig.blackscreendetectenabled();
 
             AsyncCallback<bool> uiConnectedCb( std::bind( &CustomProductController::UpdateUiConnectedStatus,
                                                           this, std::placeholders::_1 ), GetTask() ) ;
 
             m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
 
-            if( thisProductConfig.clock_available() )
+            if( thisProductConfig.clockavailable() )
             {
                 BOSE_INFO( s_logger, "%s: Product has a clock, initialize Clock", __func__ );
                 m_clock = std::make_shared<Clock>( m_FrontDoorClientIF, GetTask(), GetProductGuid() );
