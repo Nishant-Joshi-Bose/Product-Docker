@@ -31,7 +31,7 @@
         <entry chip="lpm_eddie" combine="True" name="eddie_mfg.bin" path="/home/softlib/verisoft/EddieLPM-Diags/Release/diags-alpha/1.0.0.2681/ALPHA/lpm_*.bin" version="filename" />
         <entry chip="lpm_eddie" combine="True" name="eddie_bl.bin" path="/home/softlib/verisoft/EddieLPM-BL/Release/trunk/0.1.0.1599/DP2/lpm_bootloader*.bin" version="filename" />
         <entry name="eddie.bin" path="/home/softlib/verisoft/EddieLPM-App/Release/Eddie/master/3.0.1-22+e4f669d/EDDIE_DP2/lpm_*.bin" version="filename" />
-        <entry name="eddie_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Continuous/new-volume-animations/2.6-167+29aa49c/HomeSpeaker/Animations.bin" version="dynamic" />
+        <entry name="eddie_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/2.6-168+f780599/HomeSpeaker/Animations.bin" version="dynamic" />
         <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/4.3-343+8d7c421/App-Eddie-DP2*.cyacd" version="dynamic" />
     </manifest_entries>
 </blob>
