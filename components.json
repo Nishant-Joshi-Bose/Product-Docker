@@ -164,6 +164,10 @@
     "selected_version": "Release/stable/2.2.6-801+0e2eb8f"
   },
   {
+    "name": "opensource-avahi-qc8017_32",
+    "selected_version": "Release/bose-stable/v1.0-26-ge366db4"
+  },
+  {
     "name": "opensource-jsoncpp-qc8017_32",
     "selected_version": "Release/bose-stable/1.8.3-29-gf5bca2f"
   },
@@ -174,6 +178,10 @@
   {
     "name": "opensource-libwebsockets-qc8017_32",
     "selected_version": "Release/bose-stable/2.4.1-67+gf1b00ef"
+  },
+  {
+    "name": "opensource-OpenAvnuApple-qc8017_32",
+    "selected_version": "Release/bose-stable/v1.0-1771-g12c9681"
   },
   {
     "name": "opensource-opkg-native",
@@ -240,12 +248,12 @@
     "selected_version": "Release/master/4.8"
   },
   {
-    "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/stable/3.0.3-327+3d8e803"
-  },
-  {
     "name": "RivieraLPM-Tools",
     "selected_version": "master@7a7009ce8bd0bc3f272180729930563a41eb2118"
+  },
+  {
+    "name": "RivieraLpmService-qc8017_32",
+    "selected_version": "Release/stable/3.0.3-327+3d8e803"
   },
   {
     "name": "RivieraLpmUpdater",

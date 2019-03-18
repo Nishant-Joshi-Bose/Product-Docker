@@ -93,6 +93,8 @@ rcs_dir=$(components get A4VRemoteCommunicationService-qc8017_32 installed_locat
 vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
+opensource_ptp_dir=$(components get opensource-OpenAvnuApple-qc8017_32 installed_location) || exit
+opensource_avahi_dir=$(components get opensource-avahi-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -104,7 +106,7 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/bin/ptp" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' --exclude='isNetworkConfigured' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
@@ -133,11 +135,6 @@ cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/CapsMultiroomVersions.json "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/bin/avahi-daemon "$opt_dir/bin/avahi-daemon" || exit
-cp "$stfs"/opt/Bose/bin/avahi-autoipd "$opt_dir/bin/avahi-autoipd" || exit
-cp "$stfs"/opt/Bose/bin/avahi-autoipd.action "$opt_dir/bin/avahi-autoipd.action" || exit
-cp "$stfs"/opt/Bose/bin/ptp/daemon_cl "$opt_dir/bin/ptp/daemon_cl" || exit
-cp "$stfs"/opt/Bose/bin/ptp/aptp_cfg.ini "$opt_dir/bin/ptp/aptp_cfg.ini" || exit
 cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
@@ -259,6 +256,8 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$devicecontroller_dir/stage" "$opt_dir" || exit
 "$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
+"$opensource_ptp_dir/Bose/stage" "$opt_dir" || exit
+"$opensource_avahi_dir/Bose/stage" "$opt_dir" || exit
 
 # remove Shepherd-vfe.xml
 if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
