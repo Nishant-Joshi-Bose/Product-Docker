@@ -29,7 +29,7 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-45+1764e16"
+    "selected_version": "Release/stable/2.2.0-51+017bb02"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -37,7 +37,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/stable/2.2.5-300+4d9b8e5"
+    "selected_version": "Release/stable/2.2.5-304+65467c6"
   },
   {
     "name": "Bluetooth-qc8017_32",
@@ -93,7 +93,7 @@
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/stable/0.0.4-62+d7c6da5"
+    "selected_version": "Release/stable/0.0.4-63+3cfac26"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -105,11 +105,11 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-222+a67be29"
+    "selected_version": "Release/stable/2.2.0-224+8552f54"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-stable/1.0.2-44+34f9117"
+    "selected_version": "Release/bose-stable/1.0.4-44+3a707d7"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -129,7 +129,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/stable/2.2.7-1226+b71ed72"
+    "selected_version": "Release/stable/2.2.8-1276+d21e1ca"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-330+66f3548"
+    "selected_version": "Release/stable/2.2.0-334+b3b27a4"
   },
   {
     "name": "LpmMfgTool",
@@ -217,11 +217,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@25b4ab042e7a4f38fbc8de444a352d3540cc2c5c"
+    "selected_version": "stable@7485699f956b59d6ba786d4eebde395d1c29c7ee"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-400+25b4ab0"
+    "selected_version": "Release/stable/2.2.0-407+7485699"
   },
   {
     "name": "ProductUIAssets",
@@ -253,11 +253,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/stable/3.1.4-368+d7e5b41"
+    "selected_version": "Release/stable/3.1.4-375+2970ef8"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/stable/2.1.0-97+6a825bb"
+    "selected_version": "Release/stable/2.1.0-99+01f1163"
   },
   {
     "name": "RivieraMinimalFS-qc8017_32",
@@ -265,15 +265,15 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/stable/3.0.0-119+394b70a"
+    "selected_version": "Release/stable/3.0.0-121+412579a"
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/stable/2.4.7-1309+231d8b8"
+    "selected_version": "Release/stable/2.4.7-1316+32f28a3"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/stable/2.4.7-1309+231d8b8"
+    "selected_version": "Release/stable/2.4.7-1316+32f28a3"
   },
   {
     "name": "SecureDeviceKey",
@@ -281,7 +281,7 @@
   },
   {
     "name": "ServicesClients-qc8017_32",
-    "selected_version": "Release/stable/2.0.0-42+adfd115"
+    "selected_version": "Release/stable/2.0.0-50+3ceb0f4"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -289,11 +289,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/stable/3.1.0-1782+2f07103"
+    "selected_version": "Release/stable/3.1.0-1825+f0bc1af"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.45094.3262234"
+    "selected_version": "Release/Castle-Fork-stable/2.2.2.45108.3265231"
   },
   {
     "name": "SystemEventService-qc8017_32",
