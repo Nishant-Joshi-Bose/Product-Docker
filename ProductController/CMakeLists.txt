@@ -20,7 +20,8 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSoftwareInstallScheduler
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
-  {PROTO_CC_DEST}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductIotHandler
+  ${CASTLEIOTCLIENT}/include
   .
 )
 
@@ -82,11 +83,16 @@ TARGET_LINK_LIBRARIES(ProductController
   SoftwareUpdateAPI
   STS
   STSClient
+  IoTIPCClient
   uuid
   ShelbyUtils
   CommonTypes
   STSProtoBufs
-  SoundTouch_SDK_Protobuf_static
+  SoundTouchInterfacePlayerServiceApi
+  SoundTouchInterfaceContentSelectionServiceApi
+  SoundTouchInterfaceDiscoveryAdvertisementServiceApi
+  SoundTouchInterfaceAudioServiceApi
+  SoundTouchInterfaceSystemServiceApi
   CapsUtils
   SystemEventService
   BoseLibs
