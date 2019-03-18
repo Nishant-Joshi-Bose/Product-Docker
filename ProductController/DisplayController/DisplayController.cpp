@@ -120,8 +120,6 @@ static constexpr uint64_t SCREEN_BLANK_DEBOUNCE_COUNTS[DisplayController::Screen
     1,  // ScreenBlackState_NotBlack
 };
 
-/*!
- */
 DisplayController::DisplayController( const Configuration& config,
                                       ProductController& controller,
                                       const std::shared_ptr<FrontDoorClientIF>& fdClient,
@@ -151,8 +149,6 @@ DisplayController::DisplayController( const Configuration& config,
 
 }
 
-/*!
- */
 DisplayController::~DisplayController()
 {
     m_updateloopTimer->Stop();
@@ -164,8 +160,6 @@ DisplayController::~DisplayController()
     }
 }
 
-/*!
- */
 void DisplayController::Initialize()
 {
     // Read JSON configuration.
@@ -206,8 +200,6 @@ void DisplayController::Initialize()
     } );
 }
 
-/*!
- */
 bool DisplayController::ParseJSONData()
 {
     BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
@@ -348,8 +340,6 @@ bool DisplayController::ParseJSONData()
     return true;
 }
 
-/*!
- */
 bool DisplayController::ParseBrightnessData( Brightness* output, const Json::Value& rootNode, std::string nodeName )
 {
     Json::Value brightnessRoot = rootNode[nodeName];
@@ -378,8 +368,6 @@ bool DisplayController::ParseBrightnessData( Brightness* output, const Json::Val
     return true;
 }
 
-/*!
- */
 void DisplayController::PushDefaultsToLPM()
 {
     static constexpr float FRACTIONAL_PRECISION = 1000.0f;
@@ -441,8 +429,6 @@ void DisplayController::PushDefaultsToLPM()
     IL::BreakThread( f, m_productController.GetTask() );
 }
 
-/*!
- */
 void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
 {
     if( m_uiConnected != currentUiConnectedStatus )
@@ -468,8 +454,6 @@ void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
     }
 }
 
-/*!
- */
 void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, uint16_t time )
 {
     BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
@@ -521,8 +505,6 @@ void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
     IL::BreakThread( f, m_task );
 }
 
-/*!
- */
 void DisplayController::UpdateLoop()
 {
     m_currentTick++;
@@ -563,8 +545,6 @@ void DisplayController::UpdateLoop()
     } );
 }
 
-/*!
- */
 void DisplayController::ProcessUiHeartBeat()
 {
     uint64_t deltaTicks = m_currentTick - m_lastUiHeartBeatTick;
@@ -599,8 +579,6 @@ void DisplayController::ProcessUiHeartBeat()
     }
 }
 
-/*!
- */
 void DisplayController::ProcessBlackScreenDetection()
 {
     ScreenBlackState screenState = ScreenBlackState_Invalid;
@@ -677,8 +655,6 @@ void DisplayController::ProcessBlackScreenDetection()
     }
 }
 
-/*!
- */
 void DisplayController::SetBlackScreenNowState( ScreenBlackState s )
 {
     m_screenBlackState = s;
@@ -686,8 +662,6 @@ void DisplayController::SetBlackScreenNowState( ScreenBlackState s )
     m_screenBlackChangeCounter = 0;
 }
 
-/*!
- */
 void DisplayController::RegisterLpmEvents()
 {
     BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
@@ -714,8 +688,6 @@ void DisplayController::RegisterLpmEvents()
     m_lpmClient->RegisterEvent<IpcUIBrightness_t>( IPC_PER_GET_UI_BRIGHTNESS, notificationCbUIBrightness );
 }
 
-/*!
- */
 void DisplayController::RegisterFrontdoorEndPoints()
 {
 
@@ -790,22 +762,16 @@ void DisplayController::RegisterFrontdoorEndPoints()
 
 }
 
-/*!
- */
 void DisplayController::HandlePutDisplayRequest( const Display &req,
                                                  const Callback<Display>& resp )
 {
 }
 
-/*!
- */
 void DisplayController::HandleGetDisplayRequest( Callback<Display> resp )
 {
     resp.Send( GetDisplay() );
 }
 
-/*!
- */
 void DisplayController::PullUIBrightnessFromLpm( IpcUIBrightnessDevice_t deviceType )
 {
     BOSE_DEBUG( s_logger, "%s, hasLcd %i", __FUNCTION__, m_config.m_hasLcd );
@@ -829,8 +795,6 @@ void DisplayController::PullUIBrightnessFromLpm( IpcUIBrightnessDevice_t deviceT
     IL::BreakThread( f, m_productController.GetTask() );
 }
 
-/*!
- */
 bool DisplayController::HandleLpmNotificationBackLight( IpcBackLight_t lpmBackLight )
 {
     m_display.set_backlightprecentage( lpmBackLight.value() );
@@ -864,8 +828,6 @@ bool DisplayController::HandleLpmNotificationUIBrightness( IpcUIBrightness_t lpm
     return true;
 }
 
-/*!
- */
 void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
                                                Callback<UiHeartBeat> resp )
 {
@@ -879,8 +841,6 @@ void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
     resp.Send( response );
 }
 
-/*!
- */
 void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
                                               Callback<UiHeartBeat> resp )
 {
@@ -901,8 +861,6 @@ void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
     resp.Send( response );
 }
 
-/*!
- */
 void DisplayController::HandleGetUiHeartBeat( Callback<UiHeartBeat> resp )
 {
     BOSE_LOG( VERBOSE, "received Get heartbeat: " << m_uiHeartBeat );
@@ -911,22 +869,16 @@ void DisplayController::HandleGetUiHeartBeat( Callback<UiHeartBeat> resp )
     resp.Send( response );
 }
 
-/*!
- */
 Display DisplayController::GetDisplay()
 {
     return m_display;
 }
 
-/*!
- */
 const DisplayController::Configuration& DisplayController::GetConfig() const
 {
     return m_config;
 }
 
-/*!
- */
 void DisplayController::HandleGetLcdBrightnessRequest( const Callback<Brightness>& resp )
 {
     BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
@@ -934,8 +886,6 @@ void DisplayController::HandleGetLcdBrightnessRequest( const Callback<Brightness
     resp.Send( m_lcdBrightness );
 }
 
-/*!
- */
 void DisplayController::HandleLpmSetLightSensorParams( IpcLpmGenericResponse_t response )
 {
     if( response.code() == IPC_TRANSITION_COMPLETE )
@@ -946,8 +896,6 @@ void DisplayController::HandleLpmSetLightSensorParams( IpcLpmGenericResponse_t r
     }
 }
 
-/*!
- */
 void DisplayController::HandleLpmGetUIBrightness( IpcUIBrightness_t response )
 {
     m_lcdBrightness.set_mode( BrightnessIpcEnumToProtoEnum( ( IpcUIBrightnessMode_t ) response.mode() ) );
@@ -956,8 +904,6 @@ void DisplayController::HandleLpmGetUIBrightness( IpcUIBrightness_t response )
     m_frontdoorClientPtr->SendNotification( FRONTDOOR_ENDPOINT_BRIGHTNESS, m_lcdBrightness );
 }
 
-/*!
- */
 bool DisplayController::IsFrontdoorBrightnessDataValid( const Brightness& incoming,
                                                         const Brightness& spec, const char* endPoint )
 {
@@ -1025,8 +971,6 @@ void DisplayController::HandlePutLcdBrightnessRequest( Brightness req, const Cal
     resp.Send( m_lcdBrightness );
 }
 
-/*!
- */
 IpcUIBrightnessMode_t DisplayController::BrightnessProtoEnumToIpcEnum( Brightness_BrightnessMode mode )
 {
     switch( mode )
@@ -1047,8 +991,6 @@ IpcUIBrightnessMode_t DisplayController::BrightnessProtoEnumToIpcEnum( Brightnes
     }
 }
 
-/*!
-*/
 Brightness_BrightnessMode DisplayController::BrightnessIpcEnumToProtoEnum( IpcUIBrightnessMode_t mode )
 {
     switch( mode )
@@ -1069,8 +1011,6 @@ Brightness_BrightnessMode DisplayController::BrightnessIpcEnumToProtoEnum( IpcUI
     }
 }
 
-/*!
- */
 void DisplayController::BuildLpmUIBrightnessStruct( IpcUIBrightness_t* out, IpcUIBrightnessDevice_t deviceType )
 {
     out->set_device( deviceType );
@@ -1097,8 +1037,6 @@ void DisplayController::BuildLpmUIBrightnessStruct( IpcUIBrightness_t* out, IpcU
     out->set_time( UI_BRIGHTNESS_TIME_DEFAULT );
 }
 
-/*!
- */
 void DisplayController::RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void>& completedCb )
 {
     BOSE_DEBUG( s_logger, "%s, turnOn %i", __FUNCTION__, turnOn );
@@ -1134,8 +1072,6 @@ void DisplayController::RequestTurnDisplayOnOff( bool turnOn, AsyncCallback<void
     IL::BreakThread( f, m_task );
 }
 
-/*!
- */
 DisplayController::ScreenBlackState DisplayController::ReadFrameBufferBlackState()
 {
     if( ! m_config.m_blackScreenDetectEnabled )
