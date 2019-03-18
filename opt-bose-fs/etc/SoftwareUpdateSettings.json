@@ -6,7 +6,6 @@
         "idleToSoftwareUpdateInWindowTime" : 30,
         "idleToSoftwareUpdateAfterWindowTime" : 5,
         "noNtpSyncToSoftwareUpdateTime" : 720,
-        "noNtpSyncToSoftwareUpdateTime" : 720,
         "rangeOfDelayOnWindowStart" : 179
     }
 }
