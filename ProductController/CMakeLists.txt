@@ -89,7 +89,11 @@ TARGET_LINK_LIBRARIES(ProductController
   ShelbyUtils
   CommonTypes
   STSProtoBufs
-  SoundTouch_SDK_Protobuf_static
+  SoundTouchInterfacePlayerServiceApi
+  SoundTouchInterfaceContentSelectionServiceApi
+  SoundTouchInterfaceDiscoveryAdvertisementServiceApi
+  SoundTouchInterfaceAudioServiceApi
+  SoundTouchInterfaceSystemServiceApi
   CapsUtils
   SystemEventService
   BoseLibs

@@ -43,6 +43,7 @@ COMPONENT(SASS_DIR SASS-${SDK})
 COMPONENT(SERVICESCLIENTS_DIR ServicesClients-${SDK})
 COMPONENT(SOFTWAREUPDATE_DIR SoftwareUpdate-${SDK})
 COMPONENT(SOUNDTOUCH_SDK_DIR SoundTouch-SDK-${SDK})
+COMPONENT(CAPSAPI_DIR CAPSAPI-${SDK})
 COMPONENT(SYSTEMEVENTSERVICE_DIR SystemEventService-${SDK})
 COMPONENT(TELEMETRY_DIR Telemetry-${SDK})
 COMPONENT(VPACONTROLLER_DIR VPAController-${SDK})
@@ -141,6 +142,8 @@ INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
+  ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/include
+  ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/include/SoundTouchInterface
   ${AVSLIBS_DIR}/include
   ${LIBWEBSOCKETS_DIR}/include
   ${FRONTDOOR_DIR}/include
@@ -177,6 +180,7 @@ LINK_DIRECTORIES(
   ${AUDIOSOURCE_DIR}/lib
   ${SERVICESCLIENTS_DIR}/lib
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs
+  ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/lib
   ${KEYHANDLER_DIR}/lib
   ${AVSLIBS_DIR}/lib
   ${FRONTDOOR_DIR}/lib
