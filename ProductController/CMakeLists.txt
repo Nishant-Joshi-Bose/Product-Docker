@@ -117,7 +117,12 @@ TARGET_LINK_LIBRARIES(Professor
   ShelbyUtils
   CommonTypes
   STSProtoBufs
-  SoundTouch_SDK_Protobuf_static
+  SoundTouchInterfaceAudioServiceApi
+  SoundTouchInterfaceContentSelectionServiceApi
+  SoundTouchInterfaceDiscoveryAdvertisementServiceApi
+  SoundTouchInterfaceEndPointsErrorApi
+  SoundTouchInterfacePlayerServiceApi
+  SoundTouchInterfaceSystemServiceApi
   CapsUtils
   SystemEventService
   A4VRemoteCommClient
