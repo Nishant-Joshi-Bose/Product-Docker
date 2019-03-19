@@ -225,7 +225,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@8edba808ba70a64538467cb949c6bfc95774ff2e"
+    "selected_version": "stable@8edba808ba70a64538467cb949c6bfc95774ff2e"
   },
   {
     "name": "protobuf-native",
