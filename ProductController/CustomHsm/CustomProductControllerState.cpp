@@ -24,7 +24,7 @@ CustomProductControllerState::CustomProductControllerState( ProductControllerHsm
                                                             const std::string& name ) :
     CHsmState( stateId, &hsm, name, pSuperState )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, __func__ );
 }
 
 CustomProductController& CustomProductControllerState::GetCustomProductController()

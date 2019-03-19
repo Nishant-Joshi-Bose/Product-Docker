@@ -21,7 +21,7 @@ CustomProductControllerStateTop::CustomProductControllerStateTop( ProductControl
                                                                   const std::string& name ) :
     ProductControllerStateTop( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger,  __func__ );
+    BOSE_DEBUG( s_logger,  __func__ );
 }
 
 bool CustomProductControllerStateTop::HandleModulesReady()
@@ -37,7 +37,7 @@ bool CustomProductControllerStateTop::HandleIntentAuxIn( KeyHandlerUtil::ActionT
 
 bool CustomProductControllerStateTop::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& info )
 {
-    BOSE_INFO( s_logger,  __func__ );
+    BOSE_DEBUG( s_logger,  __func__ );
     return true;
 }
 

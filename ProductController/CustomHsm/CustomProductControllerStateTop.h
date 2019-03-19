@@ -34,4 +34,5 @@ public:
     bool HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent ) override;
     bool HandleIntentCountDown( KeyHandlerUtil::ActionType_t intent ) override;
 };
-} // namespace ProductApp
+
+} // namespace

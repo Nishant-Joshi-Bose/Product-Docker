@@ -102,7 +102,11 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
+mkdir -p "$output_dir" || exit
+mkdir -p "$opt_dir/etc" || exit
+mkdir -p "$opt_dir/bin" || exit
+mkdir -p "$opt_dir/lib" || exit
+mkdir -p "$opt_dir/etc/chimes" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 

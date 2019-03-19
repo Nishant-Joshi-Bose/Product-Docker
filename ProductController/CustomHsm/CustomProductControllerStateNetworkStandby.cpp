@@ -22,7 +22,7 @@ CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkS
         const std::string& name ) :
     ProductControllerStateNetworkStandby( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, __func__ );
 }
 
 void CustomProductControllerStateNetworkStandby::HandleStateEnter()
