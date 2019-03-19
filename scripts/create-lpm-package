@@ -18,7 +18,7 @@ release_xml=$wspace/LpmManifestFiles/$hw_var/release_lpm_package.xml
 nightly_xml=$wspace/LpmManifestFiles/$hw_var/nightly_lpm_package.xml
 continuous_xml=$wspace/LpmManifestFiles/$hw_var/continuous_lpm_package.xml
 
-riviera_lpm_tools_dir=$(components get RivieraLpmTools installed_location) || exit
+riviera_lpm_tools_dir=$(components get RivieraLPM-Tools installed_location) || exit
 
 
 # For release builds, we want to the timestamp of the BLOB to reflect that last time the manifest XML file was modified in git. This
@@ -39,13 +39,13 @@ if [ "$build_type" == "Release" ]; then
     # Apparently we don't use the linux epoch directly for timestamps. We use the minutes since January 1, 2013 12 AM EST...
     adjusted_epoch_time=$(( ( $epoch_time - 1357016400 ) / 60 )) || exit
     cp $release_xml $builds_dir/lpm_package.xml || exit
-    python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $release_xml $builds_dir --build_type $build_type --timestamp $adjusted_epoch_time || exit
+    python2.7 $riviera_lpm_tools_dir/blob/blob_utility.py --pack $release_xml $builds_dir --build_type $build_type --timestamp $adjusted_epoch_time || exit
 elif [ "$build_type" == "Nightly" ]; then
     cp $nightly_xml $builds_dir/lpm_package.xml || exit
-    python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $nightly_xml $builds_dir --build_type $build_type || exit
+    python2.7 $riviera_lpm_tools_dir/blob/blob_utility.py --pack $nightly_xml $builds_dir --build_type $build_type || exit
 elif [ "$build_type" == "Continuous" ]; then
     cp $continuous_xml $builds_dir/lpm_package.xml || exit
-    python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $continuous_xml $builds_dir --build_type $build_type || exit
+    python2.7 $riviera_lpm_tools_dir/blob/blob_utility.py --pack $continuous_xml $builds_dir --build_type $build_type || exit
 else
     echo >&2 "$0: Error: Please use a build type of Release, Continuous, or Nightly"
     exit 1
