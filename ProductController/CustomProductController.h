@@ -570,9 +570,6 @@ private:
 
     bool m_haltInPlayableTransitionNetworkStandby = false;
 
-    int64_t m_bootCompleteTime              = 0;
-
-    VoiceServicePB::VoiceStatus m_voiceStatus = VoiceServicePB::VoiceStatus::UNKNOWN;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
