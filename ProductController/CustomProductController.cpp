@@ -409,11 +409,11 @@ void CustomProductController::LoadProductConfiguration( ProductPb::ProductConfig
     }
 }
 
-uint16_t CustomProductController::FindThisProductConfig( ProductPb::ProductConfig& productConfig )
+int CustomProductController::FindThisProductConfig( ProductPb::ProductConfig& productConfig )
 {
     auto productType = GetProductType();
 
-    for( uint16_t productIndex = 0; productIndex < productConfig.productdetails_size(); productIndex++ )
+    for( auto productIndex = 0; productIndex < productConfig.productdetails_size(); productIndex++ )
     {
         if( productConfig.productdetails( productIndex ).product() == productType )
         {
@@ -421,7 +421,7 @@ uint16_t CustomProductController::FindThisProductConfig( ProductPb::ProductConfi
             return productIndex;
         }
     }
-    BOSE_DIE( "Product Type " << productType.c_str() << " NOT found in config file:: " );
+    BOSE_DIE( "Product Type " << productType << " NOT found in config file:: " );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
