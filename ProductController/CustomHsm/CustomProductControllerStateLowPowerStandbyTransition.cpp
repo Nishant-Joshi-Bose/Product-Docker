@@ -23,12 +23,12 @@ CustomProductControllerStateLowPowerStandbyTransition::CustomProductControllerSt
     ProductControllerStateLowPowerStandbyTransition( hsm, pSuperState, stateId, name ),
     m_displayControllerIsReady( false )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, __func__ );
 }
 
 void CustomProductControllerStateLowPowerStandbyTransition::HandleStateStart()
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, __func__ );
 
     m_displayControllerIsReady = false;
 
