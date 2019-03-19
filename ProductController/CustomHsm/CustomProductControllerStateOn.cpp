@@ -20,12 +20,12 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
                                                                 const std::string& name ) :
     ProductControllerStateOn( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, __func__ );
 }
 
 bool CustomProductControllerStateOn::HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_LOG( INFO, "intent:" << CommonIntentHandler::GetIntentName( intent ) );
+    BOSE_LOG( DEBUG, "intent:" << CommonIntentHandler::GetIntentName( intent ) );
 
     GetCustomProductController().GetIntentHandler().Handle( intent );
 
@@ -34,7 +34,7 @@ bool CustomProductControllerStateOn::HandleIntentAuxIn( KeyHandlerUtil::ActionTy
 
 bool CustomProductControllerStateOn::HandleIntentCountDown( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_LOG( INFO, "intent:" << CommonIntentHandler::GetIntentName( intent ) );
+    BOSE_LOG( DEBUG, "intent:" << CommonIntentHandler::GetIntentName( intent ) );
 
     GetCustomProductController().GetIntentHandler().Handle( intent );
 

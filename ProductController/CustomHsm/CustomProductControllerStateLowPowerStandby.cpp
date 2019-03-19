@@ -20,7 +20,7 @@ CustomProductControllerStateLowPowerStandby::CustomProductControllerStateLowPowe
         const std::string& name ) :
     ProductControllerStateLowPowerStandby( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, __func__ );
 }
 
 void CustomProductControllerStateLowPowerStandby::HandleStateExit()
