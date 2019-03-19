@@ -125,7 +125,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-stable/1.0.2-53+3a707d7"
+    "selected_version": "Release/bose-stable/1.0.4-44+3a707d7"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.2.7-1273+ac57a6f"
+    "selected_version": "Release/stable/2.2.8-1276+d21e1ca"
   },
   {
     "name": "HTTPInterface-qc8017_32",
