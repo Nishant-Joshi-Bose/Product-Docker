@@ -352,50 +352,35 @@ void CustomProductController::Initialize( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductController::ProductDependentInitialize()
 {
-    auto productType = GetProductType();
-    bool productFound = false;
     ProductPb::ProductConfig productConfig;
 
     LoadProductConfiguration( productConfig );
 
-    for( uint16_t j = 0; j < productConfig.productdetails_size(); j++ )
+    const auto& thisProductConfig = productConfig.productdetails( FindThisProductConfig( productConfig ) );
+
+    m_productName = thisProductConfig.productname();
+
+    DisplayController::Configuration displayCtrlConfig;
+    displayCtrlConfig.m_hasLightSensor = thisProductConfig.lightsensoravailable();
+    displayCtrlConfig.m_hasLcd = thisProductConfig.lcdavailable();
+    displayCtrlConfig.m_blackScreenDetectEnabled = thisProductConfig.blackscreendetectenabled();
+
+    AsyncCallback<bool> uiConnectedCb( std::bind( &CustomProductController::UpdateUiConnectedStatus,
+                                                  this, std::placeholders::_1 ), GetTask() ) ;
+
+    m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
+
+    if( thisProductConfig.clockavailable() )
     {
-        if( productConfig.productdetails( j ).product() == productType )
-        {
-            BOSE_INFO( s_logger, "%s: Product Type %s, found in config file at index %d", __func__, productType.c_str(), j );
-            productFound = true;
-            const auto& thisProductConfig = productConfig.productdetails( j );
-            m_productName = thisProductConfig.productname();
-
-            DisplayController::Configuration displayCtrlConfig;
-            displayCtrlConfig.m_hasLightSensor = thisProductConfig.lightsensoravailable();
-            displayCtrlConfig.m_hasLcd = thisProductConfig.lcdavailable();
-            displayCtrlConfig.m_blackScreenDetectEnabled = thisProductConfig.blackscreendetectenabled();
-
-            AsyncCallback<bool> uiConnectedCb( std::bind( &CustomProductController::UpdateUiConnectedStatus,
-                                                          this, std::placeholders::_1 ), GetTask() ) ;
-
-            m_displayController = std::make_shared<DisplayController>( displayCtrlConfig, *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient(), uiConnectedCb );
-
-            if( thisProductConfig.clockavailable() )
-            {
-                BOSE_INFO( s_logger, "%s: Product has a clock, initialize Clock", __func__ );
-                m_clock = std::make_shared<Clock>( m_FrontDoorClientIF, GetTask(), GetProductGuid() );
-                m_clock->Initialize( );
-            }
-
-            // Sanity check...
-            if( m_clock && not displayCtrlConfig.m_hasLcd )
-            {
-                BOSE_DIE( "Product Config file specifies clock but no LCD!!!" );
-            }
-            break;
-        }
+        BOSE_INFO( s_logger, "%s: Product has a clock, initialize Clock", __func__ );
+        m_clock = std::make_shared<Clock>( m_FrontDoorClientIF, GetTask(), GetProductGuid() );
+        m_clock->Initialize( );
     }
 
-    if( not productFound )
+    // Sanity check...
+    if( m_clock && not displayCtrlConfig.m_hasLcd )
     {
-        BOSE_DIE( "Product Type " << productType.c_str() << " NOT found in config file:: " );
+        BOSE_DIE( "Product Config file specifies clock but no LCD!!!" );
     }
 }
 
@@ -422,6 +407,21 @@ void CustomProductController::LoadProductConfiguration( ProductPb::ProductConfig
     {
         BOSE_DIE( "Product config from disk failed markup error - " << e.what() );
     }
+}
+
+uint16_t CustomProductController::FindThisProductConfig( ProductPb::ProductConfig& productConfig )
+{
+    auto productType = GetProductType();
+
+    for( uint16_t productIndex = 0; productIndex < productConfig.productdetails_size(); productIndex++ )
+    {
+        if( productConfig.productdetails( productIndex ).product() == productType )
+        {
+            BOSE_INFO( s_logger, "%s: Product Type %s, found in config file at index %d", __func__, productType.c_str(), productIndex );
+            return productIndex;
+        }
+    }
+    BOSE_DIE( "Product Type " << productType.c_str() << " NOT found in config file:: " );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

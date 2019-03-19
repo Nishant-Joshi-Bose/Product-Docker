@@ -133,7 +133,8 @@ private:
     void InitializeHsm( );
     void InitializeAction( );
     void ProductDependentInitialize();
-    void LoadProductConfiguration( ProductPb::ProductConfig& productConfig );
+    void LoadProductConfiguration( ProductPb::ProductConfig& );
+    uint16_t FindThisProductConfig( ProductPb::ProductConfig& );
     void RegisterLpmEvents();
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
