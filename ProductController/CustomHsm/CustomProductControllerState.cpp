@@ -44,7 +44,7 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductController* CustomProductControllerState::s_productController = nullptr;
-KeyHandlerUtil::ActionType_t CustomProductControllerState::s_ActionPendingFromTansition = ( KeyHandlerUtil::ActionType_t )Action::INVALID;
+KeyHandlerUtil::ActionType_t CustomProductControllerState::s_ActionPendingFromTransition = ( KeyHandlerUtil::ActionType_t )Action::INVALID;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

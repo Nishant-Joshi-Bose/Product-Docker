@@ -36,7 +36,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "APTimer.h"
-#include "A4V_QuickSetMessageIDs.pb.h"
 #include "IntentHandler.h"
 #include "ProductCecHelper.h"
 #include "ProductDspHelper.h"
@@ -54,8 +53,8 @@
 #include "SystemPowerMacro.pb.h"
 #include "ProductFrontDoorKeyInjectIF.h"
 #include "AccessorySoftwareInstallManager.h"
-#include "A4VQuickSetServiceClientFactory.h"
 #include "MonotonicClock.h"
+#include "DeviceControllerClientIF.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -179,6 +178,11 @@ public:
         return m_IntentHandler;
     }
 
+    const DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr& GetDeviceControllerClient() const
+    {
+        return m_deviceControllerPtr;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following methods are used by the state machine to determine the status of the
@@ -238,6 +242,7 @@ public:
 
     bool IsSystemLanguageSet( ) const;
 
+    void SendSystemSourcesPropertiesToCAPS();
     void SendInitialCapsData() override;
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
@@ -347,7 +352,14 @@ private:
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
     std::shared_ptr< ProductBLERemoteManager           > m_ProductBLERemoteManager;
 
-    A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following subclasses declarations are used to manage the lower level hardware and
+    ///        the device, as well as to interface with the user and higher level system
+    ///        applications and command line.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr       m_deviceControllerPtr;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -550,12 +562,17 @@ private:
                               const Callback<FrontDoor::Error> & errorCb ) const;
     void UpdatePowerMacro( );
     void PersistPowerMacro( );
+    void SendPowerMacroToDataCollection( );
     void ReconcileCurrentProductSource( );
     void LoadPowerMacroFromPersistance( );
+
+    void HandleVoiceStatus( VoiceServicePB::VoiceStatus voiceStatus ) override;
 
     bool m_haltInPlayableTransitionNetworkStandby = false;
 
     int64_t m_bootCompleteTime              = 0;
+
+    VoiceServicePB::VoiceStatus m_voiceStatus = VoiceServicePB::VoiceStatus::UNKNOWN;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

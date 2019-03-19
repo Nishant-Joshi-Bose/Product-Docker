@@ -30,9 +30,9 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateLowPowerStandbyTransition::
 CustomProductControllerStateLowPowerStandbyTransition( ProductControllerHsm& hsm,
-                                                 CHsmState* pSuperState,
-                                                 Hsm::STATE stateId,
-                                                 const std::string& name )
+                                                       CHsmState* pSuperState,
+                                                       Hsm::STATE stateId,
+                                                       const std::string& name )
     : ProductControllerStateLowPowerStandbyTransition( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", GetName( ).c_str( ) );

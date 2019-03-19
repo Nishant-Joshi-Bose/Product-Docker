@@ -43,7 +43,7 @@ CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductContr
                                                                     const std::string& name )
     : ProductControllerStateIdle( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, "%s::%s - is being constructed.", CLASS_NAME, __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s - is being constructed.", CLASS_NAME );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

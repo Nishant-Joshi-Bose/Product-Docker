@@ -58,7 +58,7 @@ bool CustomProductControllerStateTop::HandleAdaptIQControl( const ProductAdaptIQ
 
     if( cmd.action() == ProductAdaptIQControl::Start )
     {
-        s_ActionPendingFromTansition = ( KeyHandlerUtil::ActionType_t )Action::ACTION_APAPTIQ_START;
+        s_ActionPendingFromTransition = ( KeyHandlerUtil::ActionType_t )Action::ACTION_APAPTIQ_START;
     }
 
     return true;
@@ -73,11 +73,11 @@ bool CustomProductControllerStateTop::HandleAdaptIQControl( const ProductAdaptIQ
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateTop::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s handling %d.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "%s in %s is handling the intent action %s", GetName( ).c_str( ), __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     if( intent == ( KeyHandlerUtil::ActionType_t )Action::ACTION_START_PAIR_SPEAKERS_LAN )
     {
-        s_ActionPendingFromTansition = intent;
+        s_ActionPendingFromTransition = intent;
     }
 
     return true;

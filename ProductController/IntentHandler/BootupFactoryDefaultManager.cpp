@@ -10,20 +10,20 @@
 
 namespace
 {
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    ///            Constant Definitions
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // These numbers define the time window after exiting the BOOTUP state where a press and subsequent
-    // release of the "action" key can initiate a factory default.  The conditions that must be satisifed
-    // in order for a factory default to be initiated are
-    //  1) The system must *not* be communicating with a Kepler remote
-    //  2) The action button must be pressed within 5 seconds of exiting the bootup state
-    //  3) The action button must be held for between 15 and 45 seconds
-    constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_MSEC      = 5000;
-    constexpr int64_t   BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC    = 15000;
-    constexpr int64_t   BOOTUP_FACTORY_DEFAULT_MAX_HOLD_MSEC    = 45000;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Constant Definitions
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// These numbers define the time window after exiting the BOOTUP state where a press and subsequent
+// release of the "action" key can initiate a factory default.  The conditions that must be satisifed
+// in order for a factory default to be initiated are
+//  1) The system must *not* be communicating with a Kepler remote
+//  2) The action button must be pressed within 5 seconds of exiting the bootup state
+//  3) The action button must be held for between 15 and 45 seconds
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_WINDOW_MSEC      = 5000;
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC    = 15000;
+constexpr int64_t   BOOTUP_FACTORY_DEFAULT_MAX_HOLD_MSEC    = 45000;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,14 +40,14 @@ namespace ProductApp
 /// @param ProductController&         productController
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BootupFactoryDefaultManager::BootupFactoryDefaultManager( NotifyTargetTaskIF&        task,
-                              const CliClientMT&         commandLineClient,
-                              const FrontDoorClientIF_t& frontDoorClient,
-                              ProductController&         productController )
+                                                          const CliClientMT&         commandLineClient,
+                                                          const FrontDoorClientIF_t& frontDoorClient,
+                                                          ProductController&         productController )
 
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
-    m_productController( static_cast<CustomProductController&>( productController ) )
+      m_productController( static_cast<CustomProductController&>( productController ) )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", "BootupFactoryDefaultManager" );
+    BOSE_INFO( s_logger, "%s is being constructed.", __func__ );
 
 }
 
@@ -60,12 +60,12 @@ BootupFactoryDefaultManager::BootupFactoryDefaultManager( NotifyTargetTaskIF&   
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool BootupFactoryDefaultManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
-    BOSE_INFO( s_logger, "%s in %s", "BootupFactoryDefaultManager", __func__ );
+    BOSE_INFO( s_logger, "%s received %s", __func__, CommonIntentHandler::GetIntentName( action ).c_str( ) );
 
     if( action == ( KeyHandlerUtil::ActionType_t )Action::BOOTUP_FACTORY_DEFAULT_START )
     {
         int64_t timeSinceBooted = MonotonicClock::NowMs( ) - m_productController.GetBootCompleteTime( );
-    
+
         if( ( m_productController.GetBootCompleteTime( ) != 0 ) && ( timeSinceBooted < BOOTUP_FACTORY_DEFAULT_WINDOW_MSEC ) && !m_productController.IsBLERemoteConnected( ) )
         {
             // we allow the key start time to be latched anywhere within the window such that
@@ -86,7 +86,7 @@ bool BootupFactoryDefaultManager::Handle( KeyHandlerUtil::ActionType_t& action )
     {
         int64_t timeSinceBootupFactoryDefaultRequest = MonotonicClock::NowMs( ) - m_bootupFactoryDefaultKeyTime;
         BOSE_INFO( s_logger, "%s: bootup intent check %lld", __PRETTY_FUNCTION__, timeSinceBootupFactoryDefaultRequest );
-    
+
         if(
             ( timeSinceBootupFactoryDefaultRequest > BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC ) &&
             ( timeSinceBootupFactoryDefaultRequest < BOOTUP_FACTORY_DEFAULT_MAX_HOLD_MSEC ) )
