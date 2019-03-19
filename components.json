@@ -217,7 +217,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@7485699f956b59d6ba786d4eebde395d1c29c7ee"
+    "selected_version": "stable@312d6207a89be6c11d128b10eac2ed59a5feaab7"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "stable@dc56420f98b965ba2cac3418df37fdf19bebd9df"
+    "selected_version": "stable@8edba808ba70a64538467cb949c6bfc95774ff2e"
   },
   {
     "name": "protobuf-native",
