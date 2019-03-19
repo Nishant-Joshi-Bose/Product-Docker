@@ -217,7 +217,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "CASTLE-27327_PlayVolumeTone@e97c15499b01ae143fe35699f9e31c2d077c500b"
+    "selected_version": "stable@312d6207a89be6c11d128b10eac2ed59a5feaab7"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -225,7 +225,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "CASTLE-27327_PlayVolumeTone@8919ca3cfb8962c6be9d4973b4018b1727957b10"
+    "selected_version": "master@8edba808ba70a64538467cb949c6bfc95774ff2e"
   },
   {
     "name": "protobuf-native",
