@@ -1,0 +1,14 @@
+{ "alarmCancelKeyExceptionList":
+[
+    {"keyOrigin": 1, "keyId": 3, "comment": "Vol+ RF"},
+    {"keyOrigin": 1, "keyId": 2, "comment": "Vol- RF"},
+    {"keyOrigin": 2, "keyId": 3, "comment": "Vol+ IR"},
+    {"keyOrigin": 2, "keyId": 2, "comment": "Vol- IR"}
+],
+"alarmCancelOriginExceptionList":
+[
+    {"keyOrigin": 5, "comment": "IPC"},
+    {"keyOrigin": 6, "comment": "CEC"}
+]
+
+}

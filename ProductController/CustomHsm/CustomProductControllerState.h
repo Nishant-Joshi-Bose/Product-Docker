@@ -44,6 +44,7 @@
 #include "CustomProductControllerStates.h"
 #include "SystemEventMessage.pb.h"
 #include "ChimeEvents.h"
+#include "CommonIntentHandler.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -426,6 +427,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentVoiceListening( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This handler is used to respond to the LPM detecting an amp fault.
@@ -512,7 +518,7 @@ protected:
 
     static ProductController* s_productController;
 
-    static  KeyHandlerUtil::ActionType_t s_ActionPendingFromTansition;
+    static  KeyHandlerUtil::ActionType_t s_ActionPendingFromTransition;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
