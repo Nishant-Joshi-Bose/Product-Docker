@@ -5,7 +5,6 @@ CAPSAPI_DIR := $(shell components get CAPSAPI-$(sdk) installed_location)
 PRODUCTCONTROLLERCOMMONPROTO_DIR := $(shell components get ProductControllerCommonProto-$(sdk) installed_location)
 PRODUCTCONTROLLERCOMMON_DIR := $(shell components get ProductControllerCommon installed_location)
 RIVIERALPMSERVICE_DIR := $(shell components get RivieraLpmService-$(sdk) installed_location)
-SOUNDTOUCH_SDK_DIR := $(shell components get SoundTouch-SDK-$(sdk) installed_location)
 SYSTEMEVENTSERVICE_DIR := $(shell components get SystemEventService-$(sdk) installed_location)
 
 PROTO_SOURCES = \
@@ -24,7 +23,6 @@ PROTO_IMPORT_DIRS := \
  $(PRODUCTCONTROLLERCOMMONPROTO_DIR)/protobufs \
  $(PRODUCTCONTROLLERCOMMON_DIR)/Protobufs/private \
  $(RIVIERALPMSERVICE_DIR)/proto \
- $(SOUNDTOUCH_SDK_DIR)/protobufs \
  $(SYSTEMEVENTSERVICE_DIR)/protobufs \
 
 include $(BOSELIBS_DIR)/protobuf.mk
