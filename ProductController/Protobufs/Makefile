@@ -13,6 +13,7 @@ PROTO_SOURCES = \
   KeyActions.proto \
   KeyNames.proto \
   LightBarController.proto \
+  ProductConfig.proto \
   ProductMessage.proto \
   ProductSTS.proto \
 

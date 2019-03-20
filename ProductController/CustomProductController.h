@@ -74,6 +74,7 @@
 #include "DisplayController.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
+#include "ProductConfig.pb.h"
 #include "ProductIotHandler.h"
 
 namespace ProductApp
@@ -131,6 +132,9 @@ private:
 
     void InitializeHsm( );
     void InitializeAction( );
+    void ProductDependentInitialize();
+    void LoadProductConfiguration( ProductPb::ProductConfig& );
+    int FindThisProductConfig( ProductPb::ProductConfig& );
     void RegisterLpmEvents();
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
@@ -371,7 +375,9 @@ private:
     std::unique_ptr<LightBar::LightBarController>                   m_lightbarController;
     std::shared_ptr<DisplayController>                              m_displayController;
     IntentHandler                                                   m_IntentHandler;
-    Clock                                                           m_Clock;
+    std::shared_ptr<Clock>                                          m_clock;
+    std::string                                                     m_productName = "NOT SET";
+
     bool                                                            m_isBLEModuleReady  = false;
     bool                                                            m_isUiConnected = false;
 

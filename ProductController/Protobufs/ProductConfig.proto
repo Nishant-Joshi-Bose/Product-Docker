@@ -1,0 +1,25 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file ProductConfig.proto
+///
+/// @brief Product Configuration protobuf definition
+///
+/// Copyright 2019 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+package ProductPb;
+
+message ProductDetails
+{  
+    optional string product = 1;
+    optional string productName = 2;
+    optional bool lcdAvailable = 3;
+    optional bool lightSensorAvailable = 4;
+    optional bool blackScreenDetectEnabled = 5;
+    optional bool clockAvailable = 6;
+}
+
+message ProductConfig
+{  
+    repeated ProductDetails productDetails = 1;
+}
+

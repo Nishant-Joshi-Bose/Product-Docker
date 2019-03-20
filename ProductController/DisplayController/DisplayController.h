@@ -90,6 +90,8 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     Display GetDisplay();
 
+    const Configuration& GetConfig() const;
+
     /*! \brief Put display in on or off state.
      * \param turnOn Pass true to turn the display on, and false to turn it off.
      * \param completedCb Optional callback to be invoked when the action is complete, default empty.
