@@ -401,6 +401,13 @@ public:
         return false;
     }
 
+
+    virtual bool CanPlayVolumeTone( bool &canPlay )
+    {
+        canPlay = false;
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static CustomProductController& GetCustomProductController();
