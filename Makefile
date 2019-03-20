@@ -96,6 +96,17 @@ packages-gz: generate-metadata product-ipk wpe-ipk softwareupdate-ipk monaco-ipk
 packages-gz-with-hsp: generate-metadata monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk gva-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
+IPKS_NOGVA = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_NOGVA = SoundTouchRecovery product-script software-update hsp wpe monaco SoundTouch lpm_updater
+
+.PHONY: package-no-gva
+package-no-gva: packages-gz-no-gva
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_NOGVA) -i $(IPKS_NOGVA) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_nogva.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
+
+.PHONY: packages-gz-no-gva
+packages-gz-no-gva: generate-metadata monaco-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_NOGVA)
+
 .PHONY: graph
 graph: product-ipk
 	graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
@@ -143,7 +154,11 @@ product-script-ipk:
 	./scripts/create-product-script-ipk
 
 .PHONY: all-packages
+ifeq (1,$(disableGVA))
+all-packages: package-no-hsp package-with-hsp package-no-gva graph
+else
 all-packages: package-no-hsp package-with-hsp graph
+endif
 	./scripts/create-product-tar -i $(IPKS_HSP)
 
 .PHONY: clean
