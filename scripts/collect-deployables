@@ -35,5 +35,5 @@ files=(
 cp "${files[@]}" "$deploy_dir" || exit
 
 if [ "$disableGVA" == "1" ]; then
-    cp "$builds_dir/product_update_nogva.zip" "$deploy_dir"
+    cp "$builds_dir/product_update_nogva.zip" "$deploy_dir" || exit
 fi
