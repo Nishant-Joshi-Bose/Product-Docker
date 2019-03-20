@@ -3,7 +3,7 @@ include Settings.mk
 
 .PHONY: deploy
 deploy: all-packages
-	scripts/collect-deployables builds/Release builds/deploy
+	scripts/collect-deployables builds/Release builds/deploy ${disableGVA}
 
 .PHONY: force
 force:
