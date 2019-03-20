@@ -32,3 +32,6 @@ files=(
 )
 
 cp "${files[@]}" "$deploy_dir" || exit
+
+# optional file
+cp "$builds_dir/product_update_nogva.zip" "$deploy_dir"
