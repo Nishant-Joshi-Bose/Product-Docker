@@ -115,8 +115,14 @@ private:
     std::map< const KeyFilter::FilterEntry*, std::vector<FilterRegex> >             m_filterRegex;
     void InitializeKeyFilter( );
     std::map< unsigned, bool >                                                      m_lastPressStatus;
+    LpmServiceMessages::KEY_VALUE                                                   m_playPauseKey;
+    APTimerPtr                                                                      m_playPauseTimer;
     bool AccommodateOrphanReleaseEvents( const IpcKeyInformation_t& keyEvent, bool pressRet );
     static bool IsBlastableEvent( const IpcKeyInformation_t&  keyEvent );
+    LpmServiceMessages::KEY_VALUE GetPlayPauseKey();
+    void HandlePlayPauseTimeOut();
+    void ResetPlayPauseTimer();
+
 
 };
 
