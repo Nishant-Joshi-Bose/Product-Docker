@@ -402,7 +402,7 @@ public:
     }
 
 
-    virtual bool CanPlayVolumeTone( bool &canPlay )
+    virtual bool ShouldPlayVolumeTone( bool &canPlay )
     {
         canPlay = false;
         return false;
