@@ -73,6 +73,7 @@ public:
 
     void HandleStateEnter( )                                              override;
     void HandleStateExit( )                                               override;
+    bool CanPlayVolumeTone( bool &canPlay )                               override;
 
 private:
     void SetVolumeToThresholdLimit( );

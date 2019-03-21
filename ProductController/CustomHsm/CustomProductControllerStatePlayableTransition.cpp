@@ -1,14 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateOn.h
+/// @file      CustomProductControllerStatePlayableTransition.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product on state. It is an all encompassing state that includes the playing and
-///            playable substates.
+///            product playable transition state.
 ///
-/// @author    Stuart J. Lumby
-///
-/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+/// @attention Copyright (C) 2019 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
 ///            The Mountain Road,
@@ -22,20 +19,19 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following compiler directive prevents this header file from being included more than once,
-/// which may cause multiple declaration compiler errors.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma once
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
-#include "ProductControllerStateOn.h"
-#include "HsmState.h"
+#include "Utilities.h"
+#include "CustomProductControllerStatePlayableTransition.h"
+#include "ProductControllerHsm.h"
+#include "ProductControllerState.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Constant Definitions
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -45,41 +41,37 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-///            Forward Class Declarations
+/// @brief CustomProductControllerStatePlayableTransition::CustomProductControllerStatePlayableTransition
+///
+/// @param ProductControllerHsm& hsm
+///
+/// @param CHsmState*            pSuperState
+///
+/// @param Hsm::STATE            stateId
+///
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductControllerHsm;
+CustomProductControllerStatePlayableTransition::CustomProductControllerStatePlayableTransition( ProductControllerHsm& hsm,
+        CHsmState*            pSuperState,
+        Hsm::STATE            stateId,
+        const std::string&    name )
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @class CustomProductControllerState
-///
-/// @brief This class is used for executing produce specific actions when in an on state.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateOn : public ProductControllerStateOn
+    : ProductControllerStatePlayableTransition( hsm, pSuperState, stateId, name )
 {
-public:
+    BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
+}
 
-    CustomProductControllerStateOn( ProductControllerHsm& hsm,
-                                    CHsmState*            pSuperState,
-                                    Hsm::STATE            stateId,
-                                    const std::string&    name    = "CustomProductControllerStateOn" );
-
-    ~CustomProductControllerStateOn( ) override
-    {
-
-    }
-
-    void HandleStateEnter( )                                                    override;
-    bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )   override;
-    bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd )               override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )      override;
-    bool HandleIntentSetupBLERemote()                                           override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
-    bool HandleIntentRating( KeyHandlerUtil::ActionType_t intent )              override;
-    bool CanPlayVolumeTone( bool &canPlay )                                     override;
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  CustomProductControllerStatePlayableTransition::CanPlayVolumeTone
+/// @param  canPlay , reference to bool variable
+/// @return This method returns false
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayableTransition::CanPlayVolumeTone( bool & /* canPlay */ )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
+    return false;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

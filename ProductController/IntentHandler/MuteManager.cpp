@@ -200,7 +200,6 @@ void MuteManager::ToggleMute( )
 
     SoundTouchInterface::volume pbVolume;
     pbVolume.set_muted( !m_muted );
-    pbVolume.mutable_feedback()->set_enable( true );
 
     BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
     m_FrontDoorClient->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(

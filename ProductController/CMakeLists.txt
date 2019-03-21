@@ -67,11 +67,13 @@ ADD_EXECUTABLE(Professor
   CustomHsm/CustomProductControllerStateLowPowerStandbyTransition.cpp
   CustomHsm/CustomProductControllerStateNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlayable.cpp
+  CustomHsm/CustomProductControllerStatePlayableTransition.cpp
   CustomHsm/CustomProductControllerStatePlayableTransitionNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlaying.cpp
   CustomHsm/CustomProductControllerStatePlayingSelected.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSetupNetworkConfig.cpp
+  CustomHsm/CustomProductControllerStatePlayingTransition.cpp
   CustomHsm/CustomProductControllerStateTop.cpp
   IntentHandler/AudioModeManager.cpp
   IntentHandler/BootupFactoryDefaultManager.cpp
