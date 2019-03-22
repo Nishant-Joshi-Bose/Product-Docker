@@ -21,7 +21,7 @@ endif
 
 jobs := $(shell grep -c ^processor /proc/cpuinfo)
 
-$(info sdk=${sdk} cfg=${cfg} jobs=${jobs} gva=${disableGVA})
+$(info sdk=${sdk} cfg=${cfg} jobs=${jobs} disableGVA=${disableGVA})
 
 BUILDS_DIR := $(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)
 
