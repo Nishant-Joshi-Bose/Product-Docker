@@ -113,7 +113,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-stable/1.0.2-44+34f9117"
+    "selected_version": "Release/bose-stable/1.0.4-44+3a707d7"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -197,7 +197,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable_mr1_2019@d8ef7bd77ff626b20d9dc721554cf5ac2e5b62bc"
+    "selected_version": "stable_mr1.5_2019@53a62f45e1127098397fbaa00cccfaa1f8a94134"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -265,7 +265,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-2019_MR1.5/2.2.2.45137.3270102"
+    "selected_version": "Release/Castle-Fork-2019_MR1.5/2.2.2.45149.3271050"
   },
   {
     "name": "svc-pts-log-decrypt",
