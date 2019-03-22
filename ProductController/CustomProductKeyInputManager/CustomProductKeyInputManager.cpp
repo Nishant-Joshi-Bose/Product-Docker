@@ -278,24 +278,24 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 
     auto keyid = keyEvent.keyid( );
 
-    // blast release unconditionally (BlastKey will check origin)
-    // if nothing is currently being blasted this will have no effect
-    if( keyEvent.keystate( ) == KEY_RELEASED )
-    {
-        BlastKey( keyEvent, "none" );
-    }
-
     // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
     if( keyid == BOSE_TV_INPUT )
     {
         const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSourceSlot_Name( TV ) );
 
-        if( ( tvSource and tvSource->has_details( ) ) && ( keyEvent.keystate() == KEY_PRESSED ) )
+        if( tvSource and tvSource->has_details( ) )
         {
             BlastKey( keyEvent, ProductSourceSlot_Name( TV ) );
         }
 
         return AccommodateOrphanReleaseEvents( keyEvent, true );
+    }
+
+    // blast release unconditionally (BlastKey will check origin)
+    // if nothing is currently being blasted this will have no effect
+    if( keyEvent.keystate( ) == KEY_RELEASED )
+    {
+        BlastKey( keyEvent, "none" );
     }
 
     // Do some sanity-checks to see if we can proceed
