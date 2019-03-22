@@ -219,11 +219,11 @@ bool CustomProductControllerStateOn::HandleIntentMuteControl( KeyHandlerUtil::Ac
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  CustomProductControllerStateOn::CanPlayVolumeTone
+/// @brief  CustomProductControllerStateOn::ShouldPlayVolumeTone
 /// @param  canPlay , reference to bool variable
 /// @return This method returns false
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::CanPlayVolumeTone( bool & /* canPlay */ )
+bool CustomProductControllerStateOn::ShouldPlayVolumeTone( bool & /* canPlay */ )
 {
     BOSE_INFO( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
     return false;

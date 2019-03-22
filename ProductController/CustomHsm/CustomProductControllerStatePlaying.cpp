@@ -124,11 +124,11 @@ void CustomProductControllerStatePlaying::SetVolumeToThresholdLimit( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  CustomProductControllerStatePlaying::CanPlayVolumeTone
+/// @brief  CustomProductControllerStatePlaying::ShouldPlayVolumeTone
 /// @param  canPlay , reference to bool variable
 /// @return This method returns true
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlaying::CanPlayVolumeTone( bool &canPlay )
+bool CustomProductControllerStatePlaying::ShouldPlayVolumeTone( bool &canPlay )
 {
     BOSE_INFO( s_logger, "The %s state is in %s ", GetName( ).c_str( ), __func__ );
     canPlay = true;

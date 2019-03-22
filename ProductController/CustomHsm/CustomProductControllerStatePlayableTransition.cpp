@@ -63,11 +63,11 @@ CustomProductControllerStatePlayableTransition::CustomProductControllerStatePlay
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  CustomProductControllerStatePlayableTransition::CanPlayVolumeTone
+/// @brief  CustomProductControllerStatePlayableTransition::ShouldPlayVolumeTone
 /// @param  canPlay , reference to bool variable
 /// @return This method returns false
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayableTransition::CanPlayVolumeTone( bool & /* canPlay */ )
+bool CustomProductControllerStatePlayableTransition::ShouldPlayVolumeTone( bool & /* canPlay */ )
 {
     BOSE_INFO( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
     return false;

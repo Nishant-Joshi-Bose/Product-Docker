@@ -64,7 +64,7 @@ public:
 
     }
 
-    bool CanPlayVolumeTone( bool &canPlay )                                     override;
+    bool ShouldPlayVolumeTone( bool &canPlay )                            override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
