@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/1.0.2-750+6e22d24"
+    "selected_version": "Release/stable/1.0.3-793+8e3c62b"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -77,7 +77,7 @@
   },
   {
     "name": "BoseWebBrussels",
-    "selected_version": "Release/stable/4.0.2-26+618e1b3"
+    "selected_version": "Release/stable/4.0.3-28+5055612"
   },
   {
     "name": "BTSTSSink-qc8017_32",

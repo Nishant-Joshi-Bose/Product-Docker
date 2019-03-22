@@ -74,8 +74,6 @@ public:
     bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
     bool HandleDspBooted( const LpmServiceMessages::IpcDeviceBoot_t& dspBooted ) override;
-    bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )       override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
 
 private:
 
