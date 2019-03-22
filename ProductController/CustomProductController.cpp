@@ -282,7 +282,7 @@ void CustomProductController::Run( )
     CustomProductControllerState* stateSoftwareInstallManual = new ProductControllerStateSoftwareInstall
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_MANUAL );
 
     CustomProductControllerState* stateCriticalError = new ProductControllerStateCriticalError
     ( GetHsm( ),
