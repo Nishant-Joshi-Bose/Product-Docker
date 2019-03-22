@@ -7,7 +7,7 @@ ifndef BOSE_WORKSPACE
 endif
 
 sdk = qc8017_32
-disableGVA ?= 0
+disableGVA ?= false
 
 # Used to determine what type of BLOB Manifest file to use. Acceptible options
 # are Release, Continuous, or Nightly.

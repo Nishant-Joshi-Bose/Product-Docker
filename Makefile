@@ -154,7 +154,7 @@ product-script-ipk:
 	./scripts/create-product-script-ipk
 
 .PHONY: all-packages
-ifeq (1,$(disableGVA))
+ifeq (true,$(disableGVA))
 all-packages: package-no-hsp package-with-hsp package-no-gva graph
 else
 all-packages: package-no-hsp package-with-hsp graph
