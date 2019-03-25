@@ -78,6 +78,7 @@ public:
     bool HandleIntentSetupBLERemote()                                           override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
     bool HandleIntentRating( KeyHandlerUtil::ActionType_t intent )              override;
+    bool ShouldPlayVolumeTone( bool &canPlay )                                  override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
