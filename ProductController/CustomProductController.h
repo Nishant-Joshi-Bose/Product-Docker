@@ -376,7 +376,6 @@ private:
     std::shared_ptr<DisplayController>                              m_displayController;
     IntentHandler                                                   m_IntentHandler;
     std::shared_ptr<Clock>                                          m_clock;
-    std::string                                                     m_productName = "NOT SET";
 
     bool                                                            m_isBLEModuleReady  = false;
     bool                                                            m_isUiConnected = false;
