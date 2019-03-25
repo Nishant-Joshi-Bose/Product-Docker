@@ -233,7 +233,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@312d6207a89be6c11d128b10eac2ed59a5feaab7"
+    "selected_version": "stable@dfc870c397539f2a9562692bc587199d51d38d0c"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -309,7 +309,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-master/2019-03-20_1716"
+    "selected_version": "Release/Castle-Fork-stable/2.2.2.45108.3265231"
   },
   {
     "name": "svc-pts-log-decrypt",

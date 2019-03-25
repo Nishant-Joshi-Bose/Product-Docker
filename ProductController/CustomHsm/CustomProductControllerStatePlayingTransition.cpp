@@ -69,7 +69,7 @@ CustomProductControllerStatePlayingTransition::CustomProductControllerStatePlayi
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingTransition::ShouldPlayVolumeTone( bool & /* canPlay */ )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
+    BOSE_DEBUG( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
     return false;
 }
 
