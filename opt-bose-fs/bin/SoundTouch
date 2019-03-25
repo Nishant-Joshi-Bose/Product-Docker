@@ -47,7 +47,7 @@ lowpower=(
 
 # Add GVA xml to lowpower mode only if GVA package is installed
 if [ -e /opt/Bose/etc/Shepherd-GVA.xml ]; then
-  lowpower+=( Shepherd-GVA.xml )
+    lowpower+=( Shepherd-GVA.xml )
 fi
 
 function validate {
