@@ -39,12 +39,16 @@ lowpower=(
     Shepherd-AudioPath.xml
     Shepherd-NetManager.xml
     Shepherd-avs.xml
-    Shepherd-GVA.xml
     Shepherd-vfe.xml
     Shepherd-VPAController.xml
     Shepherd-Bluetooth.xml
     Shepherd-BLEToFrontDoorService.xml
 )
+
+# Add GVA xml to lowpower mode only if GVA package is installed
+if [ -e /opt/Bose/etc/Shepherd-GVA.xml ]; then
+  lowpower+=( Shepherd-GVA.xml )
+fi
 
 function validate {
     if ! validate-mfgdata; then
