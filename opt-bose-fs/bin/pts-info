@@ -58,4 +58,3 @@ tap-command vpa getactivevpa
 tap-command vpa getstate
 tap-command gva getconvstates
 tap-command gva getdevstates
-cat /tmp/libassistant.log
