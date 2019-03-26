@@ -61,7 +61,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/stable/4.0.3-657+781ec3c"
+    "selected_version": "Release/stable/4.0.4-662+8339adf"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -194,6 +194,10 @@
   {
     "name": "opensource-opkg-x86",
     "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
+  },
+  {
+    "name": "opensource-tinyxml-qc8017_32",
+    "selected_version": "Continuous/bose-master/v2.6.1-23-g4b0629c"
   },
   {
     "name": "opensource-util-linux-qc8017_32",

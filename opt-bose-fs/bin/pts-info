@@ -56,3 +56,7 @@ tap-command softwareupdate list
 tap-command vpa getvoicesettings
 tap-command vpa getactivevpa
 tap-command vpa getstate
+tap-command gva getstate
+tap-command gva getstateinfo
+tap-command gva getconvstates
+tap-command gva getdevstates
