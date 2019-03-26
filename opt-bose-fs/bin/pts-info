@@ -17,6 +17,7 @@ cat /opt/Bose/etc/BoseVersion.json
 cat /persist/mfg_data.json
 cat /etc/riviera-version
 cat /opt/Bose/monaco/version.txt
+cat /tmp/libassistant.log
 free -m
 df -h
 ifconfig -a
@@ -56,3 +57,5 @@ tap-command softwareupdate list
 tap-command vpa getvoicesettings
 tap-command vpa getactivevpa
 tap-command vpa getstate
+tap-command gva getconvstates
+tap-command gva getdevstates
