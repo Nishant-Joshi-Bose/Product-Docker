@@ -96,7 +96,7 @@ CustomProductController::CustomProductController():
     m_ProductIotHandler( GetTask(),
                          "/opt/Bose/etc/ProductInputs.json",
                          m_FrontDoorClientIF,
-                         std::make_shared<IoTIPCClient>( GetTask(), "EddieIotClient" ) )
+                         std::make_shared<IoTIPCClient>( GetTask(), "" ) )
 {
     BOSE_INFO( s_logger, __func__ );
 }
