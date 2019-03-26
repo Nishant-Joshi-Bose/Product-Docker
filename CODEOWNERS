@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/about-codeowners/
 
-* @Michael-Cook-Bose @Jonathan-Cooper-Bose
-/EC/ @Alfred-von-Campe-Bose @Michael-Cook-Bose
+* @global-Michael-Cook-Bose @global-Jonathan-Cooper-Bose
+/EC/ @Alfred-von-Campe-Bose
 /Test/ @Aman-Osman-Bose
 /Jenkins* @Aman-Osman-Bose
-/scripts/ @Chirag-Desai-EInfochips @Dharati-Shah-EInfochips @Michael-Cook-Bose
+/scripts/ @Chirag-Desai-EInfochips @Dharati-Shah-EInfochips
 /keys/ @Chirag-Desai-EInfochips @Dharati-Shah-EInfochips

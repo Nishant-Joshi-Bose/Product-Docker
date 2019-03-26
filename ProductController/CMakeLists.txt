@@ -21,6 +21,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductIotHandler
+  ${PRODUCTCONTROLLERCOMMON_DIR}/VolumeToneManager
   ${CASTLEIOTCLIENT}/include
   .
 )
@@ -38,6 +39,7 @@ ADD_EXECUTABLE(ProductController
   CustomProductController.cpp
   Main.cpp
   Clock.cpp
+  ${PROTO_CC_DEST}/ProductConfig.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
