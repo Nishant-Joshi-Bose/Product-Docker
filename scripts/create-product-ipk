@@ -106,6 +106,8 @@ mkdir -p "$opt_dir/etc" || exit
 mkdir -p "$opt_dir/bin" || exit
 mkdir -p "$opt_dir/lib" || exit
 mkdir -p "$opt_dir/etc/chimes" || exit
+mkdir -p "$opt_dir/pts/info.d" || exit
+mkdir -p "$opt_dir/pts/logs.d" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
