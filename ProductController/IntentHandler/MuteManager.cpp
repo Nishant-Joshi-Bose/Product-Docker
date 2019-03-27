@@ -200,7 +200,9 @@ void MuteManager::ToggleMute( )
 
     SoundTouchInterface::volume pbVolume;
     pbVolume.set_muted( !m_muted );
+#if 0 // @TODO waiting for  CASTLE-29661; see PGC-4261
     pbVolume.mutable_feedback()->set_enable( true );
+#endif
 
     BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
     m_FrontDoorClient->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
