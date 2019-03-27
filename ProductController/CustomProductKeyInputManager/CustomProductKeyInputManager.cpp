@@ -44,6 +44,8 @@ namespace ProductApp
 constexpr const char KEY_CONFIGURATION_FILE_NAME[ ] = "/var/run/KeyConfiguration.json";
 constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = BOSE_CONF_DIR "BlastConfiguration.json";
 constexpr const char USER_KEY_CONFIGURATION_FILE_NAME[ ] = BOSE_CONF_DIR "UserKeyConfig.json";
+constexpr const uint32_t PLAY_PAUSE_TIMEOUT_SECONDS = 2;
+constexpr const uint32_t PLAY_PAUSE_TIMEOUT = PLAY_PAUSE_TIMEOUT_SECONDS * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -64,7 +66,8 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductControl
       m_ProductController( ProductController ),
       m_deviceControllerPtr( ProductController.GetDeviceControllerClient() ),
       m_TimeOfChordRelease( 0 ),
-      m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
+      m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY ),
+      m_playPauseTimer( APTimer::Create( ProductController.GetTask(), "PlayPauseTimer" ) )
 {
     InitializeKeyFilter( );
 }
@@ -275,24 +278,19 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 
     auto keyid = keyEvent.keyid( );
 
+    // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
+    if( keyid == BOSE_TV_INPUT )
+    {
+        BlastKey( keyEvent, ProductSourceSlot_Name( TV ) );
+
+        return AccommodateOrphanReleaseEvents( keyEvent, true );
+    }
+
     // blast release unconditionally (BlastKey will check origin)
     // if nothing is currently being blasted this will have no effect
     if( keyEvent.keystate( ) == KEY_RELEASED )
     {
         BlastKey( keyEvent, "none" );
-    }
-
-    // TV_INPUT is a special case.  It should always be sent to tv source, regardless of what source is selected
-    if( keyid == BOSE_TV_INPUT )
-    {
-        const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT,  ProductSourceSlot_Name( TV ) );
-
-        if( ( tvSource and tvSource->has_details( ) ) && ( keyEvent.keystate() == KEY_PRESSED ) )
-        {
-            BlastKey( keyEvent, ProductSourceSlot_Name( TV ) );
-        }
-
-        return AccommodateOrphanReleaseEvents( keyEvent, true );
     }
 
     // Do some sanity-checks to see if we can proceed
@@ -349,7 +347,20 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     // that normally would have been blasted, we'll consume the key)
     if( m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) && ( keyEvent.keystate() == KEY_PRESSED ) )
     {
-        BlastKey( keyEvent, sourceItem->sourceaccountname() );
+        // Since the remotes only have a single play/pause key, determine whether BOSE_PLAY or BOSE_PAUSE
+        // should be sent.
+        if( keyEvent.keyid() == BOSE_PLAY && ( keyEvent.keyorigin() == KEY_ORIGIN_IR || keyEvent.keyorigin() == KEY_ORIGIN_RF ) )
+        {
+            IpcKeyInformation_t playPauseEvent;
+            playPauseEvent.set_keyorigin( keyEvent.keyorigin() );
+            playPauseEvent.set_keystate( keyEvent.keystate() );
+            playPauseEvent.set_keyid( GetPlayPauseKey() );
+            BlastKey( playPauseEvent, sourceItem->sourceaccountname() );
+        }
+        else
+        {
+            BlastKey( keyEvent, sourceItem->sourceaccountname() );
+        }
     }
     else
     {
@@ -453,7 +464,7 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
 /// @return This method returns the name of the supplied intent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const std::string& CustomProductKeyInputManager::IntentName( KeyHandlerUtil::ActionType_t intent )
+const std::string & CustomProductKeyInputManager::IntentName( KeyHandlerUtil::ActionType_t intent )
 {
     return ( intent <= Action::ActionCommon_t::ACTION_COMMON_LAST ) ?
            Action::ActionCommon_t::Actions_Name( static_cast<Action::ActionCommon_t::Actions>( intent ) ) :
@@ -549,6 +560,66 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
 
     return false;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductKeyInputManager::GetPlayPauseKey
+///
+/// @return This method returns the next value that should be sent when the remote (Kepler or IR)
+///         play/pause button has been pressed.  The default value is BOSE_PAUSE.  If a second button
+///         press comes within 2 seconds of the previous button press, BOSE_PLAY is sent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+LpmServiceMessages::KEY_VALUE CustomProductKeyInputManager::GetPlayPauseKey()
+{
+    LpmServiceMessages::KEY_VALUE retVal;
+
+    // Cancel timer
+    ResetPlayPauseTimer();
+    retVal = m_playPauseKey;
+
+    if( m_playPauseKey == BOSE_PAUSE )
+    {
+        m_playPauseKey = BOSE_PLAY;
+    }
+    else
+    {
+        m_playPauseKey = BOSE_PAUSE;
+    }
+    return( retVal );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductKeyInputManager::HandlePlayPauseTimeOut
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductKeyInputManager::HandlePlayPauseTimeOut( )
+{
+    BOSE_DEBUG( s_logger, "Play pause key timer, setting to pause." );
+
+    m_playPauseKey = BOSE_PAUSE;
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductKeyInputManager::ResetPlayPauseTimeOut
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductKeyInputManager::ResetPlayPauseTimer( )
+{
+    BOSE_DEBUG( s_logger, "Setting play pause timer" );
+
+    m_playPauseTimer->SetTimeouts( PLAY_PAUSE_TIMEOUT, 0 );
+    m_playPauseTimer->Start( [ this ]( )
+    {
+        HandlePlayPauseTimeOut();
+    } );
+}
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
