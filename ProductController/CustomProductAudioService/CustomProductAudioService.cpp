@@ -93,6 +93,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
             m_StreamConfigResponseCb = {};
         }
         m_DspIsRebooting = false;
+        m_currentEqSelectUpdating = true;
 
         ProductMessage bootedMsg;
         *bootedMsg.mutable_dspbooted( ) = image;
@@ -558,6 +559,7 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
     }
     m_deferredEqSelectResponse( m_AudioSettingsMgr->GetEqSelect() );
     m_deferredEqSelectResponse = {};
+    m_currentEqSelectUpdating = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1092,9 +1094,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
 
     auto getEqSelectDeferred = [ this ]( Callback<AudioEqSelect> respCb )
     {
-        if( !m_DspIsRebooting )
+        if( !m_currentEqSelectUpdating )
         {
-            // If the DSP isn't rebooting, just answer with the most recent status
+            // If we know EQ select isn't in the process of updating, just answer with the current value
             respCb( m_AudioSettingsMgr->GetEqSelect() );
             return;
         }

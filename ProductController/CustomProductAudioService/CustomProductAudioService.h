@@ -49,6 +49,7 @@ private:
     std::unique_ptr<ThermalMonitorTask>                 m_ThermalTask;
     std::shared_ptr< DataCollectionClientIF >           m_DataCollectionClient;
     bool                                                m_DspIsRebooting = false;
+    bool                                                m_currentEqSelectUpdating = false;
     Callback<bool>                                      m_StreamConfigResponseCb;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
