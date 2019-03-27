@@ -502,9 +502,22 @@ void CustomProductController::RegisterLpmEvents()
     m_displayController->RegisterLpmEvents();
 }
 
+void CustomProductController::RequestAuxCableState()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    if( m_AuxCableStateCb )
+    {
+        GetLpmHardwareInterface()->GetLpmClient()->IpcGetAuxState( m_AuxCableStateCb.get() );
+    }
+}
+
 void CustomProductController::RegisterAuxEvents( AsyncCallback<LpmServiceMessages::IpcAuxState_t> &cb )
 {
     BOSE_INFO( s_logger, __func__ );
+
+    // Cache AuxCableDetection Callback as it will be called when Exiting LowPowerResume State
+    m_AuxCableStateCb = cb;
 
     GetLpmHardwareInterface()->GetLpmClient()->IpcGetAuxState( cb );
 
