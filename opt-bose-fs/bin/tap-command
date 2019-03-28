@@ -24,7 +24,7 @@ Send a single command to the CLI server and display the resulting output.
 """)
 parser.add_argument("--timeout", "-t", type=float, default=5.0, metavar="SEC",
                     help="""
-Maximum time to wait for the second prompt.
+Maximum time to wait for the second prompt. (default: %(default)s)
 """)
 parser.add_argument("--debug",
                     help="Enable debug logging",
