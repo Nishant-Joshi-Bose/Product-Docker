@@ -87,7 +87,6 @@ bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 insta
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
-googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
 opensource_ptp_dir=$(components get opensource-OpenAvnuApple-qc8017_32 installed_location) || exit
 opensource_avahi_dir=$(components get opensource-avahi-qc8017_32 installed_location) || exit
@@ -223,7 +222,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
-"$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
 "$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
@@ -309,7 +307,7 @@ else
 fi
 # Start Progress
 if [ -f /opt/Bose/bin/ProgressReport ]; then
-	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
+    /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
 fi
 
 exit 0

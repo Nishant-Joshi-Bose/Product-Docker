@@ -4,12 +4,13 @@
 # See EC/deploy.txt.
 #
 
-if (( $# != 2 )); then
-    echo >&2 "usage: $0 builds-dir deploy-dir"
+if (( $# != 3 )); then
+    echo >&2 "usage: $0 builds-dir deploy-dir disableGVA(true/false)"
     exit 1
 fi
 builds_dir=$1; shift
 deploy_dir=$1; shift
+disableGVA=$1; shift
 
 src_dir=$(cd "$(dirname "$0")/.." && echo "$PWD") || exit
 
@@ -32,3 +33,7 @@ files=(
 )
 
 cp "${files[@]}" "$deploy_dir" || exit
+
+if [ $disableGVA = true ]; then
+    cp "$builds_dir/product_update_nogva.zip" "$deploy_dir" || exit
+fi

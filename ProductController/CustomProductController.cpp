@@ -96,7 +96,7 @@ CustomProductController::CustomProductController():
     m_ProductIotHandler( GetTask(),
                          "/opt/Bose/etc/ProductInputs.json",
                          m_FrontDoorClientIF,
-                         std::make_shared<IoTIPCClient>( GetTask(), "EddieIotClient" ) )
+                         std::make_shared<IoTIPCClient>( GetTask(), "" ) )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -358,8 +358,6 @@ void CustomProductController::ProductDependentInitialize()
 
     const auto& thisProductConfig = productConfig.productdetails( FindThisProductConfig( productConfig ) );
 
-    m_productName = thisProductConfig.productname();
-
     DisplayController::Configuration displayCtrlConfig;
     displayCtrlConfig.m_hasLightSensor = thisProductConfig.lightsensoravailable();
     displayCtrlConfig.m_hasLcd = thisProductConfig.lcdavailable();
@@ -471,7 +469,25 @@ std::string CustomProductController::GetDefaultProductName() const
             productName = macAddress;
             BOSE_WARNING( s_logger, "errorType = %s", error.what() );
         }
-        productName += " " + m_productName;
+
+        std::string productType;
+
+        if( auto productTypeValue = MfgData::Get( "productType" ) )
+        {
+            productType = *productTypeValue;
+            if( productType.compare( "eddie" ) == 0 )
+            {
+                productName += " HS 500";
+            }
+            else if( productType.compare( "eddieclub" ) == 0 )
+            {
+                productName += " HS 450";
+            }
+            else
+            {
+                BOSE_DIE( __func__ << " Fatal Error: Invalid Product Type " <<  productType );
+            }
+        }
     }
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str() );
     return productName;
