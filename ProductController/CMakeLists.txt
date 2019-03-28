@@ -10,6 +10,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSoftwareInstallScheduler
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/VolumeToneManager
   ${DATACOLLECTIONCLIENT_DIR}
   ${KEYHANDLER_DIR}/include
   ${NETWORK_SERVICE_DIR}/include
@@ -66,11 +67,13 @@ ADD_EXECUTABLE(Professor
   CustomHsm/CustomProductControllerStateLowPowerStandbyTransition.cpp
   CustomHsm/CustomProductControllerStateNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlayable.cpp
+  CustomHsm/CustomProductControllerStatePlayableTransition.cpp
   CustomHsm/CustomProductControllerStatePlayableTransitionNetworkStandby.cpp
   CustomHsm/CustomProductControllerStatePlaying.cpp
   CustomHsm/CustomProductControllerStatePlayingSelected.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSetup.cpp
   CustomHsm/CustomProductControllerStatePlayingSelectedSetupNetworkConfig.cpp
+  CustomHsm/CustomProductControllerStatePlayingTransition.cpp
   CustomHsm/CustomProductControllerStateTop.cpp
   IntentHandler/AudioModeManager.cpp
   IntentHandler/BootupFactoryDefaultManager.cpp

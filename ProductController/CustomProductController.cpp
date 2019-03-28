@@ -49,7 +49,6 @@
 #include "CustomProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
-#include "CustomProductControllerStateBooted.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStateFirstBootGreeting.h"
@@ -60,7 +59,6 @@
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
-#include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -76,7 +74,6 @@
 #include "ProductControllerStatePlayingSelectedSilentSourceInvalid.h"
 #include "ProductControllerStatePlayingSelectedSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedStoppingStreams.h"
-#include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateSoftwareInstallTransition.h"
@@ -87,6 +84,7 @@
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQCancelling.h"
 #include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStateBooted.h"
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
@@ -95,11 +93,13 @@
 #include "CustomProductControllerStateNetworkStandby.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
+#include "CustomProductControllerStatePlayableTransition.h"
 #include "CustomProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "CustomProductControllerStatePlayingSelectedSetupNetworkConfig.h"
+#include "CustomProductControllerStatePlayingTransition.h"
 #include "CustomProductControllerStateTop.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
@@ -282,7 +282,7 @@ void CustomProductController::Run( )
     CustomProductControllerState* stateSoftwareInstallManual = new ProductControllerStateSoftwareInstall
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_MANUAL );
 
     CustomProductControllerState* stateCriticalError = new ProductControllerStateCriticalError
     ( GetHsm( ),
@@ -312,10 +312,10 @@ void CustomProductController::Run( )
     ///
     /// Playable Transition State and Sub-States
     ///
-    CustomProductControllerState* statePlayableTransition = new ProductControllerStatePlayableTransition
+    CustomProductControllerState* statePlayableTransition = new CustomProductControllerStatePlayableTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
 
     CustomProductControllerState* statePlayableTransitionInternal = new ProductControllerStatePlayableTransitionInternal
     ( GetHsm( ),
@@ -381,10 +381,10 @@ void CustomProductController::Run( )
     ///
     /// Playing Transition State and Sub-States
     ///
-    CustomProductControllerState* statePlayingTransition = new ProductControllerStatePlayingTransition
+    CustomProductControllerState* statePlayingTransition = new CustomProductControllerStatePlayingTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
 
     CustomProductControllerState* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSwitch
     ( GetHsm( ),
@@ -2847,6 +2847,18 @@ bool CustomProductController::IsSwUpdateForeground( ) const
     }
 
     // We are likely en-route to accessory update, it's always in background
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   CustomProductController::ShouldPlayVolumeTone
+///
+/// @brief  Disable Volume tones on PGC (see CASTLE-29629)
+///
+/// @return bool always false
+///////////////////////////////////////////////////////////////////////////////
+bool CustomProductController::ShouldPlayVolumeTone( )
+{
     return false;
 }
 
