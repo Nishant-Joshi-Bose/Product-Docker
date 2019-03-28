@@ -73,6 +73,24 @@
             "comment":"Failed to store preset"
         },
         {
+            "event_id":15,
+            "tone":"T11_neutral_confirmation_loop.flac",
+            "volume":38,
+            "comment":"Volume Changed"
+        },
+        {
+            "event_id":16,
+            "tone":"T19_neutral_ceiling.flac",
+            "volume":100,
+            "comment":"Volume set to max"
+        },
+        {
+            "event_id":17,
+            "tone":"T11_neutral_confirmation.flac",
+            "volume":38,
+            "comment":"Volume unmute"
+        },
+        {
             "event_id":20,
             "tone":"T16_bass_box_pairing_complete.flac",
             "comment":"Bass Box pairing complete",

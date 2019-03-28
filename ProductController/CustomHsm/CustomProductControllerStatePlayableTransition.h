@@ -1,13 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStatePlaying.h
+/// @file      CustomProductControllerStatePlayableTransition.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product playing state.
+///            product playable transition state.
 ///
-/// @author    Stuart J. Lumby
-///
-/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+/// @attention Copyright (C) 2019 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
 ///            The Mountain Road,
@@ -33,8 +31,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStatePlaying.h"
-#include "ProductControllerStates.h"
+#include "ProductControllerStatePlayableTransition.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,32 +48,23 @@ namespace ProductApp
 class ProductControllerHsm;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @class CustomProductControllerStatePlaying
-///
-/// @brief This class is used for executing produce specific actions when in an playing state.
-///
+/// @brief The CustomProductControllerStatePlayableTransition Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlaying : public ProductControllerStatePlaying
+class CustomProductControllerStatePlayableTransition : public ProductControllerStatePlayableTransition
 {
 public:
 
-    CustomProductControllerStatePlaying( ProductControllerHsm& hsm,
-                                         CHsmState*            pSuperState,
-                                         Hsm::STATE            stateId,
-                                         const std::string&    name  = "CustomPlaying" );
+    CustomProductControllerStatePlayableTransition( ProductControllerHsm& hsm,
+                                                    CHsmState*            pSuperState,
+                                                    Hsm::STATE            stateId,
+                                                    const std::string&    name    = "CustomProductControllerStatePlayableTransition" );
 
-    ~CustomProductControllerStatePlaying( ) override
+    ~CustomProductControllerStatePlayableTransition( ) override
     {
 
     }
 
-    void HandleStateEnter( )                                              override;
-    void HandleStateExit( )                                               override;
     bool ShouldPlayVolumeTone( bool &canPlay )                            override;
-
-private:
-    void SetVolumeToThresholdLimit( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
