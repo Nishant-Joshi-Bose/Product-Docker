@@ -300,6 +300,12 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
     {
         return AccommodateOrphanReleaseEvents( keyEvent, false );
     }
+
+    if( !nowSelection.contentitem( ).islocal( ) )
+    {
+        return AccommodateOrphanReleaseEvents( keyEvent, false );
+    }
+
     auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
     if( not sourceItem )
     {
