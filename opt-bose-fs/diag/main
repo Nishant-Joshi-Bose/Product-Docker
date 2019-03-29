@@ -125,26 +125,21 @@ for detail in product_details['productDetails']:
     if prod == detail['product']:
       lcdAvailable = detail['lcdAvailable']
 
+print """
+  <li>Tests
+  <div class="box">
+  """
 
 if lcdAvailable:
   print """
-  <li>Tests
-  <div class="box">
-  <a href="/diag/display">Display</a><br>
+  <a href="/diag/display">Display</a><br>"""
+ 
+
+print """
   <a href="/diag/microphone">Microphones</a><br>
   <a href="/diag/wifi">Wi-Fi</a>
   </div>
   """
-
-else :
-  print """
-  <li>Tests
-  <div class="box">
-  <a href="/diag/microphone">Microphones</a><br>
-  <a href="/diag/wifi">Wi-Fi</a>
-  </div>
-  """
-
 
 print "<hr>"
 
