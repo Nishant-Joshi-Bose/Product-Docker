@@ -516,7 +516,7 @@ void CustomProductController::RegisterAuxEvents( AsyncCallback<LpmServiceMessage
 {
     BOSE_INFO( s_logger, __func__ );
 
-    // Cache AuxCableDetection Callback as it will be called when Exiting LowPowerResume State
+    // Cache this callback (cb), so it can be used for getting Aux State from LPM during Low Power Resume.
     m_AuxCableStateCb = cb;
 
     GetLpmHardwareInterface()->GetLpmClient()->IpcGetAuxState( cb );
