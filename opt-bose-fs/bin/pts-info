@@ -56,3 +56,14 @@ tap-command softwareupdate list
 tap-command qss get_src_list
 tap-command qss get_src_cfg
 tap-command qss list_codesets
+
+tap-command vpa getvoicesettings
+tap-command vpa getactivevpa
+tap-command vpa getstate
+
+if [ -e /opt/Bose/etc/Shepherd-GVA.xml ]; then
+    tap-command gva getstate
+    tap-command gva getstateinfo
+    tap-command gva getconvstates
+    tap-command gva getdevstates
+fi
