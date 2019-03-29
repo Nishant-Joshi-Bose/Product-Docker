@@ -512,38 +512,43 @@ bool CustomProductKeyInputManager::FilterIntent( KeyHandlerUtil::ActionType_t& i
     {
         return false;
     }
+    const auto& filter = it->filter();
 
     const auto& nowSelection = m_ProductController.GetNowSelection( );
     BOSE_DEBUG( s_logger, "%s: nowSelection %s", __PRETTY_FUNCTION__,  ProtoToMarkup::ToJson( nowSelection ).c_str() );
-    const auto& source = nowSelection.contentitem( ).source( );
-    const auto& sourceAccount = nowSelection.contentitem( ).sourceaccount( );
-    auto filterSource = [ source, sourceAccount]( const FilterRegex & f )
-    {
-        BOSE_DEBUG( s_logger, "%s: check %s %s", __PRETTY_FUNCTION__,  source.c_str(), sourceAccount.c_str() );
 
-        try
+    if( nowSelection.contentitem( ).islocal( ) )
+    {
+        // non-local sources are not filtered
+        const auto& source = nowSelection.contentitem( ).source( );
+        const auto& sourceAccount = nowSelection.contentitem( ).sourceaccount( );
+        auto filterSource = [ source, sourceAccount]( const FilterRegex & f )
         {
-            return ( std::regex_match( source, f.m_sourceFilter ) && std::regex_match( sourceAccount, f.m_sourceAccountFilter ) );
-        }
-        catch( const std::regex_error& e )
+            BOSE_DEBUG( s_logger, "%s: check %s %s", __PRETTY_FUNCTION__,  source.c_str(), sourceAccount.c_str() );
+
+            try
+            {
+                return ( std::regex_match( source, f.m_sourceFilter ) && std::regex_match( sourceAccount, f.m_sourceAccountFilter ) );
+            }
+            catch( const std::regex_error& e )
+            {
+                BOSE_ERROR( s_logger, "%s: regex error %s (%d)", __PRETTY_FUNCTION__, e.what(), e.code() );
+                return false;
+            }
+        };
+        const auto& filterRegex = m_filterRegex.find( &filter );
+        if( filterRegex == m_filterRegex.end() )
         {
-            BOSE_ERROR( s_logger, "%s: regex error %s (%d)", __PRETTY_FUNCTION__, e.what(), e.code() );
+            BOSE_ERROR( s_logger, "%s: Couldn't find filter regex for intent %s (this should not happen!)", __PRETTY_FUNCTION__, intentName.c_str() );
             return false;
         }
-    };
-    const auto& filter = it->filter();
-    const auto& filterRegex = m_filterRegex.find( &filter );
-    if( filterRegex == m_filterRegex.end() )
-    {
-        BOSE_ERROR( s_logger, "%s: Couldn't find filter regex for intent %s (this should not happen!)", __PRETTY_FUNCTION__, intentName.c_str() );
-        return false;
-    }
-    const auto& itf = std::find_if( filterRegex->second.begin(), filterRegex->second.end(), filterSource );
-    if( itf != filterRegex->second.end() )
-    {
-        // We found a matching source, this intent is to be filtered
-        BOSE_INFO( s_logger, "%s: Discard intent %s due to filter", __PRETTY_FUNCTION__, intentName.c_str() );
-        return true;
+        const auto& itf = std::find_if( filterRegex->second.begin(), filterRegex->second.end(), filterSource );
+        if( itf != filterRegex->second.end() )
+        {
+            // We found a matching source, this intent is to be filtered
+            BOSE_INFO( s_logger, "%s: Discard intent %s due to filter", __PRETTY_FUNCTION__, intentName.c_str() );
+            return true;
+        }
     }
 
     if( ! filter.has_translate() )
