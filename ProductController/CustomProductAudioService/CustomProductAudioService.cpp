@@ -53,7 +53,8 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
                                                    ProductController.GetTask( ) ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
     m_currentNetworkSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
-    m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN )
+    m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
+    m_deferredEqSelectResponse( {}, ProductController.GetTask() )
 {
     BOSE_DEBUG( s_logger, __func__ );
 
@@ -558,7 +559,7 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
     }
     m_deferredEqSelectResponse( m_AudioSettingsMgr->GetEqSelect() );
-    m_deferredEqSelectResponse = {};
+    m_deferredEqSelectResponse = AsyncCallback<AudioEqSelect>( {}, m_ProductTask );
     m_currentEqSelectUpdating = false;
 }
 
@@ -1106,7 +1107,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         // of rebooting (so we haven't received the list of updated supported modes yet), and
         // Madrid queries this endpoint.  In this case, we need to defer the response until we get
         // the next update from the DSP.
-        m_deferredEqSelectResponse = respCb;
+        m_deferredEqSelectResponse = AsyncCallback<AudioEqSelect>( respCb, m_ProductTask );
     };
     m_EqSelectSetting = std::unique_ptr< AudioSetting< AudioEqSelect > >
                         ( new AudioSetting< AudioEqSelect >
