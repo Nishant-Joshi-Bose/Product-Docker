@@ -150,7 +150,7 @@ packages-gz-no-gva: generate-metadata brussels-ipk product-ipk wpe-ipk softwareu
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Professor builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
+	graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
 
 .PHONY: softwareupdate-ipk
 softwareupdate-ipk: cmake_build

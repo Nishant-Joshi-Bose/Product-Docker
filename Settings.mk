@@ -1,3 +1,7 @@
+product = professor
+PRODUCT = PROFESSOR
+Product = Professor
+
 ifndef BOSE_WORKSPACE
   $(error No BOSE_WORKSPACE)
 endif
