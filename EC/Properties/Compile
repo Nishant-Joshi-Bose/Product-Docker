@@ -20,7 +20,7 @@ fi
 
 export DONT_UPDATE_CASTLETOOLS=1
 export GENERATE_HSP_SIGNATURES=1
-eval $KWINJECT make jobs=8 hw_var=Alpha deploy || exit
+eval $KWINJECT make jobs=8 hw_var=Alpha deploy disableGVA=$[DisableGVA] || exit
 
 set +x
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then

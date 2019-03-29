@@ -7,6 +7,7 @@ ifndef BOSE_WORKSPACE
 endif
 
 sdk = qc8017_32
+disableGVA ?= false
 
 # Used to determine what type of BLOB Manifest file to use. Acceptible options
 # are Release, Continuous, or Nightly.
@@ -24,7 +25,7 @@ endif
 
 jobs := $(shell grep -c ^processor /proc/cpuinfo)
 
-$(info sdk=${sdk} cfg=${cfg} jobs=${jobs} hw_var=${hw_var})
+$(info sdk=${sdk} cfg=${cfg} jobs=${jobs} hw_var=${hw_var} disableGVA=${disableGVA})
 
 export BUILDS_DIR := $(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)
 export HW_VAR := $(hw_var)
