@@ -2652,7 +2652,8 @@ void CustomProductController::InitializeAccessorySoftwareInstallManager( )
     auto softwareInstallFunc = [this]( void )
     {
         ProductMessage productMessage;
-        productMessage.set_softwareinstall( true );
+        productMessage.set_softwareinstall( false );
+        GetProductSoftwareInstallManager().SetSwUpdateForeground( true );
         SendAsynchronousProductMessage( productMessage );
     };
     auto softwareInstallcb = std::make_shared<AsyncCallback<void> > ( softwareInstallFunc, GetTask() );
