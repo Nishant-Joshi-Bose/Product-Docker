@@ -114,7 +114,20 @@ print "</div>"
 prodType = "productType"
 prod = mfg_data.get(prodType)
 
-if prod == "eddie":
+display_value = json.load(open("/opt/Bose/etc/ProductConfig.json"))
+
+
+value = None
+
+product_details = display_value['ProductConfig']
+
+for each in product_details['productDetails']:
+    prod_type = each['product']
+    if prod == prod_type:
+      value = each['lcdAvailable']
+
+
+if value:
   print """
   <li>Tests
   <div class="box">
@@ -124,7 +137,7 @@ if prod == "eddie":
   </div>
   """
 
-if prod == "eddieclub":
+else :
   print """
   <li>Tests
   <div class="box">
@@ -132,6 +145,7 @@ if prod == "eddieclub":
   <a href="/diag/wifi">Wi-Fi</a>
   </div>
   """
+
 
 print "<hr>"
 
