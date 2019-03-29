@@ -111,14 +111,27 @@ for elem in """country_code regionCode snSystem productType productName
 print "</table>"
 print "</div>"
 
-print """
-<li>Tests
-<div class="box">
-<a href="/diag/display">Display</a><br>
-<a href="/diag/microphone">Microphones</a><br>
-<a href="/diag/wifi">Wi-Fi</a>
-</div>
-"""
+prodType = "productType"
+prod = mfg_data.get(prodType)
+
+if prod == "eddie":
+  print """
+  <li>Tests
+  <div class="box">
+  <a href="/diag/display">Display</a><br>
+  <a href="/diag/microphone">Microphones</a><br>
+  <a href="/diag/wifi">Wi-Fi</a>
+  </div>
+  """
+
+if prod == "eddieclub":
+  print """
+  <li>Tests
+  <div class="box">
+  <a href="/diag/microphone">Microphones</a><br>
+  <a href="/diag/wifi">Wi-Fi</a>
+  </div>
+  """
 
 print "<hr>"
 
