@@ -111,19 +111,14 @@ for elem in """country_code regionCode snSystem productType productName
 print "</table>"
 print "</div>"
 
-
 prod = mfg_data.get("productType")
-
-product_config = json.load(open("/opt/Bose/etc/ProductConfig.json"))
-
-
+product_details = json.load(open("/opt/Bose/etc/ProductConfig.json"))
 lcdAvailable = None
+product_config = product_details['ProductConfig']
 
-product_details = product_config['ProductConfig']
-
-for detail in product_details['productDetails']:
+for detail in product_config['productDetails']:
     if prod == detail['product']:
-      lcdAvailable = detail['lcdAvailable']
+        lcdAvailable = detail['lcdAvailable']
 
 print """
   <li>Tests
