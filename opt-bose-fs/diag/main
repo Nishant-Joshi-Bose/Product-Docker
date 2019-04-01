@@ -112,9 +112,9 @@ print "</table>"
 print "</div>"
 
 prod = mfg_data.get("productType")
-product_details = json.load(open("/opt/Bose/etc/ProductConfig.json"))
+product_config = json.load(open("/opt/Bose/etc/ProductConfig.json"))['ProductConfig']
 lcdAvailable = None
-product_config = product_details['ProductConfig']
+
 
 for detail in product_config['productDetails']:
     if prod == detail['product']:
