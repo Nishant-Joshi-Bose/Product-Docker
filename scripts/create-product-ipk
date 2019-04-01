@@ -20,7 +20,7 @@ tryhelp () {
     exit 1
 }
 opts=$(getopt --name "$this" --shell sh \
-    -o uh \
+    -o h \
     -l "help" \
     -- "$@") || tryhelp
 eval set -- "$opts"
@@ -64,7 +64,6 @@ httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
-googlevoiceassistant64_dir=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
 avs_dir=$(components get AVSService-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
 audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
@@ -204,7 +203,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-"$googlevoiceassistant64_dir/stage" "$opt_dir" || exit
 
 "$audiopath64_dir/stage" --product=professor "$opt_dir" || exit
 "$audiopathproduct64_dir/stage" --product=professor "$opt_dir" || exit
