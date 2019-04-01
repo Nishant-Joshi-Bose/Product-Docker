@@ -4,13 +4,14 @@
 # See EC/deploy.txt.
 #
 
-if (( $# != 3 )); then
-    echo >&2 "usage: $0 source-dir builds-dir deploy-dir"
+if (( $# != 4 )); then
+    echo >&2 "usage: $0 source-dir builds-dir deploy-dir disableGVA(true/false)"
     exit 1
 fi
 source_dir=$1; shift
 builds_dir=$1; shift
 deploy_dir=$1; shift
+disableGVA=$1; shift
 
 rm -rf "$deploy_dir"
 mkdir -p "$deploy_dir" || exit
@@ -31,3 +32,7 @@ files=(
 )
 
 cp "${files[@]}" "$deploy_dir" || exit
+
+if [ $disableGVA = true ]; then
+    cp "$builds_dir/product_update_nogva.zip" "$deploy_dir" || exit
+fi
