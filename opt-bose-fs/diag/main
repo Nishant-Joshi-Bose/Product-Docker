@@ -111,14 +111,30 @@ for elem in """country_code regionCode snSystem productType productName
 print "</table>"
 print "</div>"
 
+prod = mfg_data.get("productType")
+product_config = json.load(open("/opt/Bose/etc/ProductConfig.json"))['ProductConfig']
+lcdAvailable = None
+
+
+for detail in product_config['productDetails']:
+    if prod == detail['product']:
+        lcdAvailable = detail['lcdAvailable']
+
 print """
-<li>Tests
-<div class="box">
-<a href="/diag/display">Display</a><br>
-<a href="/diag/microphone">Microphones</a><br>
-<a href="/diag/wifi">Wi-Fi</a>
-</div>
-"""
+  <li>Tests
+  <div class="box">
+  """
+
+if lcdAvailable:
+  print """
+  <a href="/diag/display">Display</a><br>"""
+ 
+
+print """
+  <a href="/diag/microphone">Microphones</a><br>
+  <a href="/diag/wifi">Wi-Fi</a>
+  </div>
+  """
 
 print "<hr>"
 
