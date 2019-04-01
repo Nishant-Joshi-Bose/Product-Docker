@@ -161,7 +161,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/stable/2.2.6-824+3319771"
+    "selected_version": "Release/stable/2.2.7-843+9656306"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -281,7 +281,7 @@
   },
   {
     "name": "SecureDeviceKey",
-    "selected_version": "stable@9b48e4fe6f9eda83d3f81b5a6defa2e3106db2d3"
+    "selected_version": "stable@f901be7f986727ac18add981975e08297d43169f"
   },
   {
     "name": "ServicesClients-qc8017_32",
