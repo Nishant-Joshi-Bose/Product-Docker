@@ -18,7 +18,7 @@
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateNetworkStandby.h"
-#include "ProductControllerStateLowPowerResume.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateLowPowerStandby.h"
 #include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
@@ -121,6 +121,7 @@ public:
 
     std::string GetDefaultProductName() const override;
     void RegisterAuxEvents( AsyncCallback<LpmServiceMessages::IpcAuxState_t> &cb );
+    void RequestAuxCableState();
 
 private:
     /// Disable copies
@@ -319,7 +320,7 @@ private:
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
     ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
-    ProductControllerStateLowPowerResume                            m_ProductControllerStateLowPowerResume;
+    CustomProductControllerStateLowPowerResume                      m_ProductControllerStateLowPowerResume;
     CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
@@ -394,6 +395,7 @@ private:
 
     ProductSTSController                                            m_ProductSTSController;
     ProductIotHandler                                               m_ProductIotHandler;
+    BOptional< AsyncCallback<LpmServiceMessages::IpcAuxState_t> >   m_AuxCableStateCb;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {
