@@ -13,10 +13,12 @@ logread
 printf "\n\f\n> dmesg\n"
 dmesg
 
-if [ -e /opt/Bose/etc/Shepherd-GVA.xml ]; then
-    printf "\n\f\n> libassistant logs\n"
-    cat /tmp/libassistant.log
-fi
+for i in /opt/Bose/pts/logs.d/*; do
+    if [ -x "$i" ]; then
+        printf "\n\f\n> %s\n" "$i"
+        "$i"
+    fi
+done
 
 printf "\n\f\n"
 pts-info
