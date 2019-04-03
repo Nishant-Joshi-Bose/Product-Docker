@@ -49,11 +49,11 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@1adf1514484f4f320795cd1a2074e48abc8137e1"
+    "selected_version": "stable@84bef3fd45cab5d9ff41cfd06e1bf63562fd9942"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "master@24b0ffaad4d130ae5a2df0e470868846c7888392"
+    "selected_version": "stable@eca0a74a34bfde5ab7f718b2ae3fe145071726ae"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/stable/2.2.6-824+3319771"
+    "selected_version": "Release/stable/2.2.8-850+9a47ce2"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -281,7 +281,7 @@
   },
   {
     "name": "SecureDeviceKey",
-    "selected_version": "stable@9b48e4fe6f9eda83d3f81b5a6defa2e3106db2d3"
+    "selected_version": "stable@f901be7f986727ac18add981975e08297d43169f"
   },
   {
     "name": "ServicesClients-qc8017_32",
