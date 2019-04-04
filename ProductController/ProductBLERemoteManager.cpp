@@ -129,18 +129,6 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
     AsyncCallback< SystemPowerPb::SystemPowerControl > powerCb( handleSystemPowerControl, m_ProductTask );
     frontDoorClient->RegisterNotification<SystemPowerPb::SystemPowerControl>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb );
     frontDoorClient->SendGet<SystemPowerPb::SystemPowerControl, FrontDoor::Error>( FRONTDOOR_SYSTEM_POWER_CONTROL_API, powerCb, {} );
-    {
-        //audio zone callback for notifications
-        AsyncCallback< SoundTouchInterface::zone >
-        nowPlayingCb( std::bind( &ProductBLERemoteManager::UpdateCapsAudioZone,
-                                 this,
-                                 std::placeholders::_1 ),
-                      m_ProductTask );
-
-        //audio zone notification registration
-        frontDoorClient->RegisterNotification< SoundTouchInterface::zone >(
-            FRONTDOOR_AUDIO_ZONE_API, nowPlayingCb );
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -265,37 +253,6 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductBLERemoteManager::UpdateCapsAudioZone
-///
-/// @param  SoundTouchInterface::zone zoneInfo
-///
-/// @return This method does not return anything.
-///
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::UpdateCapsAudioZone( const SoundTouchInterface::zone& zoneInfo )
-{
-    BOSE_INFO( s_logger, "%s, zone- (%s)", __func__,  ProtoToMarkup::ToJson( zoneInfo, false ).c_str() );
-
-    bool zoneMember = false;
-    for( const auto& m : zoneInfo.members( ) )
-    {
-        if( m.guid( ) == m_ProductController.GetProductGuid( ) )
-        {
-            zoneMember = true;
-            break;
-        }
-    }
-    if( zoneMember != m_IsZoneMember )
-    {
-        BOSE_INFO( s_logger, "%s now %sa zone member", __func__,  zoneMember ? "" : "not " );
-        m_IsZoneMember = zoneMember;
-        UpdateBacklight();
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief ProductBLERemoteManager::InitLedsMsg
 ///
 /// @param  LedsRawMsg_t Raw LED message to initialize
@@ -411,16 +368,16 @@ const std::tuple<const KeplerConfig::StateEntry&, bool, const KeplerConfig::Zone
         const auto& state = GetKeplerState( KeplerConfig::STATE_OFF );
         return std::make_tuple( state, true, state.zoneconfig() );
     }
-    else if( m_IsZoneMember )
-    {
-        const auto& state = GetKeplerState( KeplerConfig::STATE_ZONE );
-        return std::make_tuple( state, true, state.zoneconfig() );
-    }
 
-    // For the rest we determine the source by what's currently playing
     if( !m_nowSelection.has_contentitem() )
     {
         const auto& state = GetKeplerState( KeplerConfig::STATE_OFF );
+        return std::make_tuple( state, true, state.zoneconfig() );
+    }
+
+    if( !m_nowSelection.contentitem( ).islocal( ) )
+    {
+        const auto& state = GetKeplerState( KeplerConfig::STATE_ZONE );
         return std::make_tuple( state, true, state.zoneconfig() );
     }
 
