@@ -3,6 +3,7 @@
 # Strip symbols from executables.
 # Optionally save a copy of the unstripped executables for later debugging.
 #
+this=${0##*/}
 
 unstripped_dir=
 if [[ $1 = --save=* ]]; then
@@ -11,7 +12,7 @@ if [[ $1 = --save=* ]]; then
 fi
 
 if (( $# == 0 )); then
-    echo >&2 "usage: ${0##*/} [--save=unstripped-dir] files..."
+    echo >&2 "usage: $this [--save=unstripped-dir] files..."
     exit 1
 fi
 
