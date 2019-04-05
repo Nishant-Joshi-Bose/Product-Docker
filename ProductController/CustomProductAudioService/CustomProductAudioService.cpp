@@ -324,23 +324,23 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     }
 }
 
-EddieAudioSettings_t_AudioMode CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
+PRODUCT_AUDIO_SETTINGS( _AudioMode ) CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
     if( modeName == "DIALOG" )
     {
-        return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIALOG;
+        return PRODUCT_AUDIO_SETTINGS( _AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIALOG );
     }
     else if( modeName == "DIRECT" )
     {
-        return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIRECT;
+        return PRODUCT_AUDIO_SETTINGS( _AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIRECT );
     }
     else if( modeName == "NIGHT" )
     {
-        return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_NIGHT;
+        return PRODUCT_AUDIO_SETTINGS( _AudioMode_AUDIOSETTINGS_AUDIO_MODE_NIGHT );
     }
     else
     {
-        return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_NORMAL;
+        return PRODUCT_AUDIO_SETTINGS( _AudioMode_AUDIOSETTINGS_AUDIO_MODE_NORMAL );
     }
 }
 

@@ -11,9 +11,11 @@
 #include "ProductAudioService.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
-#include "EddieAudioSettings.pb.h"
 #include "DataCollectionClientIF.h"
 
+// Eddie audio settings
+#include "EddieAudioSettings.pb.h"
+#define PRODUCT_AUDIO_SETTINGS(concatStr) EddieAudioSettings_t##concatStr
 
 namespace ProductApp
 {
@@ -71,11 +73,11 @@ private:
      * \param modeName String to convert.
      * \return AudioSettingsAudioMode_t value for given string.
      */
-    EddieAudioSettings_t_AudioMode ModeNameToEnum( const std::string& modeName );
+    PRODUCT_AUDIO_SETTINGS( _AudioMode ) ModeNameToEnum( const std::string& modeName );
 
 
     //! Holds information that APProduct would like to know, including audio settings and thermal data.
-    EddieAudioSettings_t m_mainStreamAudioSettings;
+    PRODUCT_AUDIO_SETTINGS() m_mainStreamAudioSettings;
 
     //! Manages and persists audio settings.
     std::unique_ptr<CustomAudioSettingsManager> m_audioSettingsMgr;
