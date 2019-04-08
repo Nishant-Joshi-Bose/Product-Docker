@@ -55,7 +55,14 @@ print "{}: wrote {}".format(this_script, script_name)
 if remount:
     subprocess.call(["mount", "-oremount,ro", "/"])
 
+# If we're running via `adb shell`, we're going to get a SIGHUP when we run
+# this next command.  We use `setsid` to ensure the SIGHUP isn't delivered to
+# the command (so the command is allowed to finish).  Also we discard stdout
+# and stderr otherwise the command would get a SIGPIPE if it tried to generate
+# any output.
+
 print "{}: running {}".format(this_script, new)
-subprocess.call(new.split())
+devnull = open(os.devnull, 'w')
+subprocess.call(['setsid'] + new.split(), stdout=devnull, stderr=devnull)
 
 sys.exit()
