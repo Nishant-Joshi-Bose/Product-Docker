@@ -58,7 +58,6 @@ here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
-riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
 httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
@@ -90,10 +89,6 @@ vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) |
 cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
 opensource_ptp_dir=$(components get opensource-OpenAvnuApple-qc8017_32 installed_location) || exit
 opensource_avahi_dir=$(components get opensource-avahi-qc8017_32 installed_location) || exit
-
-sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
-tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
-tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
 
 stage=$wspace/builds/$cfg/product-ipk-stage
 rm -rf "$stage"
@@ -328,43 +323,7 @@ EOF
 unstripped_dir=$output_dir/product-unstripped
 unstripped_tar=$unstripped_dir.tar.gz
 rm -rf "$unstripped_dir" "$unstripped_tar"
-mkdir -p "$unstripped_dir" || exit
-
-# Our standard CentOS configuration has
-# LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib which causes
-# ${tool64_prefix}strip to segfault.  As a workaround, unset LD_LIBRARY_PATH
-# here and hope it wasn't actually needed for anything else this script does.
-if [ "$LD_LIBRARY_PATH" ]; then
-    echo "$this: unsetting LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-    unset LD_LIBRARY_PATH
-fi
-
-for i in "$stage"/Bose/{lib,bin}/*; do
-    type=$(file --brief "$i") || exit
-    case "$type" in
-        (*", stripped")
-            echo >&2 "$this: (warning) No debug symbols: $i"
-            ;;
-        (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
-            cp "$i" "$unstripped_dir" || exit
-            # `strip` fails without an error message if the file is empty
-            if ! "${tool64_prefix}strip" "$i"; then
-                echo >&2 "$this: Failed to strip $i"
-                exit 1
-            fi
-            ;;
-        (*", not stripped")
-            cp "$i" "$unstripped_dir" || exit
-            # `strip` fails without an error message if the file is empty
-            if ! "${tool_prefix}strip" "$i"; then
-                echo >&2 "$this: Failed to strip $i"
-                exit 1
-            fi
-            ;;
-    esac
-done
-
-cd  || exit
+"$here/strip-symbols" --save="$output_dir/product-unstripped" "$stage"/Bose/{lib,bin}/* || exit
 tar --owner=0 --group=0 -czf "$unstripped_tar" \
     -C "$(dirname "$unstripped_dir")" \
     "$(basename "$unstripped_dir")" \

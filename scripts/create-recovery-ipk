@@ -61,13 +61,8 @@ function put_script {
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
-riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 rivierarecovery_dir=$(components get RivieraSwUpRecovery-qc8017_32 installed_location) || exit
 minimalfs_dir=$(components get RivieraMinimalFS-qc8017_32 installed_location) || exit
-
-sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
-tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
-tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
 
 stage=$wspace/builds/$cfg/recovery-ipk-stage
 rm -rf "$stage"
@@ -176,37 +171,8 @@ echo "SoundTouch recovery prerm"
 exit 0
 EOF
 
-# Our standard CentOS configuration has
-# LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib which causes
-# ${tool64_prefix}strip to segfault.  As a workaround, unset LD_LIBRARY_PATH
-# here and hope it wasn't actually needed for anything else this script does.
-if [ "$LD_LIBRARY_PATH" ]; then
-    echo "$this: unsetting LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-    unset LD_LIBRARY_PATH
-fi
+"$here/strip-symbols" "$stage"/Bose/bin/* || exit
 
-for i in "$stage"/Bose/bin/*; do
-    type=$(file --brief "$i") || exit
-    case "$type" in
-        (*", stripped")
-            echo >&2 "$this: (warning) No debug symbols: $i"
-            ;;
-        (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
-            # `strip` fails without an error message if the file is empty
-            if ! "${tool64_prefix}strip" "$i"; then
-                echo >&2 "$this: Failed to strip $i"
-                exit 1
-            fi
-            ;;
-        (*", not stripped")
-            # `strip` fails without an error message if the file is empty
-            if ! "${tool_prefix}strip" "$i"; then
-                echo >&2 "$this: Failed to strip $i"
-                exit 1
-            fi
-            ;;
-    esac
-done
 # -----------------------------------------------------------------------------
 # Stage area is complete.  Package it into a *.ipk file.
 
