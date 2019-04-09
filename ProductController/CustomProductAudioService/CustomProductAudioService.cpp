@@ -54,7 +54,7 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
     m_currentNetworkSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
     m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
-    m_deferredEqSelectResponse( {}, ProductController.GetTask() )
+    m_deferredEqSelectResponse( []( AudioEqSelect eq ) {}, ProductController.GetTask() )
 {
     BOSE_DEBUG( s_logger, __func__ );
 
@@ -559,7 +559,7 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
     }
     m_deferredEqSelectResponse( m_AudioSettingsMgr->GetEqSelect() );
-    m_deferredEqSelectResponse = AsyncCallback<AudioEqSelect>( {}, m_ProductTask );
+    m_deferredEqSelectResponse = AsyncCallback<AudioEqSelect>( []( AudioEqSelect eq ) {}, m_ProductTask );
     m_currentEqSelectUpdating = false;
 }
 
