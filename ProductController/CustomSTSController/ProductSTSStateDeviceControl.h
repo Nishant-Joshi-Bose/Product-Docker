@@ -32,6 +32,7 @@ public:
     bool HandleStop( const STS::Void & ) override;
     bool HandleSkipNext( const STS::Void & ) override;
     bool HandleSkipPrevious( const STS::Void & ) override;
+    bool HandleSkipPreviousForce( const STS::Void & ) override;
 
 private:
     DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr m_deviceControllerPtr;
