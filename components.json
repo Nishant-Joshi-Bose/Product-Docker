@@ -29,7 +29,7 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-83+9dba8fb"
+    "selected_version": "Release/stable/2.2.0-86+af67807"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -37,11 +37,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/stable/2.3.0-320+fb49f82"
+    "selected_version": "Release/stable/2.3.0-324+90470c8"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/stable/2.5.4-17-gf8c228e"
+    "selected_version": "Release/stable/2.5.4-20-g0ab5afc"
   },
   {
     "name": "bose-opkg-utils",
@@ -69,11 +69,11 @@
   },
   {
     "name": "CAPSAPI-qc8017_32",
-    "selected_version": "Release/stable/1.0.0-50+3f6bb0e"
+    "selected_version": "Release/stable/1.0.0-54+0312c54"
   },
   {
     "name": "CAPSAPI-x86_64",
-    "selected_version": "Release/stable/1.0.0-50+3f6bb0e"
+    "selected_version": "Release/stable/1.0.0-54+0312c54"
   },
   {
     "name": "CastleLibs-native",
@@ -93,7 +93,7 @@
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/stable/0.0.4-67+96bc9f6"
+    "selected_version": "Release/stable/0.0.4-69+223c364"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -129,7 +129,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.2.8-1464+a16ed83"
+    "selected_version": "Release/stable/2.2.8-1478+1b8f83d"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -221,11 +221,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@146d14f73a9ef7821608c9812d0312407459f74b"
+    "selected_version": "stable@4ab520977ffcc28588ccae1200aff7657a4c844d"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-438+146d14f"
+    "selected_version": "Release/stable/2.2.0-440+4ab5209"
   },
   {
     "name": "ProductUIAssets",
@@ -285,7 +285,7 @@
   },
   {
     "name": "ServicesClients-qc8017_32",
-    "selected_version": "Release/stable/2.0.0-63+b137692"
+    "selected_version": "Release/stable/2.0.0-65+0267866"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -297,7 +297,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.45242.3296984"
+    "selected_version": "Release/Castle-Fork-stable/2.2.2.45259.3298103"
   },
   {
     "name": "SystemEventService-qc8017_32",
