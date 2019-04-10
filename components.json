@@ -92,18 +92,6 @@
     "selected_version": "Release/stable/1.0.0-62+2c516c8"
   },
   {
-    "name": "CastleLibs-native",
-    "selected_version": "branches/castle-libs@2853"
-  },
-  {
-    "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2853"
-  },
-  {
-    "name": "CastleLibs-x86",
-    "selected_version": "branches/castle-libs@2853"
-  },
-  {
     "name": "Cli-qc8017_32",
     "selected_version": "Release/stable/2.2.0-191+648838e"
   },
@@ -184,6 +172,10 @@
     "selected_version": "Release/bose-stable/v1.0-26-ge366db4"
   },
   {
+    "name": "opensource-curl-qc8017_32",
+    "selected_version": "Continuous/bose-master/TBD"
+  },
+  {
     "name": "opensource-jsoncpp-qc8017_32",
     "selected_version": "Release/bose-stable/1.8.3-34-gda7b724"
   },
@@ -196,8 +188,24 @@
     "selected_version": "Release/bose-stable/2.4.1-76+g96380a1"
   },
   {
+    "name": "opensource-nghttp2-qc8017_32",
+    "selected_version": "Continuous/bose-master/v1.24.0-10-g61d4310"
+  },
+  {
     "name": "opensource-OpenAvnuApple-qc8017_32",
     "selected_version": "Release/bose-stable/v1.0-1800-ga34ab9e"
+  },
+  {
+    "name": "opensource-openssl-qc8017_32",
+    "selected_version": "Continuous/bose-master/OpenSSL_1_0_2l-14-gfc63a6e"
+  },
+  {
+    "name": "opensource-openssl-x86_64",
+    "selected_version": "Continuous/bose-master/OpenSSL_1_0_2l-14-gfc63a6e"
+  },
+  {
+    "name": "opensource-openssl-x86",
+    "selected_version": "Continuous/bose-master/OpenSSL_1_0_2l-14-gfc63a6e"
   },
   {
     "name": "opensource-opkg-native",
