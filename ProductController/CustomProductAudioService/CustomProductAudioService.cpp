@@ -47,14 +47,14 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
     m_ThermalTask( std::unique_ptr<ThermalMonitorTask>(
-                       new ThermalMonitorTask( lpmClient, ProductController.GetTask( ),
+                       new ThermalMonitorTask( lpmClient, m_ProductTask,
                                                AsyncCallback<IpcSystemTemperatureData_t>(
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
-                                                   ProductController.GetTask( ) ) ) ) ),
+                                                   m_ProductTask ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
     m_currentNetworkSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
     m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
-    m_deferredEqSelectResponse( []( AudioEqSelect eq ) {}, ProductController.GetTask() )
+    m_deferredEqSelectResponse( []( AudioEqSelect eq ) {}, m_ProductTask )
 {
     BOSE_DEBUG( s_logger, __func__ );
 
