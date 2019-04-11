@@ -173,7 +173,7 @@
   },
   {
     "name": "opensource-nghttp2-qc8017_32",
-    "selected_version": "Continuous/bose-master/v1.24.0-10-g61d4310"
+    "selected_version": "Continuous/bose-stable/v1.24.0-11-g1e8a6c3"
   },
   {
     "name": "opensource-OpenAvnuApple-qc8017_32",
@@ -205,7 +205,7 @@
   },
   {
     "name": "opensource-tinyxml-qc8017_32",
-    "selected_version": "Release/bose-stable/v2.6.1-26-gc6650a7"
+    "selected_version": "Continuous/bose-stable/v2.6.1-31-g1e9abf0"
   },
   {
     "name": "opensource-util-linux-qc8017_32",
