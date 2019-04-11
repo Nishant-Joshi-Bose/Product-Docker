@@ -743,7 +743,7 @@ void CustomProductController::UpdateUiConnectedStatus( bool status )
 
 void CustomProductController::HandleProductMessage( const ProductMessage& productMessage )
 {
-    BOSE_INFO( s_logger, "%s", __func__ );
+    BOSE_DEBUG( s_logger, "%s", __func__ );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// LPM status messages require both product-specific and common handling.
