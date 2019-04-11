@@ -41,7 +41,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/stable/2.5.4-20-g0ab5afc"
+    "selected_version": "Continuous/CASTLE-30585_disable_btout/2.5.5-1-g4e4e3f8"
   },
   {
     "name": "bose-opkg-utils",
