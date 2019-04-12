@@ -57,7 +57,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/3.3.0-1168+9b4605f"
+    "selected_version": "Continuous/remove-castlelibs/3.4.0-1174+f35db43"
   },
   {
     "name": "BoseWebMonaco",
@@ -101,7 +101,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-712+3bdd8d0"
+    "selected_version": "Continuous/remove-castlelibs/2.3.0-722+089776a"
   },
   {
     "name": "FrontDoorService-qc8017_32",
@@ -157,7 +157,7 @@
   },
   {
     "name": "opensource-curl-qc8017_32",
-    "selected_version": "Continuous/bose-master/curl-7_54_1-19-g2328677"
+    "selected_version": "Release/bose-stable/curl-7_54_1-20-gab96e73"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
@@ -173,7 +173,7 @@
   },
   {
     "name": "opensource-nghttp2-qc8017_32",
-    "selected_version": "Continuous/bose-stable/v1.24.0-11-g1e8a6c3"
+    "selected_version": "Release/bose-stable/v1.24.0-12-ga97dfcb"
   },
   {
     "name": "opensource-OpenAvnuApple-qc8017_32",
@@ -181,15 +181,15 @@
   },
   {
     "name": "opensource-openssl-qc8017_32",
-    "selected_version": "Continuous/bose-master/OpenSSL_1_0_2l-14-gfc63a6e"
+    "selected_version": "Release/bose-stable/OpenSSL_1_0_2l-15-g7661080"
   },
   {
     "name": "opensource-openssl-x86_64",
-    "selected_version": "Continuous/bose-master/OpenSSL_1_0_2l-14-gfc63a6e"
+    "selected_version": "Release/bose-stable/OpenSSL_1_0_2l-15-g7661080"
   },
   {
     "name": "opensource-openssl-x86",
-    "selected_version": "Continuous/bose-master/OpenSSL_1_0_2l-14-gfc63a6e"
+    "selected_version": "Release/bose-stable/OpenSSL_1_0_2l-15-g7661080"
   },
   {
     "name": "opensource-opkg-native",
@@ -205,7 +205,7 @@
   },
   {
     "name": "opensource-tinyxml-qc8017_32",
-    "selected_version": "Continuous/bose-stable/v2.6.1-31-g1e9abf0"
+    "selected_version": "Release/bose-stable/v2.6.1-31-g1e9abf0"
   },
   {
     "name": "opensource-util-linux-qc8017_32",
