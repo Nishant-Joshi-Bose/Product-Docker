@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/4.1.4-5403+f4ee399"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5548+7861769"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/4.1.4-5403+f4ee399"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5548+7861769"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/4.1.4-5403+f4ee399"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5548+7861769"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/4.1.4-5403+f4ee399"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5548+7861769"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
