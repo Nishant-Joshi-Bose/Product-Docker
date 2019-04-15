@@ -1,31 +1,31 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5548+7861769"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5548+7861769"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5548+7861769"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5548+7861769"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
-    "selected_version": "Release/stable/0.0.2-434+dc81d8b"
+    "selected_version": "Continuous/remove-castlelibs/0.0.2-478+e5d78b0"
   },
   {
     "name": "AudioSource-BMX-x86_64",
-    "selected_version": "Release/stable/0.0.2-434+dc81d8b"
+    "selected_version": "Continuous/remove-castlelibs/0.0.2-478+e5d78b0"
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/stable/2.2.1-308+b785d0c"
+    "selected_version": "Continuous/remove-castlelibs/2.3.0-320+0c3289d"
   },
   {
     "name": "AVSService-qc8017_32",
@@ -69,15 +69,15 @@
   },
   {
     "name": "CAPSAPI-qc8017_32",
-    "selected_version": "Release/stable/1.0.0-54+0312c54"
+    "selected_version": "Continuous/remove-castlelibs/1.0.0-60+18c8f90"
   },
   {
     "name": "CAPSAPI-x86_64",
-    "selected_version": "Release/stable/1.0.0-54+0312c54"
+    "selected_version": "Continuous/remove-castlelibs/1.0.0-60+18c8f90"
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-184+c2438ac"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-187+d5455b0"
   },
   {
     "name": "CloudControlClient-qc8017_32",
@@ -85,7 +85,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/stable/4.0.1-214+d5b80cc"
+    "selected_version": "Continuous/remove-castlelibs/4.0.1-217+dc6311b"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -101,15 +101,15 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/2.3.0-722+089776a"
+    "selected_version": "Continuous/remove-castlelibs/2.3.0-725+aaac851"
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-867+56205ce"
+    "selected_version": "Continuous/remove-castlelibs/2.3.0-908+95cf2e7"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-272+d60ae4b"
+    "selected_version": "Continuous/remove-castlelibs/2.2.2-278+dd3be67"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/stable/3.0.1-253+3869545"
+    "selected_version": "Continuous/remove-castlelibs/3.0.1-257+861bea8"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -129,19 +129,19 @@
   },
   {
     "name": "IotIpcClient-qc8017_32",
-    "selected_version": "Release/stable/1.0.0-97+f9896df"
+    "selected_version": "Continuous/remove-castlelibs/1.0.0-108+e9b3b7c"
   },
   {
     "name": "IotIpcClient-x86_64",
-    "selected_version": "Release/stable/1.0.0-97+f9896df"
+    "selected_version": "Continuous/remove-castlelibs/1.0.0-108+e9b3b7c"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-183+0389f6f"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-185+2600c58"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-366+9905e3f"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-369+53ecde4"
   },
   {
     "name": "LpmMfgTool",
@@ -169,7 +169,7 @@
   },
   {
     "name": "opensource-libwebsockets-qc8017_32",
-    "selected_version": "Release/bose-stable/2.4.1-76+g96380a1"
+    "selected_version": "Continuous/remove-castlelibs/2.4.1-78+g4d1a5ea"
   },
   {
     "name": "opensource-nghttp2-qc8017_32",
@@ -221,7 +221,7 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-1330+ddc33d4"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-1352+0776259"
   },
   {
     "name": "product-startup",
@@ -233,7 +233,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-440+4ab5209"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-445+9caa94d"
   },
   {
     "name": "ProductUIAssets",
@@ -265,7 +265,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/stable/3.1.4-405+67ae5c9"
+    "selected_version": "Continuous/remove-castlelibs/3.1.4-413+54a1654"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -297,7 +297,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-154+48e1618"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-156+564f656"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -313,7 +313,7 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-126+19187a8"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-127+fb7451d"
   },
   {
     "name": "TestUtils",
