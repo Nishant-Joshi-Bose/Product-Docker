@@ -2765,7 +2765,8 @@ void CustomProductController::InitializeAccessorySoftwareInstallManager( )
     auto softwareInstallFunc = [this]( void )
     {
         ProductMessage productMessage;
-        productMessage.set_softwareinstall( true );
+        productMessage.set_softwareinstall( false );
+        GetProductSoftwareInstallManager().SetSwUpdateForeground( true );
         SendAsynchronousProductMessage( productMessage );
     };
     auto softwareInstallcb = std::make_shared<AsyncCallback<void> > ( softwareInstallFunc, GetTask() );
@@ -2847,6 +2848,18 @@ bool CustomProductController::IsSwUpdateForeground( ) const
     }
 
     // We are likely en-route to accessory update, it's always in background
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   CustomProductController::ShouldPlayVolumeTone
+///
+/// @brief  Disable Volume tones on PGC (see CASTLE-29629)
+///
+/// @return bool always false
+///////////////////////////////////////////////////////////////////////////////
+bool CustomProductController::ShouldPlayVolumeTone( )
+{
     return false;
 }
 

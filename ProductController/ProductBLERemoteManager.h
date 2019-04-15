@@ -109,7 +109,6 @@ private:
     const int                                           m_PairingTimeout        = 7200;
     bool                                                m_poweredOn             = false;
     bool                                                m_sourceSelectAllowed   = true;
-    bool                                                m_IsZoneMember          = false;
     KeplerPb::KeplerConfig                              m_keplerConfig;
     const KeplerPb::KeplerConfig::StateEntry            m_defaultState;
     const KeplerPb::KeplerConfig::ZoneConfiguration     m_defaultZoneConfig;
@@ -122,7 +121,6 @@ private:
     void InitializeFrontDoor();
     void InitializeRCS();
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
-    void UpdateCapsAudioZone( const SoundTouchInterface::zone& zoneInfo );
     void UpdateBacklight( );
     void CheckPairing( );
     static void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
