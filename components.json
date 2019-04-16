@@ -81,7 +81,7 @@
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/stable/0.0.4-69+223c364"
+    "selected_version": "Continuous/remove-castlelibs/0.0.4-71+4870d35"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -117,7 +117,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.2.8-1478+1b8f83d"
+    "selected_version": "Continuous/remove-castlelibs/2.2.8-1509+8fb4294"
   },
   {
     "name": "HTTPInterface-qc8017_32",
