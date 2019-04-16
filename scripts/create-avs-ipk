@@ -68,6 +68,9 @@ echo "Stage directory $stage"
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir" || exit
+mkdir -p "$opt_dir/etc" || exit
+mkdir -p "$opt_dir/bin" || exit
+mkdir -p "$opt_dir/lib" || exit
 
 echo "Package version \"$avs_ver\""
 "$wspace"/scripts/validate-version "$avs_ver" || exit
