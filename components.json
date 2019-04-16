@@ -89,7 +89,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/stable/4.0.0-225+038033a"
+    "selected_version": "Continuous/remove-castlelibs/4.0.0-228+f27bba6"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/stable/3.0.0-369+ef58476"
+    "selected_version": "Continuous/remove-castlelibs/3.0.0-371+4d05f9d"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
@@ -149,7 +149,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/stable/2.2.8-854+a77fbe9"
+    "selected_version": "Continuous/remove-castlelibs/2.2.8-865+3a168e0"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -269,7 +269,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/stable/2.1.0-113+5364d2e"
+    "selected_version": "Continuous/remove-castlelibs/2.1.0-117+949f231"
   },
   {
     "name": "RivieraMinimalFS-qc8017_32",
@@ -277,15 +277,15 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/stable/3.0.0-128+b3b04d1"
+    "selected_version": "Continuous/remove-castlelibs/3.0.0-131+36e4f6b"
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/stable/2.4.12-1411+73499e4"
+    "selected_version": "Continuous/remove-castlelibs/2.4.15-1456+35d56d3"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/stable/2.4.12-1411+73499e4"
+    "selected_version": "Continuous/remove-castlelibs/2.4.15-1456+35d56d3"
   },
   {
     "name": "SecureDeviceKey",
@@ -301,7 +301,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/stable/4.0.2-1988+386ccdb"
+    "selected_version": "Continuous/remove-castlelibs/4.0.2-2007+44243d3"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -309,7 +309,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-145+1163572"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-148+5c79d94"
   },
   {
     "name": "Telemetry-qc8017_32",
@@ -321,7 +321,7 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Release/stable/2.2.6-691+a158e42"
+    "selected_version": "Continuous/remove-castlelibs/2.2.6-700+41469a9"
   },
   {
     "name": "Webkit",
