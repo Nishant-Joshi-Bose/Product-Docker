@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5561+d2858e6"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5561+d2858e6"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5561+d2858e6"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5561+d2858e6"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -37,11 +37,11 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/stable/2.3.0-324+90470c8"
+    "selected_version": "Continuous/remove-castlelibs/2.3.0-325+72fc4ec"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/stable/2.5.4-20-g0ab5afc"
+    "selected_version": "Continuous/remove-castlelibs/2.5.6-3-g715f407"
   },
   {
     "name": "bose-opkg-utils",
@@ -109,11 +109,11 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/2.2.2-278+dd3be67"
+    "selected_version": "Continuous/remove-castlelibs/2.2.2-279+dd3be67"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/3.0.0-371+4d05f9d"
+    "selected_version": "Continuous/remove-castlelibs/3.0.0-372+8d5b941"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
@@ -149,7 +149,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/2.2.8-865+3a168e0"
+    "selected_version": "Continuous/remove-castlelibs/2.2.8-864+3a168e0"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -265,7 +265,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/3.1.4-413+54a1654"
+    "selected_version": "Continuous/remove-castlelibs/3.1.4-415+f06112b"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -277,7 +277,7 @@
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/3.0.0-131+36e4f6b"
+    "selected_version": "Continuous/remove-castlelibs/3.0.0-132+549b8ec"
   },
   {
     "name": "SASS-qc8017_32",
@@ -301,7 +301,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/4.0.2-2007+44243d3"
+    "selected_version": "Continuous/remove-castlelibs/4.0.2-2010+6bfb525"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
