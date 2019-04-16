@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5561+d2858e6"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5561+d2858e6"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5561+d2858e6"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Continuous/remove-castlelibs/4.1.4-5561+d2858e6"
+    "selected_version": "Continuous/remove-castlelibs/4.1.4-5562+d2858e6"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -29,19 +29,19 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-86+af67807"
+    "selected_version": "Continuous/remove-castlelibs/2.2.1-107+68a31d6"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/stable/3.1.13_release-17-gad047f0"
+    "selected_version": "Continuous/remove-castlelibs/3.1.14-4-g3e36e79"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/2.3.0-325+72fc4ec"
+    "selected_version": "Continuous/remove-castlelibs/2.3.0-327+ae594a4"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/2.5.6-3-g715f407"
+    "selected_version": "Continuous/remove-castlelibs/2.5.6-4-g95a0561"
   },
   {
     "name": "bose-opkg-utils",
@@ -65,7 +65,7 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/stable/2.5.7-17-g3be0912"
+    "selected_version": "Continuous/remove-castlelibs/2.5.7-20-gfa6961a"
   },
   {
     "name": "CAPSAPI-qc8017_32",
@@ -93,7 +93,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-229+8ebc8ba"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-241+8a2ff82"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -109,7 +109,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/2.2.2-279+dd3be67"
+    "selected_version": "Continuous/remove-castlelibs/2.2.2-278+dd3be67"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/2.2.8-864+3a168e0"
+    "selected_version": "Continuous/remove-castlelibs/2.2.8-865+3a168e0"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -217,7 +217,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-1931+32bf115"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-1952+f32cf5b"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -265,7 +265,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/remove-castlelibs/3.1.4-415+f06112b"
+    "selected_version": "Continuous/remove-castlelibs/3.1.4-413+54a1654"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -293,7 +293,7 @@
   },
   {
     "name": "ServicesClients-qc8017_32",
-    "selected_version": "Release/stable/2.0.0-65+0267866"
+    "selected_version": "Continuous/remove-castlelibs/2.0.0-70+dc74776"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -305,7 +305,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.45259.3298103"
+    "selected_version": "Continuous/Castle-Fork-remove-castlelibs/2019-04-16_1233"
   },
   {
     "name": "SystemEventService-qc8017_32",
