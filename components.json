@@ -125,7 +125,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-236+f40c947"
+    "selected_version": "Continuous/remove-castlelibs/2.2.0-242+7b9a584"
   },
   {
     "name": "IotIpcClient-qc8017_32",
