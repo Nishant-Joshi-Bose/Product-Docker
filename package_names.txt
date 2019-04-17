@@ -1,0 +1,10 @@
+SoundTouchRecovery 
+product-script 
+software-update 
+hsp
+wpe 
+monaco
+SoundTouch 
+gva 
+avs 
+lpm_updater
