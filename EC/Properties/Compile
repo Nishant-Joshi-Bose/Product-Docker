@@ -19,7 +19,7 @@ fi
 
 export DONT_UPDATE_CASTLETOOLS=1
 export GENERATE_HSP_SIGNATURES=1
-eval $KWINJECT make jobs=8 deploy disableGVA=$[DisableGVA] enableBTOut=$[EnableBTOut] || exit
+eval $KWINJECT make jobs=8 deploy disableGVA=$[DisableGVA] || exit
 
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then
     # Get the version number for the recovery partition
