@@ -218,7 +218,6 @@ private:
                                                             ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
                                                             spkrInfo );
 
-    void DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
     void RearAccessoryConnectTimeout();
 
 private:

@@ -880,72 +880,6 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-///   Functions to detect whether any accessory speaker is disconnected or reconnected
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief SpeakerPairingManager::DetectMissingSub
-///
-/// @param const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState )
-{
-    BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
-    if( oldAccessorySpeakerState.subs_size() > m_accessorySpeakerState.subs_size() )
-    {
-        BOSE_INFO( s_logger, "subs changed from %d to %d", oldAccessorySpeakerState.subs_size(), m_accessorySpeakerState.subs_size() );
-
-        if( m_accessorySpeakerState.subs_size() == 0 )
-        {
-            // New accessorySpeakerState does not include sub but oldAccessorySpeakerState does (subs_size > 0).
-            // This can happen if:
-            // (1) one sub was connected but now disconnected, or
-            // (2) two subs were connected but lose connection simultaneously
-            // Copy one sub info from old speakerState to the current list,
-            // but set configuration to MISSING_BASS so lightbar blinks.
-            const auto& old_sub_info = oldAccessorySpeakerState.subs( 0 );
-            auto spkrInfo = m_accessorySpeakerState.add_subs();
-            spkrInfo->set_type( old_sub_info.type() );
-            spkrInfo->set_wireless( old_sub_info.wireless() );
-            spkrInfo->set_serialnum( old_sub_info.serialnum() );
-            spkrInfo->set_version( old_sub_info.version() );
-            spkrInfo->set_available( false );
-            spkrInfo->set_configurationstatus( "MISSING_BASS" );
-        }
-        else
-        {
-            // We currently support maximum of two bass boxes, if the code reaches this block, we know:
-            // New accessorySpeakerState includes 1 sub and oldAccesorySpeakerState includes 2 subs.
-            // This happens if two subs were connected, but one of them lost connection.
-            // Find which one lost connection by comparing the serial number.
-            //
-            for( int i = 0; i < oldAccessorySpeakerState.subs_size(); i++ )
-            {
-                if( m_accessorySpeakerState.subs( 0 ).serialnum() != oldAccessorySpeakerState.subs( i ).serialnum() )
-                {
-                    // Found the disconnected sub, copy the info from old list but set configurationStatus to MISSING_BASS
-                    // The status of the other sub is still valid
-                    BOSE_INFO( s_logger, "Sub %d disconnected", i );
-                    const auto& missed_sub_info = oldAccessorySpeakerState.subs( i );
-                    auto spkrInfo = m_accessorySpeakerState.add_subs();
-                    spkrInfo->set_type( missed_sub_info.type() );
-                    spkrInfo->set_wireless( missed_sub_info.wireless() );
-                    spkrInfo->set_serialnum( missed_sub_info.serialnum() );
-                    spkrInfo->set_version( missed_sub_info.version() );
-                    spkrInfo->set_available( false );
-                    spkrInfo->set_configurationstatus( "MISSING_ONE_BASS" );
-                    break;
-                }
-            }
-        }
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief SpeakerPairingManager::RearAccessoryConnectTimeout
 ///
 ///
@@ -953,11 +887,13 @@ void SpeakerPairingManager::DetectMissingSub( const ProductPb::AccessorySpeakerS
 
 void SpeakerPairingManager::RearAccessoryConnectTimeout( )
 {
-    // The expected rear accessory did not connect before the timer goes off.
-    // Set the configurationStatus of rears to MISSING_REAR so lightbar blinks
+    // If the expected rears already connected when the time goes off, this function simply returns
+    // If the expected rear accessory did not connect before the timer goes off,
+    // set the configurationStatus of rears to MISSING_REAR so lightbar blinks
     BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
     if( m_numOfExpectedRears > 0 )
     {
+
         for( int i = 0; i < m_accessorySpeakerState.rears_size(); ++i )
         {
             BOSE_INFO( s_logger, "Paired rear failed to connect" );
