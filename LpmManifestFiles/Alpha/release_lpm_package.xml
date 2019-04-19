@@ -45,6 +45,6 @@
         <entry name="psoc_gc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/4.2-234+35428aa/App-GingerCheevers-Alpha*.cyacd" version="dynamic" />
         <entry name="prof_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/2.7-171+bbe38f1/SoundBar/Animations.bin" version="dynamic" />
         <entry name="remote.hex" path="/home/softlib/verisoft/BLERemoteXCVR/Release/master/v2.0.0-0+9c2b8b9/BLEBridge_app_*.hex" version="dynamic" />
-        <entry flags="1" name="speaker.bos" path="/home/softlib/verisoft/A4V-System/Release/trunk/1.14.7.3243685/speaker_1.14.7.3243541.bos" version="1.14.4.3220375" />
+        <entry flags="1" name="speaker.bos" path="/home/softlib/verisoft/A4V-System/Release/trunk/1.14.7.3243685/speaker_1.14.7.3243541.bos" version="1.14.7.3243541" />
     </manifest_entries>
 </blob>
