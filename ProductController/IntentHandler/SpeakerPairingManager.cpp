@@ -595,9 +595,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
 
 // Rears we send off to get valid config
-    //ToDo: Remove the third argument
-    uint32_t oldAccessorySpeakerStateRearSize = oldAccessorySpeakerState.rears().size();
-    const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears, oldAccessorySpeakerStateRearSize );
+    const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears );
     for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
     {
         m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
@@ -678,9 +676,9 @@ void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
 /// @return This method returns a char* based on whether the configuration is valid
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight, uint32_t oldRearSize )
+const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight )
 {
-    BOSE_INFO( s_logger, "numLeft %d, numRight %d, oldRearsSize %d", numLeft, numRight, oldRearSize );
+    BOSE_INFO( s_logger, "numLeft %d, numRight %d", numLeft, numRight );
 
     if( m_numOfExpectedRears > 0 )
     {
