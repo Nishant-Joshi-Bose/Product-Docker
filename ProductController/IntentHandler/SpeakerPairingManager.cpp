@@ -522,6 +522,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     m_accessoryListReceived = true;
     m_firstAccessoryListReceived = true;
+    m_numOfExpectedRears = 0;
 
     ProductPb::AccessorySpeakerState oldAccessorySpeakerState;
     oldAccessorySpeakerState.CopyFrom( m_accessorySpeakerState );
@@ -531,8 +532,6 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
 
     uint32_t numOfLeftRears  = 0;
     uint32_t numOfRightRears = 0;
-    //uint32_t numOfExpectedRears = 0;
-    m_numOfExpectedRears = 0;
     bool rearsEnabled = false;
     bool subsEnabled  = false;
 
@@ -577,24 +576,21 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         }
     }
 
-// If we have at least one we want to mark them as controllable
+    // If we have at least one we want to mark them as controllable
     m_accessorySpeakerState.mutable_controllable()->set_rears( m_accessorySpeakerState.rears_size() > 0 );
     m_accessorySpeakerState.mutable_controllable()->set_subs( m_accessorySpeakerState.subs_size() > 0 );
 
-// Set controllable fields
+    // Set controllable fields
     m_accessorySpeakerState.mutable_enabled()->set_rears( rearsEnabled );
     m_accessorySpeakerState.mutable_enabled()->set_subs( subsEnabled );
 
-// Subwoofers are in VALID config if it is really connected or expected as LPM controls that to mitigate improper tuning
+    // Subwoofers are in VALID config if it is really connected or expected as LPM controls that to mitigate improper tuning
     for( int i = 0; i < m_accessorySpeakerState.subs_size(); i++ )
     {
         m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
     }
-    //ToDo: Remove this log
-    BOSE_INFO( s_logger, "oldAccessorySpeakerState: %s", oldAccessorySpeakerState.DebugString().c_str() );
 
-
-// Rears we send off to get valid config
+    // Rears we send off to get valid config
     const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears );
     for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
     {
@@ -671,7 +667,6 @@ void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
 ///
 /// @param  uint32_t numLeft  - number of left channel rears
 ///         uint32_t numRight - number of right channel rears
-///         uint32_t oldRearSize - num of rear accessories in previous list
 ///
 /// @return This method returns a char* based on whether the configuration is valid
 ///
@@ -682,9 +677,16 @@ const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, 
 
     if( m_numOfExpectedRears > 0 )
     {
+        // If one or more rear accessory is Expected, start a timer for it to connect. This can happen if
+        // (1) While system is on and  both rears are connected, one or both are powered off and LPM sends
+        //     the new acc list after LPM watchdog goes off
+        // (2) System changes from off or standby to On, one accessory connects and LPM sends the acc List
+        //     with the other status set to Expected.
         BOSE_INFO( s_logger, "More rears expected, start timer" );
         m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME, 0 );
         m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
+        // Return VALID so lightbar does Not blink yet. The timer callback will check the rears status again
+        // and cause the lightbar to blink if the expected rear fails to connect.
         return "VALID";
     }
     else
@@ -761,6 +763,7 @@ bool SpeakerPairingManager::AccessoryStatusIsExpected( unsigned int status )
         return false;
     }
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  SpeakerPairingManager::AccessoryTypeIsRear
