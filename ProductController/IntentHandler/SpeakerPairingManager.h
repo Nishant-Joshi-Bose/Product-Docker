@@ -209,6 +209,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     static const char* AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight, uint32_t oldSize );
     static bool AccessoryStatusIsConnected( unsigned int status );
+    static bool AccessoryStatusIsExpected( unsigned int status );
     static bool AccessoryTypeIsRear( unsigned int type );
     static bool AccessoryTypeIsSub( unsigned int type );
     static const char* AccessoryTypeToString( unsigned int type );

@@ -537,19 +537,23 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     for( int i = 0; i < accList.accessory_size( ); i++ )
     {
         const auto& accDesc = accList.accessory( i );
-        if( accDesc.has_status( ) && AccessoryStatusIsConnected( accDesc.status( ) ) )
+        if( accDesc.has_status( ) && ( AccessoryStatusIsConnected( accDesc.status( ) ) ||
+                                       AccessoryStatusIsExpected( accDesc.status() ) ) )
         {
             if( accDesc.has_type( ) && AccessoryTypeIsRear( accDesc.type( ) ) )
             {
                 auto spkrInfo = m_accessorySpeakerState.add_rears( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
-                if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_LEFT_REAR )
+                if( AccessoryStatusIsConnected( accDesc.status() ) )
                 {
-                    numOfLeftRears++;
-                }
-                else if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_RIGHT_REAR )
-                {
-                    numOfRightRears++;
+                    if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_LEFT_REAR )
+                    {
+                        numOfLeftRears++;
+                    }
+                    else if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_RIGHT_REAR )
+                    {
+                        numOfRightRears++;
+                    }
                 }
                 rearsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
             }
@@ -756,13 +760,34 @@ bool SpeakerPairingManager::AccessoryStatusIsConnected( unsigned int status )
     case LpmServiceMessages::ACCESSORY_CONNECTION_WIRED:
     case LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS:
     case LpmServiceMessages::ACCESSORY_CONNECTION_BOTH:
-    case LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED:
         return true;
     default:
         return false;
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  SpeakerPairingManager::AccessoryStatusIsExpected
+///
+/// @param  unsigned int status
+///
+/// @return This method returns true if the accessory is expected (paired but not connected);
+///         otherwise, it returns false.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool SpeakerPairingManager::AccessoryStatusIsExpected( unsigned int status )
+{
+    if( static_cast< LpmServiceMessages::AccessoryConnectionStatus_t >( status ) ==
+        LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  SpeakerPairingManager::AccessoryTypeIsRear
