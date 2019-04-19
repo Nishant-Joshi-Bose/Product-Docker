@@ -219,13 +219,16 @@ private:
                                                             spkrInfo );
 
     void RearAccessoryConnectTimeout();
+    void BassAccessoryConnectTimeout();
 
 private:
     bool        m_accessoryListReceived = false;
     bool        m_firstAccessoryListReceived = false;
     APTimerPtr  m_timerRearAccessoryConnect;
+    APTimerPtr  m_timerBassAccessoryConnect;
     bool        m_waitSecondRearAccessoryConnect = false;
-    uint32_t    m_numOfExpectedRears;
+    uint32_t    m_numOfExpectedRears = 0;
+    uint32_t    m_numOfExpectedBass = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

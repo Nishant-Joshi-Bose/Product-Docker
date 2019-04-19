@@ -56,7 +56,8 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0;
-constexpr uint32_t REAR_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME = 30 * 1000;
+constexpr uint32_t REAR_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME = 20 * 1000;
+constexpr uint32_t BASS_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME = 20 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -83,7 +84,8 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
       m_FrontDoorClientIF( frontDoorClient ),
       m_DataCollectionClient( productController.GetDataCollectionClient() ),
       m_lpmConnected( false ),
-      m_timerRearAccessoryConnect( APTimer::Create( m_ProductTask, "RearAccessoryConnectTimer" ) )
+      m_timerRearAccessoryConnect( APTimer::Create( m_ProductTask, "RearAccessoryConnectTimer" ) ),
+      m_timerBassAccessoryConnect( APTimer::Create( m_ProductTask, "BassAccessoryConnectTimer" ) )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", "SpeakerPairingManager" );
 
@@ -523,6 +525,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     m_accessoryListReceived = true;
     m_firstAccessoryListReceived = true;
     m_numOfExpectedRears = 0;
+    m_numOfExpectedBass = 0;
 
     ProductPb::AccessorySpeakerState oldAccessorySpeakerState;
     oldAccessorySpeakerState.CopyFrom( m_accessorySpeakerState );
@@ -572,6 +575,10 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
                 auto spkrInfo = m_accessorySpeakerState.add_subs( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
                 subsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
+                if( AccessoryStatusIsExpected( accDesc.status() ) )
+                {
+                    m_numOfExpectedBass++;
+                }
             }
         }
     }
@@ -588,6 +595,13 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     for( int i = 0; i < m_accessorySpeakerState.subs_size(); i++ )
     {
         m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
+    }
+
+    if( m_numOfExpectedBass > 0 )
+    {
+        BOSE_INFO( s_logger, "bass connection expected, start timer" );
+        m_timerBassAccessoryConnect->SetTimeouts( BASS_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME, 0 );
+        m_timerBassAccessoryConnect->Start( std::bind( &SpeakerPairingManager::BassAccessoryConnectTimeout, this ) );
     }
 
     // Rears we send off to get valid config
@@ -903,6 +917,25 @@ void SpeakerPairingManager::RearAccessoryConnectTimeout( )
             m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( "MISSING_REAR" );
         }
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief SpeakerPairingManager::BassAccessoryConnectTimeout
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void SpeakerPairingManager::BassAccessoryConnectTimeout()
+{
+    BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
+    if( m_numOfExpectedBass > 0 )
+    {
+        for( int i = 0; i < m_accessorySpeakerState.subs_size(); ++i )
+        {
+            BOSE_INFO( s_logger, "Paired bass failed to connect" );
+            m_accessorySpeakerState.mutable_subs( i ) -> set_configurationstatus( " MISSING_BASS" );
+        }
     }
 }
 
