@@ -207,9 +207,9 @@ private:
     ///        types.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    static const char* AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight, uint32_t oldSize );
-    static bool AccessoryStatusIsConnected( unsigned int status );
-    static bool AccessoryStatusIsExpected( unsigned int status );
+    const char* AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight, uint32_t oldSize );
+    bool AccessoryStatusIsConnected( unsigned int status );
+    bool AccessoryStatusIsExpected( unsigned int status );
     static bool AccessoryTypeIsRear( unsigned int type );
     static bool AccessoryTypeIsSub( unsigned int type );
     static const char* AccessoryTypeToString( unsigned int type );
@@ -227,6 +227,7 @@ private:
     bool        m_firstAccessoryListReceived = false;
     APTimerPtr  m_timerRearAccessoryConnect;
     bool        m_waitSecondRearAccessoryConnect = false;
+    uint32_t    m_numOfExpectedRears;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
