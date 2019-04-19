@@ -219,7 +219,6 @@ private:
                                                             spkrInfo );
 
     void DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
-    void DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
     void RearAccessoryConnectTimeout();
 
 private:
