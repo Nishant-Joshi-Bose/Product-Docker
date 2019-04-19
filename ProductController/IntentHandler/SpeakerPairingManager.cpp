@@ -910,7 +910,6 @@ void SpeakerPairingManager::RearAccessoryConnectTimeout( )
     BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
     if( m_numOfExpectedRears > 0 )
     {
-
         for( int i = 0; i < m_accessorySpeakerState.rears_size(); ++i )
         {
             BOSE_INFO( s_logger, "Paired rear failed to connect" );
@@ -934,8 +933,9 @@ void SpeakerPairingManager::BassAccessoryConnectTimeout()
         for( int i = 0; i < m_accessorySpeakerState.subs_size(); ++i )
         {
             BOSE_INFO( s_logger, "Paired bass failed to connect" );
-            m_accessorySpeakerState.mutable_subs( i ) -> set_configurationstatus( " MISSING_BASS" );
+            m_accessorySpeakerState.mutable_subs( i ) -> set_configurationstatus( "MISSING_BASS" );
         }
+        m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
     }
 }
 
