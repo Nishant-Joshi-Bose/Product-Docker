@@ -63,29 +63,27 @@ product-ipk: cmake_build
 privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-IPKS = \
-  recovery.ipk \
-  product-script.ipk \
-  software-update.ipk \
-  wpe.ipk \
-  monaco.ipk \
-  product.ipk \
-  gva.ipk \
-  lpm_updater.ipk \
+IPKS_FILE=$(BOSE_WORKSPACE)/ipks.txt
+PACKAGENAMES_FILE=$(BOSE_WORKSPACE)/package_names.txt
+IPKS_HSP := $(shell cat < $(IPKS_FILE))
+IPKS := $(filter-out hsp.ipk,$(IPKS_HSP))
+IPKS_NOGVA := $(filter-out gva.ipk,$(IPKS_HSP))
+PACKAGENAMES_HSP := $(shell cat < $(PACKAGENAMES_FILE))
+PACKAGENAMES := $(filter-out hsp,$(PACKAGENAMES_HSP))
+PACKAGENAMES_NOGVA := $(filter-out gva,$(PACKAGENAMES_HSP))
+TARGETS_HSP := $(subst .ipk,-ipk,$(IPKS_HSP))
+TARGETS := $(subst .ipk,-ipk,$(IPKS))
+TARGETS_NOGVA := $(subst .ipk,-ipk,$(IPKS_NOGVA))
 
-PACKAGENAMES = \
-  SoundTouchRecovery \
-  product-script \
-  software-update \
-  wpe \
-  monaco \
-  SoundTouch \
-  gva \
-  lpm_updater \
 
 EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
 EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
 EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
+
+print_variables:
+		echo $(IPKS_HSP)
+		echo $(PACKAGENAMES_HSP)
+		echo $(TARGETS_HSP)
 
 # Add exclude packages list in metadata.json
 .PHONY: generate-metadata
@@ -96,105 +94,32 @@ generate-metadata: cmake_build
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-# Create one more zip file for Bonjour / local update with HSP.
-# Temporary until DP2 boards are not available.
-IPKS_HSP = \
-  recovery.ipk \
-  product-script.ipk \
-  software-update.ipk \
-  hsp.ipk \
-  wpe.ipk \
-  monaco.ipk \
-  product.ipk \
-  gva.ipk \
-  lpm_updater.ipk \
-
-PACKAGENAMES_HSP = \
-  SoundTouchRecovery \
-  product-script \
-  software-update \
-  hsp \
-  wpe \
-  monaco \
-  SoundTouch \
-  gva \
-  lpm_updater \
-
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: \
-generate-metadata \
-product-ipk \
-wpe-ipk \
-softwareupdate-ipk \
-monaco-ipk \
-hsp-ipk \
-lpmupdater-ipk \
-recovery-ipk \
-product-script-ipk \
-gva-ipk
+packages-gz: generate-metadata $(TARGETS)
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp:
+packages-gz-with-hsp: generate-metadata $(TARGETS_HSP)
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
-packages-gz-with-hsp: generate-metadata
-packages-gz-with-hsp: monaco-ipk
-packages-gz-with-hsp: product-ipk
-packages-gz-with-hsp: wpe-ipk
-packages-gz-with-hsp: softwareupdate-ipk
-packages-gz-with-hsp: hsp-ipk
-packages-gz-with-hsp: lpmupdater-ipk
-packages-gz-with-hsp: recovery-ipk
-packages-gz-with-hsp: product-script-ipk
-packages-gz-with-hsp: gva-ipk
-
-IPKS_NOGVA = \
-  recovery.ipk \
-  product-script.ipk \
-  software-update.ipk \
-  hsp.ipk \
-  wpe.ipk \
-  monaco.ipk \
-  product.ipk \
-  lpm_updater.ipk \
-
-PACKAGENAMES_NOGVA = \
-  SoundTouchRecovery \
-  product-script \
-  software-update \
-  hsp \
-  wpe \
-  monaco \
-  SoundTouch \
-  lpm_updater \
 
 .PHONY: package-no-gva
 package-no-gva: packages-gz-no-gva
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_NOGVA) -i $(IPKS_NOGVA) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_nogva.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz-no-gva
-packages-gz-no-gva:
+packages-gz-no-gva: generate-metadata $(TARGETS_NOGVA)
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_NOGVA)
-packages-gz-no-gva: generate-metadata
-packages-gz-no-gva: monaco-ipk
-packages-gz-no-gva: product-ipk
-packages-gz-no-gva: wpe-ipk
-packages-gz-no-gva: softwareupdate-ipk
-packages-gz-no-gva: hsp-ipk
-packages-gz-no-gva: lpmupdater-ipk
-packages-gz-no-gva: recovery-ipk
-packages-gz-no-gva: product-script-ipk
 
 .PHONY: graph
 graph: product-ipk
 	graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
 
-.PHONY: softwareupdate-ipk
-softwareupdate-ipk: cmake_build
+.PHONY: software-update-ipk
+software-update-ipk: cmake_build
 	./scripts/create-software-update-ipk
 
 .PHONY: hsp-ipk
@@ -219,8 +144,8 @@ endif
 recovery-ipk: cmake_build
 	./scripts/create-recovery-ipk -p $(product)
 
-.PHONY: lpmupdater-ipk
-lpmupdater-ipk: lpm-bos
+.PHONY: lpm_updater-ipk
+lpm_updater-ipk: lpm-bos
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ $(product)
 
 .PHONY: monaco-ipk
@@ -234,6 +159,10 @@ wpe-ipk:
 .PHONY: product-script-ipk
 product-script-ipk:
 	./scripts/create-product-script-ipk
+
+.PHONY: avs-ipk
+avs-ipk:
+	./scripts/create-avs-ipk
 
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph
