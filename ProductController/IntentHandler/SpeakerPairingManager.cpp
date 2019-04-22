@@ -597,9 +597,20 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
     }
 
+    // Detect if any accessory is to be connected. This can happen if:
+    // (1) System goes from off/standby to On, some of the accessories connects and some not yet
+    // (2) System is on, some accessories lost connection and the watchdog timer of LPM goes off.
+    // In both cases, LPM sends accessory list with some accessory status set to Expected.
+    if( m_numOfExpectedRears > 0 )
+    {
+        BOSE_INFO( s_logger, "Rears connection expected, start timer" );
+        m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME, 0 );
+        m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
+    }
     if( m_numOfExpectedBass > 0 )
     {
-        BOSE_INFO( s_logger, "bass connection expected, start timer" );
+        // Similar to rears
+        BOSE_INFO( s_logger, "Bass connection expected, start timer" );
         m_timerBassAccessoryConnect->SetTimeouts( BASS_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME, 0 );
         m_timerBassAccessoryConnect->Start( std::bind( &SpeakerPairingManager::BassAccessoryConnectTimeout, this ) );
     }
@@ -691,14 +702,6 @@ const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, 
 
     if( m_numOfExpectedRears > 0 )
     {
-        // If one or more rear accessory is Expected, start a timer for it to connect. This can happen if
-        // (1) While system is on and  both rears are connected, one or both are powered off and LPM sends
-        //     the new acc list after LPM watchdog goes off
-        // (2) System changes from off or standby to On, one accessory connects and LPM sends the acc List
-        //     with the other status set to Expected.
-        BOSE_INFO( s_logger, "More rears expected, start timer" );
-        m_timerRearAccessoryConnect->SetTimeouts( REAR_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME, 0 );
-        m_timerRearAccessoryConnect->Start( std::bind( &SpeakerPairingManager::RearAccessoryConnectTimeout, this ) );
         // Return VALID so lightbar does Not blink yet. The timer callback will check the rears status again
         // and cause the lightbar to blink if the expected rear fails to connect.
         return "VALID";
