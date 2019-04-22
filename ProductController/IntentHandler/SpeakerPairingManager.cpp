@@ -919,6 +919,7 @@ void SpeakerPairingManager::RearAccessoryConnectTimeout( )
             m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( "MISSING_REAR" );
         }
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
+        SendAccessoryPairingStateToProduct( );
     }
 }
 
@@ -939,6 +940,7 @@ void SpeakerPairingManager::BassAccessoryConnectTimeout()
             m_accessorySpeakerState.mutable_subs( i ) -> set_configurationstatus( "MISSING_BASS" );
         }
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
+        SendAccessoryPairingStateToProduct( );
     }
 }
 
