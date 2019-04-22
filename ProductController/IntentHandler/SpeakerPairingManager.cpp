@@ -702,8 +702,10 @@ const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, 
 
     if( m_numOfExpectedRears > 0 )
     {
-        // Return VALID so lightbar does Not blink yet. The timer callback will check the rears status again
-        // and cause the lightbar to blink if the expected rear fails to connect.
+        // When the system goes to ON, it is very likely one rear is in CONNECTED status and the
+        // other is in Expected status, return VALID so the lightbar does not blink
+        // If the Expected rear does not connect when the timer goes off, the timer callback
+        // updates the configurationStatus so the UI update correctly
         return "VALID";
     }
     else
@@ -869,7 +871,6 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
         spkrInfo->set_type( AccessoryTypeToString( accDesc.type( ) ) );
     }
 
-
     switch( accDesc.status() )
     {
     case LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS:
@@ -902,15 +903,16 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
 ///
 /// @brief SpeakerPairingManager::RearAccessoryConnectTimeout
 ///
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SpeakerPairingManager::RearAccessoryConnectTimeout( )
 {
-    // If the expected rears already connected when the time goes off, this function simply returns
+    // If the expected rears are connected when the time goes off, this function simply returns.
     // If the expected rear accessory did not connect before the timer goes off,
-    // set the configurationStatus of rears to MISSING_REAR so lightbar blinks
+    // set the configurationStatus of rears to MISSING_REAR so lightbar blinks and the
+    // accessory on the Madrid UI grays out.
     BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
+
     if( m_numOfExpectedRears > 0 )
     {
         for( int i = 0; i < m_accessorySpeakerState.rears_size(); ++i )
@@ -927,11 +929,11 @@ void SpeakerPairingManager::RearAccessoryConnectTimeout( )
 ///
 /// @brief SpeakerPairingManager::BassAccessoryConnectTimeout
 ///
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::BassAccessoryConnectTimeout()
 {
     BOSE_INFO( s_logger, "%s entering method %s", CLASS_NAME, __func__ );
+
     if( m_numOfExpectedBass > 0 )
     {
         for( int i = 0; i < m_accessorySpeakerState.subs_size(); ++i )
