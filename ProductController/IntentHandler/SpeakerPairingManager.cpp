@@ -918,7 +918,10 @@ void SpeakerPairingManager::RearAccessoryConnectTimeout( )
         BOSE_INFO( s_logger, "Paired rear failed to connect" );
         for( int i = 0; i < m_accessorySpeakerState.rears_size(); ++i )
         {
-            m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( "MISSING_REAR" );
+            if( m_accessorySpeakerState.rears( i ).available() == false )
+            {
+                m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( "MISSING_REAR" );
+            }
         }
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
         SendAccessoryPairingStateToProduct( );
@@ -939,7 +942,10 @@ void SpeakerPairingManager::BassAccessoryConnectTimeout()
         BOSE_INFO( s_logger, "Paired bass failed to connect" );
         for( int i = 0; i < m_accessorySpeakerState.subs_size(); ++i )
         {
-            m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "MISSING_BASS" );
+            if( m_accessorySpeakerState.subs( i ).available() == false )
+            {
+                m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "MISSING_BASS" );
+            }
         }
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
         SendAccessoryPairingStateToProduct( );
