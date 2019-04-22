@@ -207,7 +207,7 @@ private:
     ///        types.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const char* AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight );
+    const char* AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight ) const;
     static bool AccessoryStatusIsConnected( unsigned int status );
     static bool AccessoryStatusIsExpected( unsigned int status );
     static bool AccessoryTypeIsRear( unsigned int type );

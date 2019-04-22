@@ -554,7 +554,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
                 if( AccessoryStatusIsConnected( accDesc.status() ) )
                 {
                     // Increase the number of accessory only if the accessory is really connected
-                    // The number is used to set configurationStatus (VALID or not) used by Monoco
+                    // The number is used to set configurationStatus (VALID or not) used by Monaco
                     if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_LEFT_REAR )
                     {
                         numOfLeftRears++;
@@ -605,7 +605,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
     }
 
     // Detect if any accessory is to be connected. This can happen if:
-    // (1) System goes from off/standby to On, some of the accessories connects and some not yet
+    // (1) System goes from off/standby to On, some of the accessories connected and some not yet
     // (2) System is on, some accessories lost connection and the watchdog timer of LPM goes off.
     // In both cases, LPM sends accessory list with some accessory status set to Expected.
     if( m_numOfExpectedRears > 0 )
@@ -696,7 +696,7 @@ void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
 /// @return This method returns a char* based on whether the configuration is valid
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight )
+const char* SpeakerPairingManager::AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight ) const
 {
     BOSE_INFO( s_logger, "numLeft %d, numRight %d", numLeft, numRight );
 
