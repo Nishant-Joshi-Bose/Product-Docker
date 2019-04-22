@@ -597,6 +597,13 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
     }
 
+    // Rears we send off to get valid config
+    const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears );
+    for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
+    {
+        m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
+    }
+
     // Detect if any accessory is to be connected. This can happen if:
     // (1) System goes from off/standby to On, some of the accessories connects and some not yet
     // (2) System is on, some accessories lost connection and the watchdog timer of LPM goes off.
@@ -613,13 +620,6 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         BOSE_INFO( s_logger, "Bass connection expected, start timer" );
         m_timerBassAccessoryConnect->SetTimeouts( BASS_ACCESSORY_MILLISECOND_MAX_CONNECT_TIME, 0 );
         m_timerBassAccessoryConnect->Start( std::bind( &SpeakerPairingManager::BassAccessoryConnectTimeout, this ) );
-    }
-
-    // Rears we send off to get valid config
-    const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears );
-    for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
-    {
-        m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
     }
 
     SendAccessoryPairingStateToProduct();
