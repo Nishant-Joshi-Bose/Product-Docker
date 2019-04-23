@@ -6,7 +6,8 @@
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
-  <daemon name="IoT"/>
+  <daemon name="IoT"
+          recovery="reboot"/>
 
   <daemon name="CAPS"
           recovery="reboot">
