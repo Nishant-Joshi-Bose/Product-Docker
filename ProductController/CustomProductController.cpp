@@ -641,24 +641,27 @@ void CustomProductController::SendInitialCapsData()
         using namespace ProductSTS;
 
         Sources message;
-        Sources_SourceItem* source;
 
 #if BOSE_FEATURE(AUX_SOURCE)
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-        source->set_sourceaccountname( ProductSourceSlot_Name( AUX ) );
-        source->set_accountid( ProductSourceSlot_Name( AUX ) );
-        source->set_status( SourceStatus::AVAILABLE );
-        source->set_visible( true );
+        {
+            auto source = message.add_sources();
+            source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+            source->set_sourceaccountname( ProductSourceSlot_Name( AUX ) );
+            source->set_accountid( ProductSourceSlot_Name( AUX ) );
+            source->set_status( SourceStatus::AVAILABLE );
+            source->set_visible( true );
+        }
 #endif
 
         // Set the (in)visibility of SETUP sources.
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::SETUP );
-        source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
-        source->set_accountid( SetupSourceSlot_Name( SETUP ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
-        source->set_visible( false );
+        {
+            auto source = message.add_sources();
+            source->set_sourcename( SHELBY_SOURCE::SETUP );
+            source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
+            source->set_accountid( SetupSourceSlot_Name( SETUP ) );
+            source->set_status( SourceStatus::UNAVAILABLE );
+            source->set_visible( false );
+        }
 
         GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
