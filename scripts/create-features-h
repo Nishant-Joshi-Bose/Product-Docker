@@ -11,8 +11,8 @@ _, features_json_file, features_h_file = sys.argv
 #
 # features.json is like the following:
 # {
-#     "bluetooth_out": true,
-#     "aux_source": true
+#     "AUX_SOURCE": true,
+#     "BLUETOOTH_OUT": true
 # }
 #
 # For each feature `foo` generate
