@@ -17,15 +17,15 @@
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/4.1.6-5603+2ed1712"
+    "selected_version": "Release/stable_mr2_2019/4.1.7-5700+8b10444"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/4.1.6-5603+2ed1712"
+    "selected_version": "Release/stable_mr2_2019/4.1.7-5700+8b10444"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/4.1.6-5603+2ed1712"
+    "selected_version": "Release/stable_mr2_2019/4.1.7-5700+8b10444"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
