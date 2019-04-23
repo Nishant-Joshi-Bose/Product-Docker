@@ -38,6 +38,7 @@ GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_locati
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
+	maybe-update $(BUILDS_DIR)/BoseFeatures.h -- ./scripts/create-features-h features.json $(BUILDS_DIR)/BoseFeatures.h
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	cp -av $(GVA_DIR)/tools/auth_util.py builds/$(cfg)
