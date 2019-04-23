@@ -32,7 +32,7 @@ _, features_json_file, features_h_file = sys.argv
 # is intended to cause mistakes like
 #    #if BOSE_FEATURE(SOME_MISTYPED_NAME)
 # or the failure to `#include "BoseFeatures.h"`
-# to become compilation errors,
+# to become compilation errors.
 #
 
 features = json.load(open(features_json_file, 'rt'))
