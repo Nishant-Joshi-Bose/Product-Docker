@@ -1,4 +1,4 @@
 {
-    "bluetooth_out": true,
-    "aux_source": true
+    "AUX_SOURCE": true,
+    "BLUETOOTH_OUT": true
 }
