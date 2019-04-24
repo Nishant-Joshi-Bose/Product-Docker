@@ -184,11 +184,11 @@
     "selected_version": "Release/bose-stable/OpenSSL_1_0_2l-15-g7661080"
   },
   {
-    "name": "opensource-openssl-x86_64",
+    "name": "opensource-openssl-x86",
     "selected_version": "Release/bose-stable/OpenSSL_1_0_2l-15-g7661080"
   },
   {
-    "name": "opensource-openssl-x86",
+    "name": "opensource-openssl-x86_64",
     "selected_version": "Release/bose-stable/OpenSSL_1_0_2l-15-g7661080"
   },
   {
