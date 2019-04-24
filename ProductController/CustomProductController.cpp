@@ -29,6 +29,7 @@
 #include "ProductCommandLine.h"
 #include "CommonProductCommandLine.h"
 #include "IoTIPCClient.h"
+#include "BoseFeatures.h"
 
 static DPrint s_logger( "CustomProductController" );
 
@@ -640,20 +641,27 @@ void CustomProductController::SendInitialCapsData()
         using namespace ProductSTS;
 
         Sources message;
-        Sources_SourceItem* source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::PRODUCT );
-        source->set_sourceaccountname( ProductSourceSlot_Name( AUX ) );
-        source->set_accountid( ProductSourceSlot_Name( AUX ) );
-        source->set_status( SourceStatus::AVAILABLE );
-        source->set_visible( true );
+
+#if BOSE_FEATURE(AUX_SOURCE)
+        {
+            auto source = message.add_sources();
+            source->set_sourcename( SHELBY_SOURCE::PRODUCT );
+            source->set_sourceaccountname( ProductSourceSlot_Name( AUX ) );
+            source->set_accountid( ProductSourceSlot_Name( AUX ) );
+            source->set_status( SourceStatus::AVAILABLE );
+            source->set_visible( true );
+        }
+#endif
 
         // Set the (in)visibility of SETUP sources.
-        source = message.add_sources( );
-        source->set_sourcename( SHELBY_SOURCE::SETUP );
-        source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
-        source->set_accountid( SetupSourceSlot_Name( SETUP ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
-        source->set_visible( false );
+        {
+            auto source = message.add_sources();
+            source->set_sourcename( SHELBY_SOURCE::SETUP );
+            source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
+            source->set_accountid( SetupSourceSlot_Name( SETUP ) );
+            source->set_status( SourceStatus::UNAVAILABLE );
+            source->set_visible( false );
+        }
 
         GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
@@ -787,22 +795,20 @@ void CustomProductController::HandleProductMessage( const ProductMessage& produc
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
 ///         specifically, provide the set of sources to be created initially.
 ///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::SetupProductSTSController( void )
+void CustomProductController::SetupProductSTSController()
 {
     using namespace ProductSTS;
 
     ProductSTSStateFactory<CustomProductSTSStateTopAux> auxStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopSetup>    silentStateFactory;
-
-    // 'AUX' is a product defined source used for the auxilary port.
     std::vector<ProductSTSController::SourceDescriptor> sources;
+
+#if BOSE_FEATURE(AUX_SOURCE)
+    // 'AUX' is a product defined source used for the auxilary port.
     ProductSTSController::SourceDescriptor descriptor_AUX{ AUX, ProductSourceSlot_Name( AUX ), true, auxStateFactory };
     sources.push_back( descriptor_AUX );
+#endif
 
     // 'SETUP' is a "fake" source used for setup state.
     ProductSTSController::SourceDescriptor descriptor_Setup{ SETUP, SetupSourceSlot_Name( SETUP ), false, silentStateFactory };
