@@ -215,7 +215,7 @@ if updates:
     max_command_len = 1018
     remove = shell_quote([name for name in updates if name in target_files])
     while remove:
-        cmd = "cd /opt/Bose && rm -f --"
+        cmd = 'cd /opt/Bose && rm -f -- ' + remove.pop(0)
         while remove:
             t = cmd + ' ' + remove[0]
             if len(t) > max_command_len:
