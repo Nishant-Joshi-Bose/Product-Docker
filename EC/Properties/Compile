@@ -30,14 +30,9 @@ if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "
     git clone git@github.com:BoseCorp/iot-profile-creator
     set +x
     iot-profile-creator/update_all_environments.sh $(echo $[ProjectName] | tr '[A-Z]' '[a-z]') $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $recoveryVersion 
-    if [ "$[ProjectName]" = "Eddie" ]; then
-        # Need to create an additional entry for Eddie-Club
-        iot-profile-creator/update_all_environments.sh eddieclub $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $recoveryVersion
-    fi
-    if [ "$[ProjectName]" = "Professor" ]; then
-        # Need to create an additional entry for Ginger-Cheevers
-        iot-profile-creator/update_all_environments.sh ginger-cheevers $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $recoveryVersion
-    fi
+
+    # Create an additional entry for Eddie-Club
+    iot-profile-creator/update_all_environments.sh eddieclub $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $recoveryVersion
 fi
 
 : success
