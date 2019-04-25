@@ -132,8 +132,6 @@ cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Spotify "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Upnp "$opt_dir/bin" || exit
-cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 # ----------------------------------------------------------------------------
@@ -194,7 +192,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
-"$audiosource_upnp_dir/stage" --product=eddie "$opt_dir" || exit
+"$audiosource_upnp_dir/stage" "$opt_dir" || exit
 "$audiopathservice64_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopathservice64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$audiopathproducts64_dir/stage" --product=eddie "$opt_dir" || exit
