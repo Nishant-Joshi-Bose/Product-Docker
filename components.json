@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/1.0.7-995+f16558e"
+    "selected_version": "Release/stable/1.0.7-1037+43bd7c2"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.2.8-1535+a5d04e2"
+    "selected_version": "Release/stable-mr2-2019/2.2.9-1574+bd387ac"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -313,7 +313,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.45337.3311140"
+    "selected_version": "Release/Castle-Fork-2019_MR2/2.2.2.45383.3319799"
   },
   {
     "name": "svc-pts-log-decrypt",
