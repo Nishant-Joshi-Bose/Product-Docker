@@ -1,0 +1,31 @@
+#!/usr/bin/python3
+#
+# Sanity checks on the run-time and build-time feature configurations to make
+# sure they are mututally consistent.
+#
+import sys
+import json
+
+this_script, = sys.argv
+
+features_json = 'features.json'
+product_inputs_json = 'opt-bose-fs/etc/ProductInputs.json'
+
+features = json.load(open(features_json, 'rt'))
+product_inputs = json.load(open(product_inputs_json, 'rt'))
+
+# ----------------------------------------------------------------------------
+# If AUX_SOURCE is true in features.json, then AUX must be listed as a source
+# in ProductInputs.json.  If false, then must not.
+
+aux_source = False
+for input in product_inputs['Config']['supportedInputs']:
+    if input.get('inputAccount') == 'AUX':
+        aux_source = True
+        break
+
+if features['AUX_SOURCE'] != aux_source:
+    sys.exit('{}: Inconsistent AUX_SOURCE configuration in {} and {}'
+             .format(this_script, features_json, product_inputs_json))
+
+# ----------------------------------------------------------------------------

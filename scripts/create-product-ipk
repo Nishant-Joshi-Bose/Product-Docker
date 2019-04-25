@@ -213,7 +213,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
-"$bluetooth_dir/stage" --product=eddie --btout=true "$opt_dir" || exit
+"$bluetooth_dir/stage" --product=eddie --btout="$(jq -r .BLUETOOTH_OUT "$wspace/features.json")" "$opt_dir" || exit
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit

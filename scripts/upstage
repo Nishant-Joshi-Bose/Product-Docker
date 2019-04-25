@@ -208,12 +208,21 @@ if updates:
     # executable, Linux won't let us modify it ("text file busy").
     # Also, avoid trying to send a command that's too long or else
     # adb will fail ("bad service name length").
-    max_per_command = 20
-    remove = [name for name in updates if name in target_files]
+    # Experimentation shows
+    #    adb shell $(python -c 'print "x" * 1018')
+    # is the longest command that does not evoke the
+    # "bad service name length" error.
+    max_command_len = 1018
+    remove = shell_quote([name for name in updates if name in target_files])
     while remove:
-        args = remove[:max_per_command]
-        remove = remove[max_per_command:]
-        call(["adb", "shell", "cd /opt/Bose && rm -f --"] + shell_quote(args))
+        cmd = 'cd /opt/Bose && rm -f -- ' + remove.pop(0)
+        while remove:
+            t = cmd + ' ' + remove[0]
+            if len(t) > max_command_len:
+                break
+            remove.pop(0)
+            cmd = t
+        call(["adb", "shell", cmd])
 
     # Copy files from stage to target.
     for name in updates:

@@ -1,0 +1,66 @@
+#!/usr/bin/python3
+import sys
+import os
+import json
+
+_, features_json_file, features_h_file = sys.argv
+
+#
+# Convert features.json to BoseFeatures.h to allow compile-time selection of
+# software features.
+#
+# features.json is like the following:
+# {
+#     "AUX_SOURCE": true,
+#     "BLUETOOTH_OUT": true
+# }
+#
+# For each feature `foo` generate
+#   #define BOSE_FEATURE_FOO BOSE_FEATURE_TRUE
+# or
+#   #define BOSE_FEATURE_FOO BOSE_FEATURE_FALSE
+# to enable or disable the feature respectively.
+#
+# Source files can test if a feature is enabled like this:
+#
+#   #include "BoseFeatures.h"
+#   #if BOSE_FEATURE(FOO)
+#   #include "Foo.h"
+#   #endif
+#
+# The use of BOSE_FEATURE_TRUE() and BOSE_FEATURE_FALSE()
+# is intended to cause mistakes like
+#    #if BOSE_FEATURE(SOME_MISTYPED_NAME)
+# or the failure to `#include "BoseFeatures.h"`
+# to become compilation errors.
+#
+
+features = json.load(open(features_json_file, 'rt'))
+
+header = []
+header.append("""\
+// AUTOMATICALLY GENERATED
+
+#pragma once
+
+#define BOSE_FEATURE_TRUE() 1
+#define BOSE_FEATURE_FALSE() 0
+
+#define BOSE_FEATURE( X ) BOSE_FEATURE_ ## X ()
+
+""")
+
+for feature, value in features.items():
+    if type(value) == type(True):
+        header.append('#define BOSE_FEATURE_{} BOSE_FEATURE_{}\n'
+                      .format(feature.upper(),
+                              str(value).upper()))
+        continue
+    raise Exception('unexpected data type {} for feature {}'
+                    .format(type(value), feature))
+
+tmp = '{}.{}~'.format(features_h_file, os.getpid())
+with open(tmp, 'wt') as fh:
+    for line in header:
+        fh.write(line)
+os.rename(tmp, features_h_file)
