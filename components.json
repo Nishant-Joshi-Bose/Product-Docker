@@ -36,6 +36,14 @@
     "selected_version": "Release/stable/0.0.2-483+3f14762"
   },
   {
+    "name": "AudioSource-UPnP-qc8017_32",
+    "selected_version": "Continuous/stable/0.0.1-17+98587aa"
+  },
+  {
+    "name": "AudioSource-UPnP-x86_64",
+    "selected_version": "Continuous/stable/0.0.1-17+98587aa"
+  },
+  {
     "name": "AudioSource-qc8017_32",
     "selected_version": "Release/stable/2.2.1-325+1cbb127"
   },
@@ -313,7 +321,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.45337.3311140"
+    "selected_version": "Continuous/Castle-Fork-CompMS/2019-04-25_1351"
   },
   {
     "name": "svc-pts-log-decrypt",
