@@ -355,15 +355,6 @@ void ProductCecHelper::Connected( bool connected )
         } );
         m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, cecSrcSwitchCb );
 
-        const Callback< HdmiHpdStatus_t > hdmiHPDCb( [this]( HdmiHpdStatus_t hpdEvent )
-        {
-            if( hpdEvent.hpd_state() )
-            {
-                m_CecHelper->RequestFakeHPD();
-            }
-        } );
-        m_ProductLpmHardwareInterface->RegisterForLpmEvents( static_cast< IpcOpcodes_t >( IPC_HDMI_HPD_EVENT ), hdmiHPDCb );
-
         const Callback< IpcCecState_t > cecStateCb( [ this ]( IpcCecState_t state )
         {
             HandleCecState( state );
