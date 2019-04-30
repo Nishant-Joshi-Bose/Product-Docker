@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Continuous/stable/4.1.8-5738+28024c8"
+    "selected_version": "Continuous/stable/4.1.8-5756+fc81e6e"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Continuous/stable/4.1.8-5738+28024c8"
+    "selected_version": "Continuous/stable/4.1.8-5756+fc81e6e"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Continuous/stable/4.1.8-5738+28024c8"
+    "selected_version": "Continuous/stable/4.1.8-5756+fc81e6e"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Continuous/stable/4.1.8-5738+28024c8"
+    "selected_version": "Continuous/stable/4.1.8-5756+fc81e6e"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Continuous/stable/3.0.0-300+79f18e5"
+    "selected_version": "Continuous/stable/3.0.0-301+a0a8ed8"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-1980+4666315"
+    "selected_version": "Continuous/stable/2.2.0-1986+5f8ce52"
   },
   {
     "name": "PassportClient-qc8017_32",
