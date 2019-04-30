@@ -71,7 +71,14 @@ mkdir -p "$output_dir" "$opt_dir" || exit
 
 echo "Package version \"$gva_ver\""
 "$wspace"/scripts/validate-version "$gva_ver" || exit
-"$gva_dir/stage" "$opt_dir" || exit
+
+has_battery=$(jq .BATTERY "$wspace/features.json") || exit
+stage_opts=()
+if $has_battery; then
+    stage_opts+=( --has-battery )
+fi
+
+"$gva_dir/stage" "${stage_opts[@]}" "$opt_dir" || exit
 
 PackageName=gva
 
