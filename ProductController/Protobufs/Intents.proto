@@ -8,7 +8,7 @@ message ActionCustom_t
         ////////////////////////////////////////////////////////////////////////////////////////////////
         /// Custom Defined Actions Valued 101 and Higher
         ////////////////////////////////////////////////////////////////////////////////////////////////
-        // unused                   = 101,
+        // unused                       = 101,
         ACTION_SETUP_BLE_REMOTE         = 102;
         ////////////////////////////////////////////////////////////////////////////////////////////////
         /// PRESET_SELECT_*_RF are "virtual" intents that are never processed directly (they are translated
@@ -23,7 +23,8 @@ message ActionCustom_t
         PRESET_SELECT_6_RF              = 108;
         BOOTUP_FACTORY_DEFAULT_START    = 109;
         BOOTUP_FACTORY_DEFAULT_COMPLETE = 110;
-        // 111-112 are available
+        // 111 is available
+        ACTION_FORCE_UPDATE             = 112;
         ACTION_VOICE_LISTENING          = 113;
         ACTION_MUTE                     = 114;
         ACTION_SOUNDTOUCH               = 115;

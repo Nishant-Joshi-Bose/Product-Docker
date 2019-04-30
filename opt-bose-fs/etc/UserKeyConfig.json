@@ -395,10 +395,18 @@
     {
         "action": "ACTION_SOUNDTOUCH",
         "commment": "select soundtouch",
-        "keyEvent": "PRESS",
+        "keyEvent": "RELEASE",
         "keyList": ["BOSE_SOUND_TOUCH_SOURCE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
         "timeOutList": []
+    },
+    {
+        "action": "ACTION_FORCE_UPDATE",
+        "commment": "Soundtouch button press and hold for at least 10000ms ---> force system to take OTA update",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_SOUND_TOUCH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [10000]
     },
     {
         "action": "ACTION_CONNECT",
