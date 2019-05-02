@@ -100,7 +100,11 @@ bool CustomProductControllerStatePlayingSelectedSetupNetworkConfig::HandlePlayCh
 {
     BOSE_INFO( s_logger, "The %s state is in %s caching %d.", GetName( ).c_str( ), __func__, chimeEvent );
 
-    m_pendingChimeEvent = chimeEvent;
+    if( chimeEvent == BT_DISCOVERABLE || chimeEvent == BT_CONNECT )
+    {
+        // Only pend chimes that would be playing soon, PGC-4202
+        m_pendingChimeEvent = chimeEvent;
+    }
     return true;
 }
 

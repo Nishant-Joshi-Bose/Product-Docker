@@ -56,6 +56,7 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & requ
                 asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
                 m_account.IPC().SendAudioSetURLEvent( asu );
             }
+
             if( source->status() == SoundTouchInterface::SourceStatus::AVAILABLE )
             {
                 // TODO - Re-evaluate this for all AVAILABLE source
@@ -187,6 +188,17 @@ bool ProductSTSStateDeviceControl::HandleSkipNext( const STS::Void & )
 }
 
 bool ProductSTSStateDeviceControl::HandleSkipPrevious( const STS::Void & )
+{
+    BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
+
+    DeviceControllerClientMessages::TranportControlMessage_t request;
+    request.set_request( DeviceControllerClientMessages::DevicePlaybackControl::PLAYBACK_CTRL_PREVIOUS );
+
+    m_deviceControllerPtr->SendTransportControlRequest( request );
+    return true;
+}
+
+bool ProductSTSStateDeviceControl::HandleSkipPreviousForce( const STS::Void & )
 {
     BOSE_INFO( s_logger, "%s( %s )", __func__, m_account.GetSourceName().c_str() );
 

@@ -207,8 +207,9 @@ private:
     ///        types.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    static const char* AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight, uint32_t oldSize );
+    const char* AccessoryRearConiguration( uint32_t numLeft, uint32_t numRight ) const;
     static bool AccessoryStatusIsConnected( unsigned int status );
+    static bool AccessoryStatusIsExpected( unsigned int status );
     static bool AccessoryTypeIsRear( unsigned int type );
     static bool AccessoryTypeIsSub( unsigned int type );
     static const char* AccessoryTypeToString( unsigned int type );
@@ -217,15 +218,17 @@ private:
                                                             ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
                                                             spkrInfo );
 
-    void DetectMissingSub( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
-    void DetectMissingRears( const ProductPb::AccessorySpeakerState& oldAccessorySpeakerState );
     void RearAccessoryConnectTimeout();
+    void BassAccessoryConnectTimeout();
 
 private:
     bool        m_accessoryListReceived = false;
     bool        m_firstAccessoryListReceived = false;
     APTimerPtr  m_timerRearAccessoryConnect;
+    APTimerPtr  m_timerBassAccessoryConnect;
     bool        m_waitSecondRearAccessoryConnect = false;
+    uint32_t    m_numOfExpectedRears = 0;
+    uint32_t    m_numOfExpectedBass = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
