@@ -1800,6 +1800,10 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentVoiceListening );
         }
+        else if( GetIntentHandler( ).IsIntentForceUpdate( action ) )
+        {
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentManualSoftwareInstall );
+        }
         else
         {
             BOSE_ERROR( s_logger, "An action key %s was received that has no associated intent.", CustomProductKeyInputManager::IntentName( action ).c_str() );

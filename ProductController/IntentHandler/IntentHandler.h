@@ -153,6 +153,11 @@ public:
     {
         return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_VOICE_LISTENING );
     }
+
+    static bool IsIntentForceUpdate( KeyHandlerUtil::ActionType_t argument )
+    {
+        return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_FORCE_UPDATE );
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
