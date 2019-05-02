@@ -209,15 +209,15 @@
   },
   {
     "name": "opensource-opkg-native",
-    "selected_version": "Release/bose-stable/bose-v3.6.2-17-g4b471e3"
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
     "name": "opensource-opkg-qc8017_32",
-    "selected_version": "Release/bose-stable/bose-v3.6.2-17-g4b471e3"
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
     "name": "opensource-opkg-x86",
-    "selected_version": "Release/bose-stable/bose-v3.6.2-17-g4b471e3"
+    "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
     "name": "opensource-util-linux-qc8017_32",
@@ -325,7 +325,7 @@
   },
   {
     "name": "svc-pts-log-decrypt",
-    "selected_version": "master@02ecd1577835b11fb3dd6342d7d4d5faf3cfd9d0"
+    "selected_version": "master@2bb0045d023c434a6b6569a1bba24c32af744312"
   },
   {
     "name": "SystemEventService-qc8017_32",
