@@ -212,24 +212,24 @@
     "selected_version": "Release/bose-dev/v0.3.6.2-2-gb1e1aba"
   },
   {
-    "name": "opensource-util-linux-qc8017_32",
-    "selected_version": "Release/bose-master/1.5.0-10+877ade5"
-  },
-  {
     "name": "opensource-tinyxml-qc8017_32",
     "selected_version": "Release/bose-stable/v2.6.1-31-g1e9abf0"
+  },
+  {
+    "name": "opensource-util-linux-qc8017_32",
+    "selected_version": "Release/bose-master/1.5.0-10+877ade5"
   },
   {
     "name": "opensource-zlib-qc8017_32",
     "selected_version": "Release/bose-stable/v1.2.11-21-ge335c7e"
   },
   {
-    "name": "PassportService-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-1964+b4ce81c"
-  },
-  {
     "name": "PassportClient-qc8017_32",
     "selected_version": "Release/stable/2.2.0-1353+5097be5"
+  },
+  {
+    "name": "PassportService-qc8017_32",
+    "selected_version": "Release/stable/2.2.0-1964+b4ce81c"
   },
   {
     "name": "product-startup",
