@@ -27,19 +27,19 @@ eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-	(--help | -h)
-	    cat <<EOF
+    (--help | -h)
+        cat <<EOF
 Usage: $this [options]
 
 Create an IPK file for installing SoundTouch with opkg.
 
 Options:
 EOF
-	    exit 0
-	    ;;
+        exit 0
+        ;;
 
-	(--) break ;;
-	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    (--) break ;;
+    (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
     esac
 done
 
@@ -67,6 +67,7 @@ audiopathservice64_dir=$(components get AudioPathService-qc8017_64 installed_loc
 audiopathproducts64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 audiosource_upnp_dir=$(components get AudioSource-UPnP-qc8017_32 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
+audiosource_spotify_dir=$(components get AudioSource-Spotify-qc8017_32 installed_location) || exit
 networkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 sass_dir=$(components get SASS-qc8017_64 installed_location) || exit
 passport_dir=$(components get Passport-qc8017_32 installed_location) || exit
@@ -131,7 +132,6 @@ cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Spotify "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 # ----------------------------------------------------------------------------
@@ -219,6 +219,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$telemetry_dir/stage" "$opt_dir" || exit
 "$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
+"$audiosource_spotify_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
 "$opensource_ptp_dir/Bose/stage" "$opt_dir" || exit
 "$opensource_avahi_dir/Bose/stage" "$opt_dir" || exit
