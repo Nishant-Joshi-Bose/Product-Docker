@@ -159,7 +159,7 @@ EOF
 # -----------------------------------------------------------------------------
 # Strip symbols from the executables.
 
-"$here/strip-symbols" "$stage"/Bose/{lib,bin,update/bin,update/lib}/* || exit
+strip-symbols "$stage"/Bose/{lib,bin,update/bin,update/lib}/* || exit
 
 # -----------------------------------------------------------------------------
 # Stage area is complete.  Package it into a *.ipk file.
