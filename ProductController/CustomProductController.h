@@ -570,6 +570,8 @@ private:
 
     void HandleVoiceStatus( VoiceServicePB::VoiceStatus voiceStatus ) override;
 
+    bool IsAllModuleReady() const;
+
     bool m_haltInPlayableTransitionNetworkStandby = false;
 
     int64_t m_bootCompleteTime              = 0;
