@@ -145,7 +145,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable-mr2-2019/2.2.9-1574+bd387ac"
+    "selected_version": "Release/stable/2.2.8-1535+a5d04e2"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -313,7 +313,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-2019_MR2/2.2.2.45383.3319799"
+    "selected_version": "Release/Castle-Fork-2019_MR2/2.2.2.45413.3330667"
   },
   {
     "name": "svc-pts-log-decrypt",
