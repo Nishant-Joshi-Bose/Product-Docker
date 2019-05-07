@@ -27,8 +27,8 @@ eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-        (--help | -h)
-            cat <<EOF
+	(--help | -h)
+	    cat <<EOF
 Usage: $this [options]
 
 Create an IPK file for installing SoundTouch with opkg.
