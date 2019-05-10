@@ -23,13 +23,79 @@ For more information, see the [Professor wiki page](https://wiki.bose.com/displa
 
 ### Getting Started
 
-Checkout CastleTools.git and Professor.git:
+Clone CastleTools.git and CastleProducts.git:
 ```shell session
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTools.git
 $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_profile or ~/.login
-$ git clone git@github.com:BoseCorp/Professor.git
+$ git clone --branch professor/master git@github.com:BoseCorp/CastleProducts.git Professor
 ```
+
+Make sure your Professor unit is accessible via adb.
+```shell session
+$ sudo adb start-server             # must be done as root. typically once per boot of the build host
+$ adb devices
+List of devices attached
+5166240   device
+
+$
+```
+
+If you have multiple Android devices, you can set the ANDROID_SERIAL environment
+variable to select a specific device:
+
+```
+export ANDROID_SERIAL=5166240
+```
+
+(Some scripts will not work correctly if you don't do that.)
+Access the APQ console via the tap cable.
+
+```shell session
+$ cat /etc/minirc.usb0
+pr port             /dev/ttyUSB0
+pu baudrate         115200
+pu bits             8
+pu parity           N
+pu stopbits         1
+pu minit
+pu mreset
+pu mhangup
+pu rtscts           No
+pu logfname         /dev/null
+$ minicom -w -C minicom.cap usb0
+```
+
+Use `dmesg` to see if your tap cable is actually USB0.
+
+If you use `adb shell` to login, you won't have the usual environment by default.
+To setup the usual environment:
+
+```shell session
+$ adb shell
+Sat Sep  2 12:10:12 UTC 2017
+Device name: "Bose SoundTouch C7E3A2"
+mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68
+#
+# type start
+start is /opt/Bose/bin/start
+#
+```
+
+Certain important error and status messages go only to the console.
+You generally won't see this information via `adb shell`.
+
+To enable development mode:
+
+```shell session
+# mount -oremount,rw /persist
+# mfgdata set development true
+# mount -oremount,ro /persist
+```
+
+This flag enables core dumps, telnet access and other debug features.
+In particular, if a daemon dies unexpectedly, no automatic recovery
+happens when development mode is enabled.
 
 <a name="compile">
 
@@ -141,16 +207,6 @@ $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zip
 ```
 
 #### Putipk_ota Script
-
-Make sure your Professor unit is accessible via adb.
-```shell session
-$ sudo adb start-server             # must be done as root. typically once per boot of the build host
-$ adb devices
-List of devices attached
-5166240   device
-
-$
-```
 
 Use the putipk_ota script to install the .ipk package you built.
 ```shell session
@@ -266,54 +322,6 @@ For example: http://203.0.113.1/pts.txt
 ### More...
 
 [Join the Professor Slack channel.](https://bosessg.slack.com/messages/CBMRG7ATV)
-
-Access the APQ console via the tap cable.
-
-```shell session
-$ cat /etc/minirc.usb0
-pr port             /dev/ttyUSB0
-pu baudrate         115200
-pu bits             8
-pu parity           N
-pu stopbits         1
-pu minit
-pu mreset
-pu mhangup
-pu rtscts           No
-pu logfname         /dev/null
-$ minicom -w -C minicom.cap usb0
-```
-
-Use `dmesg` to see if your tap cable is actually USB0.
-
-If you use `adb shell` to login, you won't have the usual environment by default.
-To setup the usual environment:
-
-```shell session
-$ adb shell
-Sat Sep  2 12:10:12 UTC 2017
-Device name: "Bose SoundTouch C7E3A2"
-mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68
-#
-# type start
-start is /opt/Bose/bin/start
-#
-```
-
-Certain important error and status messages go only to the console.
-You generally won't see this information via `adb shell`.
-
-To enable development mode:
-
-```shell session
-# mount -oremount,rw /persist
-# mfgdata set development true
-# mount -oremount,ro /persist
-```
-
-This flag enables core dumps, telnet access and other debug features.
-In particular, if a daemon dies unexpectedly, no automatic recovery
-happens when development mode is enabled.
 
 <a name="useful"/>
 ### Useful Links
