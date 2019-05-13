@@ -171,7 +171,7 @@ echo "SoundTouch recovery prerm"
 exit 0
 EOF
 
-"$here/strip-symbols" "$stage"/Bose/bin/* || exit
+strip-symbols "$stage"/Bose/bin/* || exit
 
 # -----------------------------------------------------------------------------
 # Stage area is complete.  Package it into a *.ipk file.

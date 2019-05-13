@@ -65,10 +65,12 @@ boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 audiopathservice64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
 audiopathproducts64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
+audiosource_upnp_dir=$(components get AudioSource-UPnP-qc8017_32 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
+audiosource_spotify_dir=$(components get AudioSource-Spotify-qc8017_32 installed_location) || exit
 networkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 sass_dir=$(components get SASS-qc8017_64 installed_location) || exit
-passport_dir=$(components get Passport-qc8017_32 installed_location) || exit
+passport_dir=$(components get PassportService-qc8017_32 installed_location) || exit
 wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
 web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
@@ -130,9 +132,6 @@ cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Spotify "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Upnp "$opt_dir/bin" || exit
-cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 # ----------------------------------------------------------------------------
@@ -193,6 +192,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
+"$audiosource_upnp_dir/stage" "$opt_dir" || exit
 "$audiopathservice64_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopathservice64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$audiopathproducts64_dir/stage" --product=eddie "$opt_dir" || exit
@@ -219,6 +219,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$telemetry_dir/stage" "$opt_dir" || exit
 "$cloudcontrolclient_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
+"$audiosource_spotify_dir/stage" "$opt_dir" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
 "$opensource_ptp_dir/Bose/stage" "$opt_dir" || exit
 "$opensource_avahi_dir/Bose/stage" "$opt_dir" || exit
@@ -321,7 +322,7 @@ EOF
 unstripped_dir=$output_dir/product-unstripped
 unstripped_tar=$unstripped_dir.tar.gz
 rm -rf "$unstripped_dir" "$unstripped_tar"
-"$here/strip-symbols" --save="$output_dir/product-unstripped" "$stage"/Bose/{lib,bin}/* || exit
+strip-symbols --save="$output_dir/product-unstripped" "$stage"/Bose/{lib,bin}/* || exit
 tar --owner=0 --group=0 -czf "$unstripped_tar" \
     -C "$(dirname "$unstripped_dir")" \
     "$(basename "$unstripped_dir")" \
