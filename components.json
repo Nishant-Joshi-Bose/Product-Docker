@@ -1,19 +1,19 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/4.1.11-5958+4f1b2e3"
+    "selected_version": "Continuous/stable/4.1.11-5993+d06d9bb"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/4.1.11-5958+4f1b2e3"
+    "selected_version": "Continuous/stable/4.1.11-5993+d06d9bb"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/4.1.11-5958+4f1b2e3"
+    "selected_version": "Continuous/stable/4.1.11-5993+d06d9bb"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/4.1.11-5958+4f1b2e3"
+    "selected_version": "Continuous/stable/4.1.11-5993+d06d9bb"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -29,11 +29,11 @@
   },
   {
     "name": "AudioSource-Spotify-qc8017_32",
-    "selected_version": "Release/stable/0.0.16-7-g353fd12"
+    "selected_version": "Continuous/stable/0.0.16-8-gc0443a7"
   },
   {
     "name": "AudioSource-Spotify-x86_64",
-    "selected_version": "Release/stable/0.0.16-7-g353fd12"
+    "selected_version": "Continuous/stable/0.0.16-8-gc0443a7"
   },
   {
     "name": "AudioSource-UPnP-qc8017_32",
@@ -289,11 +289,11 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/stable/2.4.18-1577+1ed7a0f"
+    "selected_version": "Continuous/stable/2.4.18-1582+3c81b9c"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/stable/2.4.18-1577+1ed7a0f"
+    "selected_version": "Continuous/stable/2.4.18-1582+3c81b9c"
   },
   {
     "name": "SecureDeviceKey",
@@ -309,7 +309,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/stable/5.0.0-2142+fa085ce"
+    "selected_version": "Continuous/stable/5.0.1-2148+da8f845"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -325,11 +325,11 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@a7c326a1c2106a727ff454c34ae6a913bbeb7ab3"
+    "selected_version": "stable@d5b1ec558576e6863ff406ee703c120d07ec47ad"
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Release/stable/2.2.6-757+48d91e7"
+    "selected_version": "Continuous/stable/2.2.6-764+e4936e7"
   },
   {
     "name": "Webkit",
