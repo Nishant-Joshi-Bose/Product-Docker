@@ -1,0 +1,20 @@
+{
+  "ProductConfig": {
+    "productDetails": [
+      {
+        "product": "professor",
+        "lcdAvailable": false,
+        "lightSensorAvailable": false,
+        "blackScreenDetectEnabled": false,
+        "clockAvailable": false
+      },
+      {
+        "product": "ginger-cheevers",
+        "lcdAvailable": false,
+        "lightSensorAvailable": false,
+        "blackScreenDetectEnabled": false,
+        "clockAvailable": false
+      }
+    ]
+  }
+}
