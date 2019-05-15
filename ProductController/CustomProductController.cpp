@@ -970,6 +970,7 @@ std::shared_ptr< ProductDspHelper >& CustomProductController::GetDspHelper( )
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has booted.
+///         This is accomplished by delegating to IsAllModuleReady()
 ///
 /// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
 ///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
@@ -979,6 +980,22 @@ bool CustomProductController::IsBooted( ) const
 {
     BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
     BOSE_VERBOSE( s_logger, " " );
+    return IsAllModuleReady();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::IsAllModuleReady
+///
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has booted.
+///
+/// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
+///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductController::IsAllModuleReady( ) const
+{
     BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( IsLpmReady( )             ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( IsCAPSReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady( )       ? "true" : "false" ) );
@@ -1007,21 +1024,15 @@ bool CustomProductController::IsBooted( ) const
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has exited low power.
-///         NOTE: Unlike booting we only wait for the things killed going to low power
+///         NOTE: Unlike booting we should only wait for the things killed going to low power
+///         However, for convenience and risk-reduction, we just call IsAllModuleReady()
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductController::IsLowPowerExited( ) const
 {
     BOSE_INFO( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
     BOSE_INFO( s_logger, " " );
-    BOSE_INFO( s_logger, "LPM Connected         :  %s", ( IsLpmReady()       ? "true" : "false" ) );
-    BOSE_INFO( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady() ? "true" : "false" ) );
-    BOSE_INFO( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
-    BOSE_INFO( s_logger, " " );
-
-    return( IsLpmReady()            and
-            IsSassReady()           and
-            IsAudioPathReady() );
+    return IsAllModuleReady();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
