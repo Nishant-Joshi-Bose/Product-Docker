@@ -4,6 +4,7 @@
           exe="/opt/Bose/bin/run_dinghy">
     <arg>MONACO</arg>
     <arg>--scale=1.0</arg>
+    <env>WPE_MEMORY_PRESSURE_HANDLER_KILL_THRESHOLD=500</env>
     <!-- Log web console messages to STDOUT -->
     <!-- <arg>- -log-console</arg> -->
   </daemon>
