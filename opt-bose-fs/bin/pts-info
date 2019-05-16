@@ -9,6 +9,7 @@ if (( $# > 0 )); then
     exit 1
 fi
 exec 2>&1 # stderr goes to stdout
+exec </dev/null
 
 (
 PS4='> '; set -x
