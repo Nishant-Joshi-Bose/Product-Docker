@@ -56,8 +56,8 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & requ
                 asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
                 m_account.IPC().SendAudioSetURLEvent( asu );
             }
-            // DUE TO AMAZON CERT NOT BEING READY DISABLE THIS FOR MR2
-            if( false /* source->status() == SoundTouchInterface::SourceStatus::AVAILABLE */ )
+
+            if( source->status() == SoundTouchInterface::SourceStatus::AVAILABLE )
             {
                 // TODO - Re-evaluate this for all AVAILABLE source
                 // https://jirapro.bose.com/browse/PGC-4182

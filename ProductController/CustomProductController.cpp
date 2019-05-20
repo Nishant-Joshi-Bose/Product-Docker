@@ -970,6 +970,7 @@ std::shared_ptr< ProductDspHelper >& CustomProductController::GetDspHelper( )
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has booted.
+///         This is accomplished by delegating to IsAllModuleReady()
 ///
 /// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
 ///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
@@ -979,6 +980,22 @@ bool CustomProductController::IsBooted( ) const
 {
     BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
     BOSE_VERBOSE( s_logger, " " );
+    return IsAllModuleReady();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::IsAllModuleReady
+///
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has booted.
+///
+/// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
+///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductController::IsAllModuleReady( ) const
+{
     BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( IsLpmReady( )             ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( IsCAPSReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady( )       ? "true" : "false" ) );
@@ -1007,21 +1024,15 @@ bool CustomProductController::IsBooted( ) const
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has exited low power.
-///         NOTE: Unlike booting we only wait for the things killed going to low power
+///         NOTE: Unlike booting we should only wait for the things killed going to low power
+///         However, for convenience and risk-reduction, we just call IsAllModuleReady()
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductController::IsLowPowerExited( ) const
 {
     BOSE_INFO( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
     BOSE_INFO( s_logger, " " );
-    BOSE_INFO( s_logger, "LPM Connected         :  %s", ( IsLpmReady()       ? "true" : "false" ) );
-    BOSE_INFO( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady() ? "true" : "false" ) );
-    BOSE_INFO( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
-    BOSE_INFO( s_logger, " " );
-
-    return( IsLpmReady()            and
-            IsSassReady()           and
-            IsAudioPathReady() );
+    return IsAllModuleReady();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1799,6 +1810,10 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         else if( GetIntentHandler( ).IsIntentVoiceListening( action ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentVoiceListening );
+        }
+        else if( GetIntentHandler( ).IsIntentForceUpdate( action ) )
+        {
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentManualSoftwareInstall );
         }
         else
         {
@@ -2695,24 +2710,26 @@ void CustomProductController::InitializeKeyIdToKeyNameMap()
     BOSE_INFO( s_logger, "CustomProductController::%s:", __func__ );
 
     // Professor team need to coordinate with the UI team to know which keys are of interest to them
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::VOLUME_UP_KEYID )]     = KeyNamesPB::keynames::VOLUME_UP;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::VOLUME_DOWN_KEYID )]   = KeyNamesPB::keynames::VOLUME_DOWN;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_1_KEYID )]      = KeyNamesPB::keynames::PRESET_1;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_2_KEYID )]      = KeyNamesPB::keynames::PRESET_2;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_3_KEYID )]      = KeyNamesPB::keynames::PRESET_3;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_4_KEYID )]      = KeyNamesPB::keynames::PRESET_4;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_5_KEYID )]      = KeyNamesPB::keynames::PRESET_5;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_6_KEYID )]      = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_VOLUME_UP )]   = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_VOLUME_DOWN )] = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_1 )]    = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_2 )]    = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_3 )]    = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_4 )]    = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_5 )]    = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_6 )]    = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_MUTE )]        = KeyNamesPB::keynames::MUTE;
 
 
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::VOLUME_UP_KEYID )]     = KeyNamesPB::keynames::VOLUME_UP;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::VOLUME_DOWN_KEYID )]   = KeyNamesPB::keynames::VOLUME_DOWN;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_1_KEYID )]      = KeyNamesPB::keynames::PRESET_1;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_2_KEYID )]      = KeyNamesPB::keynames::PRESET_2;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_3_KEYID )]      = KeyNamesPB::keynames::PRESET_3;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_4_KEYID )]      = KeyNamesPB::keynames::PRESET_4;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_5_KEYID )]      = KeyNamesPB::keynames::PRESET_5;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_6_KEYID )]      = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_UP )]   = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_DOWN )] = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_1 )]    = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_2 )]    = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_3 )]    = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_4 )]    = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_5 )]    = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_6 )]    = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_MUTE )]        = KeyNamesPB::keynames::MUTE;
 
     return;
 }
