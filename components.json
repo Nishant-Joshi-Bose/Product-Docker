@@ -1,15 +1,15 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/1.0.7-1037+43bd7c2"
+    "selected_version": "Release/stable/1.1.0-1216+81efb30"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/stable/2.2.5-76+3ef3006"
+    "selected_version": "Release/stable/2.2.5-14-ga023049"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/stable/2.2.2-60+6e4ffe1"
+    "selected_version": "Release/stable/2.2.8-14-gc21623b"
   },
   {
     "name": "AudioPathClient-qc8017_32",
@@ -349,7 +349,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@a7c326a1c2106a727ff454c34ae6a913bbeb7ab3"
+    "selected_version": "stable@d5b1ec558576e6863ff406ee703c120d07ec47ad"
   },
   {
     "name": "VPAController-qc8017_32",
