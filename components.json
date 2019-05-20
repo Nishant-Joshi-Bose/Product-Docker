@@ -81,11 +81,11 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "stable@d4220547e6b9dc8ea4f97dccab2bc16076aa6044"
+    "selected_version": "Release/stable/v1.0.1-0-g4d88a4d"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "stable@0fa8d97674fdafea340ef8475d5248b8afdd5c71"
+    "selected_version": "Release/stable/v1.0.1-0-g050c0df"
   },
   {
     "name": "BoseLibs-qc8017_32",
