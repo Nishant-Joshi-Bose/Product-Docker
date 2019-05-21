@@ -969,7 +969,7 @@ void SpeakerPairingManager::BassAccessoryConnectTimeout()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief Detect if rear accessories are of the same type: premium or non-premium
+/// @brief Detect if rear accessories are of the same type
 ///
 /// @param const LpmServiceMessages::AccessoryDescription_t& accDesc
 ///
