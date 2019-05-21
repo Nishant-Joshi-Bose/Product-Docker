@@ -220,6 +220,7 @@ private:
 
     void RearAccessoryConnectTimeout();
     void BassAccessoryConnectTimeout();
+    bool IsRearTypeMismatch( const LpmServiceMessages::AccessoryDescription_t& accDesc ) const;
 
 private:
     bool        m_accessoryListReceived = false;
