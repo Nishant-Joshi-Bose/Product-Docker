@@ -546,50 +546,35 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         {
             // If the accessory is either connected or expected (paired but not connected), add it
             // to the list so Madrid shows them in proper state.
-            if( accDesc.has_type( ) && AccessoryTypeIsRear( accDesc.type( ) ) )
+            if( accDesc.has_type( ) && AccessoryTypeIsRear( accDesc.type( ) ) && !IsRearTypeMismatch( accDesc ) )
             {
-                if( !IsRearTypeMismatch( accDesc ) )
-                {
-                    auto spkrInfo = m_accessorySpeakerState.add_rears( );
-                    AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
+                auto spkrInfo = m_accessorySpeakerState.add_rears( );
+                AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
 
-                    if( AccessoryStatusIsConnected( accDesc.status() ) )
+                if( AccessoryStatusIsConnected( accDesc.status() ) )
+                {
+                    // Increase the number of accessory only if the accessory is really connected
+                    // The number is used to set configurationStatus (VALID or not) used by Monaco
+                    if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_LEFT_REAR )
                     {
-                        // Increase the number of accessory only if the accessory is really connected
-                        // The number is used to set configurationStatus (VALID or not) used by Monaco
-                        if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_LEFT_REAR )
-                        {
-                            numOfLeftRears++;
-                        }
-                        else if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_RIGHT_REAR )
-                        {
-                            numOfRightRears++;
-                        }
+                        numOfLeftRears++;
                     }
-                    else if( AccessoryStatusIsExpected( accDesc.status() ) )
+                    else if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_RIGHT_REAR )
                     {
-                        m_numOfExpectedRears++;
-                    }
-                    if( !rearsEnabled )
-                    {
-                        if( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED )
-                        {
-                            rearsEnabled = true;
-                        }
+                        numOfRightRears++;
                     }
                 }
+                else if( AccessoryStatusIsExpected( accDesc.status() ) )
+                {
+                    m_numOfExpectedRears++;
+                }
+                rearsEnabled = rearsEnabled || ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
             }
             else if( accDesc.has_type( ) && AccessoryTypeIsSub( accDesc.type( ) ) )
             {
                 auto spkrInfo = m_accessorySpeakerState.add_subs( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
-                if( !subsEnabled )
-                {
-                    if( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED )
-                    {
-                        subsEnabled = true;
-                    }
-                }
+                subsEnabled = subsEnabled || ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
                 if( AccessoryStatusIsExpected( accDesc.status() ) )
                 {
                     m_numOfExpectedBass++;
