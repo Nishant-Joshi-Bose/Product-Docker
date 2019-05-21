@@ -1,3 +1,4 @@
+MinimalFS
 SoundTouchRecovery 
 product-script 
 software-update 

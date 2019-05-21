@@ -35,6 +35,10 @@ PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon ins
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_location)
+AVSSERVICE_DIR = $(shell components get AVSService-qc8017_32 installed_location)
+PRODUCT_STARTUP_DIR = $(shell components get product-startup installed_location)
+RIVIERASWUPRECOVERY_DIR  = $(shell components get RivieraSwUpRecovery-qc8017_32 installed_location)
+RIVIERAMINIMALFS_DIR  = $(shell components get RivieraMinimalFS-qc8017_32 installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -122,7 +126,7 @@ graph: product-ipk
 
 .PHONY: software-update-ipk
 software-update-ipk: cmake_build
-	./scripts/create-software-update-ipk
+	${SOFTWARE_UPDATE_DIR}/create-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
@@ -130,7 +134,7 @@ hsp-ipk: cmake_build
 
 .PHONY: gva-ipk
 gva-ipk: cmake_build
-	./scripts/create-gva-ipk
+	${GVA_DIR}/create-ipk
 
 .PHONY: lpm-bos
 lpm-bos:
@@ -144,7 +148,7 @@ endif
 
 .PHONY: recovery-ipk
 recovery-ipk: cmake_build
-	./scripts/create-recovery-ipk -p $(product)
+	${RIVIERASWUPRECOVERY_DIR}/create-ipk -p $(product)
 
 .PHONY: lpm_updater-ipk
 lpm_updater-ipk: lpm-bos
@@ -160,11 +164,16 @@ wpe-ipk:
 
 .PHONY: product-script-ipk
 product-script-ipk:
-	./scripts/create-product-script-ipk
+	${PRODUCT_STARTUP_DIR}/create-ipk
 
 .PHONY: avs-ipk
 avs-ipk:
-	./scripts/create-avs-ipk
+	${AVSSERVICE_DIR}/create-ipk
+
+.PHONY: minimalfs-ipk
+minimalfs-ipk:
+	/bin/bash ${RIVIERAMINIMALFS_DIR}/create-ipk -p ${product}
+
 
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph

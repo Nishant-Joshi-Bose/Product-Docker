@@ -1,3 +1,4 @@
+minimalfs.ipk
 recovery.ipk 
 product-script.ipk 
 software-update.ipk 
