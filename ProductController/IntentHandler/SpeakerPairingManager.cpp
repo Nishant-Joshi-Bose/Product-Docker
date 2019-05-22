@@ -546,7 +546,7 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
         {
             // If the accessory is either connected or expected (paired but not connected), add it
             // to the list so Madrid shows them in proper state.
-            if( accDesc.has_type( ) && AccessoryTypeIsRear( accDesc.type( ) ) )
+            if( accDesc.has_type( ) && AccessoryTypeIsRear( accDesc.type( ) ) && !IsRearTypeMismatch( accDesc ) )
             {
                 auto spkrInfo = m_accessorySpeakerState.add_rears( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
@@ -568,13 +568,13 @@ void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::Ip
                 {
                     m_numOfExpectedRears++;
                 }
-                rearsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
+                rearsEnabled = rearsEnabled || ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
             }
             else if( accDesc.has_type( ) && AccessoryTypeIsSub( accDesc.type( ) ) )
             {
                 auto spkrInfo = m_accessorySpeakerState.add_subs( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
-                subsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
+                subsEnabled = subsEnabled || ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
                 if( AccessoryStatusIsExpected( accDesc.status() ) )
                 {
                     m_numOfExpectedBass++;
@@ -950,6 +950,31 @@ void SpeakerPairingManager::BassAccessoryConnectTimeout()
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
         SendAccessoryPairingStateToProduct( );
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief Detect if rear accessories are of the same type
+///
+/// @param const LpmServiceMessages::AccessoryDescription_t& accDesc
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool SpeakerPairingManager::IsRearTypeMismatch( const LpmServiceMessages::AccessoryDescription_t& accDesc ) const
+{
+    bool mismatch = false;
+    if( m_accessorySpeakerState.rears_size() > 0 )
+    {
+        for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
+        {
+            if( m_accessorySpeakerState.rears( i ).type( ) != AccessoryTypeToString( accDesc.type( ) ) )
+            {
+                mismatch = true;
+                BOSE_WARNING( s_logger, "Rear accessory type mismatch" );
+                break;
+            }
+        }
+    }
+    return mismatch;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
