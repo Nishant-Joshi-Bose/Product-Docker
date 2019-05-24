@@ -362,7 +362,7 @@ unstripped_dir=$output_dir/product-unstripped
 unstripped_tar=$unstripped_dir.tar.gz
 rm -rf "$unstripped_dir" "$unstripped_tar"
 mkdir -p "$unstripped_dir" || exit
-strip-symbols "$stage"/Bose/{lib,bin}/* || exit
+strip-symbols "$stage"/Bose/{lib,bin,update/bin,update/lib}/* || exit
 
 cd  || exit
 tar --owner=0 --group=0 -czf "$unstripped_tar" \
