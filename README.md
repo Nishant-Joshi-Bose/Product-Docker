@@ -5,7 +5,7 @@ Eddie
 [![Build Status](http://jnkwebhook.ngrok.io/buildStatus/icon?job=Continous_Build_Testing/Eddie_Continuous_Build_Testing_Master)](http://eco2jenkins.bose.com:8080/job/Continous_Build_Testing/job/Eddie_Continuous_Build_Testing_Master/)
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
-This repo contains the source code and tools specific to the Eddie product.
+The source code and tools specific to the Eddie product.
 
 ![Eddie](misc/product.png)
 
@@ -33,7 +33,7 @@ Make sure your Eddie unit is accessible via adb.
 $ sudo adb start-server             # must be done as root. typically once per boot of the build host
 $ adb devices
 List of devices attached
-5166240	device
+5166240 device
 
 $
 ```
@@ -144,18 +144,6 @@ For a simpler-way; see ./pushup script.
 To update the software, along with HSP, use product_update.zip file. To update
 the software, without HSP update (recommended only if HSP version you are
 updating to, is same as one on device), use product_update_no_hsp.zip.
-
-##### Special instructions to downgrade MR4 / MR1 to SOS Release
-SOP, SOS and MR4 have following HSP versios.
-* SOP: HSP 3.10.3
-* SOS: HSP 3.10.5
-* MR4: HSP 4.1 (or higher)
-
-To optimize Out of Box update opeation to smallest time possible, SOP to SOS HSP performs only "kernel" update. Other file system space and partitions remain same between 3.10.3 to 3.10.5. This works as intended, though has side effect for those who wants to downgrade from higher HSP versions to SOS e.g. from MR4 to SOS - for development / testing purposes.
-
-To downgrade to SOS release, one need to use update package specially made for downgrade operation at *\\solid\softlib\verisoft\Eddie\Release\SOS\<Release 2.0.5-5531+d50e0d4 or higher>\forDowngrade\product_update_for_downgrade.zip.*
-
-**If builds higher then SOS (i.e. builds with HSP 4.x or higher) are downgraded using \\solid\softlib\verisoft\Eddie\Release\SOS\<Release>\product_update.zip, device will potetially be bricked and will enter in QFIL mode. Please see instructions below about QFIL / VIP to recover such device.**
 
 #### QFIL / VIP
 
