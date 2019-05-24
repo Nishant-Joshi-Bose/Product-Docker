@@ -191,8 +191,8 @@ endif
 recovery-ipk: cmake_build
 	${RIVIERASWUPRECOVERY_DIR}/create-ipk -p professor
 
-.PHONY: lpm-updater-ipk
-lpm-updater-ipk: lpm-bos
+.PHONY: lpm_updater-ipk
+lpm_updater-ipk: lpm-bos
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ professor
 
 .PHONY: brussels-ipk
