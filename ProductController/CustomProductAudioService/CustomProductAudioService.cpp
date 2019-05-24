@@ -32,7 +32,7 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& p
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( productController.GetTask( ),
-                         productController.GetMessageHandler() ,
+                         productController.GetMessageHandler(),
                          frontDoorClient ),
     m_audioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
     m_thermalTask( lpmClient, productController.GetTask( ),
