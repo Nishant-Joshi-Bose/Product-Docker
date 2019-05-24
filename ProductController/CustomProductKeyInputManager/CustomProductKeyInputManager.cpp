@@ -39,7 +39,6 @@ constexpr const char* KEY_CONFIGURATION_FILE_NAME = "/var/run/KeyConfiguration.j
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductKeyInputManager::CustomProductKeyInputManager( CustomProductController& ProductController )
-
     : ProductKeyInputManager( ProductController.GetTask( ),
                               ProductController.GetMessageHandler( ),
                               ProductController.GetLpmHardwareInterface( ),
