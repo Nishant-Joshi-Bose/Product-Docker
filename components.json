@@ -57,7 +57,7 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/stable/2.2.1-238+c7fea18"
+    "selected_version": "Release/stable/2.2.1-268+bfabeb6"
   },
   {
     "name": "BLERemoteXCVR",
@@ -149,7 +149,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.2.9-1786+459a817"
+    "selected_version": "Release/stable/2.2.9-1832+aeb192e"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -301,11 +301,11 @@
   },
   {
     "name": "RivieraMinimalFS-qc8017_32",
-    "selected_version": "Release/stable/0.1.1-52+fe9ea6c"
+    "selected_version": "Release/stable/0.1.1-62+a6ac721"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/stable/5.0.0-165+c02d4c7"
+    "selected_version": "Release/stable/5.0.0-175+ff1b2a7"
   },
   {
     "name": "SASS-qc8017_32",
@@ -329,7 +329,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/stable/5.0.1-2194+3da642d"
+    "selected_version": "Release/stable/5.0.2-2242+c7b778b"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

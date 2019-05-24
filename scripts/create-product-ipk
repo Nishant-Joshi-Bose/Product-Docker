@@ -277,7 +277,7 @@ PackageName=SoundTouch
 
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
-"$wspace"/scripts/validate-version "$package_version" || exit
+validate-version "$package_version" || exit
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName
