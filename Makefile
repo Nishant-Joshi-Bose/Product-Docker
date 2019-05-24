@@ -43,6 +43,7 @@ SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_
 TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommonProto-qc8017_32 installed_location)
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
+GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_location)
 AVSSERVICE_DIR = $(shell components get AVSService-qc8017_32 installed_location)
 PRODUCT_STARTUP_DIR = $(shell components get product-startup installed_location)
 RIVIERASWUPRECOVERY_DIR  = $(shell components get RivieraSwUpRecovery-qc8017_32 installed_location)
