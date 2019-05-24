@@ -66,6 +66,7 @@ protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 audiopathservice64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
 audiopathproducts64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
 audiosource_upnp_dir=$(components get AudioSource-UPnP-qc8017_32 installed_location) || exit
+audiosource_musicservices_dir=$(components get AudioSource-MusicServices-qc8017_32 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
 audiosource_spotify_dir=$(components get AudioSource-Spotify-qc8017_32 installed_location) || exit
 networkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
@@ -127,11 +128,7 @@ cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/CapsMultiroomVersions.json "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 # ----------------------------------------------------------------------------
@@ -193,6 +190,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # Allow components to add to the staging area.
 
 "$audiosource_upnp_dir/stage" "$opt_dir" || exit
+"$audiosource_musicservices_dir/stage" "$opt_dir" || exit
 "$audiopathservice64_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopathservice64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$audiopathproducts64_dir/stage" --product=eddie "$opt_dir" || exit
