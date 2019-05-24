@@ -56,8 +56,9 @@ for feature, value in features.items():
                       .format(feature.upper(),
                               str(value).upper()))
         continue
-    raise Exception('unexpected data type {} for feature {}'
-                    .format(type(value), feature))
+
+    header.append('#define BOSE_FEATURE_{} {}\n'
+                  .format(feature.upper(), value))
 
 tmp = '{}.{}~'.format(features_h_file, os.getpid())
 with open(tmp, 'wt') as fh:

@@ -70,7 +70,7 @@ opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir" || exit
 
 echo "Package version \"$monaco_ver\""
-"$wspace"/scripts/validate-version "$monaco_ver" || exit
+validate-version "$monaco_ver" || exit
 cp -rf "$monaco_dir"/monaco "$opt_dir/" || exit
 
 PackageName=monaco
