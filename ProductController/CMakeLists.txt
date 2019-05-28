@@ -103,13 +103,13 @@ TARGET_LINK_LIBRARIES(ProductController
   SASSClient
   StsAmazon
   ProtoToMarkup
-  jsoncpp
-  protobuf
-  libwebsockets.a
-  libssl.a
-  libcrypto.a
-  libTinyXml.a
-  libz.a
+  ${JSONCPP_DIR}/lib/libjsoncpp.a
+  ${PROTOBUF_DIR}/lib/libprotobuf.a
+  ${LIBWEBSOCKETS_DIR}/lib/libwebsockets.a
+  ${OPENSSL_DIR}/lib/libssl.a
+  ${OPENSSL_DIR}/lib/libcrypto.a
+  ${TINYXML_DIR}/lib/libTinyXml.a
+  ${ZLIB_DIR}/lib/libz.a
   pthread
   rt
   cap
