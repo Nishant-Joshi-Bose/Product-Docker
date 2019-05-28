@@ -1,15 +1,15 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/1.0.7-1037+43bd7c2"
+    "selected_version": "Release/stable/1.1.0-1216+81efb30"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/stable/2.2.5-76+3ef3006"
+    "selected_version": "Release/stable/2.2.5-14-ga023049"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/stable/2.2.2-60+6e4ffe1"
+    "selected_version": "Release/stable/2.2.8-14-gc21623b"
   },
   {
     "name": "AudioPathClient-qc8017_32",
@@ -57,7 +57,7 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/stable/2.2.1-238+c7fea18"
+    "selected_version": "Release/stable/2.2.1-268+bfabeb6"
   },
   {
     "name": "BLERemoteXCVR",
@@ -81,11 +81,11 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "stable@d4220547e6b9dc8ea4f97dccab2bc16076aa6044"
+    "selected_version": "Release/stable/v1.0.1-0-g4d88a4d"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "stable@0fa8d97674fdafea340ef8475d5248b8afdd5c71"
+    "selected_version": "Release/stable/v1.0.1-0-g050c0df"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -93,7 +93,7 @@
   },
   {
     "name": "BoseWebBrussels",
-    "selected_version": "Release/stable/5.0.0-64+54b0a84"
+    "selected_version": "Release/stable/5.0.1-81+e897629"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.2.9-1786+459a817"
+    "selected_version": "Release/stable/2.2.9-1832+aeb192e"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -253,11 +253,11 @@
   },
   {
     "name": "product-startup",
-    "selected_version": "Release/stable/5.0.0-11+946b969"
+    "selected_version": "Release/stable/5.0.0-15+594522a"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@a289ebb7164f0a7e825e215fe9334e461d420248"
+    "selected_version": "stable@820fa54d5a3c5a3ab69d07bfd721e5eab3fe8acc"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -301,11 +301,11 @@
   },
   {
     "name": "RivieraMinimalFS-qc8017_32",
-    "selected_version": "Release/stable/0.1.1-52+fe9ea6c"
+    "selected_version": "Release/stable/0.1.1-62+a6ac721"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/stable/5.0.0-165+c02d4c7"
+    "selected_version": "Release/stable/5.0.0-175+ff1b2a7"
   },
   {
     "name": "SASS-qc8017_32",
@@ -329,7 +329,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/stable/5.0.1-2194+3da642d"
+    "selected_version": "Release/stable/5.0.2-2242+c7b778b"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -349,7 +349,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@a7c326a1c2106a727ff454c34ae6a913bbeb7ab3"
+    "selected_version": "stable@d5b1ec558576e6863ff406ee703c120d07ec47ad"
   },
   {
     "name": "VPAController-qc8017_32",

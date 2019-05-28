@@ -1,0 +1,6 @@
+{
+    "AUX_SOURCE": true,
+    "BATTERY": false,
+    "BLUETOOTH_OUT": true,
+    "GVA_MIC_MUTE_DELAY_MS": 750
+}
