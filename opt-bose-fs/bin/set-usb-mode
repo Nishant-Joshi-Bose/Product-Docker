@@ -47,8 +47,6 @@ function do_p2p {
 	lease_file /dev/null
 	pidfile /var/run/udhcpd.rndis1.pid
 	option subnet 255.255.255.0
-	option router 203.0.113.1
-	option dns 203.0.113.1
 	option lease 600
 	EOF
 
