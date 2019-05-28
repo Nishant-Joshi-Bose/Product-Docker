@@ -12,7 +12,7 @@ ENDMACRO()
 COMPONENT(AUDIOPATHCLIENT_DIR AudioPathClient-${SDK})
 COMPONENT(AUDIOPATHPRODUCT_DIR AudioPathProducts-${SDK})
 COMPONENT(AUDIOSOURCE_DIR AudioSource-${SDK})
-COMPONENT(AVSLIBS_DIR AVSService-${SDK})
+COMPONENT(AVSSERVICE_DIR AVSService-${SDK})
 COMPONENT(BLESETUP_DIR BLESetup-${SDK})
 COMPONENT(BLETOFRONTDOORSERVICE_DIR BLEToFrontDoorService-${SDK})
 COMPONENT(BLUETOOTH_DIR Bluetooth-${SDK})
@@ -37,7 +37,7 @@ COMPONENT(PASSPORTCLIENT_DIR PassportClient-${SDK})
 COMPONENT(PRODUCTCONTROLLERCOMMONPROTO_DIR ProductControllerCommonProto-${SDK})
 COMPONENT(PRODUCTCONTROLLERCOMMON_DIR ProductControllerCommon)
 COMPONENT(PROTOBUF_DIR protobuf-${SDK})
-COMPONENT(RIVIERA_LPM_SERVICE_DIR RivieraLpmService-${SDK})
+COMPONENT(RIVIERALPMSERVICE_DIR RivieraLpmService-${SDK})
 COMPONENT(SASS_DIR SASS-${SDK})
 COMPONENT(SERVICESCLIENTS_DIR ServicesClients-${SDK})
 COMPONENT(SOFTWAREUPDATE_DIR SoftwareUpdate-${SDK})
@@ -102,11 +102,14 @@ SET(OUTPUT_BIN_DIR bin)
 SET(OUTPUT_LIB_DIR lib)
 SET(CUSTOM_HSM_DIR "${CMAKE_SOURCE_DIR}/ProductController/CustomHsm")
 SET(INTENT_HANDLER_DIR "${CMAKE_SOURCE_DIR}/ProductController/IntentHandler")
-#Custom hardware interface directory path needs to be set before building CastleProductControllerCommon library
-SET (CUSTOM_HARDWARE_DIR "${CMAKE_SOURCE_DIR}/ProductController/CustomProductLpmHardwareInterface")
-#Custom product audio service path needs to be set before building CastleProductControllerCommon library
-SET(CUSTOM_PRODUCT_AUDIOSERVICE_DIR "${CMAKE_SOURCE_DIR}/ProductController/CustomProductAudioService")
 
+# Custom hardware interface directory path needs to be set before building
+# CastleProductControllerCommon library
+SET (CUSTOM_HARDWARE_DIR "${CMAKE_SOURCE_DIR}/ProductController/CustomProductLpmHardwareInterface")
+
+# Custom product audio service path needs to be set before building
+# CastleProductControllerCommon library
+SET(CUSTOM_PRODUCT_AUDIOSERVICE_DIR "${CMAKE_SOURCE_DIR}/ProductController/CustomProductAudioService")
 
 IF(${CFG} STREQUAL "Release")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -g2 -DNDEBUG")
@@ -126,7 +129,7 @@ INCLUDE_DIRECTORIES(
   ${PROTO_CC_DEST}
   ${AUDIOPATHCLIENT_DIR}/include
   ${CMAKE_SOURCE_DIR}/builds/RivieraLPM
-  ${RIVIERA_LPM_SERVICE_DIR}/include
+  ${RIVIERALPMSERVICE_DIR}/include
   ${BOSELIBS_DIR}/include
   ${BOSELIBS_DIR}/protobufs
   ${PROTOBUF_DIR}/include
@@ -148,7 +151,7 @@ INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/include
   ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/include/SoundTouchInterface
-  ${AVSLIBS_DIR}/include
+  ${AVSSERVICE_DIR}/include
   ${LIBWEBSOCKETS_DIR}/include
   ${FRONTDOORCLIENT_DIR}/include
   ${FRONTDOORCLIENT_DIR}/include/FrontDoor
@@ -182,14 +185,14 @@ LINK_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMONPROTO_DIR}/lib
   ${DATACOLLECTIONCLIENT_DIR}/lib
   ${HTTPINTERFACE_DIR}/lib
-  ${RIVIERA_LPM_SERVICE_DIR}/lib
+  ${RIVIERALPMSERVICE_DIR}/lib
   ${LIGHTBARCONTROLLER_DIR}/lib
   ${NETWORKSERVICE_DIR}/lib
   ${AUDIOSOURCE_DIR}/lib
   ${SERVICESCLIENTS_DIR}/lib
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs
   ${KEYHANDLER_DIR}/lib
-  ${AVSLIBS_DIR}/lib
+  ${AVSSERVICE_DIR}/lib
   ${FRONTDOORCLIENT_DIR}/lib
   ${SASS_DIR}/lib
   ${SOFTWAREUPDATE_DIR}/lib
