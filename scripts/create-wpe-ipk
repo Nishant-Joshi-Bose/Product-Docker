@@ -68,7 +68,7 @@ opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir" || exit
 
 echo "Package version \"$wpe_ver\""
-"$wspace"/scripts/validate-version "$wpe_ver" || exit
+validate-version "$wpe_ver" || exit
 cp -f "$wpe_dir/wpe.ipk" "$opt_dir/" || exit
 cd "$opt_dir" && ar -x "$opt_dir/wpe.ipk" || exit
 tar -xzf "$opt_dir/control.tar.gz" || exit
