@@ -211,7 +211,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
-"$bluetooth_dir/stage" --product=eddie --btout="$(jq -r .BLUETOOTH_OUT "$wspace/features.json")" "$opt_dir" || exit
+"$bluetooth_dir/stage" --btout="$(jq -r .BLUETOOTH_OUT "$wspace/features.json")" "$opt_dir" || exit
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
@@ -336,6 +336,38 @@ if [ \$? -ne 0 ]; then
     fi
 fi
 
+#####################################################################
+# Manipulate BTConfig file
+
+BTConfigFile="/opt/Bose/etc/BTConfig.xml"
+if [ ! -f "\$BTConfigFile" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - /opt/Bose/etc/BTConfig.xml does not exist"; exit 1;
+    fi
+fi
+
+productType=\$(jq -r .productType /persist/mfg_data.json)
+if [ \$? -ne 0 ] || [ "\$productType" == "null" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to read ProductType from mfg_data"; exit 1;
+    fi
+fi
+echo "postinst - ProductType is \$productType"
+
+case \$productType in
+    eddie)
+        sed -i 's/manual_carousel="false"/manual_carousel="true"/g' /opt/Bose/etc/BTConfig.xml
+        echo "postinst - BT Config - Eddie - Manual carousel enabled"
+        ;;
+
+    taylor)
+        sed -i 's/manual_carousel="false"/manual_carousel="true"/g' /opt/Bose/etc/BTConfig.xml
+        echo "postinst - BT Config - Taylor - Manual carousel enabled"
+        ;;
+
+    *)
+        echo "postinst - Default BT Config"
+esac
 #####################################################################
 
 # Set Progress End

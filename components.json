@@ -65,7 +65,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/stable/2.13.0-8-g7212428"
+    "selected_version": "Continuous/stable/2.15.0-0-g1c1e7c2"
   },
   {
     "name": "bose-opkg-utils",
