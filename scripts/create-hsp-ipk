@@ -74,7 +74,7 @@ mkdir -p "$opt_dir/hsp" || exit
 
 echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
 echo "Package version \"$riviera_hsp_ver\""
-"$wspace"/scripts/validate-version "$riviera_hsp_ver" || exit
+validate-version "$riviera_hsp_ver" || exit
 # update_ext4.zip is HSP update file with update using CP / mv commands
 # update_block.zip is HSP update with using "dd" or blocked update
 # update_block_kernel.zip is HSP update with only kernel update. - THIS SHOULDN'T BE USED except SOS.
