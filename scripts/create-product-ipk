@@ -309,6 +309,74 @@ find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 # Ignore error if any as exiting would fail ipk installation completely
 cp /opt/Bose/etc/BoseVersion.json /cache/OriginalFSVersion.json
 
+#####################################################################
+
+# Inject BMAPProductID and major version into Fluoride stack bt_did.conf file
+
+# only fail ipk if development flag is set
+development=\$(jq -r .development /persist/mfg_data.json)
+if [ "\$development" != "true" ]; then
+    development=false
+fi
+
+baseFile="/opt/Bose/etc/bt_did.conf"
+if [ ! -f "\$baseFile" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - bt_did.conf does not exist"; exit 1;
+    fi
+fi
+
+bmapID=\$(jq -r .BMAPProductID /persist/mfg_data.json)
+if [ \$? -ne 0 ] || [ "\$bmapID" == "null" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to read BMAPProductID from mfg_data"; exit 1;
+    fi
+fi
+echo "postinst - BMAPProductID is \$bmapID"
+
+majorVer=\$(jq -r .major /opt/Bose/etc/BoseVersion.json)
+if [ \$? -ne 0 ] || [ "\$majorVer" == "null" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to read major version from mfg_data"; exit 1;
+    fi
+else
+    #limited to 2 bytes in fluoride
+    if (( \$majorVer > 255 )); then
+        if \$development; then
+            echo >&2 "\$0: ERROR: postinst - Major version is >256, but we only have two bytes for field"; exit 1;
+        else
+            majorVer="255"
+        fi
+    fi
+
+fi
+echo "postinst - MajorVersion is \$majorVer"
+
+#convert majorVer to hex
+hexVersion=\$(printf '0x%02x00' "\$majorVer")
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to CONVERT major version from mfg_data"; exit 1;
+    fi
+fi
+echo "postinst - hexVersion is \$hexVersion"
+
+sed -i "s/^productId = 0x0000/productId = \$bmapID/" "\$baseFile"
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to WRITE BMAPProductID to bt_did.conf"; exit 1;
+    fi
+fi
+
+sed -i "s/^version = 0x0000/version = \$hexVersion/" "\$baseFile"
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to WRITE version to bt_did.conf"; exit 1;
+    fi
+fi
+
+#####################################################################
+
 # Set Progress End
 # CASTLE-14239: Currently, though not required by IPK itself
 #   every IPK is doing full system reset. This is required to clear
