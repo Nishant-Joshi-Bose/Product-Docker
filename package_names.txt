@@ -1,0 +1,11 @@
+MinimalFS
+SoundTouchRecovery 
+product-script 
+software-update 
+hsp
+wpe 
+brussels
+SoundTouch 
+gva 
+avs 
+lpm_updater
