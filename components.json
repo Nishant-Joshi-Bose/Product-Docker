@@ -137,7 +137,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-stable/1.0.4-44+3a707d7"
+    "selected_version": "Release/bose-stable/1.0.5-47+79977b9"
   },
   {
     "name": "FrontDoorClient-qc8017_32",
@@ -333,7 +333,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-162+c04f3e9"
+    "selected_version": "Release/stable/2.2.0-163+b5ae21b"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
