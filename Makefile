@@ -45,6 +45,7 @@ PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommo
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
 GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_location)
 AVSSERVICE_DIR = $(shell components get AVSService-qc8017_32 installed_location)
+IOT_DIR = $(shell components get IoTService-qc8017_32 installed_location)
 PRODUCT_STARTUP_DIR = $(shell components get product-startup installed_location)
 RIVIERASWUPRECOVERY_DIR  = $(shell components get RivieraSwUpRecovery-qc8017_32 installed_location)
 RIVIERAMINIMALFS_DIR  = $(shell components get RivieraMinimalFS-qc8017_32 installed_location)
