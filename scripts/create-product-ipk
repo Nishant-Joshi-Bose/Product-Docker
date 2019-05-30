@@ -136,7 +136,6 @@ cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/CapsMultiroomVersions.json "$opt_dir/etc" || exit
-cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
 
