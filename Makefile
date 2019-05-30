@@ -212,6 +212,10 @@ product-script-ipk:
 avs-ipk:
 	${AVSSERVICE_DIR}/create-ipk
 
+.PHONY: iot-ipk
+iot-ipk:
+	${IOT_DIR}/create-ipk
+
 .PHONY: minimalfs-ipk
 minimalfs-ipk:
 	/bin/bash ${RIVIERAMINIMALFS_DIR}/create-ipk -p ${product}
