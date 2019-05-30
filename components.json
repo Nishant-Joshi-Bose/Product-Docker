@@ -36,6 +36,14 @@
     "selected_version": "Release/stable/0.0.2-566+983b2d0"
   },
   {
+    "name": "AudioSource-MusicServices-qc8017_32",
+    "selected_version": "Continuous/master/1.0.0-5+7d848c2"
+  },
+  {
+    "name": "AudioSource-MusicServices-x86_64",
+    "selected_version": "Continuous/master/1.0.0-5+7d848c2"
+  },
+  {
     "name": "AudioSource-qc8017_32",
     "selected_version": "Release/stable/2.3.0-370+bfc63a6"
   },
@@ -73,7 +81,7 @@
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/stable/2.11.1-4-g22a0cf9"
+    "selected_version": "Continuous/stable/2.12.0-5-g91cf933"
   },
   {
     "name": "bose-opkg-utils",
