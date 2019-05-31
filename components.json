@@ -261,11 +261,11 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-1378+2e7a789"
+    "selected_version": "Release/stable/2.2.0-1430+b566bea"
   },
   {
     "name": "PassportService-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-2044+38c754e"
+    "selected_version": "Release/stable/2.2.0-35+06abbdd"
   },
   {
     "name": "product-startup",
