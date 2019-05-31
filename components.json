@@ -28,6 +28,10 @@
     "selected_version": "Release/stable/4.1.12-6060+e36f589"
   },
   {
+    "name": "AudioSource-AirPlay2-qc8017_32",
+    "selected_version": "Continuous/stable/v1.0.0-4-gf020876"
+  },
+  {
     "name": "AudioSource-BMX-qc8017_32",
     "selected_version": "Release/stable/0.0.2-566+983b2d0"
   },
@@ -101,7 +105,7 @@
   },
   {
     "name": "BoseWebBrussels",
-    "selected_version": "Release/stable/5.0.1-81+e897629"
+    "selected_version": "Release/stable/5.0.2-97+5c352da"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -137,7 +141,7 @@
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-stable/1.0.4-44+3a707d7"
+    "selected_version": "Release/bose-stable/1.0.5-47+79977b9"
   },
   {
     "name": "FrontDoorClient-qc8017_32",
@@ -333,7 +337,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-162+c04f3e9"
+    "selected_version": "Release/stable/2.2.0-163+b5ae21b"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
