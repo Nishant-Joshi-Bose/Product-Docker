@@ -169,7 +169,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-413+ab0feb5"
+    "selected_version": "Continuous/master/2.2.6-0-g634d97c"
   },
   {
     "name": "LpmMfgTool",
@@ -285,7 +285,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/stable/3.1.6-482+d0bff33"
+    "selected_version": "Continuous/stable/3.1.6-492+6ae9aff"
   },
   {
     "name": "RivieraLpmUpdater",
