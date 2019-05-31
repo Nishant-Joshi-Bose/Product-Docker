@@ -49,6 +49,7 @@ private:
     std::unique_ptr<ThermalMonitorTask>                 m_ThermalTask;
     std::shared_ptr< DataCollectionClientIF >           m_DataCollectionClient;
     bool                                                m_DspIsRebooting = false;
+    bool                                                m_currentEqSelectUpdating = false;
     Callback<bool>                                      m_StreamConfigResponseCb;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,5 +100,7 @@ private:
     LpmServiceMessages::IpcDspStreamConfigReqPayload_t m_DspStreamConfig;
     uint32_t m_currentNetworkSourceLatency;
     uint32_t m_currentTVSourceLatency;
+
+    AsyncCallback<ProductPb::AudioEqSelect> m_deferredEqSelectResponse;
 };
 }// namespace ProductApp

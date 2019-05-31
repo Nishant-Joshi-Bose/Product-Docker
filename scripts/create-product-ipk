@@ -64,13 +64,16 @@ httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
-avs_dir=$(components get AVSService-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
 audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
+audiosource_upnp_dir=$(components get AudioSource-UPnP-qc8017_32 installed_location) || exit
+audiosource_musicservices_dir=$(components get AudioSource-MusicServices-qc8017_32 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
+audiosource_spotify_dir=$(components get AudioSource-Spotify-qc8017_32 installed_location) || exit
+audiosource_airplay2_dir=$(components get AudioSource-AirPlay2-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlesass_dir=$(components get SASS-qc8017_64 installed_location) || exit
-castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
+castlepassport_dir=$(components get PassportService-qc8017_32 installed_location) || exit
 wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
 web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
@@ -135,15 +138,8 @@ cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/CapsMultiroomVersions.json "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Amazon "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Deezer "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/IHeart "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/SiriusXM "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Spotify "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Upnp "$opt_dir/bin" || exit
-cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
+
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 # ----------------------------------------------------------------------------
@@ -204,8 +200,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
-"$avs_dir/stage" "$opt_dir" || exit
-
+"$audiosource_musicservices_dir/stage" "$opt_dir" || exit
 "$audiopath64_dir/stage" --product=professor "$opt_dir" || exit
 "$audiopathproduct64_dir/stage" --product=professor "$opt_dir" || exit
 
@@ -250,7 +245,10 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
 "$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
+"$audiosource_upnp_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
+"$audiosource_spotify_dir/stage" "$opt_dir" || exit
+"$audiosource_airplay2_dir/stage" "$opt_dir" || exit
 "$vm_dir/stage" "$opt_dir" || exit
 "$rcs_dir/stage" "$opt_dir" || exit
 "$devicecontroller_dir/stage" "$opt_dir" || exit
@@ -279,7 +277,7 @@ PackageName=SoundTouch
 
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
-"$wspace"/scripts/validate-version "$package_version" || exit
+validate-version "$package_version" || exit
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName
@@ -311,6 +309,74 @@ find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 # copy version so it can be used while system is in Restore mode
 # Ignore error if any as exiting would fail ipk installation completely
 cp /opt/Bose/etc/BoseVersion.json /cache/OriginalFSVersion.json
+
+#####################################################################
+
+# Inject BMAPProductID and major version into Fluoride stack bt_did.conf file
+
+# only fail ipk if development flag is set
+development=\$(jq -r .development /persist/mfg_data.json)
+if [ "\$development" != "true" ]; then
+    development=false
+fi
+
+baseFile="/opt/Bose/etc/bt_did.conf"
+if [ ! -f "\$baseFile" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - bt_did.conf does not exist"; exit 1;
+    fi
+fi
+
+bmapID=\$(jq -r .BMAPProductID /persist/mfg_data.json)
+if [ \$? -ne 0 ] || [ "\$bmapID" == "null" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to read BMAPProductID from mfg_data"; exit 1;
+    fi
+fi
+echo "postinst - BMAPProductID is \$bmapID"
+
+majorVer=\$(jq -r .major /opt/Bose/etc/BoseVersion.json)
+if [ \$? -ne 0 ] || [ "\$majorVer" == "null" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to read major version from mfg_data"; exit 1;
+    fi
+else
+    #limited to 2 bytes in fluoride
+    if (( \$majorVer > 255 )); then
+        if \$development; then
+            echo >&2 "\$0: ERROR: postinst - Major version is >256, but we only have two bytes for field"; exit 1;
+        else
+            majorVer="255"
+        fi
+    fi
+
+fi
+echo "postinst - MajorVersion is \$majorVer"
+
+#convert majorVer to hex
+hexVersion=\$(printf '0x%02x00' "\$majorVer")
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to CONVERT major version from mfg_data"; exit 1;
+    fi
+fi
+echo "postinst - hexVersion is \$hexVersion"
+
+sed -i "s/^productId = 0x0000/productId = \$bmapID/" "\$baseFile"
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to WRITE BMAPProductID to bt_did.conf"; exit 1;
+    fi
+fi
+
+sed -i "s/^version = 0x0000/version = \$hexVersion/" "\$baseFile"
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to WRITE version to bt_did.conf"; exit 1;
+    fi
+fi
+
+#####################################################################
 
 # Set Progress End
 # CASTLE-14239: Currently, though not required by IPK itself
@@ -364,40 +430,7 @@ unstripped_dir=$output_dir/product-unstripped
 unstripped_tar=$unstripped_dir.tar.gz
 rm -rf "$unstripped_dir" "$unstripped_tar"
 mkdir -p "$unstripped_dir" || exit
-
-# Our standard CentOS configuration has
-# LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib which causes
-# ${tool64_prefix}strip to segfault.  As a workaround, unset LD_LIBRARY_PATH
-# here and hope it wasn't actually needed for anything else this script does.
-if [ "$LD_LIBRARY_PATH" ]; then
-    echo "$this: unsetting LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-    unset LD_LIBRARY_PATH
-fi
-
-for i in "$stage"/Bose/{lib,bin}/*; do
-    type=$(file --brief "$i") || exit
-    case "$type" in
-        (*", stripped")
-            echo >&2 "$this: (warning) No debug symbols: $i"
-            ;;
-        (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
-            cp "$i" "$unstripped_dir" || exit
-            # `strip` fails without an error message if the file is empty
-            if ! "${tool64_prefix}strip" "$i"; then
-                echo >&2 "$this: Failed to strip $i"
-                exit 1
-            fi
-            ;;
-        (*", not stripped")
-            cp "$i" "$unstripped_dir" || exit
-            # `strip` fails without an error message if the file is empty
-            if ! "${tool_prefix}strip" "$i"; then
-                echo >&2 "$this: Failed to strip $i"
-                exit 1
-            fi
-            ;;
-    esac
-done
+strip-symbols "$stage"/Bose/{lib,bin,update/bin,update/lib}/* || exit
 
 cd  || exit
 tar --owner=0 --group=0 -czf "$unstripped_tar" \
