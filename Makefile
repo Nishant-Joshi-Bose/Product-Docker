@@ -179,7 +179,6 @@ iot-ipk:
 minimalfs-ipk:
 	/bin/bash ${RIVIERAMINIMALFS_DIR}/create-ipk -p ${product}
 
-
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph
 	./scripts/create-product-tar -i $(IPKS_HSP)
