@@ -70,6 +70,7 @@ audiosource_upnp_dir=$(components get AudioSource-UPnP-qc8017_32 installed_locat
 audiosource_musicservices_dir=$(components get AudioSource-MusicServices-qc8017_32 installed_location) || exit
 audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
 audiosource_spotify_dir=$(components get AudioSource-Spotify-qc8017_32 installed_location) || exit
+audiosource_airplay2_dir=$(components get AudioSource-AirPlay2-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlesass_dir=$(components get SASS-qc8017_64 installed_location) || exit
 castlepassport_dir=$(components get PassportService-qc8017_32 installed_location) || exit
@@ -136,7 +137,6 @@ cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/CapsMultiroomVersions.json "$opt_dir/etc" || exit
-cp "$stfs"/opt/Bose/AirPlay2 "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/AudioNotification "$opt_dir/bin" || exit
 
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
@@ -247,6 +247,7 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$audiosource_upnp_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$audiosource_spotify_dir/stage" "$opt_dir" || exit
+"$audiosource_airplay2_dir/stage" "$opt_dir" || exit
 "$vm_dir/stage" "$opt_dir" || exit
 "$rcs_dir/stage" "$opt_dir" || exit
 "$devicecontroller_dir/stage" "$opt_dir" || exit
