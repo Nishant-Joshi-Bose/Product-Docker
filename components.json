@@ -273,13 +273,13 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@820fa54d5a3c5a3ab69d07bfd721e5eab3fe8acc"
+    "selected_version": "stable@14eb93f1eb89907ce562fd866a644d62ea544096"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-481+0073f0a"
+    "selected_version": "Continuous/stable/2.2.0-497+14eb93f"
   },
-  {
+    {
     "name": "ProductUIAssets",
     "selected_version": "stable@583a2d0a30359b26aea80cb36f96a7875061b304"
   },
