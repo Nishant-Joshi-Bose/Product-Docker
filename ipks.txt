@@ -8,4 +8,5 @@ monaco.ipk
 product.ipk
 gva.ipk
 avs.ipk
+iot.ipk
 lpm_updater.ipk

@@ -8,4 +8,5 @@ monaco
 SoundTouch
 gva
 avs
+iot
 lpm_updater
