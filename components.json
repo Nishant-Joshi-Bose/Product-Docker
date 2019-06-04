@@ -181,7 +181,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/stable/2.2.10-982+938da26"
+    "selected_version": "Continuous/stable/2.2.13-2-g5f70f67"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -257,7 +257,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@9dd0340d6425a67092a7adc5656fc572f47888ac"
+    "selected_version": "stable@9999bcbaad8926a0107b574fec85bb460041911a"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",

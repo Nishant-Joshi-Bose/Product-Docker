@@ -37,7 +37,6 @@ override=false
 # properly.
 lowpower=(
     Shepherd-AudioPath.xml
-    Shepherd-NetManager.xml
     Shepherd-avs.xml
     Shepherd-vfe.xml
     Shepherd-VPAController.xml
