@@ -2,6 +2,7 @@
     "AUX_SOURCE": true,
     "BATTERY": false,
     "BLUETOOTH_OUT": true,
+    "GVA_DEBUG": false,
     "GVA_MIC_MUTE_DELAY_MS": 750,
     "VFE_NUMBER_OF_MIC_CHANNELS": 1
 }
