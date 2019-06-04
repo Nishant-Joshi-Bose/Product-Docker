@@ -43,6 +43,12 @@ SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_
 TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 PRODUCTCONTROLLERCOMMONPROTO_DIR = $(shell components get ProductControllerCommonProto-qc8017_32 installed_location)
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
+GVA_DIR = $(shell components get GoogleVoiceAssistant-qc8017_64 installed_location)
+AVSSERVICE_DIR = $(shell components get AVSService-qc8017_32 installed_location)
+IOT_DIR = $(shell components get IoTService-qc8017_32 installed_location)
+PRODUCT_STARTUP_DIR = $(shell components get product-startup installed_location)
+RIVIERASWUPRECOVERY_DIR  = $(shell components get RivieraSwUpRecovery-qc8017_32 installed_location)
+RIVIERAMINIMALFS_DIR  = $(shell components get RivieraMinimalFS-qc8017_32 installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -104,12 +110,27 @@ privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
 #Create Zip file for Local update - no hsp
-IPKS = recovery.ipk product-script.ipk software-update.ipk wpe.ipk brussels.ipk product.ipk gva.ipk lpm_updater.ipk
-PACKAGENAMES = SoundTouchRecovery product-script software-update wpe brussels SoundTouch gva lpm_updater
+IPKS_FILE=$(BOSE_WORKSPACE)/ipks.txt
+PACKAGENAMES_FILE=$(BOSE_WORKSPACE)/package_names.txt
+
+IPKS_HSP := $(shell cat < $(IPKS_FILE))
+IPKS := $(filter-out hsp.ipk,$(IPKS_HSP))
+IPKS_NOGVA := $(filter-out gva.ipk,$(IPKS_HSP))
+PACKAGENAMES_HSP := $(shell cat < $(PACKAGENAMES_FILE))
+PACKAGENAMES := $(filter-out hsp,$(PACKAGENAMES_HSP))
+PACKAGENAMES_NOGVA := $(filter-out gva,$(PACKAGENAMES_HSP))
+TARGETS_HSP := $(subst .ipk,-ipk,$(IPKS_HSP))
+TARGETS := $(subst .ipk,-ipk,$(IPKS))
+TARGETS_NOGVA := $(subst .ipk,-ipk,$(IPKS_NOGVA))
 
 EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
 EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
 EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
+
+print_variables:
+	echo $(IPKS_HSP)
+	echo $(PACKAGENAMES_HSP)
+	echo $(TARGETS_HSP)
 
 # Add exclude packages list in metadata.json
 .PHONY: generate-metadata
@@ -120,41 +141,33 @@ generate-metadata: cmake_build
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-#Create one more Zip file for Bonjour / Local update with HSP
-#- This is temporary, till DP2 boards are not available.
-IPKS_HSP = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk brussels.ipk product.ipk gva.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = SoundTouchRecovery product-script software-update hsp wpe brussels SoundTouch gva lpm_updater
-
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: generate-metadata product-ipk wpe-ipk softwareupdate-ipk brussels-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk gva-ipk
+packages-gz: generate-metadata $(TARGETS) 
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: generate-metadata brussels-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk gva-ipk
+packages-gz-with-hsp: generate-metadata $(TARGETS_HSP)
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
-
-IPKS_NOGVA = recovery.ipk product-script.ipk software-update.ipk hsp.ipk wpe.ipk brussels.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_NOGVA = SoundTouchRecovery product-script software-update hsp wpe brussels SoundTouch lpm_updater
 
 .PHONY: package-no-gva
 package-no-gva: packages-gz-no-gva
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_NOGVA) -i $(IPKS_NOGVA) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_nogva.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz-no-gva
-packages-gz-no-gva: generate-metadata brussels-ipk product-ipk wpe-ipk softwareupdate-ipk hsp-ipk lpmupdater-ipk recovery-ipk product-script-ipk
+packages-gz-no-gva: generate-metadata $(TARGES_NOGVA)
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_NOGVA)
 
 .PHONY: graph
 graph: product-ipk
 	graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
 
-.PHONY: softwareupdate-ipk
-softwareupdate-ipk: cmake_build
-	./scripts/create-software-update-ipk
+.PHONY: software-update-ipk
+software-update-ipk: cmake_build
+	${SOFTWARE_UPDATE_DIR}/create-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
@@ -162,7 +175,7 @@ hsp-ipk: cmake_build
 
 .PHONY: gva-ipk
 gva-ipk: cmake_build
-	./scripts/create-gva-ipk
+	${GVA_DIR}/create-ipk
 
 .PHONY: lpm-bos
 lpm-bos:
@@ -177,10 +190,10 @@ endif
 
 .PHONY: recovery-ipk
 recovery-ipk: cmake_build
-	./scripts/create-recovery-ipk -p professor
+	${RIVIERASWUPRECOVERY_DIR}/create-ipk -p professor
 
-.PHONY: lpmupdater-ipk
-lpmupdater-ipk: lpm-bos
+.PHONY: lpm_updater-ipk
+lpm_updater-ipk: lpm-bos
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ professor
 
 .PHONY: brussels-ipk
@@ -193,7 +206,19 @@ wpe-ipk:
 
 .PHONY: product-script-ipk
 product-script-ipk:
-	./scripts/create-product-script-ipk
+	${PRODUCT_STARTUP_DIR}/create-ipk
+
+.PHONY: avs-ipk
+avs-ipk:
+	${AVSSERVICE_DIR}/create-ipk
+
+.PHONY: iot-ipk
+iot-ipk:
+	${IOT_DIR}/create-ipk
+
+.PHONY: minimalfs-ipk
+minimalfs-ipk:
+	/bin/bash ${RIVIERAMINIMALFS_DIR}/create-ipk -p ${product}
 
 .PHONY: all-packages
 ifeq (true,$(disableGVA))

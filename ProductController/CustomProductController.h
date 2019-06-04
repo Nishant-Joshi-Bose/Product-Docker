@@ -323,8 +323,6 @@ public:
         return m_bootCompleteTime;
     }
 
-    bool ShouldPlayVolumeTone( ) override;
-
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -569,6 +567,8 @@ private:
     void LoadPowerMacroFromPersistance( );
 
     void HandleVoiceStatus( VoiceServicePB::VoiceStatus voiceStatus ) override;
+
+    bool IsAllModuleReady() const;
 
     bool m_haltInPlayableTransitionNetworkStandby = false;
 

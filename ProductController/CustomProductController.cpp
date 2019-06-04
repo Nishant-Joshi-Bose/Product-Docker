@@ -522,206 +522,205 @@ void CustomProductController::Run( )
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
-    using namespace DeviceManagerPb;
     using namespace SystemPowerPb;
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateTop );
 
-    GetHsm( ).AddState( NotifiedNames::BOOTING,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_BOOTING,
                         SystemPowerControl_State_Not_Notify,
                         stateBooting );
 
 
-    GetHsm( ).AddState( NotifiedNames::FIRST_BOOT_GREETING,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_FIRST_BOOT_GREETING,
                         SystemPowerControl_State_Not_Notify,
                         stateFirstBootGreeting );
 
-    GetHsm( ).AddState( NotifiedNames::UPDATING,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_UPDATING,
                         SystemPowerControl_State_Not_Notify,
                         stateSoftwareInstallTransition );
 
-    GetHsm( ).AddState( NotifiedNames::UPDATING,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_UPDATING,
                         SystemPowerControl_State_Not_Notify,
                         stateSoftwareInstall );
 
-    GetHsm( ).AddState( NotifiedNames::UPDATING_MANUAL,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_UPDATING_MANUAL,
                         SystemPowerControl_State_Not_Notify,
                         stateSoftwareInstallManual );
 
-    GetHsm( ).AddState( NotifiedNames::CRITICAL_ERROR,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_CRITICAL_ERROR,
                         SystemPowerControl_State_Not_Notify,
                         stateCriticalError );
 
-    GetHsm( ).AddState( NotifiedNames::FACTORY_DEFAULT,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_FACTORY_DEFAULT,
                         SystemPowerControl_State_Not_Notify,
                         stateFactoryDefault );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateBooted );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateFirstBootGreetingTransition );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateLowPowerStandbyTransition );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_OFF,
                         stateLowPowerStandby );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateLowPowerResume );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_OFF,
                         statePlayableTransition );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         statePlayableTransitionInternal );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_OFF,
                         statePlayableTransitionIdle );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_OFF,
                         statePlayableTransitionNetworkStandby );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateOn );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_OFF,
                         statePlayable );
 
-    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
                         SystemPowerControl_State_OFF,
                         stateNetworkStandby );
 
-    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
                         SystemPowerControl_State_OFF,
                         stateNetworkStandbyConfigured );
 
-    GetHsm( ).AddState( NotifiedNames::NETWORK_STANDBY,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
                         SystemPowerControl_State_OFF,
                         stateNetworkStandbyNotConfigured );
 
-    GetHsm( ).AddState( NotifiedNames::IDLE,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_IDLE,
                         SystemPowerControl_State_OFF,
                         stateIdle );
 
-    GetHsm( ).AddState( NotifiedNames::IDLE,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_IDLE,
                         SystemPowerControl_State_OFF,
                         stateIdleVoiceConfigured );
 
-    GetHsm( ).AddState( NotifiedNames::IDLE,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_IDLE,
                         SystemPowerControl_State_OFF,
                         stateIdleVoiceNotConfigured );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingTransition );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingTransitionSelected );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         statePlaying );
 
-    GetHsm( ).AddState( NotifiedNames::PLAYING_SOURCE_OFF,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_PLAYING_SOURCE_OFF,
                         SystemPowerControl_State_OFF,
                         statePlayingDeselected );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelected );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSilent );
 
-    GetHsm( ).AddState( NotifiedNames::PLAYING_SOURCE_OFF,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_PLAYING_SOURCE_OFF,
                         SystemPowerControl_State_OFF,
                         statePlayingSelectedSilentSourceInvalid );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSilentSourceValid );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_ON,
                         statePlayingSelectedNotSilent );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSetup );
 
-    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSetupNetworkConfig );
 
-    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSetupNetworkConfigWiFiConnection );
 
-    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupNetworkConfigWiFiTransition );
 
-    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupNetworkConfigWiFiExiting );
 
-    GetHsm( ).AddState( NotifiedNames::NETWORK_CONFIG,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupNetworkConfigWifiAborting );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_ON,
                         statePlayingSelectedSetupOther );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_Not_Notify,
                         statePlayingSelectedSetupExiting );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_OFF,
                         stateStoppingStreams );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_ON,
                         stateAccessoryPairing );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateAccessoryPairingCancelling );
 
-    GetHsm( ).AddState( NotifiedNames::SELECTED,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
                         SystemPowerControl_State_ON,
                         stateAdaptIQ );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateAdaptIQCancelling );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateStoppingStreamsDedicated );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateStoppingStreamsDedicatedForFactoryDefault );
 
-    GetHsm( ).AddState( Device_State_Not_Notify,
+    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                         SystemPowerControl_State_Not_Notify,
                         stateStoppingStreamsDedicatedForSoftwareUpdate );
 
@@ -970,6 +969,7 @@ std::shared_ptr< ProductDspHelper >& CustomProductController::GetDspHelper( )
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has booted.
+///         This is accomplished by delegating to IsAllModuleReady()
 ///
 /// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
 ///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
@@ -979,6 +979,22 @@ bool CustomProductController::IsBooted( ) const
 {
     BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
     BOSE_VERBOSE( s_logger, " " );
+    return IsAllModuleReady();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::IsAllModuleReady
+///
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has booted.
+///
+/// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
+///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductController::IsAllModuleReady( ) const
+{
     BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( IsLpmReady( )             ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( IsCAPSReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady( )       ? "true" : "false" ) );
@@ -1007,21 +1023,15 @@ bool CustomProductController::IsBooted( ) const
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has exited low power.
-///         NOTE: Unlike booting we only wait for the things killed going to low power
+///         NOTE: Unlike booting we should only wait for the things killed going to low power
+///         However, for convenience and risk-reduction, we just call IsAllModuleReady()
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductController::IsLowPowerExited( ) const
 {
     BOSE_INFO( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
     BOSE_INFO( s_logger, " " );
-    BOSE_INFO( s_logger, "LPM Connected         :  %s", ( IsLpmReady()       ? "true" : "false" ) );
-    BOSE_INFO( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady() ? "true" : "false" ) );
-    BOSE_INFO( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
-    BOSE_INFO( s_logger, " " );
-
-    return( IsLpmReady()            and
-            IsSassReady()           and
-            IsAudioPathReady() );
+    return IsAllModuleReady();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1799,6 +1809,10 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         else if( GetIntentHandler( ).IsIntentVoiceListening( action ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentVoiceListening );
+        }
+        else if( GetIntentHandler( ).IsIntentForceUpdate( action ) )
+        {
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentManualSoftwareInstall );
         }
         else
         {
@@ -2695,24 +2709,26 @@ void CustomProductController::InitializeKeyIdToKeyNameMap()
     BOSE_INFO( s_logger, "CustomProductController::%s:", __func__ );
 
     // Professor team need to coordinate with the UI team to know which keys are of interest to them
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::VOLUME_UP_KEYID )]     = KeyNamesPB::keynames::VOLUME_UP;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::VOLUME_DOWN_KEYID )]   = KeyNamesPB::keynames::VOLUME_DOWN;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_1_KEYID )]      = KeyNamesPB::keynames::PRESET_1;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_2_KEYID )]      = KeyNamesPB::keynames::PRESET_2;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_3_KEYID )]      = KeyNamesPB::keynames::PRESET_3;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_4_KEYID )]      = KeyNamesPB::keynames::PRESET_4;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_5_KEYID )]      = KeyNamesPB::keynames::PRESET_5;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_6_KEYID )]      = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_VOLUME_UP )]   = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_VOLUME_DOWN )] = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_1 )]    = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_2 )]    = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_3 )]    = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_4 )]    = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_5 )]    = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_6 )]    = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_MUTE )]        = KeyNamesPB::keynames::MUTE;
 
 
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::VOLUME_UP_KEYID )]     = KeyNamesPB::keynames::VOLUME_UP;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::VOLUME_DOWN_KEYID )]   = KeyNamesPB::keynames::VOLUME_DOWN;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_1_KEYID )]      = KeyNamesPB::keynames::PRESET_1;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_2_KEYID )]      = KeyNamesPB::keynames::PRESET_2;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_3_KEYID )]      = KeyNamesPB::keynames::PRESET_3;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_4_KEYID )]      = KeyNamesPB::keynames::PRESET_4;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_5_KEYID )]      = KeyNamesPB::keynames::PRESET_5;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_6_KEYID )]      = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_UP )]   = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_DOWN )] = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_1 )]    = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_2 )]    = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_3 )]    = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_4 )]    = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_5 )]    = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_6 )]    = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_MUTE )]        = KeyNamesPB::keynames::MUTE;
 
     return;
 }
@@ -2848,18 +2864,6 @@ bool CustomProductController::IsSwUpdateForeground( ) const
     }
 
     // We are likely en-route to accessory update, it's always in background
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name   CustomProductController::ShouldPlayVolumeTone
-///
-/// @brief  Disable Volume tones on PGC (see CASTLE-29629)
-///
-/// @return bool always false
-///////////////////////////////////////////////////////////////////////////////
-bool CustomProductController::ShouldPlayVolumeTone( )
-{
     return false;
 }
 
