@@ -64,8 +64,6 @@ lowpower=(
     Shepherd-NetManager.xml
     Shepherd-avs.xml
     Shepherd-VPAController.xml
-    Shepherd-Bluetooth.xml
-    Shepherd-BLEToFrontDoorService.xml
 )
 
 # Add GVA xml to lowpower mode only if GVA package is installed
