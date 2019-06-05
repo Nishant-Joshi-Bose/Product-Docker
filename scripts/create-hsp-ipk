@@ -31,7 +31,7 @@ while :; do
     case "$arg" in
     (--help | -h)
         cat <<EOF
-Usage: $this [options]
+Usage: $this [options] Release
 Create an IPK file for installing Riviera HSP with opkg.
 Options:
     -h | --help: Print help
@@ -47,6 +47,8 @@ EOF
     esac
 done
 
+cfg=$1; shift
+
 if (( $# != 0 )); then
     echo >&2 "$this: unexpected argument '$1'"
     tryhelp
@@ -55,7 +57,6 @@ if [ -z "$hsp_update_type" ]; then
     hsp_update_type="full"
 fi
 
-cfg=Release
 
 function put_script {
     local file="$1"; shift
