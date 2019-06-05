@@ -1,5 +1,5 @@
 {
-    "killUIOnHeartBeatLossPidFile" : "/var/run/monaco.pid",
+    "killUIOnHeartBeatLossPidFile" : "/var/run/local-ui.pid",
     "uiHeartBeatLossWarnMS" : 30000,
     "uiHeartBeatLossErrorMS" : 60000,
     
