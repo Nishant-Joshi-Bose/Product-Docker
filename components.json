@@ -183,7 +183,6 @@
     "name": "IoTService-qc8017_32",
     "selected_version": "Release/stable/1.0.1-11+fb51fdb"
   },
-
   {
     "name": "KeyHandler-qc8017_32",
     "selected_version": "Release/stable/2.2.0-214+8d3bcad"
@@ -374,6 +373,6 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/stable/2.2.1-152+e376dd7"
+    "selected_version": "Release/stable/2.2.2-167+5a0967a"
   }
 ]
