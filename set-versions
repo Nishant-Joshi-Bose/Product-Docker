@@ -1,0 +1,123 @@
+#!/bin/sh
+sv () {
+    [ "$2" = New ] && set -- --dry-run "$@"
+    components set-version --quiet "$@"
+}
+
+# release: false
+
+sv bose-opkg-utils stable@dc68bf49f79a24f21a22b50eed6a9d6ef2f44062
+sv bose-web-riviera-ap-page stable@4d88a4d4ddd66edcc7552169bdbb19c442c1feef
+sv bose-web-update-page stable@050c0df846c07eb071d58045328a2a542043a1c5
+sv BoseWebMonaco Release/stable/5.1.0-778+25e3ed0
+sv DinghyWebBrowser-{} Release/bose-stable/1.0.5-47+79977b9
+sv google-libassistant-{} Release/bose-stable/1.151831.0-40+5e595f9
+sv googletest-{} branches/googletest@2692
+sv LisaBDSP-{} Release/Castle-Fork-git_migration/2.1.9-21383
+sv LpmMfgTool Release/master/0.0.1-4+34833d6
+sv opensource-avahi-{} Release/bose-stable/v0.6.36-1-gc3f15e1
+sv opensource-libtool bose-stable@c3c855e0eef6022554a1ed4928dc909a3743feed
+sv opensource-OpenAvnuApple-{} Release/bose-stable/v1.0-1800-ga34ab9e
+sv opensource-util-linux-{} Release/bose-master/1.5.0-10+877ade5
+sv product-startup Release/stable/5.0.0-15+594522a
+sv ProductControllerCommon stable@d9245c3bcbfde924bcda489e6f241ce9435bdc20
+sv ProductUIAssets stable@e0a2710553fda8ed1bd96bc1a98ad1406f62d4e0
+sv proprietary-airplay2-{} Release/bose-stable/2.0.2-32-gef35daf
+sv proprietary-libspotify_embedded-{} Release/stable/v3.66.42-67+9ede497
+sv Riviera-HSP-Images Release/master/5.0.6
+sv Riviera-Toolchain Release/master/5.0.6
+sv RivieraLPM-Shared master@6e4938b7124a77bb4ce4420dab35874bd3188bfc
+sv RivieraLPM-Tools master@8dca5445b30e1f402e2282483924a5ced387f8a8
+sv SecureDeviceKey stable@5fb596d5247f0dddea5d69f69ec9c1255cd97a31
+
+sv DspLibraries-{} Release/trunk/6.0.0.5283
+sv Fluoride-{} Release/bose-stable/3.3.4-1-gab4940d
+sv HoneycombBDSP-{} Release/trunk/4.1.5.5282
+sv opensource-googletest-{} Release/bose-stable/bose-v1.8.1-11-gd357ec1
+sv opensource-gssdp-{} Release/bose-stable/bose-v1.0.2-12-g04a4f68
+sv opensource-id3-{} Release/bose-stable/v3.8.3-16-ge4a86b8
+sv opensource-jsoncpp-{} Release/bose-stable/bose-v1.8.3-17-ga15ce36
+sv opensource-libmms-{} Release/bose-stable/libmms-0.6.4-13-g6b14970
+sv opensource-tinyxml-{} Release/bose-stable/bose-v2.6.1-13-g2668604
+sv opensource-zlib-{} Release/bose-stable/bose-v1.2.11-17-gc0ccc23
+sv protobuf-{} Release/bose-stable/bose-v2.4.1-15-gfb4ce8e
+sv RivieraBDSP-{} Release/trunk/4.0.0.5284
+sv unittest-cpp-{} Release/bose-stable/2.0.0-71+57b463b
+sv Webkit Release/stable/2.2.2-167+5a0967a
+
+sv opensource-gupnp-{} Release/bose-stable/bose-v1.0.2-3-gf58addd
+sv opensource-nghttp2-{} Release/bose-stable/bose-v1.24.0-18-g34506a1
+sv opensource-openssl-{} Release/bose-stable/bose-v1.0.2-27-g8406a29
+sv TransStringMapper-{} Release/stable/1.0.0-39+150fe3f
+
+sv opensource-curl-{} Release/bose-stable/bose-v7.54.1-22-g11d6cbf
+sv opensource-libwebsockets-{} Release/bose-stable/bose-v2.4.2-2-g999e18c
+
+sv BoseLibs-{} Release/stable/3.5.0-1344+6cb34c2
+sv opensource-libarchive-{} Release/bose-stable/bose-v3.3.1-18-gba18eb7
+
+sv AVSAPI-{} Release/stable/2.5.0-59+b637a49
+sv Cli-{} Release/stable/2.2.0-219+c80c4ae
+sv ClockSync-{} Release/stable/2.2.8-166+432b0f6
+sv ClockSyncClient-{} Release/stable/2.2.0-100+ae3aefa
+sv FrontDoorClient-{} Release/stable/3.0.0-786+7ca8b4d
+sv FrontDoorUtility-{} Release/stable/3.0.0-322+2087615
+sv HTTPInterface-{} Release/stable/3.0.1-290+393f95d
+sv IotIpcClient-{} Release/stable/2.0.0-149+601ee9d
+sv JWTUtils-{} Release/stable/2.2.0-193+0ce634f
+sv opensource-opkg-{} Release/bose-stable/bose-v3.6.2-34-g55bc7e0
+sv PassportClient-{} Release/stable/2.2.0-1442+20c91e6
+sv PbStore-{} Release/stable/2.2.1-47+198c81b
+sv Shepherd-{} Release/stable/2.2.0-166+c5dc3c9
+
+sv AudioPathClient-{} Release/stable/5.0.0-6522+c56f81c
+sv AudioPathProducts-{} Release/stable/5.0.0-6522+c56f81c
+sv AudioPathService-{} Release/stable/5.0.0-6522+c56f81c
+sv AudioSource-{} Release/stable/2.3.0-396+c878e9e
+sv AVSClient-{} Release/stable/2.5.0-70+d412717
+sv DataCollectionClient-{} Release/stable/4.0.1-256+8128d0e
+sv KeyHandler-{} Release/stable/2.2.0-218+76ce3f2
+sv ProductStateClient-{} Release/stable/0.1.0-130+8895090
+sv RivieraLpmService-{} Release/stable/3.1.6-500+f0844c1
+sv SystemEventService-{} Release/stable/2.2.0-195+c2d51db
+sv Telemetry-{} Release/stable/3.0.0-178+3be44c4
+sv TelemetryClient-{} Release/stable/3.0.0-52+44aa71a
+sv VPAController-{} Release/stable/2.2.10-6-gcb16239
+
+sv AudioSource-AirPlay2-{} Release/stable/v1.0.0-14-gb973723
+sv AudioSource-BMX-{} Release/stable/0.0.2-611+6a78a29
+sv AudioSource-Spotify-{} Release/stable/0.0.26-20-g69a5d0b
+sv BTStackAdapter-{} Release/stable/2.19.0-6-gaa13bcb
+sv CAPSAPI-{} Release/stable/1.0.0-107+30ca22a
+sv FrontDoorService-{} Release/stable/3.1.0-1076+0d032cb
+sv LightBarController-{} Release/stable/2.2.6-8-gc57b862
+sv NetworkService-{} Release/stable/2.2.13-4-g99c3acd
+sv RivieraLpmUpdater Release/stable/2.1.0-156+2897b1d
+sv SASS-{} Release/stable/2.5.0-1670+60bbf9c
+
+sv AudioSource-MusicServices-{} Release/stable/1.0.0-17+af5bf9c
+sv AudioSource-UPnP-{} Release/stable/0.0.1-78+89f35e8
+sv BLESetup-{} Release/stable/3.1.28-5-g2636495
+sv BTSource-{} Release/stable/3.27.0-6-g79c4158
+sv BTSTSSink-{} Release/stable/2.6.8-5-ge6838f9
+sv DataCollectionService-{} Release/stable/4.0.0-276+571a4e1
+sv DemoController-{} Release/stable/2.2.0-290+1db0fd3
+sv GalapagosClient-{} Release/stable/3.0.0-431+2966929
+sv ProductControllerCommonProto-{} Release/stable/2.2.0-504+d9245c3
+sv SoftwareUpdate-{} Release/stable/5.0.4-2371+e39ae7d
+
+sv BLEToFrontDoorService-{} Release/stable/2.3.0-390+426ddbf
+sv Bluetooth-{} Release/stable/2.15.0-4-g5a7ad71
+sv CloudControlClient-{} Release/stable/0.0.4-119+032ed1d
+sv GoogleVoiceAssistant-{} Release/stable/2.2.9-1907+fb88fce
+sv HTTPProxy-{} Release/stable/2.2.0-296+a6dd78a
+sv PassportService-{} Release/stable/2.2.0-43+cb3df2d
+sv RivieraSwUpRecovery-{} Release/stable/5.0.0-181+b394050
+sv ServicesClients-{} Release/stable/2.0.7-142+3ba7608
+
+sv AVSService-{} Release/stable/2.2.1-299+aaea265
+sv IoTService-{} Release/stable/1.0.1-22+547f390
+sv RivieraMinimalFS-{} Release/stable/0.1.1-71+ec9300a
+sv SoundTouch-SDK-{} Release/Castle-Fork-stable/2.2.2.45569.3378837
+
+exit 0
