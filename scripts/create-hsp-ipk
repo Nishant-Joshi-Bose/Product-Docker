@@ -22,8 +22,8 @@ tryhelp () {
     exit 1
 }
 opts=$(getopt --name "$this" --shell sh \
-    -o uh \
-    -l "help" \
+    -o ht: \
+    -l "help,type:" \
     -- "$@") || tryhelp
 eval set -- "$opts"
 while :; do
@@ -31,25 +31,31 @@ while :; do
     case "$arg" in
     (--help | -h)
         cat <<EOF
-Usage: $this [options] <Release|Debug>
-
+Usage: $this [options]
 Create an IPK file for installing Riviera HSP with opkg.
-
 Options:
+    -h | --help: Print help
+    -t | --type: Type of HSP update - full (Default) / partial
 EOF
         exit 0
         ;;
-
+    (--type | -t):
+        hsp_update_type="$1"; shift
+        ;;
     (--) break ;;
     (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
     esac
 done
 
-if (( $# != 1 )); then
-    echo >&2 "$this: wrong usage"
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
     tryhelp
 fi
-cfg=$1; shift
+if [ -z "$hsp_update_type" ]; then
+    hsp_update_type="full"
+fi
+
+cfg=Release
 
 function put_script {
     local file="$1"; shift
@@ -78,7 +84,13 @@ validate-version "$riviera_hsp_ver" || exit
 # update_ext4.zip is HSP update file with update using CP / mv commands
 # update_block.zip is HSP update with using "dd" or blocked update
 # update_block_kernel.zip is HSP update with only kernel update. - THIS SHOULDN'T BE USED except SOS.
-cp "$riviera_hsp_images_dir"/update_block.zip "$opt_dir/hsp/update_ext4.zip" || exit
+if [ "$hsp_update_type" == "full" ]; then
+    echo "Using Full HSP Update"
+    cp "$riviera_hsp_images_dir"/update_block_full.zip "$opt_dir/hsp/update_ext4.zip" || exit
+else
+    echo "Using Partial HSP Update"
+    cp "$riviera_hsp_images_dir"/update_block.zip "$opt_dir/hsp/update_ext4.zip" || exit
+fi
 
 # To mark HSP update is in progress fetch the file path from CommonHeader.h file
 hsp_update_indication=`cat "$swup_dir"/include/CommonHeader.h | awk '$3 == "g_HSPUpdateInProgress" {print $5}' | tr -d ';\"'` || exit
@@ -126,6 +138,7 @@ if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
     exiterror
 fi
 
+# Fix for issue CASTLE-13393, We need Recovery related binaries and scripts in cache partition from HSP 3.6 onwards
 # Fix for issue CASTLE-13393, We need Recovery related binaries and scripts in cache partition from HSP 3.6 onwards
 # Make sure that cache partition is mounted, if not then mount it
 if ! grep -q /cache /proc/mounts; then
@@ -203,4 +216,3 @@ ipk=$ipk_dir/hsp.ipk
 mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
-echo "Created $ipk"
