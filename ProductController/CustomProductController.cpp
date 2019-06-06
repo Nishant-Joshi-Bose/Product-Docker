@@ -143,7 +143,7 @@ constexpr auto      g_DefaultCAPSValuesStateFile        = "DefaultCAPSValuesDone
 constexpr auto      g_DefaultRebroadcastLatencyModeFile = "DefaultRebroadcastLatencyModeDone";
 
 constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = BOSE_CONF_DIR "BlastConfiguration.json";
-constexpr char       UI_KILL_PID_FILE[] = "/var/run/brussels.pid";
+constexpr char       UI_KILL_PID_FILE[] = "/var/run/local-ui.pid";
 constexpr uint32_t   UI_ALIVE_TIMEOUT = 60 * 1000;
 }
 

@@ -135,7 +135,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
     RegisterCommonAudioPathEvents();
 
     {
-        Callback< std::string, Callback< std::string, std::string > >
+        Callback< const APProductCommon::MainStreamAudioSettingsParam_t&, Callback< std::string, std::string > >
         callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
                              this,
                              std::placeholders::_1,
@@ -177,7 +177,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 ///
 /// @name   CustomProductAudioService::GetMainStreamAudioSettingsCallback
 ///
-/// @param  std::string contentItem
+/// @param  const APProductCommon::MainStreamAudioSettingsParam_t& param
 ///
 /// @param  const Callback<std::string, std::string> cb
 ///
@@ -185,8 +185,10 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 ///         and get latest mainStreamAudioSettings and inputRoute back
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb )
+void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProductCommon::MainStreamAudioSettingsParam_t& param,
+                                                                    const Callback<std::string, std::string> cb )
 {
+    std::string const& contentItem = param.contentItem;
     BOSE_DEBUG( s_logger, "%s - contentItem = %s", __func__, contentItem.c_str() );
 
     // Parse contentItem string received from APProduct
