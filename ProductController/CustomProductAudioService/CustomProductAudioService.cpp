@@ -203,6 +203,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProd
         BOSE_ERROR( s_logger, "Converting contentItem string from APProduct to ContentItem proto failed markup error - %s", e.what() );
         error = true;
     }
+    contentItemProto.set_islocal( param.isLocal );
     // If no parsing error occured, update m_MainStreamAudioSettings and m_InputRoute with new contentItem
     if( !error && contentItemProto.has_source() && contentItemProto.has_sourceaccount() )
     {
