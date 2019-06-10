@@ -55,7 +55,8 @@ private:
     /*! \brief APProduct handling function: Callback invoked when we get a
      *   RegisterForMainStreamAudioSettingsRequest from the AudioPath.
      */
-    void GetMainStreamAudioSettingsCallback( std::string contentItem, const Callback<std::string, std::string> cb );
+    void GetMainStreamAudioSettingsCallback( const APProductCommon::MainStreamAudioSettingsParam_t& param,
+                                             const Callback<std::string, std::string> cb );
 
     /*! \brief APProduct handling function: Send all audio data to AudioPath.
      */
