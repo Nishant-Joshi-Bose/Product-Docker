@@ -101,7 +101,6 @@ TARGET_LINK_LIBRARIES(ProductController
   BoseLibs
   PassportLan
   SASSClient
-  StsAmazon
   ProtoToMarkup
   ${JSONCPP_DIR}/lib/libjsoncpp.a
   ${PROTOBUF_DIR}/lib/libprotobuf.a

@@ -6,8 +6,6 @@
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
-  <daemon name="IoT"/>
-
   <daemon name="CAPS"
           recovery="reboot">
     <arg>-c/opt/Bose/etc/CAPS.xml</arg>

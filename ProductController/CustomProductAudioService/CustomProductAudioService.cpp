@@ -59,8 +59,9 @@ void CustomProductAudioService::RegisterAudioPathEvents()
     RegisterCommonAudioPathEvents();
 
     {
-        Callback< std::string, Callback< std::string, std::string > > callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
-                                                                                this, _1, _2 ) );
+        Callback< const APProductCommon::MainStreamAudioSettingsParam_t&,
+                  Callback< std::string, std::string > > callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
+                                                                              this, _1, _2 ) );
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
     ConnectToAudioPath();
@@ -214,8 +215,10 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                              m_dataCollectionClient ) );
 }
 
-void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem, const Callback<std::string, std::string> cb )
+void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProductCommon::MainStreamAudioSettingsParam_t &param,
+                                                                    const Callback<std::string, std::string> cb )
 {
+    std::string const& contentItem = param.contentItem;
     BOSE_DEBUG( s_logger, "%s - contentItem = %s", __func__, contentItem.c_str() );
 
     // Parse contentItem string received from APProduct
