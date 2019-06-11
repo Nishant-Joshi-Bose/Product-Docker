@@ -29,7 +29,7 @@
             --><header master_version="3.0.16" name="professor_package.bos" />
     <manifest_entries>
         <entry chip="lpm_professor" combine="True" name="professor_mfg.bin" path="/home/softlib/verisoft/ProfessorLPM-Diags/Release/master/0.3.18-151+2a7d046/DP2/lpm_0.3.18-151+2a7d046.bin" version="filename" />
-        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Release/Professor/master/4.0.5-235+c816ab3/Alpha/lpm_4.0.5-235+c816ab3.bin" version="filename" />
+        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Release/Professor/master/4.0.6-239+80f313b/Alpha/lpm_4.0.6-239+80f313b.bin" version="filename" />
         <entry chip="lpm_professor" combine="True" name="professor_bl.bin" path="/home/softlib/verisoft/ProfessorLPM-BL/Release/trunk/0.2.0.1674/lpm_bootloader_0.2.0.1674.bin" version="filename" />
         <entry name="f0.bin" path="/home/softlib/verisoft/A4V-F0/Release/trunk/1.8.1.12410/RIVIERA_F0_1.8.1.12410.bin" version="filename" />
         <entry name="darr.bin" path="/home/softlib/verisoft/A4V-WirelessAudio/Release/trunk/40.000.12236/wam_40.000.12236.bin" version="40" />
