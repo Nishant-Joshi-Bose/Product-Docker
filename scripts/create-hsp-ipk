@@ -56,7 +56,14 @@ fi
 if [ -z "$hsp_update_type" ]; then
     hsp_update_type="full"
 fi
-
+case "$hsp_update_type" in
+  (full | partial) :;;
+  (*)
+    echo >&2 "$0: invalid --type=$hsp_update_type"
+    tryhelp
+    exit 1
+    ;;
+esac
 
 function put_script {
     local file="$1"; shift
