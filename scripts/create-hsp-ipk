@@ -140,7 +140,6 @@ if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
 fi
 
 # Fix for issue CASTLE-13393, We need Recovery related binaries and scripts in cache partition from HSP 3.6 onwards
-# Fix for issue CASTLE-13393, We need Recovery related binaries and scripts in cache partition from HSP 3.6 onwards
 # Make sure that cache partition is mounted, if not then mount it
 if ! grep -q /cache /proc/mounts; then
     echo "Mounting Cache"
