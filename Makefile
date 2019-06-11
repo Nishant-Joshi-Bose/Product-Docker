@@ -218,7 +218,7 @@ iot-ipk:
 
 .PHONY: minimalfs-ipk
 minimalfs-ipk:
-	/bin/bash ${RIVIERAMINIMALFS_DIR}/create-ipk -p ${product}
+	/bin/bash ${RIVIERAMINIMALFS_DIR}/create-ipk
 
 .PHONY: all-packages
 ifeq (true,$(disableGVA))
