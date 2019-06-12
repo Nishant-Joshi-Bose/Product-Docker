@@ -133,7 +133,6 @@ TARGET_LINK_LIBRARIES(Professor
   BoseLibs
   PassportLan
   SASSClient
-  StsAmazon
   VoiceServiceClient
   ProtoToMarkup
   jsoncpp
