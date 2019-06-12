@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/1.0.10-12-g5c585c1"
+    "selected_version": "Release/stable/1.0.10-13-gff10c1d"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -273,7 +273,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@d9245c3bcbfde924bcda489e6f241ce9435bdc20"
+    "selected_version": "stable@2ed720fdd76edf45ee3bf183e1929ddc019f11c1"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -297,11 +297,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/5.0.6"
+    "selected_version": "Release/master/5.0.8"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/5.0.6"
+    "selected_version": "Release/master/5.0.8"
   },
   {
     "name": "RivieraLPM-Tools",
