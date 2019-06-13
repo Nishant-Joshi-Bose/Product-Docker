@@ -70,7 +70,7 @@ opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir" || exit
 
 echo "Package version \"$brussels_ver\""
-"$wspace"/scripts/validate-version "$brussels_ver" || exit
+validate-version "$brussels_ver" || exit
 cp -rf "$brussels_dir"/brussels "$opt_dir/" || exit
 
 PackageName=brussels

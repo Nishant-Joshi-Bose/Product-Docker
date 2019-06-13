@@ -47,13 +47,14 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
     m_ThermalTask( std::unique_ptr<ThermalMonitorTask>(
-                       new ThermalMonitorTask( lpmClient, ProductController.GetTask( ),
+                       new ThermalMonitorTask( lpmClient, m_ProductTask,
                                                AsyncCallback<IpcSystemTemperatureData_t>(
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
-                                                   ProductController.GetTask( ) ) ) ) ),
+                                                   m_ProductTask ) ) ) ),
     m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
     m_currentNetworkSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
-    m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN )
+    m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
+    m_deferredEqSelectResponse( []( AudioEqSelect eq ) {}, m_ProductTask )
 {
     BOSE_DEBUG( s_logger, __func__ );
 
@@ -93,6 +94,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
             m_StreamConfigResponseCb = {};
         }
         m_DspIsRebooting = false;
+        m_currentEqSelectUpdating = true;
 
         ProductMessage bootedMsg;
         *bootedMsg.mutable_dspbooted( ) = image;
@@ -133,7 +135,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
     RegisterCommonAudioPathEvents();
 
     {
-        Callback< std::string, Callback< std::string, std::string > >
+        Callback< const APProductCommon::MainStreamAudioSettingsParam_t&, Callback< std::string, std::string > >
         callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
                              this,
                              std::placeholders::_1,
@@ -175,7 +177,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 ///
 /// @name   CustomProductAudioService::GetMainStreamAudioSettingsCallback
 ///
-/// @param  std::string contentItem
+/// @param  const APProductCommon::MainStreamAudioSettingsParam_t& param
 ///
 /// @param  const Callback<std::string, std::string> cb
 ///
@@ -183,8 +185,10 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 ///         and get latest mainStreamAudioSettings and inputRoute back
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb )
+void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProductCommon::MainStreamAudioSettingsParam_t& param,
+                                                                    const Callback<std::string, std::string> cb )
 {
+    std::string const& contentItem = param.contentItem;
     BOSE_DEBUG( s_logger, "%s - contentItem = %s", __func__, contentItem.c_str() );
 
     // Parse contentItem string received from APProduct
@@ -556,6 +560,9 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
     {
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
     }
+    m_deferredEqSelectResponse( m_AudioSettingsMgr->GetEqSelect() );
+    m_deferredEqSelectResponse = AsyncCallback<AudioEqSelect>( []( AudioEqSelect eq ) {}, m_ProductTask );
+    m_currentEqSelectUpdating = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1087,6 +1094,23 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         return error;
     };
     auto refreshEqSelectAction = []( ) {};
+
+    auto getEqSelectDeferred = [ this ]( Callback<AudioEqSelect> respCb )
+    {
+        if( !m_currentEqSelectUpdating )
+        {
+            // If we know EQ select isn't in the process of updating, just answer with the current value
+            respCb( m_AudioSettingsMgr->GetEqSelect() );
+            return;
+        }
+
+        // Wait for the next status to arrive from the DSP before answering.  This is important
+        // to eliminate a race condition in which AiQ has just completed, the DSP is in the process
+        // of rebooting (so we haven't received the list of updated supported modes yet), and
+        // Madrid queries this endpoint.  In this case, we need to defer the response until we get
+        // the next update from the DSP.
+        m_deferredEqSelectResponse = AsyncCallback<AudioEqSelect>( respCb, m_ProductTask );
+    };
     m_EqSelectSetting = std::unique_ptr< AudioSetting< AudioEqSelect > >
                         ( new AudioSetting< AudioEqSelect >
                           ( FRONTDOOR_AUDIO_EQSELECT_API,
@@ -1098,7 +1122,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                             DATA_COLLECTION_EQSELECT,
-                            m_DataCollectionClient ) );
+                            m_DataCollectionClient,
+                            getEqSelectDeferred ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/SubwooferPolarity - register handlers for POST/PUT/GET requests
