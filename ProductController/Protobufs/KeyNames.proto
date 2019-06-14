@@ -14,5 +14,6 @@ enum keynames
     PRESET_5    = 12;
     PRESET_6    = 13;
     MUTE        = 14;
+    BLUETOOTH   = 15;
 }
 
