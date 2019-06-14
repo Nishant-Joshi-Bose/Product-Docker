@@ -2718,7 +2718,7 @@ void CustomProductController::InitializeKeyIdToKeyNameMap()
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_5 )]         = KeyNamesPB::keynames::PRESET_5;
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_6 )]         = KeyNamesPB::keynames::PRESET_6;
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_MUTE )]             = KeyNamesPB::keynames::MUTE;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_BLUETOOTH_SOURCE )] = KeyNamesPB::keynames::MUTE;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_BLUETOOTH_SOURCE )] = KeyNamesPB::keynames::BLUETOOTH;
 
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_UP )]        = KeyNamesPB::keynames::VOLUME_UP;
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_DOWN )]      = KeyNamesPB::keynames::VOLUME_DOWN;
@@ -2729,7 +2729,7 @@ void CustomProductController::InitializeKeyIdToKeyNameMap()
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_5 )]         = KeyNamesPB::keynames::PRESET_5;
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_6 )]         = KeyNamesPB::keynames::PRESET_6;
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_MUTE )]             = KeyNamesPB::keynames::MUTE;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_BLUETOOTH_SOURCE )] = KeyNamesPB::keynames::MUTE;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_BLUETOOTH_SOURCE )] = KeyNamesPB::keynames::BLUETOOTH;
 
     return;
 }
