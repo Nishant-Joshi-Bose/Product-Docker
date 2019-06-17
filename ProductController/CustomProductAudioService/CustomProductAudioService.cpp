@@ -189,7 +189,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProd
                                                                     const Callback<std::string, std::string> cb )
 {
     std::string const& contentItem = param.contentItem;
-    BOSE_DEBUG( s_logger, "%s - contentItem = %s", __func__, contentItem.c_str() );
+    BOSE_DEBUG( s_logger, "%s - isLocal = %d, contentItem = %s", __func__, param.isLocal, contentItem.c_str() );
 
     // Parse contentItem string received from APProduct
     bool error = false;
@@ -203,6 +203,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProd
         BOSE_ERROR( s_logger, "Converting contentItem string from APProduct to ContentItem proto failed markup error - %s", e.what() );
         error = true;
     }
+    contentItemProto.set_islocal( param.isLocal );
     // If no parsing error occured, update m_MainStreamAudioSettings and m_InputRoute with new contentItem
     if( !error && contentItemProto.has_source() && contentItemProto.has_sourceaccount() )
     {
@@ -234,7 +235,11 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProd
         }
 
         // Update input route
-        if( contentItemProto.source() == SHELBY_SOURCE::PRODUCT )
+        if( !param.isLocal )
+        {
+            m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
+        }
+        else if( contentItemProto.source() == SHELBY_SOURCE::PRODUCT )
         {
             m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
                            ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |

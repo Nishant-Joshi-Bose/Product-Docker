@@ -2457,26 +2457,27 @@ void CustomProductController::InitializeKeyIdToKeyNameMap()
     BOSE_INFO( s_logger, "CustomProductController::%s:", __func__ );
 
     // Professor team need to coordinate with the UI team to know which keys are of interest to them
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_VOLUME_UP )]   = KeyNamesPB::keynames::VOLUME_UP;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_VOLUME_DOWN )] = KeyNamesPB::keynames::VOLUME_DOWN;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_1 )]    = KeyNamesPB::keynames::PRESET_1;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_2 )]    = KeyNamesPB::keynames::PRESET_2;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_3 )]    = KeyNamesPB::keynames::PRESET_3;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_4 )]    = KeyNamesPB::keynames::PRESET_4;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_5 )]    = KeyNamesPB::keynames::PRESET_5;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_6 )]    = KeyNamesPB::keynames::PRESET_6;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_MUTE )]        = KeyNamesPB::keynames::MUTE;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_VOLUME_UP )]        = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_VOLUME_DOWN )]      = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_1 )]         = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_2 )]         = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_3 )]         = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_4 )]         = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_5 )]         = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_NUMBER_6 )]         = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_MUTE )]             = KeyNamesPB::keynames::MUTE;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, LpmServiceMessages::BOSE_BLUETOOTH_SOURCE )] = KeyNamesPB::keynames::BLUETOOTH;
 
-
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_UP )]   = KeyNamesPB::keynames::VOLUME_UP;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_DOWN )] = KeyNamesPB::keynames::VOLUME_DOWN;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_1 )]    = KeyNamesPB::keynames::PRESET_1;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_2 )]    = KeyNamesPB::keynames::PRESET_2;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_3 )]    = KeyNamesPB::keynames::PRESET_3;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_4 )]    = KeyNamesPB::keynames::PRESET_4;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_5 )]    = KeyNamesPB::keynames::PRESET_5;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_6 )]    = KeyNamesPB::keynames::PRESET_6;
-    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_MUTE )]        = KeyNamesPB::keynames::MUTE;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_UP )]        = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_VOLUME_DOWN )]      = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_1 )]         = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_2 )]         = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_3 )]         = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_4 )]         = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_5 )]         = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_NUMBER_6 )]         = KeyNamesPB::keynames::PRESET_6;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_MUTE )]             = KeyNamesPB::keynames::MUTE;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, LpmServiceMessages::BOSE_BLUETOOTH_SOURCE )] = KeyNamesPB::keynames::BLUETOOTH;
 
     return;
 }
