@@ -61,7 +61,6 @@ restore=false
 # NOTE : Vfe can not be added here due to dir structure needed to run prof and GC
 lowpower=(
     Shepherd-AudioPath.xml
-    Shepherd-NetManager.xml
     Shepherd-avs.xml
     Shepherd-VPAController.xml
 )
