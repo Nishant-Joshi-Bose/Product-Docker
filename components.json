@@ -36,15 +36,7 @@
     "selected_version": "Release/stable/0.0.2-622+68bca69"
   },
   {
-    "name": "AudioSource-BMX-x86_64",
-    "selected_version": "Release/stable/0.0.2-622+68bca69"
-  },
-  {
     "name": "AudioSource-MusicServices-qc8017_32",
-    "selected_version": "Release/stable/1.0.0-20+8748688"
-  },
-  {
-    "name": "AudioSource-MusicServices-x86_64",
     "selected_version": "Release/stable/1.0.0-20+8748688"
   },
   {
@@ -56,15 +48,7 @@
     "selected_version": "Release/stable/0.0.28-29-g5380c84"
   },
   {
-    "name": "AudioSource-Spotify-x86_64",
-    "selected_version": "Release/stable/0.0.28-29-g5380c84"
-  },
-  {
     "name": "AudioSource-UPnP-qc8017_32",
-    "selected_version": "Release/stable/0.0.1-89+6f2c985"
-  },
-  {
-    "name": "AudioSource-UPnP-x86_64",
     "selected_version": "Release/stable/0.0.1-89+6f2c985"
   },
   {
@@ -113,10 +97,6 @@
   },
   {
     "name": "CAPSAPI-qc8017_32",
-    "selected_version": "Release/stable/1.0.0-114+c39eb48"
-  },
-  {
-    "name": "CAPSAPI-x86_64",
     "selected_version": "Release/stable/1.0.0-114+c39eb48"
   },
   {
@@ -176,10 +156,6 @@
     "selected_version": "Release/stable/2.0.0-152+d19fb5b"
   },
   {
-    "name": "IotIpcClient-x86_64",
-    "selected_version": "Release/stable/2.0.0-152+d19fb5b"
-  },
-  {
     "name": "IoTService-qc8017_32",
     "selected_version": "Release/stable/1.0.0-32-g9497a87"
   },
@@ -229,10 +205,6 @@
   },
   {
     "name": "opensource-openssl-qc8017_32",
-    "selected_version": "Release/bose-stable/bose-v1.0.2-32-gdc4dcca"
-  },
-  {
-    "name": "opensource-openssl-x86_64",
     "selected_version": "Release/bose-stable/bose-v1.0.2-32-gdc4dcca"
   },
   {
