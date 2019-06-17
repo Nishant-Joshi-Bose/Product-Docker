@@ -37,7 +37,6 @@ override=false
 # properly.
 lowpower=(
     Shepherd-AudioPath.xml
-    Shepherd-avs.xml
     Shepherd-vfe.xml
     Shepherd-VPAController.xml
 )
@@ -45,6 +44,11 @@ lowpower=(
 # Add GVA xml to lowpower mode only if GVA package is installed
 if [ -e /opt/Bose/etc/Shepherd-GVA.xml ]; then
     lowpower+=( Shepherd-GVA.xml )
+fi
+
+# Add avs xml to lowpower mode only if avs package is installed
+if [ -e /opt/Bose/etc/Shepherd-avs.xml ]; then
+    lowpower+=( Shepherd-avs.xml )
 fi
 
 function validate {

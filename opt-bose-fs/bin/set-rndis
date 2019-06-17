@@ -36,11 +36,13 @@ if enabled in script and disabled in script:
             # Already enabled.
             sys.exit()
         open(flag_file, 'a')
+        new = enabled
     elif len(sys.argv) == 1 and sys.argv[0] == "off":
         if not os.path.exists(flag_file):
             # Already disabled.
             sys.exit()
         os.remove(flag_file)
+        new = disabled
     else:
         sys.exit("usage: {} [on|off]".format(this_script))
 
