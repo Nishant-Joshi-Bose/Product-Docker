@@ -22,9 +22,6 @@ ProductSTSStateDeviceControl::ProductSTSStateDeviceControl( ProductSTSHsm& hsm,
 {
 }
 
-// @TODO what is the proper value here? Is it product-specific? CASTLE-5047 https://jirapro.bose.com/browse/PAELLA-9910
-static constexpr uint32_t LOW_LATENCY_DELAYED_START_MS = 25;
-
 bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & request, uint32_t seq )
 {
     BOSE_INFO( s_logger, "%s( %s ): %s", __func__, m_account.GetSourceName().c_str(), request.DebugString().c_str() );
