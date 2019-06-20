@@ -21,67 +21,27 @@ flag_file = '/mnt/nv/enable-rndis'
 
 this_script = os.path.basename(sys.argv.pop(0))
 
-if enabled in script and disabled in script:
-    # New mechanism.  Requires https://github.com/BoseCorp/meta-bose/pull/170
-
-    if len(sys.argv) == 0:
-        if os.path.exists(flag_file):
-            print 'enabled'
-        else:
-            print 'disabled'
-        sys.exit()
-
-    if len(sys.argv) == 1 and sys.argv[0] == "on":
-        if os.path.exists(flag_file):
-            # Already enabled.
-            sys.exit()
-        open(flag_file, 'a')
-    elif len(sys.argv) == 1 and sys.argv[0] == "off":
-        if not os.path.exists(flag_file):
-            # Already disabled.
-            sys.exit()
-        os.remove(flag_file)
+if len(sys.argv) == 0:
+    if os.path.exists(flag_file):
+        print 'enabled'
     else:
-        sys.exit("usage: {} [on|off]".format(this_script))
+        print 'disabled'
+    sys.exit()
 
+if len(sys.argv) == 1 and sys.argv[0] == "on":
+    if os.path.exists(flag_file):
+        # Already enabled.
+        sys.exit()
+    open(flag_file, 'a')
+    new = enabled
+elif len(sys.argv) == 1 and sys.argv[0] == "off":
+    if not os.path.exists(flag_file):
+        # Already disabled.
+        sys.exit()
+    os.remove(flag_file)
+    new = disabled
 else:
-    # Old mechanism.  Requires us to modify script_name.
-
-    if len(sys.argv) == 0:
-        if disabled in script:
-            print "disabled"
-        elif enabled in script:
-            print "enabled"
-        else:
-            print "unknown"
-        sys.exit()
-
-    if len(sys.argv) == 1 and sys.argv[0] == "on":
-        old, new = disabled, enabled
-    elif len(sys.argv) == 1 and sys.argv[0] == "off":
-        old, new = enabled, disabled
-    else:
-        sys.exit("usage: {} [on|off]".format(this_script))
-
-    if new in script:
-        #print "unchanged"
-        sys.exit()
-
-    i = script.find(old)
-    if i == -1:
-        sys.exit("{}: not enabled and not disabled?".format(this_script))
-
-    remount = False
-    if not os.access(script_name, os.W_OK):
-        remount = True
-        subprocess.call(["mount", "-oremount,rw", "/"])
-
-    with open(script_name, "w") as fh:
-        fh.write(script[:i] + new + script[i+len(old):])
-    print "{}: wrote {}".format(this_script, script_name)
-
-    if remount:
-        subprocess.call(["mount", "-oremount,ro", "/"])
+    sys.exit("usage: {} [on|off]".format(this_script))
 
 # If we're running via `adb shell`, we're going to get a SIGHUP when we run
 # this next command.  We use `setsid` to ensure the SIGHUP isn't delivered to
