@@ -13,7 +13,6 @@
 
   <daemon name="AirPlay2"/>
   <daemon name="Amazon"/>
-  <daemon name="AudioNotification"/>
   <daemon name="BMX"/>
   <daemon name="Deezer"/>
   <daemon name="IHeart"/>
