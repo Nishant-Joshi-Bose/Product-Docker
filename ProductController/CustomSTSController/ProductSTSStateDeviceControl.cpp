@@ -50,6 +50,7 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & requ
             {
                 STS::AudioSetURL asu;
                 asu.set_url( URL );
+                asu.set_streamtype( GetAudioPlaybackStreamType( ) );
                 m_account.IPC().SendAudioSetURLEvent( asu );
             }
 
