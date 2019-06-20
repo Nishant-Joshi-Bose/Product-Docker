@@ -105,6 +105,10 @@ bool ProductCecHelper::Run( )
         FRONTDOOR_CONTENT_NOWPLAYING_API,
         callback );
 
+    m_FrontDoorClient->SendGet<SoundTouchInterface::NowPlaying, FrontDoor::Error>(
+        FRONTDOOR_CONTENT_NOWPLAYING_API,
+        callback, {} );
+
 
     auto getFunc = [ this ]( Callback< const CecModeResponse>   resp,
                              Callback<FrontDoor::Error>         errorRsp )
