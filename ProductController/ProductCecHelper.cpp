@@ -656,29 +656,17 @@ void ProductCecHelper::PowerOn( )
     }
     else
     {
+        // This is the bandaid for the nowPlaying -> deslected -> selected case
+        // TODO : https://jirapro.bose.com/browse/PGC-4693
         // may have missed the now playing so re-fetch since we still have source set to STANDBY
         AsyncCallback< SoundTouchInterface::NowPlaying >
         successCB( std::bind( &ProductCecHelper::HandleNowPlaying,
                               this, std::placeholders::_1 ),
                    m_ProductTask );
 
-        auto errorCB = AsyncCallback<FrontDoor::Error>( [this]( const FrontDoor::Error & errResp )
-        {
-            try
-            {
-                std::string json = ProtoToMarkup::ToJson( errResp );
-                BOSE_INFO( s_logger, "Received error response from FrontDoor: %s ", json.c_str() );
-            }
-            catch( const std::exception& e )
-            {
-                BOSE_INFO( s_logger, "Could not parse error json received from FrontDoor: %s ", e.what() );
-            }
-        }, m_ProductTask );
-
         m_FrontDoorClient->SendGet<SoundTouchInterface::NowPlaying, FrontDoor::Error>(
             FRONTDOOR_CONTENT_NOWPLAYING_API,
-            successCB,
-            errorCB );
+            successCB, {} );
     }
 
 }
