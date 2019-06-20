@@ -84,12 +84,12 @@ bool ProductCecHelper::Run( )
     m_cecModePersistence = ProtoPersistenceFactory :: Create( cecModePersistPath, g_ProductPersistenceDir );
     LoadFromPersistence();
 
-    m_CecHelper = A4VVideoManagerClientFactory::Create( "ProductCecHelper", m_ProductTask );
+    m_videoManagerPtr = A4VVideoManagerClientFactory::Create( "ProductCecHelper", m_ProductTask );
     Callback< bool > ConnectedCallback( std::bind( &ProductCecHelper::Connected,
                                                    this,
                                                    std::placeholders::_1 ) );
 
-    m_CecHelper->Connect( ConnectedCallback );
+    m_videoManagerPtr->Connect( ConnectedCallback );
 
     ///
     /// Registration as a client for getting notification of changes in the now playing state from
@@ -267,6 +267,8 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::PerhapsSetCecSource( )
 {
+    BOSE_INFO( s_logger, "%s : m_LpmPowerIsOn %d m_HavePhysicalAddress = %d m_LpmSourceID = %d",
+               __PRETTY_FUNCTION__, m_LpmPowerIsOn, m_HavePhysicalAddress, m_LpmSourceID );
     if( !m_LpmPowerIsOn )
     {
         return;
@@ -345,7 +347,7 @@ void ProductCecHelper::Connected( bool connected )
                                      this,
                                      std::placeholders::_1 ) );
 
-    m_CecHelper->RegisterForHotplugEvent( CallbackForKeyEvents );
+    m_videoManagerPtr->RegisterForHotplugEvent( CallbackForKeyEvents );
 
     auto lpmConnectCb = [ this ]( bool connected )
     {
@@ -359,7 +361,7 @@ void ProductCecHelper::Connected( bool connected )
         {
             if( hpdEvent.hpd_state() )
             {
-                m_CecHelper->RequestFakeHPD();
+                m_videoManagerPtr->RequestFakeHPD();
             }
         } );
         m_ProductLpmHardwareInterface->RegisterForLpmEvents( static_cast< IpcOpcodes_t >( IPC_HDMI_HPD_EVENT ), hdmiHPDCb );
@@ -461,7 +463,7 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
                             this,
                             std::placeholders::_1 );
             AsyncCallback<A4VVideoManagerServiceMessages::EDIDRawMsg_t> cb( func, m_ProductTask );
-            m_CecHelper->RequestRawEDID( cb );
+            m_videoManagerPtr->RequestRawEDID( cb );
         }
         {
             BOSE_LOG( INFO, "Sending Phy addr Request" );
@@ -470,7 +472,7 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
                             this,
                             std::placeholders::_1 );
             AsyncCallback<A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t> cb( func, m_ProductTask );
-            m_CecHelper->RequestPhyAddr( cb );
+            m_videoManagerPtr->RequestPhyAddr( cb );
         }
 
     }
@@ -521,7 +523,7 @@ void ProductCecHelper::HandlePhyAddrResponse( const A4VVideoManagerServiceMessag
 {
     BOSE_DEBUG( s_logger, "CEC Physical address 0x%x is being set.", cecPhysicalAddress.addr() );
 
-    if( m_connected == false || m_CecHelper == nullptr )
+    if( m_connected == false || m_videoManagerPtr == nullptr )
     {
         BOSE_ERROR( s_logger, "A send CEC PA request could not be made, as no connection is available." );
 
@@ -561,7 +563,7 @@ void ProductCecHelper::HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlay
 {
     using namespace ProductSTS;
 
-    BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received %s.", ProtoToMarkup::ToJson( nowPlayingStatus ).c_str( ) );
+    BOSE_INFO( s_logger, "CEC CAPS now playing status has been received %s.", ProtoToMarkup::ToJson( nowPlayingStatus ).c_str( ) );
 
     // Default to allowing CEC source switch (we'll get nowPlaying with INVALID_SOURCE after setup, so we need to make sure
     // this defaults to cleared)
@@ -625,7 +627,7 @@ void ProductCecHelper::PowerOff( )
     A4VVideoManagerServiceMessages::PowerStateMsg_t msg;
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Low );
-    m_CecHelper->SetPowerState( msg );
+    m_videoManagerPtr->SetPowerState( msg );
     m_LpmSourceID = LPM_IPC_SOURCE_STANDBY;
     m_LpmPowerIsOn = false;
 
@@ -645,10 +647,40 @@ void ProductCecHelper::PowerOn( )
     A4VVideoManagerServiceMessages::PowerStateMsg_t msg;
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Full );
-    m_CecHelper->SetPowerState( msg );
+    m_videoManagerPtr->SetPowerState( msg );
     m_LpmPowerIsOn = true;
 
-    PerhapsSetCecSource( );
+    if( m_LpmSourceID != LPM_IPC_SOURCE_STANDBY )
+    {
+        PerhapsSetCecSource( );
+    }
+    else
+    {
+        // may have missed the now playing so re-fetch since we still have source set to STANDBY
+        AsyncCallback< SoundTouchInterface::NowPlaying >
+        successCB( std::bind( &ProductCecHelper::HandleNowPlaying,
+                              this, std::placeholders::_1 ),
+                   m_ProductTask );
+
+        auto errorCB = AsyncCallback<FrontDoor::Error>( [this]( const FrontDoor::Error & errResp )
+        {
+            try
+            {
+                std::string json = ProtoToMarkup::ToJson( errResp );
+                BOSE_INFO( s_logger, "Received error response from FrontDoor: %s ", json.c_str() );
+            }
+            catch( const std::exception& e )
+            {
+                BOSE_INFO( s_logger, "Could not parse error json received from FrontDoor: %s ", e.what() );
+            }
+        }, m_ProductTask );
+
+        m_FrontDoorClient->SendGet<SoundTouchInterface::NowPlaying, FrontDoor::Error>(
+            FRONTDOOR_CONTENT_NOWPLAYING_API,
+            successCB,
+            errorCB );
+    }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
