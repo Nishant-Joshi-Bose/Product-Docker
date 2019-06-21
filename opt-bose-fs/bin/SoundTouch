@@ -61,8 +61,12 @@ restore=false
 # NOTE : Vfe can not be added here due to dir structure needed to run prof and GC
 lowpower=(
     Shepherd-AudioPath.xml
-    Shepherd-avs.xml
 )
+
+# Add avs xml to lowpower mode only if avs package is installed
+if [ -e /opt/Bose/etc/Shepherd-avs.xml ]; then
+    lowpower+=( Shepherd-avs.xml )
+fi
 
 function validate {
     if ! validate-mfgdata; then
@@ -250,15 +254,7 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
     log info "Clearing product persistence"
     rm -rfv /mnt/nv/product-persistence/*
 
-    if ! [ -e /mnt/nv/update/install-status.dat ]; then
-        # Clear pending update status and packages- if any
-        # Checking for install-status.dat protect against clearing partial install
-        rm -rfv /mnt/nv/update*.dat
-        rm -rfv /opt/Bose/.swUpdateCache/ipks/*
-        rm -rfv /opt/Bose/.swUpdateCache/localupdate/*
-    else
-        log warning "Partially installed Software Update found. Will not clear Update during Factory Default"
-    fi
+    swup-factory-reset
 
     reset_timezone_to_default force
     sync

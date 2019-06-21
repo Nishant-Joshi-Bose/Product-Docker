@@ -125,7 +125,7 @@ private:
     NotifyTargetTaskIF*        m_ProductTask;
     Callback< ProductMessage > m_ProductNotify;
     std::shared_ptr < CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
-    A4VVideoManager::A4VVideoManagerClientIF::A4VVideoManagerClientPtr m_CecHelper;
+    A4VVideoManager::A4VVideoManagerClientIF::A4VVideoManagerClientPtr m_videoManagerPtr;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This holds the cached status for the CecMode response.
