@@ -162,7 +162,7 @@ timeout(time: 8, unit: 'HOURS')
     // To Push Data of Failed Job and Total Job on Graphite
     println failureList.size()
     println buildCount
-    graphite_table_name = "Eddie-Product-Pipeline-" + "${SW_BRANCH}"
+    graphite_table_name = "Eddie-Product-Pipeline-${SW_BRANCH}"
     def PipelineSummary = new PipelineSummary()
     def job_summary_map = PipelineSummary.GetSummary(this, buildCount, failureList.size())
     println job_summary_map
