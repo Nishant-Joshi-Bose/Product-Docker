@@ -1,6 +1,7 @@
 #!/usr/bin/env groovy
 @Library(['JenkinsSocketAPI','JenkinsSharedLibrary']) _
-import socket
+import PipelineSummary
+import GraphitePush
 import NodeVerification
 /*
   Description: Jenkinsfile is a container for the pipeline script.
@@ -161,9 +162,9 @@ timeout(time: 8, unit: 'HOURS')
     // To Push Data of Failed Job and Total Job on Graphite
     println failureList.size()
     println buildCount
-    graphite_table_name = 'Eddie-Product-Pipeline'
-    if ("${SW_BRANCH}" != 'SOS'){
-        graphite_table_name += "-${SW_BRANCH}"
-    }
-    def GraphiteSocket = new GraphiteSocket(failureList.size(), buildCount, graphite_table_name, Eddie_Product)  
+    graphite_table_name = "Eddie-Product-Pipeline-" + "${SW_BRANCH}"
+    def PipelineSummary = new PipelineSummary()
+    def job_summary_map = PipelineSummary.GetSummary(this, buildCount, failureList.size())
+    println job_summary_map
+    def GraphitePush = new GraphitePush(job_summary_map, graphite_table_name)
 }
