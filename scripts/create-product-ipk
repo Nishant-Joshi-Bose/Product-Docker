@@ -89,7 +89,6 @@ bluetooth_dir=$(components get Bluetooth-qc8017_32 installed_location) || exit
 bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
 lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
 telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
-svc_pts_log_decrypt_dir=$(components get svc-pts-log-decrypt installed_location) || exit
 devicecontroller_dir=$(components get A4VDeviceController-qc8017_32 installed_location) || exit
 rcs_dir=$(components get A4VRemoteCommunicationService-qc8017_32 installed_location) || exit
 vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
@@ -238,11 +237,10 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
-"$bluetooth_dir/stage" --product=professor "$opt_dir" || exit
+"$bluetooth_dir/stage" --btout="$(jq -r .BLUETOOTH_OUT "$wspace/features.json")" "$opt_dir" || exit
 "$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 "$telemetry_dir/stage" "$opt_dir" || exit
-"$svc_pts_log_decrypt_dir/stage" "$opt_dir" || exit
 "$audiosource_upnp_dir/stage" "$opt_dir" || exit
 "$audiosource_bmx_dir/stage" "$opt_dir" || exit
 "$audiosource_spotify_dir/stage" "$opt_dir" || exit
