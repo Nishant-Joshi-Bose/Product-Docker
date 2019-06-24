@@ -288,13 +288,13 @@ void CustomProductController::Run( )
     GetHsm( ).AddState <ProductControllerStateFactoryDefault> ( stateTop, PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT, SYSTEM_STATE_NOTIFIED_NAME_FACTORY_DEFAULT,
                                                                 SystemPowerControl_State_Not_Notify );
 
-    ( void )
-    GetHsm( ).AddState <CustomProductControllerStateLowPowerStandbyTransition> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                                                                                 SystemPowerControl_State_Not_Notify );
-
-    ( void )
+    auto* stateLowPowerStandby = 
     GetHsm( ).AddState <ProductControllerStateLowPowerStandby> ( stateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
                                                                  SystemPowerControl_State_OFF );
+
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateLowPowerStandbyTransition> ( stateLowPowerStandby, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                                 SystemPowerControl_State_Not_Notify );
 
     ( void )
     GetHsm( ).AddState <CustomProductControllerStateLowPowerResume> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
