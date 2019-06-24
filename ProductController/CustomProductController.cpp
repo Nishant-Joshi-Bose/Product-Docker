@@ -294,15 +294,16 @@ void CustomProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
 
-    CustomProductControllerState* stateLowPowerStandbyTransition = new CustomProductControllerStateLowPowerStandbyTransition
-    ( GetHsm( ),
-      stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
-
     CustomProductControllerState* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+
+    CustomProductControllerState* stateLowPowerStandbyTransition = new CustomProductControllerStateLowPowerStandbyTransition
+    ( GetHsm( ),
+      stateLowPowerStandby,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
+
 
     CustomProductControllerState* stateLowPowerResume = new CustomProductControllerStateLowPowerResume
     ( GetHsm( ),
