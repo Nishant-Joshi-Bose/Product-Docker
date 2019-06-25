@@ -304,7 +304,6 @@ void CustomProductController::Run( )
       stateLowPowerStandby,
       CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
-
     CustomProductControllerState* stateLowPowerResume = new CustomProductControllerStateLowPowerResume
     ( GetHsm( ),
       stateTop,
