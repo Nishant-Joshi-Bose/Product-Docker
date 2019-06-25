@@ -49,8 +49,6 @@ namespace ProductApp
 ///
 /// @param CHsmState*                  pSuperState       This argument references the parent state.
 ///
-/// @param CustomProductController& productController This argument references the product controller.
-///
 /// @param Hsm::STATE                  stateId           This enumeration represents the state ID.
 ///
 /// @param const std::string&          name              This argument names the state.
@@ -59,12 +57,10 @@ namespace ProductApp
 CustomProductControllerStateAdaptIQ::
 CustomProductControllerStateAdaptIQ( ProductControllerHsm&       hsm,
                                      CHsmState*                  pSuperState,
-                                     CustomProductController&    productController,
                                      Hsm::STATE                  stateId,
                                      const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name ),
-      m_timer( APTimer::Create( productController.GetTask( ), "AdaptIQTimer" ) )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being constructed." );
 }
@@ -79,13 +75,23 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being started." );
 
     ///
+    /// Construct the timer object the first time we get here. GetProductController() is not available
+    /// during construction time. It gets its value through ProductControllerHsm::Init() which is called
+    /// after all state objects have been constructed.
+    ///
+    static const bool doOnce = [ this ]
+    {
+        m_timer = APTimer::Create( GetProductController( ).GetTask( ), "AdaptIQTimer" );
+        return false;
+    }( );
+    ///
     /// Disable source selection while in AdaptIQ.
     ///
-    GetProductController( ).SendAllowSourceSelectMessage( false );
+    GetProductController( ).SendAllowSourceSelectMessage( doOnce ); // use doOnce (known to be false) so we don't get a compiler error for unused variable
     m_completed = false;
 
     m_timer->SetTimeouts( ADAPTIQ_INACTIVITY_TIMEOUT, 0 );
-    m_timer->Start( [ = ]( )
+    m_timer->Start( [ this ]
     {
         HandleTimeOut();
     } );
@@ -177,7 +183,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
     BOSE_INFO( s_logger, "%s : Handle Action %d\n", __func__, cmd.action() );
 
     m_timer->SetTimeouts( ADAPTIQ_INACTIVITY_TIMEOUT, 0 );
-    m_timer->Start( [ = ]( )
+    m_timer->Start( [ this ]
     {
         HandleTimeOut();
     } );
