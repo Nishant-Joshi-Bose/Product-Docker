@@ -238,493 +238,241 @@ void CustomProductController::Run( )
     BOSE_DEBUG( s_logger, "The Custom Product Controller is setting up the state machine." );
 
     ///
-    /// Construction of the Common and Custom States
+    /// Construction of the Common and Custom States, and insertion of the states into the HSM
     ///
+    using namespace SystemPowerPb;
     ///
     /// Top State
     ///
-    CustomProductControllerState* stateTop = new CustomProductControllerStateTop( GetHsm( ),
-                                                                                  nullptr );
+    auto* stateTop =
+        GetHsm( ).AddState <CustomProductControllerStateTop> ( nullptr, CUSTOM_PRODUCT_CONTROLLER_STATE_TOP, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                               SystemPowerControl_State_Not_Notify );
     ///
-    /// Booting State and Various System Level States
+    /// Booting States and Various System Level States
     ///
-    CustomProductControllerState* stateBooting = new CustomProductControllerStateBooting
-    ( GetHsm( ),
-      stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateBooting> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING, SYSTEM_STATE_NOTIFIED_NAME_BOOTING,
+                                                               SystemPowerControl_State_Not_Notify );
 
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateBooted> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTED, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                              SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateBooted = new CustomProductControllerStateBooted
-    ( GetHsm( ),
-      stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTED );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateFirstBootGreeting> ( stateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING, SYSTEM_STATE_NOTIFIED_NAME_FIRST_BOOT_GREETING,
+                                                                   SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateFirstBootGreetingTransition> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                                   SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateFirstBootGreetingTransition = new CustomProductControllerStateFirstBootGreetingTransition
-    ( GetHsm( ),
-      stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateSoftwareInstallTransition> ( stateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_TRANSITION, SYSTEM_STATE_NOTIFIED_NAME_UPDATING,
+                                                                           SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateSoftwareInstallTransition = new ProductControllerStateSoftwareInstallTransition
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_TRANSITION );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateSoftwareInstall> ( stateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL, SYSTEM_STATE_NOTIFIED_NAME_UPDATING,
+                                                                 SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateSoftwareInstall = new ProductControllerStateSoftwareInstall
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateSoftwareInstall> ( stateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_MANUAL, SYSTEM_STATE_NOTIFIED_NAME_UPDATING_MANUAL,
+                                                                 SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateSoftwareInstallManual = new ProductControllerStateSoftwareInstall
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL_MANUAL );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateCriticalError> ( stateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR, SYSTEM_STATE_NOTIFIED_NAME_CRITICAL_ERROR,
+                                                               SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateCriticalError = new ProductControllerStateCriticalError
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateFactoryDefault> ( stateTop, PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT, SYSTEM_STATE_NOTIFIED_NAME_FACTORY_DEFAULT,
+                                                                SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateFactoryDefault = new ProductControllerStateFactoryDefault
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
+    auto* stateLowPowerStandby = 
+    GetHsm( ).AddState <ProductControllerStateLowPowerStandby> ( stateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                 SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateLowPowerStandbyTransition> ( stateLowPowerStandby, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                                 SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateLowPowerStandbyTransition = new CustomProductControllerStateLowPowerStandbyTransition
-    ( GetHsm( ),
-      stateLowPowerStandby,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
-
-    CustomProductControllerState* stateLowPowerResume = new CustomProductControllerStateLowPowerResume
-    ( GetHsm( ),
-      stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateLowPowerResume> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                      SystemPowerControl_State_Not_Notify );
 
     ///
     /// Playable Transition State and Sub-States
     ///
-    CustomProductControllerState* statePlayableTransition = new CustomProductControllerStatePlayableTransition
-    ( GetHsm( ),
-      stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
+    auto* statePlayableTransition =
+        GetHsm( ).AddState <CustomProductControllerStatePlayableTransition> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                              SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayableTransitionInternal = new ProductControllerStatePlayableTransitionInternal
-    ( GetHsm( ),
-      statePlayableTransition,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL );
+    auto* statePlayableTransitionInternal =
+        GetHsm( ).AddState <ProductControllerStatePlayableTransitionInternal> ( statePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                                SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
-    ( GetHsm( ),
-      statePlayableTransitionInternal,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayableTransitionIdle> ( statePlayableTransitionInternal, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                        SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* statePlayableTransitionNetworkStandby = new CustomProductControllerStatePlayableTransitionNetworkStandby
-    ( GetHsm( ),
-      statePlayableTransitionInternal,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStatePlayableTransitionNetworkStandby> ( statePlayableTransitionInternal, CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+            SystemPowerControl_State_OFF );
 
     ///
     /// Top On State
     ///
-    CustomProductControllerState* stateOn = new CustomProductControllerStateOn
-    ( GetHsm( ),
-      stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_ON );
+    auto* stateOn =
+        GetHsm( ).AddState <CustomProductControllerStateOn> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                              SystemPowerControl_State_Not_Notify );
 
     ///
     /// Playable State and Sub-States
     ///
-    CustomProductControllerState* statePlayable = new CustomProductControllerStatePlayable
-    ( GetHsm( ),
-      stateOn,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+    auto* statePlayable =
+        GetHsm( ).AddState <CustomProductControllerStatePlayable> ( stateOn, CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                    SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* stateNetworkStandby = new CustomProductControllerStateNetworkStandby
-    ( GetHsm( ),
-      statePlayable,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+    auto* stateNetworkStandby =
+        GetHsm( ).AddState <CustomProductControllerStateNetworkStandby> ( statePlayable, CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY, SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
+                                                                          SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* stateNetworkStandbyConfigured = new ProductControllerStateNetworkStandbyConfigured
-    ( GetHsm( ),
-      stateNetworkStandby,
-      PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateNetworkStandbyConfigured> ( stateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED, SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
+                                                                          SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* stateNetworkStandbyNotConfigured = new ProductControllerStateNetworkStandbyNotConfigured
-    ( GetHsm( ),
-      stateNetworkStandby,
-      PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateNetworkStandbyNotConfigured> ( stateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED, SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
+                                                                             SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* stateIdle = new CustomProductControllerStateIdle
-    ( GetHsm( ),
-      statePlayable,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_IDLE );
+    auto* stateIdle =
+        GetHsm( ).AddState <CustomProductControllerStateIdle> ( statePlayable, CUSTOM_PRODUCT_CONTROLLER_STATE_IDLE, SYSTEM_STATE_NOTIFIED_NAME_IDLE,
+                                                                SystemPowerControl_State_OFF );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateIdleVoiceConfigured> ( stateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED, SYSTEM_STATE_NOTIFIED_NAME_IDLE,
+                                                                     SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* stateIdleVoiceConfigured = new ProductControllerStateIdleVoiceConfigured
-    ( GetHsm( ),
-      stateIdle,
-      PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
-
-    CustomProductControllerState* stateIdleVoiceNotConfigured = new ProductControllerStateIdleVoiceNotConfigured
-    ( GetHsm( ),
-      stateIdle,
-      PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateIdleVoiceNotConfigured> ( stateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED, SYSTEM_STATE_NOTIFIED_NAME_IDLE,
+                                                                        SystemPowerControl_State_OFF );
 
     ///
     /// Playing Transition State and Sub-States
     ///
-    CustomProductControllerState* statePlayingTransition = new CustomProductControllerStatePlayingTransition
-    ( GetHsm( ),
-      stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
+    auto* statePlayingTransition =
+        GetHsm( ).AddState <CustomProductControllerStatePlayingTransition> ( stateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                             SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSwitch
-    ( GetHsm( ),
-      statePlayingTransition,
-      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingTransitionSwitch> ( statePlayingTransition, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                         SystemPowerControl_State_Not_Notify );
 
     ///
     /// Playing State and Sub-States
     ///
-    CustomProductControllerState* statePlaying = new CustomProductControllerStatePlaying
-    ( GetHsm( ),
-      stateOn,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING );
+    auto* statePlaying =
+        GetHsm( ).AddState <CustomProductControllerStatePlaying> ( stateOn, CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                   SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayingDeselected = new ProductControllerStatePlayingDeselected
-    ( GetHsm( ),
-      statePlaying,
-      PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingDeselected> ( statePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED, SYSTEM_STATE_NOTIFIED_NAME_PLAYING_SOURCE_OFF,
+                                                                   SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* statePlayingSelected = new CustomProductControllerStatePlayingSelected
-    ( GetHsm( ),
-      statePlaying,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
+    auto* statePlayingSelected =
+        GetHsm( ).AddState <CustomProductControllerStatePlayingSelected> ( statePlaying, CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                                           SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayingSelectedSilent = new ProductControllerStatePlayingSelectedSilent
-    ( GetHsm( ),
-      statePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
+    auto* statePlayingSelectedSilent =
+        GetHsm( ).AddState <ProductControllerStatePlayingSelectedSilent> ( statePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                                           SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayingSelectedSilentSourceInvalid = new ProductControllerStatePlayingSelectedSilentSourceInvalid
-    ( GetHsm( ),
-      statePlayingSelectedSilent,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedSilentSourceInvalid> ( statePlayingSelectedSilent, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_INVALID, SYSTEM_STATE_NOTIFIED_NAME_PLAYING_SOURCE_OFF,
+                                                                                    SystemPowerControl_State_OFF );
 
-    CustomProductControllerState* statePlayingSelectedSilentSourceValid = new ProductControllerStatePlayingSelectedSilentSourceValid
-    ( GetHsm( ),
-      statePlayingSelectedSilent,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_VALID );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedSilentSourceValid> ( statePlayingSelectedSilent, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT_SOURCE_VALID, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                                                  SystemPowerControl_State_ON );
 
-    CustomProductControllerState* statePlayingSelectedNotSilent = new ProductControllerStatePlayingSelectedNotSilent
-    ( GetHsm( ),
-      statePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedNotSilent> ( statePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                                          SystemPowerControl_State_ON );
 
-    CustomProductControllerState* statePlayingSelectedSetup = new CustomProductControllerStatePlayingSelectedSetup
-    ( GetHsm( ),
-      statePlayingSelected,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+    auto* statePlayingSelectedSetup =
+        GetHsm( ).AddState <CustomProductControllerStatePlayingSelectedSetup> ( statePlayingSelected, CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                                                SystemPowerControl_State_ON );
 
-    CustomProductControllerState* statePlayingSelectedSetupNetworkConfig = new CustomProductControllerStatePlayingSelectedSetupNetworkConfig
-    ( GetHsm( ),
-      statePlayingSelectedSetup,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG );
+    auto* statePlayingSelectedSetupNetworkConfig =
+        GetHsm( ).AddState <CustomProductControllerStatePlayingSelectedSetupNetworkConfig> ( statePlayingSelectedSetup, CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG, SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
+                SystemPowerControl_State_ON );
 
-    CustomProductControllerState* statePlayingSelectedSetupNetworkConfigWiFiTransition = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition
-    ( GetHsm( ),
-      statePlayingSelectedSetupNetworkConfig,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_TRANSITION );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition> ( statePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_TRANSITION, SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
+            SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
-    ( GetHsm( ),
-      statePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedSetupOther> ( statePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                                           SystemPowerControl_State_ON );
 
-    CustomProductControllerState* statePlayingSelectedSetupExiting = new ProductControllerStatePlayingSelectedSetupExiting
-    ( GetHsm( ),
-      statePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedSetupExiting> ( statePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                                             SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayingSelectedSetupNetworkConfigWiFiConnection = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection
-    ( GetHsm( ),
-      statePlayingSelectedSetupNetworkConfig,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_CONNECTION );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection> ( statePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_CONNECTION, SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
+            SystemPowerControl_State_ON );
 
-    CustomProductControllerState* statePlayingSelectedSetupNetworkConfigWiFiExiting = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting
-    ( GetHsm( ),
-      statePlayingSelectedSetupNetworkConfig,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_EXITING );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiExiting> ( statePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_EXITING, SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
+            SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* statePlayingSelectedSetupNetworkConfigWifiAborting = new ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting
-    ( GetHsm( ),
-      statePlayingSelectedSetupNetworkConfig,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_ABORTING );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiAborting> ( statePlayingSelectedSetupNetworkConfig, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_CONFIG_WIFI_ABORTING, SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
+            SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateStoppingStreams = new ProductControllerStatePlayingSelectedStoppingStreams
-    ( GetHsm( ),
-      statePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStatePlayingSelectedStoppingStreams> ( statePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                                SystemPowerControl_State_OFF );
 
     ///
     /// Accessory Pairing States
     ///
-    CustomProductControllerState* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
-    ( GetHsm( ),
-      statePlayingSelected,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateAccessoryPairing> ( statePlayingSelected, CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                                        SystemPowerControl_State_ON );
 
-    CustomProductControllerState* stateAccessoryPairingCancelling = new CustomProductControllerStateAccessoryPairingCancelling
-    ( GetHsm( ),
-      statePlayingSelected,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_CANCELLING );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateAccessoryPairingCancelling> ( statePlayingSelected, CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_CANCELLING, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                                  SystemPowerControl_State_Not_Notify );
 
     ///
     /// AdaptIQ States
     ///
-    CustomProductControllerState* stateAdaptIQ = new CustomProductControllerStateAdaptIQ
-    ( GetHsm( ),
-      statePlayingSelected,
-      *this,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateAdaptIQ> ( statePlayingSelected, CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ, SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+                                                               SystemPowerControl_State_ON );
 
-    CustomProductControllerState* stateAdaptIQCancelling = new CustomProductControllerStateAdaptIQCancelling
-    ( GetHsm( ),
-      statePlayingSelected,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
+    ( void )
+    GetHsm( ).AddState <CustomProductControllerStateAdaptIQCancelling> ( statePlayingSelected, CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                         SystemPowerControl_State_Not_Notify );
 
     ///
-    /// Stopping Dedicated Streams State and Sub-States
+    /// Stopping Streams Dedicated State and Sub-States
     ///
-    CustomProductControllerState* stateStoppingStreamsDedicated = new ProductControllerStateStoppingStreamsDedicated
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED );
+    auto* stateStoppingStreamsDedicated =
+        GetHsm( ).AddState <ProductControllerStateStoppingStreamsDedicated> ( stateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                              SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateStoppingStreamsDedicatedForFactoryDefault = new ProductControllerStateStoppingStreamsDedicatedForFactoryDefault
-    ( GetHsm( ),
-      stateStoppingStreamsDedicated,
-      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateStoppingStreamsDedicatedForFactoryDefault> ( stateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+            SystemPowerControl_State_Not_Notify );
 
-    CustomProductControllerState* stateStoppingStreamsDedicatedForSoftwareUpdate = new ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate
-    ( GetHsm( ),
-      stateStoppingStreamsDedicated,
-      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE );
+    ( void )
+    GetHsm( ).AddState <ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate> ( stateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+            SystemPowerControl_State_Not_Notify );
 
     ///
-    /// The states are added to the state machine and the state machine is initialized.
+    /// The state machine is initialized.
     ///
-    using namespace SystemPowerPb;
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateTop );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_BOOTING,
-                        SystemPowerControl_State_Not_Notify,
-                        stateBooting );
-
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_FIRST_BOOT_GREETING,
-                        SystemPowerControl_State_Not_Notify,
-                        stateFirstBootGreeting );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_UPDATING,
-                        SystemPowerControl_State_Not_Notify,
-                        stateSoftwareInstallTransition );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_UPDATING,
-                        SystemPowerControl_State_Not_Notify,
-                        stateSoftwareInstall );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_UPDATING_MANUAL,
-                        SystemPowerControl_State_Not_Notify,
-                        stateSoftwareInstallManual );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_CRITICAL_ERROR,
-                        SystemPowerControl_State_Not_Notify,
-                        stateCriticalError );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_FACTORY_DEFAULT,
-                        SystemPowerControl_State_Not_Notify,
-                        stateFactoryDefault );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateBooted );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateFirstBootGreetingTransition );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateLowPowerStandbyTransition );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_OFF,
-                        stateLowPowerStandby );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateLowPowerResume );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_OFF,
-                        statePlayableTransition );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayableTransitionInternal );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_OFF,
-                        statePlayableTransitionIdle );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_OFF,
-                        statePlayableTransitionNetworkStandby );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateOn );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_OFF,
-                        statePlayable );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
-                        SystemPowerControl_State_OFF,
-                        stateNetworkStandby );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
-                        SystemPowerControl_State_OFF,
-                        stateNetworkStandbyConfigured );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_STANDBY,
-                        SystemPowerControl_State_OFF,
-                        stateNetworkStandbyNotConfigured );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_IDLE,
-                        SystemPowerControl_State_OFF,
-                        stateIdle );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_IDLE,
-                        SystemPowerControl_State_OFF,
-                        stateIdleVoiceConfigured );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_IDLE,
-                        SystemPowerControl_State_OFF,
-                        stateIdleVoiceNotConfigured );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingTransition );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingTransitionSelected );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlaying );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_PLAYING_SOURCE_OFF,
-                        SystemPowerControl_State_OFF,
-                        statePlayingDeselected );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingSelected );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingSelectedSilent );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_PLAYING_SOURCE_OFF,
-                        SystemPowerControl_State_OFF,
-                        statePlayingSelectedSilentSourceInvalid );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_ON,
-                        statePlayingSelectedSilentSourceValid );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_ON,
-                        statePlayingSelectedNotSilent );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_ON,
-                        statePlayingSelectedSetup );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
-                        SystemPowerControl_State_ON,
-                        statePlayingSelectedSetupNetworkConfig );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
-                        SystemPowerControl_State_ON,
-                        statePlayingSelectedSetupNetworkConfigWiFiConnection );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingSelectedSetupNetworkConfigWiFiTransition );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingSelectedSetupNetworkConfigWiFiExiting );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_NETWORK_CONFIG,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingSelectedSetupNetworkConfigWifiAborting );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_ON,
-                        statePlayingSelectedSetupOther );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_Not_Notify,
-                        statePlayingSelectedSetupExiting );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_OFF,
-                        stateStoppingStreams );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_ON,
-                        stateAccessoryPairing );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateAccessoryPairingCancelling );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-                        SystemPowerControl_State_ON,
-                        stateAdaptIQ );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateAdaptIQCancelling );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateStoppingStreamsDedicated );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateStoppingStreamsDedicatedForFactoryDefault );
-
-    GetHsm( ).AddState( SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                        SystemPowerControl_State_Not_Notify,
-                        stateStoppingStreamsDedicatedForSoftwareUpdate );
-
-    GetHsm( ).Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
+    GetHsm( ).Init( this, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
     /// Initialize entities in the Common Product Controller
