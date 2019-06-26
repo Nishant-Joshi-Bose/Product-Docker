@@ -2,8 +2,12 @@ export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: deploy
+ifeq ($(sdk), x86_64)
+deploy: cmake_build
+else
 deploy: all-packages
 	scripts/collect-deployables builds/Release builds/deploy ${disableGVA}
+endif
 
 .PHONY: force
 force:
