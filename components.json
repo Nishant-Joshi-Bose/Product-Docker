@@ -53,7 +53,7 @@
   },
   {
     "name": "AudioSource-x86_64",
-    "selected_version": "Release/stable/2.3.0-401+8160d44"
+    "selected_version": "Release/stable/2.3.0-392+22e8b63"
   },
   {
     "name": "AudioSource-Spotify-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "CAPSAPI-x86_64",
-    "selected_version": "Release/stable/1.0.0-114+c39eb48"
+    "selected_version": "Release/stable/1.0.0-107+30ca22a"
   },
   {
     "name": "Cli-qc8017_32",

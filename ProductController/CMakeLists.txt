@@ -102,6 +102,7 @@ TARGET_LINK_LIBRARIES(ProductController
   PassportLan
   SASSClient
   ProtoToMarkup
+  libCapsUtils.a
   ${JSONCPP_DIR}/lib/libjsoncpp.a
   ${PROTOBUF_DIR}/lib/libprotobuf.a
   ${LIBWEBSOCKETS_DIR}/lib/libwebsockets.a
