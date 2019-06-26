@@ -49,7 +49,7 @@
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/stable/2.3.0-401+8160d44"
+    "selected_version": "Release/stable/2.3.0-426+26d206c"
   },
   {
     "name": "AudioSource-x86_64",
@@ -137,7 +137,7 @@
   },
   {
     "name": "CAPSAPI-qc8017_32",
-    "selected_version": "Release/stable/1.0.0-114+c39eb48"
+    "selected_version": "Release/stable/1.0.0-123+a431c11"
   },
   {
     "name": "CAPSAPI-x86_64",
@@ -401,7 +401,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.2-3-g443cf3c"
+    "selected_version": "Release/stable/2.2.4-2-gf90f241"
   },
   {
     "name": "ProductControllerCommonProto-x86_64",
