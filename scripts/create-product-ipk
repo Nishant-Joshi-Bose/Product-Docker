@@ -402,7 +402,7 @@ if [ "\$b" = "\$i" ]; then
 else
     echo "Built for Riviera-HSP: \$b"
     echo "Installed Riviera-HSP: \$i"
-    echo "See https://github.com/BoseCorp/Professor/blob/master/README.md#hsp"
+    echo "See https://github.com/BoseCorp/CastleProducts/blob/professor/master/README.md#hsp"
 fi
 # Start Progress
 if [ -f /opt/Bose/bin/ProgressReport ]; then
