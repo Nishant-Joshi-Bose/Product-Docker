@@ -23,7 +23,6 @@
 #include "ProductDataCollectionDefines.h"
 
 #define IPC_LATENCY_VALUE_UNKNOWN 0xffff
-// end TODO
 
 using namespace std::placeholders;
 
