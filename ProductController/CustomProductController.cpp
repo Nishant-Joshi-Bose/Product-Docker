@@ -1643,9 +1643,6 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         DeviceControllerClientMessages::MainStreamAudioSilentMsg_t mainStreamSilentMsg;
         mainStreamSilentMsg.set_silent( mainStreamSilent );
         m_deviceControllerPtr->SendMainStreamSilent( mainStreamSilentMsg );
-
-
-
         ( void ) HandleCommonProductMessage( message );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
