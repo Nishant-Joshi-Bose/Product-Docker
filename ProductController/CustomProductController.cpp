@@ -287,8 +287,8 @@ void CustomProductController::Run( )
                                                                 SystemPowerControl_State_Not_Notify );
 
     auto* stateLowPowerStandby =
-    GetHsm( ).AddState <ProductControllerStateLowPowerStandby> ( stateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                                                                 SystemPowerControl_State_OFF );
+        GetHsm( ).AddState <ProductControllerStateLowPowerStandby> ( stateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                     SystemPowerControl_State_OFF );
 
     ( void )
     GetHsm( ).AddState <CustomProductControllerStateLowPowerStandbyTransition> ( stateLowPowerStandby, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
@@ -1629,7 +1629,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_audiosilent( ) )
     {
-        const std::vector< APProductCommon::PlaybackStatus >& playbacks = m_ProductAudioService->GetLastPlaybackStatus();
+        const auto& playbacks = m_ProductAudioService->GetLastPlaybackStatus();
 
         bool mainStreamSilent = true;
         for( const auto &playbackStream : playbacks )
