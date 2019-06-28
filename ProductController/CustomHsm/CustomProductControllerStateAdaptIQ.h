@@ -63,7 +63,6 @@ public:
 
     CustomProductControllerStateAdaptIQ( ProductControllerHsm&       hsm,
                                          CHsmState*                  pSuperState,
-                                         CustomProductController&    productController,
                                          Hsm::STATE                  stateId,
                                          const std::string&          name    = "AdaptIQ" );
 

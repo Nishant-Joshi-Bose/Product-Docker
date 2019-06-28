@@ -31,6 +31,7 @@ enum CustomProductControllerStates
     /// state changes in the common code that need to transition to a derived custom state will do so
     /// correctly.
     ///
+    CUSTOM_PRODUCT_CONTROLLER_STATE_TOP                                     = PRODUCT_CONTROLLER_STATE_TOP,
     CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING                                 = PRODUCT_CONTROLLER_STATE_BOOTING,
     CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTED                                  = PRODUCT_CONTROLLER_STATE_BOOTED,
     CUSTOM_PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION          = PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION,
