@@ -15,8 +15,6 @@
 #include "FrontDoorClient.h"
 #include "AudioSettings.pb.h"
 #include "DataCollectionClientIF.h"
-#include "DeviceControllerClientIF.h"
-
 
 namespace ProductApp
 {
@@ -51,7 +49,6 @@ private:
     std::unique_ptr<CustomAudioSettingsManager>         m_audioSettingsMgr;
     std::unique_ptr<ThermalMonitorTask>                 m_thermalTask;
     std::shared_ptr< DataCollectionClientIF >           m_dataCollectionClient;
-    DeviceController::DeviceControllerClientIF::DeviceControllerClientPtr m_deviceControllerPtr;
     bool                                                m_dspIsRebooting = false;
     bool                                                m_currentEqSelectUpdating = false;
     Callback<bool>                                      m_streamConfigResponseCb;
@@ -80,7 +77,6 @@ private:
     void GetMainStreamAudioSettingsCallback( const APProductCommon::MainStreamAudioSettingsParam_t& param,
                                              const Callback<std::string, std::string> cb );
     void SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb );
-    void PlaybackStatusCallback( const std::vector< APProductCommon::PlaybackStatus >& playbacks ) override;
     void InternalMuteCallback( bool mute );
     void RebroadcastLatencyCallback( uint32_t latency );
     void SendMainStreamAudioSettingsEvent();

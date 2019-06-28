@@ -21,7 +21,6 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
-#include "DeviceControllerClientMessages.pb.h"
 
 #define IPC_LATENCY_VALUE_UNKNOWN 0xffff
 // end TODO
@@ -52,7 +51,6 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
                                                    m_ProductTask ) ) ) ),
     m_dataCollectionClient( ProductController.GetDataCollectionClient() ),
-    m_deviceControllerPtr( ProductController.GetDeviceControllerClient() ),
     m_currentNetworkSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
     m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
     m_deferredEqSelectResponse( []( AudioEqSelect eq ) {}, m_ProductTask )
@@ -447,37 +445,6 @@ void CustomProductAudioService::InternalMuteCallback( bool mute )
     BOSE_DEBUG( s_logger, "%s, mute = %s", __func__, mute ? "true" : "false" );
     m_productLpmHardwareInterface->SetInternalMute( mute );
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name  CustomProductAudioService::PlaybackStatusCallback
-///
-/// @param std::vector< APProductCommon::PlaybackStatus > playbacks
-///
-/// @brief Custom action on the playback status for each playing stream, including whether the
-///        stream is silent or not.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::PlaybackStatusCallback( const std::vector< APProductCommon::PlaybackStatus >& playbacks )
-{
-    BOSE_VERBOSE( s_logger, __func__ );
-
-    ProductAudioService::PlaybackStatusCallback( playbacks );
-    //send main stream audio silence status to DeviceController
-    bool mainStreamSilent = true;
-    for( const auto &playbackStream : playbacks )
-    {
-        if( playbackStream.m_isPrimary && ( !playbackStream.m_isSilent || !playbackStream.m_isContinuous ) )
-        {
-            mainStreamSilent = false;
-            break;
-        }
-    }
-    DeviceControllerClientMessages::MainStreamAudioSilentMsg_t mainStreamSilentMsg;
-    mainStreamSilentMsg.set_silent( mainStreamSilent );
-    m_deviceControllerPtr->SendMainStreamSilent( mainStreamSilentMsg );
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
