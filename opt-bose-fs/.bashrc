@@ -36,7 +36,7 @@ if [ "${PS1-}" ]; then # interactive shells
         [ "$i" ] && echo -n "<$i>"
     }
     unitlabel=$(jq -r </persist/mfg_data.json 2>/dev/null \
-      '"\(.productType)-\(.snMacEth [9:] | split(":") | join(""))"'
+      '"\(.productType)-\(.snMacWlan0 [9:] | split(":") | join(""))"'
     )
     PS1='$(ps1)$unitlabel\$ '
     set -o notify
