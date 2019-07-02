@@ -109,11 +109,11 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "stable@4d88a4d4ddd66edcc7552169bdbb19c442c1feef"
+    "selected_version": "stable@3a5790038160d342c5fa345c06593a371da56ef6"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "stable@050c0df846c07eb071d58045328a2a542043a1c5"
+    "selected_version": "stable@1a5059b7e4a27742dc19eb2f5fe22eefbf4915b1"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -125,7 +125,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/stable/5.0.3-796+45698a6"
+    "selected_version": "Release/stable/5.0.4-807+b5e383d"
   },
   {
     "name": "BTSTSSink-qc8017_32",
@@ -277,7 +277,7 @@
   },
   {
     "name": "opensource-avahi-qc8017_32",
-    "selected_version": "Release/bose-stable/v0.6.40-1-gfc0d0a1"
+    "selected_version": "Release/bose-stable/v0.6.41-1-g0367927"
   },
   {
     "name": "opensource-avahi-x86_64",
@@ -293,7 +293,7 @@
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Release/bose-stable/bose-v1.8.3-22-g8560949"
+    "selected_version": "Release/bose-stable/bose-v1.8.3-24-g8522b51"
   },
   {
     "name": "opensource-jsoncpp-x86_64",
@@ -325,7 +325,7 @@
   },
   {
     "name": "opensource-OpenAvnuApple-qc8017_32",
-    "selected_version": "Release/bose-stable/v1.0-1819-g5eb6189"
+    "selected_version": "Release/bose-stable/v1.0-1821-ge0f71ea"
   },
   {
     "name": "opensource-openssl-qc8017_32",
@@ -353,7 +353,7 @@
   },
   {
     "name": "opensource-tinyxml-qc8017_32",
-    "selected_version": "Release/bose-stable/bose-v2.6.1-19-gd4270bd"
+    "selected_version": "Release/bose-stable/bose-v2.6.1-21-g5493c0b"
   },
   {
     "name": "opensource-tinyxml-x86_64",
@@ -397,7 +397,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@2ed720fdd76edf45ee3bf183e1929ddc019f11c1"
+    "selected_version": "stable@0be32311523559549a4c1606b3d6a9ebb5d3713a"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -425,7 +425,7 @@
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/5.0.8"
+    "selected_version": "Release/master/5.0.16"
   },
   {
     "name": "RivieraLPM-Tools",
@@ -513,7 +513,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@48759234f999bcb6859eda9e5028b8d5d8bad58e"
+    "selected_version": "stable@83ef81a048defe59ab48cc45e83b6677064d9101"
   },
   {
     "name": "VPAController-qc8017_32",
@@ -525,6 +525,6 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/stable/2.2.2-170+1baad21"
+    "selected_version": "Release/stable/2.2.2-177+50fb502"
   }
 ]
