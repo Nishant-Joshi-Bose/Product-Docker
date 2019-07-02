@@ -21,10 +21,8 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
-// TODO - JCH - fix this as part of PGC-2476
-//#include "RivieraLPM_IpcProtocol.h"
+
 #define IPC_LATENCY_VALUE_UNKNOWN 0xffff
-// end TODO
 
 using namespace std::placeholders;
 
@@ -44,14 +42,14 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
     ProductAudioService( ProductController.GetTask( ),
                          ProductController.GetMessageHandler(),
                          frontDoorClient ),
-    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
-    m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
-    m_ThermalTask( std::unique_ptr<ThermalMonitorTask>(
+    m_productLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
+    m_audioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
+    m_thermalTask( std::unique_ptr<ThermalMonitorTask>(
                        new ThermalMonitorTask( lpmClient, m_ProductTask,
                                                AsyncCallback<IpcSystemTemperatureData_t>(
                                                    std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ),
                                                    m_ProductTask ) ) ) ),
-    m_DataCollectionClient( ProductController.GetDataCollectionClient() ),
+    m_dataCollectionClient( ProductController.GetDataCollectionClient() ),
     m_currentNetworkSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
     m_currentTVSourceLatency( LpmServiceMessages::LATENCY_VALUE_UNKNOWN ),
     m_deferredEqSelectResponse( []( AudioEqSelect eq ) {}, m_ProductTask )
@@ -65,7 +63,7 @@ CustomProductAudioService::CustomProductAudioService( CustomProductController& P
             SendAudioSettingsToDataCollection();
         }
     };
-    m_DataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
+    m_dataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,12 +86,12 @@ void CustomProductAudioService::RegisterAudioPathEvents()
         if( m_DspStreamConfig.has_audiosettings() )
         {
             BOSE_INFO( s_logger, "DSP booted, send stream config (%s)", ProtoToMarkup::ToJson( m_DspStreamConfig ).c_str() );
-            m_ProductLpmHardwareInterface->SetStreamConfig( m_DspStreamConfig, m_StreamConfigResponseCb );
+            m_productLpmHardwareInterface->SetStreamConfig( m_DspStreamConfig, m_streamConfigResponseCb );
             // stream config callback is normally empty (gets set when we get a SetStreamConfig request that
             // we can't immediately forward to DSP because it's booting)
-            m_StreamConfigResponseCb = {};
+            m_streamConfigResponseCb = {};
         }
-        m_DspIsRebooting = false;
+        m_dspIsRebooting = false;
         m_currentEqSelectUpdating = true;
 
         ProductMessage bootedMsg;
@@ -111,7 +109,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
             return;
         }
 
-        bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
+        bool success =  m_productLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
                         ( LpmServiceMessages::IPC_DSP_BOOTED_EVENT, Callback<LpmServiceMessages::IpcDeviceBoot_t>( bootedFunc ) );
         if( not success )
         {
@@ -119,12 +117,12 @@ void CustomProductAudioService::RegisterAudioPathEvents()
             return;
         }
     };
-    m_ProductLpmHardwareInterface->RegisterForLpmConnection( lpmConnectCb );
+    m_productLpmHardwareInterface->RegisterForLpmConnection( lpmConnectCb );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize member variables related to AudioPath
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    // Initialize m_MainStreamAudioSettings with current audio settings value from AudioSettingsManager
+    // Initialize m_mainStreamAudioSettings with current audio settings value from AudioSettingsManager
     // thermalData will be updated by thermal task periodically in a separate route
     FetchLatestAudioSettings();
 
@@ -204,63 +202,63 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProd
         error = true;
     }
     contentItemProto.set_islocal( param.isLocal );
-    // If no parsing error occured, update m_MainStreamAudioSettings and m_InputRoute with new contentItem
+    // If no parsing error occured, update m_mainStreamAudioSettings and m_inputRoute with new contentItem
     if( !error && contentItemProto.has_source() && contentItemProto.has_sourceaccount() )
     {
         // Update audio settings
         BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback, source = %s, sourecAccount = %s", contentItemProto.source().c_str(), contentItemProto.sourceaccount().c_str() );
 
         /// UpdateContentItem will re-populate the AudioSetting value and persistence level caused by content item change
-        /// in m_AudioSetting Json and m_currentXX proto,
+        /// in m_audioSetting Json and m_currentXX proto,
         /// and if value is changed, it will also send new values to frontdoor(notification) and data collection service
         bool isChanged = false;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kBassName,              m_AudioBassSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kTrebleName,            m_AudioTrebleSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kCenterName,            m_AudioCenterSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundName,          m_AudioSurroundSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundDelayName,     m_AudioSurroundDelaySetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kGainOffsetName,        m_AudioGainOffsetSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kAvSyncName,            m_AudioAvSyncSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferGainName,     m_AudioSubwooferGainSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kModeName,              m_AudioModeSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kContentTypeName,       m_AudioContentTypeSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kDualMonoSelectName,    m_DualMonoSelectSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kEqSelectName,          m_EqSelectSetting ) ) ? true : isChanged;
-        isChanged = ( m_AudioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferPolarityName, m_SubwooferPolaritySetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kBassName,              m_audioBassSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kTrebleName,            m_audioTrebleSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kCenterName,            m_audioCenterSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundName,          m_audioSurroundSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kSurroundDelayName,     m_audioSurroundDelaySetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kGainOffsetName,        m_audioGainOffsetSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kAvSyncName,            m_audioAvSyncSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferGainName,     m_audioSubwooferGainSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kModeName,              m_audioModeSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kContentTypeName,       m_audioContentTypeSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kDualMonoSelectName,    m_dualMonoSelectSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kEqSelectName,          m_eqSelectSetting ) ) ? true : isChanged;
+        isChanged = ( m_audioSettingsMgr->UpdateContentItem( contentItemProto, kSubwooferPolarityName, m_subwooferPolaritySetting ) ) ? true : isChanged;
 
         if( isChanged )
         {
             FetchLatestAudioSettings();
-            m_AudioSettingsMgr->PersistAudioSettings();
+            m_audioSettingsMgr->PersistAudioSettings();
         }
 
         // Update input route
         if( !param.isLocal )
         {
-            m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
+            m_inputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
         }
         else if( contentItemProto.source() == SHELBY_SOURCE::PRODUCT )
         {
-            m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
+            m_inputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
                            ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
                            ( 1 << AUDIO_INPUT_BIT_POSITION_EARC );
         }
         else if( contentItemProto.source() == SHELBY_SOURCE::SETUP )
         {
-            m_InputRoute = 0;
+            m_inputRoute = 0;
         }
         else
         {
-            m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
+            m_inputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
         }
     }
     else
     {
         BOSE_ERROR( s_logger, "ContentItem string from APProduct doesn't contain \"source\" or \"sourceAccount\" field" );
     }
-    // Reply APProduct with the current m_MainStreamAudioSettings and m_InputRoute
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
-    std::string inputRoute = std::to_string( m_InputRoute );
+    // Reply APProduct with the current m_mainStreamAudioSettings and m_inputRoute
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings );
+    std::string inputRoute = std::to_string( m_inputRoute );
     cb.Send( mainStreamAudioSettings, inputRoute );
 }
 
@@ -274,44 +272,44 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProd
 void CustomProductAudioService::SendAudioSettingsToDataCollection( ) const
 {
     BOSE_DEBUG( s_logger, __func__ );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioBassLevel >( m_AudioSettingsMgr->GetBass( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioBassLevel >( m_audioSettingsMgr->GetBass( ) ),
         DATA_COLLECTION_BASS );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioTrebleLevel >( m_AudioSettingsMgr->GetTreble( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioTrebleLevel >( m_audioSettingsMgr->GetTreble( ) ),
         DATA_COLLECTION_TREBLE );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioCenterLevel >( m_AudioSettingsMgr->GetCenter( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioCenterLevel >( m_audioSettingsMgr->GetCenter( ) ),
         DATA_COLLECTION_CENTER );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioSurroundLevel >( m_AudioSettingsMgr->GetSurround( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioSurroundLevel >( m_audioSettingsMgr->GetSurround( ) ),
         DATA_COLLECTION_SURROUND );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioSurroundDelay >( m_AudioSettingsMgr->GetSurroundDelay( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioSurroundDelay >( m_audioSettingsMgr->GetSurroundDelay( ) ),
         DATA_COLLECTION_SURROUND_DELAY );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioGainOffset >( m_AudioSettingsMgr->GetGainOffset( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioGainOffset >( m_audioSettingsMgr->GetGainOffset( ) ),
         DATA_COLLECTION_GAIN_OFFSET );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioAvSync >( m_AudioSettingsMgr->GetAvSync( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioAvSync >( m_audioSettingsMgr->GetAvSync( ) ),
         DATA_COLLECTION_AVSYNC );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioSubwooferGain >( m_AudioSettingsMgr->GetSubwooferGain( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioSubwooferGain >( m_audioSettingsMgr->GetSubwooferGain( ) ),
         DATA_COLLECTION_SUBWOOFER_GAIN );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioMode >( m_AudioSettingsMgr->GetMode( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioMode >( m_audioSettingsMgr->GetMode( ) ),
         DATA_COLLECTION_MODE );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioContentType >( m_AudioSettingsMgr->GetContentType( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioContentType >( m_audioSettingsMgr->GetContentType( ) ),
         DATA_COLLECTION_CONTENT_TYPE );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioDualMonoSelect >( m_AudioSettingsMgr->GetDualMonoSelect( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioDualMonoSelect >( m_audioSettingsMgr->GetDualMonoSelect( ) ),
         DATA_COLLECTION_DUALMONO_SELECT );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioEqSelect >( m_AudioSettingsMgr->GetEqSelect( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioEqSelect >( m_audioSettingsMgr->GetEqSelect( ) ),
         DATA_COLLECTION_EQSELECT );
-    m_DataCollectionClient->SendData(
-        std::make_shared< AudioSubwooferPolarity >( m_AudioSettingsMgr->GetSubwooferPolarity( ) ),
+    m_dataCollectionClient->SendData(
+        std::make_shared< AudioSubwooferPolarity >( m_audioSettingsMgr->GetSubwooferPolarity( ) ),
         DATA_COLLECTION_SUBWOOFER_POLARITY );
 }
 
@@ -328,9 +326,9 @@ void CustomProductAudioService::SendAudioSettingsToDataCollection( ) const
 void CustomProductAudioService::RebroadcastLatencyCallback( uint32_t latency )
 {
     BOSE_DEBUG( s_logger, "%s: latency = %d", __func__, latency );
-    if( latency != m_MainStreamAudioSettings.additionallocallatencyms() )
+    if( latency != m_mainStreamAudioSettings.additionallocallatencyms() )
     {
-        m_MainStreamAudioSettings.set_additionallocallatencyms( latency );
+        m_mainStreamAudioSettings.set_additionallocallatencyms( latency );
         SendMainStreamAudioSettingsEvent();
     }
 }
@@ -339,24 +337,24 @@ void CustomProductAudioService::RebroadcastLatencyCallback( uint32_t latency )
 ///
 /// @name   CustomProductAudioService::FetchLatestAudioSettings
 ///
-/// @brief  update m_MainStreamAudioSettings with the latest audio settings from AudioSettingsManager
+/// @brief  update m_mainStreamAudioSettings with the latest audio settings from AudioSettingsManager
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::FetchLatestAudioSettings( )
 {
-    m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
-    m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
-    m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
-    m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
-    m_MainStreamAudioSettings.set_surrounddelay( m_AudioSettingsMgr->GetSurroundDelay( ).value() );
-    m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
-    m_MainStreamAudioSettings.set_appxvideolatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
-    m_MainStreamAudioSettings.set_subwooferlevel( m_AudioSettingsMgr->GetSubwooferGain( ).value() );
-    m_MainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
-    m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
-    m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum( m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
-    m_MainStreamAudioSettings.set_deltaeqselect( EqSelectNameToEnum( m_AudioSettingsMgr->GetEqSelect( ).mode() ) );
-    m_MainStreamAudioSettings.set_subwooferpolarity( SubwooferPolarityNameToEnum( m_AudioSettingsMgr->GetSubwooferPolarity( ).value() ) );
+    m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
+    m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
+    m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
+    m_mainStreamAudioSettings.set_surroundlevel( m_audioSettingsMgr->GetSurround( ).value() );
+    m_mainStreamAudioSettings.set_surrounddelay( m_audioSettingsMgr->GetSurroundDelay( ).value() );
+    m_mainStreamAudioSettings.set_gainoffset( m_audioSettingsMgr->GetGainOffset( ).value() );
+    m_mainStreamAudioSettings.set_appxvideolatencyms( m_audioSettingsMgr->GetAvSync( ).value() );
+    m_mainStreamAudioSettings.set_subwooferlevel( m_audioSettingsMgr->GetSubwooferGain( ).value() );
+    m_mainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
+    m_mainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_audioSettingsMgr->GetContentType( ).value() ) );
+    m_mainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum( m_audioSettingsMgr->GetDualMonoSelect( ).value() ) );
+    m_mainStreamAudioSettings.set_deltaeqselect( EqSelectNameToEnum( m_audioSettingsMgr->GetEqSelect( ).mode() ) );
+    m_mainStreamAudioSettings.set_subwooferpolarity( SubwooferPolarityNameToEnum( m_audioSettingsMgr->GetSubwooferPolarity( ).value() ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -400,7 +398,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
 
     if( serializedInputRoute.empty() )
     {
-        streamConfig.set_inputroute( m_InputRoute );
+        streamConfig.set_inputroute( m_inputRoute );
     }
     else
     {
@@ -422,15 +420,15 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
     }
 
     m_DspStreamConfig = streamConfig;
-    if( not m_DspIsRebooting )
+    if( not m_dspIsRebooting )
     {
         // send it to the DSP
-        m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
+        m_productLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
     }
     else
     {
         // wait until the DSP reboots to send it, and save the response callback
-        m_StreamConfigResponseCb = cb;
+        m_streamConfigResponseCb = cb;
     }
 }
 
@@ -444,7 +442,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
 void CustomProductAudioService::InternalMuteCallback( bool mute )
 {
     BOSE_DEBUG( s_logger, "%s, mute = %s", __func__, mute ? "true" : "false" );
-    m_ProductLpmHardwareInterface->SetInternalMute( mute );
+    m_productLpmHardwareInterface->SetInternalMute( mute );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -457,7 +455,7 @@ void CustomProductAudioService::InternalMuteCallback( bool mute )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings );
     BOSE_DEBUG( s_logger, "%s: %s", __func__, mainStreamAudioSettings.c_str() );
     m_APPointer -> SetMainStreamAudioSettings( mainStreamAudioSettings );
 }
@@ -524,7 +522,7 @@ void CustomProductAudioService::SetTVSourceLatency( uint32_t latency )
 void CustomProductAudioService::ThermalDataReceivedCb( IpcSystemTemperatureData_t data )
 {
     BOSE_VERBOSE( s_logger, __func__ );
-    m_MainStreamAudioSettings.mutable_temperaturedata()->CopyFrom( data );
+    m_mainStreamAudioSettings.mutable_temperaturedata()->CopyFrom( data );
     SendMainStreamAudioSettingsEvent();
 }
 
@@ -540,11 +538,11 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     BOSE_DEBUG( s_logger, __func__ );
     if( enabled )
     {
-        m_ThermalTask->Start();
+        m_thermalTask->Start();
     }
     else
     {
-        m_ThermalTask->Stop();
+        m_thermalTask->Stop();
     }
 }
 
@@ -560,12 +558,12 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 void CustomProductAudioService::SetAiqInstalled( bool installed )
 {
     BOSE_DEBUG( s_logger, "%s: installed = %s", __func__, installed ? "true" : "false" );
-    AudioSettingResultCode::ResultCode_t ret = m_AudioSettingsMgr->UpdateEqSelectSupportedMode( AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ), installed );
+    AudioSettingResultCode::ResultCode_t ret = m_audioSettingsMgr->UpdateEqSelectSupportedMode( AudioEqSelect_supportedMode_Name( AudioEqSelect_supportedMode_EQ_AIQ_A ), installed );
     if( ret == AudioSettingResultCode::ResultCode_t::NO_ERROR )
     {
-        m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_AudioSettingsMgr->GetEqSelect( ) );
+        m_FrontDoorClientIF->SendNotification( FRONTDOOR_AUDIO_EQSELECT_API, m_audioSettingsMgr->GetEqSelect( ) );
     }
-    m_deferredEqSelectResponse( m_AudioSettingsMgr->GetEqSelect() );
+    m_deferredEqSelectResponse( m_audioSettingsMgr->GetEqSelect() );
     m_deferredEqSelectResponse = AsyncCallback<AudioEqSelect>( []( AudioEqSelect eq ) {}, m_ProductTask );
     m_currentEqSelectUpdating = false;
 }
@@ -579,27 +577,27 @@ void CustomProductAudioService::SetAiqInstalled( bool installed )
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::ToggleAudioMode()
 {
-    AudioMode mode = m_AudioSettingsMgr->GetMode();
+    AudioMode mode = m_audioSettingsMgr->GetMode();
 
     if( mode.value() == "DIALOG" )
     {
         BOSE_INFO( s_logger, "Toggling AudioMode: Currently DIALOG" );
         mode.set_value( "NORMAL" );
-        m_AudioSettingsMgr->SetMode( mode );
+        m_audioSettingsMgr->SetMode( mode );
     }
     else if( mode.value() == "NORMAL" )
     {
         BOSE_INFO( s_logger, "Toggling AudioMode: Currently NORMAL" );
         mode.set_value( "DIALOG" );
-        m_AudioSettingsMgr->SetMode( mode );
+        m_audioSettingsMgr->SetMode( mode );
     }
     else
     {
         BOSE_ERROR( s_logger, "Unexpected AudioMode %s found in %s", mode.value().c_str(), __func__ );
     }
 
-    m_AudioModeSetting->SendFrontDoorNotification();
-    m_AudioModeSetting->SendToDataCollection();
+    m_audioModeSetting->SendFrontDoorNotification();
+    m_audioModeSetting->SendToDataCollection();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -695,24 +693,24 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getBassAction = [this]( )
     {
-        return m_AudioSettingsMgr->GetBass( );
+        return m_audioSettingsMgr->GetBass( );
     };
     auto setBassAction = [this]( AudioBassLevel val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetBass( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetBass( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
+            m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshBassAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshBass( );
+        return m_audioSettingsMgr->RefreshBass( );
     };
-    m_AudioBassSetting = std::unique_ptr< AudioSetting< AudioBassLevel > >
+    m_audioBassSetting = std::unique_ptr< AudioSetting< AudioBassLevel > >
                          ( new AudioSetting< AudioBassLevel >
                            ( FRONTDOOR_AUDIO_BASS_API,
                              getBassAction,
@@ -723,31 +721,31 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                              FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                              FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                              DATA_COLLECTION_BASS,
-                             m_DataCollectionClient ) );
+                             m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/treble - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getTrebleAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetTreble( );
+        return m_audioSettingsMgr->GetTreble( );
     };
     auto setTrebleAction = [ this ]( AudioTrebleLevel val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetTreble( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetTreble( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
+            m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshTrebleAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshTreble( );
+        return m_audioSettingsMgr->RefreshTreble( );
     };
-    m_AudioTrebleSetting = std::unique_ptr< AudioSetting< AudioTrebleLevel > >
+    m_audioTrebleSetting = std::unique_ptr< AudioSetting< AudioTrebleLevel > >
                            ( new AudioSetting< AudioTrebleLevel >
                              ( FRONTDOOR_AUDIO_TREBLE_API,
                                getTrebleAction,
@@ -758,31 +756,31 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                DATA_COLLECTION_TREBLE,
-                               m_DataCollectionClient ) );
+                               m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/center - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getCenterAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetCenter( );
+        return m_audioSettingsMgr->GetCenter( );
     };
     auto setCenterAction = [ this ]( AudioCenterLevel val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetCenter( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetCenter( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
+            m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshCenterAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshCenter( );
+        return m_audioSettingsMgr->RefreshCenter( );
     };
-    m_AudioCenterSetting = std::unique_ptr< AudioSetting< AudioCenterLevel > >
+    m_audioCenterSetting = std::unique_ptr< AudioSetting< AudioCenterLevel > >
                            ( new AudioSetting<AudioCenterLevel>
                              ( FRONTDOOR_AUDIO_CENTER_API,
                                getCenterAction,
@@ -793,31 +791,31 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                DATA_COLLECTION_CENTER,
-                               m_DataCollectionClient ) );
+                               m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surround - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getSurroundAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetSurround( );
+        return m_audioSettingsMgr->GetSurround( );
     };
     auto setSurroundAction = [ this ]( AudioSurroundLevel val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetSurround( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetSurround( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
+            m_mainStreamAudioSettings.set_surroundlevel( m_audioSettingsMgr->GetSurround( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshSurroundAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshSurround( );
+        return m_audioSettingsMgr->RefreshSurround( );
     };
-    m_AudioSurroundSetting = std::unique_ptr< AudioSetting< AudioSurroundLevel > >
+    m_audioSurroundSetting = std::unique_ptr< AudioSetting< AudioSurroundLevel > >
                              ( new AudioSetting< AudioSurroundLevel >
                                ( FRONTDOOR_AUDIO_SURROUND_API,
                                  getSurroundAction,
@@ -828,30 +826,30 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                  FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                  FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                  DATA_COLLECTION_SURROUND,
-                                 m_DataCollectionClient ) );
+                                 m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surroundDelay - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getSurroundDelayAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetSurroundDelay( );
+        return m_audioSettingsMgr->GetSurroundDelay( );
     };
     auto setSurroundDelayAction = [ this ]( AudioSurroundDelay val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetSurroundDelay( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetSurroundDelay( val );
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_surrounddelay( m_AudioSettingsMgr->GetSurroundDelay( ).value() );
+            m_mainStreamAudioSettings.set_surrounddelay( m_audioSettingsMgr->GetSurroundDelay( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshSurroundDelayAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshSurroundDelay( );
+        return m_audioSettingsMgr->RefreshSurroundDelay( );
     };
-    m_AudioSurroundDelaySetting = std::unique_ptr< AudioSetting< AudioSurroundDelay > >
+    m_audioSurroundDelaySetting = std::unique_ptr< AudioSetting< AudioSurroundDelay > >
                                   ( new AudioSetting< AudioSurroundDelay >
                                     ( FRONTDOOR_AUDIO_SURROUNDDELAY_API,
                                       getSurroundDelayAction,
@@ -862,31 +860,31 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                       DATA_COLLECTION_SURROUND_DELAY,
-                                      m_DataCollectionClient ) );
+                                      m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/gainOffset - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getGainOffsetAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetGainOffset( );
+        return m_audioSettingsMgr->GetGainOffset( );
     };
     auto setGainOffsetAction = [ this ]( AudioGainOffset val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetGainOffset( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetGainOffset( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
+            m_mainStreamAudioSettings.set_gainoffset( m_audioSettingsMgr->GetGainOffset( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshGainOffsetAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshGainOffset( );
+        return m_audioSettingsMgr->RefreshGainOffset( );
     };
-    m_AudioGainOffsetSetting =  std::unique_ptr< AudioSetting< AudioGainOffset > >
+    m_audioGainOffsetSetting =  std::unique_ptr< AudioSetting< AudioGainOffset > >
                                 ( new AudioSetting< AudioGainOffset >
                                   ( FRONTDOOR_AUDIO_GAINOFFSET_API,
                                     getGainOffsetAction,
@@ -897,31 +895,31 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                     FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                     DATA_COLLECTION_GAIN_OFFSET,
-                                    m_DataCollectionClient ) );
+                                    m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/avSync - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getAvSyncAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetAvSync( );
+        return m_audioSettingsMgr->GetAvSync( );
     };
     auto setAvSyncAction = [ this ]( AudioAvSync val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetAvSync( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetAvSync( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_appxvideolatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
+            m_mainStreamAudioSettings.set_appxvideolatencyms( m_audioSettingsMgr->GetAvSync( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshAvSyncAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshAvSync( );
+        return m_audioSettingsMgr->RefreshAvSync( );
     };
-    m_AudioAvSyncSetting = std::unique_ptr< AudioSetting< AudioAvSync > >
+    m_audioAvSyncSetting = std::unique_ptr< AudioSetting< AudioAvSync > >
                            ( new AudioSetting< AudioAvSync >
                              ( FRONTDOOR_AUDIO_AVSYNC_API,
                                getAvSyncAction,
@@ -932,23 +930,23 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                DATA_COLLECTION_AVSYNC,
-                               m_DataCollectionClient ) );
+                               m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/subWooferGain - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getSubwooferGainAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetSubwooferGain( );
+        return m_audioSettingsMgr->GetSubwooferGain( );
     };
     auto setSubwooferGainAction = [ this ]( AudioSubwooferGain val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetSubwooferGain( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetSubwooferGain( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_subwooferlevel(
-                m_AudioSettingsMgr->GetSubwooferGain( ).value() );
+            m_mainStreamAudioSettings.set_subwooferlevel(
+                m_audioSettingsMgr->GetSubwooferGain( ).value() );
 
             SendMainStreamAudioSettingsEvent();
         }
@@ -956,9 +954,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto refreshSubwooferGainAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshSubwooferGain( );
+        return m_audioSettingsMgr->RefreshSubwooferGain( );
     };
-    m_AudioSubwooferGainSetting = std::unique_ptr< AudioSetting<AudioSubwooferGain > >
+    m_audioSubwooferGainSetting = std::unique_ptr< AudioSetting<AudioSubwooferGain > >
                                   ( new AudioSetting< AudioSubwooferGain >
                                     ( FRONTDOOR_AUDIO_SUBWOOFERGAIN_API,
                                       getSubwooferGainAction,
@@ -969,32 +967,32 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                       DATA_COLLECTION_SUBWOOFER_GAIN,
-                                      m_DataCollectionClient ) );
+                                      m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/mode - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getModeAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetMode( );
+        return m_audioSettingsMgr->GetMode( );
     };
     auto setModeAction = [ this ]( AudioMode val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetMode( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetMode( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_audiomode(
-                ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
+            m_mainStreamAudioSettings.set_audiomode(
+                ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshModeAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshMode( );
+        return m_audioSettingsMgr->RefreshMode( );
     };
-    m_AudioModeSetting = std::unique_ptr< AudioSetting<AudioMode > >
+    m_audioModeSetting = std::unique_ptr< AudioSetting<AudioMode > >
                          ( new AudioSetting< AudioMode >
                            ( FRONTDOOR_AUDIO_MODE_API,
                              getModeAction,
@@ -1005,32 +1003,32 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                              FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                              FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                              DATA_COLLECTION_MODE,
-                             m_DataCollectionClient ) );
+                             m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/contentType - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getContentTypeAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetContentType( );
+        return m_audioSettingsMgr->GetContentType( );
     };
     auto setContentTypeAction = [ this ]( AudioContentType val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetContentType( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetContentType( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum(
-                                                           m_AudioSettingsMgr->GetContentType( ).value() ) );
+            m_mainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum(
+                                                           m_audioSettingsMgr->GetContentType( ).value() ) );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshContentTypeAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshContentType( );
+        return m_audioSettingsMgr->RefreshContentType( );
     };
-    m_AudioContentTypeSetting = std::unique_ptr< AudioSetting<AudioContentType > >
+    m_audioContentTypeSetting = std::unique_ptr< AudioSetting<AudioContentType > >
                                 ( new AudioSetting< AudioContentType >
                                   ( FRONTDOOR_AUDIO_CONTENTTYPE_API,
                                     getContentTypeAction,
@@ -1041,32 +1039,32 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                     FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                     DATA_COLLECTION_CONTENT_TYPE,
-                                    m_DataCollectionClient ) );
+                                    m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/dualMonoSelect - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getDualMonoSelectAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetDualMonoSelect( );
+        return m_audioSettingsMgr->GetDualMonoSelect( );
     };
     auto setDualMonoSelectAction = [ this ]( AudioDualMonoSelect val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetDualMonoSelect( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetDualMonoSelect( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum(
-                                                              m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
+            m_mainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum(
+                                                              m_audioSettingsMgr->GetDualMonoSelect( ).value() ) );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshDualMonoSelectAction = [this]( )
     {
-        return m_AudioSettingsMgr->RefreshDualMonoSelect( );
+        return m_audioSettingsMgr->RefreshDualMonoSelect( );
     };
-    m_DualMonoSelectSetting = std::unique_ptr< AudioSetting<AudioDualMonoSelect > >
+    m_dualMonoSelectSetting = std::unique_ptr< AudioSetting<AudioDualMonoSelect > >
                               ( new AudioSetting< AudioDualMonoSelect >
                                 ( FRONTDOOR_AUDIO_DUALMONOSELECT_API,
                                   getDualMonoSelectAction,
@@ -1077,23 +1075,23 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                   FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                   FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                   DATA_COLLECTION_DUALMONO_SELECT,
-                                  m_DataCollectionClient ) );
+                                  m_dataCollectionClient ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/eqSelect - register handlers for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getEqSelectAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetEqSelect( );
+        return m_audioSettingsMgr->GetEqSelect( );
     };
     auto setEqSelectAction = [ this ]( AudioEqSelect val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetEqSelect( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetEqSelect( val );
 
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_deltaeqselect(
-                EqSelectNameToEnum( m_AudioSettingsMgr->GetEqSelect( ).mode() ) );
+            m_mainStreamAudioSettings.set_deltaeqselect(
+                EqSelectNameToEnum( m_audioSettingsMgr->GetEqSelect( ).mode() ) );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
@@ -1105,7 +1103,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         if( !m_currentEqSelectUpdating )
         {
             // If we know EQ select isn't in the process of updating, just answer with the current value
-            respCb( m_AudioSettingsMgr->GetEqSelect() );
+            respCb( m_audioSettingsMgr->GetEqSelect() );
             return;
         }
 
@@ -1116,7 +1114,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         // the next update from the DSP.
         m_deferredEqSelectResponse = AsyncCallback<AudioEqSelect>( respCb, m_ProductTask );
     };
-    m_EqSelectSetting = std::unique_ptr< AudioSetting< AudioEqSelect > >
+    m_eqSelectSetting = std::unique_ptr< AudioSetting< AudioEqSelect > >
                         ( new AudioSetting< AudioEqSelect >
                           ( FRONTDOOR_AUDIO_EQSELECT_API,
                             getEqSelectAction,
@@ -1127,7 +1125,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                             DATA_COLLECTION_EQSELECT,
-                            m_DataCollectionClient,
+                            m_dataCollectionClient,
                             getEqSelectDeferred ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1135,21 +1133,21 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     ///////////////////////////////////////////////////////////////////////////////////////////////
     auto getSubwooferPolarityAction = [ this ]( )
     {
-        return m_AudioSettingsMgr->GetSubwooferPolarity( );
+        return m_audioSettingsMgr->GetSubwooferPolarity( );
     };
     auto setSubwooferPolarityAction = [ this ]( AudioSubwooferPolarity val )
     {
-        AudioSettingResultCode::ResultCode_t error = m_AudioSettingsMgr->SetSubwooferPolarity( val );
+        AudioSettingResultCode::ResultCode_t error = m_audioSettingsMgr->SetSubwooferPolarity( val );
         if( error == AudioSettingResultCode::ResultCode_t::NO_ERROR )
         {
-            m_MainStreamAudioSettings.set_subwooferpolarity(
-                SubwooferPolarityNameToEnum( m_AudioSettingsMgr->GetSubwooferPolarity( ).value() ) );
+            m_mainStreamAudioSettings.set_subwooferpolarity(
+                SubwooferPolarityNameToEnum( m_audioSettingsMgr->GetSubwooferPolarity( ).value() ) );
             SendMainStreamAudioSettingsEvent();
         }
         return error;
     };
     auto refreshSubwooferPolarityAction = []( ) {};
-    m_SubwooferPolaritySetting = std::unique_ptr< AudioSetting< AudioSubwooferPolarity > >
+    m_subwooferPolaritySetting = std::unique_ptr< AudioSetting< AudioSubwooferPolarity > >
                                  ( new AudioSetting< AudioSubwooferPolarity >
                                    ( FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API,
                                      getSubwooferPolarityAction,
@@ -1160,7 +1158,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME,
                                      DATA_COLLECTION_SUBWOOFER_POLARITY,
-                                     m_DataCollectionClient ) );
+                                     m_dataCollectionClient ) );
 }
 
 }// namespace ProductApp
