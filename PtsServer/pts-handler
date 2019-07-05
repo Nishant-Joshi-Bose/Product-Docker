@@ -363,7 +363,7 @@ if path == "/dev" and is_development():
 function set_address() {
   var av = address.value.trim();
   var err = "";
-  if (av.match(/^[-\w.]+$/)) {
+  if (av.match(/^[-\w.]+(:\d+)?$/)) {
     var anchors = document.getElementsByTagName("a");
     for (var i = anchors.length; --i >= 0;) {
       a = anchors[i];
