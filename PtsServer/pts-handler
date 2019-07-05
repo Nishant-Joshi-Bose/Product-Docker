@@ -421,7 +421,7 @@ if path == "/dev" and is_development():
  td {
    padding: 3px;
  }
- tr.even {
+ tr:nth-child(even) {
    background-color: lightgrey;
  }
  span.error {
@@ -472,102 +472,102 @@ Address:
     <th>Endpoint</th>
     <th>Description</th>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">usb</td>
     <td><a>/diag</a></td>
     <td>Quality Audit</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">any</td>
     <td><a>/logread.txt</a></td>
     <td>A snapshot of the system log ring buffer*</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">any</td>
     <td><a>/logread.txt.gz</a></td>
     <td>Same as /logread.txt but compressed*</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">any</td>
     <td><a>/pts.txt</a></td>
     <td>Various Linux and system status information (e.g., ifconfig)*</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">any</td>
     <td><a>/pts.dat</a></td>
     <td>Same as /pts.txt but encrypted</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">any</td>
     <td><a>/logread.dat</a></td>
     <td>Same as /logread.txt but encrypted</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">any</td>
     <td><a>/recovery.txt</a></td>
     <td>Recovery mode logs for HSP update</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">any</td>
     <td><a>/recovery.dat</a></td>
     <td>Same as /recovery.txt but encrypted</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">usb</td>
     <td><a>/reflash</a></td>
     <td>Force the unit into reflash mode (QFIL)</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">usb</td>
     <td><a>/bose-version</a></td>
     <td>/opt/Bose/etc/BoseVersion.json</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">usb</td>
     <td><a>/kernel-version</a></td>
     <td>/etc/riviera-version</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">usb</td>
     <td><a>/validate-mfgdata</a></td>
     <td>Check the manufacturing data</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">usb</td>
     <td><a>/controller-version</a></td>
     <td>The LPM version strings</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">usb</td>
     <td><a>/clear-first-greeting</a></td>
     <td>Clear the flag indicating the unit's first boot</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">any</td>
     <td><a>/opensource</a></td>
     <td>The licenses of open source software used in the system</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">any</td>
     <td><a>/service</a></td>
     <td>Remanufacturing. Only in service mode</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">usb</td>
     <td><a>/device-id</a></td>
     <td>Get this unit's device ID</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">any</td>
     <td><a>/keys</a></td>
     <td>Show key configuration*</td>
   </tr>
-  <tr class="even">
+  <tr>
     <td class="iface">usb, wlan1</td>
     <td><a>/</a>, <a>/index.html</a></td>
     <td>Wi-Fi setup</td>
   </tr>
-  <tr class="odd">
+  <tr>
     <td class="iface">any</td>
     <td><a>:17008/update.html</a></td>
     <td>Bonjour Update</td>
