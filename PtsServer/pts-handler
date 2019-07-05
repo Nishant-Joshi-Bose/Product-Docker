@@ -315,16 +315,7 @@ if path == "/device-id":
 
     http_ok()
     redirect_stderr()
-    # The SecureDeviceKey and HSP libraries used by get-device-id
-    # currently spew gratuitous output to stdout and stderr. For that
-    # reason, we discard both stdout and stderr and read the .json file instead.
-    # Presumably one day the SecureDeviceKey libraries will be cleaned up
-    # and this code can be simplified.
-    if subprocess.call("get-device-id &> /dev/null", shell=True) == 0:
-        print open('/tmp/deviceID.json').read()
-    else:
-        print "Could not read device ID."
-    sys.exit()
+    os.execlp("get-device-id", "get-device-id")
 
 # ----------------------------------------------------------------------------
 # Open source license documents.
