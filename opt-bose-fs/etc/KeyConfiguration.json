@@ -10,7 +10,7 @@
         20
       ],
       "action": 1,
-      "comment": "Console: MFB release between 0-1750ms -> Play/pause"
+      "comment": "Console: MFB release within 1750ms -> Play/pause"
     },
     {
       "origin": 0,
