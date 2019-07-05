@@ -318,6 +318,80 @@ if path == "/device-id":
     os.execlp("get-device-id", "get-device-id")
 
 # ----------------------------------------------------------------------------
+# Show key configuration
+if path == '/keys' and is_development():
+    http_ok('text/html')
+
+    import json
+    import re
+
+    html_escape_re = re.compile(r'[<&>]')
+    html_escapes = { '<': '&lt;',
+                     '&': '&amp;',
+                     '>': '&gt;' }
+    def html_escape(text):
+        return html_escape_re.sub(lambda match: html_escapes[match.group(0)], text)
+
+    config_file = '/opt/Bose/etc/KeyConfiguration.json'
+    config = json.load(open(config_file, 'rt'))
+    key_table = config['keyTable']
+    print """
+<head>
+<title>Key Configuration</title>
+<style type="text/css">
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+table {
+    border-collapse: collapse;
+}
+th {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    background-color: #4CAF50;
+    color: white;
+}
+td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
+<html>
+<h1>Key Configuration</h1>
+<table>
+<tr><th>Key Event</th><th>Action</th></tr>
+"""
+    prefix_re = re.compile(r'^Console:\s*')
+    delim_re = re.compile(r'\s+->\s+')
+    for key in key_table:
+        comment = key['comment'].strip()
+        comment = prefix_re.sub('', comment)
+        match = delim_re.search(comment)
+        if match:
+            i, j = match.span()
+            event = comment[:i]
+            action = comment[j:]
+            print('<tr><td>{event}</td><td>{action}</td></tr>'
+                  .format(event=html_escape(event),
+                          action=html_escape(action)))
+        else:
+            print('<tr><td colspan="2">{comment}</td></tr>'
+                  .format(comment=html_escape(comment)))
+
+    print("""\
+</table>
+</html>
+</body>
+""")
+    sys.exit()
+
+# ----------------------------------------------------------------------------
 # Open source license documents.
 # The customer end-user documentation references this URL path.
 
@@ -477,6 +551,16 @@ Address:
     <td class="iface">any</td>
     <td><a>/service</a></td>
     <td>Remanufacturing. Only in service mode</td>
+  </tr>
+  <tr class="even">
+    <td class="iface">usb</td>
+    <td><a>/device-id</a></td>
+    <td>Get this unit's device ID</td>
+  </tr>
+  <tr class="odd">
+    <td class="iface">any</td>
+    <td><a>/keys</a></td>
+    <td>Show key configuration*</td>
   </tr>
   <tr class="even">
     <td class="iface">usb, wlan1</td>
