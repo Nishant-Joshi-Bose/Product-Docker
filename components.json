@@ -136,12 +136,12 @@
     "selected_version": "Release/stable/2.2.0-314+640a730"
   },
   {
-    "name": "IoTService-qc8017_32",
-    "selected_version": "Release/stable/1.0.9-14-g4507af4"
-  },
-  {
     "name": "IotIpcClient-qc8017_32",
     "selected_version": "Release/stable/2.0.0-186+9de1e04"
+  },
+  {
+    "name": "IoTService-qc8017_32",
+    "selected_version": "Release/stable/1.0.9-14-g4507af4"
   },
   {
     "name": "KeyHandler-qc8017_32",
