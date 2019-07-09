@@ -333,23 +333,18 @@ void CustomProductController::InitializeAction()
     m_ProductIotHandler.Run();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   CustomProductController::Initialize
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::Initialize( void )
+void CustomProductController::Initialize()
 {
     BOSE_INFO( s_logger, __func__ );
     IL::BreakThread( std::bind( &CustomProductController::InitializeAction, this ), GetTask( ) );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::ProductDependentInitialize
 /// @brief  Function to handle product specific items that are located in a Product config file
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 void CustomProductController::ProductDependentInitialize()
 {
     ProductPb::ProductConfig productConfig;
@@ -422,13 +417,13 @@ int CustomProductController::FindThisProductConfig( ProductPb::ProductConfig& pr
     BOSE_DIE( "Product Type " << productType << " NOT found in config file:: " );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  CustomProductController::GetMessageHandler
 ///
 /// @return Callback < ProductMessage >
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 Callback < ProductMessage > CustomProductController::GetMessageHandler( )
 {
     Callback < ProductMessage >
@@ -554,7 +549,7 @@ void CustomProductController::CallbackError( const FrontDoor::Error &error )
     BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
 
-void CustomProductController::HandleSTSReady( void )
+void CustomProductController::HandleSTSReady()
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_isSTSReady = true;
@@ -587,7 +582,7 @@ bool CustomProductController::IsAllModuleReady() const
              IsSoftwareUpdateReady() and
              IsUiConnected() and
              IsSassReady() and
-             IsVoiceModuleReady() ) ;
+             IsVoiceModuleReady() );
 }
 
 bool CustomProductController::IsBtLeModuleReady() const
@@ -613,11 +608,11 @@ bool CustomProductController::IsLanguageSet()
     return m_deviceManager.IsLanguageSet();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductController::SendInitialCapsData
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 void CustomProductController::SendInitialCapsData()
 {
     BOSE_INFO( s_logger, __func__ );
@@ -732,7 +727,6 @@ void CustomProductController::InitializeKeyIdToKeyNameMap()
     return;
 }
 
-
 void CustomProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent )
 {
     BOSE_INFO( s_logger, "%s: Translated Intent %s", __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
@@ -787,14 +781,14 @@ void CustomProductController::HandleProductMessage( const ProductMessage& produc
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::SetupProductSTSController
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
 ///         specifically, provide the set of sources to be created initially.
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 void CustomProductController::SetupProductSTSController()
 {
     using namespace ProductSTS;
@@ -818,21 +812,17 @@ void CustomProductController::SetupProductSTSController()
     m_ProductSTSController.Initialize( sources, cb_STSInitWasComplete, cb_HandleSelectSourceSlot );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::HandleSTSInitWasComplete
 ///
-/// @brief  This method is called from the ProductSTSController when all the initially-created
-///         sources have been created with CAPS/STS
+/// @brief  This method is called from the ProductSTSController when all the
+///         initially-created sources have been created with CAPS/STS
 ///
-/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
+/// @note   This method is called on the ProductSTSController thread
 ///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleSTSInitWasComplete( void )
+//////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleSTSInitWasComplete()
 {
     BOSE_INFO( s_logger, __func__ );
     IL::BreakThread( std::bind( &CustomProductController::HandleSTSReady,
@@ -840,7 +830,7 @@ void CustomProductController::HandleSTSInitWasComplete( void )
                      GetTask( ) );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::HandleSelectSourceSlot
 ///
@@ -853,7 +843,7 @@ void CustomProductController::HandleSTSInitWasComplete( void )
 ///
 /// @return This method does not return anything.
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 void CustomProductController::HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot )
 {
     BOSE_INFO( s_logger, "%s: slot: %d", __func__, sourceSlot );
@@ -879,24 +869,25 @@ void CustomProductController::HandleBtLeModuleReady( bool btLeModuleReady )
         GetHsm().Handle<>( &CustomProductControllerState::HandleBtLeModuleReady );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 /// @name   IsBooted
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has booted.
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 bool CustomProductController::IsBooted( ) const
 {
     return IsAllModuleReady();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 /// @name   IsLowPowerExited
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has exited low power and all modules
 ///         have come back
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 bool CustomProductController::IsLowPowerExited( ) const
 {
     return IsAllModuleReady();
 }
-} /// namespace ProductApp
+
+} // namespace
