@@ -30,6 +30,7 @@
 #include "BOptional.h"
 #include "ProductConfig.pb.h"
 #include "ProductIotHandler.h"
+#include "TelemetryMetrics.h"
 
 namespace ProductApp
 {
@@ -188,7 +189,14 @@ public:
     // @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
     NetManager::Protobuf::OperationalMode GetWiFiOperationalMode() const;
 
+    std::shared_ptr<Telemetry::Metrics> GetTelemetry()
+    {
+        return m_telemetry;
+    }
+
 private:
+
+    std::shared_ptr<Telemetry::Metrics> m_telemetry;
 
     std::shared_ptr<CustomProductAudioService> m_ProductAudioService;
 

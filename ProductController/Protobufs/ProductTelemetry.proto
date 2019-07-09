@@ -1,0 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file ProductTelemetry.proto
+///
+/// Copyright 2019 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+package ProductTelemetry;
+
+enum Counters {
+     NETWORK_STANDBY_ENTER = 0;
+     NETWORK_STANDBY_EXIT = 1;
+     LOW_POWER_STANDBY = 2;
+     LOW_POWER_RESUME = 3;
+}
