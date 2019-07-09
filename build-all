@@ -5,4 +5,5 @@
 
 set -x
 make "$@" sdk=qc8017_32 cfg=Release || exit
+make "$@" sdk=x86_64 cfg=Debug || exit
 : success
