@@ -334,7 +334,7 @@ bool DisplayController::ParseJSONData()
         m_uiHeartBeatLossErrorTicks = json_root["uiHeartBeatLossErrorMS"].asUInt() / UPDATE_SLEEP_MS;
     }
 
-    BOSE_LOG( DEBUG, "UI heartbeat ticks warning: " << m_uiHeartBeatLossWarnTicks << ", error:" << m_uiHeartBeatLossErrorTicks);
+    BOSE_LOG( DEBUG, "UI heartbeat ticks warning: " << m_uiHeartBeatLossWarnTicks << ", error:" << m_uiHeartBeatLossErrorTicks );
 
     return true;
 }
@@ -618,8 +618,8 @@ void DisplayController::ProcessBlackScreenDetection()
                 m_screenBlackChangeTo = screenState;
                 m_screenBlackChangeCounter = m_screenBlackInactivityTicks;
 
-                BOSE_LOG( DEBUG, "Screen black state changed to " << screenState MM ", waiting " 
-                                    << m_screenBlackChangeCounter * UPDATE_SLEEP_MS << " MS.");
+                BOSE_LOG( DEBUG, "Screen black state changed to " << screenState << ", waiting "
+                          << m_screenBlackChangeCounter * UPDATE_SLEEP_MS << " MS." );
             }
             else
             {
@@ -830,7 +830,7 @@ bool DisplayController::HandleLpmNotificationUIBrightness( IpcUIBrightness_t lpm
 void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
                                                Callback<UiHeartBeat> resp )
 {
-    BOSE_LOG( INFO, "Recieved first heartbeat: " << req.count());
+    BOSE_LOG( INFO, "Recieved first heartbeat: " << req.count() );
 
     m_uiHeartBeat = req.count();
     m_lastUiHeartBeatTick = m_currentTick;
@@ -843,12 +843,12 @@ void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
 void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
                                               Callback<UiHeartBeat> resp )
 {
-    BOSE_LOG( VERBOSE, "Received heartbeat: " << req.count() << ", current " << m_uiHeartBeat);
+    BOSE_LOG( VERBOSE, "Received heartbeat: " << req.count() << ", current " << m_uiHeartBeat );
 
     if( ( m_uiHeartBeat != ULLONG_MAX )
         && ( abs( m_uiHeartBeat - req.count() ) >= UI_HEART_BEAT_MISSED_THRESHOLD ) )
     {
-        BOSE_LOG( WARNING, "UI is skipping heart beat, received: " << req.count() << ", current: " << m_uiHeartBeat);
+        BOSE_LOG( WARNING, "UI is skipping heart beat, received: " << req.count() << ", current: " << m_uiHeartBeat );
     }
 
     m_uiHeartBeat = req.count();
