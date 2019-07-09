@@ -334,8 +334,7 @@ bool DisplayController::ParseJSONData()
         m_uiHeartBeatLossErrorTicks = json_root["uiHeartBeatLossErrorMS"].asUInt() / UPDATE_SLEEP_MS;
     }
 
-    BOSE_DEBUG( s_logger, "UI heartbeat ticks warning: %llu, error: %llu",
-                ( unsigned long long )m_uiHeartBeatLossWarnTicks, ( unsigned long long )m_uiHeartBeatLossErrorTicks );
+    BOSE_LOG( DEBUG, "UI heartbeat ticks warning: " << m_uiHeartBeatLossWarnTicks << ", error:" << m_uiHeartBeatLossErrorTicks);
 
     return true;
 }

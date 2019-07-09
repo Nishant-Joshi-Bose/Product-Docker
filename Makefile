@@ -1,13 +1,14 @@
 export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
-.PHONY: deploy
 ifeq ($(sdk), x86_64)
-deploy: cmake_build
-else
+.PHONY: all
+all: cmake_build
+endif
+
+.PHONY: deploy
 deploy: all-packages
 	scripts/collect-deployables builds/Release builds/deploy ${disableGVA}
-endif
 
 .PHONY: force
 force:
@@ -203,7 +204,7 @@ distclean:
 .PHONY: test
 test: cmake_build
 ifneq ($(sdk),$(filter $(sdk),x86_64))
-	@echo ERROR: SDK must be x86_64 to run unit tests
+	false ERROR: Cannot run unit tests for sdk=$(sdk)
 else
 	cd $(BUILDS_DIR) && env BOSE_DPRINT_CONF="set stdout; all info" \
 	$(UNITTEST_LOCK) \
