@@ -28,9 +28,6 @@ def stop_service(service_name):
     if not killed:                                                                                                      
         print("Failed to kill {0} ".format(service_name))  
 
-
-
-
 @pytest.fixture(scope="module")
 def start_mock_frontDoor(request):
     """
@@ -48,3 +45,13 @@ def start_mock_frontDoor(request):
     mockfd = MockFrontDoor(PORT=8084)
     mockfd.run()
     return mockfd
+
+
+@pytest.fixture(scope="session")
+def eddie_product_controller(request):
+    """
+    Start the product controller
+     
+    1. Move the checked-in files as needed by ProductController
+    2. Start the Product Controller
+    """
