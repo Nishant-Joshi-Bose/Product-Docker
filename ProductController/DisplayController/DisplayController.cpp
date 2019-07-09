@@ -618,8 +618,8 @@ void DisplayController::ProcessBlackScreenDetection()
                 m_screenBlackChangeTo = screenState;
                 m_screenBlackChangeCounter = m_screenBlackInactivityTicks;
 
-                BOSE_DEBUG( s_logger, "Screen black state changed to %i, waiting %llu MS.",
-                            screenState, ( unsigned long long )( m_screenBlackChangeCounter * UPDATE_SLEEP_MS ) );
+                BOSE_LOG( DEBUG, "Screen black state changed to " << screenState MM ", waiting " 
+                                    << m_screenBlackChangeCounter * UPDATE_SLEEP_MS << " MS.");
             }
             else
             {
@@ -830,7 +830,7 @@ bool DisplayController::HandleLpmNotificationUIBrightness( IpcUIBrightness_t lpm
 void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
                                                Callback<UiHeartBeat> resp )
 {
-    BOSE_INFO( s_logger, "Received first heartbeat: %llu", ( unsigned long long )req.count() );
+    BOSE_LOG( INFO, "Recieved first heartbeat: " << req.count());
 
     m_uiHeartBeat = req.count();
     m_lastUiHeartBeatTick = m_currentTick;
@@ -843,14 +843,12 @@ void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
 void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
                                               Callback<UiHeartBeat> resp )
 {
-    BOSE_VERBOSE( s_logger, "Received heartbeat: %llu, current %llu",
-                  ( unsigned long long )req.count(), ( unsigned long long )m_uiHeartBeat );
+    BOSE_LOG( VERBOSE, "Received heartbeat: " << req.count() << ", current " << m_uiHeartBeat);
 
     if( ( m_uiHeartBeat != ULLONG_MAX )
         && ( abs( m_uiHeartBeat - req.count() ) >= UI_HEART_BEAT_MISSED_THRESHOLD ) )
     {
-        BOSE_WARNING( s_logger, "UI is skipping heart beat, received: %llu, current: %llu",
-                      ( unsigned long long )req.count(), ( unsigned long long )m_uiHeartBeat );
+        BOSE_LOG( WARNING, "UI is skipping heart beat, received: " << req.count() << ", current: " << m_uiHeartBeat);
     }
 
     m_uiHeartBeat = req.count();
