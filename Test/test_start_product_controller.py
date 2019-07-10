@@ -6,6 +6,7 @@ import pytest
 
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
-pytest.mark.usefixtures("eddie_product_controller")
+@pytest.mark.usefixtures("start_mock_frontDoor")
+@pytest.mark.usefixtures("eddie_product_controller")
 def test_start_controller(eddie_product_controller):
     assert(True)

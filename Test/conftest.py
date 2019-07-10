@@ -33,7 +33,7 @@ def stop_service(service_name):
 @pytest.fixture(scope="module")
 def start_mock_frontDoor(request):
     """
-    Starts a mock local FrontDoor server at port 8082
+    Starts a mock local FrontDoor server at port 8084
     """
     mockfd = None
     def teardown():
