@@ -16,6 +16,7 @@ PROTO_SOURCES = \
   ProductConfig.proto \
   ProductMessage.proto \
   ProductSTS.proto \
+  ProductTelemetry.proto \
 
 PROTO_IMPORT_DIRS := \
  . \
