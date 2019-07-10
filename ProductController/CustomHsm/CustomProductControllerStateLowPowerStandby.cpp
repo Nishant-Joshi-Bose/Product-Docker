@@ -7,6 +7,7 @@
 
 #include "CustomProductControllerStateLowPowerStandby.h"
 #include "ProductControllerHsm.h"
+#include "ProductTelemetry.pb.h"
 #include "CustomProductController.h"
 #include "DPrint.h"
 
@@ -21,6 +22,13 @@ CustomProductControllerStateLowPowerStandby::CustomProductControllerStateLowPowe
     ProductControllerStateLowPowerStandby( hsm, pSuperState, stateId, name )
 {
     BOSE_DEBUG( s_logger, __func__ );
+}
+
+void CustomProductControllerStateLowPowerStandby::HandleStateEnter()
+{
+    auto& controller = GetCustomProductController();
+
+    controller.GetTelemetry()->IncrementMetric<ProductTelemetry::Counters>( ProductTelemetry::Counters::LOW_POWER_STANDBY );
 }
 
 void CustomProductControllerStateLowPowerStandby::HandleStateExit()

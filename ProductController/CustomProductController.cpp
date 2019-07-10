@@ -75,6 +75,7 @@
 #include "IoTIPCClient.h"
 #include "BoseFeatures.h"
 #include "ProductConstants.h"
+#include "ProductTelemetry.pb.h"
 
 static DPrint s_logger( "CustomProductController" );
 
@@ -88,6 +89,12 @@ const std::string g_ProductPersistenceDir = "product-persistence/";
 const std::string g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
 
 CustomProductController::CustomProductController():
+    m_telemetry( Telemetry::Metrics::Create( "ProductController",
+                                             ProductTelemetry::Counters_descriptor(),
+                                             nullptr, // metricFieldDescriptor
+                                             nullptr, // statFieldDescriptor
+                                             GetTask(),
+                                             m_FrontDoorClientIF ) ),
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
@@ -724,7 +731,6 @@ void CustomProductController::InitializeKeyIdToKeyNameMap()
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, KeyNamesPB::keyid::PRESET_4_KEYID )]  = KeyNamesPB::keynames::PRESET_4;
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, KeyNamesPB::keyid::PRESET_5_KEYID )]  = KeyNamesPB::keynames::PRESET_5;
     m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, KeyNamesPB::keyid::PRESET_6_KEYID )]  = KeyNamesPB::keynames::PRESET_6;
-    return;
 }
 
 void CustomProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent )
@@ -732,7 +738,6 @@ void CustomProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil
     BOSE_INFO( s_logger, "%s: Translated Intent %s", __func__, CommonIntentHandler::GetIntentName( intent ).c_str( ) );
 
     GetHsm().Handle<> ( &CustomProductControllerState::HandleNetworkStandbyIntent );
-    return;
 }
 
 void CustomProductController::UpdateUiConnectedStatus( bool status )
