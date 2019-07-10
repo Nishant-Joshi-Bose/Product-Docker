@@ -60,6 +60,7 @@ def eddie_product_controller(request):
     # Move json files to correct directories
     print("Moving files to correct directories. Please make sure json files are in your current directory")
     os.system("mkdir -p /opt/Bose/etc")
+    os.system("mv -v product-persistence /scratch/CastleProducts/builds/Debug/x86_64/bin")
     os.system("mv -v KeyConfiguration.json /var/run")
     os.system("mv -v *.json chimes /opt/Bose/etc")
     
