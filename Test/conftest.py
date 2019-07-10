@@ -58,20 +58,22 @@ def eddie_product_controller(request):
     2. Start the Product Controller
     """
     # Move json files to correct directories
-    print("Moving files to correct directories. Please make sure json files are in your current directory")
+    print("Moving files to correct directories. Please make sure json files are in your current directory.")
+    # P.S. I added some json files, but not all of them. Unsure if I need to add more
+    exec_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../builds/Debug/x86_64/bin"))
     os.system("mkdir -p /opt/Bose/etc")
-    os.system("mv -v product-persistence /scratch/CastleProducts/builds/Debug/x86_64/bin")
+    os.system("mv -v product-persistence " + exec_path)
     os.system("mv -v KeyConfiguration.json /var/run")
     os.system("mv -v *.json chimes /opt/Bose/etc")
     
     # Run product controller
-    os.chdir("/scratch/CastleProducts/builds/Debug/x86_64/bin")
+    os.chdir(exec_path)
     print("Starting product controller")
-    cmd = "env BOSE_DPRINT_CONF='set stdout' ./ProductController"
-    start_service(cmd, "Product_Controller")
+    cmd = "env BOSE_DPRINT_CONF='set stdout' ./ProductController &"
+    start_service(cmd, "ProductController")
     def teardown():
         """teardown call for stopping service"""
-        stop_service("Product_Controller")
+        stop_service("ProductController")
         
         
         
