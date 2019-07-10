@@ -43,6 +43,7 @@ ADD_EXECUTABLE(ProductController
   ${PROTO_CC_DEST}/ProductConfig.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
+  ${PROTO_CC_DEST}/ProductTelemetry.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
@@ -63,6 +64,7 @@ ADD_EXECUTABLE(ProductController
 )
 
 TARGET_LINK_LIBRARIES(ProductController
+  TelemetryClient
   CastleProductControllerCommon
   ProductControllerCommonProto
   DataCollectionClient
