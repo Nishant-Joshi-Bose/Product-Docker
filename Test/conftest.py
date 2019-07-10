@@ -63,7 +63,7 @@ def eddie_product_controller(request):
     exec_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../builds/Debug/x86_64/bin"))
     os.system("mkdir -p /opt/Bose/etc")
     os.system("mv -v product-persistence " + exec_path)
-    os.system("mv -v KeyConfiguration.json /var/run")
+    os.system("sudo mv -v KeyConfiguration.json /var/run")
     os.system("mv -v *.json chimes /opt/Bose/etc")
     
     # Run product controller
