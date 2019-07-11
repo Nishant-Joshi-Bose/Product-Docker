@@ -1,20 +1,21 @@
 import os
 import psutil
 import pytest
-from pytest_testrail.plugin import pytestrail
 
 from CastleTestUtils.MockServices.MockFrontDoor.Server.mockfrontDoor import MockFrontDoor
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+
+LOGGER = get_logger(__name__)
 
 def start_service(cmd, service_name):
     """
     Function to start a service
     :return: return code of the process
     """
-    print("Launching - {0} cmd={1}".format(service_name, cmd))
+    LOGGER.info("Launching - {0} cmd={1}".format(service_name, cmd))
     ret = os.system(cmd)
     if ret != 0:
-        print("Failed to run {0}, ret code={1}".format(service_name, ret))
+        LOGGER.info("Failed to run {0}, ret code={1}".format(service_name, ret))
     return ret
 
 def stop_service(service_name):
@@ -24,11 +25,11 @@ def stop_service(service_name):
     killed = False
     for proc in psutil.process_iter():
         if proc.name() == service_name:
-            print("Got {0} running - Terminating".format(proc.name()))
+            LOGGER.info("Got {0} running - Terminating".format(proc.name()))
             proc.kill()
             killed = True
     if not killed:
-        print("Failed to kill {0} ".format(service_name))
+        LOGGER.info("Failed to kill {0} ".format(service_name))
 
 @pytest.fixture(scope="module")
 def start_mock_frontDoor(request):
@@ -48,7 +49,6 @@ def start_mock_frontDoor(request):
     mockfd.run()
     return mockfd
 
-
 @pytest.fixture(scope="session")
 def eddie_product_controller(request):
     """
@@ -57,16 +57,14 @@ def eddie_product_controller(request):
     2. Start the Product Controller
     """
     # Move json files to correct directories
-    print("Moving files to correct directories. Please make sure json files are in your current directory.")
-    # P.S. I added some json files, but not all of them. Unsure if I need to add more
+    LOGGER.info("Moving files to correct directories. Please make sure json files are in your current directory.")
     exec_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../builds/Debug/x86_64/bin"))
     os.system("mkdir -p /opt/Bose/etc")
     os.system("mv -v product-persistence " + exec_path)
     os.system("sudo mv -v KeyConfiguration.json /var/run")
     os.system("mv -v *.json chimes /opt/Bose/etc")
-
     os.chdir(exec_path)
-    print("Starting product controller")
+    LOGGER.info("Starting product controller")
     cmd = "env BOSE_DPRINT_CONF='set stdout' ./ProductController &"
     start_service(cmd, "ProductController")
     def teardown():
