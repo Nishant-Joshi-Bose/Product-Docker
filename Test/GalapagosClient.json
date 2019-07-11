@@ -1,0 +1,11 @@
+{
+    "GalapagosClientConfig": {
+        "product_token_file": "/mnt/nv/product-persistence/galapagos_jwt.json",
+        "identity_certificate_file": "/mnt/nv/product-persistence/identity.crt",
+        "server_certificate_file": "/mnt/nv/product-persistence/server.crt",
+        "iot_endpoint_file": "/mnt/nv/product-persistence/IoTEndpoint.dat",
+        "client_id_file": "/mnt/nv/product-persistence/clientId.dat",
+        "service_discovery_url": "https://services.api.bose.io/discovery",
+        "http_backoff_values": [ 15, 60, 240, 900, 1800, 3600, 7200 ]
+    }
+}

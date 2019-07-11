@@ -1,0 +1,15 @@
+{
+  "abbrev_commit": "58bf69b",
+  "branch": "",
+  "build_number": "7890",
+  "commit": "58bf69b17021f81f6490f6b2af8941f17b90e3ff",
+  "host": "ssgbld01",
+  "localtime": "2019-06-27T22:24:19",
+  "long": "5.0.6.7890 epdbuild@ssgbld01 2019-06-27T22:24:19 58bf69b",
+  "major": "5",
+  "minor": "0",
+  "patch": "6",
+  "short": "5.0.6",
+  "time": 1561688659,
+  "user": "epdbuild"
+}
