@@ -29,7 +29,7 @@
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
-    "selected_version": "Release/stable/0.0.2-668+918f966"
+    "selected_version": "Continuous/stable/0.0.2-673+2a30ddb"
   },
   {
     "name": "AudioSource-MusicServices-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Continuous/stable/2.2.1-389+d17bf65"
+    "selected_version": "Continuous/stable/2.2.1-394+73fcc0e"
   },
   {
     "name": "AVSService-x86_64",
@@ -69,7 +69,7 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/stable/2.4.0-421+31d0e98"
+    "selected_version": "Continuous/stable/2.4.0-423+ca3cf4c"
   },
   {
     "name": "BLEToFrontDoorService-x86_64",
@@ -133,7 +133,7 @@
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/stable/0.0.4-156+20cfea6"
+    "selected_version": "Continuous/stable/0.0.4-157+f41df22"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -181,7 +181,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/stable/2.2.14-2-g8b54abe"
+    "selected_version": "Continuous/stable/2.2.14-4-g7210bc0"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -345,7 +345,7 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.6-6-g2297532"
+    "selected_version": "Release/stable/2.2.8-7-g3b8fd74"
   },
   {
     "name": "ProductControllerCommonProto-x86_64",
@@ -433,7 +433,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-stable/2019-07-10_1328"
+    "selected_version": "Continuous/Castle-Fork-stable/2019-07-10_1447"
   },
   {
     "name": "SoundTouch-SDK-x86_64",
@@ -453,6 +453,10 @@
   },
   {
     "name": "TelemetryClient-qc8017_32",
+    "selected_version": "Release/stable/3.0.0-73+0d291c6"
+  },
+  {
+    "name": "TelemetryClient-x86_64",
     "selected_version": "Release/stable/3.0.0-73+0d291c6"
   },
   {
