@@ -6,21 +6,21 @@ from pytest_testrail.plugin import pytestrail
 from CastleTestUtils.MockServices.MockFrontDoor.Server.mockfrontDoor import MockFrontDoor
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
-def start_service(cmd, service_name):                                                                              
-    """                                                                                            
-    Function to start a service                                                                                
-    :return: return code of the process                                                                       
-    """                                                                            
-    print("Launching - {0} cmd={1}".format(service_name, cmd))                                                    
-    ret = os.system(cmd)                                                                                                
-    if ret != 0:                                                                                                        
-        print("Failed to run {0}, ret code={1}".format(service_name, ret))                                        
-    return ret                                                                                               
-                                                                                                                        
-def stop_service(service_name):                                                                                         
-    """                                                                                                                 
-    Function to stop a service                                                                                          
-    """                                                                                                                 
+def start_service(cmd, service_name):
+    """
+    Function to start a service
+    :return: return code of the process
+    """
+    print("Launching - {0} cmd={1}".format(service_name, cmd))
+    ret = os.system(cmd)
+    if ret != 0:
+        print("Failed to run {0}, ret code={1}".format(service_name, ret))
+    return ret
+
+def stop_service(service_name):
+    """
+    Function to stop a service
+    """
     killed = False
     for proc in psutil.process_iter():
         if proc.name() == service_name:
@@ -53,7 +53,6 @@ def start_mock_frontDoor(request):
 def eddie_product_controller(request):
     """
     Start the product controller
-     
     1. Move the checked-in files as needed by ProductController
     2. Start the Product Controller
     """
@@ -65,8 +64,7 @@ def eddie_product_controller(request):
     os.system("mv -v product-persistence " + exec_path)
     os.system("sudo mv -v KeyConfiguration.json /var/run")
     os.system("mv -v *.json chimes /opt/Bose/etc")
-    
-    # Run product controller
+
     os.chdir(exec_path)
     print("Starting product controller")
     cmd = "env BOSE_DPRINT_CONF='set stdout' ./ProductController &"
@@ -74,8 +72,3 @@ def eddie_product_controller(request):
     def teardown():
         """teardown call for stopping service"""
         stop_service("ProductController")
-        
-        
-        
-        
-        
