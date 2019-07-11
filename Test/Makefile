@@ -5,20 +5,15 @@ default: generated_sources
 vsetup:
 	test -d venv || virtualenv venv
 
-.PHONY: check_tools
-check_tools:
-ifndef DONT_UPDATE_CASTLETOOLS
-	castletools-update
-endif
-	components install
-
 RIVIERA_LPMSERVICE_DIR = $(shell components get RivieraLpmService-x86_64 installed_location)
+CLI_SERVICE_DIR = $(shell components get Cli-x86_64 installed_location)
 
 .PHONY: generated_sources
-generated_sources: check_tools
+generated_sources:
 	rm -rf builds
 	mkdir -p builds
-	ln -nsf $(RIVIERA_LPMSERVICE_DIR) RivieraLpmService
+	ln -nsf $(RIVIERA_LPMSERVICE_DIR) builds/RivieraLpmService
+	ln -nsf $(CLI_SERVICE_DIR) builds/CliService
 
 .PHONY: comptest
 comptest:
