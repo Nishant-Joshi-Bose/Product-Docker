@@ -249,3 +249,13 @@ Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
 More on [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Guide)
 
 [Updating Individual Components on Eddie](https://wiki.bose.com/display/WSSW/Updating+Individual+Components+on+Eddie)
+=======
+# CastleProducts
+Product-specific code for Riviera-based products.
+
+Each product foo has its own foo/master branch.
+
+* [Eddie](https://github.com/BoseCorp/CastleProducts/tree/eddie/master) - "Home Speaker 500"
+* [Professor](https://github.com/BoseCorp/CastleProducts/tree/professor/master) - "Home Soundbar 500"
+* [Taylor](https://github.com/BoseCorp/CastleProducts/tree/taylor/master) - "Portable Home Speaker"
+* [Flipper](https://github.com/BoseCorp/CastleProducts/tree/flipper/master) - "Home Speaker 300"
