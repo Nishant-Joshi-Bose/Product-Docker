@@ -12,11 +12,11 @@
     "selected_version": "Release/stable/5.0.4-7097+f9211f0"
   },
   {
-    "name": "AudioPathProducts-x86_64",
+    "name": "AudioPathProducts-qc8017_64",
     "selected_version": "Release/stable/5.0.4-7097+f9211f0"
   },
   {
-    "name": "AudioPathProducts-qc8017_64",
+    "name": "AudioPathProducts-x86_64",
     "selected_version": "Release/stable/5.0.4-7097+f9211f0"
   },
   {
@@ -40,16 +40,16 @@
     "selected_version": "Release/stable/2.3.0-459+0739bea"
   },
   {
-    "name": "AudioSource-x86_64",
-    "selected_version": "Release/stable/2.3.0-459+0739bea"
-  },
-  {
     "name": "AudioSource-Spotify-qc8017_32",
     "selected_version": "Release/stable/0.0.34-6-gc6713ad"
   },
   {
     "name": "AudioSource-UPnP-qc8017_32",
     "selected_version": "Release/stable/0.0.7-3-g0c144ae"
+  },
+  {
+    "name": "AudioSource-x86_64",
+    "selected_version": "Release/stable/2.3.0-459+0739bea"
   },
   {
     "name": "AVSService-qc8017_32",
@@ -84,10 +84,6 @@
     "selected_version": "Release/stable/2.20.7-3-g2bcdda7"
   },
   {
-    "name": "BoseLibs-x86_64",
-    "selected_version": "Release/stable/3.6.0-1461+7f191c8"
-  },
-  {
     "name": "bose-opkg-utils",
     "selected_version": "stable@dc68bf49f79a24f21a22b50eed6a9d6ef2f44062"
   },
@@ -101,6 +97,10 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
+    "selected_version": "Release/stable/3.6.0-1461+7f191c8"
+  },
+  {
+    "name": "BoseLibs-x86_64",
     "selected_version": "Release/stable/3.6.0-1461+7f191c8"
   },
   {
@@ -452,16 +452,16 @@
     "selected_version": "Release/stable/3.0.0-207+5558a22"
   },
   {
+    "name": "Telemetry-x86_64",
+    "selected_version": "Release/stable/3.0.0-207+5558a22"
+  },
+  {
     "name": "TelemetryClient-qc8017_32",
     "selected_version": "Release/stable/3.0.0-73+0d291c6"
   },
   {
     "name": "TelemetryClient-x86_64",
     "selected_version": "Release/stable/3.0.0-73+0d291c6"
-  },
-  {
-    "name": "Telemetry-x86_64",
-    "selected_version": "Release/stable/3.0.0-207+5558a22"
   },
   {
     "name": "TestUtils",
