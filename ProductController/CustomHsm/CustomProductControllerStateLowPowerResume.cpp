@@ -31,6 +31,8 @@ void CustomProductControllerStateLowPowerResume::HandleStateEnter()
     auto& controller = GetCustomProductController();
 
     controller.GetTelemetry()->IncrementMetric<ProductTelemetry::Counters>( ProductTelemetry::Counters::LOW_POWER_RESUME );
+
+    ProductControllerStateLowPowerResume::HandleStateEnter();
 }
 
 void CustomProductControllerStateLowPowerResume::HandleStateExit( )
