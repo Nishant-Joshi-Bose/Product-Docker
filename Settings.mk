@@ -13,7 +13,7 @@ disableGVA ?= false
 # are Release, Continuous, or Nightly.
 BUILD_TYPE=Release
 
-ifeq ($(sdk),$(filter native x86 x86_64, $(sdk)))
+ifeq ($(sdk),$(filter x86 x86_64, $(sdk)))
   cfg = Debug
 else
   cfg = Release
