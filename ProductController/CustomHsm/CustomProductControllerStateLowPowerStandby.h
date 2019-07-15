@@ -25,8 +25,6 @@ public:
     virtual ~CustomProductControllerStateLowPowerStandby() override
     {
     }
-
-    void HandleStateEnter() override;
     void HandleStateExit() override;
 };
 } /// namespace ProductApp

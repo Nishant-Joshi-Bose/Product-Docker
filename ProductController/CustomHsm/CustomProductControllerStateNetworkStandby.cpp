@@ -9,7 +9,6 @@
 
 #include "CustomProductControllerStateNetworkStandby.h"
 #include "ProductControllerHsm.h"
-#include "ProductTelemetry.pb.h"
 #include "CustomProductController.h"
 #include "DPrint.h"
 
@@ -28,23 +27,15 @@ CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkS
 
 void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
-    auto& controller = GetCustomProductController();
-
-    controller.GetTelemetry()->IncrementMetric<ProductTelemetry::Counters>( ProductTelemetry::Counters::NETWORK_STANDBY_ENTER );
-
     // For regulation, cap LCD display in standby state.
-    controller.GetDisplayController()->SetStandbyLcdBrightnessCapEnabled( true );
+    GetCustomProductController().GetDisplayController()->SetStandbyLcdBrightnessCapEnabled( true );
 
     ProductControllerStateNetworkStandby::HandleStateEnter();
 }
 
 void CustomProductControllerStateNetworkStandby::HandleStateExit()
 {
-    auto& controller = GetCustomProductController();
-
-    controller.GetTelemetry()->IncrementMetric<ProductTelemetry::Counters>( ProductTelemetry::Counters::NETWORK_STANDBY_EXIT );
-
-    controller.GetDisplayController()->SetStandbyLcdBrightnessCapEnabled( false );
+    GetCustomProductController().GetDisplayController()->SetStandbyLcdBrightnessCapEnabled( false );
 
     ProductControllerStateNetworkStandby::HandleStateExit();
 }
