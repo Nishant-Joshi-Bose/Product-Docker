@@ -11,4 +11,6 @@ enum Counters {
      NETWORK_STANDBY_EXIT = 1;
      LOW_POWER_STANDBY = 2;
      LOW_POWER_RESUME = 3;
+// The above values must be provided by all products.
+// Product-specific values should start at 100
 }

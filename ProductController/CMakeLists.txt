@@ -68,6 +68,7 @@ TARGET_LINK_LIBRARIES(ProductController
   CastleProductControllerCommon
   ProductControllerCommonProto
   DataCollectionClient
+  TelemetryClient 
   LpmClient
   HttpInterface
   FrontDoorClient

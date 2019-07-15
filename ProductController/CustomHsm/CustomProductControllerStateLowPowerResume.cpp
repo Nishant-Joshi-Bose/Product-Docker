@@ -9,7 +9,6 @@
 
 #include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductController.h"
-#include "ProductTelemetry.pb.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "CustomProductControllerStateLowPowerResume" );
@@ -24,15 +23,6 @@ CustomProductControllerStateLowPowerResume::CustomProductControllerStateLowPower
     ProductControllerStateLowPowerResume( hsm, pSuperState, stateId, name )
 {
     BOSE_DEBUG( s_logger, __func__ );
-}
-
-void CustomProductControllerStateLowPowerResume::HandleStateEnter()
-{
-    auto& controller = GetCustomProductController();
-
-    controller.GetTelemetry()->IncrementMetric<ProductTelemetry::Counters>( ProductTelemetry::Counters::LOW_POWER_RESUME );
-
-    ProductControllerStateLowPowerResume::HandleStateEnter();
 }
 
 void CustomProductControllerStateLowPowerResume::HandleStateExit( )
