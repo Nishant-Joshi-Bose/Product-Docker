@@ -332,6 +332,10 @@
     "selected_version": "Release/stable/3.0.0-207+5558a22"
   },
   {
+    "name": "TelemetryClient-qc8017_32",
+    "selected_version": "Release/stable/3.0.0-73+0d291c6"
+  },
+  {
     "name": "TestUtils",
     "selected_version": "stable@99b5a98fbb236e466249acf1e7f2fc86dbabf3ec"
   },

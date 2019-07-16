@@ -41,6 +41,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
+  ${PROTO_CC_DEST}/ProductTelemetry.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
@@ -97,6 +98,7 @@ TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
   ProductControllerCommonProto
   DataCollectionClient
+  TelemetryClient
   LpmClient
   HttpInterface
   FrontDoorClient
