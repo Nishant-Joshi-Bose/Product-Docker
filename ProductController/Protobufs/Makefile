@@ -25,6 +25,7 @@ PROTO_SOURCES = ProductMessage.proto          \
                 Kepler.proto                  \
                 KeyFilter.proto               \
                 Intents.proto                 \
+                ProductTelemetry.proto        \
 
 #
 # The following alias is used to search for imported Protocol Buffer files.
