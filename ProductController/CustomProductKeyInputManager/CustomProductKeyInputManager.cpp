@@ -457,7 +457,7 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
         }
     }
 
-    BOSE_VERBOSE( s_logger, "%s( %s ) @ %lld returning %s", __func__, keyEvent.ShortDebugString().c_str( ), timeNow, retVal ? "true" : "false" );
+    BOSE_LOG( VERBOSE, "( " <<  keyEvent.ShortDebugString() << " ) @ " << timeNow << "returning" << ( retVal ? "true" : "false" ) );
     return retVal;
 }
 

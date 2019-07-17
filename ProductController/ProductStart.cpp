@@ -70,7 +70,7 @@ void ShowBacktrace( int sig )
 
     for( auto function : backtrace( ) )
     {
-        BOSE_ERROR( ProductApp::s_logger, function.length( ) ? function.c_str() : "<unresolved>" );
+        BOSE_ERROR( ProductApp::s_logger, "%s", function.length( ) ? function.c_str() : "<unresolved>" );
     }
 
     BOSE_ERROR( ProductApp::s_logger, "-------- Product Controller Segmentation Fault End ---------" );

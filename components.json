@@ -73,6 +73,10 @@
     "selected_version": "Release/stable/0.0.7-3-g0c144ae"
   },
   {
+    "name": "AudioSource-UPnP-x86_64",
+    "selected_version": "Release/stable/0.0.7-3-g0c144ae"
+  },
+  {
     "name": "AudioSource-x86_64",
     "selected_version": "Release/stable/2.3.0-459+0739bea"
   },
@@ -201,7 +205,15 @@
     "selected_version": "Release/stable/3.1.0-5-gd0a5c20"
   },
   {
+    "name": "FrontDoorService-x86_64",
+    "selected_version": "Release/stable/3.1.0-5-gd0a5c20"
+  },
+  {
     "name": "FrontDoorUtility-qc8017_32",
+    "selected_version": "Release/stable/3.0.0-343+6154243"
+  },
+  {
+    "name": "FrontDoorUtility-x86_64",
     "selected_version": "Release/stable/3.0.0-343+6154243"
   },
   {
