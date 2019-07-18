@@ -236,3 +236,21 @@ clean:
 .PHONY: distclean
 distclean:
 	git clean -fdX
+
+.PHONY: test
+test: cmake_build
+ifneq ($(sdk),$(filter $(sdk),x86_64))
+	false ERROR: Cannot run unit tests for sdk=$(sdk)
+else
+	cd $(BUILDS_DIR) && env BOSE_DPRINT_CONF="set stdout; all info" \
+	$(UNITTEST_LOCK) \
+	ctest $(CTEST_FLAGS) --timeout $(CTEST_MAX_SECONDS_PER_TEST)
+ifdef GENERATE_CODE_COVERAGE
+	@echo Checking code coverage
+	mkdir -p $(BUILDS_DIR)/gcov
+	-lcov --capture --directory . --output-file $(BUILDS_DIR)/gcov/coverage.info
+	-lcov --remove $(BUILDS_DIR)/gcov/coverage.info '$(BUILDS_DIR)/*' '/usr/*' '*/components-cache/*' --output-file $(BUILDS_DIR)/gcov/coverage.info
+	-genhtml $(BUILDS_DIR)/gcov/coverage.info --output-directory $(BUILDS_DIR)/gcov/out
+	-gcovr -e $(BUILDS_DIR) -r . --branches --xml -o $(BUILDS_DIR)/gcov/cobertura.xml
+endif
+endif
