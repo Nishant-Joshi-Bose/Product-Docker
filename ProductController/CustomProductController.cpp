@@ -1625,6 +1625,27 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         GetHsm( ).Handle< const LpmServiceMessages::IpcDeviceBoot_t& >( &CustomProductControllerState::HandleDspBooted, message.dspbooted() );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// AudioPath stream states (silent or not silent) messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_audiosilent( ) )
+    {
+        const auto& playbacks = m_ProductAudioService->GetLastPlaybackStatus();
+
+        bool mainStreamSilent = true;
+        for( const auto &playbackStream : playbacks )
+        {
+            if( playbackStream.m_isPrimary && ( !playbackStream.m_isSilent || !playbackStream.m_isContinuous ) )
+            {
+                mainStreamSilent = false;
+                break;
+            }
+        }
+        DeviceControllerClientMessages::MainStreamAudioSilentMsg_t mainStreamSilentMsg;
+        mainStreamSilentMsg.set_silent( mainStreamSilent );
+        m_deviceControllerPtr->SendMainStreamSilent( mainStreamSilentMsg );
+        ( void ) HandleCommonProductMessage( message );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
     /// type is unknown.
     ///////////////////////////////////////////////////////////////////////////////////////////////
