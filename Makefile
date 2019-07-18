@@ -5,6 +5,11 @@ ifneq ($(filter $(HW_VAR), DP2 Alpha),$(HW_VAR))
 	$(error HW_VAR must equal DP2 or Alpha. Found $(HW_VAR))
 endif
 
+ifeq ($(sdk), x86_64)
+.PHONY: all
+all: cmake_build
+endif
+
 .PHONY: deploy
 deploy: all-packages
 	scripts/collect-deployables . builds/Release builds/deploy/$(HW_VAR) ${disableGVA}
