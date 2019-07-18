@@ -75,7 +75,6 @@
 #include "IoTIPCClient.h"
 #include "BoseFeatures.h"
 #include "ProductConstants.h"
-#include "ProductTelemetry.pb.h"
 
 static DPrint s_logger( "CustomProductController" );
 
@@ -89,12 +88,6 @@ const std::string g_ProductPersistenceDir = "product-persistence/";
 const std::string g_DefaultCAPSValuesStateFile  = "DefaultCAPSValuesDone";
 
 CustomProductController::CustomProductController():
-    m_telemetry( Telemetry::Metrics::Create( "ProductController",
-                                             ProductTelemetry::Counters_descriptor(),
-                                             nullptr, // metricFieldDescriptor
-                                             nullptr, // statFieldDescriptor
-                                             GetTask(),
-                                             m_FrontDoorClientIF ) ),
     m_ProductCommandLine( std::make_shared< ProductCommandLine >( *this ) ),
     m_CommonProductCommandLine( ),
     m_IntentHandler( *GetTask(), GetCommonCliClientMT(), m_FrontDoorClientIF, *this ),
