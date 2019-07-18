@@ -1053,7 +1053,7 @@ void CustomProductController::HandleUiHeartBeat(
     const Callback<DisplayControllerPb::UiHeartBeat> & respCb,
     const Callback<FrontDoor::Error> & errorCb )
 {
-    BOSE_LOG( INFO, "recieved UI process heartbeat: " << req.count() );
+    BOSE_LOG( INFO, "received UI process heartbeat: " << req.count() );
 
     // Restart UI Timer
     m_uiAliveTimer->Stop();

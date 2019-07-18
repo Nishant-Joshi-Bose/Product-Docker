@@ -457,7 +457,7 @@ bool CustomProductKeyInputManager::FilterIncompleteChord( const IpcKeyInformatio
         }
     }
 
-    BOSE_LOG( VERBOSE, "( " <<  keyEvent.ShortDebugString() << " ) @ " << timeNow << "returning" << ( retVal ? "true" : "false" ) );
+    BOSE_LOG( VERBOSE, "( " <<  keyEvent.ShortDebugString() << " ) @ " << timeNow << "returning " << ( retVal ? "true" : "false" ) );
     return retVal;
 }
 

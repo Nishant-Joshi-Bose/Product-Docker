@@ -72,20 +72,20 @@ bool BootupFactoryDefaultManager::Handle( KeyHandlerUtil::ActionType_t& action )
             // if a user were to press the key, release it, and press it again within the window,
             // the time of the last press would be latched; this should prevent frustration in case
             // the user doesn't get a "solid touch" immediately
-            BOSE_LOG( INFO, __PRETTY_FUNCTION__ << ": Recieved bootup factory default press within valid window ["
+            BOSE_LOG( INFO, ": Received bootup factory default press within valid window ["
                       << m_productController.GetBootCompleteTime( ) << ", " << timeSinceBooted << "]" );
             m_bootupFactoryDefaultKeyTime = MonotonicClock::NowMs( );
         }
         else
         {
-            BOSE_LOG( VERBOSE, __PRETTY_FUNCTION__ << ": Recieved bootup factory default press within valid window ["
+            BOSE_LOG( VERBOSE, ": Received bootup factory default press outside valid window ["
                       << m_productController.GetBootCompleteTime( ) << ", " << timeSinceBooted << "]" );
         }
     }
     else if( ( action == ( KeyHandlerUtil::ActionType_t )Action::BOOTUP_FACTORY_DEFAULT_COMPLETE ) && ( m_bootupFactoryDefaultKeyTime != 0 ) )
     {
         int64_t timeSinceBootupFactoryDefaultRequest = MonotonicClock::NowMs( ) - m_bootupFactoryDefaultKeyTime;
-        BOSE_LOG( INFO, __PRETTY_FUNCTION__ << ": bootup intent check " << timeSinceBootupFactoryDefaultRequest );
+        BOSE_LOG( INFO, ": bootup intent check " << timeSinceBootupFactoryDefaultRequest );
 
         if(
             ( timeSinceBootupFactoryDefaultRequest > BOOTUP_FACTORY_DEFAULT_MIN_HOLD_MSEC ) &&
@@ -100,7 +100,7 @@ bool BootupFactoryDefaultManager::Handle( KeyHandlerUtil::ActionType_t& action )
         }
         else
         {
-            BOSE_LOG( VERBOSE, __PRETTY_FUNCTION__ << ": Cancelling window for bootup factory default [" << timeSinceBootupFactoryDefaultRequest << "]" );
+            BOSE_LOG( VERBOSE, ": Cancelling window for bootup factory default [" << timeSinceBootupFactoryDefaultRequest << "]" );
         }
         // reset so we can only do this once
         m_bootupFactoryDefaultKeyTime = 0;
