@@ -173,7 +173,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/stable/2.2.26-9-g8e8162d"
+    "selected_version": "Continuous/master/2.2.28-1-ge6cf3fb"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -245,7 +245,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@77b1813488430b6ddc53841a02a330cca280dcb6"
+    "selected_version": "network-ipc-frontdoor@40636a84ed640947c6667d905d839c48fde92ecf"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -337,7 +337,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@99b5a98fbb236e466249acf1e7f2fc86dbabf3ec"
+    "selected_version": "stable@63f1b3827d26c3d2ed42e713ce98ea8be9e38c6c"
   },
   {
     "name": "VPAController-qc8017_32",
