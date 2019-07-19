@@ -370,7 +370,7 @@ tr:nth-child(even) {
     prefix_re = re.compile(r'^Console:\s*')
     delim_re = re.compile(r'\s+->\s+')
     for key in key_table:
-        comment = key['comment'].strip()
+        comment = key.get('comment', '(no comment)').strip()
         comment = prefix_re.sub('', comment)
         match = delim_re.search(comment)
         if match:
