@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Add build outputs to the deploy directory for ElectricCommander.
+# Add build outputs to the deploy directory for ElectricFlow.
 # See EC/deploy.txt.
 #
 
@@ -17,14 +17,13 @@ rm -rf "$deploy_dir"
 mkdir -p "$deploy_dir" || exit
 
 files=(
-    "$builds_dir/product-unstripped.tar.gz"
+    "$source_dir/components.json"
+    "$builds_dir"/*-unstripped.tar.gz
     "$builds_dir/product-ipk-stage/component-info.gz"
-    "$builds_dir/components.svgz"
-    "$builds_dir/components.txt"
+    "$builds_dir"/components*
     "$builds_dir/package/product.tar"
     "$builds_dir/product_update.zip"
     "$builds_dir/product_update_no_hsp.zip"
-    "$source_dir/components.json"
     "$builds_dir"/professor_package_*
     "$builds_dir"/lpm_professor_combined_*
     "$builds_dir/lpm_package.xml"
