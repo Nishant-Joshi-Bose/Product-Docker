@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService-x86_64",
-    "selected_version": "Release/stable/2.2.14-14-gdb27821"
+    "selected_version": "Release/stable/2.2.16-16-g6933a88"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
@@ -21,7 +21,7 @@
   },
   {
     "name": "A4VVideoManagerService-x86_64",
-    "selected_version": "Release/stable/2.2.21-20-gb17e4c3"
+    "selected_version": "Release/stable/2.2.23-22-gc7e8fbf"
   },
   {
     "name": "AudioPathClient-qc8017_32",
