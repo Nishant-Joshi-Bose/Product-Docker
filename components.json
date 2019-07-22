@@ -5,11 +5,11 @@
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/stable/2.2.15-15-gf3b384a"
+    "selected_version": "Release/stable/2.2.16-16-g6933a88"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/stable/2.2.22-21-gb1f3f84"
+    "selected_version": "Release/stable/2.2.23-22-gc7e8fbf"
   },
   {
     "name": "AudioPathClient-qc8017_32",
@@ -173,7 +173,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.28-1-ge6cf3fb"
+    "selected_version": "Continuous/stable/2.2.29-13-g640e426"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -245,7 +245,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "network-ipc-frontdoor@40636a84ed640947c6667d905d839c48fde92ecf"
+    "selected_version": "stable@254bdd423b2ef6c8b5048bc088126530b81e211f"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
