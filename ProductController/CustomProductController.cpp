@@ -679,11 +679,6 @@ void CustomProductController::SendDeActivateAccessPointCmd()
     BOSE_INFO( s_logger, __func__ );
 }
 
-NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( ) const
-{
-    return GetNetworkServiceUtil().GetNetManagerOperationMode();
-}
-
 void CustomProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "Translated Intent %s", CommonIntentHandler::GetIntentName( intent ).c_str( ) );

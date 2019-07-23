@@ -185,9 +185,6 @@ public:
         return m_displayController;
     }
 
-    // @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
-    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode() const;
-
 private:
 
     std::shared_ptr<CustomProductAudioService> m_ProductAudioService;

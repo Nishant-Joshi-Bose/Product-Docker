@@ -347,7 +347,7 @@ public:
         return false;
     }
 
-    virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
+    virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::NetworkOperationalMode mode )
     {
         return false;
     }

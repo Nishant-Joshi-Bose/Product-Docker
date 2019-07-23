@@ -69,10 +69,9 @@ static std::unordered_map < ProductApp::KeyActionMode_t, CountDownInfo> m_countd
 {
     {( std::make_pair( Action::FACTORY_DEFAULT_COUNTDOWN, 0 ) ), {ButtonEventName::FACTORY_DEFAULT, 10}},
     {( std::make_pair( Action::MANUAL_SETUP_COUNTDOWN,    0 ) ), {ButtonEventName::MANUAL_SETUP, 5}},
-    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::wifiOff ) ) ) , {ButtonEventName::ENABLE_WIFI, 5}},
-    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::statusOnly ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
-    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::autoSwitching ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
-    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::wifiSetup ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
+    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::WIFI_OFF ) ) ) , {ButtonEventName::ENABLE_WIFI, 5}},
+    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::AUTO ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
+    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::WIFI_SETUP ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
     {( std::make_pair( Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( false ) ) ), {ButtonEventName::ENTER_SYSTEM_INFO, 5}},
     {( std::make_pair( Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( true ) ) ), {ButtonEventName::EXIT_SYSTEM_INFO, 5}},
     {( std::make_pair( Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN,     0 ) ), {ButtonEventName::BLUETOOTH_CLEAR_PAIRING, 5}},
