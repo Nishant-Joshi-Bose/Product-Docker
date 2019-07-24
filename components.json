@@ -273,11 +273,11 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/stable/2.2.26-9-g8e8162d"
+    "selected_version": "Continuous/stable/2.2.29-13-g640e426"
   },
   {
     "name": "NetworkService-x86_64",
-    "selected_version": "Release/stable/2.2.26-8-g1b36140"
+    "selected_version": "Continuous/stable/2.2.29-13-g640e426"
   },
   {
     "name": "opensource-avahi-qc8017_32",
@@ -385,7 +385,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@77b1813488430b6ddc53841a02a330cca280dcb6"
+    "selected_version": "stable@254bdd423b2ef6c8b5048bc088126530b81e211f"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -509,7 +509,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@99b5a98fbb236e466249acf1e7f2fc86dbabf3ec"
+    "selected_version": "stable@63f1b3827d26c3d2ed42e713ce98ea8be9e38c6c"
   },
   {
     "name": "VPAController-qc8017_32",

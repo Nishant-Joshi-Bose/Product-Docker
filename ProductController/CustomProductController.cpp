@@ -1329,18 +1329,6 @@ void CustomProductController::HandlePutTimeouts( SystemPowerPb::SystemPowerTimeo
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   GetWiFiOperationalMode
-///
-/// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( ) const
-{
-    return GetNetworkServiceUtil().GetNetManagerOperationMode();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   CustomProductController::HandleMessage
 ///
 /// @brief  This method is called to handle product controller messages, which are sent from the

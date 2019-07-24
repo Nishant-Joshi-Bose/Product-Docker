@@ -484,7 +484,7 @@ public:
         s_productController = productController;
     }
 
-    virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
+    virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::NetworkOperationalMode mode )
     {
         return false;
     }
