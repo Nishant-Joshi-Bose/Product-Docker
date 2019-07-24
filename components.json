@@ -277,7 +277,7 @@
   },
   {
     "name": "NetworkService-x86_64",
-    "selected_version": "Release/stable/2.2.26-8-g1b36140"
+    "selected_version": "Continuous/stable/2.2.29-13-g640e426"
   },
   {
     "name": "opensource-avahi-qc8017_32",
