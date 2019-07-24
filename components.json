@@ -352,10 +352,6 @@
     "selected_version": "Continuous/stable/2.2.8-10-g4fcfb13"
   },
   {
-    "name": "ProductUIAssets",
-    "selected_version": "stable@e0a2710553fda8ed1bd96bc1a98ad1406f62d4e0"
-  },
-  {
     "name": "protobuf-qc8017_32",
     "selected_version": "Release/bose-stable/bose-v2.4.1-34-gaa6d0dd"
   },

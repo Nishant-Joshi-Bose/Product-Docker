@@ -79,7 +79,6 @@ lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) 
 cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
 democontroller_dir=$(components get DemoController-qc8017_32 installed_location) || exit
 webkit_dir=$(components get Webkit installed_location) || exit
-productuiassets_dir=$(components get ProductUIAssets installed_location) || exit
 frontdoorservice_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
@@ -202,7 +201,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
-"$productuiassets_dir/stage" --chimes=HomeSpeaker --type=flac "$opt_dir" || exit
 "$frontdoorservice_dir/stage" "$opt_dir" || exit
 "$frontdoorutility_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
