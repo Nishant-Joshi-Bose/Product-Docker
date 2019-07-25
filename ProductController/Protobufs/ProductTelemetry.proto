@@ -6,6 +6,9 @@
 
 package ProductTelemetry;
 
+// Document these counters here:
+// https://wiki.bose.com/display/cloud/Telemetry+Fields+Collected
+
 enum Counters {
      NETWORK_STANDBY_ENTER = 0;
      NETWORK_STANDBY_EXIT = 1;
