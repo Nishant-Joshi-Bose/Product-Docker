@@ -60,10 +60,6 @@
     "selected_version": "Release/stable/1.0.5-8-gff8bfec"
   },
   {
-    "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/stable/2.3.0-478+3bc75f4"
-  },
-  {
     "name": "AudioSource-Spotify-qc8017_32",
     "selected_version": "Release/stable/0.0.47-5-ga1d8e7b"
   },
@@ -74,6 +70,10 @@
   {
     "name": "AudioSource-UPnP-x86_64",
     "selected_version": "Release/stable/0.0.7-8-g90ae883"
+  },
+  {
+    "name": "AudioSource-qc8017_32",
+    "selected_version": "Release/stable/2.3.0-478+3bc75f4"
   },
   {
     "name": "AudioSource-x86_64",
@@ -496,16 +496,16 @@
     "selected_version": "Release/stable/3.0.0-223+7a3c15f"
   },
   {
+    "name": "Telemetry-x86_64",
+    "selected_version": "Release/stable/3.0.0-223+7a3c15f"
+  },
+  {
     "name": "TelemetryClient-qc8017_32",
     "selected_version": "Release/stable/3.0.0-85+51147b0"
   },
   {
     "name": "TelemetryClient-x86_64",
     "selected_version": "Release/stable/3.0.0-85+51147b0"
-  },
-  {
-    "name": "Telemetry-x86_64",
-    "selected_version": "Release/stable/3.0.0-223+7a3c15f"
   },
   {
     "name": "TestUtils",
