@@ -1053,7 +1053,7 @@ void CustomProductController::HandleUiHeartBeat(
     const Callback<DisplayControllerPb::UiHeartBeat> & respCb,
     const Callback<FrontDoor::Error> & errorCb )
 {
-    BOSE_INFO( s_logger, "%s received UI process heartbeat: %lld", __func__, req.count() );
+    BOSE_LOG( INFO, "received UI process heartbeat: " << req.count() );
 
     // Restart UI Timer
     m_uiAliveTimer->Stop();
@@ -1325,18 +1325,6 @@ void CustomProductController::HandlePutTimeouts( SystemPowerPb::SystemPowerTimeo
     HandleGetTimeouts( respCb, errorCb );
 
     m_FrontDoorClientIF->SendNotification( FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API, req );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   GetWiFiOperationalMode
-///
-/// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( ) const
-{
-    return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
