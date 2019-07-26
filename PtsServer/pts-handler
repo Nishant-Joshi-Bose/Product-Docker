@@ -81,6 +81,10 @@ def send_static_content(file_name, content_type):
             sys.stdout.write(buf)
     log("Sent {} ({})".format(file_name, content_type))
 
+def get_mfgdata():
+    import json
+    return json.load(open('/persist/mfg_data.json', 'rt'))
+
 # ----------------------------------------------------------------------------
 
 if method != "GET":
@@ -410,10 +414,19 @@ if path == "/service" or path.startswith("/service?"):
 
 if path == "/dev" and is_development():
     http_ok("text/html")
+
+    mfgdata = get_mfgdata()
+    product_type = mfgdata['productType']
+    macaddr = mfgdata['snMacWlan0']
+
+    title = '{} Development Links ({})' \
+            .format(product_type.title(),
+                    macaddr[9:].replace(':', ''))
+
     print """\
 <html>
 <head>
-<title>Development Links</title>
+<title>$title</title>
 <style type="text/css">
  body {
    font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -454,8 +467,8 @@ function set_address() {
 </script>
 </head>
 <body onload="set_address()">
-<h1>Development Links</h1>
-"""
+<h1>$title</h1>
+""".replace('$title', title)
 
     print """\
 <p>
@@ -561,6 +574,11 @@ Address:
     <td class="iface">any</td>
     <td><a>/keys</a></td>
     <td>Show key configuration*</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/dev</a></td>
+    <td>This page*</td>
   </tr>
   <tr>
     <td class="iface">usb, wlan1</td>
