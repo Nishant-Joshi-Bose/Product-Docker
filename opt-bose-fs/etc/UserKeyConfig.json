@@ -2,7 +2,7 @@
     "keyTable": [
     {
         "action": "POWER_TOGGLE",
-        "commment": "power toggle",
+        "comment": "power toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ON_OFF"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -10,7 +10,7 @@
     },
     {
         "action": "POWER_OFF",
-        "commment": "power off",
+        "comment": "power off",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ASSERT_OFF"],
         "origin": ["TAP", "CEC", "IR", "NETWORK"],
@@ -26,7 +26,7 @@
     },
     {
         "action": "CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST",
-        "commment": "Bluetooth release ---> CarouselList-Discoverable-ConnectToLast",
+        "comment": "Bluetooth release -> CarouselList-Discoverable-ConnectToLast",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_BLUETOOTH_SOURCE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -34,7 +34,7 @@
     },
     {
         "action": "SEND_TO_DISCOVERABLE",
-        "commment": "Bluetooth Press and Hold ---> SendToDiscoverable",
+        "comment": "Bluetooth Press and Hold -> SendToDiscoverable",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_BLUETOOTH_SOURCE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -42,7 +42,7 @@
     },
     {
         "action": "CLEAR_PAIRING_LIST",
-        "commment": "Bluetooth Press and Hold ---> Clear Pairing List",
+        "comment": "Bluetooth Press and Hold -> Clear Pairing List",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_BLUETOOTH_SOURCE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -50,7 +50,7 @@
     },
     {
         "action": "VOICE_CAROUSEL",
-        "commment": "action release ---> Alexa",
+        "comment": "action release -> Alexa",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
@@ -58,7 +58,7 @@
     },
     {
         "action": "BOOTUP_FACTORY_DEFAULT_START",
-        "commment": "action press ---> factory default (5 second window after booting)",
+        "comment": "action press -> factory default (5 second window after booting)",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
@@ -66,7 +66,7 @@
     },
     {
         "action": "BOOTUP_FACTORY_DEFAULT_COMPLETE",
-        "commment": "action release ---> factory default (30 second window, starting 15 seconds after press during window)",
+        "comment": "action release -> factory default (30 second window, starting 15 seconds after press during window)",
         "keyEvent": "RELEASE_ALWAYS",
         "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
@@ -74,7 +74,7 @@
     },
     {
         "action": "PRESET_STORE_1",
-        "commment": "Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1",
+        "comment": "Preset 1 press and hold for at least 1000ms -> Store Currently playing into Preset 1",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -82,7 +82,7 @@
     },
     {
         "action": "PRESET_STORE_2",
-        "commment": "Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2",
+        "comment": "Preset 2 press and hold for at least 1000ms -> Store Currently playing into Preset 2",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_2"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -90,7 +90,7 @@
     },
     {
         "action": "PRESET_STORE_3",
-        "commment": "Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3",
+        "comment": "Preset 3 press and hold for at least 1000ms -> Store Currently playing into Preset 3",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_3"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -98,7 +98,7 @@
     },
     {
         "action": "PRESET_STORE_4",
-        "commment": "Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4",
+        "comment": "Preset 4 press and hold for at least 1000ms -> Store Currently playing into Preset 4",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_4"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -106,7 +106,7 @@
     },
     {
         "action": "PRESET_STORE_5",
-        "commment": "Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5",
+        "comment": "Preset 5 press and hold for at least 1000ms -> Store Currently playing into Preset 5",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_5"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -114,7 +114,7 @@
     },
     {
         "action": "PRESET_STORE_6",
-        "commment": "Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6",
+        "comment": "Preset 6 press and hold for at least 1000ms -> Store Currently playing into Preset 6",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_6"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -122,7 +122,7 @@
     },
     {
         "action": "PRESET_SELECT_1",
-        "commment": "Preset 1 release ---> Select Preset stored on Key 1",
+        "comment": "Preset 1 release -> Select Preset stored on Key 1",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["IR", "TAP", "CEC", "NETWORK"],
@@ -130,7 +130,7 @@
     },
     {
         "action": "PRESET_SELECT_2",
-        "commment": "Preset 2 release ---> Select Preset stored on Key 2",
+        "comment": "Preset 2 release -> Select Preset stored on Key 2",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_2"],
         "origin": ["IR", "TAP", "CEC", "NETWORK"],
@@ -138,7 +138,7 @@
     },
     {
         "action": "PRESET_SELECT_3",
-        "commment": "Preset 3 release ---> Select Preset stored on Key 3",
+        "comment": "Preset 3 release -> Select Preset stored on Key 3",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_3"],
         "origin": ["IR", "TAP", "CEC", "NETWORK"],
@@ -146,7 +146,7 @@
     },
     {
         "action": "PRESET_SELECT_4",
-        "commment": "Preset 4 release ---> Select Preset stored on Key 4",
+        "comment": "Preset 4 release -> Select Preset stored on Key 4",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_4"],
         "origin": ["IR", "TAP", "CEC", "NETWORK"],
@@ -154,7 +154,7 @@
     },
     {
         "action": "PRESET_SELECT_5",
-        "commment": "Preset 5 release ---> Select Preset stored on Key 5",
+        "comment": "Preset 5 release -> Select Preset stored on Key 5",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_5"],
         "origin": ["IR", "TAP", "CEC", "NETWORK"],
@@ -162,7 +162,7 @@
     },
     {
         "action": "PRESET_SELECT_6",
-        "commment": "Preset 6 release ---> Select Preset stored on Key 6",
+        "comment": "Preset 6 release -> Select Preset stored on Key 6",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_6"],
         "origin": ["IR", "TAP", "CEC", "NETWORK"],
@@ -170,7 +170,7 @@
     },
     {
         "action": "PRESET_SELECT_1_RF",
-        "commment": "Preset 1 release (Kepler) ---> Select Preset stored on Key 1",
+        "comment": "Preset 1 release (Kepler) -> Select Preset stored on Key 1",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["RF"],
@@ -184,7 +184,7 @@
     },
     {
         "action": "PRESET_SELECT_2_RF",
-        "commment": "Preset 2 release (Kepler) ---> Select Preset stored on Key 2",
+        "comment": "Preset 2 release (Kepler) -> Select Preset stored on Key 2",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_2"],
         "origin": ["RF"],
@@ -198,7 +198,7 @@
     },
     {
         "action": "PRESET_SELECT_3_RF",
-        "commment": "Preset 3 release (Kepler) ---> Select Preset stored on Key 3",
+        "comment": "Preset 3 release (Kepler) -> Select Preset stored on Key 3",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_3"],
         "origin": ["RF"],
@@ -212,7 +212,7 @@
     },
     {
         "action": "PRESET_SELECT_4_RF",
-        "commment": "Preset 4 release (Kepler) ---> Select Preset stored on Key 4",
+        "comment": "Preset 4 release (Kepler) -> Select Preset stored on Key 4",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_4"],
         "origin": ["RF"],
@@ -226,7 +226,7 @@
     },
     {
         "action": "PRESET_SELECT_5_RF",
-        "commment": "Preset 5 release (Kepler) ---> Select Preset stored on Key 5",
+        "comment": "Preset 5 release (Kepler) -> Select Preset stored on Key 5",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_5"],
         "origin": ["RF"],
@@ -240,7 +240,7 @@
     },
     {
         "action": "PRESET_SELECT_6_RF",
-        "commment": "Preset 6 release (Kepler) ---> Select Preset stored on Key 6",
+        "comment": "Preset 6 release (Kepler) -> Select Preset stored on Key 6",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_6"],
         "origin": ["RF"],
@@ -254,7 +254,7 @@
     },
     {
         "action": "VOLUME_UP",
-        "commment": "volume up",
+        "comment": "volume up",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_UP"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -266,7 +266,7 @@
     },
     {
         "action": "VOLUME_RAMP_UP",
-        "commment": "volume ramp up",
+        "comment": "volume ramp up",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -278,7 +278,7 @@
     },
     {
         "action": "VOLUME_RAMP_UP_CANCEL",
-        "commment": "volume ramp up cancel",
+        "comment": "volume ramp up cancel",
         "keyEvent": "RELEASE_ALWAYS",
         "keyList": ["BOSE_VOLUME_UP"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -286,7 +286,7 @@
     },
     {
         "action": "VOLUME_DOWN",
-        "commment": "volume down",
+        "comment": "volume down",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_DOWN"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -298,7 +298,7 @@
     },
     {
         "action": "VOLUME_RAMP_DOWN",
-        "commment": "volume ramp down",
+        "comment": "volume ramp down",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -310,7 +310,7 @@
     },
     {
         "action": "VOLUME_RAMP_DOWN_CANCEL",
-        "commment": "volume ramp down cancel",
+        "comment": "volume ramp down cancel",
         "keyEvent": "RELEASE_ALWAYS",
         "keyList": ["BOSE_VOLUME_DOWN"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -318,7 +318,7 @@
     },
     {
         "action": "PLAY_PAUSE",
-        "commment": "play/pause",
+        "comment": "play/pause",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PLAY"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -326,7 +326,7 @@
     },
     {
         "action": "NEXT_TRACK",
-        "commment": "skip forward",
+        "comment": "skip forward",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_FAST_FORWARD"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -334,7 +334,7 @@
     },
     {
         "action": "NEXT_TRACK",
-        "commment": "skip forward",
+        "comment": "skip forward",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_QUICK_SKIP"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -342,7 +342,7 @@
     },
     {
         "action": "PREV_TRACK",
-        "commment": "skip back",
+        "comment": "skip back",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_FAST_REVERSE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -350,7 +350,7 @@
     },
     {
         "action": "PREV_TRACK",
-        "commment": "skip back",
+        "comment": "skip back",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_QUICK_REPLAY"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -358,7 +358,7 @@
     },
     {
         "action": "ACTION_MUTE",
-        "commment": "mute toggle",
+        "comment": "mute toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_MUTE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
@@ -370,7 +370,7 @@
     },
     {
         "action": "ACTION_ASSERT_MUTE",
-        "commment": "assert mute",
+        "comment": "assert mute",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ASSERT_MUTE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
@@ -382,7 +382,7 @@
     },
     {
         "action": "ACTION_ASSERT_UNMUTE",
-        "commment": "assert unmute",
+        "comment": "assert unmute",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ASSERT_UNMUTE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
@@ -394,7 +394,7 @@
     },
     {
         "action": "ACTION_SOUNDTOUCH",
-        "commment": "select soundtouch",
+        "comment": "select soundtouch",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_SOUND_TOUCH_SOURCE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -402,7 +402,7 @@
     },
     {
         "action": "ACTION_FORCE_UPDATE",
-        "commment": "Soundtouch button press and hold for at least 10000ms ---> force system to take OTA update",
+        "comment": "Soundtouch button press and hold for at least 10000ms -> force system to take OTA update",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_SOUND_TOUCH_SOURCE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -410,7 +410,7 @@
     },
     {
         "action": "ACTION_CONNECT",
-        "commment": "connect",
+        "comment": "connect",
         "keyEvent": "PRESS",
         "keyList": ["KEY_VAL_AVAIL_11"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -418,7 +418,7 @@
     },
     {
         "action": "ACTION_TV",
-        "commment": "select tv",
+        "comment": "select tv",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_TV_SOURCE"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -426,7 +426,7 @@
     },
     {
         "action": "ACTION_GAME",
-        "commment": "select user configurable source game/ott",
+        "comment": "select user configurable source game/ott",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_GAME_SOURCE"],
         "origin": ["IR", "TAP", "RF", "NETWORK"],
@@ -434,7 +434,7 @@
     },
     {
         "action": "ACTION_DVD",
-        "commment": "select user configurable source dvd",
+        "comment": "select user configurable source dvd",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_BD_DVD_SOURCE"],
         "origin": ["IR", "TAP", "NETWORK"],
@@ -442,7 +442,7 @@
     },
     {
         "action": "ACTION_CABLESAT",
-        "commment": "select user configurable source cable/sat",
+        "comment": "select user configurable source cable/sat",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_AUX_SOURCE"],
         "origin": ["IR", "TAP", "NETWORK"],
@@ -450,7 +450,7 @@
     },
     {
         "action": "ACTION_DVD",
-        "commment": "select user configurable source dvd (Kepler)",
+        "comment": "select user configurable source dvd (Kepler)",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_AUX_SOURCE"],
         "origin": ["RF"],
@@ -458,7 +458,7 @@
     },
     {
         "action": "ACTION_CABLESAT",
-        "commment": "select user configurable source cable/sat (Kepler)",
+        "comment": "select user configurable source cable/sat (Kepler)",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_BD_DVD_SOURCE"],
         "origin": ["RF"],
@@ -466,7 +466,7 @@
     },
     {
         "action": "ACTION_THUMB_UP",
-        "commment": "thumbs up",
+        "comment": "thumbs up",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAGE_THUMBS_UP"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -474,7 +474,7 @@
     },
     {
         "action": "ACTION_THUMB_DOWN",
-        "commment": "thumbs down",
+        "comment": "thumbs down",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAGE_THUMBS_DOWN"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -482,7 +482,7 @@
     },
     {
         "action": "FACTORY_DEFAULT",
-        "commment": "factory default",
+        "comment": "factory default",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_FD"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -490,7 +490,7 @@
     },
     {
         "action": "TOGGLE_WIFI_RADIO",
-        "commment": "toggle wifi",
+        "comment": "toggle wifi",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_WIFI_OFF"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -498,7 +498,7 @@
     },
     {
         "action": "SEND_TO_AP_MODE",
-        "commment": "ap setup",
+        "comment": "ap setup",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_AP_SETUP"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -506,7 +506,7 @@
     },
     {
         "action": "ACTION_START_PAIR_SPEAKERS",
-        "commment": "pair speakers",
+        "comment": "pair speakers",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAIR_SPKR"],
         "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
@@ -514,7 +514,7 @@
     },
     {
         "action": "ACTION_SETUP_BLE_REMOTE",
-        "commment": "setup and pair BLE remote",
+        "comment": "setup and pair BLE remote",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
@@ -522,7 +522,7 @@
     },
     {
         "action": "SYSTEM_INFO_MODE",
-        "commment": "pts mode",
+        "comment": "pts mode",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_USB_NET_SVR"],
         "origin": ["IR", "TAP", "RF", "NETWORK"],
@@ -585,4 +585,3 @@
     }
     ]
 }
-

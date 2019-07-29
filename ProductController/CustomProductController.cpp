@@ -286,9 +286,9 @@ void CustomProductController::Run( )
     GetHsm( ).AddState <ProductControllerStateFactoryDefault> ( stateTop, PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT, SYSTEM_STATE_NOTIFIED_NAME_FACTORY_DEFAULT,
                                                                 SystemPowerControl_State_Not_Notify );
 
-    auto* stateLowPowerStandby = 
-    GetHsm( ).AddState <ProductControllerStateLowPowerStandby> ( stateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
-                                                                 SystemPowerControl_State_OFF );
+    auto* stateLowPowerStandby =
+        GetHsm( ).AddState <ProductControllerStateLowPowerStandby> ( stateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
+                                                                     SystemPowerControl_State_OFF );
 
     ( void )
     GetHsm( ).AddState <CustomProductControllerStateLowPowerStandbyTransition> ( stateLowPowerStandby, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION, SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
@@ -1053,7 +1053,7 @@ void CustomProductController::HandleUiHeartBeat(
     const Callback<DisplayControllerPb::UiHeartBeat> & respCb,
     const Callback<FrontDoor::Error> & errorCb )
 {
-    BOSE_INFO( s_logger, "%s received UI process heartbeat: %lld", __func__, req.count() );
+    BOSE_LOG( INFO, "received UI process heartbeat: " << req.count() );
 
     // Restart UI Timer
     m_uiAliveTimer->Stop();
@@ -1325,18 +1325,6 @@ void CustomProductController::HandlePutTimeouts( SystemPowerPb::SystemPowerTimeo
     HandleGetTimeouts( respCb, errorCb );
 
     m_FrontDoorClientIF->SendNotification( FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API, req );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   GetWiFiOperationalMode
-///
-/// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-NetManager::Protobuf::OperationalMode CustomProductController::GetWiFiOperationalMode( ) const
-{
-    return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1623,6 +1611,27 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_dspbooted() )
     {
         GetHsm( ).Handle< const LpmServiceMessages::IpcDeviceBoot_t& >( &CustomProductControllerState::HandleDspBooted, message.dspbooted() );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// AudioPath stream states (silent or not silent) messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_audiosilent( ) )
+    {
+        const auto& playbacks = m_ProductAudioService->GetLastPlaybackStatus();
+
+        bool mainStreamSilent = true;
+        for( const auto &playbackStream : playbacks )
+        {
+            if( playbackStream.m_isPrimary && ( !playbackStream.m_isSilent || !playbackStream.m_isContinuous ) )
+            {
+                mainStreamSilent = false;
+                break;
+            }
+        }
+        DeviceControllerClientMessages::MainStreamAudioSilentMsg_t mainStreamSilentMsg;
+        mainStreamSilentMsg.set_silent( mainStreamSilent );
+        m_deviceControllerPtr->SendMainStreamSilent( mainStreamSilentMsg );
+        ( void ) HandleCommonProductMessage( message );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
