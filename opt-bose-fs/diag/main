@@ -63,15 +63,16 @@ print html_escape(version_info["long"])
 swupfile = "/opt/Bose/etc/secure/publicKeys/bose_public_key_swupdate.pem"
 hash_md5 = hashlib.md5()
 with open(swupfile, "rb") as f:
-   for chunk in iter(lambda: f.read(4096), b""):
-       hash_md5.update(chunk)
-env = "unknown"
+    for chunk in iter(lambda: f.read(4096), b""):
+        hash_md5.update(chunk)
 hash = hash_md5.hexdigest()
-if hash == "470b921c5ba60befba45130ec75c6ff4":
-   env = "development"
-if hash == "720c7c5384a2fe6b9c322d07d7e56906":
-   env = "production"
-print "</br>Software Update Hash: {} ({})".format(hash, env)
+if hash == '720c7c5384a2fe6b9c322d07d7e56906':
+    env = '(production)'
+elif hash == '470b921c5ba60befba45130ec75c6ff4':
+    env = '<span class="hilite">(development)</span>'
+else:
+    env = '<span class="hilite">(unknown)</span>'
+print "</br>Software Update Hash: {} {}".format(hash, env)
 # ---------------------------------------------------------------------------
 
 print "</div>"
