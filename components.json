@@ -1,27 +1,27 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Continuous/stable/5.0.6-7406+13d0aee"
+    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
   },
   {
     "name": "AudioPathClient-x86_64",
-    "selected_version": "Continuous/stable/5.0.6-7406+13d0aee"
+    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Continuous/stable/5.0.6-7406+13d0aee"
+    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Continuous/stable/5.0.6-7406+13d0aee"
+    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
   },
   {
     "name": "AudioPathProducts-x86_64",
-    "selected_version": "Continuous/stable/5.0.6-7406+13d0aee"
+    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Continuous/stable/5.0.6-7406+13d0aee"
+    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
   },
   {
     "name": "AudioSource-AirPlay2-qc8017_32",
@@ -53,11 +53,11 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/stable/2.2.1-440+7e34596"
+    "selected_version": "Continuous/stable/2.2.1-463+c8dcd2f"
   },
   {
     "name": "AVSService-x86_64",
-    "selected_version": "Release/stable/2.2.1-440+7e34596"
+    "selected_version": "Continuous/stable/2.2.1-463+c8dcd2f"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -205,7 +205,7 @@
   },
   {
     "name": "IoTService-qc8017_32",
-    "selected_version": "Release/stable/1.0.9-20-g4cef4af"
+    "selected_version": "Continuous/stable/1.0.13-16-g44961ad"
   },
   {
     "name": "KeyHandler-qc8017_32",
