@@ -61,27 +61,27 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Continuous/stable/3.1.42-1-g4e39e09"
+    "selected_version": "Continuous/stable/3.2.0-3-g6688532"
   },
   {
     "name": "BLESetup-x86_64",
-    "selected_version": "Continuous/stable/3.1.42-1-g4e39e09"
+    "selected_version": "Continuous/stable/3.2.0-3-g6688532"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/stable/2.4.0-439+6c5f931"
+    "selected_version": "Continuous/stable/2.4.0-440+674576f"
   },
   {
     "name": "BLEToFrontDoorService-x86_64",
-    "selected_version": "Continuous/stable/2.4.0-439+6c5f931"
+    "selected_version": "Continuous/stable/2.4.0-440+674576f"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/stable/2.25.0-2-gd0fa210"
+    "selected_version": "Continuous/stable/2.25.0-3-g4150b4b"
   },
   {
     "name": "Bluetooth-x86_64",
-    "selected_version": "Continuous/stable/2.25.0-2-gd0fa210"
+    "selected_version": "Continuous/stable/2.25.0-3-g4150b4b"
   },
   {
     "name": "bose-opkg-utils",
@@ -109,11 +109,11 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Continuous/stable/2.8.8-1-g9cd7730"
+    "selected_version": "Continuous/stable/2.9.0-3-ge458fc5"
   },
   {
     "name": "BTSTSSink-x86_64",
-    "selected_version": "Continuous/stable/2.8.8-1-g9cd7730"
+    "selected_version": "Continuous/stable/2.9.0-3-ge458fc5"
   },
   {
     "name": "CAPSAPI-qc8017_32",
