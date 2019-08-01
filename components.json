@@ -1,31 +1,31 @@
 [
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
+    "selected_version": "Continuous/stable/5.0.8-7480+543159d"
   },
   {
     "name": "AudioPathClient-x86_64",
-    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
+    "selected_version": "Continuous/stable/5.0.8-7480+543159d"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
+    "selected_version": "Continuous/stable/5.0.8-7480+543159d"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
+    "selected_version": "Continuous/stable/5.0.8-7480+543159d"
   },
   {
     "name": "AudioPathProducts-x86_64",
-    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
+    "selected_version": "Continuous/stable/5.0.8-7480+543159d"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Continuous/stable/5.0.8-7443+5345228"
+    "selected_version": "Continuous/stable/5.0.8-7480+543159d"
   },
   {
     "name": "AudioSource-AirPlay2-qc8017_32",
-    "selected_version": "Release/stable/v1.0.1-11-ga92a29d"
+    "selected_version": "Continuous/stable/v1.0.1-12-gf0b350e"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
@@ -41,11 +41,11 @@
   },
   {
     "name": "AudioSource-Spotify-qc8017_32",
-    "selected_version": "Release/stable/0.0.47-5-ga1d8e7b"
+    "selected_version": "Continuous/stable/0.0.47-6-gb6f2e86"
   },
   {
     "name": "AudioSource-UPnP-qc8017_32",
-    "selected_version": "Release/stable/0.0.7-8-g90ae883"
+    "selected_version": "Continuous/stable/0.0.7-9-g5b7784d"
   },
   {
     "name": "AudioSource-x86_64",
@@ -53,35 +53,35 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Continuous/stable/2.2.1-463+c8dcd2f"
+    "selected_version": "Continuous/stable/2.2.1-464+31e5311"
   },
   {
     "name": "AVSService-x86_64",
-    "selected_version": "Continuous/stable/2.2.1-463+c8dcd2f"
+    "selected_version": "Continuous/stable/2.2.1-464+31e5311"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/stable/3.1.41-3-g7ff7b46"
+    "selected_version": "Continuous/stable/3.1.42-1-g4e39e09"
   },
   {
     "name": "BLESetup-x86_64",
-    "selected_version": "Release/stable/3.1.41-3-g7ff7b46"
+    "selected_version": "Continuous/stable/3.1.42-1-g4e39e09"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/stable/2.4.0-435+d8ebb29"
+    "selected_version": "Continuous/stable/2.4.0-439+6c5f931"
   },
   {
     "name": "BLEToFrontDoorService-x86_64",
-    "selected_version": "Release/stable/2.4.0-435+d8ebb29"
+    "selected_version": "Continuous/stable/2.4.0-439+6c5f931"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/stable/2.23.0-3-gee6deab"
+    "selected_version": "Continuous/stable/2.25.0-2-gd0fa210"
   },
   {
     "name": "Bluetooth-x86_64",
-    "selected_version": "Release/stable/2.23.0-3-gee6deab"
+    "selected_version": "Continuous/stable/2.25.0-2-gd0fa210"
   },
   {
     "name": "bose-opkg-utils",
@@ -109,11 +109,11 @@
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/stable/2.8.7-2-gef2d3e7"
+    "selected_version": "Continuous/stable/2.8.8-1-g9cd7730"
   },
   {
     "name": "BTSTSSink-x86_64",
-    "selected_version": "Release/stable/2.8.7-2-gef2d3e7"
+    "selected_version": "Continuous/stable/2.8.8-1-g9cd7730"
   },
   {
     "name": "CAPSAPI-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/stable/2.2.5-27-ge4b6d69"
+    "selected_version": "Continuous/stable/2.2.5-28-g0114bf5"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -181,7 +181,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.2.15-8-g52ec5ea"
+    "selected_version": "Continuous/stable/2.2.15-9-g979e86e"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -205,7 +205,7 @@
   },
   {
     "name": "IoTService-qc8017_32",
-    "selected_version": "Continuous/stable/1.0.13-16-g44961ad"
+    "selected_version": "Continuous/stable/1.0.13-17-g09a36ff"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -393,15 +393,15 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/stable/2.8.4-0-gf00de61"
+    "selected_version": "Continuous/stable/2.8.4-1-gf6315af"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Continuous/stable/2.8.4-0-gf00de61"
+    "selected_version": "Continuous/stable/2.8.4-1-gf6315af"
   },
   {
     "name": "SASS-x86_64",
-    "selected_version": "Continuous/stable/2.8.4-0-gf00de61"
+    "selected_version": "Continuous/stable/2.8.4-1-gf6315af"
   },
   {
     "name": "SecureDeviceKey",
@@ -409,11 +409,11 @@
   },
   {
     "name": "ServicesClients-qc8017_32",
-    "selected_version": "Continuous/stable/2.0.7-180+58e5d50"
+    "selected_version": "Continuous/stable/2.0.7-182+be568c6"
   },
   {
     "name": "ServicesClients-x86_64",
-    "selected_version": "Continuous/stable/2.0.7-180+58e5d50"
+    "selected_version": "Continuous/stable/2.0.7-182+be568c6"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -429,11 +429,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-stable/2019-07-25_0907"
+    "selected_version": "Continuous/Castle-Fork-stable/2019-08-01_0907"
   },
   {
     "name": "SoundTouch-SDK-x86_64",
-    "selected_version": "Continuous/Castle-Fork-stable/2019-07-25_0907"
+    "selected_version": "Continuous/Castle-Fork-stable/2019-08-01_0907"
   },
   {
     "name": "SystemEventService-qc8017_32",
