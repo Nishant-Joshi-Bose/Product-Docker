@@ -33,7 +33,7 @@
   },
   {
     "name": "AudioSource-MusicServices-qc8017_32",
-    "selected_version": "Release/stable/1.0.5-9-g81dd283"
+    "selected_version": "Continuous/stable/1.0.5-10-g79565d0"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -45,7 +45,7 @@
   },
   {
     "name": "AudioSource-UPnP-qc8017_32",
-    "selected_version": "Continuous/stable/0.0.7-9-g5b7784d"
+    "selected_version": "Continuous/stable/0.0.7-10-g3b914b0"
   },
   {
     "name": "AudioSource-x86_64",
@@ -53,11 +53,11 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Continuous/stable/2.2.1-464+31e5311"
+    "selected_version": "Continuous/stable/2.2.1-465+52c95b9"
   },
   {
     "name": "AVSService-x86_64",
-    "selected_version": "Continuous/stable/2.2.1-464+31e5311"
+    "selected_version": "Continuous/stable/2.2.1-465+52c95b9"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -69,19 +69,19 @@
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Continuous/stable/2.4.0-440+674576f"
+    "selected_version": "Continuous/stable/2.4.0-441+aead79e"
   },
   {
     "name": "BLEToFrontDoorService-x86_64",
-    "selected_version": "Continuous/stable/2.4.0-440+674576f"
+    "selected_version": "Continuous/stable/2.4.0-441+aead79e"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Continuous/stable/2.25.0-3-g4150b4b"
+    "selected_version": "Continuous/stable/2.25.1-1-g45caf9a"
   },
   {
     "name": "Bluetooth-x86_64",
-    "selected_version": "Continuous/stable/2.25.0-3-g4150b4b"
+    "selected_version": "Continuous/stable/2.25.1-1-g45caf9a"
   },
   {
     "name": "bose-opkg-utils",
@@ -117,11 +117,11 @@
   },
   {
     "name": "CAPSAPI-qc8017_32",
-    "selected_version": "Release/stable/1.0.0-149+e3f3237"
+    "selected_version": "Continuous/stable/1.0.0-151+5c39b06"
   },
   {
     "name": "CAPSAPI-x86_64",
-    "selected_version": "Release/stable/1.0.0-149+e3f3237"
+    "selected_version": "Continuous/stable/1.0.0-151+5c39b06"
   },
   {
     "name": "Cli-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/stable/0.0.4-174+a742686"
+    "selected_version": "Continuous/stable/0.0.4-176+5d4791e"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -181,7 +181,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/stable/2.2.15-9-g979e86e"
+    "selected_version": "Continuous/stable/2.2.15-10-gb5b1261"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -205,7 +205,7 @@
   },
   {
     "name": "IoTService-qc8017_32",
-    "selected_version": "Continuous/stable/1.0.13-17-g09a36ff"
+    "selected_version": "Continuous/stable/1.0.13-18-g627679a"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -345,11 +345,11 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.8-15-gc7285c2"
+    "selected_version": "Continuous/stable/2.2.8-16-gd44130f"
   },
   {
     "name": "ProductControllerCommonProto-x86_64",
-    "selected_version": "Release/stable/2.2.8-15-gc7285c2"
+    "selected_version": "Continuous/stable/2.2.8-16-gd44130f"
   },
   {
     "name": "protobuf-qc8017_32",
@@ -409,11 +409,11 @@
   },
   {
     "name": "ServicesClients-qc8017_32",
-    "selected_version": "Continuous/stable/2.0.7-182+be568c6"
+    "selected_version": "Continuous/stable/2.0.7-183+17680ef"
   },
   {
     "name": "ServicesClients-x86_64",
-    "selected_version": "Continuous/stable/2.0.7-182+be568c6"
+    "selected_version": "Continuous/stable/2.0.7-183+17680ef"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -429,11 +429,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-stable/2019-08-01_0907"
+    "selected_version": "Continuous/Castle-Fork-stable/2019-08-01_1537"
   },
   {
     "name": "SoundTouch-SDK-x86_64",
-    "selected_version": "Continuous/Castle-Fork-stable/2019-08-01_0907"
+    "selected_version": "Continuous/Castle-Fork-stable/2019-08-01_1537"
   },
   {
     "name": "SystemEventService-qc8017_32",
