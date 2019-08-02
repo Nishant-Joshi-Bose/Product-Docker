@@ -8,7 +8,7 @@
 
 static DPrint s_logger( "CustomProductSTSStateTopAux" );
 static constexpr uint32_t LOW_LATENCY_DELAYED_START_MS = 25;
-//////////////////////////////////////////////////////////////
+
 CustomProductSTSStateTopAux::CustomProductSTSStateTopAux( ProductSTSHsm& hsm,
                                                           CHsmState *pSuperState,
                                                           ProductSTSAccount& account ) :
@@ -79,14 +79,13 @@ void CustomProductSTSStateTopAux::ProcessAuxAggregateStatus()
         m_AuxStateActionMap[m_NextState.key]();
         m_CurrentState = m_NextState;
     }
-    return ;
 }
 
 bool CustomProductSTSStateTopAux::ProcessUserPlayStatus( bool isPlay )
 {
     BOSE_DEBUG( m_logger, "%s: requested User Play status:%s", __func__,
                 isPlay ? "PLAY" : "STOP/PAUSE" );
-    
+
     if( GetAuxInsertedStatus() )
     {
         SetUserPlayStatus( isPlay );
@@ -103,7 +102,6 @@ bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
 
     return ProcessUserPlayStatus( false );
 }
-
 
 bool CustomProductSTSStateTopAux::HandlePause( const STS::Void & )
 {
@@ -126,7 +124,7 @@ bool CustomProductSTSStateTopAux::HandlePlay( const STS::Void & )
 bool CustomProductSTSStateTopAux::HandleAudioStatus( const STS::AudioStatus &audioStatus )
 {
     BOSE_DEBUG( m_logger, "Custom-HandleAudioStatus( %s ), audioStatus = %s, AUX is %sInserted",
-                m_account.GetSourceName().c_str(), STS::AudioState::Enum_Name( audioStatus.state() ).c_str( ),
+                m_account.GetSourceName().c_str(), STS::AudioState::Enum_Name( audioStatus.state() ).c_str(),
                 GetAuxInsertedStatus() ? "" : "NOT " );
     ProcessAuxAggregateStatus();
     return true;
@@ -159,16 +157,17 @@ void CustomProductSTSStateTopAux::HandleAUXCableDetect( LpmServiceMessages::IpcA
     BOSE_INFO( m_logger, "Custom-HandleAUXCableDetect( %s ), AUX Inserted: %s", m_account.GetSourceName().c_str(),
                GetAuxInsertedStatus() ? "TRUE" : "FALSE" );
 
-    ProcessAUXCableState( );
+    ProcessAUXCableState();
 }
 
-void CustomProductSTSStateTopAux::ProcessAUXCableState( )
+void CustomProductSTSStateTopAux::ProcessAUXCableState()
 {
     BOSE_INFO( m_logger, "%s: Aux Cable is %sinserted, User Selection is %s",
                __func__, GetAuxInsertedStatus() ? "" : "NOT ", GetUserPlayStatus() ? "PLAY" : "STOP" );
     ProcessAuxAggregateStatus();
     return;
 }
+
 void CustomProductSTSStateTopAux::RegisterAuxPlugStatusCallbacks()
 {
     BOSE_INFO( m_logger, "%s: ", __FUNCTION__ );
@@ -182,11 +181,12 @@ void CustomProductSTSStateTopAux::RegisterAuxPlugStatusCallbacks()
     ( static_cast<ProductApp::CustomProductController*>( &( m_account.GetProductSTSController()->GetProductController() ) ) )->RegisterAuxEvents( cb );
     return;
 }
+
 void CustomProductSTSStateTopAux::AuxPlay()
 {
-    const std::string& URL = GetURL( );
+    const std::string& URL = GetURL();
     BOSE_INFO( s_logger, "%s:Playing AUX stream", __func__ );
-    if( !URL.empty( ) )
+    if( !URL.empty() )
     {
         STS::AudioSetURL asu;
         asu.set_url( URL );
@@ -202,10 +202,10 @@ void CustomProductSTSStateTopAux::AuxPlay()
     m_account.IPC().SendNowPlayingChangeEvent( npc );
 }
 
-void CustomProductSTSStateTopAux::AuxStopPlaying( )
+void CustomProductSTSStateTopAux::AuxStopPlaying()
 {
     BOSE_INFO( m_logger, "%s: Current status:%s, req=%s", __func__,
-               STS::PlayStatus::Enum_Name( m_np.playstatus( ) ).c_str(), GetAuxInsertedStatus() ? "STOP" : "PAUSE" );
+               STS::PlayStatus::Enum_Name( m_np.playstatus() ).c_str(), GetAuxInsertedStatus() ? "STOP" : "PAUSE" );
     m_account.IPC().SendAudioStopEvent();
     if( GetAuxInsertedStatus() )
     {
@@ -220,4 +220,3 @@ void CustomProductSTSStateTopAux::AuxStopPlaying( )
     *( npc.mutable_nowplaying() ) = m_np;
     m_account.IPC().SendNowPlayingChangeEvent( npc );
 }
-
