@@ -70,6 +70,13 @@ public:
     bool HandlePlay( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
+    /// @brief Act on pause request
+    /// @param Void
+    /// @return true if successful
+    ////////////////////////////////////////////////////////
+    bool HandlePause( const STS::Void & ) override;
+
+    ////////////////////////////////////////////////////////
     /// @brief Act HandleAudioStatus only if the AUX cable is not inserted by doing SendAudioStopEvent
     /// @param STS::AudioStatus
     /// @return true if successful
@@ -115,6 +122,7 @@ private:
     }
     void Init();
     void ProcessAuxAggregateStatus();
+    bool ProcessUserPlayStatus( bool isPlay );
     AuxSourceState_U m_NextState;//Next state
     std::unordered_map<uint32_t, Callback<>> m_AuxStateActionMap;
     AuxSourceState_U m_CurrentState;// Current State

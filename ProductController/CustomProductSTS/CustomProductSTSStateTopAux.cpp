@@ -82,32 +82,45 @@ void CustomProductSTSStateTopAux::ProcessAuxAggregateStatus()
     return ;
 }
 
+bool CustomProductSTSStateTopAux::ProcessUserPlayStatus( bool isPlay )
+{
+    BOSE_DEBUG( m_logger, "%s: requested User Play status:%s", __func__,
+                isPlay ? "PLAY" : "STOP/PAUSE" );
+    
+    if( GetAuxInsertedStatus() )
+    {
+        SetUserPlayStatus( isPlay );
+    }
+    ProcessAuxAggregateStatus();
+    return true;
+}
+
 bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
 {
     BOSE_DEBUG( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
                 __FUNCTION__, m_account.GetSourceName().c_str(),
                 m_active ? "" : "not ", GetAuxInsertedStatus() ? "" : "NOT " );
 
-    if( GetAuxInsertedStatus() )
-    {
-        SetUserPlayStatus( false );
-    }
-    ProcessAuxAggregateStatus();
-    return true;
+    return ProcessUserPlayStatus( false );
 }
 
+
+bool CustomProductSTSStateTopAux::HandlePause( const STS::Void & )
+{
+    BOSE_DEBUG( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
+                __FUNCTION__, m_account.GetSourceName().c_str(),
+                m_active ? "" : "not ", GetAuxInsertedStatus() ? "" : "NOT " );
+
+    return ProcessUserPlayStatus( false );
+}
 
 bool CustomProductSTSStateTopAux::HandlePlay( const STS::Void & )
 {
     BOSE_DEBUG( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
                 __FUNCTION__, m_account.GetSourceName().c_str(),
                 m_active ? "" : "not ", GetAuxInsertedStatus() ? "" : "NOT " );
-    if( GetAuxInsertedStatus() )
-    {
-        SetUserPlayStatus( true );
-    }
-    ProcessAuxAggregateStatus();
-    return true;
+
+    return ProcessUserPlayStatus( true );
 }
 
 bool CustomProductSTSStateTopAux::HandleAudioStatus( const STS::AudioStatus &audioStatus )
