@@ -362,8 +362,6 @@ private:
     bool m_IsAutoWakeEnabled;
     bool m_Running;
 
-    NetManager::Protobuf::OperationalMode m_networkOperationalMode;
-
     bool m_isNetworkWired;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
