@@ -60,22 +60,22 @@ struct equal_to<ProductApp::KeyActionMode_t>
 
 typedef struct _CountDown
 {
-    ButtonEventName     intentName;
-    uint16_t            countdown;
+    std::string         intentName;
+    uint32_t            countdown;
 } CountDownInfo;
 
 
 static std::unordered_map < ProductApp::KeyActionMode_t, CountDownInfo> m_countdownIntentInfoMap =
 {
-    {( std::make_pair( Action::FACTORY_DEFAULT_COUNTDOWN, 0 ) ), {ButtonEventName::FACTORY_DEFAULT, 10}},
-    {( std::make_pair( Action::MANUAL_SETUP_COUNTDOWN,    0 ) ), {ButtonEventName::MANUAL_SETUP, 5}},
-    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::WIFI_OFF ) ) ) , {ButtonEventName::ENABLE_WIFI, 5}},
-    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::AUTO ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
-    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::WIFI_SETUP ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
-    {( std::make_pair( Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( false ) ) ), {ButtonEventName::ENTER_SYSTEM_INFO, 5}},
-    {( std::make_pair( Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( true ) ) ), {ButtonEventName::EXIT_SYSTEM_INFO, 5}},
-    {( std::make_pair( Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN,     0 ) ), {ButtonEventName::BLUETOOTH_CLEAR_PAIRING, 5}},
-    {( std::make_pair( Action::MANUAL_SOFTWARE_INSTALL_COUNTDOWN, 0 ) ), {ButtonEventName::MANUAL_SOFTWARE_INSTALL, 10}}
+    {( std::make_pair( Action::FACTORY_DEFAULT_COUNTDOWN, 0 ) ), {BUTTON_EVENT_FACTORY_DEFAULT, 10}},
+    {( std::make_pair( Action::MANUAL_SETUP_COUNTDOWN,    0 ) ), {BUTTON_EVENT_MANUAL_SETUP, 5}},
+    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::WIFI_OFF ) ) ) , {BUTTON_EVENT_ENABLE_WIFI, 5}},
+    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::AUTO ) ) ) , {BUTTON_EVENT_DISABLE_WIFI, 5}},
+    {( std::make_pair( Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::NetworkOperationalMode::WIFI_SETUP ) ) ) , {BUTTON_EVENT_DISABLE_WIFI, 5}},
+    {( std::make_pair( Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( false ) ) ), {BUTTON_EVENT_ENTER_SYSTEM_INFO, 5}},
+    {( std::make_pair( Action::SYSTEM_INFO_COUNTDOWN, ( uint32_t )( true ) ) ), {BUTTON_EVENT_EXIT_SYSTEM_INFO, 5}},
+    {( std::make_pair( Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN,     0 ) ), {BUTTON_EVENT_BLUETOOTH_CLEAR_PAIRING, 5}},
+    {( std::make_pair( Action::MANUAL_SOFTWARE_INSTALL_COUNTDOWN, 0 ) ), {BUTTON_EVENT_MANUAL_SOFTWARE_INSTALL, 10}}
 };
 
 namespace ProductApp
@@ -123,7 +123,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         if( m_actionType.is_initialized() and m_countdownValue > 0 and m_countdownValue <= m_countdownIntentInfoMap[ std::make_pair( ( ActionCustom_t::Actions )m_actionType.get(), getMode( ( ActionCustom_t::Actions ) m_actionType.get() ) )].countdown )
         {
-            NotifyButtonEvent( m_countdownIntentInfoMap[std::make_pair( ( ActionCustom_t::Actions )m_actionType.get(), getMode( ( ActionCustom_t::Actions ) m_actionType.get() ) ) ].intentName, ButtonEventState::CANCEL, 0 );
+            GetProductController().NotifyButtonEvent( m_countdownIntentInfoMap[std::make_pair( ( ActionCustom_t::Actions )m_actionType.get(), getMode( ( ActionCustom_t::Actions ) m_actionType.get() ) ) ].intentName.c_str(), BUTTON_STATE_CANCEL, 0 );
             m_actionType.reset();
         }
         else if( m_countdownValue == 0 )
@@ -160,11 +160,11 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             m_countdownValue--;
             if( m_countdownValue )
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[ std::make_pair( ( ActionCustom_t::Actions )intent, getMode( ( ActionCustom_t::Actions )intent ) ) ].intentName, ButtonEventState::COUNTDOWN, m_countdownValue );
+                GetProductController().NotifyButtonEvent( m_countdownIntentInfoMap[ std::make_pair( ( ActionCustom_t::Actions )intent, getMode( ( ActionCustom_t::Actions )intent ) ) ].intentName.c_str(), BUTTON_STATE_COUNTDOWN, m_countdownValue );
             }
             else
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[ std::make_pair( ( ActionCustom_t::Actions )intent, getMode( ( ActionCustom_t::Actions )intent ) ) ].intentName, ButtonEventState::COMPLETED, 0 );
+                GetProductController().NotifyButtonEvent( m_countdownIntentInfoMap[ std::make_pair( ( ActionCustom_t::Actions )intent, getMode( ( ActionCustom_t::Actions )intent ) ) ].intentName.c_str(), BUTTON_STATE_COMPLETED, 0 );
             }
         }
     }
