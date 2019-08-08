@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/1.1.25-5-g5bd1d7d"
+    "selected_version": "Release/stable/1.1.30-6-g75f0592"
   },
   {
     "name": "A4VDeviceController-x86_64",
-    "selected_version": "Release/stable/1.1.25-5-g5bd1d7d"
+    "selected_version": "Release/stable/1.1.30-6-g75f0592"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -33,19 +33,19 @@
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/5.0.6-7337+ba0ed53"
+    "selected_version": "Release/stable/5.0.8-7611+cc27cf4"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/5.0.6-7337+ba0ed53"
+    "selected_version": "Release/stable/5.0.8-7611+cc27cf4"
   },
   {
     "name": "AudioPathProducts-x86_64",
-    "selected_version": "Release/stable/5.0.6-7337+ba0ed53"
+    "selected_version": "Release/stable/5.0.8-7611+cc27cf4"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/5.0.6-7337+ba0ed53"
+    "selected_version": "Release/stable/5.0.8-7611+cc27cf4"
   },
   {
     "name": "AudioSource-AirPlay2-qc8017_32",
