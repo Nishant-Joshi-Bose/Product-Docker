@@ -176,7 +176,6 @@ CustomProductController::CustomProductController( ) :
     ///
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
-    m_networkOperationalMode( NetManager::Protobuf::wifiOff ),
     m_isNetworkWired( false ),
     m_ethernetEnabled( true ),
     ///
