@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/1.1.30-6-g75f0592"
+    "selected_version": "Release/stable/2.0.1-6-ga0dee20"
   },
   {
     "name": "A4VDeviceController-x86_64",
-    "selected_version": "Release/stable/1.1.30-6-g75f0592"
+    "selected_version": "Release/stable/2.0.1-6-ga0dee20"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
