@@ -97,12 +97,6 @@
             "comment":"Volume unmute"
         },
         {
-            "event_id":18,
-            "tone":"T13_not_available.flac",
-            "comment":"    ",
-            "volume":37
-        },
-        {
             "event_id":20,
             "tone":"T16_bass_box_pairing_complete.flac",
             "comment":"Bass Box pairing complete",
