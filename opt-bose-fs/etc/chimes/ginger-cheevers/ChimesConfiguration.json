@@ -13,6 +13,12 @@
             "comment":"bluetooth discoverable"
         },
         {
+            "event_id":3,
+            "tone":"T13_not_available.flac",
+            "comment":"VPA button press while mic is muted",
+            "volume":37
+        },
+        {
             "event_id":4,
             "tone":"T5_connected.flac",
             "volume":37,
@@ -89,6 +95,12 @@
             "tone":"T11_neutral_confirmation.flac",
             "volume":38,
             "comment":"Volume unmute"
+        },
+        {
+            "event_id":18,
+            "tone":"T13_not_available.flac",
+            "comment":"    ",
+            "volume":37
         },
         {
             "event_id":20,
