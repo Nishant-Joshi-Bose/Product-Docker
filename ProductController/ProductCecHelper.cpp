@@ -654,25 +654,7 @@ void ProductCecHelper::PowerOn( )
     m_videoManagerPtr->SetPowerState( msg );
     m_LpmPowerIsOn = true;
 
-    if( m_LpmSourceID != LPM_IPC_SOURCE_STANDBY )
-    {
-        PerhapsSetCecSource( );
-    }
-    else
-    {
-        // This is the bandaid for the nowPlaying -> deslected -> selected case
-        // TODO : https://jirapro.bose.com/browse/PGC-4693
-        // may have missed the now playing so re-fetch since we still have source set to STANDBY
-        AsyncCallback< SoundTouchInterface::NowPlaying >
-        successCB( std::bind( &ProductCecHelper::HandleNowPlaying,
-                              this, std::placeholders::_1 ),
-                   m_ProductTask );
-
-        m_FrontDoorClient->SendGet<SoundTouchInterface::NowPlaying, FrontDoor::Error>(
-            FRONTDOOR_CONTENT_NOWPLAYING_API,
-            successCB, {} );
-    }
-
+    PerhapsSetCecSource( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
