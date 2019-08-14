@@ -261,11 +261,11 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/stable/2.2.11-13-g91a7bd9"
+    "selected_version": "Continuous/stable/2.2.11-14-ge3fa099"
   },
   {
     "name": "LightBarController-x86_64",
-    "selected_version": "Release/stable/2.2.11-13-g91a7bd9"
+    "selected_version": "Continuous/stable/2.2.11-14-ge3fa099"
   },
   {
     "name": "LpmMfgTool",
@@ -389,11 +389,11 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.8-18-gc005302"
+    "selected_version": "Continuous/stable/2.2.8-19-gf3139d7"
   },
   {
     "name": "ProductControllerCommonProto-x86_64",
-    "selected_version": "Release/stable/2.2.8-18-gc005302"
+    "selected_version": "Continuous/stable/2.2.8-19-gf3139d7"
   },
   {
     "name": "ProductUIAssets",
