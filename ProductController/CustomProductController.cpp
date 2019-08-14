@@ -64,6 +64,8 @@
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlaying.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
+#include "ProductControllerStatePlayingSelectedNotSilentSourceInvalid.h"
+#include "ProductControllerStatePlayingSelectedNotSilentSourceValid.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiConnection.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkConfigWiFiTransition.h"
@@ -494,10 +496,24 @@ void CustomProductController::Run( )
       SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
       SystemPowerControl_State_ON );
 
+    auto statePlayingSelectedNotSilent =
+        GetHsm( ).AddState <ProductControllerStatePlayingSelectedNotSilent>
+        ( statePlayingSelected,
+          PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT,
+          SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+          SystemPowerControl_State_Not_Notify );
+
     ( void )
-    hsm.AddState<ProductControllerStatePlayingSelectedNotSilent>
-    ( statePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT,
+    hsm.AddState<ProductControllerStatePlayingSelectedNotSilentSourceInvalid>
+    ( statePlayingSelectedNotSilent,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT_SOURCE_INVALID,
+      SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+      SystemPowerControl_State_Not_Notify );
+
+    ( void )
+    hsm.AddState<ProductControllerStatePlayingSelectedNotSilentSourceValid>
+    ( statePlayingSelectedNotSilent,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT_SOURCE_VALID,
       SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
       SystemPowerControl_State_ON );
 
