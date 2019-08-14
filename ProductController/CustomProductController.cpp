@@ -517,13 +517,6 @@ void CustomProductController::Run( )
       SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
       SystemPowerControl_State_ON );
 
-    ( void )
-    hsm.AddState<ProductControllerStatePlayingSelectedNotSilent>
-    ( statePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT,
-      SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
-      SystemPowerControl_State_ON );
-
     auto statePlayingSelectedSetup =
         hsm.AddState<CustomProductControllerStatePlayingSelectedSetup>
         ( statePlayingSelected,
