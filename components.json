@@ -225,7 +225,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/low-power-handling/2.2.15-48-g8a397fe"
+    "selected_version": "Continuous/low-power-handling/2.2.23-43-g59a78eb"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -385,7 +385,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "CASTLE-30121@0e6a24ce7873f4647d1fa41910a032f49391de7d"
+    "selected_version": "CASTLE-30121@62be33c8cf2fef7daf3092f25ece7c7602bb2797"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
