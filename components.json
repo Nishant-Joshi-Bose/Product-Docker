@@ -1,19 +1,19 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/2.0.1-6-ga0dee20"
+    "selected_version": "Release/stable/2.0.1-9-gbd66957"
   },
   {
     "name": "A4VDeviceController-x86_64",
-    "selected_version": "Release/stable/2.0.1-6-ga0dee20"
+    "selected_version": "Release/stable/2.0.1-9-gbd66957"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/stable/2.2.18-20-ge582cc7"
+    "selected_version": "Release/stable/2.2.20-20-ge3a5b0d"
   },
   {
     "name": "A4VRemoteCommunicationService-x86_64",
-    "selected_version": "Release/stable/2.2.18-20-ge582cc7"
+    "selected_version": "Release/stable/2.2.20-20-ge3a5b0d"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
@@ -261,11 +261,11 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Continuous/stable/2.2.11-14-ge3fa099"
+    "selected_version": "Release/stable/2.2.11-13-g91a7bd9"
   },
   {
     "name": "LightBarController-x86_64",
-    "selected_version": "Continuous/stable/2.2.11-14-ge3fa099"
+    "selected_version": "Release/stable/2.2.11-13-g91a7bd9"
   },
   {
     "name": "LpmMfgTool",
@@ -389,11 +389,11 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Continuous/stable/2.2.8-19-gf3139d7"
+    "selected_version": "Release/stable/2.2.8-18-gc005302"
   },
   {
     "name": "ProductControllerCommonProto-x86_64",
-    "selected_version": "Continuous/stable/2.2.8-19-gf3139d7"
+    "selected_version": "Release/stable/2.2.8-18-gc005302"
   },
   {
     "name": "ProductUIAssets",
@@ -421,11 +421,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/stable/3.1.6-611+7223f0e"
+    "selected_version": "Release/stable/3.1.6-608+5d5aecc"
   },
   {
     "name": "RivieraLpmService-x86_64",
-    "selected_version": "Continuous/stable/3.1.6-611+7223f0e"
+    "selected_version": "Release/stable/3.1.6-608+5d5aecc"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -509,7 +509,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@99b5a98fbb236e466249acf1e7f2fc86dbabf3ec"
+    "selected_version": "stable@f51e0db9d143f43c27e5a6ad4e8b7c0facbd869b"
   },
   {
     "name": "VPAController-qc8017_32",
