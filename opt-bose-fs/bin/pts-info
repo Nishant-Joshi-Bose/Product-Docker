@@ -25,7 +25,7 @@ ifconfig -a
 ip route list
 wpa_cli status
 wpa_cli scan_results
-ReadLpmVersion
+ReadLpmVersion blob user-app boot-loader psoc lightbar-anim-db dsp darr f0 cc2640
 head -20 /mnt/nv/product-persistence/*
 ls -lHt /mnt/nv/BoseLog
 ps
