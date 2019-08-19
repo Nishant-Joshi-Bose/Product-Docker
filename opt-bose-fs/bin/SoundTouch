@@ -63,11 +63,6 @@ lowpower=(
     Shepherd-AudioPath.xml
 )
 
-# Add avs xml to lowpower mode only if avs package is installed
-if [ -e /opt/Bose/etc/Shepherd-avs.xml ]; then
-    lowpower+=( Shepherd-avs.xml )
-fi
-
 function validate {
     if ! validate-mfgdata; then
         log warning "Missing or invalid manufacturing data"
