@@ -61,17 +61,11 @@ restore=false
 # NOTE : Vfe can not be added here due to dir structure needed to run prof and GC
 lowpower=(
     Shepherd-AudioPath.xml
-    Shepherd-VPAController.xml
 )
 
 # Add GVA xml to lowpower mode only if GVA package is installed
 if [ -e /opt/Bose/etc/Shepherd-GVA.xml ]; then
     lowpower+=( Shepherd-GVA.xml )
-fi
-
-# Add avs xml to lowpower mode only if avs package is installed
-if [ -e /opt/Bose/etc/Shepherd-avs.xml ]; then
-    lowpower+=( Shepherd-avs.xml )
 fi
 
 function validate {

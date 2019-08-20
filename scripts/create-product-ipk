@@ -31,7 +31,7 @@ while :; do
 	    cat <<EOF
 Usage: $this [options]
 
-Create an IPK file for installing SoundTouch with opkg.
+Create an IPK file for installing this product.
 
 Options:
 EOF
@@ -221,7 +221,7 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
 "$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
-"$lpmservice_dir/stage" "$opt_dir" || exit
+"$lpmservice_dir/stage" --with-utils=PlatformReset,PlatformResetIntoQfil,ReadLpmVersion "$opt_dir" || exit
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
