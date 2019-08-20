@@ -260,6 +260,10 @@
     "selected_version": "Release/stable/2.2.4-9-g4b8bf15"
   },
   {
+    "name": "LedAnimationTool-qc8017_32",
+    "selected_version": "Continuous/animationComponent_taylor/1.30-184+3895a21"
+  },
+  {
     "name": "LightBarController-qc8017_32",
     "selected_version": "Release/stable/2.2.11-7-g3b06ecd"
   },
