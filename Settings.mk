@@ -19,16 +19,12 @@ else
   cfg = Release
 endif
 
-ifeq ($(hw_var),$(filter DP2 Alpha, $(hw_var)))
-  hw_var = Alpha
-endif
 
 jobs := $(shell grep -c ^processor /proc/cpuinfo)
 
-$(info sdk=${sdk} cfg=${cfg} jobs=${jobs} hw_var=${hw_var} disableGVA=${disableGVA})
+$(info sdk=${sdk} cfg=${cfg} jobs=${jobs} disableGVA=${disableGVA})
 
 export BUILDS_DIR := $(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)
-export HW_VAR := $(hw_var)
 
 PROTO_CC_DEST := $(BUILDS_DIR)/proto
 PROTO_PY_DEST := $(BUILDS_DIR)/proto_py
