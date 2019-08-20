@@ -1,10 +1,6 @@
 export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
-ifneq ($(filter $(HW_VAR), DP2 Alpha),$(HW_VAR))
-	$(error HW_VAR must equal DP2 or Alpha. Found $(HW_VAR))
-endif
-
 ifeq ($(sdk), x86_64)
 .PHONY: all
 all: cmake_build
@@ -12,7 +8,7 @@ endif
 
 .PHONY: deploy
 deploy: all-packages
-	scripts/collect-deployables . builds/Release builds/deploy/$(HW_VAR) ${disableGVA}
+	scripts/collect-deployables . builds/Release builds/deploy ${disableGVA}
 
 .PHONY: force
 force:
@@ -191,7 +187,7 @@ else
 endif
 	rm -f ./builds/$(cfg)/professor_package*.bos
 	rm -f ./builds/$(cfg)/lpm_professor*.hex
-	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE) $(HW_VAR)
+	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: recovery-ipk
 recovery-ipk: cmake_build
