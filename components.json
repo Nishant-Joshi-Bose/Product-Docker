@@ -81,11 +81,11 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Continuous/master/2.2.1-493+6071422"
+    "selected_version": "Release/stable/2.2.1-486+6ba6dd5"
   },
   {
     "name": "AVSService-x86_64",
-    "selected_version": "Continuous/master/2.2.1-493+6071422"
+    "selected_version": "Release/stable/2.2.1-486+6ba6dd5"
   },
   {
     "name": "BLERemoteXCVR",
@@ -225,7 +225,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Continuous/master/2.2.25-3-g34e802a"
+    "selected_version": "Continuous/stable/2.2.26-2-ga64bf5c"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -485,11 +485,11 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/CASTLE-36102/2.2.7-6-g49ee94a"
+    "selected_version": "Release/stable/2.2.0-221+a53f367"
   },
   {
     "name": "SystemEventService-x86_64",
-    "selected_version": "Continuous/CASTLE-36102/2.2.7-6-g49ee94a"
+    "selected_version": "Release/stable/2.2.0-221+a53f367"
   },
   {
     "name": "Telemetry-qc8017_32",
