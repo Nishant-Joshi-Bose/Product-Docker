@@ -225,7 +225,7 @@
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.2.22-1-gf59e922"
+    "selected_version": "Continuous/stable/2.2.26-2-ga64bf5c"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -385,7 +385,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@d97f919fca4f1ec6d9779f4a55108dea922601f2"
+    "selected_version": "stable@e77060749c4a4d06645ec71a631293a49621c13b"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
