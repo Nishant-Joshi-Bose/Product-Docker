@@ -78,7 +78,7 @@ print "</div>"
 
 print "<li>LPM Versions"
 print "<div class='box'>"
-ph = subprocess.Popen(["ReadLpmVersion"],
+ph = subprocess.Popen("ReadLpmVersion blob user-app boot-loader psoc lightbar-anim-db dsp darr f0 cc2640".split(),
                       stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 print "<table>"
 for line in ph.stdout:

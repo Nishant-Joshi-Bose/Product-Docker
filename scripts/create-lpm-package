@@ -3,20 +3,19 @@
 # Create a BLOB to be used to update the LPM and its peripherals.
 #
 #
-if (( $# != 3 )); then
-    echo >&2 "usage: $0 builds-dir build-type hw-var"
+if (( $# != 2 )); then
+    echo >&2 "usage: $0 builds-dir build-type"
     exit 1
 fi
 builds_dir=$1; shift
 build_type=$1; shift
-hw_var=$1; shift
 
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
-release_xml=$wspace/LpmManifestFiles/$hw_var/release_lpm_package.xml
-nightly_xml=$wspace/LpmManifestFiles/$hw_var/nightly_lpm_package.xml
-continuous_xml=$wspace/LpmManifestFiles/$hw_var/continuous_lpm_package.xml
+release_xml=$wspace/LpmManifestFiles/release_lpm_package.xml
+nightly_xml=$wspace/LpmManifestFiles/nightly_lpm_package.xml
+continuous_xml=$wspace/LpmManifestFiles/continuous_lpm_package.xml
 
 riviera_lpm_tools_dir=$(components get RivieraLPM-Tools installed_location) || exit
 

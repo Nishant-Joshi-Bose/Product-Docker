@@ -292,7 +292,7 @@ if path == "/controller-version":
 
     http_ok()
     redirect_stderr()
-    subprocess.call(["ReadLpmVersion"])
+    subprocess.call("ReadLpmVersion blob user-app boot-loader psoc lightbar-anim-db dsp darr f0 cc2640".split())
     sys.exit()
 
 # ----------------------------------------------------------------------------
