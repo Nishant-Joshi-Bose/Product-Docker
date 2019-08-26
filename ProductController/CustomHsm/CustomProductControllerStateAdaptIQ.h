@@ -78,6 +78,7 @@ public:
     bool HandleIntentPowerToggle( ) override;
     bool HandleIntentPowerOff( ) override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
+    bool HandlePlayChimeRequest( ProductApp::ChimeEvents_t chimeEvent )     override;
 
 private:
 
