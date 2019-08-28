@@ -60,6 +60,10 @@
     "selected_version": "Release/stable/1.0.5-13-g23b1b2f"
   },
   {
+    "name": "AudioSource-qc8017_32",
+    "selected_version": "Release/stable/2.3.0-493+f7215ef"
+  },
+  {
     "name": "AudioSource-Spotify-qc8017_32",
     "selected_version": "Release/stable/0.0.47-13-g19c2f3f"
   },
@@ -70,10 +74,6 @@
   {
     "name": "AudioSource-UPnP-x86_64",
     "selected_version": "Release/stable/0.0.17-2-g0159c24"
-  },
-  {
-    "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/stable/2.3.0-493+f7215ef"
   },
   {
     "name": "AudioSource-x86_64",
@@ -158,6 +158,14 @@
   {
     "name": "CAPSAPI-x86_64",
     "selected_version": "Release/stable/1.0.0-162+54382d1"
+  },
+  {
+    "name": "CAPSService-qc8017_32",
+    "selected_version": "Release/stable/2.2.2-76+bec1230"
+  },
+  {
+    "name": "CAPSService-x86_64",
+    "selected_version": "Release/stable/2.2.2-76+bec1230"
   },
   {
     "name": "Cli-qc8017_32",
@@ -396,6 +404,14 @@
     "selected_version": "Release/stable/2.2.12-23-g1c7e532"
   },
   {
+    "name": "ProductDiscoveryService-qc8017_32",
+    "selected_version": "Release/stable/1.0.12-1-g5202fe3"
+  },
+  {
+    "name": "ProductDiscoveryService-x86_64",
+    "selected_version": "Release/stable/1.0.12-1-g5202fe3"
+  },
+  {
     "name": "ProductUIAssets",
     "selected_version": "stable@4887ed487e933f1409473f353f4660acf072d4d2"
   },
@@ -474,14 +490,6 @@
   {
     "name": "SoftwareUpdate-x86_64",
     "selected_version": "Release/stable/6.0.0-2739+7cb3ff5"
-  },
-  {
-    "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.45814.3492917"
-  },
-  {
-    "name": "SoundTouch-SDK-x86_64",
-    "selected_version": "Release/Castle-Fork-stable/2.2.2.45814.3492917"
   },
   {
     "name": "SystemEventService-qc8017_32",
