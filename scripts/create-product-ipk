@@ -96,6 +96,7 @@ cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_l
 vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
 opensource_ptp_dir=$(components get opensource-OpenAvnuApple-qc8017_32 installed_location) || exit
 opensource_avahi_dir=$(components get opensource-avahi-qc8017_32 installed_location) || exit
+productdiscoveryservice_dir=$(components get ProductDiscoveryService-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -126,10 +127,8 @@ cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 cp "$wspace/builds/$cfg/qc8017_32/KeyConfiguration.json" "$opt_dir/etc" || exit
 cp "$wspace/builds/$cfg/qc8017_32/BlastConfiguration.json" "$opt_dir/etc" || exit
 
-# ----------------------------------------------------------------------------
-# Legacy SoundTouch-SDK stuff.  This will all go away soon.
-soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
-stfs=$soundtouch_sdk/fs
+capsservice_dir=$(components get CAPSService-qc8017_32 installed_location) || exit
+stfs=$capsservice_dir/fs
 mkdir -p "$opt_dir/etc/multistring" || exit
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/etc/multistring" || exit
 cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
@@ -252,6 +251,7 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$vpacontroller_dir/stage" "$opt_dir" || exit
 "$opensource_ptp_dir/Bose/stage" "$opt_dir" || exit
 "$opensource_avahi_dir/Bose/stage" "$opt_dir" || exit
+"$productdiscoveryservice_dir/stage" "$opt_dir" || exit
 
 # remove Shepherd-vfe.xml
 if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
