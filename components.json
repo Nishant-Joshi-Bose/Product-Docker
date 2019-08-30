@@ -144,6 +144,14 @@
     "selected_version": "Release/stable/5.0.4-807+b5e383d"
   },
   {
+    "name": "BTSource-qc8017_32",
+    "selected_version": "Release/stable/3.43.1-4-gec69c63"
+  },
+  {
+    "name": "BTSource-x86_64",
+    "selected_version": "Release/stable/3.43.1-4-gec69c63"
+  },
+  {
     "name": "BTSTSSink-qc8017_32",
     "selected_version": "Release/stable/2.9.11-5-g814c072"
   },
@@ -397,7 +405,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@2c1077ff91e55a24b17317aa70b7af470428421a"
+    "selected_version": "stable@9a1d56a0ed758ea73eeddb0600fce1d7862538ed"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",

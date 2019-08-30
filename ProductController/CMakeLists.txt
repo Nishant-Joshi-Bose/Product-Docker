@@ -106,6 +106,7 @@ TARGET_LINK_LIBRARIES(Professor
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
+  BluetoothSourceServiceProto
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
