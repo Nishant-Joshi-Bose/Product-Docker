@@ -273,6 +273,18 @@ bool CustomProductControllerStateAdaptIQ::HandleIntentSpeakerPairing( KeyHandler
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  CustomProductControllerStateAdaptIQ::HandlePlayChimeRequest
+/// @param  ChimeEvents_t chimeEvent )
+/// @return This method returns true but drops the chime
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQ::HandlePlayChimeRequest( ChimeEvents_t chimeEvent )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s dropping %d.", GetName( ).c_str( ), __func__, chimeEvent );
+
+    return true;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             End of Product Application Namespace                             ///
