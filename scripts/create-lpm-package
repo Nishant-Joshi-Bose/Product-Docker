@@ -18,6 +18,7 @@ nightly_xml=$wspace/LpmManifestFiles/nightly_lpm_package.xml
 continuous_xml=$wspace/LpmManifestFiles/continuous_lpm_package.xml
 
 riviera_lpm_tools_dir=$(components get RivieraLPM-Tools installed_location) || exit
+lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_location) ||exit
 
 
 # For release builds, we want to the timestamp of the BLOB to reflect that last time the manifest XML file was modified in git. This
@@ -26,9 +27,12 @@ riviera_lpm_tools_dir=$(components get RivieraLPM-Tools installed_location) || e
 # to the manifest file have not been committed in git the timestamp will remain the same instead of changing. To work around this,
 # developers will need to remember to bump the version of the BLOB (minor or major revision) in order to generate a BLOB with a different version.
 #
-#
 # Nightly builds and continuous builds will use the current time during as the timestamp.
 #
+# Generate Lightbar animation db for SoundBar product
+mkdir -p $builds_dir/lpm-updater-ipk-stage/lightbar_db/SoundBar
+$lightBarAnimationTool_dir/generate_animation_db.py --config=lightBar/Configuration-SoundBar.json --asset=lightBar/SoundBar --manifest=lightBar/SoundBar/output/AnimationManifest.json --odir=$builds_dir/lpm-updater-ipk-stage/lightbar_db/SoundBar  || exit
+
 if [ "$build_type" == "Release" ]; then
     epoch_time=$( git log -1 --format="%ad" --date=raw  -- $release_xml | awk '{print $1;}' ) || exit
     if [ -z $epoch_time ]; then
