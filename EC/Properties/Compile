@@ -25,18 +25,10 @@ make sdk=x86_64 cfg=Debug jobs=8 || exit
 
 set +x
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then
-    # Get the version number for the recovery partition
-    ar x builds/Release/recovery.ipk data.tar.gz
-    recoveryVersion=$(tar -Oxf data.tar.gz ./Bose_minimal.tar.gz | tar -Ozxf - Bose/etc/BoseVersion.json | jq -r '.short + "-" + .build_number + "+" + .abbrev_commit')
-    rm -f data.tar.gz
-
     git clone git@github.com:BoseCorp/iot-profile-creator
     set +x
-    iot-profile-creator/update_all_environments.sh $(echo $[ProjectName] | tr '[A-Z]' '[a-z]') $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $recoveryVersion
-    if [ "$[ProjectName]" = "Professor" ]; then
-        # Need to create an additional entry for Ginger-Cheevers
-        iot-profile-creator/update_all_environments.sh ginger-cheevers $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $recoveryVersion
-    fi
+    iot-profile-creator/update_all_environments.sh professor       $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $MinimalFSVersion
+    iot-profile-creator/update_all_environments.sh ginger-cheevers $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $MinimalFSVersion
 fi
 
 : success
