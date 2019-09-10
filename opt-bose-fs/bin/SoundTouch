@@ -195,6 +195,9 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
   </daemon>
 </ShepherdConfig>
 EOF
+        else
+            # Start lightBarAnimationTool in development mode only
+            rm "$rundir/Shepherd-lightBarAnimationTool.xml" || exit
         fi
     fi
 

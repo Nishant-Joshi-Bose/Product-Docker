@@ -1,0 +1,11 @@
+{
+  "lightbar_config": "B1-B2-B3-B4-G1-G2-G3-G4-R12-R34-W13-W12-W11-W10-W9-W8-W7-W6-W5-W4-W3-W2-W1-N",
+  "animation_duration": "20",
+  "patterns": [
+    {
+      "name": "1",
+      "active_time": "20",
+      "pattern": "0-0-0-0-800-800-800-800-2800-2800-0-0-0-0-0-0-0-0-0-0-0-0-0-0"
+    }
+  ]
+}
