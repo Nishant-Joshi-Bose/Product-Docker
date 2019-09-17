@@ -16,7 +16,6 @@
   <daemon name="BMX"/>
   <daemon name="Deezer"/>
   <daemon name="IHeart"/>
-  <daemon name="SiriusXM"/>
   <daemon name="Spotify"/>
   <daemon name="Upnp"/>
 
