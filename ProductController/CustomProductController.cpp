@@ -1135,9 +1135,9 @@ void CustomProductController::EvaluateRadioStatus( )
     }
 
 
-    if( /* TODO IfInJapan */ true and
-          ( m_radioStatus.band() == IPC_SOC_RADIO_BAND_52 or m_radioStatus.band() = IPC_SOC_RADIO_BAND_58 ) and
-          ( m_radioStatus.status( IPC_SOC_NETWORKSTATUS_WIFI ) ) )
+    if( true /* TODO IfInJapan */ and
+        ( m_radioStatus.band() == IPC_SOC_RADIO_BAND_52 or m_radioStatus.band() == IPC_SOC_RADIO_BAND_58 ) and
+        ( m_radioStatus.status() == IPC_SOC_NETWORKSTATUS_WIFI ) )
 
     {
         // TODO - Notify BTSource on the following endpoint
@@ -1519,16 +1519,16 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
     }
     {
 
-        AsyncCallback< SoundTouchInterface::volume >
-        audioVolumeCb( std::bind( &CustomProductController::HandleAudioVolumeNotification,
-                                  this,
-                                  std::placeholders::_1 ),
-                       GetTask( ) );
+        AsyncCallback< BluetoothSourceService::AppStatus >
+        btSourceStatusCb( std::bind( &CustomProductController::HandleBTOutStatus,
+                                     this,
+                                     std::placeholders::_1 ),
+                          GetTask( ) );
 
         //Audio volume notification registration
-        m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::volume >(
-            FRONTDOOR_AUDIO_VOLUME_API,
-            audioVolumeCb );
+        m_FrontDoorClientIF->RegisterNotification< BluetoothSourceService::AppStatus >(
+            FRONTDOOR_BT_SOURCE_STATUS,
+            btSourceStatusCb );
     }
 }
 

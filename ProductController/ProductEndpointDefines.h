@@ -62,6 +62,7 @@
 #define FRONTDOOR_SYSTEM_POWER_MACRO_API                "/system/power/macro"
 #define FRONTDOOR_SYSTEM_POWER_TIMEOUTS_API             "/system/power/timeouts"
 #define FRONTDOOR_UI_ALIVE                              "/ui/alive"
+#define FRONTDOOR_BT_SOURCE_STATUS                      "/bluetooth/source/status"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
