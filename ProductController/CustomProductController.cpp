@@ -1137,23 +1137,22 @@ void CustomProductController::EvaluateRadioStatus( )
     {
         m_radioStatus = newRadioStatus;
         m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
-    }
 
+        if( ( GetProductCountryCode().compare( "JP" ) == 0 ) and
+            ( m_radioStatus.band() == IPC_SOC_RADIO_BAND_52 ) and
+            ( m_radioStatus.status() == IPC_SOC_NETWORKSTATUS_WIFI ) )
 
-    if( ( GetProductCountryCode().compare( "JP" ) == 0 ) and
-        ( m_radioStatus.band() == IPC_SOC_RADIO_BAND_52 ) and
-        ( m_radioStatus.status() == IPC_SOC_NETWORKSTATUS_WIFI ) )
-
-    {
-        BluetoothSourceService::darrSetting darr;
-        darr.set_on24ghz( true );
-        m_FrontDoorClientIF->SendPut<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
-    }
-    else
-    {
-        BluetoothSourceService::darrSetting darr;
-        darr.set_on24ghz( false );
-        m_FrontDoorClientIF->SendPut<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
+        {
+            BluetoothSourceService::darrSetting darr;
+            darr.set_on24ghz( true );
+            m_FrontDoorClientIF->SendPut<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
+        }
+        else
+        {
+            BluetoothSourceService::darrSetting darr;
+            darr.set_on24ghz( false );
+            m_FrontDoorClientIF->SendPut<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
+        }
     }
 }
 
