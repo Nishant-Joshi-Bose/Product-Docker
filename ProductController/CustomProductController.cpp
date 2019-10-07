@@ -1089,10 +1089,15 @@ void CustomProductController::HandleBTOutStatus( const BluetoothSourceService::A
 
 void CustomProductController::EvaluateRadioStatus( )
 {
+    //
+    // For more info on the below logic please reference the following table
+    // https://wiki.bose.com/display/WSSW/Bluetooth+Out+and+DARR+Behavior+Table
+    //
+
     IpcRadioStatus_t newRadioStatus;
 
     bool btActive = ( ( m_nowPlaying.container().contentitem().source() == SHELBY_SOURCE::BLUETOOTH ) or
-                      ( m_btOutStatus.has_activedevice() ) );
+                      ( m_btOutStatus.has_activedevice() and GetProductCountryCode().compare( "JP" ) != 0 ) );
     newRadioStatus.set_btactive( btActive );
 
     if( GetNetworkServiceUtil().IsNetworkWired() )
@@ -1135,15 +1140,21 @@ void CustomProductController::EvaluateRadioStatus( )
     }
 
 
-    if( true /* TODO IfInJapan */ and
-        ( m_radioStatus.band() == IPC_SOC_RADIO_BAND_52 or m_radioStatus.band() == IPC_SOC_RADIO_BAND_58 ) and
+    if( ( GetProductCountryCode().compare( "JP" ) == 0 ) and
+        ( m_radioStatus.band() == IPC_SOC_RADIO_BAND_52 ) and
         ( m_radioStatus.status() == IPC_SOC_NETWORKSTATUS_WIFI ) )
 
     {
-        // TODO - Notify BTSource on the following endpoint
-        // https://github.com/BoseCorp/CastleBTSource/pull/160
+        BluetoothSourceService::darrSetting darr;
+        darr.set_on24ghz( true );
+        m_FrontDoorClientIF->SendPut<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
     }
-
+    else
+    {
+        BluetoothSourceService::darrSetting darr;
+        darr.set_on24ghz( false );
+        m_FrontDoorClientIF->SendPut<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
