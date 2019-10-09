@@ -155,6 +155,7 @@ void IntentHandler::Initialize( )
     /// source selection key actions, typically based on remote key actions.
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]              = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_TV_CEC ]          = playbackRequestManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_APAPTIQ_START ]   = playbackRequestManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_GAME ]            = playbackRequestManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_DVD ]             = playbackRequestManager;
