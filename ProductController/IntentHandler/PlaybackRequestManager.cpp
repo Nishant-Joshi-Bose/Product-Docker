@@ -119,6 +119,12 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( TV ) );
         playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
     }
+    else if( action == ( uint16_t )Action::ACTION_TV_CEC )
+    {
+        playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( TV ) );
+        playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
+        playbackRequestData.mutable_preset()->set_location( "NOP" );
+    }
     else if( action == ( uint16_t )Action::ACTION_GAME )
     {
         auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( m_gameSourcePlaybackRq.source(), m_gameSourcePlaybackRq.sourceaccount() );
