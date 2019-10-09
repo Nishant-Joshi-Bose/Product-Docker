@@ -1150,7 +1150,7 @@ void CustomProductController::EvaluateRadioStatus( )
         {
             darr.set_on24ghz( false );
         }
-        m_FrontDoorClientIF->SendPut<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
+        m_FrontDoorClientIF->SendPost<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
     }
 }
 
