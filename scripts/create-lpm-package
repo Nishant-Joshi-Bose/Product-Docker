@@ -10,12 +10,10 @@ fi
 builds_dir=$1; shift
 build_type=$1; shift
 
-here=$(cd "$(dirname $0)" && echo "$PWD") || exit
-wspace=$(cd "$here/.." && echo "$PWD") || exit
+wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
 
 echo "LPM Package builds_dir = $builds_dir"
 echo "LPM Package build_type = $build_type"
-echo "LPM Package here       = $here"
 echo "LPM Package wspace     = $wspace"
 
 release_xml=$wspace/LpmManifestFiles/release_lpm_package.xml

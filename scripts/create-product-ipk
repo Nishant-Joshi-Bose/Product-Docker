@@ -54,8 +54,8 @@ function put_script {
     chmod 755 "$file" || exit
 }
 
-here=$(cd "$(dirname $0)" && echo "$PWD") || exit
-wspace=$(cd "$here/.." && echo "$PWD") || exit
+wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
+
 if [ ! -z $CONAN_BUILD ]; then
     riviera_hsp_images_dir=$(conan-get-install RivieraHSP qc8017_32 location)/images/ || exit
     riviera_toolchain_dir=$(conan-get-install RivieraSDK qc8017_32 location) || exit
@@ -243,8 +243,8 @@ if [ -e "$secure_dir" ]; then
 fi
 
 mkdir -p "$secure_dir" || exit
-cp -r "$here/keys/development/publicKeys/" "$secure_dir" || exit
-cp -r "$here/keys/development/CACerts/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 find "$secure_dir" -type d -exec chmod 550 {} \; || exit
 find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 

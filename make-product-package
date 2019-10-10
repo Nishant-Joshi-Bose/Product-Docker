@@ -34,7 +34,7 @@ wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
 
 # Generate version files. Dont rely on product controller version
 mkdir -p "$wspace"/builds/package_version
-gen-version-files --git-tag --git-tag-prefix professor/ "$wspace"/builds/package_version
+gen-version-files --git-tag "$wspace"/builds/package_version
 
 # If product controller used a dev depends to overide anything during build
 # Overide that comp at top level as well

@@ -7,8 +7,8 @@ def conan = new JenkinsConan(this)
 
 //PARAMS
 String compile_label = "COMPILE_NODE_BIG"
-String[] alwaysBuild = ['professor/master']
-String tagPrefix = 'professor/'
+String[] alwaysBuild = ['master']
+String tagPrefix = ''
 String build_timeout = '120'
 String product_type = 'professor,ginger-cheevers' // must be all lowercase
 

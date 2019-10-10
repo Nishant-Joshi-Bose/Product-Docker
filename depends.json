@@ -505,6 +505,13 @@
   },
   {
     "channel": "conan_stable",
+    "component": "PtsServer",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
     "component": "RivieraLPM-Shared",
     "options": "",
     "user": "BoseCorp",
