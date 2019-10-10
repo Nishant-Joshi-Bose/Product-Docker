@@ -788,7 +788,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     del parser
     ''' set path of <this script dir>/../ as workspace '''
-    workspace = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    workspace = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), '..')
     is_without_lpm = args.without_lpm
     is_development = args.development
     ipksList = args.ipks

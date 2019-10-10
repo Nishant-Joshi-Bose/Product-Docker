@@ -54,7 +54,7 @@ function put_script {
     chmod 755 "$file" || exit
 }
 
-wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$(dirname $0)" && echo "$PWD")/.. || exit
 
 if [ ! -z $CONAN_BUILD ]; then
     brussels_dir=$(conan-get-install bose-web-brussels qc8017_32 location) || exit

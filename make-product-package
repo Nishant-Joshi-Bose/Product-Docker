@@ -146,7 +146,9 @@ do
             ;;
         SoundTouch)
             "$wspace"/scripts/create-product-ipk || exit
-            graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $product "$wspace"/builds/$config/product-ipk-stage/component-info.gz -o"$wspace"/builds/"$config"/components
+            if [ -z $CONAN_BUILD ]; then
+                graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $product "$wspace"/builds/$config/product-ipk-stage/component-info.gz -o"$wspace"/builds/"$config"/components
+            fi
             ;;
         gva)
             "$GOOGLEVOICEASSISTANT_DIR"/create-ipk || exit
