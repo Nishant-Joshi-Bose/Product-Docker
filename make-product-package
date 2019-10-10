@@ -1,0 +1,204 @@
+#!/bin/bash
+#
+# Build product package
+this=${0##*/} # this script's name
+
+tryhelp () {
+    echo >&2 "usage: $0 configuration(Release/Debug) sdk(qc8017_32/x86_64) product-list("professor ginger-cheevers"/"eddie eddieclub"/flipper/taylor)"
+    exit 1
+}
+
+if (( $# != 3 )); then
+	tryhelp
+fi
+config=$1; shift
+sdk=$1; shift
+product=$1; shift
+
+
+if [ "$sdk" != "qc8017_32" -a "$sdk" != "x86_64" ]; then
+    echo >&2 "$this: invalid sdk  '$sdk'"
+	tryhelp
+fi
+if [ "$config" != "Release" -a "$config" != "Debug" ]; then
+    echo >&2 "$this: invalid configuration '$config'"
+	tryhelp
+fi
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
+
+# Generate version files. Dont rely on product controller version
+mkdir -p "$wspace"/builds/package_version
+gen-version-files --git-tag --git-tag-prefix professor/ "$wspace"/builds/package_version
+
+# If product controller used a dev depends to overide anything during build
+# Overide that comp at top level as well
+if [ ! -z $CONAN_BUILD ] && [ -f "$wspace"/dev_depends.json ]; then
+    echo "!!!!! dev_depends.json found : applying to package build !!!!!"
+    cp "$wspace"/dev_depends.json $wspace/
+fi
+
+# get all the install locations
+if [ ! -z $CONAN_BUILD ] && [ ! -f "$wspace"/conan_install_locations.json ]; then
+    echo "!!!!! conan_install_locations.json not found !!!!!"
+    echo "Performing conan install for required architectures..."
+    # CONAN-TODO lock the dependency versions between these install runs
+    conan install "$wspace"  --pr=RivieraSDK_32 -u --build=missing || exit
+    conan-merge-installs || exit
+    conan install "$wspace"  --pr=RivieraSDK_64 -u --build=missing || exit
+    conan-merge-installs || exit
+    conan install "$wspace"  --pr=x86_64 -u --build=missing || exit
+    conan-merge-installs || exit
+fi
+
+if [ ! -z $CONAN_BUILD ]; then
+    RIVIERALPMUPDATER_DIR=$(conan-get-install RivieraLpmUpdater qc8017_32 location) || exit
+    GOOGLEVOICEASSISTANT_DIR=$(conan-get-install GVA qc8017_64 location) || exit
+    AVSSERVICE_DIR=$(conan-get-install AVSService qc8017_32 location) || exit
+    IOT_DIR=$(conan-get-install CastleIoTService qc8017_32 location) || exit
+    SOFTWARE_UPDATE_DIR=$(conan-get-install CastleSoftwareUpdate qc8017_32 location) || exit
+    PRODUCT_STARTUP_DIR=$(conan-get-install RivieraStartup qc8017_32 location) || exit
+    RIVIERASWUPRECOVERY_DIR=$(conan-get-install RivieraSwUpRecovery qc8017_32 location) || exit
+    RIVIERAMINIMALFS_DIR=$(conan-get-install RivieraMinimalFS qc8017_32 location) || exit
+    TESTUTILS_DIR=$(conan-get-install CastleTestUtils qc8017_32 location) || exit
+else
+    RIVIERALPMUPDATER_DIR=$(components get RivieraLpmUpdater installed_location) || exit
+    GOOGLEVOICEASSISTANT_DIR=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
+    AVSSERVICE_DIR=$(components get AVSService-qc8017_32 installed_location) || exit
+    IOT_DIR=$(components get IoTService-qc8017_32 installed_location) || exit
+    SOFTWARE_UPDATE_DIR=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+    PRODUCT_STARTUP_DIR=$(components get product-startup installed_location) || exit
+    RIVIERASWUPRECOVERY_DIR=$(components get RivieraSwUpRecovery-qc8017_32 installed_location) || exit
+    RIVIERAMINIMALFS_DIR=$(components get RivieraMinimalFS-qc8017_32 installed_location) || exit
+    TESTUTILS_DIR=$(components get TestUtils installed_location) || exit
+fi
+
+echo "RIVIERALPMUPDATER_DIR is $RIVIERALPMUPDATER_DIR"
+echo "GOOGLEVOICEASSISTANT_DIR is $GOOGLEVOICEASSISTANT_DIR"
+echo "AVSSERVICE_DIR is $AVSSERVICE_DIR"
+echo "IOT_DIR is $IOT_DIR"
+echo "SOFTWARE_UPDATE_DIR is $SOFTWARE_UPDATE_DIR"
+echo "PRODUCT_STARTUP_DIR is $PRODUCT_STARTUP_DIR"
+echo "RIVIERASWUPRECOVERY_DIR is $RIVIERASWUPRECOVERY_DIR"
+echo "RIVIERAMINIMALFS_DIR is $RIVIERAMINIMALFS_DIR"
+echo "TESTUTILS_DIR is $TESTUTILS_DIR"
+
+# Create ipks as per list in ipks.txt
+IPKS_FILE="$wspace"/ipks.txt || exit
+PACKAGENAMES_FILE="$wspace"/package_names.txt || exit
+
+IPKS_HSP=$(cat < $IPKS_FILE) || exit
+IPKS=$(grep -v "hsp.ipk" $IPKS_FILE) || exit
+PACKAGENAMES_HSP=$(cat < $PACKAGENAMES_FILE) || exit
+PACKAGENAMES=$(grep -v "hsp" $PACKAGENAMES_FILE) || exit
+TARGETS_HSP=$(echo $IPKS_HSP | tr .ipk -ipk) || exit
+TARGETS=$(echo $IPKS | tr .ipk -ipk)|| exit
+
+EXCL_MANDATORY_PACKAGES_LST="product-script software-update hsp" || exit
+EXCL_PACKAGES_LST_LOCAL=$EXCL_MANDATORY_PACKAGES_LST || exit
+EXCL_PACKAGES_LST_OTA=$EXCL_MANDATORY_PACKAGES_LST || exit
+
+privateKeyFilePath="$wspace"/keys/development/privateKey/dev.p12 || exit
+privateKeyPasswordPath="$wspace"/keys/development/privateKey/dev_p12.pass || exit
+
+# Make meta files and master packages for update
+echo "Making metadata.json..."
+"$SOFTWARE_UPDATE_DIR"/make-metadata-json -d "$wspace"/builds/$config -p $product -k dev -l $EXCL_PACKAGES_LST_LOCAL -o $EXCL_PACKAGES_LST_OTA || exit
+
+mkdir -p  "$wspace"/builds/$config/
+cp "$wspace"/builds/$config/metadata.json "$wspace"/builds/$config/metadata.json
+
+packages=(${PACKAGENAMES_HSP})
+for curr_pkg in $PACKAGENAMES_HSP
+do
+    echo "Creating IPK for Package $curr_pkg"
+    case $curr_pkg in
+        MinimalFS)
+            # Hack for some reason components build has no permisions
+            chmod +x "$RIVIERAMINIMALFS_DIR"/create-ipk
+            "$RIVIERAMINIMALFS_DIR"/create-ipk || exit
+            ;;
+        SoundTouchRecovery)
+            # Hack for some reason components build has no permisions
+            chmod +x "${RIVIERASWUPRECOVERY_DIR}"/create-ipk
+            "${RIVIERASWUPRECOVERY_DIR}"/create-ipk -p $product || exit
+            ;;
+        product-script)
+            "$PRODUCT_STARTUP_DIR"/create-ipk || exit
+            ;;
+        software-update)
+            "$SOFTWARE_UPDATE_DIR"/create-ipk || exit
+            rm -rf "$wspace"/builds/$config/metadata.json
+            ;;
+        hsp)
+            "$wspace"/scripts/create-hsp-ipk $config || exit
+            ;;
+        wpe)
+            "$wspace"/scripts/create-wpe-ipk || exit
+            ;;
+        brussels)
+            "$wspace"/scripts/create-brussels-ipk || exit
+            ;;
+        SoundTouch)
+            "$wspace"/scripts/create-product-ipk || exit
+            graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $product "$wspace"/builds/$config/product-ipk-stage/component-info.gz -o"$wspace"/builds/"$config"/components
+            ;;
+        gva)
+            "$GOOGLEVOICEASSISTANT_DIR"/create-ipk || exit
+            ;;
+        avs)
+            "$AVSSERVICE_DIR"/create-ipk || exit
+            ;;
+        iot)
+            "$IOT_DIR"/create-ipk || exit
+            ;;
+        lpm_updater)
+            # @todo: How to translate below lines?
+            #    $(info BUILD_TYPE=$(BUILD_TYPE))
+            #    ifeq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
+            #        $(error BUILD_TYPE must equal Release, Nightly or Continuous)
+            #    endif
+            BUILD_TYPE=Release
+            "$wspace"/scripts/create-lpm-package "$wspace"/builds/$config/ $BUILD_TYPE || exit
+            mkdir -p "$wspace"/builds/$config/ || exit
+            "$RIVIERALPMUPDATER_DIR"/create-ipk "$RIVIERALPMUPDATER_DIR"/lpm-updater-ipk-stage "$wspace"/builds/$config/ "$wspace"/builds/$config/ $product || exit
+            ;;
+        *)
+            echo "Do not know how to build Package $curr_pkg. Exiting"
+            exit 1
+    esac
+done
+
+# Move all ipks from internal folder to outside #todo: Find better way
+mv "$wspace"/builds/$config/*.ipk "$wspace"/builds/$config/
+echo "Making product_update_no_hsp.zip..."
+# product_udpate_nohsp.zip
+cd "$wspace"/builds/$config && "$SOFTWARE_UPDATE_DIR"/make-packages-gz.sh Packages.gz $IPKS || exit
+cd "$wspace"/builds/$config && python2.7 "$SOFTWARE_UPDATE_DIR"/make-update-zip.py -n $PACKAGENAMES -i $IPKS -s "$wspace"/builds/$config -d "$wspace"/builds/$config -o product_update_no_hsp.zip -k "$privateKeyFilePath" -p "$privateKeyPasswordPath"
+
+echo "Making product_update.zip..."
+# product_update.zip
+cd "$wspace"/builds/$config && "$SOFTWARE_UPDATE_DIR"/make-packages-gz.sh Packages.gz $IPKS_HSP
+cd "$wspace"/builds/$config && python2.7 "$SOFTWARE_UPDATE_DIR"/make-update-zip.py -n $PACKAGENAMES_HSP -i $IPKS_HSP -s $wspace/builds/$config -d "$wspace"/builds/$config -o product_update.zip -k "$privateKeyFilePath" -p "$privateKeyPasswordPath"
+
+echo "Making product.tar..."
+export GENERATE_HSP_SIGNATURES=1
+"$wspace"/scripts/create-product-tar -i $IPKS_HSP || exit
+
+# Final packaging steps that gathers everything
+echo "Collecting Deployables..."
+
+# collect all deployables only for conan
+"$wspace"/scripts/collect-deployables "$wspace" "$wspace"/builds/Release "$wspace"/builds/deploy || exit
+conan install . -u -o product_package=True --build=missing || exit
+branchName=$((git branch | grep \* | cut -d ' ' -f2 | tr -d '[:space:]' | tr "/" "_") || exit)
+conan export-pkg "$wspace" BoseCorp/"$branchName" -j "$wspace"/export.json -f || exit
+
+echo "Packaging Complete"
+exit 0
+

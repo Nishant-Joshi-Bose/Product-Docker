@@ -1,0 +1,232 @@
+#!/bin/bash
+#
+# Create an IPK file for installing Riviera HSP with opkg.
+#
+# To install:
+#   opkg install -d bose hsp.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
+#
+# To uninstall:
+#   opkg remove hsp
+#
+# CAUTION: HSP IPK, if interrupted / have issues,
+#          can corrupt the device.
+#          Please have it QFILed if this happen
+#
+this=${0##*/} # this script's name
+
+tryhelp () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+opts=$(getopt --name "$this" --shell sh \
+    -o ht: \
+    -l "help,type:" \
+    -- "$@") || tryhelp
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+    (--help | -h)
+        cat <<EOF
+Usage: $this [options] Release
+Create an IPK file for installing Riviera HSP with opkg.
+Options:
+    -h | --help: Print help
+    -t | --type: Type of HSP update - full (Default) / partial
+EOF
+        exit 0
+        ;;
+    (--type | -t):
+        hsp_update_type="$1"; shift
+        ;;
+    (--) break ;;
+    (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+cfg=$1; shift
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+if [ -z "$hsp_update_type" ]; then
+    hsp_update_type="full"
+fi
+case "$hsp_update_type" in
+  (full | partial) :;;
+  (*)
+    echo >&2 "$0: invalid --type=$hsp_update_type"
+    tryhelp
+    exit 1
+    ;;
+esac
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+here=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$here/.." && echo "$PWD") || exit
+
+if( [ "$CONAN_BUILD" = true ] ); then
+    swup_dir=$(conan-get-install CastleSoftwareUpdate qc8017_32 location) || exit
+    riviera_hsp_images_dir=$(conan-get-install RivieraHSP qc8017_32 location)/images/ || exit
+    riviera_hsp_ver=$(conan-get-install RivieraHSP qc8017_32 version) || exit
+else
+    swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+    riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
+    riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
+fi
+
+riviera_hsp_ver=${riviera_hsp_ver##*/}
+
+stage=$wspace/builds/$cfg/hsp-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+opt_dir=$stage/Bose
+mkdir -p "$opt_dir/hsp" || exit
+
+echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
+echo "Package version \"$riviera_hsp_ver\""
+validate-version "$riviera_hsp_ver" || exit
+# update_ext4.zip is HSP update file with update using CP / mv commands
+# update_block.zip is HSP update with using "dd" or blocked update
+# update_block_kernel.zip is HSP update with only kernel update. - THIS SHOULDN'T BE USED except SOS.
+if [ "$hsp_update_type" == "full" ]; then
+    echo "Using Full HSP Update"
+    cp "$riviera_hsp_images_dir"/update_block_full.zip "$opt_dir/hsp/update_ext4.zip" || exit
+else
+    echo "Using Partial HSP Update"
+    cp "$riviera_hsp_images_dir"/update_block.zip "$opt_dir/hsp/update_ext4.zip" || exit
+fi
+
+# To mark HSP update is in progress fetch the file path from CommonHeader.h file
+hsp_update_indication=`cat "$swup_dir"/include/CommonHeader.h | awk '$3 == "g_HSPUpdateInProgress" {print $5}' | tr -d ';\"'` || exit
+# check if the file name is present or not, error out if file name not found
+if [ -z "$hsp_update_indication" ]; then
+    echo "$this : Error fetching hsp update in progress file name from include/CommonHeader.h"
+    exit 1
+fi
+
+PackageName=hsp
+
+cat >"$stage/control" <<EOF || exit
+Package: $PackageName
+Version: $riviera_hsp_ver
+Description: Hardware Support Package version $riviera_hsp_ver
+ The Riviera HSP
+Section: soundtouch
+Priority: required
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: soundtouch
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+echo "hsp postinst"
+exiterror()
+{
+    # Set Progress End
+    /opt/Bose/bin/ProgressReport -n $PackageName -e 1 -i 1 -r APQ -b 0 -p 100
+    exit 1
+}
+
+if ! grep -q /opt/Bose /proc/mounts; then
+    echo "Bose partition not mounted"
+    exiterror
+fi
+
+if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
+    echo "/opt/Bose/hsp/update_ext4.zip not found"
+    exiterror
+fi
+
+# Fix for issue CASTLE-13393, We need Recovery related binaries and scripts in cache partition from HSP 3.6 onwards
+# Make sure that cache partition is mounted, if not then mount it
+if ! grep -q /cache /proc/mounts; then
+    echo "Mounting Cache"
+    mount /dev/mmcblk0p26 /cache || exiterror
+fi
+
+# Remove old logs
+rm -f /cache/recovery/last_log.*
+rm -f /cache/recovery/last_kmsg.*
+
+if [ -e /opt/Bose/hsp/RecoveryMain ]; then
+    mv /opt/Bose/hsp/RecoveryMain /cache/ || exiterror
+    chmod +x /cache/RecoveryMain || exiterror
+fi
+
+if [ -e /opt/Bose/hsp/RecoveryMgr ]; then
+    mv /opt/Bose/hsp/RecoveryMgr /cache/ || exiterror
+    chmod +x /cache/RecoveryMgr || exiterror
+fi
+
+echo "Updating RecoveryFS - Start"
+busybox unzip -p /opt/Bose/hsp/update_ext4.zip recovery-updater.sh > /tmp/recovery-updater.sh || exiterror
+busybox chmod a+x /tmp/recovery-updater.sh || exiterror
+/tmp/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
+echo "Updating RecoveryFS - Done"
+
+if ! grep -q /cache /proc/mounts; then
+    echo "Mounting Cache"
+    mount /dev/mmcblk0p26 /cache || exiterror
+fi
+mkdir -p /cache/recovery/ || exiterror
+echo "--update_package=/opt/Bose/hsp/update_ext4.zip" > /cache/recovery/command || exiterror
+echo "--idle_after" >> /cache/recovery/command || exiterror
+
+# CASTLE-23165 this file will mark that hsp installation is started in recovery mode
+touch $hsp_update_indication || exiterror
+
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r RECOVERY -b 0 -p 100
+exit 0
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "hsp postrm"
+exit 0
+EOF
+
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+echo "hsp preinst"
+# Set Progress Start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r APQ -b 0 -p 1
+exit 0
+
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "hsp prerm"
+exit 0
+EOF
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk_dir=$wspace/builds/$cfg
+ipk=$ipk_dir/hsp.ipk
+mkdir -p "$ipk_dir" || exit
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit

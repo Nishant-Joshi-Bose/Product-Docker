@@ -295,13 +295,6 @@
   },
   {
     "channel": "conan_stable",
-    "component": "RivieraLPMTools",
-    "options": "",
-    "user": "BoseCorp",
-    "version": "[>=0.0.1-0, include_prerelease=True]"
-  },
-  {
-    "channel": "conan_stable",
     "component": "CastleNetworkService",
     "options": "",
     "user": "BoseCorp",
