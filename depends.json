@@ -1,0 +1,779 @@
+[
+  {
+    "channel": "conan_stable",
+    "component": "A4V-DeviceController",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "A4VQuickSetService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "A4VRemoteCommunicationService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "A4VVideoManagerService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AVSAPI",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AVSClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AVSService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AudioSource",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AudioSource-AirPlay2",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AudioSource-MusicServices",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AudioSource-Spotify",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AudioSource-UPnP",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "AudioSourceBMX",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[*, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "BLERemoteXCVR",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "BoseLibs",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleAudioPathClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleBLESetup",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleBLEToFrontDoorService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleBTSTSSink",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleBTSource",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleBTStackAdapter",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleBluetooth",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleCAPSAPI",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=1.0.0-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleCAPSService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=1.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleCli",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleClockSyncClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleCloudControlClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleDataCollectionClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleDataCollectionService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleDemoController",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleFrontDoorClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleFrontDoorService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleFrontDoorUtility",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleHTTPInterface",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleHTTPProxy",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleIoTService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleIotIpcClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleJWTUtils",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleKeyHandler",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=2.2.2, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleLedAnimationTool",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleLightBarController",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleLpmMfgTool",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "RivieraLPMTools",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleNetworkService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastlePassportClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastlePassportService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleProductControllerCommon",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleProductControllerCommonProto",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleProductDiscoveryClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=1.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleProductDiscoveryService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleProductStateClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleProductUIAssets",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleSASS",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleSecureDeviceKey",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleSoftwareUpdate",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleSystemEventsService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=2.2.3, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleTelemetry",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=2.2.1, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleTelemetryClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleTestUtils",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleTransStringMapper",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=1.0.1, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleVPAController",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=2.2.11, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleVoicePromptsService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "CastleWebkit",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "ClockSync",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "ClockSyncClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "Fluoride",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "GVA",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "GalapagosClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "HomeKit",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "NetworkPowerClient",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "NetworkPowerService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "PbStore",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "PR-1097",
+    "component": "ProfessorProductController",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "RivieraLPM-Shared",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "RivieraLpmService",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "RivieraLpmUpdater",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "RivieraMinimalFS",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "RivieraStartup",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "RivieraSwUpRecovery",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "ServicesClients",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "Shepherd",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "bose-opkg-utils",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.22-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "bose-web-brussels",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.22-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "bose-web-riviera-ap-page",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "bose-web-update-page",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "google-libassistant",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=1.151831.1-5, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-OpenAvnuApple",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-avahi",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-boringssl",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-curl",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-googletest",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-gssdp",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-gupnp",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-id3",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-jsoncpp",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-libarchive",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-libmms",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-libtool",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-libwebsockets",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-nghttp2",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-openssl",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-opkg",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-opus-codec",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-protobuf",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-tinyxml",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-unittest-cpp",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-util-linux",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "opensource-zlib",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "proprietary-airplay2",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "proprietary-libspotify_embedded",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "qualcomm_bt_vendor",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[*, include_prerelease=True]"
+  }
+]

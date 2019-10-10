@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Add build outputs to the deploy directory for ElectricFlow.
+# See EC/deploy.txt.
+#
+
+if (( $# != 3 )); then
+    echo >&2 "usage: $0 source-dir builds-dir deploy-dir disableGVA(true/false)"
+    exit 1
+fi
+source_dir=$1; shift
+builds_dir=$1; shift
+deploy_dir=$1; shift
+
+rm -rf "$deploy_dir"
+mkdir -p "$deploy_dir" || exit
+
+files=(
+    "$builds_dir"/*-unstripped.tar.gz
+    "$builds_dir/product_update.zip"
+    "$builds_dir/product_update_no_hsp.zip"
+    "$builds_dir"/professor_package_*
+    "$builds_dir"/lpm_professor_combined_*
+    "$builds_dir/lpm_package.xml"
+    "$builds_dir/lpm_blob_configuration.xml"
+    "$builds_dir/package/product.tar"
+)
+
+if [ ! -z $CONAN_BUILD ]; then
+  files+=(
+    "$source_dir"/ProductPackage/conanbuildinfo.json
+    "$source_dir"/ProductPackage/conan_install_locations.json
+  )
+else
+  files+=(
+    "$builds_dir/product-ipk-stage/component-info.gz"
+    "$builds_dir"/components*
+    "$source_dir/components.json"
+  )
+fi
+
+cp "${files[@]}" "$deploy_dir" || exit
+
