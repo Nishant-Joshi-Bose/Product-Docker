@@ -408,7 +408,7 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
             BOSE_INFO( s_logger, "Ignoring source switch to TV, already in cec source TV" );
             return;
         }
-        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV ) );
+        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV_CEC ) );
         break;
 
     case LPM_IPC_SOURCE_INTERNAL:
