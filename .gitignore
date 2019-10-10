@@ -1,0 +1,17 @@
+builds/
+components/
+
+conanbuildinfo.txt
+conanbuildinfo.cmake
+conaninfo.txt
+activate_run.sh
+deactivate_run.sh
+graph_info.json
+conan_local_version.txt
+dev_depends.json
+conan_git_md5sum.txt
+conan_local_version.txt
+conan.lock
+conan_install_locations.json
+conanbuildinfo.json
+export.json
