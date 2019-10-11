@@ -108,10 +108,8 @@ privateKeyPasswordPath="$wspace"/keys/development/privateKey/dev_p12.pass || exi
 
 # Make meta files and master packages for update
 echo "Making metadata.json..."
-"$SOFTWARE_UPDATE_DIR"/make-metadata-json -d "$wspace"/builds/$config -p $product -k dev -l $EXCL_PACKAGES_LST_LOCAL -o $EXCL_PACKAGES_LST_OTA || exit
-
 mkdir -p  "$wspace"/builds/$config/
-cp "$wspace"/builds/$config/metadata.json "$wspace"/builds/$config/metadata.json
+"$SOFTWARE_UPDATE_DIR"/make-metadata-json -d "$wspace"/builds/$config -p $product -k dev -l $EXCL_PACKAGES_LST_LOCAL -o $EXCL_PACKAGES_LST_OTA || exit
 
 packages=(${PACKAGENAMES_HSP})
 for curr_pkg in $PACKAGENAMES_HSP
@@ -176,8 +174,6 @@ do
     esac
 done
 
-# Move all ipks from internal folder to outside #todo: Find better way
-mv "$wspace"/builds/$config/*.ipk "$wspace"/builds/$config/
 echo "Making product_update_no_hsp.zip..."
 # product_udpate_nohsp.zip
 cd "$wspace"/builds/$config && "$SOFTWARE_UPDATE_DIR"/make-packages-gz.sh Packages.gz $IPKS || exit
