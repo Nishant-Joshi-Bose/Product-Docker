@@ -35,7 +35,7 @@ class Professor(common.MakefilePackage):
             # ipks_list is expected to be a comma separated list, we need to reformat it to a string
             ipks = ''
             for i in self.options.ipks_list.value.split(','):
-                ipks += (i + "\n")
+                ipks += (i + " ")
             self.run("./scripts/create-product-tar -i %s" % ipks)
 
 
