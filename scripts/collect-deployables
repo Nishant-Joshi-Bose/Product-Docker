@@ -28,8 +28,8 @@ files=(
 
 if [ ! -z $CONAN_BUILD ]; then
   files+=(
-    "$source_dir"/ProductPackage/conanbuildinfo.json
-    "$source_dir"/ProductPackage/conan_install_locations.json
+    "$source_dir"/conanbuildinfo.json
+    "$source_dir"/conan_install_locations.json
   )
 else
   files+=(

@@ -130,7 +130,7 @@ def create_stage(workspace, is_conan):
     logging.info("Workspace [%s]" % workspace)
     
     if is_conan:
-        os.chdir("%s/ProductPackage" % workspace)
+        os.chdir("%s" % workspace)
         riviera_hsp_images_dir = execute_cmd_on_host("conan-get-install RivieraHSP qc8017_32 location").rstrip() + '/images'
         riviera_tools_dir =  execute_cmd_on_host("conan-get-install RivieraSDK qc8017_32 location").rstrip()
         riviera_version = execute_cmd_on_host("conan-get-install RivieraHSP qc8017_32 version").rstrip()
@@ -335,8 +335,8 @@ def install_ipk(ipks_dir, ipk_name, offline_dir, is_conan, workspace):
     try:
         ipk_to_install = os.path.join(ipks_dir, ipk_name)
         if is_conan:
-            os.chdir("%s/ProductPackage" % workspace)
-            boseopkg_dir = execute_cmd_on_host("conan-get-install opensource-opkg x86_64 location").rstrip()
+            os.chdir("%s" % workspace)
+            boseopkg_dir = os.environ['OPENSOURCE_OPKG']
             os.chdir(workspace)
         else:
             boseopkg_dir = execute_cmd_on_host("components get opensource-opkg-x86 installed_location").rstrip()

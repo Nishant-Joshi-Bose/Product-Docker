@@ -15,32 +15,35 @@ class Professor(common.MakefilePackage):
         "revision": "auto"
     }
 
-    options = {"product_package":[True, False]}
-    default_options = {"product_package": False}
+    options = {"product_package":[True, False], "ipks_list":"ANY"}
+    default_options = {"product_package": False, "ipks_list":None}
 
-
-    # for x86_64 we only need opensource-opkg
     # for qc64 we need GVA, CastleSASS, and CastleAudioPathClient
     # for qc32 we need to EXCLUDE GVA
-    x86_64_depends = ["opensource-opkg"]
     qc8017_64_depends = ["GVA", "CastleSASS", "CastleAudioPathClient"]
     qc8017_32_excludes = ["GVA"]
 
+
+    def build_requirements(self):
+        if self.settings.arch == "x86_64":
+            self.build_requires("opensource-opkg/[>=0.0.1-0, include_prerelease=True]@BoseCorp/conan_stable")
+
+
     def build(self):
-        pass
+        if self.options.product_package and self.options.ipks_list is not None:
+            print("Running conan build steps for product.tar")
+            # ipks_list is expected to be a comma separated list, we need to reformat it to a string
+            ipks = ''
+            for i in self.options.ipks_list.value.split(','):
+                ipks += (i + "\n")
+            self.run("./scripts/create-product-tar -i %s" % ipks)
+
 
     def requirements(self):
         for package in common.parse_requires(os.path.join(os.path.dirname(__file__),"depends.json")):
             assert package[0]
             packageName = package[0].split('/')[0]
             assert packageName
-
-
-            # only include the x86_64 depends
-            if self.settings.arch == "x86_64":
-               if any(inclusion == packageName for inclusion in self.x86_64_depends):
-                  print("Adding %s - for x86_64 builds" % package[0])
-                  self.requires(*package)
 
             # For qc64, only include the ones in the array above
             if self.settings.arch == "qc8017_64":
@@ -55,7 +58,6 @@ class Professor(common.MakefilePackage):
                     print("Skipping %s - doesn't support %s" % (package[0],self.settings.arch))
                     continue
                 self.requires(*package)
-
 
 
     def package(self):
