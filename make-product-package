@@ -183,10 +183,11 @@ cd "$wspace"/builds/$config && python2.7 "$SOFTWARE_UPDATE_DIR"/make-update-zip.
 
 echo "Making product.tar..."
 export GENERATE_HSP_SIGNATURES=1
+cd $wspace
 if [ ! -z $CONAN_BUILD ]; then
   IPKS_HSP=$(echo $IPKS_HSP | tr '\n' ',' | tr ' ' ',')
   conan install $wspace -o product_package=True -o ipks_list="$IPKS_HSP" --build=missing || exit # need to install x86_64 for opkg build requirements
-  conan build $wspace # this will run the product-tar script that requires the opkg build dependency
+  conan build $wspace || exit # this will run the product-tar script that requires the opkg build dependency
 else
   "$wspace"/scripts/create-product-tar -i $IPKS_HSP || exit
 fi

@@ -1,4 +1,4 @@
-from conans import ConanFile, python_requires
+from conans import python_requires
 import os
 
 common = python_requires('CastleConanRecipes/[>=0.0.22-0, include_prerelease=True]@BoseCorp/master')
@@ -6,7 +6,7 @@ common = python_requires('CastleConanRecipes/[>=0.0.22-0, include_prerelease=Tru
 
 class Professor(common.MakefilePackage):
     name = "Professor"
-    version = common.get_version_git_tag(prefix="professor/")
+    version = common.get_version_git_tag()
     generators = "json"
     url = "https://github.com/BoseCorp/%s" % name
     scm = {
@@ -36,7 +36,7 @@ class Professor(common.MakefilePackage):
             ipks = ''
             for i in self.options.ipks_list.value.split(','):
                 ipks += (i + " ")
-            self.run("./scripts/create-product-tar -i %s" % ipks)
+            self.run("scripts/create-product-tar -i %s" % ipks)
 
 
     def requirements(self):
@@ -47,7 +47,7 @@ class Professor(common.MakefilePackage):
 
             # For qc64, only include the ones in the array above
             if self.settings.arch == "qc8017_64":
-               if any(inclusion == packageName for inclusion in self.qc8017_64_depends):
+                if any(inclusion == packageName for inclusion in self.qc8017_64_depends):
                    print("Adding %s - for qc8017_64 builds" % package[0])
                    self.requires(*package)
 
