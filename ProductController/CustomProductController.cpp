@@ -1076,6 +1076,32 @@ void CustomProductController::SetEthernetEnabled( bool enabled )
     }
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductController::PersistLastPlayedContentItem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::PersistLastPlayedContentItem( SoundTouchInterface::NowPlaying& nowPlayingPb, bool force )
+{
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
+
+    if( nowPlayingPb.has_container() and nowPlayingPb.container().has_contentitem() )
+    {
+        SoundTouchInterface::NowPlaying::Container *npContainer = nowPlayingPb.mutable_container();
+        SoundTouchInterface::ContentItem *ci = npContainer->mutable_contentitem();
+
+        //For A4V triggered sources with location we do not want to persist as these are voice initiated.
+        //See: https://jirapro.bose.com/browse/PGC-5044
+        if( ci->source() == SHELBY_SOURCE::PRODUCT and ci->has_location() )
+        {
+            ci->clear_location();
+        }
+    }
+
+    ProductController::PersistLastPlayedContentItem( nowPlayingPb, force );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::HandleCapsNowPlaying

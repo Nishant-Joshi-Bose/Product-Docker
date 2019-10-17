@@ -446,6 +446,14 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleAudioVolumeNotification( SoundTouchInterface::volume volume );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  PersistLastPlayedContentItem
+    /// @brief Update SoundTouchInterface object before passing it to base class which evaluates
+    ///        nowPlayingPb for peristent storage
+    /// @return void
+    ////////////////////////////////////////////////////////////////////////////////
+    void PersistLastPlayedContentItem( SoundTouchInterface::NowPlaying& nowPlayingPb, bool force = false ) override;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declaration is used for now playing information handling
