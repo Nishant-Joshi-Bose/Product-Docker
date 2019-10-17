@@ -117,6 +117,7 @@ public:
     static bool IsIntentPlayProductSource( KeyHandlerUtil::ActionType_t argument )
     {
         return ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_TV ) ||
+               ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_TV_CEC ) ||
                ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_GAME ) ||
                ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_DVD ) ||
                ( argument == ( KeyHandlerUtil::ActionType_t )Action::ACTION_CABLESAT );
