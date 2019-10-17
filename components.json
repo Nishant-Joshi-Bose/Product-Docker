@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.1.31-6-g5c1f13e"
+    "selected_version": "Release/2019_MR4/2.1.31-8-g428fa7e"
   },
   {
     "name": "A4VDeviceController-x86_64",
-    "selected_version": "Release/2019_MR4/2.1.31-6-g5c1f13e"
+    "selected_version": "Release/2019_MR4/2.1.31-8-g428fa7e"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -57,7 +57,7 @@
   },
   {
     "name": "AudioSource-MusicServices-qc8017_32",
-    "selected_version": "Release/2019_MR4/1.0.32-5-g4e67e8f"
+    "selected_version": "Release/2019_MR4/1.0.32-8-g2c1bc5e"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -81,11 +81,11 @@
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.1-635+51a2c99"
+    "selected_version": "Release/2019_MR4/2.3.70-0-gb102f7c"
   },
   {
     "name": "AVSService-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.1-635+51a2c99"
+    "selected_version": "Release/2019_MR4/2.3.70-0-gb102f7c"
   },
   {
     "name": "BLERemoteXCVR",
@@ -93,27 +93,27 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.4.11-3-g3590dcc"
+    "selected_version": "Release/2019_MR4/3.4.11-5-g8ac7a62"
   },
   {
     "name": "BLESetup-x86_64",
-    "selected_version": "Release/2019_MR4/3.4.11-3-g3590dcc"
+    "selected_version": "Release/2019_MR4/3.4.11-5-g8ac7a62"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.4.0-551+631ac94"
+    "selected_version": "Release/2019_MR4/2.4.0-561+90675e5"
   },
   {
     "name": "BLEToFrontDoorService-x86_64",
-    "selected_version": "Release/2019_MR4/2.4.0-551+631ac94"
+    "selected_version": "Release/2019_MR4/2.4.0-561+90675e5"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.30.13-7-ga0c730d"
+    "selected_version": "Release/2019_MR4/2.30.13-10-g5f718eb"
   },
   {
     "name": "Bluetooth-x86_64",
-    "selected_version": "Release/2019_MR4/2.30.13-7-ga0c730d"
+    "selected_version": "Release/2019_MR4/2.30.13-10-g5f718eb"
   },
   {
     "name": "bose-opkg-utils",
@@ -141,23 +141,23 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/2019_MR4/6.0.1-859+ed3bba8"
+    "selected_version": "Release/2019_MR4/6.0.1-868+b4ec931"
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.51.0-6-gd7596b2"
+    "selected_version": "Release/2019_MR4/3.51.0-8-g2adbd31"
   },
   {
     "name": "BTSource-x86_64",
-    "selected_version": "Release/2019_MR4/3.51.0-6-gd7596b2"
+    "selected_version": "Release/2019_MR4/3.51.0-8-g2adbd31"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.12.7-4-g3900e3b"
+    "selected_version": "Release/2019_MR4/2.12.7-5-g3a1ce6a"
   },
   {
     "name": "BTSTSSink-x86_64",
-    "selected_version": "Release/2019_MR4/2.12.7-4-g3900e3b"
+    "selected_version": "Release/2019_MR4/2.12.7-5-g3a1ce6a"
   },
   {
     "name": "CAPSAPI-qc8017_32",
