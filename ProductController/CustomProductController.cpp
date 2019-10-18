@@ -116,6 +116,7 @@
 #include "AudioPathControl.pb.h"
 #include "ProductDataCollectionDefines.h"
 #include "SystemSourcesFriendlyNames.pb.h"
+#include "ProtoOperators.h"
 
 ///
 /// Class Name Declaration for Logging
@@ -1076,6 +1077,83 @@ void CustomProductController::SetEthernetEnabled( bool enabled )
     }
 }
 
+void CustomProductController::HandleBTOutStatus( const BluetoothSourceService::AppStatus& status )
+{
+    if( status != m_btOutStatus )
+    {
+        m_btOutStatus = status;
+        EvaluateRadioStatus();
+    }
+}
+
+
+void CustomProductController::EvaluateRadioStatus( )
+{
+    //
+    // For more info on the below logic please reference the following table
+    // https://wiki.bose.com/display/WSSW/Bluetooth+Out+and+DARR+Behavior+Table
+    //
+
+    IpcRadioStatus_t newRadioStatus;
+
+    bool btActive = ( ( m_nowPlaying.container().contentitem().source() == SHELBY_SOURCE::BLUETOOTH ) or
+                      ( m_btOutStatus.has_activedevice() and GetProductCountryCode().compare( "JP" ) != 0 ) );
+    newRadioStatus.set_btactive( btActive );
+
+    if( GetNetworkServiceUtil().IsNetworkWired() )
+    {
+        newRadioStatus.set_status( IPC_SOC_NETWORKSTATUS_ETHERNET );
+        newRadioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+    }
+    else if( not GetNetworkServiceUtil().IsNetworkConnected() )
+    {
+        newRadioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
+        newRadioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+    }
+    else if( m_wirelessStatus.frequencykhz( ) > 2300000 and
+             m_wirelessStatus.frequencykhz( ) < 2600000 )
+    {
+        newRadioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
+        newRadioStatus.set_band( IPC_SOC_RADIO_BAND_24 );
+    }
+    else if( m_wirelessStatus.frequencykhz( ) >= 5000000 and
+             m_wirelessStatus.frequencykhz( ) <= 5300000 )
+    {
+        newRadioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
+        newRadioStatus.set_band( IPC_SOC_RADIO_BAND_52 );
+    }
+    else if( m_wirelessStatus.frequencykhz( ) >= 5600000 and
+             m_wirelessStatus.frequencykhz( ) <= 5900000 )
+    {
+        newRadioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
+        newRadioStatus.set_band( IPC_SOC_RADIO_BAND_58 );
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
+    }
+
+    if( m_radioStatus != newRadioStatus )
+    {
+        m_radioStatus = newRadioStatus;
+        m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
+
+        BluetoothSourceService::darrSetting darr;
+        if( ( GetProductCountryCode().compare( "JP" ) == 0 ) and
+            ( m_radioStatus.band() == IPC_SOC_RADIO_BAND_52 ) and
+            ( m_radioStatus.status() == IPC_SOC_NETWORKSTATUS_WIFI ) )
+
+        {
+            darr.set_on24ghz( true );
+        }
+        else
+        {
+            darr.set_on24ghz( false );
+        }
+        m_FrontDoorClientIF->SendPost<BluetoothSourceService::darrSetting, FrontDoor::Error>( FRONTDOOR_BT_DARR_SETTING, darr,  {}, {} );
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductController::HandleCapsNowPlaying
@@ -1083,14 +1161,8 @@ void CustomProductController::SetEthernetEnabled( bool enabled )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductController::HandleCapsNowPlaying( SoundTouchInterface::NowPlaying np )
 {
-    if( IsNowPlayingChanged( np ) )
-    {
-        m_radioStatus.set_btactive( np.container().contentitem().source() == SHELBY_SOURCE::BLUETOOTH );
-        m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
-
-        BOSE_VERBOSE( s_logger, "Now Playing Changed Sent New Radio Status: %s", m_radioStatus.ShortDebugString().c_str() );
-    }
     ProductController::HandleCapsNowPlaying( np );
+    EvaluateRadioStatus();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1453,6 +1525,19 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
+    {
+
+        AsyncCallback< BluetoothSourceService::AppStatus >
+        btSourceStatusCb( std::bind( &CustomProductController::HandleBTOutStatus,
+                                     this,
+                                     std::placeholders::_1 ),
+                          GetTask( ) );
+
+        //Audio volume notification registration
+        m_FrontDoorClientIF->RegisterNotification< BluetoothSourceService::AppStatus >(
+            FRONTDOOR_BT_SOURCE_STATUS,
+            btSourceStatusCb );
+    }
 }
 
 void CustomProductController::HandleGetTimeouts( Callback<SystemPowerPb::SystemPowerTimeouts> respCb,
@@ -1549,40 +1634,8 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         if( message.wirelessstatus( ).has_frequencykhz( ) and
             message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
-            IpcRadioStatus_t radioStatus;
-            radioStatus.set_status( m_radioStatus.status() );
-            radioStatus.set_band( m_radioStatus.band( ) );
-
-            if( message.wirelessstatus( ).frequencykhz( ) > 2300000 and
-                message.wirelessstatus().frequencykhz( ) < 2600000 )
-            {
-                radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
-                radioStatus.set_band( IPC_SOC_RADIO_BAND_24 );
-            }
-            else if( message.wirelessstatus( ).frequencykhz( ) >= 5000000 and
-                     message.wirelessstatus( ).frequencykhz( ) <= 5300000 )
-            {
-                radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
-                radioStatus.set_band( IPC_SOC_RADIO_BAND_52 );
-            }
-            else if( message.wirelessstatus( ).frequencykhz( ) >= 5600000 and
-                     message.wirelessstatus( ).frequencykhz( ) <= 5900000 )
-            {
-                radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
-                radioStatus.set_band( IPC_SOC_RADIO_BAND_58 );
-            }
-            else
-            {
-                BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
-            }
-
-
-            if( radioStatus.status() != m_radioStatus.status() ||
-                radioStatus.band() != m_radioStatus.band() )
-            {
-                m_radioStatus.CopyFrom( radioStatus );
-                m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
-            }
+            m_wirelessStatus.CopyFrom( message.wirelessstatus() );
+            EvaluateRadioStatus();
         }
         else
         {
@@ -1601,19 +1654,8 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< >( &CustomProductControllerState::HandleEthernetConnectionRemoved );
             m_isNetworkWired = GetNetworkServiceUtil().IsNetworkConnected();
         }
-        // if wired we need to update lpm
-        if( GetNetworkServiceUtil().IsNetworkWired() )
-        {
-            m_radioStatus.set_status( IPC_SOC_NETWORKSTATUS_ETHERNET );
-            m_radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
-            m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
-        }
-        else if( not GetNetworkServiceUtil().IsNetworkConnected() )
-        {
-            m_radioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
-            m_radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
-            m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
-        }
+        // if network status change we may need to update lpm
+        EvaluateRadioStatus();
 
         ( void ) HandleCommonProductMessage( message );
     }
