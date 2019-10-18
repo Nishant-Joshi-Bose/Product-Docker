@@ -1082,13 +1082,15 @@ void CustomProductController::SetEthernetEnabled( bool enabled )
 /// @name   CustomProductController::PersistLastPlayedContentItem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::PersistLastPlayedContentItem( SoundTouchInterface::NowPlaying& nowPlayingPb, bool force )
+void CustomProductController::PersistLastPlayedContentItem( const SoundTouchInterface::NowPlaying& nowPlayingPb, bool force )
 {
     BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
 
-    if( nowPlayingPb.has_container() and nowPlayingPb.container().has_contentitem() )
+    SoundTouchInterface::NowPlaying copyOfNpPb( nowPlayingPb );
+
+    if( copyOfNpPb.has_container() and copyOfNpPb.container().has_contentitem() )
     {
-        SoundTouchInterface::NowPlaying::Container *npContainer = nowPlayingPb.mutable_container();
+        SoundTouchInterface::NowPlaying::Container *npContainer = copyOfNpPb.mutable_container();
         SoundTouchInterface::ContentItem *ci = npContainer->mutable_contentitem();
 
         //For A4V triggered sources with location we do not want to persist as these are voice initiated.
@@ -1098,8 +1100,8 @@ void CustomProductController::PersistLastPlayedContentItem( SoundTouchInterface:
             ci->clear_location();
         }
     }
+    ProductController::PersistLastPlayedContentItem( copyOfNpPb, force );
 
-    ProductController::PersistLastPlayedContentItem( nowPlayingPb, force );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

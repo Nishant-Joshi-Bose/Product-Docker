@@ -452,7 +452,7 @@ private:
     ///        nowPlayingPb for peristent storage
     /// @return void
     ////////////////////////////////////////////////////////////////////////////////
-    void PersistLastPlayedContentItem( SoundTouchInterface::NowPlaying& nowPlayingPb, bool force = false ) override;
+    void PersistLastPlayedContentItem( const SoundTouchInterface::NowPlaying& nowPlayingPb, bool force = false ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
