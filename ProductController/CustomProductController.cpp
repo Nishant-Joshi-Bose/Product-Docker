@@ -1156,6 +1156,33 @@ void CustomProductController::EvaluateRadioStatus( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductController::PersistLastPlayedContentItem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::PersistLastPlayedContentItem( const SoundTouchInterface::NowPlaying& nowPlayingPb, bool force )
+{
+    BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
+
+    SoundTouchInterface::NowPlaying copyOfNpPb( nowPlayingPb );
+
+    if( copyOfNpPb.has_container() and copyOfNpPb.container().has_contentitem() )
+    {
+        SoundTouchInterface::NowPlaying::Container *npContainer = copyOfNpPb.mutable_container();
+        SoundTouchInterface::ContentItem *ci = npContainer->mutable_contentitem();
+
+        //For A4V triggered sources with location we do not want to persist as these are voice initiated.
+        //See: https://jirapro.bose.com/browse/PGC-5044
+        if( ci->source() == SHELBY_SOURCE::PRODUCT and ci->has_location() )
+        {
+            ci->clear_location();
+        }
+    }
+    ProductController::PersistLastPlayedContentItem( copyOfNpPb, force );
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   CustomProductController::HandleCapsNowPlaying
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
