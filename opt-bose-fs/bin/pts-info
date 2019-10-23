@@ -65,6 +65,9 @@ tap-command 'dsp pt "dy"'
 tap-command 'dsp pt "st"'
 tap-command 'dsp pt "st f"'
 
+# DARR Band Settings
+tap-command 'wa x,s'
+
 #DeviceController Config
 cat /mnt/nv/product-persistence/DeviceControllerConfig.dat
 
