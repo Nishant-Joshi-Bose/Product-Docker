@@ -1,0 +1,13 @@
+# -*- sh -*-
+# This is an Electric Commander script which is mostly like Shell but allows
+# certain non-Shell constructs like $[buildDir].
+
+set -x
+
+cd $[buildDir]
+CastleToolsDir=/home/epd/srcref/CastleTools
+export PATH=$CastleToolsDir/bin:/tools/klocwork/user/bin:/tools/klocwork/server/bin:$PATH
+
+./make-product-package Release qc8017_32 professor,ginger-cheevers
+
+: success

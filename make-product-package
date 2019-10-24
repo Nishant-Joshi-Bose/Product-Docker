@@ -198,7 +198,10 @@ echo "Collecting Deployables..."
 # collect all deployables only for conan
 "$wspace"/scripts/collect-deployables "$wspace" "$wspace"/builds/Release "$wspace"/builds/deploy || exit
 branchName=$((git branch | grep \* | cut -d ' ' -f2 | tr -d '[:space:]' | tr "/" "_") || exit)
-conan export-pkg "$wspace" BoseCorp/"$branchName" -j "$wspace"/export.json -f || exit
+
+if [ ! -z $CONAN_BUILD ]; then
+  conan export-pkg "$wspace" BoseCorp/"$branchName" -j "$wspace"/export.json -f || exit
+fi
 
 echo "Packaging Complete"
 exit 0
