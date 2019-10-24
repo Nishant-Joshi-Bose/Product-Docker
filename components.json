@@ -88,6 +88,10 @@
     "selected_version": "Release/stable/2.2.1-603+7a3e43f"
   },
   {
+    "name": "BLERemoteXCVR",
+    "selected_version": "Release/master/v2.0.0-0+9c2b8b9"
+  },
+  {
     "name": "BLESetup-qc8017_32",
     "selected_version": "Release/stable/3.4.6-1-gcbe854f"
   },
@@ -117,11 +121,11 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "stable@3a5790038160d342c5fa345c06593a371da56ef6"
+    "selected_version": "stable@b4a45f3dbd79c0e16dbe60c53a1428fe1b9133b0"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "stable@1a5059b7e4a27742dc19eb2f5fe22eefbf4915b1"
+    "selected_version": "stable@5095f2c80874d2a8ea8de8863aa95815395f4790"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -130,10 +134,6 @@
   {
     "name": "BoseLibs-x86_64",
     "selected_version": "Release/stable/3.8.1-1632+bc27c76"
-  },
-  {
-    "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/v2.0.0-0+9c2b8b9"
   },
   {
     "name": "BoseWebBrussels",
@@ -405,7 +405,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@7d2aa8b2aca57e4b5a1aa479fbbe534db5cb8e18"
+    "selected_version": "stable@ca664a73d182d1f1b6909fb0d254dfc38b646f9f"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
@@ -428,12 +428,28 @@
     "selected_version": "stable@4887ed487e933f1409473f353f4660acf072d4d2"
   },
   {
+    "name": "ProfessorProductController-qc8017_32",
+    "selected_version": "Release/stable/3.0.13-7-g098f155"
+  },
+  {
+    "name": "ProfessorProductController-x86_64",
+    "selected_version": "Release/stable/3.0.13-7-g098f155"
+  },
+  {
     "name": "protobuf-qc8017_32",
     "selected_version": "Release/bose-stable/bose-v2.4.1-54-g0d66cb0"
   },
   {
     "name": "protobuf-x86_64",
     "selected_version": "Release/bose-stable/bose-v2.4.1-54-g0d66cb0"
+  },
+  {
+    "name": "PtsServer-qc8017_32",
+    "selected_version": "Release/stable/0.0.10-1-g6c2f2c8"
+  },
+  {
+    "name": "PtsServer-x86_64",
+    "selected_version": "Release/stable/0.0.10-1-g6c2f2c8"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -445,7 +461,7 @@
   },
   {
     "name": "RivieraLPM-Tools",
-    "selected_version": "master@4f526ba780adc94813e11358925c9346e0a9b076"
+    "selected_version": "master@99eaee43150a633fa8cdc4bf1c158c74129a060e"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -529,7 +545,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "stable@6f56cc3fcb23c2b4ab4e4a832c4073f94cccf823"
+    "selected_version": "stable@37aa9d9fc47fe498b2dff989a28f14ea026557fb"
   },
   {
     "name": "VPAController-qc8017_32",
