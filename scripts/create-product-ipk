@@ -192,6 +192,7 @@ cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 
 cp "$ptsservice_dir/pts-handler" "$opt_dir/etc" || exit
+cp "$ptsservice_dir/PtsServer" "$opt_dir/bin" || exit
 
 # CONAN TODO - Why did I need to add /bin
 if [ ! -z $CONAN_BUILD ]; then
