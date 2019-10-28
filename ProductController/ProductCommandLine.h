@@ -111,8 +111,8 @@ private:
     void HandleAutowake( const std::list<std::string> & argList,
                          std::string& response );
 
-    void HandleKey( const std::list<std::string> & argList,
-                    std::string& response );
+    void HandleIntent( const std::list<std::string> & argList,
+                       std::string& response );
 
     void HandleMute( const std::list<std::string> & argList,
                      std::string& response );

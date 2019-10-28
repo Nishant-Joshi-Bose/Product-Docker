@@ -116,12 +116,12 @@ void ProductCommandLine::RegisterCliCmds( )
                                                                           callbackForCommands,
                                                                           static_cast<int>( CLICmdsKeys::AUTOWAKE ) );
 
-    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product key",
-                                                                          "This command tests sending a key action value.",
-                                                                          "product key [int from 0 to 254]",
+    m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product intent",
+                                                                          "This command tests sending an intent value.",
+                                                                          "product intent [int from 0 to 254]",
                                                                           m_ProductController.GetTask(),
                                                                           callbackForCommands,
-                                                                          static_cast<int>( CLICmdsKeys::KEY ) );
+                                                                          static_cast<int>( CLICmdsKeys::INTENT ) );
 
     m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product mute",
                                                                           "This command mutes or unmutes the volume.",
@@ -159,7 +159,7 @@ void ProductCommandLine::RegisterCliCmds( )
                                                                           static_cast<int>( CLICmdsKeys::TEST_PAIRING ) );
 
     m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product test_power",
-                                                                          "This command tests sending a power key action.",
+                                                                          "This command tests sending a power toggle intent.",
                                                                           "product test_power",
                                                                           m_ProductController.GetTask(),
                                                                           callbackForCommands,
@@ -221,8 +221,8 @@ void ProductCommandLine::HandleCliCmd( uint16_t                              cmd
         HandleAutowake( argList, response );
         break;
 
-    case CLICmdsKeys::KEY :
-        HandleKey( argList, response );
+    case CLICmdsKeys::INTENT :
+        HandleIntent( argList, response );
         break;
 
     case CLICmdsKeys::MUTE :
@@ -324,37 +324,37 @@ void ProductCommandLine::HandleAutowake( const std::list<std::string>& argList,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductCommandLine::HandleKey
+/// @name   ProductCommandLine::HandleIntent
 ///
-/// @brief  This command tests sending a key action value to the product controller state machine.
+/// @brief  This command tests sending an intent value to the product controller state machine.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::HandleKey( const std::list<std::string>& argList,
-                                    std::string& response )
+void ProductCommandLine::HandleIntent( const std::list<std::string>& argList,
+                                       std::string& response )
 {
     if( argList.size( ) != 1 )
     {
-        response = "Incorrect Usage: product key [integer from 0 to 254]";
+        response = "Incorrect Usage: product intent [integer from 0 to 254]";
     }
     else
     {
         const std::string& argumentString = argList.front( );
-        const uint32_t     keyActionValue = std::atoi( argumentString.c_str( ) );
+        const uint32_t     intentValue    = std::atoi( argumentString.c_str( ) );
 
-        if( keyActionValue <= 254 )
+        if( intentValue <= 254 )
         {
-            response  = "The key action value ";
-            response +=  argumentString;
+            response  = "The intent value ";
+            response +=  CommonIntentHandler::GetIntentName( intentValue );
             response += " will be sent to the product controller state machine.\r\n";
 
             ProductMessage productMessage;
-            productMessage.set_action( static_cast< uint32_t >( keyActionValue ) );
+            productMessage.set_action( static_cast< uint32_t >( intentValue ) );
 
             m_ProductController.SendAsynchronousProductMessage( productMessage );
         }
         else
         {
-            response = "Incorrect Usage: product key [integer from 0 to 254]";
+            response = "Incorrect Usage: product intent [integer from 0 to 254]";
         }
     }
 }
@@ -583,7 +583,7 @@ void ProductCommandLine::HandleTestPairing( const std::list<std::string>& argLis
 ///
 /// @name   ProductCommandLine::HandleTestPower
 ///
-/// @brief  This command tests sending a power key press to the product controller state machine.
+/// @brief  This command tests sending a power toggle intent to the product controller state machine.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::HandleTestPower( const std::list<std::string>& argList,

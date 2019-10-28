@@ -12,7 +12,7 @@ enum class CLICmdsKeys
 {
     /// Always start CLI keys from COMMON_CLICMD_KEYS_LAST + 1
     AUTOWAKE = static_cast<int>( CommonCLICmdKeys::COMMON_CLICMD_KEYS_LAST ) + 1,
-    KEY,
+    INTENT,
     MUTE,
     SOURCE,
     BOOT_STATUS,
