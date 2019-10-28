@@ -1,91 +1,91 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.1.31-8-g428fa7e"
+    "selected_version": "Release/stable/2.1.33-4-ga6ce811"
   },
   {
     "name": "A4VDeviceController-x86_64",
-    "selected_version": "Release/2019_MR4/2.1.31-8-g428fa7e"
+    "selected_version": "Release/stable/2.1.33-4-ga6ce811"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.24-28-g1ddcf11"
+    "selected_version": "Release/stable/2.2.24-27-g8418932"
   },
   {
     "name": "A4VRemoteCommunicationService-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.24-28-g1ddcf11"
+    "selected_version": "Release/stable/2.2.24-27-g8418932"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.32-2-g2712b4b"
+    "selected_version": "Release/stable/2.2.32-2-gd31916f"
   },
   {
     "name": "A4VVideoManagerService-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.32-2-g2712b4b"
+    "selected_version": "Release/stable/2.2.32-2-gd31916f"
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/2019_MR4/5.3.8-8606+57a4d84"
+    "selected_version": "Release/stable/5.4.3-8807+9d748a7"
   },
   {
     "name": "AudioPathClient-x86_64",
-    "selected_version": "Release/2019_MR4/5.3.8-8606+57a4d84"
+    "selected_version": "Release/stable/5.4.3-8807+9d748a7"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/2019_MR4/5.3.8-8606+57a4d84"
+    "selected_version": "Release/stable/5.4.3-8807+9d748a7"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/2019_MR4/5.3.8-8606+57a4d84"
+    "selected_version": "Release/stable/5.4.3-8807+9d748a7"
   },
   {
     "name": "AudioPathProducts-x86_64",
-    "selected_version": "Release/2019_MR4/5.3.8-8606+57a4d84"
+    "selected_version": "Release/stable/5.4.3-8807+9d748a7"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/2019_MR4/5.3.8-8606+57a4d84"
+    "selected_version": "Release/stable/5.4.3-8807+9d748a7"
   },
   {
     "name": "AudioSource-AirPlay2-qc8017_32",
-    "selected_version": "Release/2019_MR4/v1.0.6-30-g5636655"
+    "selected_version": "Release/stable/v1.0.6-29-gf564027"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
-    "selected_version": "Release/2019_MR4/0.0.2-892+23655a0"
+    "selected_version": "Release/stable/0.0.2-926+5771cd5"
   },
   {
     "name": "AudioSource-MusicServices-qc8017_32",
-    "selected_version": "Release/2019_MR4/1.0.32-8-g2c1bc5e"
+    "selected_version": "Release/stable/1.0.32-5-gccb9ee6"
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.3.0-543+e83ca66"
+    "selected_version": "Release/stable/2.3.0-561+e9ec9d2"
   },
   {
     "name": "AudioSource-Spotify-qc8017_32",
-    "selected_version": "Release/2019_MR4/0.2.24-7-g84ee540"
+    "selected_version": "Release/stable/0.2.24-3-g6a47270"
   },
   {
     "name": "AudioSource-UPnP-qc8017_32",
-    "selected_version": "Release/2019_MR4/0.0.24-5-g63f4942"
+    "selected_version": "Release/stable/0.0.24-5-ga1ece0c"
   },
   {
     "name": "AudioSource-UPnP-x86_64",
-    "selected_version": "Release/2019_MR4/0.0.24-5-g63f4942"
+    "selected_version": "Release/stable/0.0.24-5-ga1ece0c"
   },
   {
     "name": "AudioSource-x86_64",
-    "selected_version": "Release/2019_MR4/2.3.0-543+e83ca66"
+    "selected_version": "Release/stable/2.3.0-561+e9ec9d2"
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.3.70-0-gb102f7c"
+    "selected_version": "Release/stable/2.2.71-4-g52a085e"
   },
   {
     "name": "AVSService-x86_64",
-    "selected_version": "Release/2019_MR4/2.3.70-0-gb102f7c"
+    "selected_version": "Release/stable/2.2.71-4-g52a085e"
   },
   {
     "name": "BLERemoteXCVR",
@@ -93,47 +93,47 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.4.11-5-g8ac7a62"
+    "selected_version": "Release/stable/3.4.16-1-g19d2094"
   },
   {
     "name": "BLESetup-x86_64",
-    "selected_version": "Release/2019_MR4/3.4.11-5-g8ac7a62"
+    "selected_version": "Release/stable/3.4.16-1-g19d2094"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.4.0-561+90675e5"
+    "selected_version": "Release/stable/2.4.0-565+8cef327"
   },
   {
     "name": "BLEToFrontDoorService-x86_64",
-    "selected_version": "Release/2019_MR4/2.4.0-561+90675e5"
+    "selected_version": "Release/stable/2.4.0-565+8cef327"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.30.13-10-g5f718eb"
+    "selected_version": "Release/stable/2.31.4-1-g23c03b3"
   },
   {
     "name": "Bluetooth-x86_64",
-    "selected_version": "Release/2019_MR4/2.30.13-10-g5f718eb"
+    "selected_version": "Release/stable/2.31.4-1-g23c03b3"
   },
   {
     "name": "bose-opkg-utils",
-    "selected_version": "2019_MR4@6f5fc0b0b6b56434f0f10605cf5693f4bc7dbada"
+    "selected_version": "stable@6f5fc0b0b6b56434f0f10605cf5693f4bc7dbada"
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "2019_MR4@29962e6337f5332e5c40db17d54854b72326d9f1"
+    "selected_version": "stable@3a5790038160d342c5fa345c06593a371da56ef6"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "2019_MR4@6e0d8e7624354b0d9039d2d06b36a663206906a9"
+    "selected_version": "stable@1a5059b7e4a27742dc19eb2f5fe22eefbf4915b1"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.8.2-1664+086a360"
+    "selected_version": "Release/stable/3.8.2-1714+dba4dad"
   },
   {
     "name": "BoseLibs-x86_64",
-    "selected_version": "Release/2019_MR4/3.8.2-1664+086a360"
+    "selected_version": "Release/stable/3.8.2-1714+dba4dad"
   },
   {
     "name": "BoseWebBrussels",
@@ -141,287 +141,287 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/2019_MR4/6.0.1-868+b4ec931"
+    "selected_version": "Release/stable/7.0.0-864+deb2968"
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.51.0-8-g2adbd31"
+    "selected_version": "Release/stable/3.56.1-1-gc10e366"
   },
   {
     "name": "BTSource-x86_64",
-    "selected_version": "Release/2019_MR4/3.51.0-8-g2adbd31"
+    "selected_version": "Release/stable/3.56.1-1-gc10e366"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.12.7-5-g3a1ce6a"
+    "selected_version": "Release/stable/2.12.9-1-g0082b0e"
   },
   {
     "name": "BTSTSSink-x86_64",
-    "selected_version": "Release/2019_MR4/2.12.7-5-g3a1ce6a"
+    "selected_version": "Release/stable/2.12.9-1-g0082b0e"
   },
   {
     "name": "CAPSAPI-qc8017_32",
-    "selected_version": "Release/2019_MR4/1.1.3-7-g4232741"
+    "selected_version": "Release/stable/1.1.7-4-g44274b2"
   },
   {
     "name": "CAPSAPI-x86_64",
-    "selected_version": "Release/2019_MR4/1.1.3-7-g4232741"
+    "selected_version": "Release/stable/1.1.7-4-g44274b2"
   },
   {
     "name": "CAPSService-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.0.5-12-gc0ed6e5"
+    "selected_version": "Release/stable/3.1.2-14-g993229d"
   },
   {
     "name": "CAPSService-x86_64",
-    "selected_version": "Release/2019_MR4/3.0.5-12-gc0ed6e5"
+    "selected_version": "Release/stable/3.1.2-14-g993229d"
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.1-320+487283f"
+    "selected_version": "Release/stable/2.2.1-328+a5216c4"
   },
   {
     "name": "Cli-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.1-320+487283f"
+    "selected_version": "Release/stable/2.2.1-328+a5216c4"
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/2019_MR4/0.0.5-242+4987ee8"
+    "selected_version": "Release/stable/0.0.5-259+f298d0b"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.15-25-gcd6a6d5"
+    "selected_version": "Release/stable/2.2.15-25-g4a5dbac"
   },
   {
     "name": "DataCollectionClient-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.15-25-gcd6a6d5"
+    "selected_version": "Release/stable/2.2.15-25-g4a5dbac"
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/2019_MR4/4.0.0-364+3dad4f4"
+    "selected_version": "Release/stable/4.0.0-372+0834d7b"
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.9-6-gb36aa2c"
+    "selected_version": "Release/stable/2.2.13-2-g9874448"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/2019_MR4/1.0.6-11+43e43db"
+    "selected_version": "Release/bose-stable/1.0.6-12+fc86b57"
   },
   {
     "name": "FrontDoorClient-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.7.0-5-g118f97a"
+    "selected_version": "Release/stable/3.7.0-5-g6d225c3"
   },
   {
     "name": "FrontDoorClient-x86_64",
-    "selected_version": "Release/2019_MR4/3.7.0-5-g118f97a"
+    "selected_version": "Release/stable/3.7.0-5-g6d225c3"
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.3.10-4-g7f0823b"
+    "selected_version": "Release/stable/3.3.24-1-g2890e41"
   },
   {
     "name": "FrontDoorService-x86_64",
-    "selected_version": "Release/2019_MR4/3.3.10-4-g7f0823b"
+    "selected_version": "Release/stable/3.3.24-1-g2890e41"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.0.13-9-g52c5c6a"
+    "selected_version": "Release/stable/3.0.16-3-g70a9d18"
   },
   {
     "name": "FrontDoorUtility-x86_64",
-    "selected_version": "Release/2019_MR4/3.0.13-9-g52c5c6a"
+    "selected_version": "Release/stable/3.0.16-3-g70a9d18"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.0.0-534+806fdc0"
+    "selected_version": "Release/stable/3.0.0-539+f320b4a"
   },
   {
     "name": "GalapagosClient-x86_64",
-    "selected_version": "Release/2019_MR4/3.0.0-534+806fdc0"
+    "selected_version": "Release/stable/3.0.0-539+f320b4a"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/2019_MR4/2.3.22-12-gbd6c081"
+    "selected_version": "Release/stable/2.3.52-2-ged2242e"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.0.1-349+2402865"
+    "selected_version": "Release/stable/3.0.1-359+72e44f0"
   },
   {
     "name": "HTTPInterface-x86_64",
-    "selected_version": "Release/2019_MR4/3.0.1-349+2402865"
+    "selected_version": "Release/stable/3.0.1-359+72e44f0"
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.0-371+0255439"
+    "selected_version": "Release/stable/2.2.0-375+1430a52"
   },
   {
     "name": "IotIpcClient-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.0.10-10-ge451488"
+    "selected_version": "Release/stable/2.0.10-10-g722d353"
   },
   {
     "name": "IotIpcClient-x86_64",
-    "selected_version": "Release/2019_MR4/2.0.10-10-ge451488"
+    "selected_version": "Release/stable/2.0.10-10-g722d353"
   },
   {
     "name": "IoTService-qc8017_32",
-    "selected_version": "Release/2019_MR4/1.0.26-5-ga893a59"
+    "selected_version": "Release/stable/1.0.26-5-g80a16ec"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.4-20-g0f9073a"
+    "selected_version": "Release/stable/2.2.4-21-g9143a4e"
   },
   {
     "name": "KeyHandler-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.4-20-g0f9073a"
+    "selected_version": "Release/stable/2.2.4-21-g9143a4e"
   },
   {
     "name": "LedAnimationTool-qc8017_32",
-    "selected_version": "Continuous/stable/2.7.8-2-g311b919"
+    "selected_version": "Release/stable/2.7.8-3-gcaea819"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.11-25-g92d5b38"
+    "selected_version": "Release/stable/2.2.11-25-g3d66ccf"
   },
   {
     "name": "LightBarController-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.11-25-g92d5b38"
+    "selected_version": "Release/stable/2.2.11-25-g3d66ccf"
   },
   {
     "name": "LpmMfgTool",
-    "selected_version": "Release/2019_MR4/1.0.4-50+b224dfa"
+    "selected_version": "Release/master/0.0.1-4+34833d6"
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.38-15-g043bf59"
+    "selected_version": "Release/stable/2.2.54-19-gdb52595"
   },
   {
     "name": "NetworkService-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.38-15-g043bf59"
+    "selected_version": "Release/stable/2.2.54-19-gdb52595"
   },
   {
     "name": "opensource-avahi-qc8017_32",
-    "selected_version": "Release/2019_MR4/v0.6.43-3-g26cae59"
+    "selected_version": "Release/bose-stable/v0.6.43-4-ge224e1c"
   },
   {
     "name": "opensource-curl-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v7.54.1-60-g7b15b37"
+    "selected_version": "Release/bose-stable/bose-v7.54.1-61-g691754d"
   },
   {
     "name": "opensource-curl-x86_64",
-    "selected_version": "Release/2019_MR4/bose-v7.54.1-60-g7b15b37"
+    "selected_version": "Release/bose-stable/bose-v7.54.1-61-g691754d"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v1.8.3-38-g32e00fc"
+    "selected_version": "Release/bose-stable/bose-v1.8.3-40-gef7ea1a"
   },
   {
     "name": "opensource-jsoncpp-x86_64",
-    "selected_version": "Release/2019_MR4/bose-v1.8.3-38-g32e00fc"
+    "selected_version": "Release/bose-stable/bose-v1.8.3-40-gef7ea1a"
   },
   {
     "name": "opensource-libarchive-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v3.3.1-47-gfec93f9"
+    "selected_version": "Release/bose-stable/bose-v3.3.1-45-g5dc4713"
   },
   {
     "name": "opensource-libwebsockets-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v2.4.2-22-g21b2219"
+    "selected_version": "Release/bose-stable/bose-v2.4.2-23-gab2cfc3"
   },
   {
     "name": "opensource-libwebsockets-x86_64",
-    "selected_version": "Release/2019_MR4/bose-v2.4.2-22-g21b2219"
+    "selected_version": "Release/bose-stable/bose-v2.4.2-23-gab2cfc3"
   },
   {
     "name": "opensource-nghttp2-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v1.24.0-51-gf30bb55"
+    "selected_version": "Release/bose-stable/bose-v1.24.0-52-g30bf089"
   },
   {
     "name": "opensource-nghttp2-x86_64",
-    "selected_version": "Release/2019_MR4/bose-v1.24.0-51-gf30bb55"
+    "selected_version": "Release/bose-stable/bose-v1.24.0-52-g30bf089"
   },
   {
     "name": "opensource-OpenAvnuApple-qc8017_32",
-    "selected_version": "Release/2019_MR4/v1.0-1832-ge2cab2b"
+    "selected_version": "Release/bose-stable/v1.0-1833-gefcb9a4"
   },
   {
     "name": "opensource-openssl-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v1.0.2-63-g90debb2"
+    "selected_version": "Release/bose-stable/bose-v1.0.2-64-g3344de1"
   },
   {
     "name": "opensource-openssl-x86",
-    "selected_version": "Release/2019_MR4/bose-v1.0.2-63-g90debb2"
+    "selected_version": "Release/bose-stable/bose-v1.0.2-64-g3344de1"
   },
   {
     "name": "opensource-openssl-x86_64",
-    "selected_version": "Release/2019_MR4/bose-v1.0.2-63-g90debb2"
+    "selected_version": "Release/bose-stable/bose-v1.0.2-64-g3344de1"
   },
   {
     "name": "opensource-opkg-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v0.4.1-13-gd9d03f8"
+    "selected_version": "Release/bose-stable/bose-v0.4.1-12-g35335f6"
   },
   {
     "name": "opensource-opkg-x86",
-    "selected_version": "Release/2019_MR4/bose-v0.4.1-13-gd9d03f8"
+    "selected_version": "Release/bose-stable/bose-v0.4.1-12-g35335f6"
   },
   {
     "name": "opensource-tinyxml-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v2.6.1-34-g6e4dd22"
+    "selected_version": "Release/bose-stable/bose-v2.6.1-36-gc203c9a"
   },
   {
     "name": "opensource-tinyxml-x86_64",
-    "selected_version": "Release/2019_MR4/bose-v2.6.1-34-g6e4dd22"
+    "selected_version": "Release/bose-stable/bose-v2.6.1-36-gc203c9a"
   },
   {
     "name": "opensource-util-linux-qc8017_32",
-    "selected_version": "Release/2019_MR4/1.5.0-52+3a718a6"
+    "selected_version": "Release/bose-stable/1.5.0-57+47d2c8e"
   },
   {
     "name": "opensource-util-linux-x86_64",
-    "selected_version": "Release/2019_MR4/1.5.0-52+3a718a6"
+    "selected_version": "Release/bose-stable/1.5.0-57+47d2c8e"
   },
   {
     "name": "opensource-zlib-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v1.2.11-49-g1f4130d"
+    "selected_version": "Release/bose-stable/bose-v1.2.11-51-g666c207"
   },
   {
     "name": "opensource-zlib-x86_64",
-    "selected_version": "Release/2019_MR4/bose-v1.2.11-49-g1f4130d"
+    "selected_version": "Release/bose-stable/bose-v1.2.11-51-g666c207"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.0-1561+68845c9"
+    "selected_version": "Release/stable/2.2.0-1581+86e5c2f"
   },
   {
     "name": "PassportClient-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.0-1561+68845c9"
+    "selected_version": "Release/stable/2.2.0-1581+86e5c2f"
   },
   {
     "name": "PassportService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.0-213+9c63ed5"
+    "selected_version": "Release/stable/2.2.0-276+311923c"
   },
   {
     "name": "product-startup",
-    "selected_version": "Release/2019_MR4/5.0.7-49+110bad3"
+    "selected_version": "Release/stable/5.0.7-48+27d8648"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@3f03ed7f90cdac696fef989a685eb1d25587c577"
+    "selected_version": "stable@ca664a73d182d1f1b6909fb0d254dfc38b646f9f"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.12-32-g6da2d0a"
+    "selected_version": "Release/stable/2.2.12-33-g8f4a72c"
   },
   {
     "name": "ProductControllerCommonProto-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.12-32-g6da2d0a"
+    "selected_version": "Release/stable/2.2.12-33-g8f4a72c"
   },
   {
     "name": "ProductDiscoveryService-qc8017_32",
-    "selected_version": "Release/2019_MR4/1.0.12-10-g93c2077"
+    "selected_version": "Release/stable/1.0.12-9-g1ff0725"
   },
   {
     "name": "ProductDiscoveryService-x86_64",
-    "selected_version": "Release/2019_MR4/1.0.12-10-g93c2077"
+    "selected_version": "Release/stable/1.0.12-9-g1ff0725"
   },
   {
     "name": "ProductUIAssets",
@@ -429,103 +429,103 @@
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "Release/2019_MR4/bose-v2.4.1-54-g0d66cb0"
+    "selected_version": "Release/bose-stable/bose-v2.4.1-58-g3fc5f89"
   },
   {
     "name": "protobuf-x86_64",
-    "selected_version": "Release/2019_MR4/bose-v2.4.1-54-g0d66cb0"
+    "selected_version": "Release/bose-stable/bose-v2.4.1-58-g3fc5f89"
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/5.1.9"
+    "selected_version": "Release/master/5.2.2"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/5.1.5"
+    "selected_version": "Release/master/5.2.2"
   },
   {
     "name": "RivieraLPM-Tools",
-    "selected_version": "2019_MR4@4f526ba780adc94813e11358925c9346e0a9b076"
+    "selected_version": "master@4f526ba780adc94813e11358925c9346e0a9b076"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.1.6-677+0e63ff2"
+    "selected_version": "Release/stable/3.1.6-692+ecb4297"
   },
   {
     "name": "RivieraLpmService-x86_64",
-    "selected_version": "Release/2019_MR4/3.1.6-677+0e63ff2"
+    "selected_version": "Release/stable/3.1.6-692+ecb4297"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/2019_MR4/2.1.6-3-gfa44f88"
+    "selected_version": "Release/stable/2.1.9-5-g3e2e9c5"
   },
   {
     "name": "RivieraMinimalFS-qc8017_32",
-    "selected_version": "Release/2019_MR4/0.1.7-154+5c30bd1"
+    "selected_version": "Release/stable/0.1.18-156+d826d7c"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/2019_MR4/5.0.6-4-g981e097"
+    "selected_version": "Release/stable/5.0.11-2-g139fdca"
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.13.19-4-g73d062a"
+    "selected_version": "Release/stable/2.16.13-1-g7f95c60"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/2019_MR4/2.13.19-4-g73d062a"
+    "selected_version": "Release/stable/2.16.13-1-g7f95c60"
   },
   {
     "name": "SASS-x86_64",
-    "selected_version": "Release/2019_MR4/2.13.19-4-g73d062a"
+    "selected_version": "Release/stable/2.16.13-1-g7f95c60"
   },
   {
     "name": "SecureDeviceKey",
-    "selected_version": "2019_MR4@5e2fbfdc3f1eb8b4f5acaa307037fc94d2a86f99"
+    "selected_version": "stable@54340a84cf1f1f70f75c94b73dd8091473974810"
   },
   {
     "name": "ServicesClients-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.0.7-240+331e0f8"
+    "selected_version": "Release/stable/2.0.7-256+0629d20"
   },
   {
     "name": "ServicesClients-x86_64",
-    "selected_version": "Release/2019_MR4/2.0.7-240+331e0f8"
+    "selected_version": "Release/stable/2.0.7-256+0629d20"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.17-2-geaba425"
+    "selected_version": "Release/stable/2.2.17-2-g055f09c"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/2019_MR4/6.0.0-2851+37c7c60"
+    "selected_version": "Release/stable/7.0.0-2891+58db222"
   },
   {
     "name": "SoftwareUpdate-x86_64",
-    "selected_version": "Release/2019_MR4/6.0.0-2851+37c7c60"
+    "selected_version": "Release/stable/7.0.0-2891+58db222"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.11-3-g45e326f"
+    "selected_version": "Release/stable/2.2.15-1-g6b12596"
   },
   {
     "name": "SystemEventService-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.11-3-g45e326f"
+    "selected_version": "Release/stable/2.2.15-1-g6b12596"
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.0.0-275+64f4f99"
+    "selected_version": "Release/stable/3.0.0-280+77aa49a"
   },
   {
     "name": "Telemetry-x86_64",
-    "selected_version": "Release/2019_MR4/3.0.0-275+64f4f99"
+    "selected_version": "Release/stable/3.0.0-280+77aa49a"
   },
   {
     "name": "TelemetryClient-qc8017_32",
-    "selected_version": "Release/2019_MR4/3.0.0-120+e2d099d"
+    "selected_version": "Release/stable/3.0.0-131+d4be61e"
   },
   {
     "name": "TelemetryClient-x86_64",
-    "selected_version": "Release/2019_MR4/3.0.0-120+e2d099d"
+    "selected_version": "Release/stable/3.0.0-131+d4be61e"
   },
   {
     "name": "TestUtils",
@@ -533,14 +533,14 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Release/2019_MR4/2.2.27-4-g9d6fe05"
+    "selected_version": "Release/stable/2.2.34-1-gb3ae363"
   },
   {
     "name": "VPAController-x86_64",
-    "selected_version": "Release/2019_MR4/2.2.27-4-g9d6fe05"
+    "selected_version": "Release/stable/2.2.34-1-gb3ae363"
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/2019_MR4/2.2.5-1-gbf8edb6"
+    "selected_version": "Release/stable/2.2.5-2-gcb6339a"
   }
 ]
