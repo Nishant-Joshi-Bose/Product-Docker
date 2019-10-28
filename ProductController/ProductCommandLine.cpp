@@ -24,6 +24,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#include <sstream>
 #include "Intents.h"
 #include "IntentHandler.h"
 #include "CustomProductLpmHardwareInterface.h"
@@ -340,10 +341,10 @@ void ProductCommandLine::HandleKey( const std::list<std::string>& argList,
         const std::string& argumentString = argList.front( );
         const uint32_t     keyActionValue = std::atoi( argumentString.c_str( ) );
 
-        if( 0 <= keyActionValue && keyActionValue <= 254 )
+        if( keyActionValue <= 254 )
         {
             response  = "The key action value ";
-            response +=  keyActionValue;
+            response +=  argumentString;
             response += " will be sent to the product controller state machine.\r\n";
 
             ProductMessage productMessage;
@@ -541,7 +542,7 @@ void ProductCommandLine::HandleTestFreq( const std::list<std::string>& argList,
         const std::string& argumentString = argList.front( );
         const uint32_t     frequencyValue = std::atoi( argumentString.c_str( ) );
 
-        if( 0 <= frequencyValue && frequencyValue <= 10000000 )
+        if( frequencyValue <= 10000000 )
         {
             response  = "The wifi frequncy value ";
             response +=  frequencyValue;
@@ -648,16 +649,21 @@ void ProductCommandLine::HandleTestVoice( const std::list<std::string>& argList,
 void ProductCommandLine::HandleVolume( const std::list<std::string>& argList,
                                        std::string& response )
 {
+    const uint32_t minVolume = static_cast <uint32_t>( m_ProductController.m_cachedVolume.properties( ).minlimit( ) );
+    const uint32_t maxVolume = static_cast <uint32_t>( m_ProductController.m_cachedVolume.properties( ).maxlimit( ) );
+    std::ostringstream usage;
+    usage << "Incorrect Usage: product volume [integer from " << minVolume << " to " << maxVolume << "]\r\n";
+
     if( argList.size( ) != 1 )
     {
-        response = "Incorrect Usage: product volume [integer from 0 to 100] \r\n";
+        response = usage.str( );
     }
     else
     {
         const std::string& volumeLevelString = argList.front( );
         const uint32_t     volumeLevelValue  = std::atoi( volumeLevelString.c_str( ) );
 
-        if( 0 <= volumeLevelValue && volumeLevelValue <= 100 )
+        if( volumeLevelValue >= minVolume && volumeLevelValue <= maxVolume )
         {
             response  = "The volume will be changed to the level ";
             response +=  volumeLevelString;
@@ -682,7 +688,7 @@ void ProductCommandLine::HandleVolume( const std::list<std::string>& argList,
         }
         else
         {
-            response = "Incorrect Usage: product volume [integer from 0 to 100] \r\n";
+            response = usage.str( );
         }
     }
 }
