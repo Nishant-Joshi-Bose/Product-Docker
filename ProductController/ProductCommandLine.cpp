@@ -117,7 +117,7 @@ void ProductCommandLine::RegisterCliCmds( )
                                                                           static_cast<int>( CLICmdsKeys::AUTOWAKE ) );
 
     m_ProductController.GetCommonCliClientMT().RegisterCLIServerCommands( "product intent",
-                                                                          "This command tests sending an intent value.",
+                                                                          "This command tests sending an intent.",
                                                                           "product intent [int from 0 to 254]",
                                                                           m_ProductController.GetTask(),
                                                                           callbackForCommands,
@@ -326,7 +326,7 @@ void ProductCommandLine::HandleAutowake( const std::list<std::string>& argList,
 ///
 /// @name   ProductCommandLine::HandleIntent
 ///
-/// @brief  This command tests sending an intent value to the product controller state machine.
+/// @brief  This command tests sending an intent to the product controller state machine.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::HandleIntent( const std::list<std::string>& argList,
@@ -336,6 +336,37 @@ void ProductCommandLine::HandleIntent( const std::list<std::string>& argList,
     {
         response = "Incorrect Usage: product intent [integer from 0 to 254]";
     }
+    if( argList.front( ) == "help" )
+    {
+        response = "Common intents:\n";
+        for( ActionCommon_t_Actions commonIntent = ActionCommon_t_Actions_Actions_MIN;
+             commonIntent <= ActionCommon_t_Actions_Actions_MAX;
+             commonIntent = ActionCommon_t_Actions( commonIntent + 1 ) )
+        {
+            if( ActionCommon_t_Actions_IsValid( commonIntent ) )
+            {
+                response += "\t";
+                response += std::to_string( commonIntent );
+                response += ": ";
+                response += ActionCommon_t_Actions_Name( commonIntent );
+                response += "\n";
+            }
+        }
+        response += "Custom intents:\n";
+        for( ActionCustom_t_Actions customIntent = ActionCustom_t_Actions_Actions_MIN;
+             customIntent <= ActionCustom_t_Actions_Actions_MAX;
+             customIntent = ActionCustom_t_Actions( customIntent + 1 ) )
+        {
+            if( ActionCustom_t_Actions_IsValid( customIntent ) )
+            {
+                response += "\t";
+                response += std::to_string( customIntent );
+                response += ": ";
+                response += ActionCustom_t_Actions_Name( customIntent );
+                response += "\n";
+            }
+        }
+    }
     else
     {
         const std::string& argumentString = argList.front( );
@@ -343,7 +374,7 @@ void ProductCommandLine::HandleIntent( const std::list<std::string>& argList,
 
         if( intentValue <= 254 )
         {
-            response  = "The intent value ";
+            response  = "The intent ";
             response +=  CommonIntentHandler::GetIntentName( intentValue );
             response += " will be sent to the product controller state machine.\r\n";
 
