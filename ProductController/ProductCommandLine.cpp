@@ -382,7 +382,7 @@ void ProductCommandLine::HandleMute( const std::list<std::string>& argList,
             if( muteState == "on" )
             {
 
-                muteStateValue = "The mute will be turned on. \r\n";
+                response = "The mute will be turned on. \r\n";
                 muteStateValue = true;
             }
             else
