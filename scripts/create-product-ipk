@@ -57,6 +57,7 @@ function put_script {
 wspace=$(cd "$(dirname $0)" && echo "$PWD")/.. || exit
 
 if [ ! -z $CONAN_BUILD ]; then
+    riviera_hsp_licenses_dir=$(conan-get-install RivieraHSP qc8017_32 location)/licenses/ || exit
     riviera_hsp_images_dir=$(conan-get-install RivieraHSP qc8017_32 location)/images/ || exit
     riviera_toolchain_dir=$(conan-get-install RivieraSDK qc8017_32 location) || exit
     galapagosclient_dir=$(conan-get-install GalapagosClient qc8017_32 location) || exit
@@ -215,8 +216,14 @@ EOF
 distro=$(lsb_release -is)
 if [ "$distro" = "Ubuntu" ]; then
     if [ ! -z $CONAN_BUILD ]; then 
-        # CONAN TODO
-        echo "Skipping OpenSourceLicensing from HSP due to conan issue"
+    	echo "Creating license tar"
+	tar czmf "$wspace"/Riviera-HSP-licenses.tar.gz -C $riviera_hsp_licenses_dir .|| exit
+        if dpkg -l libfile-slurp-perl >& /dev/null && dpkg -l libdigest-md5-file-perl >& /dev/null; then
+            "$wspace/OpenSourceLicensing/riviera-licenses" -professor "$wspace/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
+        else
+            echo >&2 "$(basename $0): Error: please run 'sudo apt install libfile-slurp-perl libdigest-md5-file-perl' to support open source license generation"
+            exit 1
+        fi
     else
         if dpkg -l libfile-slurp-perl >& /dev/null && dpkg -l libdigest-md5-file-perl >& /dev/null; then
             "$wspace/OpenSourceLicensing/riviera-licenses" -professor "$riviera_hsp_images_dir/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
