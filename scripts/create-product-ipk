@@ -101,7 +101,7 @@ if [ ! -z $CONAN_BUILD ]; then
     capsservice_dir=$(conan-get-install CastleCAPSService qc8017_32 location) || exit
     lightBarAnimationTool_dir=$(conan-get-install CastleLedAnimationTool qc8017_32 location) ||exit
     product_controller=$(conan-get-install ProfessorProductController qc8017_32 location) || exit
-    ptsservice_dir=$(conan-get-install PtsServer qc8017_32 location) || exit
+    ptsserver_dir=$(conan-get-install PtsServer qc8017_32 location) || exit
 else
     riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
     riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
@@ -146,7 +146,7 @@ else
     capsservice_dir=$(components get CAPSService-qc8017_32 installed_location) || exit
     lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_location) || exit
     product_controller=$(components get ProfessorProductController-qc8017_32 installed_location) || exit
-    ptsservice_dir=$(components get PtsServer-qc8017_32 installed_location) || exit
+    ptsserver_dir=$(components get PtsServer-qc8017_32 installed_location) || exit
 fi
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -192,8 +192,8 @@ cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 
-cp "$ptsservice_dir/pts-handler" "$opt_dir/etc" || exit
-cp "$ptsservice_dir/PtsServer" "$opt_dir/bin" || exit
+cp "$ptsserver_dir/pts-handler" "$opt_dir/etc" || exit
+cp "$ptsserver_dir/PtsServer" "$opt_dir/bin" || exit
 
 # CONAN TODO - Why did I need to add /bin
 if [ ! -z $CONAN_BUILD ]; then
@@ -337,7 +337,7 @@ fi
 cd "$opt_dir"/lib || exit
 rm -f *.a
 
-"$ptsservice_dir"/make-static-content-map / /opt/Bose/html $(
+"$ptsserver_dir"/make-static-content-map / /opt/Bose/html $(
   # index.html has special handling in the pts-handler script, so don't
   # include it in the static content map.
   cd "$opt_dir"/html && find ! -name index.html ! -name '*~' -type f
