@@ -466,8 +466,13 @@ echo "SoundTouch postrm"
 exit 0
 EOF
 
-riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
-riviera_hsp_ver=${riviera_hsp_ver##*/}
+if [ ! -z $CONAN_BUILD ]; then
+  riviera_hsp_ver=$(conan-get-install RivieraHSP qc8017_32 version) || exit
+else
+  riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
+  riviera_hsp_ver=${riviera_hsp_ver##*/}
+fi
+
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
 echo "SoundTouch preinst"

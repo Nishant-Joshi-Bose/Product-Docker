@@ -21,11 +21,12 @@ nightly_xml=$wspace/LpmManifestFiles/nightly_lpm_package.xml
 continuous_xml=$wspace/LpmManifestFiles/continuous_lpm_package.xml
 
 if [ ! -z $CONAN_BUILD ]; then
-lightBarAnimationTool_dir=$(conan-get-install CastleLedAnimationTool qc8017_32 location) ||exit
+  lightBarAnimationTool_dir=$(conan-get-install CastleLedAnimationTool qc8017_32 location) || exit
+  riviera_lpm_tools_dir=$(conan-get-install RivieraLPMTools qc8017_32 location) || exit
 else
-lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_location) ||exit
+  lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_location) || exit
+  riviera_lpm_tools_dir=$(components get RivieraLPM-Tools installed_location) || exit
 fi
-riviera_lpm_tools_dir=$(components get RivieraLPM-Tools installed_location) || exit
 
 # For release builds, we want to the timestamp of the BLOB to reflect that last time the manifest XML file was modified in git. This
 # allows for the BLOB version (which includes a timestamp) to stay static across builds where the contents of the BLOB does not change.
