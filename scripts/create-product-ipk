@@ -220,7 +220,9 @@ if [ "$distro" = "Ubuntu" ]; then
 	tar czmf "$wspace"/Riviera-HSP-licenses.tar.gz -C $riviera_hsp_licenses_dir .|| exit
         if dpkg -l libfile-slurp-perl >& /dev/null && dpkg -l libdigest-md5-file-perl >& /dev/null; then
             "$wspace/OpenSourceLicensing/riviera-licenses" -professor "$wspace/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
+            rm "$wspace/Riviera-HSP-licenses.tar.gz"
         else
+            rm "$wspace/Riviera-HSP-licenses.tar.gz"
             echo >&2 "$(basename $0): Error: please run 'sudo apt install libfile-slurp-perl libdigest-md5-file-perl' to support open source license generation"
             exit 1
         fi
