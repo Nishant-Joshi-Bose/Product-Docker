@@ -8,10 +8,10 @@ class Professor(common.MakefilePackage):
     name = "Professor"
     version = common.get_version_git_tag()
     generators = "json"
-    url = "https://github.com/BoseCorp/%s" % name
+    url = "https://github.com/BoseCorp/%sProductPackaging" % name
     scm = {
         "type": "git",
-        "url": "git@github.com:BoseCorp/%s.git" % name,
+        "url": "git@github.com:BoseCorp/%ssProductPackaging.git" % name,
         "revision": "auto"
     }
 
