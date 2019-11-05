@@ -35,6 +35,8 @@ if [ -z $CONAN_REMOTE ]; then
 	CONAN_REMOTE=barbarian
 fi
 
+echo "CONAN_REMOTE IS $CONAN_REMOTE"
+
 # Generate version files. Dont rely on product controller version
 mkdir -p "$wspace"/builds/package_version
 gen-version-files --git-tag "$wspace"/builds/package_version
@@ -193,7 +195,7 @@ export GENERATE_HSP_SIGNATURES=1
 cd $wspace
 if [ ! -z $CONAN_BUILD ]; then
   IPKS_HSP=$(echo $IPKS_HSP | tr '\n' ',' | tr ' ' ',')
-  conan install $wspace -o product_package=True -o ipks_list="$IPKS_HSP" --build=missing || exit # need to install x86_64 for opkg build requirements
+  conan install $wspace -r "$CONAN_REMOTE" -o product_package=True -o ipks_list="$IPKS_HSP" --build=missing || exit # need to install x86_64 for opkg build requirements
   conan build $wspace || exit # this will run the product-tar script that requires the opkg build dependency
 else
   "$wspace"/scripts/create-product-tar -i $IPKS_HSP || exit
