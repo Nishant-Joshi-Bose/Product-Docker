@@ -31,6 +31,9 @@ if (( $# != 0 )); then
 fi
 
 wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
+if [ ! -z $CONAN_REMOTE ]
+	CONAN_REMOTE=barbarian
+fi
 
 # Generate version files. Dont rely on product controller version
 mkdir -p "$wspace"/builds/package_version
@@ -48,9 +51,9 @@ if [ ! -z $CONAN_BUILD ] && [ ! -f "$wspace"/conan_install_locations.json ]; the
     echo "!!!!! conan_install_locations.json not found !!!!!"
     echo "Performing conan install for required architectures..."
     # CONAN-TODO lock the dependency versions between these install runs
-    conan install "$wspace"  --pr=RivieraSDK_64 -u --build=missing || exit
+    conan install "$wspace"  -r "$CONAN_REMOTE" --pr=RivieraSDK_64 -u --build=missing || exit
     conan-merge-installs || exit
-    conan install "$wspace"  --pr=RivieraSDK_32 -u --build=missing || exit
+    conan install "$wspace"  -r "$CONAN_REMOTE" --pr=RivieraSDK_32 -u --build=missing || exit
     conan-merge-installs || exit
 fi
 
