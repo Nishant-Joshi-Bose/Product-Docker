@@ -86,6 +86,10 @@ echo "RIVIERASWUPRECOVERY_DIR is $RIVIERASWUPRECOVERY_DIR"
 echo "RIVIERAMINIMALFS_DIR is $RIVIERAMINIMALFS_DIR"
 echo "TESTUTILS_DIR is $TESTUTILS_DIR"
 
+# This script needs to location of the rivieraSDK, so we need to set the env variable
+export RIVIERASDK=$(conan-get-install RivieraSDK qc8017_32 location)
+echo "RIVIERASDK is $RIVIERASDK"
+
 # Create ipks as per list in ipks.txt
 IPKS_FILE="$wspace"/ipks.txt || exit
 PACKAGENAMES_FILE="$wspace"/package_names.txt || exit
