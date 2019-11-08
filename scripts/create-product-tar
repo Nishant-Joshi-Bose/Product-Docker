@@ -32,6 +32,11 @@ def execute_cmd_on_host(cmd):
     (out, err) = p.communicate()
     ## Wait for command to terminate. Get return returncode ##
     p_status = p.wait()
+
+    # throw exception if command execution fails
+    if p_status != 0 :
+        raise Exception('Failed to execute command \"' + cmd +  '\"')
+
     logging.debug("\t\t[%s]" %out)
     return out
 
@@ -264,7 +269,12 @@ def extract_ext4_partition(input_ext4, partition_name, rename_ext4=None):
     util_cmd = os.path.join(swupdate_dir, "tools/BuildTools/simg2img")
     input_ext4_raw = input_ext4_full + ".raw"
     cmd = util_cmd + " " + input_ext4_full + " " + input_ext4_raw
-    execute_cmd_on_host(cmd)
+    try:
+        execute_cmd_on_host(cmd)
+    except:
+        # This is known issue that simgtoimg command is failing
+        # hence ignoring this error for now
+        logging.debug("\t\tIgnored failure executing command : [%s]", cmd)
     if not os.path.isfile(input_ext4_raw):
         return 62, "Cannot create RAW file from EXT4"
     ''' find size in bytes of $ext4_full.raw to be used during rebuilding EXT4 '''
