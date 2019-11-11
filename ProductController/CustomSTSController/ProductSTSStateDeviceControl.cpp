@@ -37,10 +37,10 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & requ
         AsyncCallback< DeviceControllerClientMessages::DeviceActivationRequest_t >
         activationCb( cb, m_account.GetProductSTSController()->GetProductController().GetTask() );
         // Send activation request
-        DeviceControllerClientMessages::DeviceActivationRequest_t request;
-        request.set_activation( true );
-        request.set_id( source->accountid() );
-        m_deviceControllerPtr->SendDeviceActivationRequest( request, activationCb );
+        DeviceControllerClientMessages::DeviceActivationRequest_t activationRequest;
+        activationRequest.set_activation( true );
+        activationRequest.set_id( source->accountid() );
+        m_deviceControllerPtr->SendDeviceActivationRequest( activationRequest, activationCb );
 
         // Update nowPlaying to STS
         if( !m_active )
@@ -108,10 +108,10 @@ bool ProductSTSStateDeviceControl::HandleDeactivateRequest( const STS::Deactivat
         AsyncCallback< DeviceControllerClientMessages::DeviceActivationRequest_t >
         activationCb( cb, m_account.GetProductSTSController()->GetProductController().GetTask() );
         // Send activation request
-        DeviceControllerClientMessages::DeviceActivationRequest_t request;
-        request.set_activation( false );
-        request.set_id( source->accountid() );
-        m_deviceControllerPtr->SendDeviceActivationRequest( request, activationCb );
+        DeviceControllerClientMessages::DeviceActivationRequest_t activationRequest;
+        activationRequest.set_activation( false );
+        activationRequest.set_id( source->accountid() );
+        m_deviceControllerPtr->SendDeviceActivationRequest( activationRequest, activationCb );
     }
     else
     {

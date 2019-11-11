@@ -353,7 +353,7 @@ void ProductCecHelper::Connected( bool connected )
 
     m_videoManagerPtr->RegisterForHotplugEvent( CallbackForKeyEvents );
 
-    auto lpmConnectCb = [ this ]( bool connected )
+    auto lpmConnectCb = [ this ]( bool lpmConnected )
     {
         const Callback< IPCSource_t > cecSrcSwitchCb( [ this ]( IPCSource_t source )
         {
