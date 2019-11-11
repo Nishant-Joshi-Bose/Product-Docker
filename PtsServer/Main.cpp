@@ -63,7 +63,7 @@ int open_listenfd()
 
     int v = 1;
     if( setsockopt( listenfd, SOL_SOCKET, SO_REUSEADDR,
-                    ( const void * )&v , sizeof( v ) ) == -1 )
+                    ( const void * )&v, sizeof( v ) ) == -1 )
         DIE( "SO_REUSEADDR: " << err() );
 
     sockaddr_in sa;
@@ -297,13 +297,13 @@ void read_static_content_map( char const* file_name )
             continue;
         }
         auto const& url_path = fields[0];
-        auto const& file_name = fields[1];
+        auto const& conent_map_file_name = fields[1];
         auto const& mime_type = fields[2];
 
-        auto r = static_items.emplace( url_path, static_item{ file_name, mime_type } );
+        auto r = static_items.emplace( url_path, static_item{ conent_map_file_name, mime_type } );
         if( !r.second )
             LOG( "Duplicate entry for " << url_path
-                 << " at " << file_name << " line " << line_number );
+                 << " at " << conent_map_file_name << " line " << line_number );
     }
 }
 
