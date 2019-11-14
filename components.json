@@ -388,6 +388,10 @@
     "selected_version": "Release/bose-stable/bose-v1.2.11-52-gf3b2829"
   },
   {
+    "name": "PackageInstallTime",
+    "selected_version": "professor/master@29bb9f356ea2503bc147b71a06d879c662b5abc8"
+  },
+  {
     "name": "PassportClient-qc8017_32",
     "selected_version": "Release/stable/2.2.0-1616+8c57020"
   },

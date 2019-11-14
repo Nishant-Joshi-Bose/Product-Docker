@@ -50,6 +50,7 @@ IOT_DIR = $(shell components get IoTService-qc8017_32 installed_location)
 PRODUCT_STARTUP_DIR = $(shell components get product-startup installed_location)
 RIVIERASWUPRECOVERY_DIR  = $(shell components get RivieraSwUpRecovery-qc8017_32 installed_location)
 RIVIERAMINIMALFS_DIR  = $(shell components get RivieraMinimalFS-qc8017_32 installed_location)
+PACKAGEINSTALLTIME_DIR = $(shell components get PackageInstallTime installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -136,7 +137,7 @@ print_variables:
 # Add exclude packages list in metadata.json
 .PHONY: generate-metadata
 generate-metadata: cmake_build
-	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p professor,ginger-cheevers -k dev -l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA)
+	$(SOFTWARE_UPDATE_DIR)/make-metadata-json -d $(BOSE_WORKSPACE)/builds/$(cfg) -p professor,ginger-cheevers -k dev -l $(EXCL_PACKAGES_LST_LOCAL) -o $(EXCL_PACKAGES_LST_OTA) -i $(PACKAGEINSTALLTIME_DIR)/packagesInstallTime.json
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
