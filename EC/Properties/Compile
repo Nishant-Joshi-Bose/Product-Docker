@@ -13,7 +13,6 @@ MinimalFSFullVersion=$(components get RivieraMinimalFS-qc8017_32 selected_versio
 MinimalFSVersion=${MinimalFSFullVersion##*/} || exit
 ectool setProperty /myJob/RestoreVersion "$MinimalFSVersion" || exit
 
-
 if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
     KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx' --ignore-files */proto/*"
 fi
@@ -23,12 +22,19 @@ export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 deploy disableGVA=$[DisableGVA] || exit
 make sdk=x86_64 cfg=Debug jobs=8 || exit
 
-set +x
 if [ "$[BuildType]" = "Release" -o "$[/javascript myJob.CreateProfileEntry]" = "true" ]; then
     git clone git@github.com:BoseCorp/iot-profile-creator
     set +x
     iot-profile-creator/update_all_environments.sh professor       $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $MinimalFSVersion
     iot-profile-creator/update_all_environments.sh ginger-cheevers $[Version] $(ectool getFullCredential IoT-Profile-Password --value password) $MinimalFSVersion
+fi
+
+if [ "$[BuildType]" = "Release" ]; then
+    clamscan --infected --recursive --stdout $[buildDir]/builds/Release/*stage | tee $[buildDir]/builds/deploy/clamscan.log
+    if [ $(awk '/Infected files/ {print $NF}' $[buildDir]/builds/deploy/clamscan.log) -ne 0 ]; then
+        printf "ClamAV found at least one infected file.\nPlease check $[buildDir]/builds/deploy/clamscan.log\n"
+        exit 1
+    fi
 fi
 
 : success
