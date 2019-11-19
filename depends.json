@@ -22,13 +22,6 @@
   },
   {
     "channel": "conan_stable",
-    "component": "DinghyWebBrowser",
-    "options": "",
-    "user": "BoseCorp",
-    "version": "[>=0.0.1-0, include_prerelease=True]"
-  },
-  {
-    "channel": "conan_stable",
     "component": "AVSService",
     "options": "",
     "user": "BoseCorp",
@@ -247,6 +240,13 @@
   {
     "channel": "conan_stable",
     "component": "CastleWebkit",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "DinghyWebBrowser",
     "options": "",
     "user": "BoseCorp",
     "version": "[>=0.0.1-0, include_prerelease=True]"
