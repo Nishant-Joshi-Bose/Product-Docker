@@ -20,8 +20,8 @@ class Professor(common.MakefilePackage):
 
     # for qc64 we need GVA, CastleSASS, and CastleAudioPathClient
     # for qc32 we need to EXCLUDE GVA
-    qc8017_64_depends = ["GVA", "CastleSASS", "CastleAudioPathClient"]
-    qc8017_32_excludes = ["GVA"]
+    qc8017_64_depends = ["GVA", "CastleSASS", "CastleAudioPathClient", "DinghyWebBrowser"]
+    qc8017_32_excludes = ["GVA", "DinghyWebBrowser"]
 
 
     def build_requirements(self):
