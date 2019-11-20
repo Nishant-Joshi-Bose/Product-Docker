@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Release/stable/2.1.40-4-g9a70e68"
+    "selected_version": "Release/stable/2.1.42-6-g9a4cb1b"
   },
   {
     "name": "A4VDeviceController-x86_64",
-    "selected_version": "Release/stable/2.1.40-4-g9a70e68"
+    "selected_version": "Release/stable/2.1.42-6-g9a4cb1b"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
@@ -25,67 +25,67 @@
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Release/stable/5.4.6-9081+ba469d3"
+    "selected_version": "Release/stable/5.4.7-9118+d753c0a"
   },
   {
     "name": "AudioPathClient-x86_64",
-    "selected_version": "Release/stable/5.4.6-9081+ba469d3"
+    "selected_version": "Release/stable/5.4.7-9118+d753c0a"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Release/stable/5.4.6-9081+ba469d3"
+    "selected_version": "Release/stable/5.4.7-9118+d753c0a"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Release/stable/5.4.6-9081+ba469d3"
+    "selected_version": "Release/stable/5.4.7-9118+d753c0a"
   },
   {
     "name": "AudioPathProducts-x86_64",
-    "selected_version": "Release/stable/5.4.6-9081+ba469d3"
+    "selected_version": "Release/stable/5.4.7-9118+d753c0a"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Release/stable/5.4.6-9081+ba469d3"
+    "selected_version": "Release/stable/5.4.7-9118+d753c0a"
   },
   {
     "name": "AudioSource-AirPlay2-qc8017_32",
-    "selected_version": "Release/stable/v1.0.6-32-g6006efc"
+    "selected_version": "Release/stable/v1.0.6-33-g6e14506"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
-    "selected_version": "Release/stable/0.0.2-935+814ade6"
+    "selected_version": "Release/stable/0.0.2-955+10c22f5"
   },
   {
     "name": "AudioSource-MusicServices-qc8017_32",
-    "selected_version": "Release/stable/1.0.37-1-g2d7f952"
+    "selected_version": "Release/stable/1.0.37-2-g483a403"
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/stable/2.3.0-566+b1dd05c"
+    "selected_version": "Release/stable/2.3.0-574+ed8c7da"
   },
   {
     "name": "AudioSource-Spotify-qc8017_32",
-    "selected_version": "Release/stable/0.2.24-6-g6c4178a"
+    "selected_version": "Release/stable/0.2.24-8-gb7033c4"
   },
   {
     "name": "AudioSource-UPnP-qc8017_32",
-    "selected_version": "Release/stable/0.0.24-8-g80117f4"
+    "selected_version": "Release/stable/0.0.24-9-g97eefe7"
   },
   {
     "name": "AudioSource-UPnP-x86_64",
-    "selected_version": "Release/stable/0.0.24-8-g80117f4"
+    "selected_version": "Release/stable/0.0.24-9-g97eefe7"
   },
   {
     "name": "AudioSource-x86_64",
-    "selected_version": "Release/stable/2.3.0-566+b1dd05c"
+    "selected_version": "Release/stable/2.3.0-574+ed8c7da"
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Release/stable/2.2.75-7-ga85f459"
+    "selected_version": "Release/stable/2.2.75-8-g6b0fd8f"
   },
   {
     "name": "AVSService-x86_64",
-    "selected_version": "Release/stable/2.2.75-7-ga85f459"
+    "selected_version": "Release/stable/2.2.75-8-g6b0fd8f"
   },
   {
     "name": "BLERemoteXCVR",
@@ -93,27 +93,27 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/stable/3.4.19-1-ga35e9a0"
+    "selected_version": "Release/stable/3.4.20-1-gb4e7f74"
   },
   {
     "name": "BLESetup-x86_64",
-    "selected_version": "Release/stable/3.4.19-1-ga35e9a0"
+    "selected_version": "Release/stable/3.4.20-1-gb4e7f74"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Release/stable/2.4.0-582+994ba33"
+    "selected_version": "Release/stable/2.4.0-586+7993467"
   },
   {
     "name": "BLEToFrontDoorService-x86_64",
-    "selected_version": "Release/stable/2.4.0-582+994ba33"
+    "selected_version": "Release/stable/2.4.0-586+7993467"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Release/stable/2.32.4-1-g3635a26"
+    "selected_version": "Release/stable/2.33.0-1-gcccec24"
   },
   {
     "name": "Bluetooth-x86_64",
-    "selected_version": "Release/stable/2.32.4-1-g3635a26"
+    "selected_version": "Release/stable/2.33.0-1-gcccec24"
   },
   {
     "name": "bose-opkg-utils",
@@ -145,35 +145,35 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/stable/3.59.8-1-gdff0599"
+    "selected_version": "Release/stable/3.60.4-1-g32611d6"
   },
   {
     "name": "BTSource-x86_64",
-    "selected_version": "Release/stable/3.59.8-1-gdff0599"
+    "selected_version": "Release/stable/3.60.4-1-g32611d6"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/stable/2.12.13-1-g0989371"
+    "selected_version": "Release/stable/2.12.14-1-g11686ec"
   },
   {
     "name": "BTSTSSink-x86_64",
-    "selected_version": "Release/stable/2.12.13-1-g0989371"
+    "selected_version": "Release/stable/2.12.14-1-g11686ec"
   },
   {
     "name": "CAPSAPI-qc8017_32",
-    "selected_version": "Release/stable/1.1.7-5-g999e226"
+    "selected_version": "Release/stable/1.1.7-6-ga805a57"
   },
   {
     "name": "CAPSAPI-x86_64",
-    "selected_version": "Release/stable/1.1.7-5-g999e226"
+    "selected_version": "Release/stable/1.1.7-6-ga805a57"
   },
   {
     "name": "CAPSService-qc8017_32",
-    "selected_version": "Release/stable/3.1.5-4-g783fea3"
+    "selected_version": "Release/stable/3.1.7-6-g816f79c"
   },
   {
     "name": "CAPSService-x86_64",
-    "selected_version": "Release/stable/3.1.5-4-g783fea3"
+    "selected_version": "Release/stable/3.1.7-6-g816f79c"
   },
   {
     "name": "Cli-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Release/stable/0.0.5-276+a4e8329"
+    "selected_version": "Release/stable/0.0.5-280+fd73601"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -197,11 +197,11 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/stable/4.0.0-381+2239321"
+    "selected_version": "Release/stable/4.0.0-384+23fcec6"
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/stable/2.2.14-6-gd4e6b67"
+    "selected_version": "Release/stable/2.2.14-7-ga8aa52b"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
@@ -217,11 +217,11 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/stable/3.4.0-1-g373c6cb"
+    "selected_version": "Release/stable/3.4.1-1-g1b97a8b"
   },
   {
     "name": "FrontDoorService-x86_64",
-    "selected_version": "Release/stable/3.4.0-1-g373c6cb"
+    "selected_version": "Release/stable/3.4.1-1-g1b97a8b"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
@@ -233,27 +233,27 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/stable/3.0.0-548+9f4e90b"
+    "selected_version": "Release/stable/3.0.0-552+2a1b019"
   },
   {
     "name": "GalapagosClient-x86_64",
-    "selected_version": "Release/stable/3.0.0-548+9f4e90b"
+    "selected_version": "Release/stable/3.0.0-552+2a1b019"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Release/stable/2.3.73-1-g10e839f"
+    "selected_version": "Release/stable/2.3.78-2-gb3c24be"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/stable/3.0.1-364+30617aa"
+    "selected_version": "Release/stable/3.0.1-372+987a308"
   },
   {
     "name": "HTTPInterface-x86_64",
-    "selected_version": "Release/stable/3.0.1-364+30617aa"
+    "selected_version": "Release/stable/3.0.1-372+987a308"
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-386+aa6b9f8"
+    "selected_version": "Release/stable/2.2.0-393+b2ebf41"
   },
   {
     "name": "IotIpcClient-qc8017_32",
@@ -265,7 +265,7 @@
   },
   {
     "name": "IoTService-qc8017_32",
-    "selected_version": "Release/stable/1.0.26-8-ga76ba62"
+    "selected_version": "Release/stable/1.0.26-9-g4fc9405"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -389,7 +389,7 @@
   },
   {
     "name": "PackageInstallTime",
-    "selected_version": "professor/master@v1.0.1-professor.master"
+    "selected_version": "professor/master@v1.0.2-professor.master"
   },
   {
     "name": "PassportClient-qc8017_32",
@@ -401,7 +401,7 @@
   },
   {
     "name": "PassportService-qc8017_32",
-    "selected_version": "Release/stable/2.2.0-363+af3f536"
+    "selected_version": "Release/stable/2.2.0-369+dbb4c84"
   },
   {
     "name": "product-startup",
@@ -413,19 +413,19 @@
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Release/stable/2.2.12-36-ge3bb1af"
+    "selected_version": "Release/stable/2.2.12-37-g8cb0b27"
   },
   {
     "name": "ProductControllerCommonProto-x86_64",
-    "selected_version": "Release/stable/2.2.12-36-ge3bb1af"
+    "selected_version": "Release/stable/2.2.12-37-g8cb0b27"
   },
   {
     "name": "ProductDiscoveryService-qc8017_32",
-    "selected_version": "Release/stable/1.0.12-11-ge22e8ff"
+    "selected_version": "Release/stable/1.0.12-12-gbff4b81"
   },
   {
     "name": "ProductDiscoveryService-x86_64",
-    "selected_version": "Release/stable/1.0.12-11-ge22e8ff"
+    "selected_version": "Release/stable/1.0.12-12-gbff4b81"
   },
   {
     "name": "ProductUIAssets",
@@ -449,7 +449,7 @@
   },
   {
     "name": "RivieraLPM-Tools",
-    "selected_version": "master@4f526ba780adc94813e11358925c9346e0a9b076"
+    "selected_version": "master@cf30a20c0d064a940facc45fe7476e5a49c3a7ac"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -461,27 +461,27 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/stable/2.1.10-12-gb3b0b02"
+    "selected_version": "Release/stable/2.1.10-13-g9b22726"
   },
   {
     "name": "RivieraMinimalFS-qc8017_32",
-    "selected_version": "Release/stable/0.1.18-164+fe83ff4"
+    "selected_version": "Release/stable/0.1.18-165+aa269b5"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Release/stable/5.0.16-1-g58b29a4"
+    "selected_version": "Release/stable/5.0.16-2-g44a17cb"
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/stable/3.0.13-1-g3d9295c"
+    "selected_version": "Release/stable/3.0.16-1-gde96931"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Release/stable/3.0.13-1-g3d9295c"
+    "selected_version": "Release/stable/3.0.16-1-gde96931"
   },
   {
     "name": "SASS-x86_64",
-    "selected_version": "Release/stable/3.0.13-1-g3d9295c"
+    "selected_version": "Release/stable/3.0.16-1-gde96931"
   },
   {
     "name": "SecureDeviceKey",
@@ -489,11 +489,11 @@
   },
   {
     "name": "ServicesClients-qc8017_32",
-    "selected_version": "Release/stable/2.0.7-270+75d1484"
+    "selected_version": "Release/stable/2.0.7-273+d03774c"
   },
   {
     "name": "ServicesClients-x86_64",
-    "selected_version": "Release/stable/2.0.7-270+75d1484"
+    "selected_version": "Release/stable/2.0.7-273+d03774c"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -501,11 +501,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/stable/7.0.2-2963+62b8f38"
+    "selected_version": "Release/stable/7.0.2-2986+f0a5d1b"
   },
   {
     "name": "SoftwareUpdate-x86_64",
-    "selected_version": "Release/stable/7.0.2-2963+62b8f38"
+    "selected_version": "Release/stable/7.0.2-2986+f0a5d1b"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -517,11 +517,11 @@
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Release/stable/3.0.0-298+db0f665"
+    "selected_version": "Release/stable/3.0.0-301+72f462f"
   },
   {
     "name": "Telemetry-x86_64",
-    "selected_version": "Release/stable/3.0.0-298+db0f665"
+    "selected_version": "Release/stable/3.0.0-301+72f462f"
   },
   {
     "name": "TelemetryClient-qc8017_32",
