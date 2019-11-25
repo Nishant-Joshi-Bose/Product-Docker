@@ -101,7 +101,7 @@ if [ ! -z $CONAN_BUILD ]; then
     productdiscoveryservice_dir=$(conan-get-install CastleProductDiscoveryService qc8017_32 location) || exit
     capsservice_dir=$(conan-get-install CastleCAPSService qc8017_32 location) || exit
     lightBarAnimationTool_dir=$(conan-get-install CastleLedAnimationTool qc8017_32 location) ||exit
-    product_controller=$(conan-get-install ProfessorProductController qc8017_32 location) || exit
+    product_controller=$(conan-get-install ProductController-Professor qc8017_32 location) || exit
     ptsserver_dir=$(conan-get-install PtsServer qc8017_32 location) || exit
 else
     riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
@@ -174,7 +174,10 @@ if [ -z $CONAN_BUILD ]; then
     cp "$components_json" "$opt_dir/etc" || exit
 fi
 
-version_json=$product_controller/etc/BoseVersion.json
+version_json=$wspace/builds/package_version/BoseVersion.json
+echo "DEBUG: version_json=$version_json"
+echo "$(cat $version_json)"
+cp "$version_json" "$opt_dir/etc" || exit
 
 stfs=$capsservice_dir/fs
 mkdir -p "$opt_dir/etc/multistring" || exit

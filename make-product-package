@@ -39,7 +39,17 @@ echo "CONAN_REMOTE IS $CONAN_REMOTE"
 
 # Generate version files. Dont rely on product controller version
 mkdir -p "$wspace"/builds/package_version
-gen-version-files --git-tag "$wspace"/builds/package_version
+
+if [ ! -z $CONAN_BUILD ]; then
+  conan inspect "$wspace" -j inspect.json
+  version=$(jq '.version' -r inspect.json)
+  gen-version-files --string "$version" "$wspace"/builds/package_version
+  rm inspect.json
+else
+  gen-version-files --git-tag "$wspace"/builds/package_version
+fi
+
+echo "Version is $version"
 
 # If product controller used a dev depends to overide anything during build
 # Overide that comp at top level as well

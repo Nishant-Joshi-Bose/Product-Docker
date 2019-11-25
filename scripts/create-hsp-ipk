@@ -73,7 +73,7 @@ function put_script {
 
 wspace=$(cd "$(dirname $0)" && echo "$PWD")/.. || exit
 
-if( [ "$CONAN_BUILD" = true ] ); then
+if [ ! -z $CONAN_BUILD ]; then
     swup_dir=$(conan-get-install CastleSoftwareUpdate qc8017_32 location) || exit
     riviera_hsp_images_dir=$(conan-get-install RivieraHSP qc8017_32 location)/images/ || exit
     riviera_hsp_ver=$(conan-get-install RivieraHSP qc8017_32 version) || exit

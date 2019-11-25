@@ -62,6 +62,7 @@ class Professor(common.MakefilePackage):
 
     def package(self):
         self.copy("*", dst="", src="builds/deploy", keep_path=True)
+        self.copy("*", dst="", src="builds/package_version", keep_path=True)
 
 
     def package_id(self):

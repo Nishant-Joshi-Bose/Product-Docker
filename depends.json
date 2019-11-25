@@ -266,8 +266,8 @@
     "version": "[>=0.0.1-0, include_prerelease=True]"
   },
   {
-    "channel": "conan_integration",
-    "component": "ProfessorProductController",
+    "channel": "conan_stable",
+    "component": "ProductController-Professor",
     "options": "",
     "user": "BoseCorp",
     "version": "[>=0.0.1-0, include_prerelease=True]"
@@ -275,6 +275,13 @@
   {
     "channel": "conan_stable",
     "component": "PtsServer",
+    "options": "",
+    "user": "BoseCorp",
+    "version": "[>=0.0.1-0, include_prerelease=True]"
+  },
+  {
+    "channel": "conan_stable",
+    "component": "RivieraHSP",
     "options": "",
     "user": "BoseCorp",
     "version": "[>=0.0.1-0, include_prerelease=True]"
