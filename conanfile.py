@@ -6,7 +6,7 @@ common = python_requires('CastleConanRecipes/[>=0.0.22-0, include_prerelease=Tru
 
 class Professor(common.MakefilePackage):
     name = "Professor"
-    version = common.get_version_git_tag()
+    version = "%s.%s" % (common.get_version_git_tag(), os.getenv("CURR_TIME_MS"))
     generators = "json"
     url = "https://github.com/BoseCorp/Product-%s" % name
     scm = {

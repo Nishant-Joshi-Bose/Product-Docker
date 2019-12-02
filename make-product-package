@@ -37,6 +37,9 @@ fi
 
 echo "CONAN_REMOTE IS $CONAN_REMOTE"
 
+# export the current timestamp as an env variable. This is used by the conanfile to append a timestamp to the version info
+export CURR_TIME_MS="$(date +%s)"
+
 # Generate version files. Dont rely on product controller version
 mkdir -p "$wspace"/builds/package_version
 
