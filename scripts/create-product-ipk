@@ -179,11 +179,6 @@ echo "DEBUG: version_json=$version_json"
 echo "$(cat $version_json)"
 cp "$version_json" "$opt_dir/etc" || exit
 
-cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
-
-cp "$wspace/builds/$cfg/qc8017_32/KeyConfiguration.json" "$opt_dir/etc" || exit
-cp "$wspace/builds/$cfg/qc8017_32/BlastConfiguration.json" "$opt_dir/etc" || exit
-
 stfs=$capsservice_dir/fs
 mkdir -p "$opt_dir/etc/multistring" || exit
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/etc/multistring" || exit
