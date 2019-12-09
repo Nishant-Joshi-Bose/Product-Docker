@@ -1,0 +1,159 @@
+@startuml
+object ProductStart
+
+ProductControllerHsm <|-- ProfessorProductController
+ProductController    <|-- ProfessorProductController
+LPMClient            <|-- ProductHardwareInterface
+CLIClient            <|-- ProductCommandLine
+
+ProductStart                --* ProfessorProductController : creates
+ProfessorProductController  --* ProductHardwareInterface   : creates
+ProfessorProductController  --* ProductAudioServices       : creates
+ProfessorProductController  --* ProductDeviceSettings      : creates
+ProfessorProductController  --* ProductSoftwareServices    : creates
+ProfessorProductController  --* ProductUserInterface       : creates
+ProfessorProductController  --* ProductCommandLine         : creates
+ProfessorProductController  --* ProductFrontDoorNetwork    : creates
+
+class ProductController {
+      GetTask
+      GetProductName
+}
+
+class ProfessorProductController {
+      GetInstance
+      Run
+      Wait
+      End
+      HandleMessage( ProductMessage message )
+      ==
+      ProductControllerHsm
+      ProductControllerStateTop
+      ProductControllerStateSetup
+      ProductControllerStateOn
+      CustomProductControllerStateBooting
+      CustomProductControllerStateNetworkStandby
+      CustomProductControllerStateIdle
+      CustomProductControllerStateUpdatingSoftware
+      ==
+      IsBooted
+      GetNetworkStatus
+      GetMainTask
+      GetLock
+}
+
+class ProductHardwareInterface {
+      GetInstance
+      Run
+      End
+      SendMessage( ProductMessage message )
+      ==
+      RequestLpmStatus
+      Connected
+      HandleLpmStatus
+      ==
+      SendSetVolume
+      SendUserMute
+      SendInternalMute
+      SendSourceSelection
+      RebootRequest
+      HandleLowPowerStandby
+      SendSetDSPAudioMode
+      SendAudioPathPresentationLatency
+      SendLipSyncDelay
+      SendToneAndLevelControl
+      SendSpeakerList
+      SendSetSystemTimeoutEnableBits
+      SetBlueToothMacAddress
+      SetBlueToothDeviceName
+      SendBlueToothDeviceData
+}
+
+class ProductAudioServices {
+      GetInstance
+      Run
+      End
+      SendMessage( ProductMessage message )
+      ==
+      SelectCallbackAction
+      DeselectCallbackAction
+      VolumeCallbackAction
+      UserMuteCallbackAction
+      InternalMuteCallbackAction
+      RebroadcastLatencyCallbackAction
+      ConnectCallbackAction
+}
+
+class ProductDeviceSettings {
+      GetInstance
+      Run
+      End
+      SendMessage( ProductMessage message )
+      ==
+      GetAudioDSPControlStore
+      GetAudioToneControlStore
+      GetAudioSpeakerLevelStore
+      GetSpeakerAttributeAndSettingStore
+      GetSystemTimeoutEnableBits
+      GetRebroadcastLatencyModeStore
+      SanitizeAudioDSPControls
+      SanitizeAudioToneControls
+      SanitizeAudioLevelControls
+      SanitizeSpeakerAttributeAndSetting
+      SanitizeRebroadcastLatencyMode
+      SendDSPAudioControls
+      SendToneAndLevelControls
+      SendSpeakerSettings
+      SendSystemTimeoutEnableBits
+      SendRebroadcastLatencyMode
+}
+
+class ProductSoftwareServices {
+      GetInstance
+      Run
+      End
+      SendMessage( ProductMessage message )
+      ==
+      SendRebootRequest( unsigned int delay );
+}
+
+class ProductUserInterface {
+      GetInstance
+      Run
+      End
+      SendMessage( ProductMessage message )
+      ==
+}
+
+class ProductCommandLine {
+      GetInstance
+      Run
+      End
+      SendMessage( ProductMessage message )
+      ==
+      HandleCommand
+      ProcessCommand
+}
+
+class ProductFrontDoorNetwork {
+      GetInstance
+      Run
+      End
+      HandleMessage( ProductMessage message )
+      SendMessage  ( ProductMessage message )
+      ==
+      ServeRequests
+      GetCapsNotification
+      HandleGetLanguageRequest
+      HandlePostLanguageRequest
+      SetSystemLanguageCode
+      GetSystemLanguageCode
+      HandleGetConfigurationStatusRequest
+      ==
+      MonitorNetwork
+      GetNetworkStatusSuccess
+      GetNetworkStatusNotification
+      GetNetworkStatusFailed
+      ProcessNetworkStatus
+}
+@enduml
