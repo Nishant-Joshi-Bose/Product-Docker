@@ -1,0 +1,92 @@
+#!/usr/bin/env groovy
+@Library(['JenkinsSharedLibrary']) _
+import JenkinsJobCleanup
+
+/*
+  Description: This file is a pipeline script to calculate install time when there is any change in product repository.
+               refer https://usvacijenkins.bose.com/job/SWU-CI/job/ITC/job/CastleProducts
+*/
+
+BranchName=env.BRANCH_NAME
+echo "Branch name : $BranchName"
+ProductType=BranchName.split('/')[0]
+echo "Product type : $ProductType"
+
+// Lockable resource ID as defined in https://usvacijenkins.bose.com/lockable-resources/
+LockableResourceLabel = "SWU-CI-PGC"
+// Last customer release URL, to be updated after every release
+PrevReleaseURL = "http://hepdsw-web.bose.com/ec/prod/Professor/Release/2019_MR4/6.0.15-7651+0af1f35/product_update.zip"
+
+// To abort in progress / in queue jobs started on PR.
+def JobCleanup = new JenkinsJobCleanup()
+JobCleanup.CheckPendingJob('SWU-CI/ITC/CastleProducts', env.BRANCH_NAME)
+
+currentBuildResult='None'
+
+def buildJob(jobName, DeviceID)
+{
+    desc="Product:$ProductType, DeviceID:$DeviceID, Branch:$BranchName"
+
+    def auto_job = build job: jobName , parameters: [[$class: 'GitParameterValue', name: 'Product_branch', value: "${env.BRANCH_NAME}"], string(name: 'Device_ID', value: DeviceID), string(name: 'PrevReleaseURL', value: PrevReleaseURL), string(name: 'Description', value: desc)], propagate: false
+
+    result = auto_job.result    
+    currentBuildResult = result
+    if (!result.equals("SUCCESS")) {
+        echo result
+        throw new Exception("Build step failure")
+    }
+}
+
+def notifyPassedBuild()
+{
+   echo 'Slack Notification Started'
+   def colorName = 'GREEN'
+   def colorCode = '#00FF00'
+   def summary = "Install time calculation PIPELINE STATUS: PASSED \n Branch : ${env.BRANCH_NAME} \n\n Please look into more details on ${env.BUILD_URL}"
+   slackSend (color: colorCode,  message: summary, channel: '#eco2-installtimecalculation')
+   echo 'Slack Notification End'
+}
+
+def notifyFailedBuild()
+{
+   echo 'Slack Notification Started'
+   def colorName = 'RED'
+   def colorCode = '#FF0000'
+   def summary = "Install time calculation PIPELINE STATUS: FAILED \n Branch : ${env.BRANCH_NAME} \n\n Please look into more details on ${env.BUILD_URL}"
+   slackSend (color: colorCode,  message: summary, channel: '#eco2-installtimecalculation')
+   echo 'Slack Notification End'
+}
+
+timeout(time: 5, unit: 'HOURS')
+{
+    node('eco2-pipeline-container')
+    {
+        lock(label: "$LockableResourceLabel", quantity: 1, variable: 'LockedDeviceID')
+        {
+            echo LockedDeviceID
+            try
+            {
+                stage("CalculateInstallTime")
+                {
+                    echo "Run all the steps to calculate install time per package"
+                    buildJob("SWU-CI/ITC/CommonSteps", LockedDeviceID)
+                }
+
+                notifyPassedBuild()
+
+            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                echo "*********** BUILD ABORTED ***********"
+                currentBuildResult = 'ABORTED'
+            } catch (e) {
+                if (currentBuildResult != 'ABORTED') {
+                    echo "Caught: ${e}"
+                    currentBuildResult = "FAILURE"
+                    notifyFailedBuild()
+                }
+            } finally {
+                currentBuild.result = currentBuildResult
+            }
+        }
+    }
+}
+

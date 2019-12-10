@@ -277,7 +277,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
-
 "$audiosource_musicservices_dir/stage" "$opt_dir" || exit
 "$audiopath64_dir/stage" --product=professor "$opt_dir" || exit
 "$audiopathproduct64_dir/stage" --product=professor "$opt_dir" || exit
@@ -376,6 +375,11 @@ EOF
 # Installer scripts
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
+# ---------- NOTICE ----------
+# This script will not be called during VIP i.e. Manufacturing flashing process.
+# Please ensure - if any commands/processes are added to the script, 
+#            they also reflect in the manufacturing / VIP package (product.tar).
+# ----------------------------
 echo "SoundTouch postinst"
 if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
@@ -475,6 +479,11 @@ EOF
 
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
+# ---------- NOTICE ----------
+# This script will not be called during VIP i.e. Manufacturing flashing process.
+# Please ensure - if any commands/processes are added to the script, 
+#            they also reflect in the manufacturing / VIP package (product.tar).
+# ----------------------------
 echo "SoundTouch preinst"
 b="$riviera_hsp_ver"
 i="\$(awk '\$1 == "HSP" {print \$2}' /etc/riviera-version)"

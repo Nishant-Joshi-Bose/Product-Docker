@@ -98,6 +98,11 @@ EOF
 # Installer scripts
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
+# ---------- NOTICE ----------
+# This script will not be called during VIP i.e. Manufacturing flashing process.
+# Please ensure - if any commands/processes are added to the script, 
+#            they also reflect in the manufacturing / VIP package (product.tar).
+# ----------------------------
 echo "brussels postinst"
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
@@ -112,6 +117,11 @@ EOF
 
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
+# ---------- NOTICE ----------
+# This script will not be called during VIP i.e. Manufacturing flashing process.
+# Please ensure - if any commands/processes are added to the script, 
+#            they also reflect in the manufacturing / VIP package (product.tar).
+# ----------------------------
 echo "brussels preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1

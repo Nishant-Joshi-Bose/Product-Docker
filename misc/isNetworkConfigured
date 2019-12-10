@@ -1,0 +1,22 @@
+#!/bin/sh
+this=${0##*/} # this script's name
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    exit 1
+fi
+
+# We can only see if profile is present. There is no way to know if profile is valid
+if [ ! -f /mnt/nv/product-persistence/NetworkProfiles.xml ]; then
+    echo >&2 "$this: /mnt/nv/product-persistence/NetworkProfiles.xml not found. No network configured."
+    exit 1
+fi
+
+if grep -Fq "<WiFiProfiles>" /mnt/nv/product-persistence/NetworkProfiles.xml
+then
+    echo >&2 "$this: At least one network profile found."
+else
+    echo >&2 "$this: No network profile set."
+    exit 1
+fi
+exit 0

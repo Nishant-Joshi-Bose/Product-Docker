@@ -1,0 +1,81 @@
+#!/usr/bin/env groovy
+@Library(['JenkinsSharedLibrary']) _
+import JenkinsJobCleanup
+/*
+  Description: Jenkinsfile is a container for the pipeline script.
+               Runs tests against a given branch in CastleProducts repo
+*/
+
+/*
+To abort in progress / in queue jobs started on PR.
+*/
+def JobCleanup = new JenkinsJobCleanup()
+JobCleanup.CheckPendingJob('Professor/Professor', env.BRANCH_NAME)
+
+def buildJob(jobName)
+{
+   build job: jobName , parameters: [[$class: 'GitParameterValue', name: 'Branch', value: "${env.CHANGE_BRANCH}"],string(name: 'PullReqId', value: "${env.CHANGE_ID}"), string(name: 'PR_NAME', value: "${env.BRANCH_NAME}")]
+}
+
+/*
+Below are the jobs list to run against each PR.
+*/
+
+def ProfessorPRTest   = ["Professor/Professor_PR"]
+
+
+failureList = []
+
+def executeBuild(item){
+    try
+    {
+            buildJob(item)
+        echo 'Current Build set to SUCCESS'
+    }
+    catch (Exception ex)
+    {
+        echo "Caught: ${ex}"
+        failureList.add(item)
+        echo 'Current Build set to FAILURE'
+    }
+}
+
+timeout(time: 4, unit: 'HOURS')
+{
+  node('eco2-pipeline-container')
+    {
+      try
+       {
+          stage("PROFESSOR_PR")
+                 {
+                    for (item in ProfessorPRTest)
+                    {
+                        try
+                        {
+                            executeBuild(item)
+                        }
+                        catch (Exception ex)
+                        {
+                            echo "Caught: ${ex}"
+                        }
+                    }
+                 }
+        }
+    
+     catch (e)
+       {
+           currentBuild.result = 'FAILURE'
+           throw e
+       }
+    finally
+   {
+          currentBuild.description = "${failureList}"
+          if(failureList){
+              currentBuild.result = 'FAILURE'
+          }
+          else{
+              currentBuild.result = 'SUCCESS'
+			}
+		}
+	}	
+}

@@ -1,3 +1,17 @@
+*~
+.#*
+\#*
+.*.swp
+*.pyc
+/builds/
+/components/
+*.sublime-project
+*.sublime-workspace
+venv/
+test/ProductController/venv/
+test/ProductController/.cache/
+test/ProductController/run_install.sh
+test/ProductController/run_tests.sh
 builds/
 components/
 
