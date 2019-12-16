@@ -1,12 +1,29 @@
 from conans import python_requires
 import os
+from semver import SemVer
 
 common = python_requires('CastleConanRecipes/[>=0.0.22-0, include_prerelease=True]@BoseCorp/master')
 
 
+def get_version(git_tag):
+    if(git_tag is None):
+        # Sometimes this can happen when exporting sources, we already exported the version so we dont need to worry
+        return None
+    semver = SemVer(git_tag, loose=True)
+    build_info_delim = '.'
+
+    # formats the version to be something like 7.0.0.<timstamp>+<buildinfo> where build info will be something like
+    # gasdd.1234
+    if(os.getenv('CURR_TIME_MS') is None):
+        print("CURR_TIME_MS can not be null, please set this env variable")
+        raise Exception('Invalid version')
+    version = "%s.%s.%s-%s+%s" % (semver.major, semver.minor, semver.patch, os.getenv('CURR_TIME_MS'), build_info_delim.join(semver.build))
+    return version
+
+
 class Professor(common.MakefilePackage):
     name = "Professor"
-    version = "%s.%s" % (common.get_version_git_tag(), os.getenv("CURR_TIME_MS"))
+    version = get_version(common.get_version_git_tag())
     generators = "json"
     url = "https://github.com/BoseCorp/Product-%s" % name
     scm = {
@@ -48,8 +65,8 @@ class Professor(common.MakefilePackage):
             # For qc64, only include the ones in the array above
             if self.settings.arch == "qc8017_64":
                 if any(inclusion == packageName for inclusion in self.qc8017_64_depends):
-                   print("Adding %s - for qc8017_64 builds" % package[0])
-                   self.requires(*package)
+                    print("Adding %s - for qc8017_64 builds" % package[0])
+                    self.requires(*package)
 
 
             # For qc 32, we want to include everything except the above array excludes
