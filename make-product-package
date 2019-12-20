@@ -76,14 +76,13 @@ if [ ! -z $CONAN_BUILD ]; then
     echo "Generating lockfile and dev_depends override"
 
     # attempt to lock the dependencies for this run by creating a lockfile and then creating a dev depends out of it
-    # the graph lock also handles version generation
-    conan graph lock "$wspace" -r "$CONAN_REMOTE" --pr=RivieraSDK_32 -u --build=missing -l conan.lock || exit
-    conan-lockfile-depends --lockfile conan.lock || exit
-
+    # this initial install will download most required dependencies before merging the installs below.
+    # The merge installs script also does version checking
     echo "Performing conan install for required architectures..."
-    conan install "$wspace"  -r "$CONAN_REMOTE" --pr=RivieraSDK_64 -u --build=missing || exit
+    conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_32 -u --build=missing || exit
+    conan-lockfile-depends --lockfile conan.lock || exit
     conan-merge-installs || exit
-    conan install "$wspace"  -r "$CONAN_REMOTE" --pr=RivieraSDK_32 -u --build=missing || exit
+    conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_64 -u --build=missing || exit
     conan-merge-installs || exit
 
     # Perform one final check to ensure our versions are the same between architectures
