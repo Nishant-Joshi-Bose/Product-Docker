@@ -36,7 +36,7 @@ def get_version(git_tag):
 
 class Professor(common.MakefilePackage):
     name = "Professor"
-    version = None
+    version = get_version(common.get_version_git_tag())
     generators = "json"
     url = "https://github.com/BoseCorp/Product-%s" % name
     scm = {
@@ -54,10 +54,6 @@ class Professor(common.MakefilePackage):
     # for qc32 we need to EXCLUDE GVA
     qc8017_64_depends = ["GVA", "CastleSASS", "CastleAudioPathClient", "DinghyWebBrowser"]
     qc8017_32_excludes = ["GVA", "DinghyWebBrowser"]
-
-
-    def set_version(self):
-        self.version = get_version(common.get_version_git_tag())
 
 
     def build_requirements(self):
