@@ -1,24 +1,37 @@
 from conans import python_requires
-import os
+import os, time, calendar
 from semver import SemVer
 
 common = python_requires('CastleConanRecipes/[>=0.0.22-0, include_prerelease=True]@BoseCorp/master')
 
 
 def get_version(git_tag):
-    if(git_tag is None):
-        # Sometimes this can happen when exporting sources, we already exported the version so we dont need to worry
-        return None
-    semver = SemVer(git_tag, loose=True)
-    build_info_delim = '.'
+    version_file = "version.txt"
+    if not os.path.exists(version_file):
+        print("Regenerating version.txt file")
+        if(git_tag is None):
+            # Sometimes this can happen when exporting sources, we already exported the version so we dont need to worry
+            return None
+        semver = SemVer(git_tag, loose=True)
+        build_info_delim = '.'
 
-    # formats the version to be something like 7.0.0.<timstamp>+<buildinfo> where build info will be something like
-    # gasdd.1234
-    if(os.getenv('CURR_TIME_MS') is None):
-        print("CURR_TIME_MS can not be null, please set this env variable")
-        raise Exception('Invalid version')
-    version = "%s.%s.%s-%s+%s" % (semver.major, semver.minor, semver.patch, os.getenv('CURR_TIME_MS'), build_info_delim.join(semver.build))
-    return version
+        # formats the version to be something like 7.0.0.<timestamp>+<buildinfo> where build info will be something like
+        # gasdd.1234
+        current_time = calendar.timegm(time.gmtime())
+        version = "%s.%s.%s-%s+%s" % (semver.major, semver.minor, semver.patch, current_time, build_info_delim.join(semver.build))
+
+        # write the version to a file
+        out_file = open(version_file, "w")
+        out_file.write(version)
+        out_file.close()
+
+        return version
+    else:
+        # read from the file if we arent trying to regenerate the version
+        file = open(version_file, "r")
+        version = file.read()
+        file.close()
+        return version
 
 
 class Professor(common.MakefilePackage):
@@ -31,6 +44,8 @@ class Professor(common.MakefilePackage):
         "url": "git@github.com:BoseCorp/Product-%s.git" % name,
         "revision": "auto"
     }
+
+    exports = "depends.json", "dev_depends.json", "build_requires.json", "version.txt"
 
     options = {"product_package":[True, False], "ipks_list":"ANY"}
     default_options = {"product_package": False, "ipks_list":None}

@@ -4,76 +4,99 @@
 this=${0##*/} # this script's name
 
 tryhelp () {
-    echo >&2 "usage: $0 configuration(Release/Debug) sdk(qc8017_32/x86_64) product-list("professor ginger-cheevers"/"eddie eddieclub"/flipper/taylor)"
+    echo >&2 "usage: $0 configuration(Release/Debug) sdk(qc8017_32/x86_64) product-list("professor ginger-cheevers"/"eddie eddieclub"/flipper/taylor) conan(true/false)"
     exit 1
 }
 
-if (( $# != 3 )); then
-	tryhelp
+cleanup() {
+    unset CONAN_BUILD
+}
+
+if [ -z "$JENKINS_HOME" ]; then
+  echo "WARNING: Building a product locally is not offcially supported. Use at your own risk. Use jenkins to build for supported results"
+  echo "Press enter to continue"
+  read
+fi
+
+if (( $# < 3 )); then
+  tryhelp
 fi
 config=$1; shift
 sdk=$1; shift
 product=$1; shift
+is_conan=$1; shift
 
 
 if [ "$sdk" != "qc8017_32" -a "$sdk" != "x86_64" ]; then
-    echo >&2 "$this: invalid sdk  '$sdk'"
-	tryhelp
+  echo >&2 "$this: invalid sdk  '$sdk'"
+  tryhelp
 fi
 if [ "$config" != "Release" -a "$config" != "Debug" ]; then
-    echo >&2 "$this: invalid configuration '$config'"
-	tryhelp
+  echo >&2 "$this: invalid configuration '$config'"
+  tryhelp
 fi
+
+if [ ! -z "$is_conan" ]; then
+  if [ "$is_conan" == "true" ] || [ "$is_conan" == "True" ]; then
+    export CONAN_BUILD=True
+  fi
+fi
+
+# trap all signals and ensure we cleanup the env variable for conan builds after we are done
+trap cleanup 0 1 2 3 6 9 14 15
 
 if (( $# != 0 )); then
     echo >&2 "$this: unexpected argument '$1'"
     tryhelp
 fi
 
+# this is required to really have things work correctly, if the env is not clean it can cause problems
+echo "Cleaning previous runs"
+git clean -fdX
+
 wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
 if [ -z $CONAN_REMOTE ]; then
-	CONAN_REMOTE=barbarian
+  CONAN_REMOTE=barbarian
 fi
 
 echo "CONAN_REMOTE IS $CONAN_REMOTE"
 
-# export the current timestamp as an env variable, if null. This is used by the conanfile to append a timestamp to the version info
-# This is only exported locally. The jenkins pipeline sets it for normal building
-if [ -z "$CURR_TIME_MS" ]; then
-  export CURR_TIME_MS="$(date +%s)"
-fi
-
 # Generate version files. Dont rely on product controller version
 mkdir -p "$wspace"/builds/package_version
 
+# get all the install locations
 if [ ! -z $CONAN_BUILD ]; then
-  conan inspect "$wspace" -j inspect.json
-  version=$(jq '.version' -r inspect.json)
-  gen-version-files --string "$version" "$wspace"/builds/package_version
-  rm inspect.json
+
+    if [ -f "$wspace/dev_depends.json" ]; then
+      echo "WARNING: Dev depends detected, removing. You can not use dev_depends for product builds"
+      rm -f "$wspace/dev_depends.json"
+    fi
+
+    echo "!!!!! conan_install_locations.json not found !!!!!"
+    echo "Generating lockfile and dev_depends override"
+
+    # attempt to lock the dependencies for this run by creating a lockfile and then creating a dev depends out of it
+    # this initial install will download most required dependencies before merging the installs below.
+    # The merge installs script also does version checking
+    echo "Performing conan install for required architectures..."
+    conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_32 -u --build=missing || exit
+    conan-lockfile-depends --lockfile conan.lock || exit
+    conan-merge-installs || exit
+    conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_64 -u --build=missing || exit
+    conan-merge-installs || exit
+
+    # Perform one final check to ensure our versions are the same between architectures
+else
+  echo "WARNING: Previous run was detected. Skipping dependency installs. If you wish to update your workspace run git clean -fdX and run this again"
+fi
+
+if [ ! -z $CONAN_BUILD ]; then
+  gen-version-files version.txt "$wspace"/builds/package_version
 else
   gen-version-files --git-tag "$wspace"/builds/package_version
 fi
 
 echo "Version is $version"
-
-# If product controller used a dev depends to overide anything during build
-# Overide that comp at top level as well
-if [ ! -z $CONAN_BUILD ] && [ -f "$wspace"/dev_depends.json ]; then
-    echo "!!!!! dev_depends.json found : applying to package build !!!!!"
-    cp "$wspace"/dev_depends.json $wspace/
-fi
-
-# get all the install locations
-if [ ! -z $CONAN_BUILD ] && [ ! -f "$wspace"/conan_install_locations.json ]; then
-    echo "!!!!! conan_install_locations.json not found !!!!!"
-    echo "Performing conan install for required architectures..."
-    # CONAN-TODO lock the dependency versions between these install runs
-    conan install "$wspace"  -r "$CONAN_REMOTE" --pr=RivieraSDK_64 -u --build=missing || exit
-    conan-merge-installs || exit
-    conan install "$wspace"  -r "$CONAN_REMOTE" --pr=RivieraSDK_32 -u --build=missing || exit
-    conan-merge-installs || exit
-fi
 
 if [ ! -z $CONAN_BUILD ]; then
     RIVIERALPMUPDATER_DIR=$(conan-get-install RivieraLpmUpdater qc8017_32 location) || exit
@@ -108,8 +131,10 @@ echo "RIVIERAMINIMALFS_DIR is $RIVIERAMINIMALFS_DIR"
 echo "TESTUTILS_DIR is $TESTUTILS_DIR"
 
 # This script needs to location of the rivieraSDK, so we need to set the env variable
-export RIVIERASDK=$(conan-get-install RivieraSDK qc8017_32 location)
-echo "RIVIERASDK is $RIVIERASDK"
+if [ ! -z $CONAN_BUILD ]; then
+  export RIVIERASDK=$(conan-get-install RivieraSDK qc8017_32 location)
+  echo "RIVIERASDK is $RIVIERASDK"
+fi
 
 # Create ipks as per list in ipks.txt
 IPKS_FILE="$wspace"/ipks.txt || exit

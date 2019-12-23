@@ -29,3 +29,4 @@ conan.lock
 conan_install_locations.json
 conanbuildinfo.json
 export.json
+version.txt
