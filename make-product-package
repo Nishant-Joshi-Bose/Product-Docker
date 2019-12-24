@@ -80,7 +80,7 @@ if [ ! -z $CONAN_BUILD ]; then
     # The merge installs script also does version checking
     echo "Performing conan install for required architectures..."
     conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_32 -u --build=missing || exit
-    conan-lockfile-depends --lockfile conan.lock || exit
+    #conan-lockfile-depends --lockfile conan.lock || exit
     conan-merge-installs || exit
     conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_64 -u --build=missing || exit
     conan-merge-installs || exit
