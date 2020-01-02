@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-@Library(['JenkinsConanLibrary@conan']) _
+@Library(['JenkinsConanLibrary']) _
 
 import JenkinsConan
 def conan = new JenkinsConan(this)
