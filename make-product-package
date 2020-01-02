@@ -10,6 +10,22 @@ tryhelp () {
 
 cleanup() {
     unset CONAN_BUILD
+    unset GENERATE_HSP_SIGNATURES
+    unset RIVIERASDK
+}
+
+conan_clean() {
+    rm -f conanbuildinfo.json
+    rm -f conanbuildinfo.txt
+    rm -f conaninfo.txt
+    rm -f conan_local_version.txt
+    rm -f conan.lock
+    rm -f activate_run.sh
+    rm -f deactivate_run.sh
+    rm -f graph_info.json
+    rm -f conan_git_md5sum.txt
+    rm -f conanbuildinfo.cmake
+    rm -f export.json
 }
 
 if [ -z "$JENKINS_HOME" ]; then
@@ -80,10 +96,12 @@ if [ ! -z $CONAN_BUILD ]; then
     # The merge installs script also does version checking
     echo "Performing conan install for required architectures..."
     conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_32 -u --build=missing || exit
-    #conan-lockfile-depends --lockfile conan.lock || exit
+    conan-lockfile-depends --lockfile conan.lock || exit
     conan-merge-installs || exit
+    conan_clean
     conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_64 -u --build=missing || exit
     conan-merge-installs || exit
+    conan_clean
 
     # Perform one final check to ensure our versions are the same between architectures
 else
@@ -236,6 +254,7 @@ export GENERATE_HSP_SIGNATURES=1
 cd $wspace
 if [ ! -z $CONAN_BUILD ]; then
   IPKS_HSP=$(echo $IPKS_HSP | tr '\n' ',' | tr ' ' ',')
+  conan_clean
   conan install $wspace -r "$CONAN_REMOTE" -o product_package=True -o ipks_list="$IPKS_HSP" --build=missing || exit # need to install x86_64 for opkg build requirements
   conan build $wspace || exit # this will run the product-tar script that requires the opkg build dependency
 else
