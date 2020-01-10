@@ -17,7 +17,6 @@
   <daemon name="Deezer"/>
   <daemon name="IHeart"/>
   <daemon name="Spotify"/>
-  <daemon name="SiriusXM"/>
   <daemon name="Upnp"/>
 
   <daemon name="PtsServer">
