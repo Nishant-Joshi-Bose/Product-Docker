@@ -69,9 +69,9 @@ endif
 KEYCONFIG_GENERATOR_DIR=$(PRODUCTCONTROLLERCOMMON_DIR)/tools/key_config_generator
 
 USERKEYCONFIG=$(BOSE_WORKSPACE)/opt-bose-fs/etc/UserKeyConfig.json
-COMMON_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/CommonIntents_pb2.py
-CUSTOM_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py/Intents_pb2.py
-AUTOLPM_SERVICES=$(RIVIERALPMSERVICE_DIR)/Python/AutoLpmServiceMessages_pb2.py
+COMMON_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py3/CommonIntents_pb2.py
+CUSTOM_INTENTS=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py3/Intents_pb2.py
+AUTOLPM_SERVICES=$(RIVIERALPMSERVICE_DIR)/proto_py3/AutoLpmServiceMessages_pb2.py
 
 KEYCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/KeyConfiguration.json
 BLASTCONFIG=$(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/BlastConfiguration.json

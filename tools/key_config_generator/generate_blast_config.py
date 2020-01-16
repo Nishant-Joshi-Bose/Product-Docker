@@ -69,7 +69,7 @@ def generate_raw_config(args):
         blastmap['blastTable'].append(oe)
 
     s = json.dumps(blastmap, indent=4)
-    with io.FileIO(args.outputcfg, "w") as file:
+    with open(args.outputcfg, "w") as file:
         file.write(s)
 
 

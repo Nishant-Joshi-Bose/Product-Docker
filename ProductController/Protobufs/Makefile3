@@ -1,0 +1,32 @@
+include $(BOSE_WORKSPACE)/Settings.mk
+
+BOSELIBS_DIR                     := $(shell components get BoseLibs-$(sdk)                     installed_location)
+CAPSAPI_DIR                      := $(shell components get CAPSAPI-$(sdk)                      installed_location)
+PRODUCTCONTROLLERCOMMON_DIR      := $(shell components get ProductControllerCommon             installed_location)
+RIVIERA_LPM_PROTO_DIR            := $(shell components get RivieraLpmService-$(sdk)            installed_location)
+SYSTEMEVENTSERVICE_DIR           := $(shell components get SystemEventService-$(sdk)           installed_location)
+AUDIOSOURCE_DIR                  := $(shell components get AudioSource-$(sdk)                  installed_location)
+PRODUCTCONTROLLERCOMMONPROTO_DIR := $(shell components get ProductControllerCommonProto-$(sdk) installed_location)
+AUDIOPATH_CLIENT_DIR             := $(shell components get AudioPathClient-$(sdk)              installed_location)
+PROTOBUF_DIR                     := $(shell components get protobuf-$(shell castletools-host-sdk) installed_location)
+
+PROTO_SOURCES = Intents.proto
+
+#
+# The following alias is used to search for imported Protocol Buffer files.
+#
+PROTO_IMPORT_DIRS :=    .                                         \
+                        $(AUDIOPATH_CLIENT_DIR)/protobufs         \
+                        $(PROTO_CC_DEST)                          \
+                        $(BOSELIBS_DIR)/protobufs                 \
+                        $(BOSELIBS_DIR)/include                   \
+                        $(CAPSAPI_DIR)/SoundTouchInterfaceAPI/protobufs \
+                        $(PRODUCTCONTROLLERCOMMON_DIR)/Protobufs/private  \
+                        $(PRODUCTCONTROLLERCOMMONPROTO_DIR)/protobufs  \
+                        $(RIVIERA_LPM_PROTO_DIR)/proto            \
+                        $(SYSTEMEVENTSERVICE_DIR)/protobufs       \
+                        $(AUDIOSOURCE_DIR)/proto                  \
+
+PROTO_PY_DEST := $(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)/proto_py3
+
+include $(PROTOBUF_DIR)/protobuf-py3.mk
