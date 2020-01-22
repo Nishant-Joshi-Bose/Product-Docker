@@ -8,7 +8,7 @@ keygen_args="$@"
 # Enable the environment and install any python packages required.
 setup_python () {
 	mkdir -p $virtual_env_dir || exit
-	virtualenv -p /usr/bin/python2.7 $virtual_env_dir || exit
+	virtualenv -p /usr/bin/python3 $virtual_env_dir || exit
 	source $virtual_env_dir/bin/activate || exit
 	pip install -r requirements.txt || exit
 }
@@ -17,11 +17,6 @@ setup_python () {
 check_dependencies () {
 	if ! python_version=$(python -c 'import sys; print(sys.version_info[:2])') 2>/dev/null; then
 		echo >&2 "$0: Python interpreter not detected"
-		exit 1
-	fi
-
-	if [ "$python_version" != "(2, 7)" ]; then
-		echo >&2 "Invalid python interpreter. Must be Python 2.7"
 		exit 1
 	fi
 
