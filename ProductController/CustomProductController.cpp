@@ -1259,6 +1259,7 @@ void CustomProductController::SetupProductSTSController( )
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_CONTROLINTEGRATION { CONTROLINTEGRATION, SetupSourceSlot_Name( CONTROLINTEGRATION ),   false, deviceControlStateFactory };
 
     sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
@@ -1267,6 +1268,7 @@ void CustomProductController::SetupProductSTSController( )
     sources.push_back( descriptor_SLOT_0 );
     sources.push_back( descriptor_SLOT_1 );
     sources.push_back( descriptor_SLOT_2 );
+    sources.push_back( descriptor_CONTROLINTEGRATION );
 
     Callback< void >
     CallbackForSTSComplete( std::bind( &ProductController::HandleSTSInitWasComplete,
