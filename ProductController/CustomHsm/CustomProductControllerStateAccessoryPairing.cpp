@@ -205,11 +205,11 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProductControllerStatePlayingSelected::HandleNowSelectionInfo
+/// @brief  CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo
 ///
 /// @param  const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo
 ///
-/// @return false: if already in pairing state.
+/// @return True: when in pairing state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo(
