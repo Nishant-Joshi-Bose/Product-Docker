@@ -210,7 +210,8 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
 /// @param  const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the latest now
-///         selection. Othewise, application would Exit from AccessoryPairing state which is not desired.
+///         selection. Othewise, application would Exit from AccessoryPairing state which is not
+///         desired (Refer PGC-5328 for more details).
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo(
