@@ -512,9 +512,25 @@ void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::ED
 
     m_eedid.set_ediddata( stringEdid.str() );
 
+    SendCurrentEdid(); // to DeviceController
     m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
     BOSE_DEBUG( s_logger, "ProductCecHelper::HandleRawEDIDResponse sent %s", m_eedid.ediddata().c_str() );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductCecHelper::SendCurrentEdid
+///
+/// @param A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::SendCurrentEdid( )
+{
+    DeviceControllerClientMessages::RawEdid_t edid;
+    edid.set_edid( m_eedid.ediddata() );
+    m_CustomProductController.GetDeviceControllerClient()->SendRawEdid( edid );
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

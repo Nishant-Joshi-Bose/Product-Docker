@@ -662,6 +662,7 @@ void CustomProductController::Run( )
     auto connectCb = [this]( bool connected )
     {
         BOSE_INFO( s_logger, "Connected to DeviceController!" );
+        m_ProductCecHelper->SendCurrentEdid();
     };
 
     auto dvcDisconnectCb  = [this, connectCb]()
