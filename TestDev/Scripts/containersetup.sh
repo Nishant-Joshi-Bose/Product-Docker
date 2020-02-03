@@ -15,7 +15,5 @@ make
 pip install -qr requirements.txt
 #pip install /scratch/Mock/CastleTestUtils/dist/*
 # The following definition is only needed for professor (and will not effect eddie)
-#   You need to find it before you create the container so by running:
-#   component ... to find the libprotobuf for x86_64 and add this path
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/scratch/components-cache/Conan/397/bose-stable/2.4.2-62+g0d99523/protobuf-x86_64/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(components get protobuf-x86_64 installed_location)/lib
 pytest -sv test_start_product_controller.py
