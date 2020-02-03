@@ -7,9 +7,9 @@ FILES_DIR="$THIS_DIR/../../builds/Coverage/x86_64/Files"
 
 docker run -it \
 -v $REPO_DIR:/scratch/CastleProducts \
--v $FILES/mnt:/mnt \
--v $FILES/opt:/opt \
--v $FILES/persist:/persist \
+-v $FILES_DIR/mnt:/mnt \
+-v $FILES_DIR/opt:/opt \
+-v $FILES_DIR/persist:/persist \
 -v /scratch/components-cache:/scratch/components-cache \
 -v $THIS_DIR:/scratch/Scripts \
 b0a9a495a8b5 bash
