@@ -12,8 +12,8 @@ source venv/bin/activate
 rm -rf ~/.cache/pip
 ./venv/bin/pip install setuptools==44.0.0
 make
-#pip install -qr requirements.txt
-pip install /scratch/Mock/CastleTestUtils/dist/*
+pip install -qr requirements.txt
+#pip install /scratch/Mock/CastleTestUtils/dist/*
 # The following definition is only needed for professor (and will not effect eddie)
 #   You need to find it before you create the container so by running:
 #   component ... to find the libprotobuf for x86_64 and add this path
