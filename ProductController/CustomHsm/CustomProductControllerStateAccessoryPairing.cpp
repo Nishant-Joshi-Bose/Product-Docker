@@ -209,7 +209,8 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
 ///
 /// @param  const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo
 ///
-/// @return True: when in pairing state.
+/// @return This method returns a true Boolean value indicating that it has handled the latest now
+///         selection. Othewise, application would Exit from AccessoryPairing state which is not desired.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo(
@@ -219,7 +220,7 @@ bool CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo(
 
     using namespace ProductSTS;
 
-    if( nowSelectionInfo.has_contentitem() )
+    if( nowSelectionInfo.has_contentitem( ) )
     {
         if( nowSelectionInfo.contentitem( ).source( ) == SHELBY_SOURCE::SETUP )
         {
