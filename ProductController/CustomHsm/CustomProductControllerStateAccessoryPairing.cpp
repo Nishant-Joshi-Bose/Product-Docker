@@ -22,6 +22,7 @@
 #include "ProductControllerHsm.h"
 #include "SpeakerPairingManager.h"
 #include "ProductMessage.pb.h"
+#include "ProductSTS.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -200,6 +201,38 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
     ///
     GetProductController( ).SendAllowSourceSelectMessage( true );
     GetProductController( ).SendStopPlaybackMessage( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo
+///
+/// @param  const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo
+///
+/// @return This method returns a true Boolean value indicating that it has handled the latest now
+///         selection. Othewise, application would Exit from AccessoryPairing state which is not
+///         desired (Refer PGC-5328 for more details).
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo(
+    const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    using namespace ProductSTS;
+
+    if( nowSelectionInfo.has_contentitem( ) )
+    {
+        if( nowSelectionInfo.contentitem( ).source( ) == SHELBY_SOURCE::SETUP )
+        {
+            const auto& sourceAccount = nowSelectionInfo.contentitem( ).sourceaccount( );
+            if( sourceAccount == SetupSourceSlot_Name( PAIRING ) )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
