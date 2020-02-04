@@ -511,8 +511,8 @@ void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::ED
     }
 
     m_eedid.set_ediddata( stringEdid.str() );
-
-	SendCurrentEdid();
+    m_rawEdid.CopyFrom( rawEdid );
+    SendCurrentEdid();
     m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
     BOSE_DEBUG( s_logger, "ProductCecHelper::HandleRawEDIDResponse sent %s", m_eedid.ediddata().c_str() );
 }
@@ -526,10 +526,10 @@ void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::ED
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::SendCurrentEdid( )
 {
-	DeviceControllerClientMessages::RawEdid_t edid;
-	edid.set_edid( m_eedid.ediddata() );
-	// Send to DeviceController for potential codeset lookup
-	m_CustomProductController.GetDeviceControllerClient()->SendRawEdid(edid);
+    DeviceControllerClientMessages::RawEdid_t edid;
+    edid.set_edid( m_rawEdid.edid() );
+    // Send to DeviceController for potential codeset lookup
+    m_CustomProductController.GetDeviceControllerClient()->SendRawEdid( edid );
 }
 
 

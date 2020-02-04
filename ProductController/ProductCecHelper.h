@@ -166,6 +166,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< DataCollectionClientIF > m_DataCollectionClient;
 
+    A4VVideoManagerServiceMessages::EDIDRawMsg_t m_rawEdid;
     DataCollectionPb::HdmiEdid m_eedid;
     DataCollectionPb::CecState m_cecStateCache;
 
