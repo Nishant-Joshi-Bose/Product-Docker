@@ -81,6 +81,11 @@ void CustomProductControllerStatePlayingSelected::GoToNextState( )
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
                 return;
             }
+            if( sourceAccount == SetupSourceSlot_Name( CONTROLINTEGRATION ) )
+            {
+                ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_CONTROL_INTEGRATION );
+                return;
+            }
         }
     }
     ProductControllerStatePlayingSelected::GoToNextState( );

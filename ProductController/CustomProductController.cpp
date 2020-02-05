@@ -88,6 +88,7 @@
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateBooted.h"
 #include "CustomProductControllerStateBooting.h"
+#include "CustomProductControllerStateControlIntegration.h"
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
@@ -614,6 +615,16 @@ void CustomProductController::Run( )
       CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING,
       SYSTEM_STATE_NOTIFIED_NOT_NOTIFY,
       SystemPowerControl_State_Not_Notify );
+
+    ///
+    /// Control integration State
+    ///
+    ( void )
+    hsm.AddState<CustomProductControllerStateControlIntegration>
+    ( statePlayingSelected,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_CONTROL_INTEGRATION,
+      SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+      SystemPowerControl_State_ON );
 
     ///
     /// Stopping Streams Dedicated State and Sub-States
