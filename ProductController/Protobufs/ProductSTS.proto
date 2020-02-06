@@ -33,7 +33,7 @@ enum SetupSourceSlot
     SETUP   = 5;
     ADAPTIQ = 6;
     PAIRING = 7;
-    CONTROLINTEGRATION = 8;
+    CONTROL_INTEGRATION = 8;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

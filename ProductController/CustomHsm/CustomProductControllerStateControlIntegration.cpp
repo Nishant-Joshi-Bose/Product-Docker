@@ -52,6 +52,11 @@ CustomProductControllerStateControlIntegration( ProductControllerHsm&       hsm,
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
+void CustomProductControllerStateControlIntegration::HandleStateStart()
+{
+    GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_AUDIO_TIMER );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  CustomProductControllerStateControlIntegration::HandleIntentPlayProductSource
@@ -61,12 +66,31 @@ CustomProductControllerStateControlIntegration( ProductControllerHsm&       hsm,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateControlIntegration::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state in %s ignore CEC TV intent.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state in %s", GetName( ).c_str( ), __func__ );
     if( intent == static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_TV_CEC ) )
     {
-        return true;    // intent ACTION_TV_CEC will be ignored
+        BOSE_INFO( s_logger, "The %s state in %s: ignore CEC TV intent.", GetName( ).c_str( ), __func__ );
+        return true;
     }
     return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief CustomProductControllerStateControlIntegration::HandleInactivityTimer
+/// @param timerType
+/// @return This method returns a true value, indicating that it has handled time out event.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateControlIntegration::HandleInactivityTimer( InactivityTimerType timerType )
+{
+    if( timerType != InactivityTimerType::NO_AUDIO_TIMER )
+    {
+        BOSE_INFO( s_logger, "The %s state is in %s: timer type %d is unexpected", GetName( ).c_str( ), __func__, timerType );
+        return false;
+    }
+
+    BOSE_INFO( s_logger, "The %s state is in %s: timer %d has expired", GetName( ).c_str( ), __func__, timerType );
+    ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

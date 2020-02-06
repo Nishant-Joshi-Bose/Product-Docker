@@ -129,11 +129,11 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Conan/440/stable/4.2.13+g3fd7c5c"
+    "selected_version": "Release/stable/3.8.2-1785+32c1acd"
   },
   {
     "name": "BoseLibs-x86_64",
-    "selected_version": "Conan/440/stable/4.2.13+g3fd7c5c"
+    "selected_version": "Release/stable/3.8.2-1785+32c1acd"
   },
   {
     "name": "BoseWebBrussels",
@@ -209,11 +209,11 @@
   },
   {
     "name": "FrontDoorClient-qc8017_32",
-    "selected_version": "Conan/440/stable/3.8.2-3+g9a5b28c"
+    "selected_version": "Release/stable/3.8.1-3-g9a5b28c"
   },
   {
     "name": "FrontDoorClient-x86_64",
-    "selected_version": "Conan/440/stable/3.8.2-3+g9a5b28c"
+    "selected_version": "Release/stable/3.8.1-3-g9a5b28c"
   },
   {
     "name": "FrontDoorService-qc8017_32",
@@ -305,19 +305,19 @@
   },
   {
     "name": "opensource-curl-qc8017_32",
-    "selected_version": "Conan/440/bose-stable/7.54.2-63+g6c8d363"
+    "selected_version": "Release/bose-stable/bose-v7.54.1-63-g6c8d363"
   },
   {
     "name": "opensource-curl-x86_64",
-    "selected_version": "Conan/440/bose-stable/7.54.2-63+g6c8d363"
+    "selected_version": "Release/bose-stable/bose-v7.54.1-63-g6c8d363"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Conan/440/bose-stable/1.8.4-43+gd840e35"
+    "selected_version": "Release/bose-stable/bose-v1.8.3-42-g155435f"
   },
   {
     "name": "opensource-jsoncpp-x86_64",
-    "selected_version": "Conan/440/bose-stable/1.8.4-43+gd840e35"
+    "selected_version": "Release/bose-stable/bose-v1.8.3-42-g155435f"
   },
   {
     "name": "opensource-libarchive-qc8017_32",
@@ -325,19 +325,19 @@
   },
   {
     "name": "opensource-libwebsockets-qc8017_32",
-    "selected_version": "Conan/440/bose-stable/2.4.3-25+g2331f80"
+    "selected_version": "Release/bose-stable/bose-v2.4.2-25-g2331f80"
   },
   {
     "name": "opensource-libwebsockets-x86_64",
-    "selected_version": "Conan/440/bose-stable/2.4.3-25+g2331f80"
+    "selected_version": "Release/bose-stable/bose-v2.4.2-25-g2331f80"
   },
   {
     "name": "opensource-nghttp2-qc8017_32",
-    "selected_version": "Conan/440/bose-stable/1.24.1-54+g85a5984"
+    "selected_version": "Release/bose-stable/bose-v1.24.0-54-g85a5984"
   },
   {
     "name": "opensource-nghttp2-x86_64",
-    "selected_version": "Conan/440/bose-stable/1.24.1-54+g85a5984"
+    "selected_version": "Release/bose-stable/bose-v1.24.0-54-g85a5984"
   },
   {
     "name": "opensource-OpenAvnuApple-qc8017_32",
@@ -345,7 +345,7 @@
   },
   {
     "name": "opensource-openssl-qc8017_32",
-    "selected_version": "Conan/440/bose-stable/1.0.3-66+gf7c1751"
+    "selected_version": "Release/bose-stable/bose-v1.0.2-66-gf7c1751"
   },
   {
     "name": "opensource-openssl-x86",
@@ -353,7 +353,7 @@
   },
   {
     "name": "opensource-openssl-x86_64",
-    "selected_version": "Conan/440/bose-stable/1.0.3-66+gf7c1751"
+    "selected_version": "Release/bose-stable/bose-v1.0.2-66-gf7c1751"
   },
   {
     "name": "opensource-opkg-qc8017_32",
@@ -433,11 +433,11 @@
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "Conan/440/bose-stable/2.4.2-62+g0d99523"
+    "selected_version": "Release/bose-stable/bose-v2.4.1-61-g7bd3315"
   },
   {
     "name": "protobuf-x86_64",
-    "selected_version": "Conan/440/bose-stable/2.4.2-62+g0d99523"
+    "selected_version": "Release/bose-stable/bose-v2.4.1-61-g7bd3315"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -445,7 +445,7 @@
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Conan/440/master/5.3.4"
+    "selected_version": "Release/master/5.3.0"
   },
   {
     "name": "RivieraLPM-Tools",

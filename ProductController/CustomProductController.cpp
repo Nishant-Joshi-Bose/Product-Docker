@@ -1270,7 +1270,7 @@ void CustomProductController::SetupProductSTSController( )
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, deviceControlStateFactory, true };
-    ProductSTSController::SourceDescriptor descriptor_CONTROLINTEGRATION { CONTROLINTEGRATION, SetupSourceSlot_Name( CONTROLINTEGRATION ),   false, deviceControlStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_CONTROL_INTEGRATION { CONTROL_INTEGRATION, SetupSourceSlot_Name( CONTROL_INTEGRATION ),   false, deviceControlStateFactory };
 
     sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
@@ -1279,7 +1279,7 @@ void CustomProductController::SetupProductSTSController( )
     sources.push_back( descriptor_SLOT_0 );
     sources.push_back( descriptor_SLOT_1 );
     sources.push_back( descriptor_SLOT_2 );
-    sources.push_back( descriptor_CONTROLINTEGRATION );
+    sources.push_back( descriptor_CONTROL_INTEGRATION );
 
     Callback< void >
     CallbackForSTSComplete( std::bind( &ProductController::HandleSTSInitWasComplete,
@@ -2158,6 +2158,26 @@ void CustomProductController::SendInitialCapsData()
             sourcesRespCb,
             m_errorCb );
         BOSE_INFO( s_logger, "%s sent %s", __func__, message.DebugString( ).c_str( ) );
+    }
+
+    {
+        // CI source was added after SOS, so it may not exist in already running systems and its visibility needs to be set
+        using namespace ProductSTS;
+        Sources message;
+        Sources_SourceItem* source = message.add_sources( );
+
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
+        source->set_accountid( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+            FRONTDOOR_SYSTEM_SOURCES_API,
+            message,
+            {},
+            m_errorCb );
+        BOSE_INFO( s_logger, "Sent %s", message.DebugString( ).c_str( ) );
     }
 
     std::string DefaultRebroadcastLatencyModeFile{ g_PersistenceRootDir };
