@@ -52,7 +52,6 @@
             "sourceName": "SETUP",
             "sourceAccountName": "ADAPTIQ",
             "zoneConfig": {
-                "zonesConfigured": [4, 7, 9],
                 "zonesUnconfigured": [4, 7, 9]
             }
         },
@@ -61,7 +60,6 @@
             "sourceName": "SETUP",
             "sourceAccountName": "PAIRING",
             "zoneConfig": {
-                "zonesConfigured": [4, 7, 9],
                 "zonesUnconfigured": [4, 7, 9]
             }
         },
@@ -70,7 +68,6 @@
             "sourceName": "SETUP",
             "sourceAccountName": "CONTROL_INTEGRATION",
             "zoneConfig": {
-                "zonesConfigured": [9, 10],
                 "zonesUnconfigured": [9, 10]
             }
         },
@@ -79,7 +76,6 @@
             "sourceName": "SETUP",
             "sourceAccountName": "SETUP",
             "zoneConfig": {
-                "zonesConfigured": [9],
                 "zonesUnconfigured": [9]
             }
         },
