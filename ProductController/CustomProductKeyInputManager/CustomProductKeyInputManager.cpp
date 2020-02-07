@@ -351,7 +351,9 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const IpcKeyInformatio
 
     // If the device has been configured, blast the key (if it hasn't been configured but it's a key
     // that normally would have been blasted, we'll consume the key)
-    if( m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem ) && ( keyEvent.keystate() == KEY_PRESSED ) )
+    if( m_ProductController.GetSourceInfo().IsSourceAvailable( *sourceItem )
+            || m_ProductController.GetSourceInfo().IsSourceConfigured( *sourceItem )
+            && ( keyEvent.keystate() == KEY_PRESSED ) )
     {
         // Since the remotes only have a single play/pause key, determine whether BOSE_PLAY or BOSE_PAUSE
         // should be sent.

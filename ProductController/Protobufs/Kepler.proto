@@ -41,6 +41,7 @@ message KeplerConfig
         STATE_OOB                   = 10;
         // we are a zone member
         STATE_ZONE                  = 11;
+        STATE_CONTROL_INTEGRATION   = 12;
     }
     
     enum SourceKey

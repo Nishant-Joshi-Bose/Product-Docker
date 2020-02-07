@@ -1249,6 +1249,7 @@ void CustomProductController::SetupProductSTSController( )
 
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
+    ProductSTSStateFactory<ProductSTSStateTop>              topStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopSilent>        silentStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopAiQ>           aiqStateFactory;
     ProductSTSStateFactory<ProductSTSStateDeviceControl>    deviceControlStateFactory;
@@ -1270,7 +1271,7 @@ void CustomProductController::SetupProductSTSController( )
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, deviceControlStateFactory, true };
-    ProductSTSController::SourceDescriptor descriptor_CONTROL_INTEGRATION { CONTROL_INTEGRATION, SetupSourceSlot_Name( CONTROL_INTEGRATION ),   false, deviceControlStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_CONTROL_INTEGRATION { CONTROL_INTEGRATION, SetupSourceSlot_Name( CONTROL_INTEGRATION ),   false, topStateFactory };
 
     sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
@@ -2095,6 +2096,7 @@ void CustomProductController::SendInitialCapsData()
         Sources message;
 
         // Populate status and visibility of PRODUCT sources.
+        // Rules for setting CAPS "status" field: https://jirapro.bose.com/browse/PGC-1169
         using namespace ProductSTS;
 
         Sources_SourceItem* source = message.add_sources( );
