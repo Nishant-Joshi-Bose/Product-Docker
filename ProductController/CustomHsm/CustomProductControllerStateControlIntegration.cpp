@@ -84,11 +84,11 @@ bool CustomProductControllerStateControlIntegration::HandleInactivityTimer( Inac
 {
     if( timerType != InactivityTimerType::NO_AUDIO_TIMER )
     {
-        BOSE_INFO( s_logger, "The %s state is in %s: timer type %d is unexpected", GetName( ).c_str( ), __func__, timerType );
+        BOSE_INFO( s_logger, "The %s state is in %s: timer type %d is unexpected", GetName( ).c_str( ), __func__, ( int )timerType );
         return false;
     }
 
-    BOSE_INFO( s_logger, "The %s state is in %s: timer %d has expired", GetName( ).c_str( ), __func__, timerType );
+    BOSE_INFO( s_logger, "The %s state is in %s: timer %d has expired", GetName( ).c_str( ), __func__, ( int )timerType );
     ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
     return true;
 }
