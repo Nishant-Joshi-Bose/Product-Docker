@@ -292,8 +292,6 @@ void ProductBLERemoteManager::InitLedsMsg( LedsRawMsg_t& leds )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::SetZone( LedsRawMsg_t& leds, int zone, LedsRawMsg_t::eLedZoneBits_t state )
 {
-    BOSE_ERROR( s_logger, "%s: Sisi zone %d", __func__, zone );
-
     if( ( zone < ZONE_FIRST ) || ( zone > ZONE_LAST ) )
     {
         BOSE_ERROR( s_logger, "%s invalid zone %d specificed", __PRETTY_FUNCTION__, zone );
@@ -418,10 +416,6 @@ const std::tuple<const KeplerConfig::StateEntry&, bool, const KeplerConfig::Zone
 
         if( !itState->has_activationkey() )
         {
-
-            BOSE_INFO( s_logger, "%s: Sisi configured = %s, zoneConfig = %s", __func__, configured ? "true" : "false", itState->zoneconfig().DebugString().c_str() );
-
-
             return std::make_tuple( *itState, configured, itState->zoneconfig() );
         }
 
