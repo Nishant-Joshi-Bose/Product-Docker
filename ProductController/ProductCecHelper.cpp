@@ -607,9 +607,19 @@ void ProductCecHelper::HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlay
             else if( source.compare( SHELBY_SOURCE::SETUP ) == 0 )
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS in setup, ignoring CEC active source requests." );
-
                 m_ignoreSourceSwitch = true;
-                m_LpmSourceID = LPM_IPC_SOURCE_INTERNAL;
+                const auto& sourceAccount = nowPlayingStatus.container( ).contentitem( ).sourceaccount( );
+                using namespace ProductSTS;
+                if( sourceAccount == SetupSourceSlot_Name( SetupSourceSlot::CONTROL_INTEGRATION ) )
+                {
+                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV and ignoring CEC active source requests." );
+                    m_LpmSourceID = LPM_IPC_SOURCE_TV;
+                }
+                else
+                {
+                    BOSE_DEBUG( s_logger, "CEC CAPS in setup, ignoring CEC active source requests." );
+                    m_LpmSourceID = LPM_IPC_SOURCE_INTERNAL;
+                }
             }
             else
             {
