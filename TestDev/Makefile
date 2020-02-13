@@ -12,7 +12,7 @@ BOSELIBS_DIR = $(shell components get BoseLibs-x86_64 installed_location)
 SOUNDTOUCHSDK_DIR = $(shell components get CAPSService-x86_64 installed_location)
 AUDIOPATHCLIENT_DIR = $(shell components get AudioPathClient-x86_64 installed_location)
 #AUDIOPATHSERVICE_DIR = $(shell components get AudioPathService-x86_64 installed_location) 
-AUDIOPATHPRODUCTS_DIR = $(shell components get AudioPathProducts-x86_64 installed_location)
+#AUDIOPATHPRODUCTS_DIR = $(shell components get AudioPathProducts-x86_64 installed_location)
 
 .PHONY: generated_sources
 generated_sources:
@@ -27,7 +27,7 @@ generated_sources:
 	cp -r $(AUDIOSOURCE_DIR) /scratch/builds
 	cp -r $(AUDIOPATHCLIENT_DIR) /scratch/builds/
 	#cp -r $(AUDIOPATHSERVICE_DIR) /scratch/builds/
-	cp -r $(AUDIOPATHPRODUCTS_DIR) /scratch/builds/
+	#cp -r $(AUDIOPATHPRODUCTS_DIR) /scratch/builds/
 	ln -nsf /scratch/builds/Cli-x86_64 ./builds/CliService
 
 .PHONY: comptest
