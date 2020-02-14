@@ -108,6 +108,7 @@ message ProductMessage
         optional bool                                       accessoriesareknown         = 26;
         optional ProductPb.AccessoriesPlayTonesRequest      accessoriesplaytones        = 27;
         optional LpmServiceMessages.IpcDeviceBoot_t         dspBooted                   = 28;
+        optional bool                                       osmactive                   = 29;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

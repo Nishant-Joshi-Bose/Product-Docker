@@ -796,6 +796,11 @@ void CustomProductController::Run( )
     ///
     InitializeAccessorySoftwareInstallManager( );
 
+    ///
+    /// Register for OSM state change callback.
+    ///
+    RegisterOSMStateCallback( );
+
     auto func = [this]( bool enabled )
     {
         if( enabled )
@@ -1256,8 +1261,9 @@ void CustomProductController::SetupProductSTSController( )
     ProductSTSStateFactory<ProductSTSStateDeviceControl>    deviceControlStateFactory;
 
     ///
-    /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
-    /// will always be available. SLOT sources need to be set-up before they become available.
+    /// ADAPTIQ, SETUP, PAIRING, and CONTROL_INTEGRATION are never available as a normal source,
+    /// whereas the TV source will always be available.
+    /// SLOT sources need to be set-up before they become available.
     /// This is set up in CustomProductController::SendInitialCapsData().
     ///
     /// The "resumesupported" (5th) constructor argument (copied from "enabled" (3rd) if absent) determines whether the source is SETUP or PRODUCT.
@@ -1864,6 +1870,14 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_dspbooted() )
     {
         GetHsm( ).Handle< const LpmServiceMessages::IpcDeviceBoot_t& >( &CustomProductControllerState::HandleDspBooted, message.dspbooted() );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// OSM activity state messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_osmactive( ) )
+    {
+        m_OSMIsActive = message.osmactive( );
+        GetHsm( ).Handle< bool >( &CustomProductControllerState::HandleOSMActivityState, m_OSMIsActive );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// AudioPath stream states (silent or not silent) messages are handled at this point.
@@ -2779,6 +2793,42 @@ void CustomProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductController::RegisterOSMStateCallback
+///
+/// @brief This method registers callback with the DeviceController, to get called when the QuickSetService's OSM state changed
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::RegisterOSMStateCallback( )
+{
+    AsyncCallback< DeviceControllerClientMessages::OSMState_t >
+    callback( std::bind( &CustomProductController::HandleOSMStateCallback,
+                         this,
+                         std::placeholders::_1 ),
+              GetTask( ) );
+    m_deviceControllerPtr->RegisterOSMStateCallback( callback );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductController::HandleOSMStateCallback
+///
+/// @brief This method gets called when the OSM state changed
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleOSMStateCallback( DeviceControllerClientMessages::OSMState_t osmState )
+{
+    BOSE_INFO( s_logger, "%s::%s: %s", CLASS_NAME, __func__, OSMState_t_State_Name( osmState.state( ) ).c_str( ) );
+    bool OSMIsActive = ( osmState.state( ) == DeviceControllerClientMessages::OSMState_t_State_START_CALLED );
+    if( OSMIsActive != m_OSMIsActive )
+    {
+        ProductMessage productMessage;
+        productMessage.set_osmactive( OSMIsActive );
+        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
