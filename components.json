@@ -1,13 +1,5 @@
 [
   {
-    "name": "A4VQuickSetService-qc8017_32",
-    "selected_version": "Conan/482/master/3.1.38+ge9fe6f8"
-  },
-  {
-    "name": "A4VQuickSetService-x86_64",
-    "selected_version": "Conan/482/master/3.1.38+ge9fe6f8"
-  },
-  {
     "name": "A4VDeviceController-qc8017_32",
     "selected_version": "Conan/482/master/2.1.55+gf57bb51"
   },

@@ -503,7 +503,7 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declarations are for handling communications with the QSS regarding the OSM state
+    /// @brief The following declarations are for handling communications with the DeviceController regarding the OSM state
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterOSMStateCallback( );
