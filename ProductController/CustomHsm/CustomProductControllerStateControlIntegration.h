@@ -52,7 +52,7 @@ public:
     {
 
     }
-    void HandleStateStart();
+    void HandleStateStart() override;
     bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )   override;
     bool HandleInactivityTimer( InactivityTimerType timerType )                 override;
     bool HandleOSMActivityState( bool state )                                   override;
