@@ -101,7 +101,7 @@
             "tone":"T16_bass_box_pairing_complete.flac",
             "comment":"Bass Box pairing complete",
             "volume":45,
-            "presentation_location":["SUBWOOFER_SPEAKER"]
+            "presentation_location":["SUBWOOFER_SPEAKER", "SUBWOOFER_SPEAKER"]
         },
         {
             "event_id":21,
