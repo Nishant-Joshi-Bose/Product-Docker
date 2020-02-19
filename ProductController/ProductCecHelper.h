@@ -35,7 +35,7 @@
 #include "A4VVideoManagerClientFactory.h"
 #include "ProductFrontDoorUtility.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
-#include "SoundTouchInterface/AudioService.pb.h"
+#include "AudioService.pb.h"
 #include "ProductMessage.pb.h"
 #include "CecMode.pb.h"
 #include "DataCollectionCecState.pb.h"
@@ -108,7 +108,7 @@ public:
     /// @brief This method propagates the volume value
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleFrontDoorVolume( SoundTouchInterface::volume const& volume );
+    void HandleFrontDoorVolume( CAPSAPI::volume const& volume );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

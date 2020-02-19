@@ -639,7 +639,7 @@ void ProductCecHelper::HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlay
 /// @param  volume Object containing volume received from the FrontDoor
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::HandleFrontDoorVolume( SoundTouchInterface::volume const& volume )
+void ProductCecHelper::HandleFrontDoorVolume( CAPSAPI::volume const& volume )
 {
     BOSE_VERBOSE( s_logger, "Got volume notify LPM (%d) (%d)", volume.value(), volume.muted() );
 
