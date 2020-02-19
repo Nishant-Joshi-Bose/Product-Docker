@@ -1,0 +1,4 @@
+<VoiceConfig>
+    <AVSHttp1Url>avs.na.amazonalexa.com</AVSHttp1Url>
+    <AVSHttp2Url>https://avs-alexa-na.amazon.com</AVSHttp2Url>
+</VoiceConfig>

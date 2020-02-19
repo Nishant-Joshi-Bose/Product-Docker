@@ -1,0 +1,587 @@
+{
+    "keyTable": [
+    {
+        "action": "POWER_TOGGLE",
+        "comment": "power toggle",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ON_OFF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "POWER_OFF",
+        "comment": "power off",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_OFF"],
+        "origin": ["TAP", "CEC", "IR", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "POWER_ON",
+        "comment": "power on",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_ON"],
+        "origin": ["TAP", "CEC", "IR", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST",
+        "comment": "Bluetooth release -> CarouselList-Discoverable-ConnectToLast",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_BLUETOOTH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [0]
+    },
+    {
+        "action": "SEND_TO_DISCOVERABLE",
+        "comment": "Bluetooth Press and Hold -> SendToDiscoverable",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_BLUETOOTH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [750]
+    },
+    {
+        "action": "CLEAR_PAIRING_LIST",
+        "comment": "Bluetooth Press and Hold -> Clear Pairing List",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_BLUETOOTH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [10000]
+    },
+    {
+        "action": "VOICE_CAROUSEL",
+        "comment": "action release -> Alexa",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_AMAZON_ACTION"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": [0]
+    },
+    {
+        "action": "BOOTUP_FACTORY_DEFAULT_START",
+        "comment": "action press -> factory default (5 second window after booting)",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_AMAZON_ACTION"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": []
+    },
+    {
+        "action": "BOOTUP_FACTORY_DEFAULT_COMPLETE",
+        "comment": "action release -> factory default (30 second window, starting 15 seconds after press during window)",
+        "keyEvent": "RELEASE_ALWAYS",
+        "keyList": ["BOSE_AMAZON_ACTION"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_STORE_1",
+        "comment": "Preset 1 press and hold for at least 1000ms -> Store Currently playing into Preset 1",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_1"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [1000]
+    },
+    {
+        "action": "PRESET_STORE_2",
+        "comment": "Preset 2 press and hold for at least 1000ms -> Store Currently playing into Preset 2",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_2"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [1000]
+    },
+    {
+        "action": "PRESET_STORE_3",
+        "comment": "Preset 3 press and hold for at least 1000ms -> Store Currently playing into Preset 3",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_3"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [1000]
+    },
+    {
+        "action": "PRESET_STORE_4",
+        "comment": "Preset 4 press and hold for at least 1000ms -> Store Currently playing into Preset 4",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_4"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [1000]
+    },
+    {
+        "action": "PRESET_STORE_5",
+        "comment": "Preset 5 press and hold for at least 1000ms -> Store Currently playing into Preset 5",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_5"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [1000]
+    },
+    {
+        "action": "PRESET_STORE_6",
+        "comment": "Preset 6 press and hold for at least 1000ms -> Store Currently playing into Preset 6",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_6"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [1000]
+    },
+    {
+        "action": "PRESET_SELECT_1",
+        "comment": "Preset 1 release -> Select Preset stored on Key 1",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_1"],
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_SELECT_2",
+        "comment": "Preset 2 release -> Select Preset stored on Key 2",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_2"],
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_SELECT_3",
+        "comment": "Preset 3 release -> Select Preset stored on Key 3",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_3"],
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_SELECT_4",
+        "comment": "Preset 4 release -> Select Preset stored on Key 4",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_4"],
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_SELECT_5",
+        "comment": "Preset 5 release -> Select Preset stored on Key 5",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_5"],
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_SELECT_6",
+        "comment": "Preset 6 release -> Select Preset stored on Key 6",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_6"],
+        "origin": ["IR", "TAP", "CEC", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_SELECT_1_RF",
+        "comment": "Preset 1 release (Kepler) -> Select Preset stored on Key 1",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_1"],
+        "origin": ["RF"],
+        "timeOutList": [],
+        "filter": {
+            "sources": [
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_1"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_2_RF",
+        "comment": "Preset 2 release (Kepler) -> Select Preset stored on Key 2",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_2"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_2"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_3_RF",
+        "comment": "Preset 3 release (Kepler) -> Select Preset stored on Key 3",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_3"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_3"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_4_RF",
+        "comment": "Preset 4 release (Kepler) -> Select Preset stored on Key 4",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_4"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_4"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_5_RF",
+        "comment": "Preset 5 release (Kepler) -> Select Preset stored on Key 5",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_5"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_5"
+        }
+    },
+    {
+        "action": "PRESET_SELECT_6_RF",
+        "comment": "Preset 6 release (Kepler) -> Select Preset stored on Key 6",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_6"],
+        "origin": ["RF"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(PRODUCT|^$)", "sourceAccountName": ".*" }
+            ],
+            "translate": "PRESET_SELECT_6"
+        }
+    },
+    {
+        "action": "VOLUME_UP",
+        "comment": "volume up",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_VOLUME_UP"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [0],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
+            ]}
+    },
+    {
+        "action": "VOLUME_RAMP_UP",
+        "comment": "volume ramp up",
+        "keyEvent": "PRESS_HOLD_REPEAT",
+        "keyList": ["BOSE_VOLUME_UP"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [300, 100],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
+            ]}
+    },
+    {
+        "action": "VOLUME_RAMP_UP_CANCEL",
+        "comment": "volume ramp up cancel",
+        "keyEvent": "RELEASE_ALWAYS",
+        "keyList": ["BOSE_VOLUME_UP"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "VOLUME_DOWN",
+        "comment": "volume down",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_VOLUME_DOWN"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [0],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
+            ]}
+    },
+    {
+        "action": "VOLUME_RAMP_DOWN",
+        "comment": "volume ramp down",
+        "keyEvent": "PRESS_HOLD_REPEAT",
+        "keyList": ["BOSE_VOLUME_DOWN"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [300, 100],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
+            ]}
+    },
+    {
+        "action": "VOLUME_RAMP_DOWN_CANCEL",
+        "comment": "volume ramp down cancel",
+        "keyEvent": "RELEASE_ALWAYS",
+        "keyList": ["BOSE_VOLUME_DOWN"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PLAY_PAUSE",
+        "comment": "play/pause",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_PLAY"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "NEXT_TRACK",
+        "comment": "skip forward",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_FAST_FORWARD"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "NEXT_TRACK",
+        "comment": "skip forward",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_QUICK_SKIP"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PREV_TRACK",
+        "comment": "skip back",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_FAST_REVERSE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "PREV_TRACK",
+        "comment": "skip back",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_QUICK_REPLAY"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_MUTE",
+        "comment": "mute toggle",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_MUTE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
+    },
+    {
+        "action": "ACTION_ASSERT_MUTE",
+        "comment": "assert mute",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_MUTE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
+    },
+    {
+        "action": "ACTION_ASSERT_UNMUTE",
+        "comment": "assert unmute",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ASSERT_UNMUTE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK", "CAPSENSE"],
+        "timeOutList": [],
+         "filter": {
+            "sources": [
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+            ]}
+    },
+    {
+        "action": "ACTION_SOUNDTOUCH",
+        "comment": "select soundtouch",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_SOUND_TOUCH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_FORCE_UPDATE",
+        "comment": "Soundtouch button press and hold for at least 10000ms -> force system to take OTA update",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_SOUND_TOUCH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": [10000]
+    },
+    {
+        "action": "ACTION_CONNECT",
+        "comment": "connect",
+        "keyEvent": "PRESS",
+        "keyList": ["KEY_VAL_AVAIL_11"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_TV",
+        "comment": "select tv",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_TV_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_GAME",
+        "comment": "select user configurable source game/ott",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_GAME_SOURCE"],
+        "origin": ["IR", "TAP", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_DVD",
+        "comment": "select user configurable source dvd",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_BD_DVD_SOURCE"],
+        "origin": ["IR", "TAP", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_CABLESAT",
+        "comment": "select user configurable source cable/sat",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_AUX_SOURCE"],
+        "origin": ["IR", "TAP", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_DVD",
+        "comment": "select user configurable source dvd (Kepler)",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_AUX_SOURCE"],
+        "origin": ["RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_CABLESAT",
+        "comment": "select user configurable source cable/sat (Kepler)",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_BD_DVD_SOURCE"],
+        "origin": ["RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_THUMB_UP",
+        "comment": "thumbs up",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_PAGE_THUMBS_UP"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_THUMB_DOWN",
+        "comment": "thumbs down",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_PAGE_THUMBS_DOWN"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "FACTORY_DEFAULT",
+        "comment": "factory default",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_FD"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "TOGGLE_WIFI_RADIO",
+        "comment": "toggle wifi",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_WIFI_OFF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "SEND_TO_AP_MODE",
+        "comment": "ap setup",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_AP_SETUP"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_START_PAIR_SPEAKERS",
+        "comment": "pair speakers",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_PAIR_SPKR"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_SETUP_BLE_REMOTE",
+        "comment": "setup and pair BLE remote",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_AMAZON_ACTION"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": [5000]
+    },
+    {
+        "action": "SYSTEM_INFO_MODE",
+        "comment": "pts mode",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_USB_NET_SVR"],
+        "origin": ["IR", "TAP", "RF", "NETWORK"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_AUDIO_MODE_TOGGLE",
+        "comment": "toggle audio mode",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_SYSTEM"],
+        "origin": ["IR", "TAP", "CEC", "RF", "NETWORK"],
+        "timeOutList": []
+    }
+    ],
+    "blastTable": [
+    {
+        "zone": "ZONE1",
+        "keyList": ["BOSE_RED", "BOSE_GREEN", "BOSE_YELLOW", "BOSE_BLUE"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE2",
+        "keyList": ["BOSE_DVD_MENU", "BOSE_EPG", "BOSE_BACK", "BOSE_EXIT", "BOSE_I_TV", "BOSE_UP_ARROW", "BOSE_DOWN_ARROW", "BOSE_LEFT_ARROW", "BOSE_RIGHT_ARROW", "BOSE_ENTER"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "zone": "ZONE3",
+        "keyList": ["BOSE_INFO", "BOSE_DVR", "BOSE_RECORD"],
+        "blastDevices": ["DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV"]
+    },
+    {
+        "zone": "ZONE4",
+        "keyList": ["BOSE_FAST_REVERSE", "BOSE_FAST_FORWARD", "BOSE_PLAY"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "zone": "ZONE5",
+        "keyList": ["BOSE_NUMBER_1", "BOSE_NUMBER_2", "BOSE_NUMBER_3", "BOSE_NUMBER_4", "BOSE_NUMBER_5", "BOSE_NUMBER_6"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE6",
+        "keyList": ["BOSE_NUMBER_7", "BOSE_NUMBER_8", "BOSE_NUMBER_9", "BOSE_NUMBER_0"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE8",
+        "keyList": ["BOSE_CHANNEL_PRESET_UP", "BOSE_CHANNEL_PRESET_DOWN", "BOSE_LAST_CHANNEL"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE9",
+        "keyList": ["BOSE_TV_INPUT"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE10",
+        "keyList": ["BOSE_SOURCE_POWER"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    }
+    ]
+}

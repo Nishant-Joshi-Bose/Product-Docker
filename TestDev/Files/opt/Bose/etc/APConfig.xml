@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AudioPathParameters>
+  <primaryParameters hasAudioInputMux="false"
+                     hasAIC="false"
+                     putDSPinSuspend="false"
+                     hasBMPSMode="false"
+                     rebroadcastMode="SYNC_TO_ROOM"/>
+  <chimeVolumeControlParameters minimum="16"
+               maximum="40"
+               slope="0.65"
+               intercept="9"
+               defaultValue="40"/>
+
+  <TTSVolumeControlParameters minimum="16"
+             maximum="42"
+             slope="0.65"
+             intercept="9"
+             defaultValue="10"/>
+
+  <duckedVolumeControlParameters minimum="0"
+                maximum="25"
+                slope="0.5"
+                intercept="0"
+                defaultValue="25"/>
+
+  <outputDeviceParameters>
+    <audioParams objName="APPAudio">
+      <app/>
+    </audioParams>
+    <muteParams objName="APPMute">
+      <app/>
+    </muteParams>
+  </outputDeviceParameters>
+
+  <outputDriverParameterSet defaultOutputDriverIndex="0">
+    <outputDriverParameters outputDriverType="AUDIO_DEVICE_TYPE_ALSA"
+                            hardwareDeviceName="hw:0,0"
+                            samplesPerFrame="192"
+                            outputSampleRate="48000"
+                            outputChannels="8"
+                            wifiAttenuation="0.39810699"
+                            auxAttenuation="1"
+                            wifiBufferTarget="1802"
+                            auxBufferTarget="1802"
+                            useDither="false">
+    </outputDriverParameters>
+  </outputDriverParameterSet>
+  <aecSource source="EXTERNAL" url="aux://" controlChannels="3" dataChannels="0,1,2"/>
+  <inputDevice url="aux://" clockDomain="ISOCHRONOUS">
+     <deviceInfo deviceName="hw:0,0" 
+                 sampleRate="48000"
+                 periodSize="192" 
+                 bufferSize="768" 
+                 numChannels="8" 
+                 type = "ALSA" 
+                 srcLatency = "0" />
+     <channelDistributor permanent="3,2,6,7"
+                         transient="0,1"/>
+     <startOffset startOffsetCommandedMs="8" />
+  </inputDevice>
+  <inputDevice url="adaptiq://" clockDomain="ISOCHRONOUS">
+     <deviceInfo deviceName="hw:0,12"
+                 sampleRate="48000"
+                 periodSize="192"
+                 bufferSize="768"
+                 numChannels="2"
+                 type = "ALSA" 
+                 srcLatency="0" />
+     <startOffset startOffsetCommandedMs="8" />
+  </inputDevice>
+  <btConfigValueConfigDirPath btConfigDirPath="/opt/Bose/etc/"/>
+  <coexLatency coexMinLatencyUS="85000"
+               noCoexMinLatencyUS="68000"
+               nominalBTOutLatencyUS="150000"
+               darr24GHzLatencyUS="105000"
+               wifi24GHzOffsetUS="6000"
+               btFixedLatencyUS="20000"/>
+  <taskAffinity renderCPUMask="8"/>
+</AudioPathParameters>

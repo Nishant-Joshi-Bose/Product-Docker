@@ -1,0 +1,140 @@
+{
+    "blastTable": [
+        {
+            "zone": "ZONE1",
+            "blastDevices": [
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV",
+                "DEVICE_TYPE_CBL_SAT"
+            ],
+            "keyList": [
+                197,
+                198,
+                199,
+                200
+            ]
+        },
+        {
+            "zone": "ZONE2",
+            "blastDevices": [
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV",
+                "DEVICE_TYPE_GAME",
+                "DEVICE_TYPE_BD_DVD",
+                "DEVICE_TYPE_CBL_SAT",
+                "DEVICE_TYPE_STREAMING"
+            ],
+            "keyList": [
+                144,
+                208,
+                248,
+                48,
+                193,
+                192,
+                32,
+                160,
+                96,
+                224
+            ]
+        },
+        {
+            "zone": "ZONE3",
+            "blastDevices": [
+                "DEVICE_TYPE_CBL_SAT",
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV"
+            ],
+            "keyList": [
+                100,
+                182,
+                156
+            ]
+        },
+        {
+            "zone": "ZONE4",
+            "blastDevices": [
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV",
+                "DEVICE_TYPE_GAME",
+                "DEVICE_TYPE_BD_DVD",
+                "DEVICE_TYPE_CBL_SAT",
+                "DEVICE_TYPE_STREAMING"
+            ],
+            "keyList": [
+                87,
+                88,
+                85
+            ]
+        },
+        {
+            "zone": "ZONE5",
+            "blastDevices": [
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV",
+                "DEVICE_TYPE_CBL_SAT"
+            ],
+            "keyList": [
+                65,
+                66,
+                67,
+                68,
+                69,
+                70
+            ]
+        },
+        {
+            "zone": "ZONE6",
+            "blastDevices": [
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV",
+                "DEVICE_TYPE_CBL_SAT"
+            ],
+            "keyList": [
+                71,
+                72,
+                73,
+                64
+            ]
+        },
+        {
+            "zone": "ZONE8",
+            "blastDevices": [
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV",
+                "DEVICE_TYPE_CBL_SAT"
+            ],
+            "keyList": [
+                25,
+                24,
+                20
+            ]
+        },
+        {
+            "zone": "ZONE9",
+            "blastDevices": [
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV",
+                "DEVICE_TYPE_GAME",
+                "DEVICE_TYPE_BD_DVD",
+                "DEVICE_TYPE_CBL_SAT"
+            ],
+            "keyList": [
+                60
+            ]
+        },
+        {
+            "zone": "ZONE10",
+            "blastDevices": [
+                "DEVICE_TYPE_TV",
+                "DEVICE_TYPE_SMART_TV",
+                "DEVICE_TYPE_GAME",
+                "DEVICE_TYPE_CBL_SAT",
+                "DEVICE_TYPE_BD_DVD",
+                "DEVICE_TYPE_STREAMING"
+            ],
+            "keyList": [
+                44
+            ]
+        }
+    ]
+}

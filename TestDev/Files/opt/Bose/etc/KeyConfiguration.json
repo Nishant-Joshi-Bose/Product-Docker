@@ -1,0 +1,2562 @@
+{
+    "keyTable": [
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                76
+            ],
+            "comment": "power toggle",
+            "action": 4
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                76
+            ],
+            "comment": "power toggle",
+            "action": 4
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                76
+            ],
+            "comment": "power toggle",
+            "action": 4
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                76
+            ],
+            "comment": "power toggle",
+            "action": 4
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                76
+            ],
+            "comment": "power toggle",
+            "action": 4
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                204
+            ],
+            "comment": "power off",
+            "action": 9
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                204
+            ],
+            "comment": "power off",
+            "action": 9
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                204
+            ],
+            "comment": "power off",
+            "action": 9
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                204
+            ],
+            "comment": "power off",
+            "action": 9
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                140
+            ],
+            "comment": "power on",
+            "action": 10
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                140
+            ],
+            "comment": "power on",
+            "action": 10
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                140
+            ],
+            "comment": "power on",
+            "action": 10
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                140
+            ],
+            "comment": "power on",
+            "action": 10
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "origin": 2,
+            "keyEvent": 1,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth release -> CarouselList-Discoverable-ConnectToLast",
+            "action": 20
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth release -> CarouselList-Discoverable-ConnectToLast",
+            "action": 20
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "origin": 4,
+            "keyEvent": 1,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth release -> CarouselList-Discoverable-ConnectToLast",
+            "action": 20
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "origin": 3,
+            "keyEvent": 1,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth release -> CarouselList-Discoverable-ConnectToLast",
+            "action": 20
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "origin": 5,
+            "keyEvent": 1,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth release -> CarouselList-Discoverable-ConnectToLast",
+            "action": 20
+        },
+        {
+            "timeOutList": [
+                750
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> SendToDiscoverable",
+            "action": 21
+        },
+        {
+            "timeOutList": [
+                750
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> SendToDiscoverable",
+            "action": 21
+        },
+        {
+            "timeOutList": [
+                750
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> SendToDiscoverable",
+            "action": 21
+        },
+        {
+            "timeOutList": [
+                750
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> SendToDiscoverable",
+            "action": 21
+        },
+        {
+            "timeOutList": [
+                750
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> SendToDiscoverable",
+            "action": 21
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> Clear Pairing List",
+            "action": 22
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> Clear Pairing List",
+            "action": 22
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> Clear Pairing List",
+            "action": 22
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> Clear Pairing List",
+            "action": 22
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                129
+            ],
+            "comment": "Bluetooth Press and Hold -> Clear Pairing List",
+            "action": 22
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "origin": 1,
+            "keyEvent": 1,
+            "keyList": [
+                174
+            ],
+            "comment": "action release -> Alexa",
+            "action": 26
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                174
+            ],
+            "comment": "action release -> Alexa",
+            "action": 26
+        },
+        {
+            "timeOutList": [],
+            "origin": 1,
+            "keyEvent": 0,
+            "keyList": [
+                174
+            ],
+            "comment": "action press -> factory default (5 second window after booting)",
+            "action": 109
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                174
+            ],
+            "comment": "action press -> factory default (5 second window after booting)",
+            "action": 109
+        },
+        {
+            "timeOutList": [],
+            "origin": 1,
+            "keyEvent": 5,
+            "keyList": [
+                174
+            ],
+            "comment": "action release -> factory default (30 second window, starting 15 seconds after press during window)",
+            "action": 110
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 5,
+            "keyList": [
+                174
+            ],
+            "comment": "action release -> factory default (30 second window, starting 15 seconds after press during window)",
+            "action": 110
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 press and hold for at least 1000ms -> Store Currently playing into Preset 1",
+            "action": 27
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 press and hold for at least 1000ms -> Store Currently playing into Preset 1",
+            "action": 27
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 press and hold for at least 1000ms -> Store Currently playing into Preset 1",
+            "action": 27
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 press and hold for at least 1000ms -> Store Currently playing into Preset 1",
+            "action": 27
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 press and hold for at least 1000ms -> Store Currently playing into Preset 1",
+            "action": 27
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 press and hold for at least 1000ms -> Store Currently playing into Preset 2",
+            "action": 28
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 press and hold for at least 1000ms -> Store Currently playing into Preset 2",
+            "action": 28
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 press and hold for at least 1000ms -> Store Currently playing into Preset 2",
+            "action": 28
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 press and hold for at least 1000ms -> Store Currently playing into Preset 2",
+            "action": 28
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 press and hold for at least 1000ms -> Store Currently playing into Preset 2",
+            "action": 28
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 press and hold for at least 1000ms -> Store Currently playing into Preset 3",
+            "action": 29
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 press and hold for at least 1000ms -> Store Currently playing into Preset 3",
+            "action": 29
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 press and hold for at least 1000ms -> Store Currently playing into Preset 3",
+            "action": 29
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 press and hold for at least 1000ms -> Store Currently playing into Preset 3",
+            "action": 29
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 press and hold for at least 1000ms -> Store Currently playing into Preset 3",
+            "action": 29
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 press and hold for at least 1000ms -> Store Currently playing into Preset 4",
+            "action": 30
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 press and hold for at least 1000ms -> Store Currently playing into Preset 4",
+            "action": 30
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 press and hold for at least 1000ms -> Store Currently playing into Preset 4",
+            "action": 30
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 press and hold for at least 1000ms -> Store Currently playing into Preset 4",
+            "action": 30
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 press and hold for at least 1000ms -> Store Currently playing into Preset 4",
+            "action": 30
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 press and hold for at least 1000ms -> Store Currently playing into Preset 5",
+            "action": 31
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 press and hold for at least 1000ms -> Store Currently playing into Preset 5",
+            "action": 31
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 press and hold for at least 1000ms -> Store Currently playing into Preset 5",
+            "action": 31
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 press and hold for at least 1000ms -> Store Currently playing into Preset 5",
+            "action": 31
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 press and hold for at least 1000ms -> Store Currently playing into Preset 5",
+            "action": 31
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 press and hold for at least 1000ms -> Store Currently playing into Preset 6",
+            "action": 32
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 press and hold for at least 1000ms -> Store Currently playing into Preset 6",
+            "action": 32
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 press and hold for at least 1000ms -> Store Currently playing into Preset 6",
+            "action": 32
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 press and hold for at least 1000ms -> Store Currently playing into Preset 6",
+            "action": 32
+        },
+        {
+            "timeOutList": [
+                1000
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 press and hold for at least 1000ms -> Store Currently playing into Preset 6",
+            "action": 32
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 1,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 release -> Select Preset stored on Key 1",
+            "action": 33
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 release -> Select Preset stored on Key 1",
+            "action": 33
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 1,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 release -> Select Preset stored on Key 1",
+            "action": 33
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 1,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 release -> Select Preset stored on Key 1",
+            "action": 33
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 1,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 release -> Select Preset stored on Key 2",
+            "action": 34
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 release -> Select Preset stored on Key 2",
+            "action": 34
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 1,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 release -> Select Preset stored on Key 2",
+            "action": 34
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 1,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 release -> Select Preset stored on Key 2",
+            "action": 34
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 1,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 release -> Select Preset stored on Key 3",
+            "action": 35
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 release -> Select Preset stored on Key 3",
+            "action": 35
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 1,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 release -> Select Preset stored on Key 3",
+            "action": 35
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 1,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 release -> Select Preset stored on Key 3",
+            "action": 35
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 1,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 release -> Select Preset stored on Key 4",
+            "action": 36
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 release -> Select Preset stored on Key 4",
+            "action": 36
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 1,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 release -> Select Preset stored on Key 4",
+            "action": 36
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 1,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 release -> Select Preset stored on Key 4",
+            "action": 36
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 1,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 release -> Select Preset stored on Key 5",
+            "action": 37
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 release -> Select Preset stored on Key 5",
+            "action": 37
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 1,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 release -> Select Preset stored on Key 5",
+            "action": 37
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 1,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 release -> Select Preset stored on Key 5",
+            "action": 37
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 1,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 release -> Select Preset stored on Key 6",
+            "action": 38
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 release -> Select Preset stored on Key 6",
+            "action": 38
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 1,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 release -> Select Preset stored on Key 6",
+            "action": 38
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 1,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 release -> Select Preset stored on Key 6",
+            "action": 38
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 1,
+            "origin": 3,
+            "action": 103,
+            "keyList": [
+                65
+            ],
+            "comment": "Preset 1 release (Kepler) -> Select Preset stored on Key 1"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 1,
+            "origin": 3,
+            "action": 104,
+            "keyList": [
+                66
+            ],
+            "comment": "Preset 2 release (Kepler) -> Select Preset stored on Key 2"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 1,
+            "origin": 3,
+            "action": 105,
+            "keyList": [
+                67
+            ],
+            "comment": "Preset 3 release (Kepler) -> Select Preset stored on Key 3"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 1,
+            "origin": 3,
+            "action": 106,
+            "keyList": [
+                68
+            ],
+            "comment": "Preset 4 release (Kepler) -> Select Preset stored on Key 4"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 1,
+            "origin": 3,
+            "action": 107,
+            "keyList": [
+                69
+            ],
+            "comment": "Preset 5 release (Kepler) -> Select Preset stored on Key 5"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 1,
+            "origin": 3,
+            "action": 108,
+            "keyList": [
+                70
+            ],
+            "comment": "Preset 6 release (Kepler) -> Select Preset stored on Key 6"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 2,
+            "action": 23,
+            "keyList": [
+                3
+            ],
+            "comment": "volume up"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 6,
+            "action": 23,
+            "keyList": [
+                3
+            ],
+            "comment": "volume up"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 4,
+            "action": 23,
+            "keyList": [
+                3
+            ],
+            "comment": "volume up"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 3,
+            "action": 23,
+            "keyList": [
+                3
+            ],
+            "comment": "volume up"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 5,
+            "action": 23,
+            "keyList": [
+                3
+            ],
+            "comment": "volume up"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 2,
+            "action": 39,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 6,
+            "action": 39,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 4,
+            "action": 39,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 3,
+            "action": 39,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 5,
+            "action": 39,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up"
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 5,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up cancel",
+            "action": 50
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 5,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up cancel",
+            "action": 50
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 5,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up cancel",
+            "action": 50
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 5,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up cancel",
+            "action": 50
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 5,
+            "keyList": [
+                3
+            ],
+            "comment": "volume ramp up cancel",
+            "action": 50
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 2,
+            "action": 24,
+            "keyList": [
+                2
+            ],
+            "comment": "volume down"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 6,
+            "action": 24,
+            "keyList": [
+                2
+            ],
+            "comment": "volume down"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 4,
+            "action": 24,
+            "keyList": [
+                2
+            ],
+            "comment": "volume down"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 3,
+            "action": 24,
+            "keyList": [
+                2
+            ],
+            "comment": "volume down"
+        },
+        {
+            "timeOutList": [
+                0
+            ],
+            "keyEvent": 1,
+            "origin": 5,
+            "action": 24,
+            "keyList": [
+                2
+            ],
+            "comment": "volume down"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 2,
+            "action": 40,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 6,
+            "action": 40,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 4,
+            "action": 40,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 3,
+            "action": 40,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down"
+        },
+        {
+            "timeOutList": [
+                300,
+                100
+            ],
+            "keyEvent": 3,
+            "origin": 5,
+            "action": 40,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down"
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 5,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down cancel",
+            "action": 51
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 5,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down cancel",
+            "action": 51
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 5,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down cancel",
+            "action": 51
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 5,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down cancel",
+            "action": 51
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 5,
+            "keyList": [
+                2
+            ],
+            "comment": "volume ramp down cancel",
+            "action": 51
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                85
+            ],
+            "comment": "play/pause",
+            "action": 1
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                85
+            ],
+            "comment": "play/pause",
+            "action": 1
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                85
+            ],
+            "comment": "play/pause",
+            "action": 1
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                85
+            ],
+            "comment": "play/pause",
+            "action": 1
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                85
+            ],
+            "comment": "play/pause",
+            "action": 1
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                88
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                88
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                88
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                88
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                88
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                90
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                90
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                90
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                90
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                90
+            ],
+            "comment": "skip forward",
+            "action": 2
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                87
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                87
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                87
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                87
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                87
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                89
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                89
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                89
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                89
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                89
+            ],
+            "comment": "skip back",
+            "action": 3
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 2,
+            "action": 114,
+            "keyList": [
+                1
+            ],
+            "comment": "mute toggle"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 6,
+            "action": 114,
+            "keyList": [
+                1
+            ],
+            "comment": "mute toggle"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 4,
+            "action": 114,
+            "keyList": [
+                1
+            ],
+            "comment": "mute toggle"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 3,
+            "action": 114,
+            "keyList": [
+                1
+            ],
+            "comment": "mute toggle"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 5,
+            "action": 114,
+            "keyList": [
+                1
+            ],
+            "comment": "mute toggle"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 1,
+            "action": 114,
+            "keyList": [
+                1
+            ],
+            "comment": "mute toggle"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 2,
+            "action": 129,
+            "keyList": [
+                254
+            ],
+            "comment": "assert mute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 6,
+            "action": 129,
+            "keyList": [
+                254
+            ],
+            "comment": "assert mute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 4,
+            "action": 129,
+            "keyList": [
+                254
+            ],
+            "comment": "assert mute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 3,
+            "action": 129,
+            "keyList": [
+                254
+            ],
+            "comment": "assert mute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 5,
+            "action": 129,
+            "keyList": [
+                254
+            ],
+            "comment": "assert mute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 1,
+            "action": 129,
+            "keyList": [
+                254
+            ],
+            "comment": "assert mute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 2,
+            "action": 130,
+            "keyList": [
+                205
+            ],
+            "comment": "assert unmute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 6,
+            "action": 130,
+            "keyList": [
+                205
+            ],
+            "comment": "assert unmute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 4,
+            "action": 130,
+            "keyList": [
+                205
+            ],
+            "comment": "assert unmute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 3,
+            "action": 130,
+            "keyList": [
+                205
+            ],
+            "comment": "assert unmute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 5,
+            "action": 130,
+            "keyList": [
+                205
+            ],
+            "comment": "assert unmute"
+        },
+        {
+            "timeOutList": [],
+            "keyEvent": 0,
+            "origin": 1,
+            "action": 130,
+            "keyList": [
+                205
+            ],
+            "comment": "assert unmute"
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 1,
+            "keyList": [
+                179
+            ],
+            "comment": "select soundtouch",
+            "action": 115
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 1,
+            "keyList": [
+                179
+            ],
+            "comment": "select soundtouch",
+            "action": 115
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 1,
+            "keyList": [
+                179
+            ],
+            "comment": "select soundtouch",
+            "action": 115
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 1,
+            "keyList": [
+                179
+            ],
+            "comment": "select soundtouch",
+            "action": 115
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 1,
+            "keyList": [
+                179
+            ],
+            "comment": "select soundtouch",
+            "action": 115
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 2,
+            "keyEvent": 2,
+            "keyList": [
+                179
+            ],
+            "comment": "Soundtouch button press and hold for at least 10000ms -> force system to take OTA update",
+            "action": 112
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                179
+            ],
+            "comment": "Soundtouch button press and hold for at least 10000ms -> force system to take OTA update",
+            "action": 112
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 4,
+            "keyEvent": 2,
+            "keyList": [
+                179
+            ],
+            "comment": "Soundtouch button press and hold for at least 10000ms -> force system to take OTA update",
+            "action": 112
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 3,
+            "keyEvent": 2,
+            "keyList": [
+                179
+            ],
+            "comment": "Soundtouch button press and hold for at least 10000ms -> force system to take OTA update",
+            "action": 112
+        },
+        {
+            "timeOutList": [
+                10000
+            ],
+            "origin": 5,
+            "keyEvent": 2,
+            "keyList": [
+                179
+            ],
+            "comment": "Soundtouch button press and hold for at least 10000ms -> force system to take OTA update",
+            "action": 112
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                17
+            ],
+            "comment": "connect",
+            "action": 116
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                17
+            ],
+            "comment": "connect",
+            "action": 116
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                17
+            ],
+            "comment": "connect",
+            "action": 116
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                17
+            ],
+            "comment": "connect",
+            "action": 116
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                17
+            ],
+            "comment": "connect",
+            "action": 116
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                14
+            ],
+            "comment": "select tv",
+            "action": 118
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                14
+            ],
+            "comment": "select tv",
+            "action": 118
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                14
+            ],
+            "comment": "select tv",
+            "action": 118
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                14
+            ],
+            "comment": "select tv",
+            "action": 118
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                14
+            ],
+            "comment": "select tv",
+            "action": 118
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                6
+            ],
+            "comment": "select user configurable source game/ott",
+            "action": 126
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                6
+            ],
+            "comment": "select user configurable source game/ott",
+            "action": 126
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                6
+            ],
+            "comment": "select user configurable source game/ott",
+            "action": 126
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                6
+            ],
+            "comment": "select user configurable source game/ott",
+            "action": 126
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                83
+            ],
+            "comment": "select user configurable source dvd",
+            "action": 127
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                83
+            ],
+            "comment": "select user configurable source dvd",
+            "action": 127
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                83
+            ],
+            "comment": "select user configurable source dvd",
+            "action": 127
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                13
+            ],
+            "comment": "select user configurable source cable/sat",
+            "action": 128
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                13
+            ],
+            "comment": "select user configurable source cable/sat",
+            "action": 128
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                13
+            ],
+            "comment": "select user configurable source cable/sat",
+            "action": 128
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                13
+            ],
+            "comment": "select user configurable source dvd (Kepler)",
+            "action": 127
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                83
+            ],
+            "comment": "select user configurable source cable/sat (Kepler)",
+            "action": 128
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                107
+            ],
+            "comment": "thumbs up",
+            "action": 119
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                107
+            ],
+            "comment": "thumbs up",
+            "action": 119
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                107
+            ],
+            "comment": "thumbs up",
+            "action": 119
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                107
+            ],
+            "comment": "thumbs up",
+            "action": 119
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                107
+            ],
+            "comment": "thumbs up",
+            "action": 119
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                106
+            ],
+            "comment": "thumbs down",
+            "action": 120
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                106
+            ],
+            "comment": "thumbs down",
+            "action": 120
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                106
+            ],
+            "comment": "thumbs down",
+            "action": 120
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                106
+            ],
+            "comment": "thumbs down",
+            "action": 120
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                106
+            ],
+            "comment": "thumbs down",
+            "action": 120
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                27
+            ],
+            "comment": "factory default",
+            "action": 8
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                27
+            ],
+            "comment": "factory default",
+            "action": 8
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                27
+            ],
+            "comment": "factory default",
+            "action": 8
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                27
+            ],
+            "comment": "factory default",
+            "action": 8
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                27
+            ],
+            "comment": "factory default",
+            "action": 8
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                28
+            ],
+            "comment": "toggle wifi",
+            "action": 7
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                28
+            ],
+            "comment": "toggle wifi",
+            "action": 7
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                28
+            ],
+            "comment": "toggle wifi",
+            "action": 7
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                28
+            ],
+            "comment": "toggle wifi",
+            "action": 7
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                28
+            ],
+            "comment": "toggle wifi",
+            "action": 7
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                29
+            ],
+            "comment": "ap setup",
+            "action": 5
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                29
+            ],
+            "comment": "ap setup",
+            "action": 5
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                29
+            ],
+            "comment": "ap setup",
+            "action": 5
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                29
+            ],
+            "comment": "ap setup",
+            "action": 5
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                29
+            ],
+            "comment": "ap setup",
+            "action": 5
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                30
+            ],
+            "comment": "pair speakers",
+            "action": 121
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                30
+            ],
+            "comment": "pair speakers",
+            "action": 121
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                30
+            ],
+            "comment": "pair speakers",
+            "action": 121
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                30
+            ],
+            "comment": "pair speakers",
+            "action": 121
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                30
+            ],
+            "comment": "pair speakers",
+            "action": 121
+        },
+        {
+            "timeOutList": [
+                5000
+            ],
+            "origin": 1,
+            "keyEvent": 2,
+            "keyList": [
+                174
+            ],
+            "comment": "setup and pair BLE remote",
+            "action": 102
+        },
+        {
+            "timeOutList": [
+                5000
+            ],
+            "origin": 6,
+            "keyEvent": 2,
+            "keyList": [
+                174
+            ],
+            "comment": "setup and pair BLE remote",
+            "action": 102
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                31
+            ],
+            "comment": "pts mode",
+            "action": 52
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                31
+            ],
+            "comment": "pts mode",
+            "action": 52
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                31
+            ],
+            "comment": "pts mode",
+            "action": 52
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                31
+            ],
+            "comment": "pts mode",
+            "action": 52
+        },
+        {
+            "timeOutList": [],
+            "origin": 2,
+            "keyEvent": 0,
+            "keyList": [
+                128
+            ],
+            "comment": "toggle audio mode",
+            "action": 131
+        },
+        {
+            "timeOutList": [],
+            "origin": 6,
+            "keyEvent": 0,
+            "keyList": [
+                128
+            ],
+            "comment": "toggle audio mode",
+            "action": 131
+        },
+        {
+            "timeOutList": [],
+            "origin": 4,
+            "keyEvent": 0,
+            "keyList": [
+                128
+            ],
+            "comment": "toggle audio mode",
+            "action": 131
+        },
+        {
+            "timeOutList": [],
+            "origin": 3,
+            "keyEvent": 0,
+            "keyList": [
+                128
+            ],
+            "comment": "toggle audio mode",
+            "action": 131
+        },
+        {
+            "timeOutList": [],
+            "origin": 5,
+            "keyEvent": 0,
+            "keyList": [
+                128
+            ],
+            "comment": "toggle audio mode",
+            "action": 131
+        }
+    ]
+}
