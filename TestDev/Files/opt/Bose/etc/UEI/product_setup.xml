@@ -1,0 +1,30 @@
+<setup>
+<activities current_act_id="1" >
+ <device_idx_lut>
+ <dev idx="0" act_type="0" />
+ <dev idx="1" act_type="1" />
+ <dev idx="2" act_type="4" host="true"/>
+</device_idx_lut>
+
+<act 
+act_id="1"
+name="WATCH TV"
+src="2"
+audio_mode="avr" 
+valid="false" >
+
+<devices>
+<dev idx="0" />
+<dev idx="2" />
+</devices>
+
+<macro_enter>
+<cmd dev="2" func_id="4226" />
+<cmd dev="0" func_id="2" />
+<cmd dev="2" func_id="2" />
+<cmd dev="2" func_id="4226" />
+</macro_enter>
+</act>
+</activities>
+<con><if_map><if id="50" name="nevo" proto="ip" keymap="FALSE" default_blaster="my_p5"/><if id="1" name="blend" proto="ble" keymap="TRUE" default_blaster="my_ble"/><if id="2" name="fusion" proto="rf4ce" keymap=" FALSE " default_blaster="my_p5"/><if id="3" name="white" proto="rf4ce" keymap=" FALSE " default_blaster="my_p5"/></if_map><blasters><b name="my_p5" prod_id="P5"/><b name="my_ble" prod_id="BLE"/></blasters></con>
+</setup>

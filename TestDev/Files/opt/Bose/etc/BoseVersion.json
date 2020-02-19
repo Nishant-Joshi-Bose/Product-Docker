@@ -1,0 +1,15 @@
+{
+  "abbrev_commit": "55e32ff",
+  "branch": "",
+  "build_number": "7854",
+  "commit": "55e32ff6f7c08c7949551aff3feb7074a5049636",
+  "host": "ssgbld01",
+  "localtime": "2020-01-24T17:04:06",
+  "long": "8.0.2.7854 epdbuild@ssgbld01 2020-01-24T17:04:06 55e32ff",
+  "major": "8",
+  "minor": "0",
+  "patch": "2",
+  "short": "8.0.2",
+  "time": 1579903446,
+  "user": "epdbuild"
+}

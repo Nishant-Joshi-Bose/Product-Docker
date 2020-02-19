@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<volume muted="false" max="70" min="10" defaultOn="30">
+    <targetvolume>30</targetvolume>
+    <actualvolume>30</actualvolume>
+    <properties maxLimit="100" minLimit="0" />
+</volume>

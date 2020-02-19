@@ -1,0 +1,11 @@
+#!/bin/sh
+echo "Starting RecoveryMain"
+if [ -f /cache/RecoveryMain ]; then
+	/cache/RecoveryMain &
+elif [ -f /opt/Bose/bin/RecoveryMain ]; then
+	/opt/Bose/bin/RecoveryMain &
+else
+	echo "RecoverMain not found"
+fi
+
+exit 0
