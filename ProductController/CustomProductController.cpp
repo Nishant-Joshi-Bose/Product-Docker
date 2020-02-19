@@ -88,6 +88,7 @@
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateBooted.h"
 #include "CustomProductControllerStateBooting.h"
+#include "CustomProductControllerStateControlIntegration.h"
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
@@ -616,6 +617,16 @@ void CustomProductController::Run( )
       SystemPowerControl_State_Not_Notify );
 
     ///
+    /// Control integration State
+    ///
+    ( void )
+    hsm.AddState<CustomProductControllerStateControlIntegration>
+    ( statePlayingSelected,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_CONTROL_INTEGRATION,
+      SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+      SystemPowerControl_State_ON );
+
+    ///
     /// Stopping Streams Dedicated State and Sub-States
     ///
     auto stateStoppingStreamsDedicated =
@@ -662,6 +673,7 @@ void CustomProductController::Run( )
     auto connectCb = [this]( bool connected )
     {
         BOSE_INFO( s_logger, "Connected to DeviceController!" );
+        m_ProductCecHelper->SendCurrentEdid();
     };
 
     auto dvcDisconnectCb  = [this, connectCb]()
@@ -783,6 +795,11 @@ void CustomProductController::Run( )
     /// Initialize the AccessorySoftwareInstallManager.
     ///
     InitializeAccessorySoftwareInstallManager( );
+
+    ///
+    /// Register for OSM state change callback.
+    ///
+    RegisterOSMStateCallback( );
 
     auto func = [this]( bool enabled )
     {
@@ -1238,13 +1255,15 @@ void CustomProductController::SetupProductSTSController( )
 
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
+    ProductSTSStateFactory<ProductSTSStateTop>              topStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopSilent>        silentStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopAiQ>           aiqStateFactory;
     ProductSTSStateFactory<ProductSTSStateDeviceControl>    deviceControlStateFactory;
 
     ///
-    /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
-    /// will always be available. SLOT sources need to be set-up before they become available.
+    /// ADAPTIQ, SETUP, PAIRING, and CONTROL_INTEGRATION are never available as a normal source,
+    /// whereas the TV source will always be available.
+    /// SLOT sources need to be set-up before they become available.
     /// This is set up in CustomProductController::SendInitialCapsData().
     ///
     /// The "resumesupported" (5th) constructor argument (copied from "enabled" (3rd) if absent) determines whether the source is SETUP or PRODUCT.
@@ -1259,6 +1278,7 @@ void CustomProductController::SetupProductSTSController( )
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_CONTROL_INTEGRATION { CONTROL_INTEGRATION, SetupSourceSlot_Name( CONTROL_INTEGRATION ),   false, topStateFactory };
 
     sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
@@ -1267,6 +1287,7 @@ void CustomProductController::SetupProductSTSController( )
     sources.push_back( descriptor_SLOT_0 );
     sources.push_back( descriptor_SLOT_1 );
     sources.push_back( descriptor_SLOT_2 );
+    sources.push_back( descriptor_CONTROL_INTEGRATION );
 
     Callback< void >
     CallbackForSTSComplete( std::bind( &ProductController::HandleSTSInitWasComplete,
@@ -1851,6 +1872,14 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         GetHsm( ).Handle< const LpmServiceMessages::IpcDeviceBoot_t& >( &CustomProductControllerState::HandleDspBooted, message.dspbooted() );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// OSM activity state messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_osmactive( ) )
+    {
+        m_OSMIsActive = message.osmactive( );
+        GetHsm( ).Handle< bool >( &CustomProductControllerState::HandleOSMActivityState, m_OSMIsActive );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// AudioPath stream states (silent or not silent) messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_audiosilent( ) )
@@ -2082,6 +2111,7 @@ void CustomProductController::SendInitialCapsData()
         Sources message;
 
         // Populate status and visibility of PRODUCT sources.
+        // Rules for setting CAPS "status" field: https://jirapro.bose.com/browse/PGC-1169
         using namespace ProductSTS;
 
         Sources_SourceItem* source = message.add_sources( );
@@ -2145,6 +2175,26 @@ void CustomProductController::SendInitialCapsData()
             sourcesRespCb,
             m_errorCb );
         BOSE_INFO( s_logger, "%s sent %s", __func__, message.DebugString( ).c_str( ) );
+    }
+
+    {
+        // CI source was added after SOS, so it may not exist in already running systems and its visibility needs to be set
+        using namespace ProductSTS;
+        Sources message;
+        Sources_SourceItem* source = message.add_sources( );
+
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
+        source->set_accountid( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
+        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+            FRONTDOOR_SYSTEM_SOURCES_API,
+            message,
+            {},
+            m_errorCb );
+        BOSE_INFO( s_logger, "Sent %s", message.DebugString( ).c_str( ) );
     }
 
     std::string DefaultRebroadcastLatencyModeFile{ g_PersistenceRootDir };
@@ -2743,6 +2793,42 @@ void CustomProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductController::RegisterOSMStateCallback
+///
+/// @brief This method registers callback with the DeviceController, to get called when the QuickSetService's OSM state changed
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::RegisterOSMStateCallback( )
+{
+    AsyncCallback< DeviceControllerClientMessages::OSMState_t >
+    callback( std::bind( &CustomProductController::HandleOSMStateCallback,
+                         this,
+                         std::placeholders::_1 ),
+              GetTask( ) );
+    m_deviceControllerPtr->RegisterOSMStateCallback( callback );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductController::HandleOSMStateCallback
+///
+/// @brief This method gets called when the OSM state changed
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleOSMStateCallback( DeviceControllerClientMessages::OSMState_t osmState )
+{
+    BOSE_INFO( s_logger, "%s::%s: %s", CLASS_NAME, __func__, OSMState_t_State_Name( osmState.state( ) ).c_str( ) );
+    bool OSMIsActive = ( osmState.state( ) == DeviceControllerClientMessages::OSMState_t_State_START_CALLED );
+    if( OSMIsActive != m_OSMIsActive )
+    {
+        ProductMessage productMessage;
+        productMessage.set_osmactive( OSMIsActive );
+        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

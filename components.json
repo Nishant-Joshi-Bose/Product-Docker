@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Conan/482/master/2.1.55+gf57bb51"
+    "selected_version": "Continuous/master/2.1.58-1-gf77186f"
   },
   {
     "name": "A4VDeviceController-x86_64",
-    "selected_version": "Conan/482/master/2.1.55+gf57bb51"
+    "selected_version": "Continuous/master/2.1.58-1-gf77186f"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",

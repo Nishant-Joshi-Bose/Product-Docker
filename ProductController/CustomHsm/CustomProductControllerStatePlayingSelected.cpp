@@ -75,10 +75,14 @@ void CustomProductControllerStatePlayingSelected::GoToNextState( )
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
                 return;
             }
-
             if( sourceAccount == SetupSourceSlot_Name( PAIRING ) )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
+                return;
+            }
+            if( sourceAccount == SetupSourceSlot_Name( CONTROL_INTEGRATION ) )
+            {
+                ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_CONTROL_INTEGRATION );
                 return;
             }
         }
