@@ -1414,10 +1414,10 @@ void CustomProductController::KillUiProcess()
 ///
 /// @brief CustomProductController::HandleAudioVolumeNotification
 ///
-/// @param const SoundTouchInterface::volume& volume
+/// @param const CAPSAPI::volume& volume
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleAudioVolumeNotification( SoundTouchInterface::volume volume )
+void CustomProductController::HandleAudioVolumeNotification( CAPSAPI::volume volume )
 {
     BOSE_INFO( s_logger, "%s received: %s", __func__, ProtoToMarkup::ToJson( volume ).c_str() );
 
@@ -1513,14 +1513,14 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
     }
     {
         //Audio volume callback for notifications
-        AsyncCallback< SoundTouchInterface::volume >
+        AsyncCallback< CAPSAPI::volume >
         audioVolumeCb( std::bind( &CustomProductController::HandleAudioVolumeNotification,
                                   this,
                                   std::placeholders::_1 ),
                        GetTask( ) );
 
         //Audio volume notification registration
-        m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::volume >(
+        m_FrontDoorClientIF->RegisterNotification< CAPSAPI::volume >(
             FRONTDOOR_AUDIO_VOLUME_API,
             audioVolumeCb );
     }
@@ -2065,8 +2065,6 @@ void CustomProductController::SendInitialCapsData()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    using namespace SoundTouchInterface;
-
     std::string DefaultCAPSValuesStateFile{ g_PersistenceRootDir };
     DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
     DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
@@ -2079,13 +2077,13 @@ void CustomProductController::SendInitialCapsData()
     if( defaultCAPSValuesDone )
     {
         // GET the current values, we may have missed an initial notification
-        AsyncCallback< volume >
+        AsyncCallback< CAPSAPI::volume >
         audioVolumeCb( std::bind( &CustomProductController::HandleAudioVolumeNotification,
                                   this,
                                   std::placeholders::_1 ),
                        GetTask( ) );
 
-        m_FrontDoorClientIF->SendGet<volume, FrontDoor::Error>(
+        m_FrontDoorClientIF->SendGet<CAPSAPI::volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API,
             audioVolumeCb,
             m_errorCb );
@@ -2097,10 +2095,10 @@ void CustomProductController::SendInitialCapsData()
         {
             BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultCAPSValuesStateFile.c_str( ) );
         }
-        volume desiredVolume;
+        CAPSAPI::volume desiredVolume;
         desiredVolume.set_min( VOLUME_MIN_THRESHOLD );
         desiredVolume.set_max( VOLUME_MAX_THRESHOLD );
-        GetFrontDoorClient()->SendPut<volume, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<CAPSAPI::volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API,
             desiredVolume,
             { },
@@ -2108,38 +2106,38 @@ void CustomProductController::SendInitialCapsData()
         BOSE_INFO( s_logger, "%s sent %s", __func__, desiredVolume.DebugString( ).c_str( ) );
 
         // Populate /system/sources::properties
-        Sources message;
+        SoundTouchInterface::Sources message;
 
         // Populate status and visibility of PRODUCT sources.
         // Rules for setting CAPS "status" field: https://jirapro.bose.com/browse/PGC-1169
         using namespace ProductSTS;
 
-        Sources_SourceItem* source = message.add_sources( );
+        SoundTouchInterface::Sources_SourceItem* source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
         source->set_accountid( ProductSourceSlot_Name( TV ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
         source->set_visible( true );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_0 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_1 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_2 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         // Set the (in)visibility of SETUP sources.
@@ -2147,29 +2145,29 @@ void CustomProductController::SendInitialCapsData()
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
         source->set_accountid( SetupSourceSlot_Name( SETUP ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
         source->set_accountid( SetupSourceSlot_Name( ADAPTIQ ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
         source->set_accountid( SetupSourceSlot_Name( PAIRING ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
-        auto sourcesRespCb = []( Sources sources )
+        auto sourcesRespCb = []( SoundTouchInterface::Sources sources )
         {
             BOSE_INFO( s_logger, FRONTDOOR_SYSTEM_SOURCES_API " properties: %s", sources.properties( ).DebugString( ).c_str( ) );
         };
 
-        GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
             message,
             sourcesRespCb,
@@ -2180,16 +2178,16 @@ void CustomProductController::SendInitialCapsData()
     {
         // CI source was added after SOS, so it may not exist in already running systems and its visibility needs to be set
         using namespace ProductSTS;
-        Sources message;
-        Sources_SourceItem* source = message.add_sources( );
+        SoundTouchInterface::Sources message;
+        SoundTouchInterface::Sources_SourceItem* source = message.add_sources( );
 
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
         source->set_accountid( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
-        GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
             message,
             {},
@@ -2210,9 +2208,9 @@ void CustomProductController::SendInitialCapsData()
         }
 
         // Set the default value for /audio/rebroadcastLatency/mode
-        RebroadcastLatencyModeMsg rebroadcastLatencyModeMsg;
+        CAPSAPI::RebroadcastLatencyModeMsg rebroadcastLatencyModeMsg;
         rebroadcastLatencyModeMsg.set_mode( APControlMsgRebroadcastLatencyMode::APRebroadcastLatencyMode_Name( APControlMsgRebroadcastLatencyMode::SYNC_TO_ROOM ) );
-        GetFrontDoorClient()->SendPut<RebroadcastLatencyModeMsg, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<CAPSAPI::RebroadcastLatencyModeMsg, FrontDoor::Error>(
             FRONTDOOR_AUDIO_REBROADCASTLATENCY_MODE_API,
             rebroadcastLatencyModeMsg,
             { },

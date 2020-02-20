@@ -53,7 +53,7 @@
 #include "DisplayController.pb.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
-#include "SoundTouchInterface/AudioService.pb.h"
+#include "AudioService.pb.h"
 #include "SystemPowerProduct.pb.h"
 #include "SystemPower.pb.h"
 #include "SystemPowerMacro.pb.h"
@@ -461,7 +461,7 @@ private:
     /// @brief The following declaration is for handling the /audio/volume frontdoor endpoint
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleAudioVolumeNotification( SoundTouchInterface::volume volume );
+    void HandleAudioVolumeNotification( CAPSAPI::volume volume );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @name  PersistLastPlayedContentItem
@@ -568,7 +568,7 @@ private:
     /// @brief The following member is used to store the /audio/volume data sent from CAPS
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    SoundTouchInterface::volume m_cachedVolume;
+    CAPSAPI::volume m_cachedVolume;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///

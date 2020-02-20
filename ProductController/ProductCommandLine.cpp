@@ -424,11 +424,11 @@ void ProductCommandLine::HandleMute( const std::list<std::string>& argList,
                 muteStateValue = false;
             }
 
-            SoundTouchInterface::volume pbVolume;
+            CAPSAPI::volume pbVolume;
             pbVolume.set_muted( muteStateValue );
 
             BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted( ) );
-            m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+            m_ProductController.GetFrontDoorClient( )->SendPut<CAPSAPI::volume, FrontDoor::Error>(
                 FRONTDOOR_AUDIO_VOLUME_API, pbVolume, {}, m_ProductController.m_errorCb );
         }
         else
@@ -691,11 +691,11 @@ void ProductCommandLine::HandleVolume( const std::list<std::string>& argList,
             response +=  volumeLevelString;
             response += ". \r\n";
 
-            SoundTouchInterface::volume pbVolume;
+            CAPSAPI::volume pbVolume;
             pbVolume.set_value( volumeLevelValue );
 
             BOSE_VERBOSE( s_logger, "Setting FrontDoor volume to %d", pbVolume.value( ) );
-            m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+            m_ProductController.GetFrontDoorClient( )->SendPut<CAPSAPI::volume, FrontDoor::Error>(
                 FRONTDOOR_AUDIO_VOLUME_API, pbVolume, {}, m_ProductController.m_errorCb );
         }
         else
