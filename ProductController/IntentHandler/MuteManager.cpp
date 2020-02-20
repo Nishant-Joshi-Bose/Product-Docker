@@ -82,13 +82,13 @@ MuteManager::MuteManager( NotifyTargetTaskIF&        task,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void MuteManager::Initialize( )
 {
-    auto fNotify = [ this ]( SoundTouchInterface::volume v )
+    auto fNotify = [ this ]( CAPSAPI::volume v )
     {
         ReceiveFrontDoorVolume( v );
     };
 
-    m_NotifierCallback = m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
-                         ( FRONTDOOR_AUDIO_VOLUME_API, AsyncCallback< SoundTouchInterface::volume > ( fNotify, m_ProductTask ) );
+    m_NotifierCallback = m_FrontDoorClient->RegisterNotification< CAPSAPI::volume >
+                         ( FRONTDOOR_AUDIO_VOLUME_API, AsyncCallback< CAPSAPI::volume > ( fNotify, m_ProductTask ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,7 +156,7 @@ void MuteManager::Stop( )
 /// @param  volume Object containing volume received from the FrontDoor
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void MuteManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume )
+void MuteManager::ReceiveFrontDoorVolume( CAPSAPI::volume const& volume )
 {
     BOSE_VERBOSE( s_logger, "volume received by %s is %s", __func__, ProtoToMarkup::ToJson( volume, false ).c_str() );
     ///
@@ -190,22 +190,22 @@ void MuteManager::ToggleMute( )
                     error.subcode(),
                     error.message().c_str() );
     };
-    auto respFunc = [ this ]( SoundTouchInterface::volume v )
+    auto respFunc = [ this ]( CAPSAPI::volume v )
     {
         ReceiveFrontDoorVolume( v );
     };
 
-    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+    AsyncCallback<CAPSAPI::volume> respCb( respFunc, m_ProductTask );
     AsyncCallback<FrontDoor::Error> errCb( errFunc, m_ProductTask );
 
-    SoundTouchInterface::volume pbVolume;
+    CAPSAPI::volume pbVolume;
     pbVolume.set_muted( !m_muted );
 #if 0 // @TODO waiting for  CASTLE-29661; see PGC-4261
     pbVolume.mutable_feedback()->set_enable( true );
 #endif
 
     BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
-    m_FrontDoorClient->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+    m_FrontDoorClient->SendPut<CAPSAPI::volume, FrontDoor::Error>(
         FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respCb, errCb );
 }
 

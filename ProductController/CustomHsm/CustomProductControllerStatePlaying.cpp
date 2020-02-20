@@ -116,9 +116,9 @@ void CustomProductControllerStatePlaying::SetVolumeToThresholdLimit( )
     auto desiredPlayingVolumePair = GetCustomProductController( ).GetDesiredPlayingVolume( );
     if( desiredPlayingVolumePair.first )
     {
-        SoundTouchInterface::volume v;
+        CAPSAPI::volume v;
         v.set_value( desiredPlayingVolumePair.second );
-        GetCustomProductController( ).GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+        GetCustomProductController( ).GetFrontDoorClient( )->SendPut<CAPSAPI::volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API, v, {}, FrontDoorErrorCallback );
     }
 }

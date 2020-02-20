@@ -158,6 +158,7 @@ INCLUDE_DIRECTORIES(
   ${BOSELIBS_DIR}/protobufs
   ${BTSOURCE_DIR}/include
   ${BTSTSSINK_DIR}/include
+  ${CAPSAPI_DIR}/include
   ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/include
   ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/include/SoundTouchInterface
   ${CAPSSERVICE_DIR}/prebuilt/include
@@ -207,6 +208,7 @@ LINK_DIRECTORIES(
   ${BOSELIBS_DIR}/lib
   ${BTSOURCE_DIR}/lib
   ${BTSTSSINK_DIR}/lib
+  ${CAPSAPI_DIR}/lib
   ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/lib
   ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/lib
   ${CAPSSERVICE_DIR}/prebuilt/Libs
