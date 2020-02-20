@@ -261,7 +261,7 @@
         "timeOutList": [0],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
+                { "sourceName": "(SETUP)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
             ]}
     },
     {
@@ -273,7 +273,7 @@
         "timeOutList": [300, 100],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
+                { "sourceName": "(SETUP)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
             ]}
     },
     {
@@ -293,7 +293,7 @@
         "timeOutList": [0],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
+                { "sourceName": "(SETUP)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
             ]}
     },
     {
@@ -305,7 +305,7 @@
         "timeOutList": [300, 100],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
+                { "sourceName": "(SETUP)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
             ]}
     },
     {
@@ -365,7 +365,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
             ]}
     },
     {
@@ -377,7 +377,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
             ]}
     },
     {
@@ -389,7 +389,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
             ]}
     },
     {
