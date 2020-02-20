@@ -184,6 +184,11 @@ public:
         return false;
     }
 
+    virtual bool HandleOSMActivityState( bool state )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Custom Product Controller reference of type

@@ -511,10 +511,27 @@ void ProductCecHelper::HandleRawEDIDResponse( A4VVideoManagerServiceMessages::ED
     }
 
     m_eedid.set_ediddata( stringEdid.str() );
-
+    m_rawEdid.CopyFrom( rawEdid );
+    SendCurrentEdid();
     m_DataCollectionClient->SendData( std::make_shared< DataCollectionPb::HdmiEdid >( m_eedid ), DATA_COLLECTION_EEDID );
     BOSE_DEBUG( s_logger, "ProductCecHelper::HandleRawEDIDResponse sent %s", m_eedid.ediddata().c_str() );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductCecHelper::SendCurrentEdid
+///
+/// @param A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::SendCurrentEdid( )
+{
+    DeviceControllerClientMessages::RawEdid_t edid;
+    edid.set_edid( m_rawEdid.edid() );
+    // Send to DeviceController for potential codeset lookup
+    m_CustomProductController.GetDeviceControllerClient()->SendRawEdid( edid );
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -590,9 +607,19 @@ void ProductCecHelper::HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlay
             else if( source.compare( SHELBY_SOURCE::SETUP ) == 0 )
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS in setup, ignoring CEC active source requests." );
-
                 m_ignoreSourceSwitch = true;
-                m_LpmSourceID = LPM_IPC_SOURCE_INTERNAL;
+                const auto& sourceAccount = nowPlayingStatus.container( ).contentitem( ).sourceaccount( );
+                using namespace ProductSTS;
+                if( sourceAccount == SetupSourceSlot_Name( SetupSourceSlot::CONTROL_INTEGRATION ) )
+                {
+                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV and ignoring CEC active source requests." );
+                    m_LpmSourceID = LPM_IPC_SOURCE_TV;
+                }
+                else
+                {
+                    BOSE_DEBUG( s_logger, "CEC CAPS in setup, ignoring CEC active source requests." );
+                    m_LpmSourceID = LPM_IPC_SOURCE_INTERNAL;
+                }
             }
             else
             {
@@ -612,7 +639,7 @@ void ProductCecHelper::HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlay
 /// @param  volume Object containing volume received from the FrontDoor
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::HandleFrontDoorVolume( SoundTouchInterface::volume const& volume )
+void ProductCecHelper::HandleFrontDoorVolume( CAPSAPI::volume const& volume )
 {
     BOSE_VERBOSE( s_logger, "Got volume notify LPM (%d) (%d)", volume.value(), volume.muted() );
 

@@ -36,26 +36,27 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "APTimer.h"
-#include "IntentHandler.h"
-#include "ProductCecHelper.h"
-#include "ProductDspHelper.h"
-#include "ProductController.h"
-#include "ProductSTSController.h"
+#include "AccessorySoftwareInstallManager.h"
+#include "DeviceControllerClientIF.h"
 #include "FrontDoorClientIF.h"
+#include "IntentHandler.h"
+#include "LightBarController.h"
+#include "MacAddressInfo.h"
+#include "MonotonicClock.h"
+#include "ProductCecHelper.h"
+#include "ProductController.h"
+#include "ProductDspHelper.h"
+#include "ProductSTSController.h"
+#include "ProductFrontDoorKeyInjectIF.h"
+
+#include "BluetoothSourceService.pb.h"
+#include "DisplayController.pb.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
-#include "SoundTouchInterface/AudioService.pb.h"
-#include "MacAddressInfo.h"
-#include "LightBarController.h"
+#include "AudioService.pb.h"
 #include "SystemPowerProduct.pb.h"
-#include "DisplayController.pb.h"
 #include "SystemPower.pb.h"
 #include "SystemPowerMacro.pb.h"
-#include "ProductFrontDoorKeyInjectIF.h"
-#include "AccessorySoftwareInstallManager.h"
-#include "MonotonicClock.h"
-#include "DeviceControllerClientIF.h"
-#include "BluetoothSourceService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -298,6 +299,11 @@ public:
         return m_speakerPairingIsFromLAN;
     }
 
+    bool GetOSMIsActive( ) const
+    {
+        return m_OSMIsActive;
+    }
+
     void PowerMacroOff();
 
     bool GetHaltInPlayableTransitionNetworkStandby( ) const
@@ -455,7 +461,7 @@ private:
     /// @brief The following declaration is for handling the /audio/volume frontdoor endpoint
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleAudioVolumeNotification( SoundTouchInterface::volume volume );
+    void HandleAudioVolumeNotification( CAPSAPI::volume volume );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @name  PersistLastPlayedContentItem
@@ -494,6 +500,14 @@ private:
     void ApplyOpticalAutoWakeSettingFromPersistence( );
     void NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
     void RegisterOpticalAutowakeForLpmConnection( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declarations are for handling communications with the DeviceController regarding the OSM state
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void RegisterOSMStateCallback( );
+    void HandleOSMStateCallback( DeviceControllerClientMessages::OSMState_t osmState );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -554,8 +568,14 @@ private:
     /// @brief The following member is used to store the /audio/volume data sent from CAPS
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    SoundTouchInterface::volume m_cachedVolume;
+    CAPSAPI::volume m_cachedVolume;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member is used to store the OSM status, active or not
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    bool m_OSMIsActive = false;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///

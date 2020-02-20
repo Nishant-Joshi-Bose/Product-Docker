@@ -88,6 +88,7 @@
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateBooted.h"
 #include "CustomProductControllerStateBooting.h"
+#include "CustomProductControllerStateControlIntegration.h"
 #include "CustomProductControllerStateFirstBootGreetingTransition.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
@@ -616,6 +617,16 @@ void CustomProductController::Run( )
       SystemPowerControl_State_Not_Notify );
 
     ///
+    /// Control integration State
+    ///
+    ( void )
+    hsm.AddState<CustomProductControllerStateControlIntegration>
+    ( statePlayingSelected,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_CONTROL_INTEGRATION,
+      SYSTEM_STATE_NOTIFIED_NAME_SELECTED,
+      SystemPowerControl_State_ON );
+
+    ///
     /// Stopping Streams Dedicated State and Sub-States
     ///
     auto stateStoppingStreamsDedicated =
@@ -662,6 +673,7 @@ void CustomProductController::Run( )
     auto connectCb = [this]( bool connected )
     {
         BOSE_INFO( s_logger, "Connected to DeviceController!" );
+        m_ProductCecHelper->SendCurrentEdid();
     };
 
     auto dvcDisconnectCb  = [this, connectCb]()
@@ -783,6 +795,11 @@ void CustomProductController::Run( )
     /// Initialize the AccessorySoftwareInstallManager.
     ///
     InitializeAccessorySoftwareInstallManager( );
+
+    ///
+    /// Register for OSM state change callback.
+    ///
+    RegisterOSMStateCallback( );
 
     auto func = [this]( bool enabled )
     {
@@ -1238,13 +1255,15 @@ void CustomProductController::SetupProductSTSController( )
 
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
+    ProductSTSStateFactory<ProductSTSStateTop>              topStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopSilent>        silentStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopAiQ>           aiqStateFactory;
     ProductSTSStateFactory<ProductSTSStateDeviceControl>    deviceControlStateFactory;
 
     ///
-    /// ADAPTIQ, SETUP, and PAIRING are never available as a normal source, whereas the TV source
-    /// will always be available. SLOT sources need to be set-up before they become available.
+    /// ADAPTIQ, SETUP, PAIRING, and CONTROL_INTEGRATION are never available as a normal source,
+    /// whereas the TV source will always be available.
+    /// SLOT sources need to be set-up before they become available.
     /// This is set up in CustomProductController::SendInitialCapsData().
     ///
     /// The "resumesupported" (5th) constructor argument (copied from "enabled" (3rd) if absent) determines whether the source is SETUP or PRODUCT.
@@ -1259,6 +1278,7 @@ void CustomProductController::SetupProductSTSController( )
     ProductSTSController::SourceDescriptor descriptor_SLOT_0  { SLOT_0,  ProductSourceSlot_Name( SLOT_0 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_1  { SLOT_1,  ProductSourceSlot_Name( SLOT_1 ),  false, deviceControlStateFactory, true };
     ProductSTSController::SourceDescriptor descriptor_SLOT_2  { SLOT_2,  ProductSourceSlot_Name( SLOT_2 ),  false, deviceControlStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_CONTROL_INTEGRATION { CONTROL_INTEGRATION, SetupSourceSlot_Name( CONTROL_INTEGRATION ),   false, topStateFactory };
 
     sources.push_back( descriptor_SETUP );
     sources.push_back( descriptor_TV );
@@ -1267,6 +1287,7 @@ void CustomProductController::SetupProductSTSController( )
     sources.push_back( descriptor_SLOT_0 );
     sources.push_back( descriptor_SLOT_1 );
     sources.push_back( descriptor_SLOT_2 );
+    sources.push_back( descriptor_CONTROL_INTEGRATION );
 
     Callback< void >
     CallbackForSTSComplete( std::bind( &ProductController::HandleSTSInitWasComplete,
@@ -1393,10 +1414,10 @@ void CustomProductController::KillUiProcess()
 ///
 /// @brief CustomProductController::HandleAudioVolumeNotification
 ///
-/// @param const SoundTouchInterface::volume& volume
+/// @param const CAPSAPI::volume& volume
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleAudioVolumeNotification( SoundTouchInterface::volume volume )
+void CustomProductController::HandleAudioVolumeNotification( CAPSAPI::volume volume )
 {
     BOSE_INFO( s_logger, "%s received: %s", __func__, ProtoToMarkup::ToJson( volume ).c_str() );
 
@@ -1492,14 +1513,14 @@ void CustomProductController::RegisterFrontDoorEndPoints( )
     }
     {
         //Audio volume callback for notifications
-        AsyncCallback< SoundTouchInterface::volume >
+        AsyncCallback< CAPSAPI::volume >
         audioVolumeCb( std::bind( &CustomProductController::HandleAudioVolumeNotification,
                                   this,
                                   std::placeholders::_1 ),
                        GetTask( ) );
 
         //Audio volume notification registration
-        m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::volume >(
+        m_FrontDoorClientIF->RegisterNotification< CAPSAPI::volume >(
             FRONTDOOR_AUDIO_VOLUME_API,
             audioVolumeCb );
     }
@@ -1851,6 +1872,14 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         GetHsm( ).Handle< const LpmServiceMessages::IpcDeviceBoot_t& >( &CustomProductControllerState::HandleDspBooted, message.dspbooted() );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// OSM activity state messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_osmactive( ) )
+    {
+        m_OSMIsActive = message.osmactive( );
+        GetHsm( ).Handle< bool >( &CustomProductControllerState::HandleOSMActivityState, m_OSMIsActive );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// AudioPath stream states (silent or not silent) messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_audiosilent( ) )
@@ -2036,8 +2065,6 @@ void CustomProductController::SendInitialCapsData()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    using namespace SoundTouchInterface;
-
     std::string DefaultCAPSValuesStateFile{ g_PersistenceRootDir };
     DefaultCAPSValuesStateFile += g_ProductPersistenceDir;
     DefaultCAPSValuesStateFile += g_DefaultCAPSValuesStateFile;
@@ -2050,13 +2077,13 @@ void CustomProductController::SendInitialCapsData()
     if( defaultCAPSValuesDone )
     {
         // GET the current values, we may have missed an initial notification
-        AsyncCallback< volume >
+        AsyncCallback< CAPSAPI::volume >
         audioVolumeCb( std::bind( &CustomProductController::HandleAudioVolumeNotification,
                                   this,
                                   std::placeholders::_1 ),
                        GetTask( ) );
 
-        m_FrontDoorClientIF->SendGet<volume, FrontDoor::Error>(
+        m_FrontDoorClientIF->SendGet<CAPSAPI::volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API,
             audioVolumeCb,
             m_errorCb );
@@ -2068,10 +2095,10 @@ void CustomProductController::SendInitialCapsData()
         {
             BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultCAPSValuesStateFile.c_str( ) );
         }
-        volume desiredVolume;
+        CAPSAPI::volume desiredVolume;
         desiredVolume.set_min( VOLUME_MIN_THRESHOLD );
         desiredVolume.set_max( VOLUME_MAX_THRESHOLD );
-        GetFrontDoorClient()->SendPut<volume, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<CAPSAPI::volume, FrontDoor::Error>(
             FRONTDOOR_AUDIO_VOLUME_API,
             desiredVolume,
             { },
@@ -2079,37 +2106,38 @@ void CustomProductController::SendInitialCapsData()
         BOSE_INFO( s_logger, "%s sent %s", __func__, desiredVolume.DebugString( ).c_str( ) );
 
         // Populate /system/sources::properties
-        Sources message;
+        SoundTouchInterface::Sources message;
 
         // Populate status and visibility of PRODUCT sources.
+        // Rules for setting CAPS "status" field: https://jirapro.bose.com/browse/PGC-1169
         using namespace ProductSTS;
 
-        Sources_SourceItem* source = message.add_sources( );
+        SoundTouchInterface::Sources_SourceItem* source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
         source->set_accountid( ProductSourceSlot_Name( TV ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
         source->set_visible( true );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_0 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_1 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_2 ) );
-        source->set_status( SourceStatus::NOT_CONFIGURED );
+        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         // Set the (in)visibility of SETUP sources.
@@ -2117,34 +2145,54 @@ void CustomProductController::SendInitialCapsData()
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
         source->set_accountid( SetupSourceSlot_Name( SETUP ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
         source->set_accountid( SetupSourceSlot_Name( ADAPTIQ ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
         source->set_accountid( SetupSourceSlot_Name( PAIRING ) );
-        source->set_status( SourceStatus::UNAVAILABLE );
+        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
-        auto sourcesRespCb = []( Sources sources )
+        auto sourcesRespCb = []( SoundTouchInterface::Sources sources )
         {
             BOSE_INFO( s_logger, FRONTDOOR_SYSTEM_SOURCES_API " properties: %s", sources.properties( ).DebugString( ).c_str( ) );
         };
 
-        GetFrontDoorClient()->SendPut<Sources, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
             message,
             sourcesRespCb,
             m_errorCb );
         BOSE_INFO( s_logger, "%s sent %s", __func__, message.DebugString( ).c_str( ) );
+    }
+
+    {
+        // CI source was added after SOS, so it may not exist in already running systems and its visibility needs to be set
+        using namespace ProductSTS;
+        SoundTouchInterface::Sources message;
+        SoundTouchInterface::Sources_SourceItem* source = message.add_sources( );
+
+        source->set_sourcename( SHELBY_SOURCE::SETUP );
+        source->set_sourceaccountname( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
+        source->set_accountid( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
+        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
+        source->set_visible( false );
+
+        GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
+            FRONTDOOR_SYSTEM_SOURCES_API,
+            message,
+            {},
+            m_errorCb );
+        BOSE_INFO( s_logger, "Sent %s", message.DebugString( ).c_str( ) );
     }
 
     std::string DefaultRebroadcastLatencyModeFile{ g_PersistenceRootDir };
@@ -2160,9 +2208,9 @@ void CustomProductController::SendInitialCapsData()
         }
 
         // Set the default value for /audio/rebroadcastLatency/mode
-        RebroadcastLatencyModeMsg rebroadcastLatencyModeMsg;
+        CAPSAPI::RebroadcastLatencyModeMsg rebroadcastLatencyModeMsg;
         rebroadcastLatencyModeMsg.set_mode( APControlMsgRebroadcastLatencyMode::APRebroadcastLatencyMode_Name( APControlMsgRebroadcastLatencyMode::SYNC_TO_ROOM ) );
-        GetFrontDoorClient()->SendPut<RebroadcastLatencyModeMsg, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<CAPSAPI::RebroadcastLatencyModeMsg, FrontDoor::Error>(
             FRONTDOOR_AUDIO_REBROADCASTLATENCY_MODE_API,
             rebroadcastLatencyModeMsg,
             { },
@@ -2743,6 +2791,42 @@ void CustomProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductController::RegisterOSMStateCallback
+///
+/// @brief This method registers callback with the DeviceController, to get called when the QuickSetService's OSM state changed
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::RegisterOSMStateCallback( )
+{
+    AsyncCallback< DeviceControllerClientMessages::OSMState_t >
+    callback( std::bind( &CustomProductController::HandleOSMStateCallback,
+                         this,
+                         std::placeholders::_1 ),
+              GetTask( ) );
+    m_deviceControllerPtr->RegisterOSMStateCallback( callback );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductController::HandleOSMStateCallback
+///
+/// @brief This method gets called when the OSM state changed
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::HandleOSMStateCallback( DeviceControllerClientMessages::OSMState_t osmState )
+{
+    BOSE_INFO( s_logger, "%s::%s: %s", CLASS_NAME, __func__, OSMState_t_State_Name( osmState.state( ) ).c_str( ) );
+    bool OSMIsActive = ( osmState.state( ) == DeviceControllerClientMessages::OSMState_t_State_START_CALLED );
+    if( OSMIsActive != m_OSMIsActive )
+    {
+        ProductMessage productMessage;
+        productMessage.set_osmactive( OSMIsActive );
+        IL::BreakThread( std::bind( GetMessageHandler( ), productMessage ), GetTask( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
