@@ -68,7 +68,7 @@
             "sourceName": "SETUP",
             "sourceAccountName": "CONTROL_INTEGRATION",
             "zoneConfig": {
-                "zonesUnconfigured": [7, 9, 10]
+                "zonesUnconfigured": [9, 10]
             }
         },
         {

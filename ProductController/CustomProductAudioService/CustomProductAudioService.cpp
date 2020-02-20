@@ -245,17 +245,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProd
         }
         else if( contentItemProto.source() == SHELBY_SOURCE::SETUP )
         {
-            using namespace ProductSTS;
-            if( contentItemProto.sourceaccount() == SetupSourceSlot_Name( SetupSourceSlot::CONTROL_INTEGRATION ) )
-            {
-                m_inputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
-                               ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
-                               ( 1 << AUDIO_INPUT_BIT_POSITION_EARC );
-            }
-            else
-            {
-                m_inputRoute = 0;
-            }
+            m_inputRoute = 0;
         }
         else
         {

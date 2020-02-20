@@ -261,7 +261,7 @@
         "timeOutList": [0],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
+                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
             ]}
     },
     {
@@ -273,7 +273,7 @@
         "timeOutList": [300, 100],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
+                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
             ]}
     },
     {
@@ -293,7 +293,7 @@
         "timeOutList": [0],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
+                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
             ]}
     },
     {
@@ -305,7 +305,7 @@
         "timeOutList": [300, 100],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
+                { "sourceName": "(SETUP)", "sourceAccountName": ".*" }
             ]}
     },
     {
@@ -365,7 +365,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP|^$)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
             ]}
     },
     {
@@ -377,7 +377,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP|^$)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
             ]}
     },
     {
@@ -389,7 +389,7 @@
         "timeOutList": [],
          "filter": {
             "sources": [
-                { "sourceName": "(SETUP|^$)", "sourceAccountName": "^((?!CONTROL_INTEGRATION).)*$" }
+                { "sourceName": "(SETUP|^$)", "sourceAccountName": ".*" }
             ]}
     },
     {
