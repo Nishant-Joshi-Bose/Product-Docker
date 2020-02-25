@@ -1,6 +1,0 @@
-<ShepherdConfig>
-   <daemon name="Passport"
-          recovery="reboot">
-   </daemon>
-</ShepherdConfig>
-

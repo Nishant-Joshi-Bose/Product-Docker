@@ -1,8 +1,0 @@
-{
-    "PayloadCfg": {
-        "minTimeframeSec": 5,
-        "maxTimeframeSec": 30,
-        "defaultTimeframeSec": 10,
-        "stagingDir": "/tmp/payload"
-    }
-}

@@ -1,6 +1,0 @@
-<ShepherdConfig>
-  <daemon name="GVA" exe="StartGVA">
-    <arg>-c</arg>
-    <arg>/opt/Bose/etc/GvaConfig.json</arg>
-  </daemon>
-</ShepherdConfig>

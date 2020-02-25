@@ -1,4 +1,0 @@
-<ShepherdConfig>
-  <daemon name="A4VQuickSetService"/>
-  <daemon name="DeviceController"/>
-</ShepherdConfig>
