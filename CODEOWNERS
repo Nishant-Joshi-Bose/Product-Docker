@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/about-codeowners/
 
-* @John-Potemri-Bose @Yishai-Sered-Bose @Derek-Richardson-Bose @Sisi-Sun-Bose
+* @Derek-Richardson-Bose @Sisi-Sun-Bose @John-Potemri-Bose
 /EC/ @Alfred-von-Campe-Bose @John-Potemri-Bose
 /Test/ @Aman-Osman-Bose
 /Jenkins* @Aman-Osman-Bose
