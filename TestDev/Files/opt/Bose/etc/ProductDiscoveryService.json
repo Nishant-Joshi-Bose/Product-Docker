@@ -1,6 +1,0 @@
-{
-  "Config": {
-    "discovery_polling_interval_seconds": 30,
-    "discovery_polling_timeout_seconds": 10
-  }
-}

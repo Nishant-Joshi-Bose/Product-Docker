@@ -1,7 +1,0 @@
-op: error, stage: error, time: 2020-01-24T22:07:38Z, note: Signature verification failed for "/opt/Bose/.swUpdateCache/localupdate//SWUpdateInstallSequence.json", Skipping deprecated package removal!
-op: other, stage: start, time: 2020-01-24T22:07:38Z, note: networkdown
-op: other, stage: start, time: 2020-01-24T22:07:38Z, note: networkdown
-op: other, stage: start, time: 2020-01-24T22:07:38Z, note: networkdown
-op: other, stage: start, time: 2020-01-24T22:07:38Z, note: networkdown
-op: other, stage: start, time: 2020-01-24T22:07:38Z, note: networkdown
-op: other, stage: start, time: 2020-01-24T22:07:38Z, note: networkdown

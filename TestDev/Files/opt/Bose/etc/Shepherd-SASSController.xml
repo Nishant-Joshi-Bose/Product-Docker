@@ -1,6 +1,0 @@
-<ShepherdConfig>
-
-  <daemon name="SASSController"
-          recovery="reboot"/>
-
-</ShepherdConfig>

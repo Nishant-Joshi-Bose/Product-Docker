@@ -1,5 +1,0 @@
-<ShepherdConfig>
-  <daemon name="ProductDiscoveryService">
-    <arg>-c/opt/Bose/etc/ProductDiscoveryService.json</arg>
-  </daemon>
-</ShepherdConfig>
