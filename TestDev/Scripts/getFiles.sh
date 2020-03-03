@@ -20,18 +20,17 @@ fi
 #cp -r $THIS_DIR/../Files $X86_64_DIR
 rm -rf $FILES_STAGE_DIR
 mkdir  -p $FILES_STAGE_DIR/opt/Bose/etc
+mkdir  -p $FILES_STAGE_DIR/mnt/nv/product-persistence
 cp -r $THIS_DIR/../Files/persist $FILES_STAGE_DIR
 
 #   Extract files needed by Professor productcontroller from build
 TMP_DIR=$(mktemp -d -t product_update-XXXXXXXXXX)
-#TMP_DIR=FooTmp
-echo unpacking product_update.zip into $TMP_DIR
+
+echo Unpack product_update.zip into $TMP_DIR
 unzip -d $TMP_DIR  $PRODUCT_UPDATE_ZIP_PATH  product.ipk 
 cd $TMP_DIR
 ar x product.ipk data.tar.gz
-#tar xzf data.tar.gz --files-from $THIS_DIR/filelist -C $FILES_STAGE_DIR/opt/Bose
-#tar xzf data.tar.gz --files-from $THIS_DIR/filelist  #this extracts ok to TMP_DIR
-echo Destination Directory: $FILES_STAGE_DIR/opt/Bose
+echo Copy /opt/Bose files to: $FILES_STAGE_DIR/opt/Bose
 tar xz  --directory $FILES_STAGE_DIR/opt/Bose --file data.tar.gz --files-from $THIS_DIR/filelist
 
-#rm -rf $TMP_DIR
+rm -rf $TMP_DIR
