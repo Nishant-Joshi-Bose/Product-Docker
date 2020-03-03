@@ -4,11 +4,11 @@
 # See EC/deploy.txt.
 #
 
-if (( $# != 4 )); then
-    echo >&2 "usage: $0 source-dir builds-dir deploy-dir disableGVA(true/false)"
+if (( $# != 3 )); then
+    echo >&2 "usage: $0 builds-dir deploy-dir disableGVA(true/false)"
     exit 1
 fi
-source_dir=$1; shift
+source_dir=$(cd "$(dirname "$0")/.." && echo "$PWD") || exit
 builds_dir=$1; shift
 deploy_dir=$1; shift
 disableGVA=$1; shift
@@ -16,16 +16,40 @@ disableGVA=$1; shift
 rm -rf "$deploy_dir"
 mkdir -p "$deploy_dir" || exit
 
+#Access version, buildId and commit hash from BoseVersion.json
+boseVersionFile=$builds_dir/product-ipk-stage/Bose/etc/BoseVersion.json
+package_version=$(make-version-string "$boseVersionFile" "{major}.{minor}.{patch}-{build_number}+{abbrev_commit}") || exit
+
+#Access 'product' from ProductConfig.json
+product=$(jq -r '.[] | .productDetails[].product' "$source_dir/opt-bose-fs/etc/ProductConfig.json" | head -1) || exit
+
+#Include version, buildId and hash to product.tar, product_update.zip and product_update_no_hsp.zip
+product_tar=update-vip-$product-dev_$package_version.tar
+bonjour_zip=update-ota-$product-dev_$package_version.zip
+bonjour_nohsp_zip=update-ota-$product-dev-no-hsp_$package_version.zip
+
+if [ -e "$builds_dir/package/product.tar" ]; then
+    mv "$builds_dir/package/product.tar" "$builds_dir/package/$product_tar" || exit
+fi
+
+if [ -e "$builds_dir/product_update.zip" ]; then
+    mv "$builds_dir/product_update.zip" "$builds_dir/$bonjour_zip" || exit
+fi
+
+if [ -e "$builds_dir/product_update_no_hsp.zip" ]; then
+    mv "$builds_dir/product_update_no_hsp.zip" "$builds_dir/$bonjour_nohsp_zip" || exit
+fi
+
 files=(
     "$source_dir/components.json"
     "$builds_dir"/*-unstripped.tar.gz
     "$builds_dir/product-ipk-stage/component-info.gz"
     "$builds_dir"/components*
-    "$builds_dir/package/product.tar"
-    "$builds_dir/product_update.zip"
-    "$builds_dir/product_update_no_hsp.zip"
-    "$builds_dir"/professor_package_*
-    "$builds_dir"/lpm_professor_combined_*
+    "$builds_dir/package/$product_tar"
+    "$builds_dir/$bonjour_zip"
+    "$builds_dir/$bonjour_nohsp_zip"
+    "$builds_dir"/${product}_package_*
+    "$builds_dir"/lpm_${product}_combined_*
     "$builds_dir/lpm_package.xml"
     "$builds_dir/lpm_blob_configuration.xml"
 )
@@ -35,3 +59,16 @@ cp "${files[@]}" "$deploy_dir" || exit
 if [ $disableGVA = true ]; then
     cp "$builds_dir/product_update_nogva.zip" "$deploy_dir" || exit
 fi
+
+# Create symlinks to match the names in other products.
+cd "$deploy_dir" || exit
+for i in update-ota-*.zip; do
+    case "$i" in
+        (*-no-hsp_*)
+            ln -s "$i" product_update_no_hsp.zip || exit
+            ;;
+        (*)
+            ln -s "$i" product_update.zip || exit
+            ;;
+    esac
+done

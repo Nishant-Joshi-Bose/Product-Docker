@@ -8,7 +8,7 @@ endif
 
 .PHONY: deploy
 deploy: all-packages
-	scripts/collect-deployables . builds/Release builds/deploy ${disableGVA}
+	scripts/collect-deployables builds/Release builds/deploy ${disableGVA}
 
 .PHONY: force
 force:
@@ -100,7 +100,7 @@ $(BLASTCONFIG): $(USERKEYCONFIG) $(AUTOLPM_SERVICES)
 .PHONY: cmake_build
 cmake_build: generated_sources $(BLASTCONFIG) $(KEYCONFIG)| $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt
-	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
+	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: product-ipk
@@ -111,10 +111,8 @@ product-ipk: cmake_build
 privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-#Create Zip file for Local update - no hsp
 IPKS_FILE=$(BOSE_WORKSPACE)/ipks.txt
 PACKAGENAMES_FILE=$(BOSE_WORKSPACE)/package_names.txt
-
 IPKS_HSP := $(shell cat < $(IPKS_FILE))
 IPKS := $(filter-out hsp.ipk,$(IPKS_HSP))
 IPKS_NOGVA := $(filter-out gva.ipk,$(IPKS_HSP))
@@ -129,6 +127,7 @@ EXCL_MANDATORY_PACKAGES_LST= product-script software-update hsp
 EXCL_PACKAGES_LST_LOCAL=$(EXCL_MANDATORY_PACKAGES_LST)
 EXCL_PACKAGES_LST_OTA=$(EXCL_MANDATORY_PACKAGES_LST)
 
+.PHONY: print_variables
 print_variables:
 	echo $(IPKS_HSP)
 	echo $(PACKAGENAMES_HSP)
@@ -160,12 +159,12 @@ package-no-gva: packages-gz-no-gva
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_NOGVA) -i $(IPKS_NOGVA) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_nogva.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz-no-gva
-packages-gz-no-gva: generate-metadata $(TARGES_NOGVA)
+packages-gz-no-gva: generate-metadata $(TARGETS_NOGVA)
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_NOGVA)
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
+	graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='^(CastleTools|TestUtils)$$|^unittest-cpp-' $(Product) builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
 
 .PHONY: software-update-ipk
 software-update-ipk: cmake_build
@@ -181,13 +180,12 @@ gva-ipk: cmake_build
 
 .PHONY: lpm-bos
 lpm-bos:
-ifneq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
 	$(info BUILD_TYPE=$(BUILD_TYPE))
-else
-	$(error BUILD_TYPE must equal Release, Nightly or Continuous. Found $(BUILD_TYPE))
+ifeq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
+	$(error BUILD_TYPE must equal Release, Nightly or Continuous)
 endif
-	rm -f ./builds/$(cfg)/professor_package*.bos
-	rm -f ./builds/$(cfg)/lpm_professor*.hex
+	rm -f ./builds/$(cfg)/$(product)_package*.bos
+	rm -f ./builds/$(cfg)/lpm_$(product)*.hex
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: recovery-ipk
@@ -223,12 +221,12 @@ minimalfs-ipk:
 	/bin/bash ${RIVIERAMINIMALFS_DIR}/create-ipk
 
 .PHONY: all-packages
-ifeq (true,$(disableGVA))
-all-packages: package-no-hsp package-with-hsp package-no-gva graph
-else
 all-packages: package-no-hsp package-with-hsp graph
-endif
 	./scripts/create-product-tar -i $(IPKS_HSP)
+
+ifeq (true,$(disableGVA))
+all-packages: package-no-gva
+endif
 
 .PHONY: clean
 clean:
