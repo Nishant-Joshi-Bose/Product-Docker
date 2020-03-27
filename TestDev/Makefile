@@ -15,6 +15,8 @@ AUDIOPATHCLIENT_DIR = $(shell components get AudioPathClient-x86_64 installed_lo
 #AUDIOPATHPRODUCTS_DIR = $(shell components get AudioPathProducts-x86_64 installed_location)
 
 .PHONY: generated_sources
+# Note that these directory location below must agree with the
+# python_paths variable defined in: pytest.ini
 generated_sources:
 	rm -rf /scratch/builds
 	rm -rf builds/
@@ -24,7 +26,7 @@ generated_sources:
 	cp -r $(CLI_SERVICE_DIR) /scratch/builds
 	cp -r $(SOUNDTOUCHSDK_DIR) /scratch/builds
 	cp -r $(BOSELIBS_DIR) /scratch/builds
-	cp -r $(AUDIOSOURCE_DIR) /scratch/builds
+	cp -r $(AUDIOSOURCE_DIR) /scratch/builds/AudioSource-x86_64
 	cp -r $(AUDIOPATHCLIENT_DIR) /scratch/builds/
 	#cp -r $(AUDIOPATHSERVICE_DIR) /scratch/builds/
 	#cp -r $(AUDIOPATHPRODUCTS_DIR) /scratch/builds/

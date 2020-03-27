@@ -13,4 +13,5 @@ docker run -it \
 -v /scratch/components-cache:/scratch/components-cache \
 -v $THIS_DIR:/scratch/Scripts \
 -v /scratch/CastleTestUtils:/scratch/CastleTestUtils \
+-v /scratch/AudioSource:/scratch/AudioSource \
 b0a9a495a8b5 bash
