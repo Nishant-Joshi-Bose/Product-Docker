@@ -15,6 +15,8 @@ PS4='> '; set -x
 
 date
 uptime
+md5sum /opt/Bose/etc/secure/publicKeys/bose_public_key_swupdate.pem
+get-pubkey-type /opt/Bose/etc/secure/publicKeys/bose_public_key_swupdate.pem
 cat /opt/Bose/etc/BoseVersion.json
 cat /persist/mfg_data.json
 cat /etc/riviera-version

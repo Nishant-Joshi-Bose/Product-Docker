@@ -1,5 +1,5 @@
 {
-  "minor": 8,
+  "minor": 9,
   "major": 2,
   "animations": [
     {
@@ -381,6 +381,16 @@
       "name": "WIFI_NW_STANDBY",
       "id": 76,
       "duration": 290
+    },
+    {
+      "name": "VOL_MUTE_ENTER",
+      "id": 77,
+      "duration": 140
+    },
+    {
+      "name": "VOL_MUTE_HOLD",
+      "id": 78,
+      "duration": 20
     }
   ]
 }
