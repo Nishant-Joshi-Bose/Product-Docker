@@ -21,9 +21,14 @@ LOGGER = get_logger(__name__)
 @pytest.mark.usefixtures("start_mock_apserver")
 @pytest.mark.usefixtures("eddie_product_controller")
 
+
 #@pytest.mark.usefixtures("start_all_mocks")
 def test_boot_status(start_mock_frontDoor):
     LOGGER.info("Getting the boot status")
+    def deadletteroffice(env):  #env is IPCMessageEnvelopBase.proto
+        print("DEAD LETTER OFFICE got called")
+        print(env.msg_type, env.msg_module_id, env.msg_id, env.msg_contents)
+
     time.sleep(3)
     # Professor may not respond to /ui/alive so nooping for now
     """
@@ -39,11 +44,11 @@ def test_boot_status(start_mock_frontDoor):
     time.sleep(7)
     """
     LOGGER.info("Start serving STSService")
-    router = ipcmessagerouter.ipcmessagerouterserver(port=30030)
+    router = ipcmessagerouter.ipcmessagerouterserver(port=30030, dlo=deadletteroffice)
     sts_service = STSServiceProxy(router)
     sts_service.connect()
 
-    router_2 = ipcmessagerouter.ipcmessagerouterserver(port=30031)
+    router_2 = ipcmessagerouter.ipcmessagerouterserver(port=30031,dlo=deadletteroffice)
     sts_account = STSAccountProxy(router_2)
     sts_account.connect()
 
@@ -57,7 +62,9 @@ def test_boot_status(start_mock_frontDoor):
     LOGGER.info("The result is: %s", result)
 
     assert result, "Unable to get the Boot status, Product Controller probably died"
-    time.sleep(5)
+    sleepTime=5
+    LOGGER.info("Sleeping for " + str(sleepTime))
+    time.sleep(sleepTime)
 
     sts_service.close()
     sts_account.close()

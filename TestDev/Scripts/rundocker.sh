@@ -12,4 +12,5 @@ docker run -it \
 -v $FILES_DIR/persist:/persist \
 -v /scratch/components-cache:/scratch/components-cache \
 -v $THIS_DIR:/scratch/Scripts \
+-v /scratch/CastleTestUtils:/scratch/CastleTestUtils \
 b0a9a495a8b5 bash

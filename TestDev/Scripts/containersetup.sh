@@ -13,7 +13,7 @@ rm -rf ~/.cache/pip
 ./venv/bin/pip install setuptools==44.0.0
 make
 pip install -qr requirements.txt
-#pip install /scratch/Mock/CastleTestUtils/dist/*
+#pip install /scratch/CastleTestUtils/dist/*
 # The following definition is only needed for professor (and will not effect eddie)
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(components get protobuf-x86_64 installed_location)/lib
 pytest -sv test_start_product_controller.py
