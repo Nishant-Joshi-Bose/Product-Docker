@@ -5,8 +5,8 @@ import pytest
 import subprocess
 
 from CastleTestUtils.IPCUtils import ipcmessagerouter
-from CastleTestUtils.STSClientServer.Client.STSAccount import STSAccount
-from CastleTestUtils.STSClientServer.Client.STSService import STSService
+#from CastleTestUtils.STSClientServer.Client.STSAccount import STSAccount
+#from CastleTestUtils.STSClientServer.Client.STSService import STSService
 from CastleTestUtils.STSClientServer.Server.STSServiceProxy import STSServiceProxy
 from CastleTestUtils.STSClientServer.Server.STSAccountProxy import STSAccountProxy
 from CastleTestUtils.MockServices.MockFrontDoor.Server.mockfrontDoor import MockFrontDoor
