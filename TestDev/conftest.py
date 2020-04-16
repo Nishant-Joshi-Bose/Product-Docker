@@ -5,8 +5,6 @@ import pytest
 import subprocess
 
 from CastleTestUtils.IPCUtils import ipcmessagerouter
-#from CastleTestUtils.STSClientServer.Client.STSAccount import STSAccount
-#from CastleTestUtils.STSClientServer.Client.STSService import STSService
 from CastleTestUtils.STSClientServer.Server.STSServiceProxy import STSServiceProxy
 from CastleTestUtils.STSClientServer.Server.STSAccountProxy import STSAccountProxy
 from CastleTestUtils.MockServices.MockFrontDoor.Server.mockfrontDoor import MockFrontDoor
@@ -140,6 +138,8 @@ def eddie_product_controller(request):
     os.chdir(exec_path)
     LOGGER.info("Starting product controller")
     cmd = "env BOSE_DPRINT_CONF='set stdout; all debug' ./Professor &"
+    #cmd = "strace -tt -yy -e trace=ipc -s 128 -E \"BOSE_DPRINT_CONF=\'set stdout; all debug\'\" ./Professor &"
+    #cmd = "env BOSE_DPRINT_CONF='set stdout; all debug' strace -o strace -ff -tt -yy -e trace=open,read,write,close,ipc,network -x -s 4096  ./Professor &"
     start_service(cmd, "ProductController")
     def teardown():
         """teardown call for stopping service"""
