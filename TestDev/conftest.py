@@ -83,7 +83,7 @@ def start_mock_frontDoor(request):
             mockfd.close()
     request.addfinalizer(teardown)
 
-    mockfd = MockFrontDoor(PORT=8084)
+    mockfd = MockFrontDoor(port=8084)
     mockfd.run()
     return mockfd
 
