@@ -29,7 +29,7 @@ def test_boot_status(start_mock_frontDoor):
         print("DEAD LETTER OFFICE got called")
         print(env.msg_type, env.msg_module_id, env.msg_id, env.msg_contents)
 
-    time.sleep(3)
+    time.sleep(7)
     # Professor may not respond to /ui/alive so nooping for now
     """
     json_msg = {"header":{"device":"",
@@ -54,17 +54,14 @@ def test_boot_status(start_mock_frontDoor):
 
     #### - ACTUAL TESTS BEGIN - ####
 
-    LOGGER.info("PAF sleep(1)")
-    time.sleep(1)
+    LOGGER.info("PAF sleep(3)")
+    time.sleep(3)
     telnet_obj = TelnetSession(host="0.0.0.0", port=17000)
     telnet_obj.write(command = "product boot_status")
     result = telnet_obj.read()
     LOGGER.info("The result is: %s", result)
 
     assert result, "Unable to get the Boot status, Product Controller probably died"
-    sleepTime=5
-    LOGGER.info("Sleeping for " + str(sleepTime))
-    time.sleep(sleepTime)
 
     sts_service.close()
     sts_account.close()
