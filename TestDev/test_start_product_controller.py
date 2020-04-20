@@ -54,8 +54,8 @@ def test_boot_status(start_mock_frontDoor):
 
     #### - ACTUAL TESTS BEGIN - ####
 
-    LOGGER.info("PAF sleep(3)")
-    time.sleep(3)
+    LOGGER.info("PAF sleep(8)")
+    time.sleep(8)
     telnet_obj = TelnetSession(host="0.0.0.0", port=17000)
     telnet_obj.write(command = "product boot_status")
     result = telnet_obj.read()
