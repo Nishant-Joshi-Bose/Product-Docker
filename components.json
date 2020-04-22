@@ -1,91 +1,91 @@
 [
   {
     "name": "A4VDeviceController-qc8017_32",
-    "selected_version": "Conan/9/master/3.0.12+gd13b728"
+    "selected_version": "Conan/8/PR-377/3.0.14-7+gbe705d7"
   },
   {
     "name": "A4VDeviceController-x86_64",
-    "selected_version": "Conan/9/master/3.0.12+gd13b728"
+    "selected_version": "Conan/8/PR-377/3.0.14-7+gbe705d7"
   },
   {
     "name": "A4VRemoteCommunicationService-qc8017_32",
-    "selected_version": "Conan/9/master/2.2.30+gb5db8d3"
+    "selected_version": "Conan/8/master/2.2.30+gb5db8d3"
   },
   {
     "name": "A4VRemoteCommunicationService-x86_64",
-    "selected_version": "Conan/9/master/2.2.30+gb5db8d3"
+    "selected_version": "Conan/8/master/2.2.30+gb5db8d3"
   },
   {
     "name": "A4VVideoManagerService-qc8017_32",
-    "selected_version": "Conan/9/master/2.2.33+g8f17a63"
+    "selected_version": "Conan/8/master/2.2.33+g8f17a63"
   },
   {
     "name": "A4VVideoManagerService-x86_64",
-    "selected_version": "Conan/9/master/2.2.33+g8f17a63"
+    "selected_version": "Conan/8/master/2.2.33+g8f17a63"
   },
   {
     "name": "AudioPathClient-qc8017_32",
-    "selected_version": "Conan/9/stable/6.4.23+gd2ac64d"
+    "selected_version": "Conan/8/master/6.4.45+g11b0128"
   },
   {
     "name": "AudioPathClient-x86_64",
-    "selected_version": "Conan/9/stable/6.4.23+gd2ac64d"
+    "selected_version": "Conan/8/master/6.4.45+g11b0128"
   },
   {
     "name": "AudioPathProducts-qc8017_32",
-    "selected_version": "Conan/9/stable/6.4.23+gd2ac64d"
+    "selected_version": "Conan/8/master/6.4.45+g11b0128"
   },
   {
     "name": "AudioPathProducts-qc8017_64",
-    "selected_version": "Conan/9/stable/6.4.23+gd2ac64d"
+    "selected_version": "Conan/8/master/6.4.45+g11b0128"
   },
   {
     "name": "AudioPathProducts-x86_64",
-    "selected_version": "Conan/9/stable/6.4.23+gd2ac64d"
+    "selected_version": "Conan/8/master/6.4.45+g11b0128"
   },
   {
     "name": "AudioPathService-qc8017_64",
-    "selected_version": "Conan/9/stable/6.4.23+gd2ac64d"
+    "selected_version": "Conan/8/master/6.4.45+g11b0128"
   },
   {
     "name": "AudioSource-AirPlay2-qc8017_32",
-    "selected_version": "Conan/9/stable/1.0.21-6+ge46a78e"
+    "selected_version": "Conan/8/master/1.0.21+g2684593"
   },
   {
     "name": "AudioSource-BMX-qc8017_32",
-    "selected_version": "Conan/9/master/0.0.80+gea0c5c1"
+    "selected_version": "Conan/8/master/0.0.83+g92dea32"
   },
   {
     "name": "AudioSource-MusicServices-qc8017_32",
-    "selected_version": "Conan/9/stable/1.0.55-2+g9fa6180"
+    "selected_version": "Conan/8/PR-61/1.0.59-3+gd123401"
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Conan/9/stable/2.5.24-3+gc52998d"
+    "selected_version": "Conan/8/master/2.5.26+g13fbdac"
   },
   {
     "name": "AudioSource-Spotify-qc8017_32",
-    "selected_version": "Conan/9/stable/0.3.4-2+g9cb26f4"
+    "selected_version": "Conan/8/master/0.3.11+g0c48165"
   },
   {
     "name": "AudioSource-UPnP-qc8017_32",
-    "selected_version": "Conan/9/stable/0.0.40-1+gd22d4ba"
+    "selected_version": "Conan/8/master/0.0.41+gf82f0e6"
   },
   {
     "name": "AudioSource-UPnP-x86_64",
-    "selected_version": "Conan/9/stable/0.0.40-1+gd22d4ba"
+    "selected_version": "Conan/8/master/0.0.41+gf82f0e6"
   },
   {
     "name": "AudioSource-x86_64",
-    "selected_version": "Conan/9/stable/2.5.24-3+gc52998d"
+    "selected_version": "Conan/8/master/2.5.26+g13fbdac"
   },
   {
     "name": "AVSService-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.101-7+g432e8d9"
+    "selected_version": "Conan/8/PR-237/2.2.118-3+g0d0bdfc"
   },
   {
     "name": "AVSService-x86_64",
-    "selected_version": "Conan/9/stable/2.2.101-7+g432e8d9"
+    "selected_version": "Conan/8/PR-237/2.2.118-3+g0d0bdfc"
   },
   {
     "name": "BLERemoteXCVR",
@@ -93,27 +93,27 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Conan/9/stable/3.9.0+g1620f21"
+    "selected_version": "Conan/8/master/3.9.1+g0502c97"
   },
   {
     "name": "BLESetup-x86_64",
-    "selected_version": "Conan/9/stable/3.9.0+g1620f21"
+    "selected_version": "Conan/8/master/3.9.1+g0502c97"
   },
   {
     "name": "BLEToFrontDoorService-qc8017_32",
-    "selected_version": "Conan/9/stable/2.17.0+ga378596"
+    "selected_version": "Conan/8/master/2.17.4+gd9a0938"
   },
   {
     "name": "BLEToFrontDoorService-x86_64",
-    "selected_version": "Conan/9/stable/2.17.0+ga378596"
+    "selected_version": "Conan/8/master/2.17.4+gd9a0938"
   },
   {
     "name": "Bluetooth-qc8017_32",
-    "selected_version": "Conan/9/stable/2.50.0+g8f021ad"
+    "selected_version": "Conan/8/PR-177/2.52.5-2+g61a1496"
   },
   {
     "name": "Bluetooth-x86_64",
-    "selected_version": "Conan/9/stable/2.50.0+g8f021ad"
+    "selected_version": "Conan/8/PR-177/2.52.5-2+g61a1496"
   },
   {
     "name": "bose-opkg-utils",
@@ -129,223 +129,223 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Conan/9/stable/4.2.13+g3fd7c5c"
+    "selected_version": "Conan/8/master/4.2.15+gf12be8d"
   },
   {
     "name": "BoseLibs-x86_64",
-    "selected_version": "Conan/9/stable/4.2.13+g3fd7c5c"
+    "selected_version": "Conan/8/master/4.2.15+gf12be8d"
   },
   {
     "name": "BoseWebBrussels",
-    "selected_version": "Conan/9/master/7.0.3+g407a0b0"
+    "selected_version": "Conan/8/master/7.0.3+g407a0b0"
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Conan/9/master/7.0.4+g2d0e50f"
+    "selected_version": "Conan/8/master/7.0.4+g2d0e50f"
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Conan/9/stable/3.103.0+g76de69b"
+    "selected_version": "Conan/8/PR-270/3.111.1-3+gcb61b19"
   },
   {
     "name": "BTSource-x86_64",
-    "selected_version": "Conan/9/stable/3.103.0+g76de69b"
+    "selected_version": "Conan/8/PR-270/3.111.1-3+gcb61b19"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Conan/9/stable/2.19.0+g22a1ff9"
+    "selected_version": "Conan/8/master/2.20.2+g8b9bf2c"
   },
   {
     "name": "BTSTSSink-x86_64",
-    "selected_version": "Conan/9/stable/2.19.0+g22a1ff9"
+    "selected_version": "Conan/8/master/2.20.2+g8b9bf2c"
   },
   {
     "name": "CAPSAPI-qc8017_32",
-    "selected_version": "Conan/9/stable/1.1.21-1+g3a00bed"
+    "selected_version": "Conan/8/PR-81/1.1.23-6+g556cbed"
   },
   {
     "name": "CAPSAPI-x86_64",
-    "selected_version": "Conan/9/stable/1.1.21-1+g3a00bed"
+    "selected_version": "Conan/8/PR-81/1.1.23-6+g556cbed"
   },
   {
     "name": "CAPSService-qc8017_32",
-    "selected_version": "Conan/9/stable/3.1.35-2+g74af4ef"
+    "selected_version": "Conan/8/PR-87/3.1.38-6+g0fc459b"
   },
   {
     "name": "CAPSService-x86_64",
-    "selected_version": "Conan/9/stable/3.1.35-2+g74af4ef"
+    "selected_version": "Conan/8/PR-87/3.1.38-6+g0fc459b"
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.24-6+g53d889c"
+    "selected_version": "Conan/8/master/2.2.27+g3bbc9d3"
   },
   {
     "name": "Cli-x86_64",
-    "selected_version": "Conan/9/stable/2.2.24-6+g53d889c"
+    "selected_version": "Conan/8/master/2.2.27+g3bbc9d3"
   },
   {
     "name": "CloudControlClient-qc8017_32",
-    "selected_version": "Conan/9/stable/0.0.59-2+g31f406d"
+    "selected_version": "Conan/8/PR-258/0.0.61-5+g6a20881"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.16-28+g4945619"
+    "selected_version": "Conan/8/master/4.0.4+gef762db"
   },
   {
     "name": "DataCollectionClient-x86_64",
-    "selected_version": "Conan/9/stable/2.2.16-28+g4945619"
+    "selected_version": "Conan/8/master/4.0.4+gef762db"
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Conan/9/stable/2.1.20-1+gc9a5d07"
+    "selected_version": "Conan/8/master/2.1.19+g883a6f5"
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.15-8+g5b3f18b"
+    "selected_version": "Conan/8/master/2.2.15+g89a325c"
   },
   {
     "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Conan/9/master/1.0.7+gb95e15d"
+    "selected_version": "Conan/8/master/1.0.7+gb95e15d"
   },
   {
     "name": "FrontDoorClient-qc8017_32",
-    "selected_version": "Conan/9/stable/3.9.1-4+g53f158d"
+    "selected_version": "Conan/8/master/3.9.1+g9a0c6d7"
   },
   {
     "name": "FrontDoorClient-x86_64",
-    "selected_version": "Conan/9/stable/3.9.1-4+g53f158d"
+    "selected_version": "Conan/8/master/3.9.1+g9a0c6d7"
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Conan/9/stable/3.4.5-3+g1a0e616"
+    "selected_version": "Conan/8/master/3.4.5+g4baa45d"
   },
   {
     "name": "FrontDoorService-x86_64",
-    "selected_version": "Conan/9/stable/3.4.5-3+g1a0e616"
+    "selected_version": "Conan/8/master/3.4.5+g4baa45d"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Conan/9/stable/3.0.17-5+g72b865a"
+    "selected_version": "Conan/8/master/3.0.18+g3cb3fe0"
   },
   {
     "name": "FrontDoorUtility-x86_64",
-    "selected_version": "Conan/9/stable/3.0.17-5+g72b865a"
+    "selected_version": "Conan/8/master/3.0.18+g3cb3fe0"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Conan/9/stable/3.0.31-2+g4ce09de"
+    "selected_version": "Conan/8/master/3.0.31+ge640ba8"
   },
   {
     "name": "GalapagosClient-x86_64",
-    "selected_version": "Conan/9/stable/3.0.31-2+g4ce09de"
+    "selected_version": "Conan/8/master/3.0.31+ge640ba8"
   },
   {
     "name": "GoogleVoiceAssistant-qc8017_64",
-    "selected_version": "Conan/9/stable/2.3.112-1+gb841089"
+    "selected_version": "Conan/8/PR-478/2.3.117-3+g014139f"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Conan/9/stable/3.0.23-2+gcfa5be7"
+    "selected_version": "Conan/8/master/3.0.24+g4b0e31d"
   },
   {
     "name": "HTTPInterface-x86_64",
-    "selected_version": "Conan/9/stable/3.0.23-2+gcfa5be7"
+    "selected_version": "Conan/8/master/3.0.24+g4b0e31d"
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.19-1+g3d88d07"
+    "selected_version": "Conan/8/master/2.2.20+g975f720"
   },
   {
     "name": "IotIpcClient-qc8017_32",
-    "selected_version": "Conan/9/stable/2.0.15-8+gaff6502"
+    "selected_version": "Conan/8/master/2.0.14+g0e9458d"
   },
   {
     "name": "IotIpcClient-x86_64",
-    "selected_version": "Conan/9/stable/2.0.15-8+gaff6502"
+    "selected_version": "Conan/8/master/2.0.14+g0e9458d"
   },
   {
     "name": "IoTService-qc8017_32",
-    "selected_version": "Conan/9/stable/1.0.37-3+geb9e2fc"
+    "selected_version": "Conan/8/PR-56/1.0.39-3+g78f740e"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.5-23+g86342c0"
+    "selected_version": "Conan/8/master/2.2.13+g0b5dcc3"
   },
   {
     "name": "KeyHandler-x86_64",
-    "selected_version": "Conan/9/stable/2.2.5-23+g86342c0"
+    "selected_version": "Conan/8/master/2.2.13+g0b5dcc3"
   },
   {
     "name": "LedAnimationTool-qc8017_32",
-    "selected_version": "Conan/9/stable/2.7.9-6+g47c9fc5"
+    "selected_version": "Conan/8/master/2.7.12+g31b1df7"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.12-29+g7f1b345"
+    "selected_version": "Conan/8/master/2.2.19+g2cd0557"
   },
   {
     "name": "LightBarController-x86_64",
-    "selected_version": "Conan/9/stable/2.2.12-29+g7f1b345"
+    "selected_version": "Conan/8/master/2.2.19+g2cd0557"
   },
   {
     "name": "LpmMfgTool",
-    "selected_version": "Conan/9/master/1.0.6+g4bb720b"
+    "selected_version": "Conan/8/master/1.0.6+g4bb720b"
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.55-22+ga93ca22"
+    "selected_version": "Conan/8/master/2.2.75+g2d05b87"
   },
   {
     "name": "NetworkService-x86_64",
-    "selected_version": "Conan/9/stable/2.2.55-22+ga93ca22"
+    "selected_version": "Conan/8/master/2.2.75+g2d05b87"
   },
   {
     "name": "opensource-avahi-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/1.0.1-33+g92a3a45"
+    "selected_version": "Conan/8/bose-master/1.0.1-45+gf418907"
   },
   {
     "name": "opensource-curl-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/7.54.2-63+g6c8d363"
+    "selected_version": "Conan/8/bose-master/7.54.2-64+g14fe49e"
   },
   {
     "name": "opensource-curl-x86_64",
-    "selected_version": "Conan/9/bose-stable/7.54.2-63+g6c8d363"
+    "selected_version": "Conan/8/bose-master/7.54.2-64+g14fe49e"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/1.8.4-43+gd840e35"
+    "selected_version": "Conan/8/bose-master/1.8.4-43+gf874bff"
   },
   {
     "name": "opensource-jsoncpp-x86_64",
-    "selected_version": "Conan/9/bose-stable/1.8.4-43+gd840e35"
+    "selected_version": "Conan/8/bose-master/1.8.4-43+gf874bff"
   },
   {
     "name": "opensource-libarchive-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/3.3.2-57+gc2b1202"
+    "selected_version": "Conan/8/bose-master/3.3.2-56+g4126009"
   },
   {
     "name": "opensource-libwebsockets-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/2.4.3-25+g2331f80"
+    "selected_version": "Conan/8/bose-master/2.4.3-52+g7f7fcdf"
   },
   {
     "name": "opensource-libwebsockets-x86_64",
-    "selected_version": "Conan/9/bose-stable/2.4.3-25+g2331f80"
+    "selected_version": "Conan/8/bose-master/2.4.3-52+g7f7fcdf"
   },
   {
     "name": "opensource-nghttp2-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/1.24.1-54+g85a5984"
+    "selected_version": "Conan/8/bose-master/1.24.1-55+g064829d"
   },
   {
     "name": "opensource-nghttp2-x86_64",
-    "selected_version": "Conan/9/bose-stable/1.24.1-54+g85a5984"
+    "selected_version": "Conan/8/bose-master/1.24.1-55+g064829d"
   },
   {
     "name": "opensource-OpenAvnuApple-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/1.0.1-34+g6831454"
+    "selected_version": "Conan/8/bose-master/1.0.1-41+g36efe9a"
   },
   {
     "name": "opensource-openssl-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/1.0.3-66+gf7c1751"
+    "selected_version": "Conan/8/bose-master/1.0.3-67+g5a95465"
   },
   {
     "name": "opensource-openssl-x86",
@@ -353,11 +353,11 @@
   },
   {
     "name": "opensource-openssl-x86_64",
-    "selected_version": "Conan/9/bose-stable/1.0.3-66+gf7c1751"
+    "selected_version": "Conan/8/bose-master/1.0.3-67+g5a95465"
   },
   {
     "name": "opensource-opkg-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/0.4.2-27+g68ddd21"
+    "selected_version": "Conan/8/bose-master/0.4.2-27+gee6ff21"
   },
   {
     "name": "opensource-opkg-x86",
@@ -365,27 +365,27 @@
   },
   {
     "name": "opensource-tinyxml-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/2.6.2-39+g85a46c3"
+    "selected_version": "Conan/8/bose-master/2.6.2-39+g3914a3d"
   },
   {
     "name": "opensource-tinyxml-x86_64",
-    "selected_version": "Conan/9/bose-stable/2.6.2-39+g85a46c3"
+    "selected_version": "Conan/8/bose-master/2.6.2-39+g3914a3d"
   },
   {
     "name": "opensource-util-linux-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/1.0.1-27+g5c4d8e7"
+    "selected_version": "Conan/8/bose-master/1.0.1-34+gd56756f"
   },
   {
     "name": "opensource-util-linux-x86_64",
-    "selected_version": "Conan/9/bose-stable/1.0.1-27+g5c4d8e7"
+    "selected_version": "Conan/8/bose-master/1.0.1-34+gd56756f"
   },
   {
     "name": "opensource-zlib-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/1.2.12-54+gf7ae656"
+    "selected_version": "Conan/8/bose-master/1.2.12-54+gbbe6fb3"
   },
   {
     "name": "opensource-zlib-x86_64",
-    "selected_version": "Conan/9/bose-stable/1.2.12-54+gf7ae656"
+    "selected_version": "Conan/8/bose-master/1.2.12-54+gbbe6fb3"
   },
   {
     "name": "PackageInstallTime",
@@ -393,39 +393,39 @@
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.20-20+g248acdd"
+    "selected_version": "Conan/8/master/3.0.26+g9872386"
   },
   {
     "name": "PassportClient-x86_64",
-    "selected_version": "Conan/9/stable/2.2.20-20+g248acdd"
+    "selected_version": "Conan/8/master/3.0.26+g9872386"
   },
   {
     "name": "PassportService-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.70-3+g15212db"
+    "selected_version": "Conan/8/master/2.2.72+ge513e31"
   },
   {
     "name": "product-startup",
-    "selected_version": "Conan/9/stable/5.0.14-3+geec889c"
+    "selected_version": "Conan/8/master/5.0.15+ga8b9ec9"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "stable@188f9f14e8d014e96c084dcd6f60bac3da3471a1"
+    "selected_version": "Protobuf-Cleanup@b90c3fd8d091b4637ba4f997fc35d34419a1dc31"
   },
   {
     "name": "ProductControllerCommonProto-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.18-3+gc722742"
+    "selected_version": "Conan/8/PR-15/2.2.19-1+g1f8a85c"
   },
   {
     "name": "ProductControllerCommonProto-x86_64",
-    "selected_version": "Conan/9/stable/2.2.18-3+gc722742"
+    "selected_version": "Conan/8/PR-15/2.2.19-1+g1f8a85c"
   },
   {
     "name": "ProductDiscoveryService-qc8017_32",
-    "selected_version": "Conan/9/stable/1.0.19-1+g0cb0673"
+    "selected_version": "Conan/8/master/1.0.20+g52ae759"
   },
   {
     "name": "ProductDiscoveryService-x86_64",
-    "selected_version": "Conan/9/stable/1.0.19-1+g0cb0673"
+    "selected_version": "Conan/8/master/1.0.20+g52ae759"
   },
   {
     "name": "ProductUIAssets",
@@ -433,19 +433,19 @@
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "Conan/9/bose-stable/2.4.2-62+g0d99523"
+    "selected_version": "Conan/8/bose-stable/2.4.2-62+g0d99523"
   },
   {
     "name": "protobuf-x86_64",
-    "selected_version": "Conan/9/bose-stable/2.4.2-62+g0d99523"
+    "selected_version": "Conan/8/bose-stable/2.4.2-62+g0d99523"
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Conan/9/master/5.3.5"
+    "selected_version": "Conan/8/master/5.3.5"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Conan/9/master/5.3.5"
+    "selected_version": "Conan/8/master/5.3.5"
   },
   {
     "name": "RivieraLPM-Tools",
@@ -453,35 +453,35 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Conan/9/master/3.1.53+g9ddebe0"
+    "selected_version": "Conan/8/master/3.1.53+g9ddebe0"
   },
   {
     "name": "RivieraLpmService-x86_64",
-    "selected_version": "Conan/9/master/3.1.53+g9ddebe0"
+    "selected_version": "Conan/8/master/3.1.53+g9ddebe0"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Conan/9/master/2.1.11+g1799160"
+    "selected_version": "Conan/8/master/2.1.12+g50085b7"
   },
   {
     "name": "RivieraMinimalFS-qc8017_32",
-    "selected_version": "Conan/9/stable/0.1.19-5+gaa269b5"
+    "selected_version": "Conan/8/master/0.1.21+g6551520"
   },
   {
     "name": "RivieraSwUpRecovery-qc8017_32",
-    "selected_version": "Conan/9/stable/5.0.18-1+g8d2d7cd"
+    "selected_version": "Conan/8/master/5.0.18+g062751d"
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Conan/9/stable/3.12.2+gb6e7629"
+    "selected_version": "Conan/8/master/3.12.5+gd11aae4"
   },
   {
     "name": "SASS-qc8017_64",
-    "selected_version": "Conan/9/stable/3.12.2+gb6e7629"
+    "selected_version": "Conan/8/master/3.12.5+gd11aae4"
   },
   {
     "name": "SASS-x86_64",
-    "selected_version": "Conan/9/stable/3.12.2+gb6e7629"
+    "selected_version": "Conan/8/master/3.12.5+gd11aae4"
   },
   {
     "name": "SecureDeviceKey",
@@ -489,47 +489,47 @@
   },
   {
     "name": "ServicesClients-qc8017_32",
-    "selected_version": "Conan/9/stable/3.0.5-1+g65b9900"
+    "selected_version": "Conan/8/PR-66/3.0.9-6+g5172e6a"
   },
   {
     "name": "ServicesClients-x86_64",
-    "selected_version": "Conan/9/stable/3.0.5-1+g65b9900"
+    "selected_version": "Conan/8/PR-66/3.0.9-6+g5172e6a"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.18-4+g4244759"
+    "selected_version": "Conan/8/master/2.2.19+g4b5ba7a"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Conan/9/stable/7.0.9-2+ge51b85e"
+    "selected_version": "Conan/8/master/7.0.11+g0191f80"
   },
   {
     "name": "SoftwareUpdate-x86_64",
-    "selected_version": "Conan/9/stable/7.0.9-2+ge51b85e"
+    "selected_version": "Conan/8/master/7.0.11+g0191f80"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.19-1+g14655ad"
+    "selected_version": "Conan/8/master/2.2.19+g14655ad"
   },
   {
     "name": "SystemEventService-x86_64",
-    "selected_version": "Conan/9/stable/2.2.19-1+g14655ad"
+    "selected_version": "Conan/8/master/2.2.19+g14655ad"
   },
   {
     "name": "Telemetry-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.20-6+g07f12c4"
+    "selected_version": "Conan/8/master/2.2.21+g655776e"
   },
   {
     "name": "Telemetry-x86_64",
-    "selected_version": "Conan/9/stable/2.2.20-6+g07f12c4"
+    "selected_version": "Conan/8/master/2.2.21+g655776e"
   },
   {
     "name": "TelemetryClient-qc8017_32",
-    "selected_version": "Conan/9/stable/3.0.24-12+g2407494"
+    "selected_version": "Conan/8/master/3.0.31+g14510c1"
   },
   {
     "name": "TelemetryClient-x86_64",
-    "selected_version": "Conan/9/stable/3.0.24-12+g2407494"
+    "selected_version": "Conan/8/master/3.0.31+g14510c1"
   },
   {
     "name": "TestUtils",
@@ -537,14 +537,14 @@
   },
   {
     "name": "VPAController-qc8017_32",
-    "selected_version": "Conan/9/stable/2.2.41-1+gbe036ee"
+    "selected_version": "Conan/8/master/2.2.44+geb5f3ff"
   },
   {
     "name": "VPAController-x86_64",
-    "selected_version": "Conan/9/stable/2.2.41-1+gbe036ee"
+    "selected_version": "Conan/8/master/2.2.44+geb5f3ff"
   },
   {
     "name": "Webkit",
-    "selected_version": "Conan/9/stable/2.2.6-4+g2050746"
+    "selected_version": "Conan/8/master/2.2.7+g4a76391"
   }
 ]

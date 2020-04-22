@@ -769,7 +769,7 @@ void CustomProductController::Run( )
     ///
     /// Register as listener for system sources update
     ///
-    auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
+    auto sourceInfoCb = [ this ]( const CAPSAPI::Sources & sources )
     {
         UpdatePowerMacro( );
         ReconcileCurrentProductSource( );
@@ -1176,16 +1176,16 @@ void CustomProductController::EvaluateRadioStatus( )
 /// @name   CustomProductController::PersistLastPlayedContentItem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::PersistLastPlayedContentItem( const SoundTouchInterface::NowPlaying& nowPlayingPb, bool force )
+void CustomProductController::PersistLastPlayedContentItem( const CAPSAPI::NowPlaying& nowPlayingPb, bool force )
 {
     BOSE_INFO( s_logger, "%s::%s", CLASS_NAME, __func__ );
 
-    SoundTouchInterface::NowPlaying copyOfNpPb( nowPlayingPb );
+    CAPSAPI::NowPlaying copyOfNpPb( nowPlayingPb );
 
     if( copyOfNpPb.has_container() and copyOfNpPb.container().has_contentitem() )
     {
-        SoundTouchInterface::NowPlaying::Container *npContainer = copyOfNpPb.mutable_container();
-        SoundTouchInterface::ContentItem *ci = npContainer->mutable_contentitem();
+        CAPSAPI::NowPlaying::Container *npContainer = copyOfNpPb.mutable_container();
+        CAPSAPI::ContentItem *ci = npContainer->mutable_contentitem();
 
         //For A4V triggered sources with location we do not want to persist as these are voice initiated.
         //See: https://jirapro.bose.com/browse/PGC-5044
@@ -1203,7 +1203,7 @@ void CustomProductController::PersistLastPlayedContentItem( const SoundTouchInte
 /// @name   CustomProductController::HandleCapsNowPlaying
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductController::HandleCapsNowPlaying( SoundTouchInterface::NowPlaying np )
+void CustomProductController::HandleCapsNowPlaying( CAPSAPI::NowPlaying np )
 {
     ProductController::HandleCapsNowPlaying( np );
     EvaluateRadioStatus();
@@ -2009,7 +2009,7 @@ std::string CustomProductController::GetDefaultProductName( ) const
 
 void CustomProductController::SendSystemSourcesPropertiesToCAPS()
 {
-    using namespace SoundTouchInterface;
+    using namespace CAPSAPI;
     // Populate /system/sources::properties
     Sources message;
     auto messageProperties = message.mutable_properties();
@@ -2105,38 +2105,38 @@ void CustomProductController::SendInitialCapsData()
         BOSE_INFO( s_logger, "%s sent %s", __func__, desiredVolume.DebugString( ).c_str( ) );
 
         // Populate /system/sources::properties
-        SoundTouchInterface::Sources message;
+        CAPSAPI::Sources message;
 
         // Populate status and visibility of PRODUCT sources.
         // Rules for setting CAPS "status" field: https://jirapro.bose.com/browse/PGC-1169
         using namespace ProductSTS;
 
-        SoundTouchInterface::Sources_SourceItem* source = message.add_sources( );
+        CAPSAPI::Sources_SourceItem* source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( TV ) );
         source->set_accountid( ProductSourceSlot_Name( TV ) );
-        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
+        source->set_status( CAPSAPI::SourceStatus::NOT_CONFIGURED );
         source->set_visible( true );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_0 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_0 ) );
-        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
+        source->set_status( CAPSAPI::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_1 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_1 ) );
-        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
+        source->set_status( CAPSAPI::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::PRODUCT );
         source->set_sourceaccountname( ProductSourceSlot_Name( SLOT_2 ) );
         source->set_accountid( ProductSourceSlot_Name( SLOT_2 ) );
-        source->set_status( SoundTouchInterface::SourceStatus::NOT_CONFIGURED );
+        source->set_status( CAPSAPI::SourceStatus::NOT_CONFIGURED );
         source->set_visible( false );
 
         // Set the (in)visibility of SETUP sources.
@@ -2144,29 +2144,29 @@ void CustomProductController::SendInitialCapsData()
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( SETUP ) );
         source->set_accountid( SetupSourceSlot_Name( SETUP ) );
-        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
+        source->set_status( CAPSAPI::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( ADAPTIQ ) );
         source->set_accountid( SetupSourceSlot_Name( ADAPTIQ ) );
-        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
+        source->set_status( CAPSAPI::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
         source = message.add_sources( );
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( PAIRING ) );
         source->set_accountid( SetupSourceSlot_Name( PAIRING ) );
-        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
+        source->set_status( CAPSAPI::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
-        auto sourcesRespCb = []( SoundTouchInterface::Sources sources )
+        auto sourcesRespCb = []( CAPSAPI::Sources sources )
         {
             BOSE_INFO( s_logger, FRONTDOOR_SYSTEM_SOURCES_API " properties: %s", sources.properties( ).DebugString( ).c_str( ) );
         };
 
-        GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<CAPSAPI::Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
             message,
             sourcesRespCb,
@@ -2177,16 +2177,16 @@ void CustomProductController::SendInitialCapsData()
     {
         // CI source was added after SOS, so it may not exist in already running systems and its visibility needs to be set
         using namespace ProductSTS;
-        SoundTouchInterface::Sources message;
-        SoundTouchInterface::Sources_SourceItem* source = message.add_sources( );
+        CAPSAPI::Sources message;
+        CAPSAPI::Sources_SourceItem* source = message.add_sources( );
 
         source->set_sourcename( SHELBY_SOURCE::SETUP );
         source->set_sourceaccountname( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
         source->set_accountid( SetupSourceSlot_Name( CONTROL_INTEGRATION ) );
-        source->set_status( SoundTouchInterface::SourceStatus::UNAVAILABLE );
+        source->set_status( CAPSAPI::SourceStatus::UNAVAILABLE );
         source->set_visible( false );
 
-        GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
+        GetFrontDoorClient()->SendPut<CAPSAPI::Sources, FrontDoor::Error>(
             FRONTDOOR_SYSTEM_SOURCES_API,
             message,
             {},
@@ -2419,7 +2419,7 @@ void CustomProductController::HandlePutPowerMacro(
         if( req.powerontv( ) )
         {
             const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-            if( not( tvSource and tvSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )   // source status field has to be AVAILABLE in order to be controlled
+            if( not( tvSource and tvSource->status() == CAPSAPI::SourceStatus::AVAILABLE ) )   // source status field has to be AVAILABLE in order to be controlled
             {
                 error.set_message( "TV is not configured but power on tv requested!" );
                 success = false;
@@ -2429,7 +2429,7 @@ void CustomProductController::HandlePutPowerMacro(
         {
             const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( req.powerondevice() ) );
 
-            if( not( reqSource and reqSource->status() == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+            if( not( reqSource and reqSource->status() == CAPSAPI::SourceStatus::AVAILABLE ) )
             {
                 error.set_message( "Requested source is not configured or available!" );
                 success = false;
@@ -2533,7 +2533,7 @@ void CustomProductController::UpdatePowerMacro( )
     if( m_powerMacro.powerontv() )  // if "powerOnTv" field is not there, it will evaluate as false
     {
         const auto tvSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( ProductSTS::TV ) );
-        if( not( tvSource && tvSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+        if( not( tvSource && tvSource->status( ) == CAPSAPI::SourceStatus::AVAILABLE ) )
         {
             m_powerMacro.set_powerontv( false );
             isChanged = true;
@@ -2543,7 +2543,7 @@ void CustomProductController::UpdatePowerMacro( )
     {
         const auto reqSource = GetSourceInfo( ).FindSource( SHELBY_SOURCE::PRODUCT, ProductSTS::ProductSourceSlot_Name( m_powerMacro.powerondevice() ) );
 
-        if( not( reqSource and reqSource->status( ) == SoundTouchInterface::SourceStatus::AVAILABLE ) )
+        if( not( reqSource and reqSource->status( ) == CAPSAPI::SourceStatus::AVAILABLE ) )
         {
             m_powerMacro.clear_powerondevice( );
             isChanged = true;
