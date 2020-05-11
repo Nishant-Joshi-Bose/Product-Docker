@@ -46,6 +46,7 @@ def test_boot_status(start_mock_frontDoor):
     LOGGER.info("Start serving STSService")
     router = ipcmessagerouter.ipcmessagerouterserver(port=30030, dlo=deadletteroffice)
     sts_service = STSServiceProxy(router)
+    sts_service.createAccountProxy_set("PAF_Account")
     sts_service.connect()
 
     router_2 = ipcmessagerouter.ipcmessagerouterserver(port=30031,dlo=deadletteroffice)
