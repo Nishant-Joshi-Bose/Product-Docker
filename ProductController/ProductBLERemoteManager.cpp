@@ -104,14 +104,14 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
 {
     auto frontDoorClient = m_ProductController.GetFrontDoorClient();
 
-    auto handleNowSelection = [ this ]( const SoundTouchInterface::NowSelectionInfo & nowSelection )
+    auto handleNowSelection = [ this ]( const CAPSAPI::NowSelectionInfo & nowSelection )
     {
         UpdateNowSelection( nowSelection );
     };
 
-    AsyncCallback< SoundTouchInterface::NowSelectionInfo > nowSelCb( handleNowSelection, m_ProductTask );
-    frontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb );
-    frontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb, {} );
+    AsyncCallback< CAPSAPI::NowSelectionInfo > nowSelCb( handleNowSelection, m_ProductTask );
+    frontDoorClient->RegisterNotification<CAPSAPI::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb );
+    frontDoorClient->SendGet<CAPSAPI::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, nowSelCb, {} );
 
     //System power control notification registration and callback handling
     auto handleSystemPowerControl = [this]( SystemPowerPb::SystemPowerControl systemPowerControlState )
@@ -168,7 +168,7 @@ void ProductBLERemoteManager::Run( )
     InitializeFrontDoor();
     InitializeRCS();
     m_ProductController.GetSourceInfo().RegisterSourceListener(
-        [ this ]( const SoundTouchInterface::Sources & sources )
+        [ this ]( const CAPSAPI::Sources & sources )
     {
         UpdateAvailableSources( sources );
     } );
@@ -227,7 +227,7 @@ void ProductBLERemoteManager::Stop( )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::UpdateAvailableSources( const SoundTouchInterface::Sources& sources )
+void ProductBLERemoteManager::UpdateAvailableSources( const CAPSAPI::Sources& sources )
 {
     BOSE_INFO( s_logger, "%s update sources %s", __func__, ProtoToMarkup::ToJson( sources ).c_str() );
     m_sources = sources;
@@ -244,7 +244,7 @@ void ProductBLERemoteManager::UpdateAvailableSources( const SoundTouchInterface:
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::NowSelectionInfo& nowSelection )
+void ProductBLERemoteManager::UpdateNowSelection( const CAPSAPI::NowSelectionInfo& nowSelection )
 {
     BOSE_INFO( s_logger, "%s update nowSelection %s", __func__, ProtoToMarkup::ToJson( nowSelection ).c_str() );
     m_nowSelection = nowSelection;

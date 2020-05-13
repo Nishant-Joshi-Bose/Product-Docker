@@ -34,7 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "A4VVideoManagerClientFactory.h"
 #include "ProductFrontDoorUtility.h"
-#include "SoundTouchInterface/PlayerService.pb.h"
+#include "PlayerService.pb.h"
 #include "AudioService.pb.h"
 #include "ProductMessage.pb.h"
 #include "CecMode.pb.h"
@@ -186,9 +186,9 @@ private:
     void HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent );
     void HandleRawEDIDResponse( A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid );
     void HandlePhyAddrResponse( A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
-    void HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlayingStatus );
+    void HandleNowPlaying( CAPSAPI::NowPlaying nowPlayingStatus );
     void HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource );
-    void HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying& response );
+    void HandlePlaybackRequestResponse( const CAPSAPI::NowPlaying& response );
     void HandlePlaybackRequestError( const FrontDoor::Error& error );
     void CecModeHandleGet( const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );
     void CecModeHandlePut( const ProductPb::CecUpdateRequest req, const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );

@@ -52,7 +52,7 @@
 #include "BluetoothSourceService.pb.h"
 #include "DisplayController.pb.h"
 #include "ProductMessage.pb.h"
-#include "SoundTouchInterface/PlayerService.pb.h"
+#include "PlayerService.pb.h"
 #include "AudioService.pb.h"
 #include "SystemPowerProduct.pb.h"
 #include "SystemPower.pb.h"
@@ -208,7 +208,7 @@ public:
     ///        currently is a kludge, until the common code supports persistent storage of this data.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    SoundTouchInterface::PlaybackRequest& GetLastSoundTouchPlayback( );
+    CAPSAPI::PlaybackRequest& GetLastSoundTouchPlayback( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -469,14 +469,14 @@ private:
     ///        nowPlayingPb for peristent storage
     /// @return void
     ////////////////////////////////////////////////////////////////////////////////
-    void PersistLastPlayedContentItem( const SoundTouchInterface::NowPlaying& nowPlayingPb, bool force = false ) override;
+    void PersistLastPlayedContentItem( const CAPSAPI::NowPlaying& nowPlayingPb, bool force = false ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declaration is used for now playing information handling
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void  HandleCapsNowPlaying( SoundTouchInterface::NowPlaying nowPlayingStatus ) override;
+    void  HandleCapsNowPlaying( CAPSAPI::NowPlaying nowPlayingStatus ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -484,7 +484,7 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void  RegisterNowPlayingEndPoint( );
-    void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
+    void  HandleNowPlaying( const CAPSAPI::NowPlaying& nowPlayingStatus );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

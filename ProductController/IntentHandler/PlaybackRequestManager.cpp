@@ -73,7 +73,7 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF&         task
 {
     BOSE_INFO( s_logger, "%s is being constructed.", __func__ );
 
-    auto handleSources = [ this ]( const SoundTouchInterface::Sources & sources )
+    auto handleSources = [ this ]( const CAPSAPI::Sources & sources )
     {
         UpdateSources( sources );
     };
@@ -98,7 +98,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     using namespace ProductSTS;
 
-    auto playbackRequestResponseCallback = [ this ]( const SoundTouchInterface::NowPlaying & response )
+    auto playbackRequestResponseCallback = [ this ]( const CAPSAPI::NowPlaying & response )
     {
         BOSE_DEBUG( s_logger, "A response to the playback request was received: %s",
                     ProtoToMarkup::ToJson( response, false ).c_str( ) );
@@ -112,7 +112,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                     error.message().c_str() );
     };
 
-    SoundTouchInterface::PlaybackRequest playbackRequestData;
+    CAPSAPI::PlaybackRequest playbackRequestData;
 
     if( action == ( uint16_t )Action::ACTION_TV )
     {
@@ -207,10 +207,10 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     if( activeSource != playbackRequestData.source()  ||
         activeAccount != playbackRequestData.sourceaccount( ) )
     {
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                playbackRequestData,
-                playbackRequestResponseCallback,
-                playbackRequestErrorCallback );
+        GetFrontDoorClient( )->SendPost<CAPSAPI::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                                                                                playbackRequestData,
+                                                                                playbackRequestResponseCallback,
+                                                                                playbackRequestErrorCallback );
 
         BOSE_INFO( s_logger, "An attempt to play the %s source has been made.", playbackRequestData.sourceaccount( ).c_str( ) );
 
@@ -228,12 +228,12 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 ///
 /// @brief PlaybackRequestManager::UpdateSources
 ///
-/// @param  const SoundTouchInterface::Sources&
+/// @param  const CAPSAPI::Sources&
 ///
 /// @return This method returns true base on its handling of a playback request.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void PlaybackRequestManager::UpdateSources( const SoundTouchInterface::Sources& sources )
+void PlaybackRequestManager::UpdateSources( const CAPSAPI::Sources& sources )
 {
     BOSE_INFO( s_logger, "%s got source update %s", __func__, ProtoToMarkup::ToJson( sources ).c_str() );
     // Repopulate the playbackRequest info associated with user configurable Game, DVD, Cable/Sat activation key

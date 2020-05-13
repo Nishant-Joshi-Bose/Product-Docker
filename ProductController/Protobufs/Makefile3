@@ -20,7 +20,7 @@ PROTO_IMPORT_DIRS :=    .                                         \
                         $(PROTO_CC_DEST)                          \
                         $(BOSELIBS_DIR)/protobufs                 \
                         $(BOSELIBS_DIR)/include                   \
-                        $(CAPSAPI_DIR)/SoundTouchInterfaceAPI/protobufs \
+                        $(CAPSAPI_DIR)/protobufs \
                         $(PRODUCTCONTROLLERCOMMON_DIR)/Protobufs/private  \
                         $(PRODUCTCONTROLLERCOMMONPROTO_DIR)/protobufs  \
                         $(RIVIERA_LPM_PROTO_DIR)/proto            \

@@ -60,7 +60,7 @@ public:
     bool HandleIntentPowerToggle( )                                             override;
     bool HandleIntentPowerOff( )                                                override;
     bool HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )  override;
-    bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )  override;
+    bool HandleNowSelectionInfo( const CAPSAPI::NowSelectionInfo& nowSelectionInfo )  override;
 
 private:
 

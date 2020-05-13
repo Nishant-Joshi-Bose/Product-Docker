@@ -52,15 +52,15 @@ bool RatingManager::Handle( KeyHandlerUtil::ActionType_t& action )
                     error.message().c_str() );
     };
 
-    SoundTouchInterface::RatingTrack ratingData;
+    CAPSAPI::RatingTrack ratingData;
 
     if( action == ( uint16_t )Action::ACTION_THUMB_UP )
     {
-        ratingData.set_rating( SoundTouchInterface::Rating::RatingEnum::UP );
+        ratingData.set_rating( CAPSAPI::Rating::RatingEnum::UP );
     }
     else if( action == ( uint16_t )Action::ACTION_THUMB_DOWN )
     {
-        ratingData.set_rating( SoundTouchInterface::Rating::RatingEnum::DOWN );
+        ratingData.set_rating( CAPSAPI::Rating::RatingEnum::DOWN );
     }
     else
     {
@@ -68,10 +68,10 @@ bool RatingManager::Handle( KeyHandlerUtil::ActionType_t& action )
         return false;
     }
 
-    GetFrontDoorClient( )->SendPost<SoundTouchInterface::RatingTrack, FrontDoor::Error>( FRONTDOOR_RATING_API,
-            ratingData,
-            {},
-            ratingMangerErrorCallback );
+    GetFrontDoorClient( )->SendPost<CAPSAPI::RatingTrack, FrontDoor::Error>( FRONTDOOR_RATING_API,
+                                                                             ratingData,
+                                                                             {},
+                                                                             ratingMangerErrorCallback );
 
     return true;
 }

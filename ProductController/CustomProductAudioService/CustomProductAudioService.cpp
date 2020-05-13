@@ -17,7 +17,7 @@
 #include "CustomProductController.h"
 #include "CustomProductAudioService.h"
 #include "ProtoToMarkup.h"
-#include "SoundTouchInterface/ContentItem.pb.h"
+#include "ContentItem.pb.h"
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
@@ -191,7 +191,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( const APProd
 
     // Parse contentItem string received from APProduct
     bool error = false;
-    SoundTouchInterface::ContentItem contentItemProto;
+    CAPSAPI::ContentItem contentItemProto;
     try
     {
         ProtoToMarkup::FromJson( contentItem, &contentItemProto );
