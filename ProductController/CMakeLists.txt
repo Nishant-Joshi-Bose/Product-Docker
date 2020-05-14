@@ -16,7 +16,7 @@ INCLUDE_DIRECTORIES(
   ${KEYHANDLER_DIR}/include
   ${NETWORK_SERVICE_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Caps
   ${AUDIOSOURCE_DIR}/include
   .
   CustomProductAudioService
@@ -126,11 +126,11 @@ TARGET_LINK_LIBRARIES(Professor
   CommonTypes
   STSProtoBufs
   CapsAudioServiceApi
-  SoundTouchInterfaceContentSelectionServiceApi
-  SoundTouchInterfaceDiscoveryAdvertisementServiceApi
-  SoundTouchInterfaceEndPointsErrorApi
-  SoundTouchInterfacePlayerServiceApi
-  SoundTouchInterfaceSystemServiceApi
+  CapsContentSelectionServiceApi
+  CapsDiscoveryAdvertisementServiceApi
+  CapsEndPointsErrorApi
+  CapsPlayerServiceApi
+  CapsSystemServiceApi
   CapsUtils
   SystemEventService
   A4VRemoteCommClient

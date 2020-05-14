@@ -96,16 +96,16 @@ bool ProductCecHelper::Run( )
     /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
     /// is used to receive these notifications.
     ///
-    AsyncCallback< SoundTouchInterface::NowPlaying >
+    AsyncCallback< CAPSAPI::NowPlaying >
     callback( std::bind( &ProductCecHelper::HandleNowPlaying,
                          this, std::placeholders::_1 ),
               m_ProductTask );
 
-    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::NowPlaying >(
+    m_FrontDoorClient->RegisterNotification< CAPSAPI::NowPlaying >(
         FRONTDOOR_CONTENT_NOWPLAYING_API,
         callback );
 
-    m_FrontDoorClient->SendGet<SoundTouchInterface::NowPlaying, FrontDoor::Error>(
+    m_FrontDoorClient->SendGet<CAPSAPI::NowPlaying, FrontDoor::Error>(
         FRONTDOOR_CONTENT_NOWPLAYING_API,
         callback, {} );
 
@@ -429,7 +429,7 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
 /// @name   ProductCecHelper::HandlePlaybackRequestResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying&
+void ProductCecHelper::HandlePlaybackRequestResponse( const CAPSAPI::NowPlaying&
                                                       response )
 {
     BOSE_DEBUG( s_logger, "A response to the playback request %s was received.",
@@ -579,10 +579,10 @@ void ProductCecHelper::Stop( )
 ///
 /// @brief ProductCecHelper::HandleNowPlaying
 ///
-/// @param SoundTouchInterface::NowPlaying nowPlayingStatus
+/// @param CAPSAPI::NowPlaying nowPlayingStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlayingStatus )
+void ProductCecHelper::HandleNowPlaying( CAPSAPI::NowPlaying nowPlayingStatus )
 {
     using namespace ProductSTS;
 
@@ -592,7 +592,7 @@ void ProductCecHelper::HandleNowPlaying( SoundTouchInterface::NowPlaying nowPlay
     // this defaults to cleared)
     m_ignoreSourceSwitch = false;
 
-    if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::PLAY )
+    if( nowPlayingStatus.state( ).status( ) == CAPSAPI::Status::PLAY )
     {
         if( nowPlayingStatus.has_container( )                          and
             nowPlayingStatus.container( ).has_contentitem( )           and

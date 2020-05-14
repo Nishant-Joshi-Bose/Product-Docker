@@ -54,7 +54,7 @@ bool ProductSTSStateDeviceControl::HandleActivateRequest( const STS::Void & requ
                 m_account.IPC().SendAudioSetURLEvent( asu );
             }
 
-            if( source->status() == SoundTouchInterface::SourceStatus::AVAILABLE )
+            if( source->status() == CAPSAPI::SourceStatus::AVAILABLE )
             {
                 // TODO - Re-evaluate this for all AVAILABLE source
                 // https://jirapro.bose.com/browse/PGC-4182

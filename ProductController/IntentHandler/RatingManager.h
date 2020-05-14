@@ -14,8 +14,8 @@
 #include "IntentManager.h"
 #include "Intents.h"
 #include "FrontDoorClientIF.h"
-#include "SoundTouchInterface/Rating.pb.h"
-#include "SoundTouchInterface/PlayerService.pb.h"
+#include "Rating.pb.h"
+#include "PlayerService.pb.h"
 #include "Utilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

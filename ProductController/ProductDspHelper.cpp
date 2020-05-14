@@ -25,7 +25,7 @@
 #include "Utilities.h"
 #include "CustomProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
-#include "SoundTouchInterface/PlayerService.pb.h"
+#include "PlayerService.pb.h"
 #include "ProductDspHelper.h"
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
@@ -164,7 +164,7 @@ void ProductDspHelper::AutoWakeTriggered()
 
     using namespace ProductSTS;
 
-    auto playbackRequestResponseCallback = [ this ]( const SoundTouchInterface::NowPlaying & response )
+    auto playbackRequestResponseCallback = [ this ]( const CAPSAPI::NowPlaying & response )
     {
         BOSE_DEBUG( s_logger, "A response to the playback request was received: %s" ,
                     ProtoToMarkup::ToJson( response, false ).c_str( ) );
@@ -178,12 +178,12 @@ void ProductDspHelper::AutoWakeTriggered()
                     error.message().c_str() );
     };
 
-    SoundTouchInterface::PlaybackRequest playbackRequestData;
+    CAPSAPI::PlaybackRequest playbackRequestData;
 
     playbackRequestData.set_source( SHELBY_SOURCE::PRODUCT );
     playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( TV ) );
 
-    m_ProductController.GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+    m_ProductController.GetFrontDoorClient( )->SendPost<CAPSAPI::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
             playbackRequestData,
             playbackRequestResponseCallback,
             playbackRequestErrorCallback );
