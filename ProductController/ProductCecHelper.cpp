@@ -488,6 +488,8 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
 
         m_HavePhysicalAddress = false;
         // Per PGC-1920, no CEC source sent to LPM when physical address is lost
+        m_rawEdid.Clear();
+        SendCurrentEdid( );
     }
 }
 
