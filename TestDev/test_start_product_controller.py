@@ -44,12 +44,14 @@ def test_boot_status(start_mock_frontDoor):
     time.sleep(7)
     """
     LOGGER.info("Start serving STSService")
-    router = ipcmessagerouter.ipcmessagerouterserver(port=30030, dlo=deadletteroffice)
+    #router = ipcmessagerouter.ipcmessagerouterserver(port=30030, dlo=deadletteroffice)
+    router = ipcmessagerouter.ipcmessagerouterserver(port=30030, dlo=deadletteroffice, multi_client_server=True)
     sts_service = STSServiceProxy(router)
     sts_service.createAccountProxy_set("PAF_Account")
     sts_service.connect()
 
-    router_2 = ipcmessagerouter.ipcmessagerouterserver(port=30031,dlo=deadletteroffice)
+    #router_2 = ipcmessagerouter.ipcmessagerouterserver(port=30031,dlo=deadletteroffice)
+    router_2 = ipcmessagerouter.ipcmessagerouterserver(port=30031,dlo=deadletteroffice, multi_client_server=True)
     sts_account = STSAccountProxy(router_2)
     sts_account.connect()
 
