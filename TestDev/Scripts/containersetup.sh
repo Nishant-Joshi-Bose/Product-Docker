@@ -15,8 +15,8 @@ source venv3/bin/activate
 make
 pip install brainstem --trusted-host ingress-platform.live-aws-useast1.bose.io/dev/svc-core-devops-nexus/prod/core-devops-nexus-core --extra-index-url https://ingress-platform.live-aws-useast1.bose.io/dev/svc-core-devops-nexus/prod/core-devops-nexus-core/repository/pypi-all/simple
 pip install pyadb --trusted-host ingress-platform.live-aws-useast1.bose.io/dev/svc-core-devops-nexus/prod/core-devops-nexus-core --extra-index-url https://ingress-platform.live-aws-useast1.bose.io/dev/svc-core-devops-nexus/prod/core-devops-nexus-core/repository/pypi-all/simple
-#pip install -qr requirements.txt
-pip install /scratch/CastleTestUtils/dist/*
+pip install -qr requirements.txt
+#pip install /scratch/CastleTestUtils/dist/*
 
 # The following definition is only needed for professor (and will not effect eddie)
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(components get protobuf-x86_64 installed_location)/lib
