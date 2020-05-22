@@ -159,8 +159,6 @@ INCLUDE_DIRECTORIES(
   ${BTSOURCE_DIR}/include
   ${BTSTSSINK_DIR}/include
   ${CAPSAPI_DIR}/include
-  ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/include
-  ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/include/SoundTouchInterface
   ${CAPSSERVICE_DIR}/prebuilt/include
   ${CASTLEIOTIPCCLIENT}/include
   ${CLI_DIR}/include
@@ -209,8 +207,6 @@ LINK_DIRECTORIES(
   ${BTSOURCE_DIR}/lib
   ${BTSTSSINK_DIR}/lib
   ${CAPSAPI_DIR}/lib
-  ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/lib
-  ${CAPSAPI_DIR}/SoundTouchInterfaceAPI/lib
   ${CAPSSERVICE_DIR}/prebuilt/Libs
   ${CASTLEIOTIPCCLIENT}/lib
   ${CLI_DIR}/lib

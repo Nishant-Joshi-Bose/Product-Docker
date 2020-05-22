@@ -34,8 +34,8 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "IntentManager.h"
-#include "SoundTouchInterface/PlayerService.pb.h"
-#include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "PlayerService.pb.h"
+#include "ContentSelectionService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -118,16 +118,16 @@ private:
     ///        configurable Game, DVD, Cable/Sat activation key on BLE remote
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    SoundTouchInterface::PlaybackRequest    m_gameSourcePlaybackRq;
-    SoundTouchInterface::PlaybackRequest    m_dvdSourcePlaybackRq;
-    SoundTouchInterface::PlaybackRequest    m_cablesatSourcePlaybackRq;
+    CAPSAPI::PlaybackRequest    m_gameSourcePlaybackRq;
+    CAPSAPI::PlaybackRequest    m_dvdSourcePlaybackRq;
+    CAPSAPI::PlaybackRequest    m_cablesatSourcePlaybackRq;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief These methods are callbacks that are invoked from a playback request.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlaying& response );
+    void PostPlaybackRequestResponse( const CAPSAPI::NowPlaying& response );
     void PostPlaybackRequestError( const FrontDoor::Error& error );
 
 
@@ -136,7 +136,7 @@ private:
     /// @brief This is called from ProductSourceInfo as a callback to deliver updates to the source list
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void UpdateSources( const SoundTouchInterface::Sources& sources );
+    void UpdateSources( const CAPSAPI::Sources& sources );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

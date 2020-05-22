@@ -207,7 +207,7 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
 ///
 /// @brief  CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo
 ///
-/// @param  const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo
+/// @param  const CAPSAPI::NowSelectionInfo& nowSelectionInfo
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the latest now
 ///         selection. Othewise, application would Exit from AccessoryPairing state which is not
@@ -215,7 +215,7 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandleNowSelectionInfo(
-    const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+    const CAPSAPI::NowSelectionInfo& nowSelectionInfo )
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 

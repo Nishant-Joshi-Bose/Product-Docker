@@ -113,14 +113,14 @@ private:
     const KeplerPb::KeplerConfig::StateEntry            m_defaultState;
     const KeplerPb::KeplerConfig::ZoneConfiguration     m_defaultZoneConfig;
 
-    SoundTouchInterface::NowSelectionInfo                                   m_nowSelection;
-    SoundTouchInterface::Sources                                            m_sources;
+    CAPSAPI::NowSelectionInfo                                   m_nowSelection;
+    CAPSAPI::Sources                                            m_sources;
     A4VRemoteCommunication::A4VRemoteCommClientIF::A4VRemoteCommClientPtr   m_RCSClient;
 
-    void UpdateNowSelection( const SoundTouchInterface::NowSelectionInfo& nowSelection );
+    void UpdateNowSelection( const CAPSAPI::NowSelectionInfo& nowSelection );
     void InitializeFrontDoor();
     void InitializeRCS();
-    void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
+    void UpdateAvailableSources( const CAPSAPI::Sources& sources );
     void UpdateBacklight( );
     void CheckPairing( );
     static void InitLedsMsg( RCS_PB_MSG::LedsRawMsg_t& leds );
