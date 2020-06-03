@@ -169,6 +169,7 @@ private:
     A4VVideoManagerServiceMessages::EDIDRawMsg_t m_rawEdid;
     DataCollectionPb::HdmiEdid m_eedid;
     DataCollectionPb::CecState m_cecStateCache;
+    bool m_ciSourceActive = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

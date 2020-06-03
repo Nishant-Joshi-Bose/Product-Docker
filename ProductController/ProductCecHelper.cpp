@@ -488,8 +488,11 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
 
         m_HavePhysicalAddress = false;
         // Per PGC-1920, no CEC source sent to LPM when physical address is lost
-        m_rawEdid.Clear();
-        SendCurrentEdid( );
+        if( m_ciSourceActive )
+        {
+            m_rawEdid.Clear();
+            SendCurrentEdid( );
+        }
     }
 }
 
@@ -616,11 +619,19 @@ void ProductCecHelper::HandleNowPlaying( CAPSAPI::NowPlaying nowPlayingStatus )
                 {
                     BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV and ignoring CEC active source requests." );
                     m_LpmSourceID = LPM_IPC_SOURCE_TV;
+                    m_ciSourceActive = true;
+                    // If we currently have no pa, send a cleared edid to the Device Controller so that assumed TVs get cleared
+                    if( !m_HavePhysicalAddress )
+                    {
+                        m_rawEdid.Clear();
+                        SendCurrentEdid( );
+                    }
                 }
                 else
                 {
                     BOSE_DEBUG( s_logger, "CEC CAPS in setup, ignoring CEC active source requests." );
                     m_LpmSourceID = LPM_IPC_SOURCE_INTERNAL;
+                    m_ciSourceActive = false;
                 }
             }
             else
