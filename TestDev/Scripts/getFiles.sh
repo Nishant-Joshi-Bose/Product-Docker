@@ -10,7 +10,6 @@ X86_64_DIR="$REPO_DIR/builds/Coverage/x86_64"
 FILES_STAGE_DIR="$X86_64_DIR/Files"
 
 #   Verify a target build was done
-#PRODUCT_UPDATE_ZIP_PATH="$REPO_DIR/builds/Release/product_update.zip"
 PRODUCT_UPDATE_ZIP_PATH="$REPO_DIR/builds/deploy/product_update.zip"
 if [ ! -f $PRODUCT_UPDATE_ZIP_PATH ]; then
     echo "product_update.zip not found. Please build for target"
@@ -18,7 +17,6 @@ if [ ! -f $PRODUCT_UPDATE_ZIP_PATH ]; then
 fi
 
 #   Populate the Files directory
-#cp -r $THIS_DIR/../Files $X86_64_DIR
 rm -rf $FILES_STAGE_DIR
 mkdir  -p $FILES_STAGE_DIR/opt/Bose/etc
 mkdir  -p $FILES_STAGE_DIR/mnt/nv/product-persistence

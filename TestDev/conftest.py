@@ -120,23 +120,25 @@ def eddie_product_controller(request):
     exec_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../builds/Coverage/x86_64/bin"))
     mock_product_perisistence_path = "/mnt/nv/product-persistence"
     mock_keyconfiguration_path = "/scratch/CastleProducts/builds/Coverage/x86_64/KeyConfiguration.json"
-    # PAF - I map the opt and persist directory pulled from target
-    #subprocess.Popen(['sudo', 'mkdir', '-p', '/opt/Bose/etc'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
-    #subprocess.Popen(['sudo', 'mkdir', '-p', '/persist'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
-    #subprocess.Popen(['sudo', 'cp', 'mfg_data.json', '/persist'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
 
-    # I will cp the Mock ./mnt/nv/product-persistence to exec_path for now
-    #subprocess.Popen(['sudo', 'cp', '-r', 'product-persistence', exec_path] , stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
+    # TODO: Reconcile this file with the eddie/master branch
+    #   The commands below put the configuration files into the locations expected by the product controller
+    #   This should work similarly for all riviera products.
+    #   Note that the files are first staged by unpacking them from the product_update.zip
+    #       and then only the mfg_data.json file is needed, since it is not part of product_update.zip
+    #   Also, as part of startup, some files (e.g. KeyConfiguration.json) are copied to /run/var 
+
     subprocess.Popen([ 'cp', '-r', mock_product_perisistence_path, exec_path] , stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
-
-    #subprocess.Popen(['sudo', 'cp', 'KeyConfiguration.json', '/var/run'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
     subprocess.Popen(['sudo', 'cp', mock_keyconfiguration_path, '/var/run'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
-    #subprocess.Popen(['sudo', 'cp', '-r', '*.json', 'chimes', '/opt/Bose/etc'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
 
 
     time.sleep(5)
     os.chdir(exec_path)
     LOGGER.info("Starting product controller")
+
+    # TODO: strace shows all the details of kernel interaction, including messages sent via IPC. We should integrate
+    #   the option of running strace and it's various parameters, perhaps as options.
+
     cmd = "env BOSE_DPRINT_CONF='set stdout; all debug' ./Professor &"
     #cmd = "strace -tt -yy -e trace=ipc -s 128 -E \"BOSE_DPRINT_CONF=\'set stdout; all debug\'\" ./Professor &"
     #cmd = "env BOSE_DPRINT_CONF='set stdout; all debug' strace -o strace -ff -tt -yy -e trace=open,read,write,close,ipc,network -x -s 4096  ./Professor &"
