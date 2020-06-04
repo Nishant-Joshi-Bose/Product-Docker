@@ -7,6 +7,7 @@
 #define DATA_COLLECTION_CONTENT_TYPE        "contenttype-audio-parameters-changed"
 #define DATA_COLLECTION_DSP_AIQ             "adaptiq-coefficients-changed"
 #define DATA_COLLECTION_DUALMONO_SELECT     "dualmonoselect-audio-parameters-changed"
+#define DATA_COLLECTION_EARC_STATUS         "earc-status-changed"
 #define DATA_COLLECTION_EEDID               "eedid-changed"
 #define DATA_COLLECTION_EQSELECT            "eqselect-audio-parameters-changed"
 #define DATA_COLLECTION_GAIN_OFFSET         "gainoffset-audio-parameters-changed"

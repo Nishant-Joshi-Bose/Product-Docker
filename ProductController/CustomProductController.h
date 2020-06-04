@@ -594,6 +594,15 @@ private:
     void ReconcileCurrentProductSource( );
     void LoadPowerMacroFromPersistance( );
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member is used to send Earc status to data collection
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    LpmServiceMessages::IpcEarcStatus_t m_earcStatus;
+    void RegisterEarcStatusLPMEvent( );
+    void SendEarcStatusToDataCollection( );
+
     void HandleVoiceStatus( VoiceServicePB::VoiceStatus voiceStatus ) override;
 
     bool IsAllModuleReady() const;
