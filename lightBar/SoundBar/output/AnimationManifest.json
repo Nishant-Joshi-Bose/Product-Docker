@@ -1,395 +1,440 @@
 {
-  "minor": 9,
+  "minor": 10,
   "major": 2,
   "animations": [
     {
-      "name": "ALARM",
+      "name": "ACTIVE_CALL_ENTER",
       "id": 1,
+      "duration": 200
+    },
+    {
+      "name": "ACTIVE_CALL_EXIT",
+      "id": 2,
+      "duration": 240
+    },
+    {
+      "name": "ACTIVE_CALL_HOLD",
+      "id": 3,
+      "duration": 1000
+    },
+    {
+      "name": "ALARM",
+      "id": 4,
       "duration": 1520
     },
     {
       "name": "AP_SETUP_ENTER",
-      "id": 2,
+      "id": 5,
       "duration": 375
     },
     {
       "name": "AP_SETUP_EXIT",
-      "id": 3,
+      "id": 6,
       "duration": 375
     },
     {
       "name": "AP_SETUP_HOLD",
-      "id": 4,
+      "id": 7,
       "duration": 20
     },
     {
       "name": "BOOTUP",
-      "id": 5,
+      "id": 8,
       "duration": 1740
     },
     {
       "name": "BT_CONNECTED",
-      "id": 6,
+      "id": 9,
       "duration": 2870
     },
     {
       "name": "BT_CONNECTING",
-      "id": 7,
+      "id": 10,
       "duration": 1160
     },
     {
       "name": "BT_DISCOVERABLE",
-      "id": 8,
+      "id": 11,
       "duration": 1450
     },
     {
       "name": "BT_PAIRLIST_CLR",
-      "id": 9,
+      "id": 12,
       "duration": 1250
     },
     {
       "name": "BUFFERING",
-      "id": 10,
+      "id": 13,
       "duration": 1450
     },
     {
       "name": "BUFFERING_ENTER",
-      "id": 11,
+      "id": 14,
       "duration": 750
     },
     {
       "name": "BUFFERING_EXIT",
-      "id": 12,
+      "id": 15,
       "duration": 750
     },
     {
       "name": "BUFFERING_HOLD",
-      "id": 13,
+      "id": 16,
       "duration": 20
     },
     {
       "name": "CONNECTED",
-      "id": 14,
+      "id": 17,
       "duration": 2730
     },
     {
       "name": "CONNECTING",
-      "id": 15,
+      "id": 18,
       "duration": 1015
     },
     {
       "name": "COUNTDOWN10_1",
-      "id": 16,
-      "duration": 1000
-    },
-    {
-      "name": "COUNTDOWN10_10",
-      "id": 17,
-      "duration": 1000
-    },
-    {
-      "name": "COUNTDOWN10_2",
-      "id": 18,
-      "duration": 1000
-    },
-    {
-      "name": "COUNTDOWN10_3",
       "id": 19,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN10_4",
+      "name": "COUNTDOWN10_10",
       "id": 20,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN10_5",
+      "name": "COUNTDOWN10_2",
       "id": 21,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN10_6",
+      "name": "COUNTDOWN10_3",
       "id": 22,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN10_7",
+      "name": "COUNTDOWN10_4",
       "id": 23,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN10_8",
+      "name": "COUNTDOWN10_5",
       "id": 24,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN10_9",
+      "name": "COUNTDOWN10_6",
       "id": 25,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN5_1",
+      "name": "COUNTDOWN10_7",
       "id": 26,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN5_2",
+      "name": "COUNTDOWN10_8",
       "id": 27,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN5_3",
+      "name": "COUNTDOWN10_9",
       "id": 28,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN5_4",
+      "name": "COUNTDOWN5_1",
       "id": 29,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN5_5",
+      "name": "COUNTDOWN5_2",
       "id": 30,
       "duration": 1000
     },
     {
-      "name": "COUNTDOWN_COMPLETE",
+      "name": "COUNTDOWN5_3",
       "id": 31,
+      "duration": 1000
+    },
+    {
+      "name": "COUNTDOWN5_4",
+      "id": 32,
+      "duration": 1000
+    },
+    {
+      "name": "COUNTDOWN5_5",
+      "id": 33,
+      "duration": 1000
+    },
+    {
+      "name": "COUNTDOWN_COMPLETE",
+      "id": 34,
       "duration": 2400
     },
     {
       "name": "CRITICAL_ERROR",
-      "id": 32,
+      "id": 35,
       "duration": 25
     },
     {
       "name": "CRITICAL_ERROR_EXIT",
-      "id": 33,
+      "id": 36,
       "duration": 375
     },
     {
+      "name": "DO_NOT_DISTURB",
+      "id": 37,
+      "duration": 2110
+    },
+    {
+      "name": "DROP_IN_ENTER",
+      "id": 38,
+      "duration": 200
+    },
+    {
+      "name": "DROP_IN_EXIT",
+      "id": 39,
+      "duration": 240
+    },
+    {
+      "name": "DROP_IN_HOLD",
+      "id": 40,
+      "duration": 1000
+    },
+    {
       "name": "FIRST_BOOT_ENTER",
-      "id": 34,
+      "id": 41,
       "duration": 5860
     },
     {
       "name": "FIRST_BOOT_EXIT",
-      "id": 35,
+      "id": 42,
       "duration": 2550
     },
     {
       "name": "GEN_BTN_HOLD",
-      "id": 36,
+      "id": 43,
       "duration": 20
     },
     {
       "name": "GEN_BTN_PRESS",
-      "id": 37,
+      "id": 44,
       "duration": 75
     },
     {
       "name": "GEN_BTN_RELEASE",
-      "id": 38,
+      "id": 45,
       "duration": 75
     },
     {
+      "name": "INCOMING_CALL",
+      "id": 46,
+      "duration": 1400
+    },
+    {
       "name": "NON_CRITICAL_ERROR",
-      "id": 39,
+      "id": 47,
       "duration": 5600
     },
     {
       "name": "NOTIFICATION",
-      "id": 40,
+      "id": 48,
       "duration": 1450
     },
     {
       "name": "NOTIFICATION_HOLD",
-      "id": 41,
-      "duration": 20
-    },
-    {
-      "name": "NOTIFICATION_OFF",
-      "id": 42,
-      "duration": 375
-    },
-    {
-      "name": "NOTIFICATION_ON",
-      "id": 43,
-      "duration": 375
-    },
-    {
-      "name": "OTA_LIFEBOAT",
-      "id": 44,
-      "duration": 1400
-    },
-    {
-      "name": "PAIR_COMPLETE",
-      "id": 45,
-      "duration": 1360
-    },
-    {
-      "name": "PAIR_COMPLETE_XSITION",
-      "id": 46,
-      "duration": 3150
-    },
-    {
-      "name": "PLAYBACK_PAUSE_ENTER",
-      "id": 47,
-      "duration": 375
-    },
-    {
-      "name": "PLAYBACK_PAUSE_EXIT",
-      "id": 48,
-      "duration": 375
-    },
-    {
-      "name": "PLAYBACK_PAUSE_HOLD",
       "id": 49,
       "duration": 20
     },
     {
-      "name": "SW_DOWNLOAD",
+      "name": "NOTIFICATION_OFF",
       "id": 50,
+      "duration": 375
+    },
+    {
+      "name": "NOTIFICATION_ON",
+      "id": 51,
+      "duration": 375
+    },
+    {
+      "name": "OTA_LIFEBOAT",
+      "id": 52,
+      "duration": 1400
+    },
+    {
+      "name": "OUTGOING_CALL",
+      "id": 53,
+      "duration": 1400
+    },
+    {
+      "name": "PAIR_COMPLETE",
+      "id": 54,
+      "duration": 1360
+    },
+    {
+      "name": "PAIR_COMPLETE_XSITION",
+      "id": 55,
+      "duration": 3150
+    },
+    {
+      "name": "PLAYBACK_PAUSE_ENTER",
+      "id": 56,
+      "duration": 375
+    },
+    {
+      "name": "PLAYBACK_PAUSE_EXIT",
+      "id": 57,
+      "duration": 375
+    },
+    {
+      "name": "PLAYBACK_PAUSE_HOLD",
+      "id": 58,
+      "duration": 20
+    },
+    {
+      "name": "SW_DOWNLOAD",
+      "id": 59,
       "duration": 2190
     },
     {
       "name": "SW_UPDATE",
-      "id": 51,
+      "id": 60,
       "duration": 2190
     },
     {
       "name": "VOL_DOWN_HOLD",
-      "id": 52,
+      "id": 61,
       "duration": 20
     },
     {
       "name": "VOL_DOWN_PRESS",
-      "id": 53,
+      "id": 62,
       "duration": 100
     },
     {
       "name": "VOL_DOWN_RELEASE",
-      "id": 54,
+      "id": 63,
       "duration": 100
     },
     {
       "name": "VOL_MAX_HOLD",
-      "id": 55,
+      "id": 64,
       "duration": 20
     },
     {
       "name": "VOL_MAX_PRESS",
-      "id": 56,
+      "id": 65,
       "duration": 140
     },
     {
       "name": "VOL_MAX_RELEASE",
-      "id": 57,
+      "id": 66,
       "duration": 140
     },
     {
       "name": "VOL_MAX_TRANSITION_OFF",
-      "id": 58,
+      "id": 67,
       "duration": 160
     },
     {
       "name": "VOL_MAX_TRANSITION_ON",
-      "id": 59,
+      "id": 68,
       "duration": 160
     },
     {
       "name": "VOL_MIN_HOLD",
-      "id": 60,
+      "id": 69,
       "duration": 20
     },
     {
       "name": "VOL_MIN_PRESS",
-      "id": 61,
+      "id": 70,
       "duration": 140
     },
     {
       "name": "VOL_MIN_RELEASE",
-      "id": 62,
+      "id": 71,
       "duration": 140
     },
     {
       "name": "VOL_MIN_TRANSITION_OFF",
-      "id": 63,
+      "id": 72,
       "duration": 160
     },
     {
       "name": "VOL_MIN_TRANSITION_ON",
-      "id": 64,
+      "id": 73,
       "duration": 160
     },
     {
       "name": "VOL_UP_HOLD",
-      "id": 65,
+      "id": 74,
       "duration": 20
     },
     {
       "name": "VOL_UP_PRESS",
-      "id": 66,
+      "id": 75,
       "duration": 100
     },
     {
       "name": "VOL_UP_RELEASE",
-      "id": 67,
+      "id": 76,
       "duration": 100
     },
     {
       "name": "VPA_SPEAKING",
-      "id": 68,
+      "id": 77,
       "duration": 1250
     },
     {
       "name": "VPA_SPEAKING_XSITION",
-      "id": 69,
+      "id": 78,
       "duration": 900
     },
     {
       "name": "VPA_THINKING",
-      "id": 70,
+      "id": 79,
       "duration": 510
     },
     {
       "name": "VPA_THINKING_XSITION",
-      "id": 71,
+      "id": 80,
       "duration": 480
     },
     {
       "name": "VPA_WAKEUP_ENTER",
-      "id": 72,
+      "id": 81,
       "duration": 210
     },
     {
       "name": "VPA_WAKEUP_EXIT",
-      "id": 73,
+      "id": 82,
       "duration": 350
     },
     {
       "name": "VPA_WAKEUP_HOLD",
-      "id": 74,
+      "id": 83,
       "duration": 35
     },
     {
       "name": "WARNING",
-      "id": 75,
+      "id": 84,
       "duration": 2650
     },
     {
       "name": "WIFI_NW_STANDBY",
-      "id": 76,
+      "id": 85,
       "duration": 290
     },
     {
       "name": "VOL_MUTE_ENTER",
-      "id": 77,
+      "id": 86,
       "duration": 140
     },
     {
       "name": "VOL_MUTE_HOLD",
-      "id": 78,
+      "id": 87,
       "duration": 20
     }
   ]
