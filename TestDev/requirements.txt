@@ -1,0 +1,4 @@
+--trusted-host ingress-platform.live-aws-useast1.bose.io
+--extra-index-url https://ingress-platform.live-aws-useast1.bose.io/dev/svc-core-devops-nexus/prod/core-devops-nexus-core/repository/pypi-all/simple
+CastleTestUtils== 4.0.4-peter-ipc
+gcovr
