@@ -1,0 +1,11 @@
+./etc/KeplerConfig.json
+./etc/BlastConfiguration.json
+./etc/chimes/professor/ChimesConfiguration.json
+./etc/DefaultAudioSettings.json
+./etc/InActivityTimer.json
+./etc/KeyConfiguration.json
+./etc/services.json
+./etc/DataCollection.json
+./etc/SoftwareUpdateSettings.json
+./etc/VolumeAlgorithm.json
+./etc/UserKeyConfig.json
