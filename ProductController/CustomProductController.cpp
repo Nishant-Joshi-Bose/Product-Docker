@@ -807,6 +807,7 @@ void CustomProductController::Run( )
         {
             // Connection to DataCollection server established, send current state info.
             SendPowerMacroToDataCollection( );
+            SendEarcStatusToDataCollection();
         }
     };
     m_dataCollectionClient->RegisterForEnabledNotifications( Callback<bool>( func ) );
@@ -1656,6 +1657,7 @@ void CustomProductController::HandleMessage( const ProductMessage& message )
         if( message.lpmstatus( ).has_connected( ) && message.lpmstatus( ).connected( ) )
         {
             m_lightbarController->RegisterLpmEvents();
+            RegisterEarcStatusLPMEvent();
         }
 
         ( void ) HandleCommonProductMessage( message );
@@ -2561,6 +2563,43 @@ void CustomProductController::UpdatePowerMacro( )
     {
         PersistPowerMacro( );
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::RegisterEarcStatusLPMEvent
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::RegisterEarcStatusLPMEvent( )
+{
+    Callback< LpmServiceMessages::IpcEarcStatus_t >
+    CallbackForEarcStatus( std::bind( &CustomProductController::SendEarcStatusToDataCollection,
+                                      this ) );
+
+    GetLpmHardwareInterface( )->RegisterForLpmEvents( IPC_EARC_STATUS,
+                                                      CallbackForEarcStatus );
+
+
+
+
+    auto func = [this]( LpmServiceMessages::IpcEarcStatus_t earcStatus )
+    {
+        m_earcStatus.CopyFrom( earcStatus );
+        SendEarcStatusToDataCollection();
+    };
+    GetLpmHardwareInterface()->RegisterForLpmEvents( IPC_EARC_STATUS, Callback<LpmServiceMessages::IpcEarcStatus_t>( func ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductController::SendEarcStatusToDataCollection
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductController::SendEarcStatusToDataCollection( )
+{
+    BOSE_INFO( s_logger, "%s::%s - m_earcStatus.active = %d", CLASS_NAME, __func__, m_earcStatus.active() );
+    auto collectionData = std::make_shared<LpmServiceMessages::IpcEarcStatus_t>( m_earcStatus );
+    m_dataCollectionClient->SendData( collectionData, DATA_COLLECTION_EARC_STATUS );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
