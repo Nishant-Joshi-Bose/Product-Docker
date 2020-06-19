@@ -32,6 +32,9 @@ function reset_timezone_to_default {
 
 cd /opt/Bose/bin || exit
 
+# Remove expired root certificates
+./remove-expired-certs
+
 # get productType for vfe linking on the fly
 productType="$(mfgdata get productType)"
 echo "Product type is : ${productType}"
