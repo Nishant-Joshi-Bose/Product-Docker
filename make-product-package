@@ -72,7 +72,7 @@ git clean -fdX
 
 wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
 if [ -z $CONAN_REMOTE ]; then
-  CONAN_REMOTE=barbarian
+  CONAN_REMOTE=liquid
 fi
 
 echo "CONAN_REMOTE IS $CONAN_REMOTE"

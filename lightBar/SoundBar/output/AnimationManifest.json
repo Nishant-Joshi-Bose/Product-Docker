@@ -1,114 +1,114 @@
 {
-  "minor": 7,
+  "minor": 10,
   "major": 2,
   "animations": [
     {
-      "name": "VOL_MAX_PRESS",
+      "name": "ACTIVE_CALL_ENTER",
       "id": 1,
-      "duration": 140
+      "duration": 200
     },
     {
-      "name": "VPA_THINKING",
+      "name": "ACTIVE_CALL_EXIT",
       "id": 2,
-      "duration": 510
+      "duration": 240
     },
     {
-      "name": "VOL_MIN_HOLD",
+      "name": "ACTIVE_CALL_HOLD",
       "id": 3,
-      "duration": 20
+      "duration": 1000
     },
     {
-      "name": "BT_DISCOVERABLE",
+      "name": "ALARM",
       "id": 4,
-      "duration": 1450
+      "duration": 1520
     },
     {
-      "name": "CRITICAL_ERROR_EXIT",
+      "name": "AP_SETUP_ENTER",
       "id": 5,
       "duration": 375
     },
     {
-      "name": "WIFI_NW_STANDBY",
+      "name": "AP_SETUP_EXIT",
       "id": 6,
-      "duration": 290
-    },
-    {
-      "name": "COUNTDOWN5_4",
-      "id": 7,
-      "duration": 1000
-    },
-    {
-      "name": "VPA_WAKEUP_ENTER",
-      "id": 8,
-      "duration": 210
-    },
-    {
-      "name": "FIRST_BOOT_ENTER",
-      "id": 9,
-      "duration": 5860
-    },
-    {
-      "name": "NOTIFICATION",
-      "id": 10,
-      "duration": 1450
-    },
-    {
-      "name": "COUNTDOWN10_10",
-      "id": 11,
-      "duration": 1000
-    },
-    {
-      "name": "VOL_MAX_RELEASE",
-      "id": 12,
-      "duration": 140
+      "duration": 375
     },
     {
       "name": "AP_SETUP_HOLD",
-      "id": 13,
+      "id": 7,
       "duration": 20
     },
     {
-      "name": "COUNTDOWN10_7",
-      "id": 14,
-      "duration": 1000
+      "name": "BOOTUP",
+      "id": 8,
+      "duration": 1740
+    },
+    {
+      "name": "BT_CONNECTED",
+      "id": 9,
+      "duration": 2870
+    },
+    {
+      "name": "BT_CONNECTING",
+      "id": 10,
+      "duration": 1160
+    },
+    {
+      "name": "BT_DISCOVERABLE",
+      "id": 11,
+      "duration": 1450
+    },
+    {
+      "name": "BT_PAIRLIST_CLR",
+      "id": 12,
+      "duration": 1250
+    },
+    {
+      "name": "BUFFERING",
+      "id": 13,
+      "duration": 1450
     },
     {
       "name": "BUFFERING_ENTER",
+      "id": 14,
+      "duration": 750
+    },
+    {
+      "name": "BUFFERING_EXIT",
       "id": 15,
       "duration": 750
     },
     {
-      "name": "GEN_BTN_RELEASE",
-      "id": 16,
-      "duration": 75
-    },
-    {
-      "name": "NOTIFICATION_OFF",
-      "id": 17,
-      "duration": 375
-    },
-    {
-      "name": "COUNTDOWN_COMPLETE",
-      "id": 18,
-      "duration": 2400
-    },
-    {
-      "name": "BT_CONNECTED",
-      "id": 19,
-      "duration": 2870
-    },
-    {
-      "name": "VPA_SPEAKING",
-      "id": 20,
-      "duration": 1250
-    },
-    {
       "name": "BUFFERING_HOLD",
-      "id": 21,
+      "id": 16,
       "duration": 20
     },
     {
-      "name": "COUNTDOWN10_9",
+      "name": "CONNECTED",
+      "id": 17,
+      "duration": 2730
+    },
+    {
+      "name": "CONNECTING",
+      "id": 18,
+      "duration": 1015
+    },
+    {
+      "name": "COUNTDOWN10_1",
+      "id": 19,
+      "duration": 1000
+    },
+    {
+      "name": "COUNTDOWN10_10",
+      "id": 20,
+      "duration": 1000
+    },
+    {
+      "name": "COUNTDOWN10_2",
+      "id": 21,
+      "duration": 1000
+    },
+    {
+      "name": "COUNTDOWN10_3",
       "id": 22,
       "duration": 1000
     },
@@ -118,34 +118,34 @@
       "duration": 1000
     },
     {
-      "name": "VPA_WAKEUP_HOLD",
+      "name": "COUNTDOWN10_5",
       "id": 24,
-      "duration": 35
+      "duration": 1000
     },
     {
-      "name": "AP_SETUP_ENTER",
+      "name": "COUNTDOWN10_6",
       "id": 25,
-      "duration": 375
+      "duration": 1000
     },
     {
-      "name": "COUNTDOWN10_8",
+      "name": "COUNTDOWN10_7",
       "id": 26,
       "duration": 1000
     },
     {
-      "name": "VOL_UP_RELEASE",
+      "name": "COUNTDOWN10_8",
       "id": 27,
-      "duration": 100
+      "duration": 1000
     },
     {
-      "name": "VOL_DOWN_RELEASE",
+      "name": "COUNTDOWN10_9",
       "id": 28,
-      "duration": 100
+      "duration": 1000
     },
     {
-      "name": "VOL_MAX_TRANSITION_ON",
+      "name": "COUNTDOWN5_1",
       "id": 29,
-      "duration": 160
+      "duration": 1000
     },
     {
       "name": "COUNTDOWN5_2",
@@ -153,229 +153,289 @@
       "duration": 1000
     },
     {
-      "name": "VPA_WAKEUP_EXIT",
+      "name": "COUNTDOWN5_3",
       "id": 31,
-      "duration": 350
+      "duration": 1000
     },
     {
-      "name": "FIRST_BOOT_EXIT",
+      "name": "COUNTDOWN5_4",
       "id": 32,
-      "duration": 2550
-    },
-    {
-      "name": "CRITICAL_ERROR",
-      "id": 33,
-      "duration": 25
-    },
-    {
-      "name": "BUFFERING",
-      "id": 34,
-      "duration": 1450
-    },
-    {
-      "name": "GEN_BTN_PRESS",
-      "id": 35,
-      "duration": 75
-    },
-    {
-      "name": "VOL_MAX_TRANSITION_OFF",
-      "id": 36,
-      "duration": 160
-    },
-    {
-      "name": "VOL_MIN_TRANSITION_OFF",
-      "id": 37,
-      "duration": 160
-    },
-    {
-      "name": "VOL_DOWN_PRESS",
-      "id": 38,
-      "duration": 100
-    },
-    {
-      "name": "COUNTDOWN5_1",
-      "id": 39,
-      "duration": 1000
-    },
-    {
-      "name": "VPA_THINKING_XSITION",
-      "id": 40,
-      "duration": 480
-    },
-    {
-      "name": "PLAYBACK_PAUSE_ENTER",
-      "id": 41,
-      "duration": 375
-    },
-    {
-      "name": "SW_DOWNLOAD",
-      "id": 42,
-      "duration": 2190
-    },
-    {
-      "name": "NOTIFICATION_HOLD",
-      "id": 43,
-      "duration": 20
-    },
-    {
-      "name": "CONNECTING",
-      "id": 44,
-      "duration": 1015
-    },
-    {
-      "name": "NOTIFICATION_ON",
-      "id": 45,
-      "duration": 375
-    },
-    {
-      "name": "BT_PAIRLIST_CLR",
-      "id": 46,
-      "duration": 1250
-    },
-    {
-      "name": "SW_UPDATE",
-      "id": 47,
-      "duration": 2190
-    },
-    {
-      "name": "BUFFERING_EXIT",
-      "id": 48,
-      "duration": 750
-    },
-    {
-      "name": "PAIR_COMPLETE_XSITION",
-      "id": 49,
-      "duration": 3150
-    },
-    {
-      "name": "PAIR_COMPLETE",
-      "id": 50,
-      "duration": 1360
-    },
-    {
-      "name": "COUNTDOWN10_6",
-      "id": 51,
-      "duration": 1000
-    },
-    {
-      "name": "VOL_UP_PRESS",
-      "id": 52,
-      "duration": 100
-    },
-    {
-      "name": "VPA_SPEAKING_XSITION",
-      "id": 53,
-      "duration": 900
-    },
-    {
-      "name": "VOL_MIN_PRESS",
-      "id": 54,
-      "duration": 140
-    },
-    {
-      "name": "COUNTDOWN10_3",
-      "id": 55,
       "duration": 1000
     },
     {
       "name": "COUNTDOWN5_5",
-      "id": 56,
+      "id": 33,
       "duration": 1000
     },
     {
-      "name": "ALARM",
-      "id": 57,
-      "duration": 1520
+      "name": "COUNTDOWN_COMPLETE",
+      "id": 34,
+      "duration": 2400
     },
     {
-      "name": "VOL_MIN_RELEASE",
-      "id": 58,
-      "duration": 140
+      "name": "CRITICAL_ERROR",
+      "id": 35,
+      "duration": 25
     },
     {
-      "name": "WARNING",
-      "id": 59,
-      "duration": 2650
-    },
-    {
-      "name": "PLAYBACK_PAUSE_EXIT",
-      "id": 60,
+      "name": "CRITICAL_ERROR_EXIT",
+      "id": 36,
       "duration": 375
     },
     {
-      "name": "BT_CONNECTING",
-      "id": 61,
-      "duration": 1160
+      "name": "DO_NOT_DISTURB",
+      "id": 37,
+      "duration": 2110
     },
     {
-      "name": "VOL_DOWN_HOLD",
-      "id": 62,
-      "duration": 20
+      "name": "DROP_IN_ENTER",
+      "id": 38,
+      "duration": 200
     },
     {
-      "name": "BOOTUP",
-      "id": 63,
-      "duration": 1740
+      "name": "DROP_IN_EXIT",
+      "id": 39,
+      "duration": 240
+    },
+    {
+      "name": "DROP_IN_HOLD",
+      "id": 40,
+      "duration": 1000
+    },
+    {
+      "name": "FIRST_BOOT_ENTER",
+      "id": 41,
+      "duration": 5860
+    },
+    {
+      "name": "FIRST_BOOT_EXIT",
+      "id": 42,
+      "duration": 2550
     },
     {
       "name": "GEN_BTN_HOLD",
+      "id": 43,
+      "duration": 20
+    },
+    {
+      "name": "GEN_BTN_PRESS",
+      "id": 44,
+      "duration": 75
+    },
+    {
+      "name": "GEN_BTN_RELEASE",
+      "id": 45,
+      "duration": 75
+    },
+    {
+      "name": "INCOMING_CALL",
+      "id": 46,
+      "duration": 1400
+    },
+    {
+      "name": "NON_CRITICAL_ERROR",
+      "id": 47,
+      "duration": 5600
+    },
+    {
+      "name": "NOTIFICATION",
+      "id": 48,
+      "duration": 1450
+    },
+    {
+      "name": "NOTIFICATION_HOLD",
+      "id": 49,
+      "duration": 20
+    },
+    {
+      "name": "NOTIFICATION_OFF",
+      "id": 50,
+      "duration": 375
+    },
+    {
+      "name": "NOTIFICATION_ON",
+      "id": 51,
+      "duration": 375
+    },
+    {
+      "name": "OTA_LIFEBOAT",
+      "id": 52,
+      "duration": 1400
+    },
+    {
+      "name": "OUTGOING_CALL",
+      "id": 53,
+      "duration": 1400
+    },
+    {
+      "name": "PAIR_COMPLETE",
+      "id": 54,
+      "duration": 1360
+    },
+    {
+      "name": "PAIR_COMPLETE_XSITION",
+      "id": 55,
+      "duration": 3150
+    },
+    {
+      "name": "PLAYBACK_PAUSE_ENTER",
+      "id": 56,
+      "duration": 375
+    },
+    {
+      "name": "PLAYBACK_PAUSE_EXIT",
+      "id": 57,
+      "duration": 375
+    },
+    {
+      "name": "PLAYBACK_PAUSE_HOLD",
+      "id": 58,
+      "duration": 20
+    },
+    {
+      "name": "SW_DOWNLOAD",
+      "id": 59,
+      "duration": 2190
+    },
+    {
+      "name": "SW_UPDATE",
+      "id": 60,
+      "duration": 2190
+    },
+    {
+      "name": "VOL_DOWN_HOLD",
+      "id": 61,
+      "duration": 20
+    },
+    {
+      "name": "VOL_DOWN_PRESS",
+      "id": 62,
+      "duration": 100
+    },
+    {
+      "name": "VOL_DOWN_RELEASE",
+      "id": 63,
+      "duration": 100
+    },
+    {
+      "name": "VOL_MAX_HOLD",
       "id": 64,
       "duration": 20
     },
     {
-      "name": "COUNTDOWN10_5",
+      "name": "VOL_MAX_PRESS",
       "id": 65,
-      "duration": 1000
+      "duration": 140
     },
     {
-      "name": "COUNTDOWN10_1",
+      "name": "VOL_MAX_RELEASE",
       "id": 66,
-      "duration": 1000
+      "duration": 140
     },
     {
-      "name": "COUNTDOWN10_2",
+      "name": "VOL_MAX_TRANSITION_OFF",
       "id": 67,
-      "duration": 1000
-    },
-    {
-      "name": "VOL_UP_HOLD",
-      "id": 68,
-      "duration": 20
-    },
-    {
-      "name": "VOL_MIN_TRANSITION_ON",
-      "id": 69,
       "duration": 160
     },
     {
-      "name": "COUNTDOWN5_3",
-      "id": 70,
-      "duration": 1000
+      "name": "VOL_MAX_TRANSITION_ON",
+      "id": 68,
+      "duration": 160
     },
     {
-      "name": "CONNECTED",
-      "id": 71,
-      "duration": 2730
-    },
-    {
-      "name": "PLAYBACK_PAUSE_HOLD",
-      "id": 72,
+      "name": "VOL_MIN_HOLD",
+      "id": 69,
       "duration": 20
     },
     {
-      "name": "NON_CRITICAL_ERROR",
-      "id": 73,
-      "duration": 5600
+      "name": "VOL_MIN_PRESS",
+      "id": 70,
+      "duration": 140
     },
     {
-      "name": "VOL_MAX_HOLD",
+      "name": "VOL_MIN_RELEASE",
+      "id": 71,
+      "duration": 140
+    },
+    {
+      "name": "VOL_MIN_TRANSITION_OFF",
+      "id": 72,
+      "duration": 160
+    },
+    {
+      "name": "VOL_MIN_TRANSITION_ON",
+      "id": 73,
+      "duration": 160
+    },
+    {
+      "name": "VOL_UP_HOLD",
       "id": 74,
       "duration": 20
     },
     {
-      "name": "AP_SETUP_EXIT",
+      "name": "VOL_UP_PRESS",
       "id": 75,
-      "duration": 375
+      "duration": 100
+    },
+    {
+      "name": "VOL_UP_RELEASE",
+      "id": 76,
+      "duration": 100
+    },
+    {
+      "name": "VPA_SPEAKING",
+      "id": 77,
+      "duration": 1250
+    },
+    {
+      "name": "VPA_SPEAKING_XSITION",
+      "id": 78,
+      "duration": 900
+    },
+    {
+      "name": "VPA_THINKING",
+      "id": 79,
+      "duration": 510
+    },
+    {
+      "name": "VPA_THINKING_XSITION",
+      "id": 80,
+      "duration": 480
+    },
+    {
+      "name": "VPA_WAKEUP_ENTER",
+      "id": 81,
+      "duration": 210
+    },
+    {
+      "name": "VPA_WAKEUP_EXIT",
+      "id": 82,
+      "duration": 350
+    },
+    {
+      "name": "VPA_WAKEUP_HOLD",
+      "id": 83,
+      "duration": 35
+    },
+    {
+      "name": "WARNING",
+      "id": 84,
+      "duration": 2650
+    },
+    {
+      "name": "WIFI_NW_STANDBY",
+      "id": 85,
+      "duration": 290
+    },
+    {
+      "name": "VOL_MUTE_ENTER",
+      "id": 86,
+      "duration": 140
+    },
+    {
+      "name": "VOL_MUTE_HOLD",
+      "id": 87,
+      "duration": 20
     }
   ]
 }
