@@ -1,0 +1,537 @@
+#!/bin/bash
+#
+# Create an IPK file for installing SoundTouch with opkg.
+#
+# To install:
+#   opkg install -d bose product.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
+#
+# To uninstall:
+#   opkg remove SoundTouch
+#
+this=${0##*/} # this script's name
+
+cfg=Release
+
+tryhelp () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+opts=$(getopt --name "$this" --shell sh \
+    -o h \
+    -l "help" \
+    -- "$@") || tryhelp
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+	(--help | -h)
+	    cat <<EOF
+Usage: $this [options]
+
+Create an IPK file for installing this product.
+
+Options:
+EOF
+	    exit 0
+	    ;;
+
+	(--) break ;;
+	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+wspace=$(cd "$(dirname $0)" && echo "$PWD")/.. || exit
+
+if [ ! -z $CONAN_BUILD ]; then
+    riviera_hsp_licenses_dir=$(conan-get-install RivieraHSP qc8017_32 location)/licenses/ || exit
+    riviera_hsp_images_dir=$(conan-get-install RivieraHSP qc8017_32 location)/images/ || exit
+    riviera_hsp_ver=$(conan-get-install RivieraHSP qc8017_32 version) || exit
+    riviera_toolchain_dir=$(conan-get-install RivieraSDK qc8017_32 location) || exit
+    galapagosclient_dir=$(conan-get-install GalapagosClient qc8017_32 location) || exit
+    httpproxy_dir=$(conan-get-install CastleHTTPProxy qc8017_32 location) || exit
+    shepherd_dir=$(conan-get-install Shepherd qc8017_32 location) || exit
+    boselibs_dir=$(conan-get-install BoseLibs qc8017_32 location) || exit
+    protobuf_dir=$(conan-get-install opensource-protobuf qc8017_32 location) || exit
+    audiopath64_dir=$(conan-get-install CastleAudioPathClient qc8017_64 location)/CastleAudioPathService || exit
+    audiopathproduct64_dir=$(conan-get-install CastleAudioPathClient qc8017_64 location)/CastleAudioPathProducts || exit
+    audiosource_upnp_dir=$(conan-get-install AudioSource-UPnP qc8017_32 location) || exit
+    audiosource_musicservices_dir=$(conan-get-install AudioSource-MusicServices qc8017_32 location) || exit
+    audiosource_bmx_dir=$(conan-get-install AudioSourceBMX qc8017_32 location) || exit
+    audiosource_spotify_dir=$(conan-get-install AudioSource-Spotify qc8017_32 location) || exit
+    audiosource_airplay2_dir=$(conan-get-install AudioSource-AirPlay2 qc8017_32 location) || exit
+    castlenetworkservice_dir=$(conan-get-install CastleNetworkService qc8017_32 location) || exit
+    castlesass_dir=$(conan-get-install CastleSASS qc8017_64 location) || exit
+    castlepassport_dir=$(conan-get-install CastlePassportService qc8017_32 location) || exit
+    wifi_setup_webpage_dir=$(conan-get-install bose-web-riviera-ap-page qc8017_32 location) || exit
+    web_update_page_dir=$(conan-get-install bose-web-update-page qc8017_32 location) || exit
+    lpmservice_dir=$(conan-get-install RivieraLpmService qc8017_32 location) || exit
+    cli_dir=$(conan-get-install CastleCli qc8017_32 location) || exit
+    democontroller_dir=$(conan-get-install CastleDemoController qc8017_32 location) || exit
+    webkit_dir=$(conan-get-install CastleWebkit qc8017_32 location) || exit
+    productuiassets_dir=$(conan-get-install CastleProductUIAssets qc8017_32 location) || exit
+    frontdoor_dir=$(conan-get-install CastleFrontDoorService qc8017_32 location) || exit
+    frontdoorutility_dir=$(conan-get-install CastleFrontDoorUtility qc8017_32 location) || exit
+    datacollection_dir=$(conan-get-install CastleDataCollectionClient qc8017_32 location) || exit
+    datacollectionservice_dir=$(conan-get-install CastleDataCollectionService qc8017_32 location) || exit
+    bluetooth_dir=$(conan-get-install CastleBluetooth qc8017_32 location) || exit
+    bletofrontdoorservice_dir=$(conan-get-install CastleBLEToFrontDoorService qc8017_32 location) || exit
+    lpmmfgtool_dir=$(conan-get-install CastleLpmMfgTool qc8017_32 location) || exit
+    telemetry_dir=$(conan-get-install CastleTelemetry qc8017_32 location) || exit
+    devicecontroller_dir=$(conan-get-install A4V-DeviceController qc8017_32 location) || exit
+    rcs_dir=$(conan-get-install A4VRemoteCommunicationService qc8017_32 location) || exit
+    vm_dir=$(conan-get-install A4VVideoManagerService qc8017_32 location) || exit
+    cloudcontrolclient_dir=$(conan-get-install CastleCloudControlClient qc8017_32 location) || exit
+    vpacontroller_dir=$(conan-get-install CastleVPAController qc8017_32 location) || exit
+    opensource_ptp_dir=$(conan-get-install opensource-OpenAvnuApple qc8017_32 location) || exit
+    opensource_avahi_dir=$(conan-get-install opensource-avahi qc8017_32 location) || exit
+    productdiscoveryservice_dir=$(conan-get-install CastleProductDiscoveryService qc8017_32 location) || exit
+    capsservice_dir=$(conan-get-install CastleCAPSService qc8017_32 location) || exit
+    lightBarAnimationTool_dir=$(conan-get-install CastleLedAnimationTool qc8017_32 location) ||exit
+    product_controller=$(conan-get-install ProductController-Professor qc8017_32 location) || exit
+    ptsserver_dir=$(conan-get-install PtsServer qc8017_32 location) || exit
+else
+    riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
+    riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
+    riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
+    galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
+    httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
+    shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
+    boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
+    protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
+    audiopath64_dir=$(components get AudioPathService-qc8017_64 installed_location) || exit
+    audiopathproduct64_dir=$(components get AudioPathProducts-qc8017_64 installed_location) || exit
+    audiosource_upnp_dir=$(components get AudioSource-UPnP-qc8017_32 installed_location) || exit
+    audiosource_musicservices_dir=$(components get AudioSource-MusicServices-qc8017_32 installed_location) || exit
+    audiosource_bmx_dir=$(components get AudioSource-BMX-qc8017_32 installed_location) || exit
+    audiosource_spotify_dir=$(components get AudioSource-Spotify-qc8017_32 installed_location) || exit
+    audiosource_airplay2_dir=$(components get AudioSource-AirPlay2-qc8017_32 installed_location) || exit
+    castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
+    castlesass_dir=$(components get SASS-qc8017_64 installed_location) || exit
+    castlepassport_dir=$(components get PassportService-qc8017_32 installed_location) || exit
+    wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
+    web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
+    lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
+    cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
+    democontroller_dir=$(components get DemoController-qc8017_32 installed_location) || exit
+    webkit_dir=$(components get Webkit installed_location) || exit
+    productuiassets_dir=$(components get ProductUIAssets installed_location) || exit
+    frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
+    frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
+    datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
+    datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
+    bluetooth_dir=$(components get Bluetooth-qc8017_32 installed_location) || exit
+    bletofrontdoorservice_dir=$(components get BLEToFrontDoorService-qc8017_32 installed_location) || exit
+    lpmmfgtool_dir=$(components get LpmMfgTool installed_location) || exit
+    telemetry_dir=$(components get Telemetry-qc8017_32 installed_location) || exit
+    devicecontroller_dir=$(components get A4VDeviceController-qc8017_32 installed_location) || exit
+    rcs_dir=$(components get A4VRemoteCommunicationService-qc8017_32 installed_location) || exit
+    vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
+    cloudcontrolclient_dir=$(components get CloudControlClient-qc8017_32 installed_location) || exit
+    vpacontroller_dir=$(components get VPAController-qc8017_32 installed_location) || exit
+    opensource_ptp_dir=$(components get opensource-OpenAvnuApple-qc8017_32 installed_location) || exit
+    opensource_avahi_dir=$(components get opensource-avahi-qc8017_32 installed_location) || exit
+    productdiscoveryservice_dir=$(components get ProductDiscoveryService-qc8017_32 installed_location) || exit
+    capsservice_dir=$(components get CAPSService-qc8017_32 installed_location) || exit
+    lightBarAnimationTool_dir=$(components get LedAnimationTool-qc8017_32 installed_location) || exit
+    product_controller=$(components get ProfessorProductController-qc8017_32 installed_location) || exit
+    ptsserver_dir=$(components get PtsServer-qc8017_32 installed_location) || exit
+
+    riviera_hsp_ver=${riviera_hsp_ver##*/}
+fi
+
+sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
+tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
+tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
+
+stage=$wspace/builds/$cfg/product-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+output_dir=$wspace/builds/$cfg
+opt_dir=$stage/Bose
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
+mkdir -p "$opt_dir/pts/info.d" || exit
+mkdir -p "$opt_dir/pts/logs.d" || exit
+
+if [ -z $CONAN_BUILD ]; then
+    components record "$stage" || exit
+    castletools-one-version --warn $stage/component-info.gz VPA-Controller-{} || exit
+    components_json=$wspace/components.json
+    cp "$components_json" "$opt_dir/etc" || exit
+fi
+
+version_json=$wspace/builds/package_version/BoseVersion.json
+echo "DEBUG: version_json=$version_json"
+echo "$(cat $version_json)"
+cp "$version_json" "$opt_dir/etc" || exit
+
+stfs=$capsservice_dir/fs
+mkdir -p "$opt_dir/etc/multistring" || exit
+cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/etc/multistring" || exit
+cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/CapsMultiroomVersions.json "$opt_dir/etc" || exit
+
+cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
+if [ ! -z $CONAN_BUILD ]; then
+    echo "Skipping CAPS sysfs iot libs...."
+else
+    cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
+fi
+# ----------------------------------------------------------------------------
+
+cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
+cp -a "$boselibs_dir/lib" "$opt_dir" || exit
+cp -a "$protobuf_dir/lib" "$opt_dir" || exit
+
+cp "$ptsserver_dir/pts-handler" "$opt_dir/etc" || exit
+cp "$ptsserver_dir/PtsServer" "$opt_dir/bin" || exit
+
+# CONAN TODO - Why did I need to add /bin
+if [ ! -z $CONAN_BUILD ]; then
+    cp "$lpmmfgtool_dir/bin/LpmMfgTool" "$opt_dir/bin" || exit
+else
+    cp "$lpmmfgtool_dir/LpmMfgTool" "$opt_dir/bin" || exit
+fi
+
+t=$(date +%s)
+put_script "$opt_dir/bin/set-default-time" <<EOF
+#!/bin/bash
+if (( \$(date +%s) < $t )); then
+    logger -s -t set-default-time Using default time $(date -u -d@$t)
+    date -s@$t
+fi
+EOF
+
+# Generate the Open Source license list from the Riviera-HSP-licenses.tar.gz file
+# Note that for PGC we need to add the -soundbar option when invoking the Perl script
+distro=$(lsb_release -is)
+if [ "$distro" = "Ubuntu" ]; then
+    if [ ! -z $CONAN_BUILD ]; then 
+    	echo "Creating license tar"
+	tar czmf "$wspace"/Riviera-HSP-licenses.tar.gz -C $riviera_hsp_licenses_dir .|| exit
+        if dpkg -l libfile-slurp-perl >& /dev/null && dpkg -l libdigest-md5-file-perl >& /dev/null; then
+            "$wspace/OpenSourceLicensing/riviera-licenses" -professor "$wspace/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
+            rm "$wspace/Riviera-HSP-licenses.tar.gz"
+        else
+            rm "$wspace/Riviera-HSP-licenses.tar.gz"
+            echo >&2 "$(basename $0): Error: please run 'sudo apt install libfile-slurp-perl libdigest-md5-file-perl' to support open source license generation"
+            exit 1
+        fi
+    else
+        if dpkg -l libfile-slurp-perl >& /dev/null && dpkg -l libdigest-md5-file-perl >& /dev/null; then
+            "$wspace/OpenSourceLicensing/riviera-licenses" -professor "$riviera_hsp_images_dir/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
+        else
+            echo >&2 "$(basename $0): Error: please run 'sudo apt install libfile-slurp-perl libdigest-md5-file-perl' to support open source license generation"
+            exit 1
+        fi
+    fi
+elif [ "$distro" = "CentOS" ]; then
+    if rpm -q perl-File-Slurp >& /dev/null && rpm -q  perl-Digest-MD5-File >& /dev/null; then
+        "$wspace/OpenSourceLicensing/riviera-licenses" -professor "$riviera_hsp_images_dir/Riviera-HSP-licenses.tar.gz" "$opt_dir/html/licenses" || exit
+    else
+       echo >&2 "$(basename $0): Error: please run 'sudo yum install perl-File-Slurp perl-Digest-MD5-File' to support open source license generation"
+       exit 1
+    fi
+else
+    echo >&2 "$(basename $0): $distro is not a supported distribution"
+    exit 1
+fi
+
+# Copy public keys in FS for development key. EC will take care of generation for Production
+secure_dir=$opt_dir/etc/secure/
+if [ -e "$secure_dir" ]; then
+    chmod -R 755 "$secure_dir" || exit
+fi
+
+mkdir -p "$secure_dir" || exit
+cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
+find "$secure_dir" -type d -exec chmod 550 {} \; || exit
+find "$secure_dir" -type f -exec chmod 440 {} \; || exit
+
+# On exit, make this dir writeable again to avoid spurious error messages
+# from `make clean` and such.
+trap 'chmod -R +w "$secure_dir"' EXIT
+
+# ----------------------------------------------------------------------------
+# Stage the product controller stuff
+"$product_controller/stage" "$opt_dir" || exit
+
+
+# ----------------------------------------------------------------------------
+# Allow components to add to the staging area.
+
+"$audiosource_musicservices_dir/stage" "$opt_dir" || exit
+"$audiopath64_dir/stage" --product=professor "$opt_dir" || exit
+"$audiopathproduct64_dir/stage" --product=professor "$opt_dir" || exit
+
+#copy Vfe binary only
+"$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary || exit
+
+mkdir -p "$opt_dir/bin/professor" || exit
+mkdir -p "$opt_dir/etc/professor" || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=professor || exit
+"$audiopathproduct64_dir/stage" "$opt_dir" --stage-vfe --product=professor || exit
+
+
+mkdir -p "$opt_dir/bin/ginger-cheevers" || exit
+mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=ginger-cheevers || exit
+"$audiopathproduct64_dir/stage" "$opt_dir" --stage-vfe --product=ginger-cheevers || exit
+
+"$castlenetworkservice_dir/stage" "$opt_dir" || exit
+"$castlesass_dir/stage" "$opt_dir" || exit
+"$castlepassport_dir/stage" "$opt_dir" || exit
+"$shepherd_dir/stage" "$opt_dir" || exit
+"$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
+"$lpmservice_dir/stage" --with-utils=PlatformReset,PlatformResetIntoQfil,ReadLpmVersion "$opt_dir" || exit
+"$cli_dir/stage" "$opt_dir" || exit
+"$democontroller_dir/stage" "$opt_dir" || exit
+"$webkit_dir/stage" "$opt_dir" || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/professor --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/bass-box --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/rear-surrounds --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/ginger-cheevers --type=flac "$opt_dir" ginger-cheevers || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/bass-box --type=flac "$opt_dir" ginger-cheevers || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/rear-surrounds --type=flac "$opt_dir" ginger-cheevers || exit
+
+"$frontdoor_dir/stage" "$opt_dir" || exit
+"$frontdoorutility_dir/stage" "$opt_dir" || exit
+"$galapagosclient_dir/stage" "$opt_dir" || exit
+"$httpproxy_dir/stage" "$opt_dir" || exit
+"$datacollection_dir/stage" "$opt_dir" || exit
+"$datacollectionservice_dir/stage" "$opt_dir" || exit
+"$bluetooth_dir/stage" --btout="$(jq -r .BLUETOOTH_OUT "$wspace/features.json")" "$opt_dir" || exit
+"$bletofrontdoorservice_dir/stage" "$opt_dir" || exit
+"$web_update_page_dir/stage" "$opt_dir/update/html" || exit
+"$telemetry_dir/stage" "$opt_dir" || exit
+"$audiosource_upnp_dir/stage" "$opt_dir" || exit
+"$audiosource_bmx_dir/stage" "$opt_dir" || exit
+"$audiosource_spotify_dir/stage" "$opt_dir" || exit
+"$audiosource_airplay2_dir/stage" "$opt_dir" || exit
+"$vm_dir/stage" "$opt_dir" || exit
+"$rcs_dir/stage" "$opt_dir" || exit
+"$devicecontroller_dir/stage" "$opt_dir" || exit
+"$cloudcontrolclient_dir/stage" "$opt_dir" || exit
+"$vpacontroller_dir/stage" "$opt_dir" || exit
+"$opensource_ptp_dir/Bose/stage" "$opt_dir" || exit
+"$opensource_avahi_dir/Bose/stage" "$opt_dir" || exit
+"$productdiscoveryservice_dir/stage" "$opt_dir" || exit
+"$lightBarAnimationTool_dir/stage" --config="$wspace"/lightBar/Configuration-SoundBar.json --assets="$wspace"/lightBar/SoundBar "$opt_dir" || exit
+
+# remove Shepherd-vfe.xml
+if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
+    rm "$opt_dir/etc/Shepherd-vfe.xml"
+fi
+
+# ----------------------------------------------------------------------------
+
+cd "$opt_dir"/lib || exit
+rm -f *.a
+
+"$ptsserver_dir"/make-static-content-map / /opt/Bose/html $(
+  # index.html has special handling in the pts-handler script, so don't
+  # include it in the static content map.
+  cd "$opt_dir"/html && find ! -name index.html ! -name '*~' -type f
+) > "$opt_dir"/etc/static-content-map.txt || exit
+
+PackageName=SoundTouch
+
+package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
+echo "Package version \"$package_version\""
+validate-version "$package_version" || exit
+
+cat >"$stage/control" <<EOF || exit
+Package: $PackageName
+Version: $package_version
+Description: SoundTouch version $package_version
+ The SoundTouch app
+Section: soundtouch
+Priority: optional
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: soundtouch
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+# ---------- NOTICE ----------
+# This script will not be called during VIP i.e. Manufacturing flashing process.
+# Please ensure - if any commands/processes are added to the script, 
+#            they also reflect in the manufacturing / VIP package (product.tar).
+# ----------------------------
+echo "SoundTouch postinst"
+if [ -x /mnt/nv/postinst ]; then
+    /mnt/nv/postinst
+fi
+
+# make sure the public key file has read only permission
+find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
+find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
+
+# copy version so it can be used while system is in Restore mode
+# Ignore error if any as exiting would fail ipk installation completely
+cp /opt/Bose/etc/BoseVersion.json /cache/OriginalFSVersion.json
+
+#####################################################################
+
+# Inject BMAPProductID and major version into Fluoride stack bt_did.conf file
+
+# only fail ipk if development flag is set
+development=\$(jq -r .development /persist/mfg_data.json)
+if [ "\$development" != "true" ]; then
+    development=false
+fi
+
+baseFile="/opt/Bose/etc/bt_did.conf"
+if [ ! -f "\$baseFile" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - bt_did.conf does not exist"; exit 1;
+    fi
+fi
+
+bmapID=\$(jq -r .BMAPProductID /persist/mfg_data.json)
+if [ \$? -ne 0 ] || [ "\$bmapID" == "null" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to read BMAPProductID from mfg_data"; exit 1;
+    fi
+fi
+echo "postinst - BMAPProductID is \$bmapID"
+
+majorVer=\$(jq -r .major /opt/Bose/etc/BoseVersion.json)
+if [ \$? -ne 0 ] || [ "\$majorVer" == "null" ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to read major version from mfg_data"; exit 1;
+    fi
+else
+    #limited to 2 bytes in fluoride
+    if (( \$majorVer > 255 )); then
+        if \$development; then
+            echo >&2 "\$0: ERROR: postinst - Major version is >256, but we only have two bytes for field"; exit 1;
+        else
+            majorVer="255"
+        fi
+    fi
+
+fi
+echo "postinst - MajorVersion is \$majorVer"
+
+#convert majorVer to hex
+hexVersion=\$(printf '0x%02x00' "\$majorVer")
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to CONVERT major version from mfg_data"; exit 1;
+    fi
+fi
+echo "postinst - hexVersion is \$hexVersion"
+
+sed -i "s/^productId = 0x0000/productId = \$bmapID/" "\$baseFile"
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to WRITE BMAPProductID to bt_did.conf"; exit 1;
+    fi
+fi
+
+sed -i "s/^version = 0x0000/version = \$hexVersion/" "\$baseFile"
+if [ \$? -ne 0 ]; then
+    if \$development; then
+        echo >&2 "\$0: ERROR: postinst - Failed to WRITE version to bt_did.conf"; exit 1;
+    fi
+fi
+
+#####################################################################
+
+# Set Progress End
+# CASTLE-14239: Currently, though not required by IPK itself
+#   every IPK is doing full system reset. This is required to clear
+#   LPM install animation - if LPM itself does not update.
+#   This should be considered as workaround as any IPK should be able
+#   to decide its own reboot requirements
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 100
+exit 0
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "SoundTouch postrm"
+exit 0
+EOF
+
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+# ---------- NOTICE ----------
+# This script will not be called during VIP i.e. Manufacturing flashing process.
+# Please ensure - if any commands/processes are added to the script, 
+#            they also reflect in the manufacturing / VIP package (product.tar).
+# ----------------------------
+echo "SoundTouch preinst"
+b="$riviera_hsp_ver"
+i="\$(awk '\$1 == "HSP" {print \$2}' /etc/riviera-version)"
+if [ "\$b" = "\$i" ]; then
+    echo "Riviera-HSP: \$i"
+else
+    echo "Built for Riviera-HSP: \$b"
+    echo "Installed Riviera-HSP: \$i"
+    echo "See https://github.com/BoseCorp/CastleProducts/blob/professor/master/README.md#hsp"
+fi
+# Start Progress
+if [ -f /opt/Bose/bin/ProgressReport ]; then
+	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r LPM -b 0 -p 1
+fi
+
+exit 0
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "SoundTouch prerm"
+exit 0
+EOF
+
+# -----------------------------------------------------------------------------
+# Strip symbols from the executables.
+# Save a copy of the unstripped executables for later debugging.
+
+unstripped_dir=$output_dir/product-unstripped
+unstripped_tar=$unstripped_dir.tar.gz
+rm -rf "$unstripped_dir" "$unstripped_tar"
+strip-symbols --save="$unstripped_dir" "$stage"/Bose/{lib,bin,update/bin,update/lib}/* || exit
+tar --owner=0 --group=0 -czf "$unstripped_tar" \
+    -C "$(dirname "$unstripped_dir")" \
+    "$(basename "$unstripped_dir")" \
+    || exit
+echo "Wrote $unstripped_tar"
+rm -rf "$unstripped_dir"
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk=$output_dir/product.ipk
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"

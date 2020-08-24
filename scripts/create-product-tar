@@ -1,0 +1,823 @@
+#!/usr/bin/python2.7
+#
+# Manage Creation of product Tarball for full flash / QFIL
+#
+# See `create-product-tar --help` for more information.
+#
+
+import sys
+import os
+import argparse
+import re
+import subprocess
+import shutil
+import logging
+import tarfile
+import zipfile
+from platform import system
+from shlex import split
+from glob import glob
+
+'''
+@todo:
+1. Remove globals
+2. Remove try except as per Michael Cook's comment
+'''
+def execute_cmd_on_host(cmd):
+    out = None
+    logging.debug("\tExecuting: [%s]" %cmd)
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    ## Talk with command i.e. read data from stdout and stderr. Store this info in tuple
+    ## Read data from stdout and stderr, until end-of-file is reached. Wait for process to terminate.
+    (out, err) = p.communicate()
+    ## Wait for command to terminate. Get return returncode ##
+    p_status = p.wait()
+
+    # throw exception if command execution fails
+    if p_status != 0 :
+        raise Exception('Failed to execute command \"' + cmd +  '\"')
+
+    logging.debug("\t\t[%s]" %out)
+    return out
+
+def copytree(src, dst, ignore_file_pattern=None):
+    '''
+    Copy file tree from src to dst
+    :param src: source directory
+    :param dst: destination directory
+    :param ignore_file_pattern: regex pattern, ignore files which matches the pattern provided
+    :return: None
+    '''
+    logging.debug("\t\tsrc [%s]" %(src))
+    logging.debug("\t\tdest [%s]" %(dst))
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            copytree(s, d, ignore_file_pattern)
+        else:
+            # if ignore_file_pattern provided, ignore files which matches the pattern provided
+            if not ignore_file_pattern or (ignore_file_pattern and not re.match(ignore_file_pattern, item)):
+                if not os.path.exists(d) or os.stat(s).st_mtime - os.stat(d).st_mtime > 1:
+                    shutil.copy2(s, d)
+
+def movetree(src, dst):
+    logging.debug("\t\tsrc [%s]" %(src))
+    logging.debug("\t\tdest [%s]" %(dst))
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        shutil.move(s, d)
+
+def move_files_from_tree(src, dst):
+    '''
+    Moves all files from src and it's subdirectories to destination directory. [files only and not directory structure]
+    :param src: Source directory
+    :param dst: Destination directory
+    :return: None
+    '''
+    logging.debug("\t\tsrc [%s]" % (src))
+    logging.debug("\t\tdest [%s]" % (dst))
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+    for file_name in os.listdir(src):
+        full_file_name = os.path.join(src, file_name)
+        if os.path.isfile(full_file_name):
+            shutil.move(full_file_name, dst)
+        elif os.path.isdir(full_file_name):
+            move_files_from_tree(full_file_name, dst)
+        else:
+            logging.warning("file[%s] not moved to destination" % (full_file_name))
+
+def os_arch():
+    os_arch = '32'
+    if "Windows" in system():
+        output = subprocess.check_output(['wmic', 'os', 'get', 'OSArchitecture'])
+        os_arch = output.split()[1]
+    else:
+        output = subprocess.check_output(['uname', '-m'])
+        if 'x86_64' in output:
+            os_arch = '64'
+        else:
+            os_arch = '32'
+    return os_arch
+
+'''
+Path values set as first step via create_stage
+'''
+riviera_hsp_images_dir = ""
+riviera_tools_dir = ""
+swupdate_dir = ""
+ipks_dir = ""
+product_update_zip = ""
+stage = ""
+stage_package_dir = ""
+output_dir = ""
+riviera_version = ""
+''' Note: All paths are defined here, change then if needed.
+    For this simple script, relative path variables are not taken as input
+    e.g. $workspace/builds/Release has builds/Release hardcoded
+'''
+def create_stage(workspace, is_conan):
+    global riviera_hsp_images_dir
+    global riviera_tools_dir
+    global riviera_version
+    global swupdate_dir
+    global ipks_dir
+    global stage
+    global stage_package_dir
+    global product_update_zip
+
+    logging.info("Workspace [%s]" % workspace)
+    
+    if is_conan:
+        os.chdir("%s" % workspace)
+        riviera_hsp_images_dir = execute_cmd_on_host("conan-get-install RivieraHSP qc8017_32 location").rstrip() + '/images'
+        riviera_tools_dir =  execute_cmd_on_host("conan-get-install RivieraSDK qc8017_32 location").rstrip()
+        riviera_version = execute_cmd_on_host("conan-get-install RivieraHSP qc8017_32 version").rstrip()
+        swupdate_dir = execute_cmd_on_host("conan-get-install CastleSoftwareUpdate qc8017_32 location").rstrip()
+        os.chdir(workspace)
+    else:
+        riviera_hsp_images_dir = execute_cmd_on_host("components get Riviera-HSP-Images installed_location").rstrip()
+        riviera_tools_dir =  execute_cmd_on_host("components get Riviera-Toolchain installed_location").rstrip()
+        riviera_version = execute_cmd_on_host("components get Riviera-HSP-Images selected_version").rstrip()
+        swupdate_dir = execute_cmd_on_host("components get SoftwareUpdate-qc8017_32 installed_location").rstrip()
+        riviera_tools_dir = riviera_tools_dir + "/sdk"
+
+    ipks_dir = os.path.join(workspace, 'builds/Release')
+    product_update_zip = os.path.join(ipks_dir, 'product_update.zip')
+    logging.info("Riviera HSP [%s]" %(riviera_hsp_images_dir))
+    logging.info("Riviera Version [%s]" %(riviera_version))
+    logging.info("Riviera Tools [%s]" %(riviera_tools_dir))
+    logging.info("Softwareupdate [%s]" %(swupdate_dir))
+
+    if not os.path.exists(product_update_zip):
+        logging.error("Required [%s] does not exist. Cannot proceed" %(product_update_zip))
+        return -10, "Required product_update.zip does not exist."
+
+    stage = os.path.join(workspace, 'builds/Release/product-package-stage')
+    stage_package_dir = os.path.join(stage, 'product')
+    logging.debug("Stage [%s]" %(stage))
+
+    if os.path.exists(stage):
+        ''' remove current stage '''
+        try:
+            logging.info("Removing old stage dir [%s]" % stage)
+            shutil.rmtree(stage)
+        except:
+            logging.error("Cannot delete existing stage [%s]" %(stage))
+            logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+            return -11, "Cannot delete existing stage"
+    ''' create new stage and stage_package_dir '''
+    try:
+        logging.info("Creating stage package dir [%s]" % stage_package_dir)
+        os.makedirs(stage_package_dir)
+    except:
+        logging.error("Cannot create stage and stage-package-dir [%s]" %(stage_package_dir))
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -12, "Cannot create stage and stage-package-dir"
+
+    return 0, ""
+
+def copy_signing_tools_to_stage():
+    global riviera_tools_dir
+    global stage_package_dir
+
+    logging.info("Adding HSP signing Tools to hsp-tools")
+    dest = os.path.join(os.path.abspath(os.path.join(stage_package_dir, os.pardir)), "hsp-tools")
+    if not os.path.exists(dest):
+        os.makedirs(dest)
+    src = os.path.join(riviera_tools_dir, "fh_loader/fh_loader")
+    try:
+        logging.info("Copying [%s] [%s]" %(src, dest))
+        shutil.copy2(src, dest)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -28, "Cannot copy fh_loader to hsp_tools"
+
+    src = os.path.join(riviera_tools_dir, "sectools")
+    dest = os.path.join(os.path.abspath(os.path.join(stage_package_dir, os.pardir)), "hsp-tools/sectools")
+    if not os.path.exists(dest):
+        os.makedirs(dest)
+    try:
+        logging.info("Copying [%s] [%s]" %(src, dest))
+        copytree(src, dest)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -29, "Cannot copy fh_loader to hsp_tools"
+    return 0, ""
+
+def copy_files_to_stage():
+    global riviera_hsp_images_dir
+    global riviera_version
+    global swupdate_dir
+    global stage_package_dir
+    global ipks_dir
+
+    logging.info("Adding HSP Images to stage")
+    #dest = os.path.join(stage_package_dir, "")
+    dest = stage_package_dir
+    src = os.path.join(riviera_hsp_images_dir, "")
+    try:
+        copytree(src, dest, ignore_file_pattern="^update_.+\.zip$")
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -21, "Cannot add HSP Images to stage"
+
+    logging.info("Adding Flash utilities to stage")
+    try:
+        src = os.path.join(swupdate_dir, "tools/FlashTools/lin")
+        dest = os.path.join(stage_package_dir, "lin")
+        logging.debug("\tAdding [%s] to stage" %(src))
+        copytree(src, dest)
+
+        src = os.path.join(swupdate_dir, "tools/FlashTools/win")
+        dest = os.path.join(stage_package_dir, "win")
+        logging.debug("\tAdding [%s] to stage" %(src))
+        copytree(src, dest)
+
+        src = os.path.join(swupdate_dir, "tools/FlashTools/mac")
+        dest = os.path.join(stage_package_dir, "mac")
+        logging.debug("\tAdding [%s] to stage" %(src))
+        copytree(src, dest)
+
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -22, "Cannot add Flash utilities to stage"
+
+    logging.info("Adding IPKs to stage")
+    try:
+        src = os.path.join(ipks_dir, "*.ipk")
+        ignore = os.path.join(ipks_dir, "hsp.ipk")
+        dest = os.path.join(stage_package_dir, "")
+        for currFile in glob(src):
+            if currFile != ignore:
+                logging.info("\tAdding [%s] to stage" %(currFile))
+                shutil.copy2(currFile, dest)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -23, "Cannot add version file to stage"
+
+    logging.info("Adding versions to stage")
+    try:
+        version_json = os.path.join(workspace, 'builds/package_version/BoseVersion.json')
+        dest = os.path.join(stage_package_dir, "")
+        logging.info("\tCopying BoseVersion.json")
+        shutil.copy2(version_json, dest)
+        lpm_ver = os.path.join(workspace, 'builds/Release/lpm_blob_configuration.xml')
+        logging.info("\tCopying lpm_blob_configuration.xml")
+        shutil.copy2(lpm_ver, dest)
+        dest = os.path.join(stage_package_dir, "riviera_version.txt")
+        with open(dest, 'w') as outF:
+            logging.info("\tWriting riviera_version.txt")
+            outF.write(riviera_version)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -24, "Cannot add version file to stage"
+    return 0, ""
+
+def extract_ext4_partition(input_ext4, partition_name, rename_ext4=None):
+    global swupdate_dir
+    global stage_package_dir
+
+    extract_dir = os.path.join(stage_package_dir, partition_name)
+    os.chdir(stage_package_dir)
+    input_ext4_full = os.path.join(stage_package_dir, input_ext4)
+    if not os.path.isfile(input_ext4_full):
+        return 61, "Input EXT4 does not exist"
+    ''' create directory '''
+    if not os.path.exists(extract_dir):
+        os.makedirs(extract_dir)
+
+    ''' find partition size
+          "$utils_dir"/BuildTools/simg2img $bose_ext4 $bose_ext4.raw > /dev/null 2>&1
+    '''
+    util_cmd = os.path.join(swupdate_dir, "tools/BuildTools/simg2img")
+    input_ext4_raw = input_ext4_full + ".raw"
+    cmd = util_cmd + " " + input_ext4_full + " " + input_ext4_raw
+    try:
+        execute_cmd_on_host(cmd)
+    except:
+        # This is known issue that simgtoimg command is failing
+        # hence ignoring this error for now
+        logging.debug("\t\tIgnored failure executing command : [%s]", cmd)
+    if not os.path.isfile(input_ext4_raw):
+        return 62, "Cannot create RAW file from EXT4"
+    ''' find size in bytes of $ext4_full.raw to be used during rebuilding EXT4 '''
+    fs_size = os.stat(input_ext4_raw).st_size
+    logging.info("\t\tSize of [%s] Partition: [%s]" %(input_ext4_raw, fs_size))
+    ''' remove raw file '''
+    os.remove(input_ext4_raw)
+
+    if rename_ext4:
+        output_ext4 = os.path.join(stage_package_dir, rename_ext4)
+        os.rename(input_ext4_full, output_ext4)
+    return fs_size, ""
+
+def create_ext4_partition(input_ext4, partition_name, partition_size):
+    global swupdate_dir
+    global stage_package_dir
+
+    extract_dir = os.path.join(stage_package_dir, partition_name)
+    input_ext4_full = os.path.join(stage_package_dir, input_ext4)
+    os.chdir(stage_package_dir)
+    '''"$utils_dir"/BuildTools/make_ext4fs -s -l $fs_size -a $bose_partition $bose_ext4 $extract_dir/ > /dev/null '''
+    util_cmd = os.path.join(swupdate_dir, "tools/BuildTools/make_ext4fs")
+    cmd = util_cmd + " -s -l " + str(partition_size) + " " + input_ext4_full + " " + extract_dir
+    if os_arch() == '64':
+        util_cmd = os.path.join(swupdate_dir, "tools/BuildTools/make_ext4fs_64")
+        buildtool_path = os.path.join(swupdate_dir, "tools/BuildTools")
+        os.environ['LD_LIBRARY_PATH'] = buildtool_path
+        cmd = (util_cmd + ' -s -l ' + str(partition_size) + ' '
+                + input_ext4_full + ' ' + extract_dir)
+    logging.debug("\t\tExecuting [%s]", cmd)
+    execute_cmd_on_host(cmd)
+    if not os.path.isfile(input_ext4_full):
+        return 71, "Cannot create new EXT4 partition"
+
+    return 0, ""
+
+def install_ipk(ipks_dir, ipk_name, offline_dir, is_conan, workspace):
+    try:
+        ipk_to_install = os.path.join(ipks_dir, ipk_name)
+        if is_conan:
+            os.chdir("%s" % workspace)
+            boseopkg_dir = os.environ['OPENSOURCE_OPKG']
+            os.chdir(workspace)
+        else:
+            boseopkg_dir = execute_cmd_on_host("components get opensource-opkg-x86 installed_location").rstrip()
+
+        opkg_lib_dir = os.path.join(boseopkg_dir, 'lib')
+        if not os.path.exists(opkg_lib_dir):
+            return 91, "Cannot find OPKG directory"
+        opkg_bin = os.path.join(boseopkg_dir, "bin/opkg")
+        opkg_conf = os.path.join(boseopkg_dir, "conf/opkg.conf")
+        os.environ['LD_LIBRARY_PATH'] = opkg_lib_dir
+        #opkg_cmd = (' fakeroot ' + opkg_bin
+        opkg_cmd = (opkg_bin
+                    + ' -f ' + opkg_conf
+                    + ' --offline-root ' + offline_dir
+                    + ' --volatile-cache --add-arch armv7a-vfp-neon:100 install ' +  ipk_to_install)
+        logging.debug("\t\tExecuting [%s]", opkg_cmd)
+        args = split(opkg_cmd)
+        cmdP = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        output, err = cmdP.communicate()
+        if err != '':
+            logging.error("IPK installation failed: %s", err)
+            return 93, "IPK installation failed with error"
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return 92, "Unknown error while installing ipk"
+    return 0, ""
+
+def perform_sed(input_file, orig_str, new_str):
+    try:
+        newlines = []
+        with open(input_file, 'r') as inF:
+            for line in inF:
+                newl = line.replace(orig_str, new_str)
+                newlines.append(line.replace(orig_str, new_str))
+        with open(input_file, 'w') as outF:
+            for line in newlines:
+                outF.write(line)
+
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return 95, "Unknown error while replacing string"
+    return 0, ""
+
+def revoke_dir_permission(path):
+    cmd = "find " + path + " -type f -exec chmod 440 {} \;"
+    execute_cmd_on_host( cmd )
+    cmd = "find " + path + " -type d -exec chmod 550 {} \;"
+    execute_cmd_on_host( cmd )
+    return 0, ""
+
+def give_dir_permission(path):
+    cmd = "chmod -R 755 " + path
+    execute_cmd_on_host( cmd )
+    return 0, ""
+
+def create_bose_partition(is_without_lpm, development, ipks_to_install, is_conan, workspace):
+    global ipks_dir
+    global product_update_zip
+    global stage_package_dir
+
+    err = 0
+    errMsg = ""
+    try:
+        ''' ------------ extract partition ------------ '''
+        logging.info("Work on Bose Partition --- ")
+        logging.info("\tExtract")
+        partition_size, errMsg = extract_ext4_partition("bose.ext4", "bose", "orig_userpartition.ext4")
+        if partition_size < 100:
+            return partition_size, errMsg
+
+        ''' ------------ install given ipks ------------ '''
+        logging.info("\tFill IPKs")
+        extract_dir = os.path.join(stage_package_dir, "bose")
+        ''' install all IPKs in Bose partition '''
+        temp_dir = os.path.join(stage_package_dir, "temp")
+        if os.path.exists(temp_dir):
+            shutil.rmtree(temp_dir)
+        os.makedirs(temp_dir)
+        if not os.path.exists(temp_dir):
+            return 82, "Not able to create temporary IPK installation space"
+
+        for ipk in ipks_to_install:
+            logging.info("\t\tInstalling IPK: [%s]" %(ipk))
+            err, errMsg = install_ipk(ipks_dir, ipk, temp_dir, is_conan, workspace)
+            if err != 0:
+                return err, errMsg
+        ''' remove hsp output as it should not be part of FS '''
+        if os.path.exists(os.path.join(temp_dir, "opt/Bose/hsp/update_ext4.zip")):
+            os.remove(os.path.join(temp_dir, "opt/Bose/hsp/update_ext4.zip"))
+
+        ''' remove bose minimal tar as we are copying it to cache partition from cache.ext4 '''
+        if os.path.exists(os.path.join(temp_dir, "opt/Bose/Bose_minimal.tar.gz")):
+            os.remove(os.path.join(temp_dir, "opt/Bose/Bose_minimal.tar.gz"))
+
+        ''' move installed files to EXT4 directory '''
+        movetree(os.path.join(temp_dir, "opt/Bose/"), extract_dir)
+        ''' sed -i -- 's/Status: install user unpacked/Status: install user installed/g' $bose_partition"/.swUpdateCache/status '''
+        err, errMsg = perform_sed(os.path.join(extract_dir, ".swUpdateCache/status"),
+                                      "Status: install user unpacked",
+                                      "Status: install user installed")
+        if err != 0:
+            return err, errMsg
+        ''' remove offline installation directory '''
+        shutil.rmtree(temp_dir)
+
+        ''' copy lpm.ipk if is_without_lpm not true '''
+        if not is_without_lpm:
+            logging.info("\t\tCopying LPM updater IPK")
+            product_update_zip = os.path.join(ipks_dir, 'product_update.zip')
+            product_update_dir = os.path.join(ipks_dir, 'product_update')
+            zip_ref = zipfile.ZipFile(product_update_zip, 'r')
+            if not os.path.exists(product_update_dir):
+                os.makedirs(product_update_dir)
+            zip_ref.extractall(product_update_dir)
+            zip_ref.close()
+            shutil.copy2(os.path.join(product_update_dir, "lpm_updater.ipk"), extract_dir)
+            shutil.copy2(os.path.join(product_update_dir, "lpm_updater.ipk.sig"), extract_dir)
+            shutil.copy2(os.path.join(product_update_dir, "SWUpdateInstallSequence.json"), extract_dir)
+            shutil.copy2(os.path.join(product_update_dir, "SWUpdateInstallSequence.json.sig"), extract_dir)
+            ''' remove current stage '''
+            try:
+                shutil.rmtree(product_update_dir)
+            except:
+                logging.error("\tCannot delete extracted product_update_dir")
+        ''' Set permission to 440 '''
+        err, errMsg = revoke_dir_permission(os.path.join(extract_dir, "etc/secure"))
+        if err != 0:
+            return err, errMsg
+        ''' ------------ Make new partition ------------ '''
+        logging.info("\tRecreate")
+        err, errMsg = create_ext4_partition("bose.ext4", "bose", partition_size)
+        if err != 0:
+            return err, errMsg
+
+        ''' Set permission to 755 '''
+        err, errMsg = give_dir_permission(os.path.join(extract_dir, "etc/secure"))
+        if err != 0:
+            return err, errMsg
+        ''' cleanup extracted directory '''
+        shutil.rmtree(extract_dir)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return 83, "Unknown error while creating Bose partition"
+    return err, errMsg
+
+def create_cache_partition(ipks_to_install, is_conan, workspace):
+    global ipks_dir
+    global stage_package_dir
+
+    '''
+    Put all contents of provided ipks in to /cache partition
+    Currently we manage all recovery and restore related files in /cache partition
+    :param ipks_to_install: list of ipks, contents of which needs to be installed in /cache
+    :return: err : return value, 0 is success
+    :return: errMsg : Error message in case of error, empty otherwise
+    '''
+    err = 0
+    errMsg = ""
+    try:
+        ''' ------------ extract partition ------------ '''
+        logging.info("Work on Cache Partition --- ")
+        logging.info("\tExtract")
+        partition_size, errMsg = extract_ext4_partition("apq8017-cache.ext4", "cache", "orig_apq8017-cache.ext4")
+        if partition_size < 0:
+            return partition_size, errMsg
+
+        ''' ------------ install given ipks ------------ '''
+        logging.info("\tFill IPKs")
+        extract_dir = os.path.join(stage_package_dir, "cache")
+        ''' install all IPKs in Bose partition '''
+        temp_dir = os.path.join(stage_package_dir, "temp")
+        if os.path.exists(temp_dir):
+            shutil.rmtree(temp_dir)
+        os.makedirs(temp_dir)
+        if not os.path.exists(temp_dir):
+            return 82, "Not able to create temporary IPK installation space"
+
+        for ipk in ipks_to_install:
+            logging.info("\t\tInstalling IPK: [%s]" %(ipk))
+            err, errMsg = install_ipk(ipks_dir, ipk, temp_dir, is_conan, workspace)
+            if err != 0:
+                return err, errMsg
+
+        ''' remove opkg offline installation files '''
+        shutil.rmtree(os.path.join(temp_dir, "opt/Bose/.swUpdateCache"))
+
+        ''' move installed files to EXT4 directory '''
+        move_files_from_tree(os.path.join(temp_dir, "opt/Bose/"), extract_dir)
+
+        ''' remove offline installation directory '''
+        shutil.rmtree(temp_dir)
+
+        ''' ------------ Make new partition ------------ '''
+        logging.info("\tRecreate")
+        err, errMsg = create_ext4_partition("apq8017-cache.ext4", "cache", partition_size)
+        if err != 0:
+            return err, errMsg
+
+        ''' cleanup extracted directory '''
+        shutil.rmtree(extract_dir)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return 83, "Unknown error while creating Cache partition"
+    return err, errMsg
+
+def create_bose_persist_partition(is_without_lpm, development):
+    global stage_package_dir
+
+    err = 0
+    errMsg = ""
+    try:
+        logging.info("Work on Bose-persist Partition --- ")
+        logging.info("\tExtract")
+        partition_size, errMsg = extract_ext4_partition("bose-persist.ext4", "bose-persist", "orig_bosepersist.ext4")
+        if partition_size < 0:
+            return 91, errMsg
+
+        logging.info("\tFill initial files")
+        extract_dir = os.path.join(stage_package_dir, "bose-persist")
+        if not is_without_lpm:
+            ''' lpm needs to be installed - create updateSwUpComponentStatus.dat '''
+            jsonStr = ' {"SwUpComponents":{"elements":[{"name":"lpm_updater","fileName":"lpm_updater.ipk","filePath":"/opt/Bose","status":"STATUS_INPROGRESS","retryCount":3,"backupIpkPath":"","isLocalUpdate":true}]}} '
+            with open(os.path.join(extract_dir, 'updateSwUpComponentStatus.dat'), 'w') as outfile:
+                outfile.write(jsonStr)
+            with open(os.path.join(extract_dir, "local_force_update"), 'w') as outfile:
+                outfile.write("yes")
+
+        logging.info("\tRecreate")
+        err, errMsg = create_ext4_partition("bose-persist.ext4", "bose-persist", partition_size)
+        ''' cleanup extracted directory '''
+        shutil.rmtree(extract_dir)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return 93, "Unknown error while creating Bose-persist partition"
+
+    return err, errMsg
+
+def sign_images():
+    global stage_package_dir
+
+    images_path = stage_package_dir
+    os.chdir(images_path)
+    logging.info("Setting current Working dir to [%s]" %(os.getcwd()))
+    tools_dir = os.path.abspath(os.path.join(stage_package_dir, "../hsp-tools"))
+    fh_loader = os.path.join(tools_dir, "fh_loader")
+    sectool = os.path.join(tools_dir, "sectools/sectools.py")
+    sectool_cfgfile = os.path.join(tools_dir, "sectools/config/bose/bose_secimage.xml")
+    if not os.path.isfile(fh_loader):
+        logging.info("***** fh_loader tool not present")
+        return 101, "fh_loader tool not present"
+    if not os.path.isfile(sectool):
+        logging.info("***** sectool not present")
+        return 102, "sectool not present"
+    if not os.path.isfile(sectool_cfgfile):
+        logging.info("sectool not present")
+        return 103, "sectool configuration file not present"
+
+    fh_loader_cmd = fh_loader + " --noreset --zlpawarehost=1 --createdigests --sendxml=rawprogram0_no_persist.xml,patch0.xml"
+    logging.info("Creating digest using [%s]" %(fh_loader_cmd))
+    logging.info("%s" %(execute_cmd_on_host(fh_loader_cmd)))
+    if not os.path.isfile(os.path.join(images_path, "ChainedTableOfDigests.bin")):
+        logging.info("File ChainedTableOfDigests.bin not created")
+        return 104, "File ChainedTableOfDigests.bin not created"
+    if not os.path.isfile(os.path.join(images_path, "DigestsToSign.bin.mbn")):
+        logging.info("File DigestsToSign.bin.mbn not created")
+        return 105, "File DigestsToSign.bin.mbn not created"
+    if not os.path.isfile(os.path.join(images_path, "DIGEST_TABLE.bin")):
+        logging.info("File DIGEST_TABLE.bin not created")
+        return 106, "File DIGEST_TABLE.bin not created"
+
+    sectool_cmd = "python " + sectool + " secimage -i DigestsToSign.bin.mbn -g vip -c "  + sectool_cfgfile + " -sat"
+    logging.info("Signing digest using [%s]" %(sectool_cmd))
+    logging.info("%s" %(execute_cmd_on_host(sectool_cmd)))
+
+    # copy output /scratch/components-cache/Release/master/3.2/Riviera-Toolchain/sdk/sectools/secimage_output/8917/vip/
+    output_file = os.path.join(tools_dir, "sectools/secimage_output/8917/vip/DigestsToSign.bin.mbn")
+    if not os.path.isfile(output_file):
+        return 107, "Output Digest was not created."
+    shutil.copy2(output_file, images_path)
+
+    os.rename(os.path.join(images_path, "ChainedTableOfDigests.bin"),
+        os.path.join(images_path, "ChainedTableOfDigests_no_persist.bin"))
+    os.rename(os.path.join(images_path, "DigestsToSign.bin.mbn"),
+        os.path.join(images_path, "DigestsToSign_no_persist.bin.mbn"))
+    os.chdir(workspace)
+    return 0, ""
+
+def create_tar(output_filename, input_dir, current_working_dir=None):
+    try:
+        if current_working_dir:
+            os.chdir(current_working_dir)
+        logging.info("output [%s] input_dir [%s]" %(output_filename, input_dir))
+        with tarfile.open(output_filename, "w") as tar:
+            tar.add(input_dir, arcname=os.path.basename(input_dir))
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -51, "Cannot create tar file"
+    return 0, ""
+
+def create_output(is_without_lpm, development, ipksList, is_conan, workspace):
+    global output_dir
+    global swupdate_dir
+    global stage
+
+    output_dir = os.path.join(workspace, 'builds/Release/package')
+    if os.path.exists(output_dir):
+        ''' remove current output '''
+        try:
+            shutil.rmtree(output_dir)
+        except:
+            logging.error("Cannot delete existing output directory [%s]" %(output_dir))
+            logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+            return -31, "Cannot delete existing output directory"
+    ''' create new output_dir '''
+    try:
+        os.makedirs(output_dir)
+    except:
+        logging.error("Cannot create output direcotry [%s]" %(output_dir))
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -32, "Cannot create output directory"
+
+    try:
+        logging.info("Adding product_flash tools to output")
+        src = os.path.join(swupdate_dir, "tools/FlashTools/product_flash*")
+        dest = os.path.join(output_dir, "")
+        for currFile in glob(src):
+            logging.info("\tAdding [%s] to output" %(currFile))
+            shutil.copy2(currFile, dest)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -33, "Cannot add product_flash tools to output"
+
+    if os_arch() == '64':
+        ''' create bose partition
+            ['product.ipk', 'brussels.ipk', 'lpm_updater.ipk', 'hsp.ipk', 'recovery.ipk', 'product-script.ipk', 'software-update.ipk', 'wpe.ipk'])
+        '''
+        err, errMsg = create_bose_partition(is_without_lpm, development, ipksList, is_conan, workspace)
+        if err != 0:
+            return err, errMsg
+
+        ''' create cache partition
+            ['recovery.ipk'])
+            Recovery IPK contains files which are critical for restore operation. and hence those files needs to be installed in cache partition
+            at the time of VIP process itself.
+        '''
+        err, errMsg = create_cache_partition(['recovery.ipk'], is_conan, workspace)
+        if err != 0:
+            return err, errMsg
+
+        ''' create bose-persist partition
+        '''
+        err, errMsg = create_bose_persist_partition(is_without_lpm, development)
+        if err != 0:
+            return err, errMsg
+
+        if os.environ.get("GENERATE_HSP_SIGNATURES") == "1":
+            ''' Sign the image files
+            '''
+            err, errMsg = sign_images()
+            if err != 0:
+                return err, errMsg
+        else:
+            logging.info("Not generating signatures in non-EC environment")
+
+    ''' Create Package Tar ball and copy to output
+    cd "$stage" || error_exit " cd $stage "
+    output_package=$output_dir/product.tar
+    tar -cf $output_package ./*  || error_exit " Creating tar "
+    '''
+    logging.info("Create product.tar")
+    output_filename = os.path.join(output_dir, "product.tar")
+    input_dir = "./product"
+    err, errMsg = create_tar(output_filename, input_dir, stage)
+
+    return err, errMsg
+
+def cleanup():
+    global stage
+
+    if os.path.exists(stage):
+        ''' remove current stage '''
+        try:
+            shutil.rmtree(stage)
+        except:
+            logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+            logging.error("Cannot delete stage [%s] for cleanup" %(stage))
+            return -41, "Cannot delete stage for cleanup"
+
+    return 0, ""
+
+def create_package(workspace, ipksList, is_without_lpm, development, is_conan):
+    global riviera_hsp_images_dir
+    global swupdate_dir
+    global stage
+    global output_dir
+
+    err, errMsg = create_stage(workspace, is_conan)
+    if err != 0:
+        return err, errMsg
+    if not os.path.exists(riviera_hsp_images_dir):
+        return -1, "Cannot find riviera_hsp_images_dir"
+    if not os.path.exists(swupdate_dir):
+        return -2, "Cannot find swupdate_dir"
+    logging.info("Stage Directory [%s]" %(stage))
+
+    ''' copy existing things like hsp images, utilities, ipks etc. '''
+    err, errMsg = copy_files_to_stage()
+    if err != 0:
+        return err, errMsg
+
+    err, errMsg = copy_signing_tools_to_stage()
+    if err != 0:
+        return err, errMsg
+    err, errMsg = create_output(is_without_lpm, development, ipksList, is_conan, workspace)
+    if err != 0:
+        return err, errMsg
+    logging.info("Output Directory [%s]" %(output_dir))
+
+    ''' cleanup unnecessary files and folders '''
+    cleanup()
+
+    return err, errMsg
+
+
+if __name__ == '__main__':
+    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+    parser = argparse.ArgumentParser(description='Create Product tarball for QFIL / full system flash via product_flash.')
+    parser.add_argument('-w', '--workspace',
+                         metavar="DIR",
+                         required=False,
+                         help="Directory where output of build system (IPKs and Packages) are stored")
+    parser.add_argument('-l', '--without-lpm',
+                         default=False,
+                         action='store_true',
+                         required=False,
+                         help="Use to avoid LPM ipk installation on first boot")
+    parser.add_argument('-d', '--development',
+                         default=False,
+                         action='store_true',
+                         required=False,
+                         help="Use to build development build - UNUSED for now")
+    parser.add_argument('-i', '--ipks',
+                        action='store',
+                        nargs='+',
+                        help='List of IPKs',
+                        required=True)
+
+    args = parser.parse_args()
+    del parser
+    ''' set path of <this script dir>/../ as workspace '''
+    workspace = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    is_without_lpm = args.without_lpm
+    is_development = args.development
+    ipksList = args.ipks
+
+    if not os.path.exists(workspace):
+        logging.error("workspace [%s] does not exist" %(workspace))
+        sys.exit(-1)
+
+    if os.environ.get('CONAN_BUILD') is None:
+        is_conan = False
+        logging.info("************* Not a Conan Build")
+    else:
+        is_conan = True
+        logging.info("************* Conan Build")
+
+    err, errMsg = create_package(workspace, ipksList, is_without_lpm, is_development, is_conan)
+    if err == 0:
+        logging.info("Success")
+        sys.exit(0)
+    else:
+        logging.error("Failure: [%d-%s]" %(err, errMsg))
+        sys.exit(-1)

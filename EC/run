@@ -1,0 +1,2 @@
+#!/bin/bash
+ec-run CED_Riviera BuildProfessor "$@"

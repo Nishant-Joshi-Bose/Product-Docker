@@ -1,0 +1,277 @@
+#!/bin/bash
+#
+# Build product package
+this=${0##*/} # this script's name
+
+tryhelp () {
+    echo >&2 "usage: $0 configuration(Release/Debug) sdk(qc8017_32/x86_64) product-list("professor ginger-cheevers"/"eddie eddieclub"/flipper/taylor) conan(true/false)"
+    exit 1
+}
+
+cleanup() {
+    unset CONAN_BUILD
+    unset GENERATE_HSP_SIGNATURES
+    unset RIVIERASDK
+}
+
+conan_clean() {
+    rm -f conanbuildinfo.json
+    rm -f conanbuildinfo.txt
+    rm -f conaninfo.txt
+    rm -f conan_local_version.txt
+    rm -f conan.lock
+    rm -f activate_run.sh
+    rm -f deactivate_run.sh
+    rm -f graph_info.json
+    rm -f conan_git_md5sum.txt
+    rm -f conanbuildinfo.cmake
+    rm -f export.json
+}
+
+if [ -z "$JENKINS_HOME" ]; then
+  echo "WARNING: Building a product locally is not offcially supported. Use at your own risk. Use jenkins to build for supported results"
+  echo "Press enter to continue"
+  read
+fi
+
+if (( $# < 3 )); then
+  tryhelp
+fi
+config=$1; shift
+sdk=$1; shift
+product=$1; shift
+is_conan=$1; shift
+
+
+if [ "$sdk" != "qc8017_32" -a "$sdk" != "x86_64" ]; then
+  echo >&2 "$this: invalid sdk  '$sdk'"
+  tryhelp
+fi
+if [ "$config" != "Release" -a "$config" != "Debug" ]; then
+  echo >&2 "$this: invalid configuration '$config'"
+  tryhelp
+fi
+
+if [ ! -z "$is_conan" ]; then
+  if [ "$is_conan" == "true" ] || [ "$is_conan" == "True" ]; then
+    export CONAN_BUILD=True
+  fi
+fi
+
+# trap all signals and ensure we cleanup the env variable for conan builds after we are done
+trap cleanup 0 1 2 3 6 9 14 15
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+# this is required to really have things work correctly, if the env is not clean it can cause problems
+echo "Cleaning previous runs"
+git clean -fdX
+
+wspace=$(cd "$(dirname $0)" && echo "$PWD") || exit
+if [ -z $CONAN_REMOTE ]; then
+  CONAN_REMOTE=liquid
+fi
+
+echo "CONAN_REMOTE IS $CONAN_REMOTE"
+
+# Generate version files. Dont rely on product controller version
+mkdir -p "$wspace"/builds/package_version
+
+# get all the install locations
+if [ ! -z $CONAN_BUILD ]; then
+
+    if [ -f "$wspace/dev_depends.json" ]; then
+      echo "WARNING: Dev depends detected, removing. You can not use dev_depends for product builds"
+      rm -f "$wspace/dev_depends.json"
+    fi
+
+    echo "!!!!! conan_install_locations.json not found !!!!!"
+    echo "Generating lockfile and dev_depends override"
+
+    # attempt to lock the dependencies for this run by creating a lockfile and then creating a dev depends out of it
+    # this initial install will download most required dependencies before merging the installs below.
+    # The merge installs script also does version checking
+    echo "Performing conan install for required architectures..."
+    conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_32 -u --build=missing || exit
+    conan-lockfile-depends --lockfile conan.lock || exit
+    conan-merge-installs || exit
+    conan_clean
+    conan install "$wspace"  -r "$CONAN_REMOTE" -pr=RivieraSDK_64 -u --build=missing || exit
+    conan-merge-installs || exit
+    conan_clean
+
+    # Perform one final check to ensure our versions are the same between architectures
+else
+  echo "WARNING: Previous run was detected. Skipping dependency installs. If you wish to update your workspace run git clean -fdX and run this again"
+fi
+
+if [ ! -z $CONAN_BUILD ]; then
+  gen-version-files version.txt "$wspace"/builds/package_version
+else
+  gen-version-files --git-tag "$wspace"/builds/package_version
+fi
+
+echo "Version is $version"
+
+if [ ! -z $CONAN_BUILD ]; then
+    RIVIERALPMUPDATER_DIR=$(conan-get-install RivieraLpmUpdater qc8017_32 location) || exit
+    GOOGLEVOICEASSISTANT_DIR=$(conan-get-install GVA qc8017_64 location) || exit
+    AVSSERVICE_DIR=$(conan-get-install AVSService qc8017_32 location) || exit
+    IOT_DIR=$(conan-get-install CastleIoTService qc8017_32 location) || exit
+    SOFTWARE_UPDATE_DIR=$(conan-get-install CastleSoftwareUpdate qc8017_32 location) || exit
+    PRODUCT_STARTUP_DIR=$(conan-get-install RivieraStartup qc8017_32 location) || exit
+    RIVIERASWUPRECOVERY_DIR=$(conan-get-install RivieraSwUpRecovery qc8017_32 location) || exit
+    RIVIERAMINIMALFS_DIR=$(conan-get-install RivieraMinimalFS qc8017_32 location) || exit
+    TESTUTILS_DIR=$(conan-get-install CastleTestUtils qc8017_32 location) || exit
+else
+    RIVIERALPMUPDATER_DIR=$(components get RivieraLpmUpdater installed_location) || exit
+    GOOGLEVOICEASSISTANT_DIR=$(components get GoogleVoiceAssistant-qc8017_64 installed_location) || exit
+    AVSSERVICE_DIR=$(components get AVSService-qc8017_32 installed_location) || exit
+    IOT_DIR=$(components get IoTService-qc8017_32 installed_location) || exit
+    SOFTWARE_UPDATE_DIR=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+    PRODUCT_STARTUP_DIR=$(components get product-startup installed_location) || exit
+    RIVIERASWUPRECOVERY_DIR=$(components get RivieraSwUpRecovery-qc8017_32 installed_location) || exit
+    RIVIERAMINIMALFS_DIR=$(components get RivieraMinimalFS-qc8017_32 installed_location) || exit
+    TESTUTILS_DIR=$(components get TestUtils installed_location) || exit
+fi
+
+echo "RIVIERALPMUPDATER_DIR is $RIVIERALPMUPDATER_DIR"
+echo "GOOGLEVOICEASSISTANT_DIR is $GOOGLEVOICEASSISTANT_DIR"
+echo "AVSSERVICE_DIR is $AVSSERVICE_DIR"
+echo "IOT_DIR is $IOT_DIR"
+echo "SOFTWARE_UPDATE_DIR is $SOFTWARE_UPDATE_DIR"
+echo "PRODUCT_STARTUP_DIR is $PRODUCT_STARTUP_DIR"
+echo "RIVIERASWUPRECOVERY_DIR is $RIVIERASWUPRECOVERY_DIR"
+echo "RIVIERAMINIMALFS_DIR is $RIVIERAMINIMALFS_DIR"
+echo "TESTUTILS_DIR is $TESTUTILS_DIR"
+
+# This script needs to location of the rivieraSDK, so we need to set the env variable
+if [ ! -z $CONAN_BUILD ]; then
+  export RIVIERASDK=$(conan-get-install RivieraSDK qc8017_32 location)
+  echo "RIVIERASDK is $RIVIERASDK"
+fi
+
+# Create ipks as per list in ipks.txt
+IPKS_FILE="$wspace"/ipks.txt || exit
+PACKAGENAMES_FILE="$wspace"/package_names.txt || exit
+
+IPKS_HSP=$(cat < $IPKS_FILE) || exit
+IPKS=$(grep -v "hsp.ipk" $IPKS_FILE) || exit
+PACKAGENAMES_HSP=$(cat < $PACKAGENAMES_FILE) || exit
+PACKAGENAMES=$(grep -v "hsp" $PACKAGENAMES_FILE) || exit
+TARGETS_HSP=$(echo $IPKS_HSP | tr .ipk -ipk) || exit
+TARGETS=$(echo $IPKS | tr .ipk -ipk)|| exit
+
+EXCL_MANDATORY_PACKAGES_LST="product-script software-update hsp" || exit
+EXCL_PACKAGES_LST_LOCAL=$EXCL_MANDATORY_PACKAGES_LST || exit
+EXCL_PACKAGES_LST_OTA=$EXCL_MANDATORY_PACKAGES_LST || exit
+
+privateKeyFilePath="$wspace"/keys/development/privateKey/dev.p12 || exit
+privateKeyPasswordPath="$wspace"/keys/development/privateKey/dev_p12.pass || exit
+
+# Make meta files and master packages for update
+echo "Making metadata.json..."
+mkdir -p  "$wspace"/builds/$config/
+"$SOFTWARE_UPDATE_DIR"/make-metadata-json -d "$wspace"/builds/$config -p $product -k dev -l $EXCL_PACKAGES_LST_LOCAL -o $EXCL_PACKAGES_LST_OTA || exit
+
+packages=(${PACKAGENAMES_HSP})
+for curr_pkg in $PACKAGENAMES_HSP
+do
+    echo "Creating IPK for Package $curr_pkg"
+    case $curr_pkg in
+        MinimalFS)
+            # Hack for some reason components build has no permisions
+            chmod +x "$RIVIERAMINIMALFS_DIR"/create-ipk
+            "$RIVIERAMINIMALFS_DIR"/create-ipk || exit
+            ;;
+        SoundTouchRecovery)
+            # Hack for some reason components build has no permisions
+            chmod +x "${RIVIERASWUPRECOVERY_DIR}"/create-ipk
+            "${RIVIERASWUPRECOVERY_DIR}"/create-ipk -p $product || exit
+            ;;
+        product-script)
+            "$PRODUCT_STARTUP_DIR"/create-ipk || exit
+            ;;
+        software-update)
+            "$SOFTWARE_UPDATE_DIR"/create-ipk || exit
+            ;;
+        hsp)
+            "$wspace"/scripts/create-hsp-ipk $config || exit
+            ;;
+        wpe)
+            "$wspace"/scripts/create-wpe-ipk || exit
+            ;;
+        brussels)
+            "$wspace"/scripts/create-brussels-ipk || exit
+            ;;
+        SoundTouch)
+            "$wspace"/scripts/create-product-ipk || exit
+            if [ -z $CONAN_BUILD ]; then
+                graph-components --sdk=qc8017_32 --sdk=qc8017_64 --exclude='CastleTools|TestUtils' $product "$wspace"/builds/$config/product-ipk-stage/component-info.gz -o"$wspace"/builds/"$config"/components
+            fi
+            ;;
+        gva)
+            "$GOOGLEVOICEASSISTANT_DIR"/create-ipk || exit
+            ;;
+        avs)
+            "$AVSSERVICE_DIR"/create-ipk || exit
+            ;;
+        iot)
+            "$IOT_DIR"/create-ipk || exit
+            ;;
+        lpm_updater)
+            # @todo: How to translate below lines?
+            #    $(info BUILD_TYPE=$(BUILD_TYPE))
+            #    ifeq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
+            #        $(error BUILD_TYPE must equal Release, Nightly or Continuous)
+            #    endif
+            BUILD_TYPE=Release
+            "$wspace"/scripts/create-lpm-package "$wspace"/builds/$config/ $BUILD_TYPE || exit
+            mkdir -p "$wspace"/builds/$config/ || exit
+            "$RIVIERALPMUPDATER_DIR"/create-ipk "$RIVIERALPMUPDATER_DIR"/lpm-updater-ipk-stage "$wspace"/builds/$config/ "$wspace"/builds/$config/ $product || exit
+            ;;
+        *)
+            echo "Do not know how to build Package $curr_pkg. Exiting"
+            exit 1
+    esac
+done
+
+echo "Making product_update_no_hsp.zip..."
+# product_udpate_nohsp.zip
+cd "$wspace"/builds/$config && "$SOFTWARE_UPDATE_DIR"/make-packages-gz.sh Packages.gz $IPKS || exit
+cd "$wspace"/builds/$config && python2.7 "$SOFTWARE_UPDATE_DIR"/make-update-zip.py -n $PACKAGENAMES -i $IPKS -s "$wspace"/builds/$config -d "$wspace"/builds/$config -o product_update_no_hsp.zip -k "$privateKeyFilePath" -p "$privateKeyPasswordPath"
+
+echo "Making product_update.zip..."
+# product_update.zip
+cd "$wspace"/builds/$config && "$SOFTWARE_UPDATE_DIR"/make-packages-gz.sh Packages.gz $IPKS_HSP
+cd "$wspace"/builds/$config && python2.7 "$SOFTWARE_UPDATE_DIR"/make-update-zip.py -n $PACKAGENAMES_HSP -i $IPKS_HSP -s $wspace/builds/$config -d "$wspace"/builds/$config -o product_update.zip -k "$privateKeyFilePath" -p "$privateKeyPasswordPath"
+
+echo "Making product.tar..."
+export GENERATE_HSP_SIGNATURES=1
+cd $wspace
+if [ ! -z $CONAN_BUILD ]; then
+  IPKS_HSP=$(echo $IPKS_HSP | tr '\n' ',' | tr ' ' ',')
+  conan_clean
+  conan install $wspace -r "$CONAN_REMOTE" -o product_package=True -o ipks_list="$IPKS_HSP" --build=missing || exit # need to install x86_64 for opkg build requirements
+  conan build $wspace || exit # this will run the product-tar script that requires the opkg build dependency
+else
+  "$wspace"/scripts/create-product-tar -i $IPKS_HSP || exit
+fi
+
+# Final packaging steps that gathers everything
+echo "Collecting Deployables..."
+
+# collect all deployables only for conan
+"$wspace"/scripts/collect-deployables "$wspace" "$wspace"/builds/Release "$wspace"/builds/deploy || exit
+branchName=$((git branch | grep \* | cut -d ' ' -f2 | tr -d '[:space:]' | tr "/" "_") || exit)
+
+if [ ! -z $CONAN_BUILD ]; then
+  conan export-pkg "$wspace" BoseCorp/"$branchName" -j "$wspace"/export.json -f || exit
+fi
+
+echo "Packaging Complete"
+exit 0
+
